@@ -1,0 +1,31 @@
+project(*) : boost_base {
+  sharedname = QuickFASTDotNet
+  managed = 1
+  after = QuickFAST
+  includes += $(QUICKFAST_ROOT)/src
+  //libout = $(QUICKFAST_ROOT)/lib
+
+  pch_header = Stdafx.h
+  pch_source = Stdafx.cpp
+
+  specific {
+    guid = 38BCB440-725D-4bdc-9BDD-CA5D76AACAE7
+    AssemblyDebug  = 1
+  }
+
+
+  Source_Files {
+    *.cpp
+    ^Stdafx.cpp
+  }
+
+  Header_Files {
+    *.h
+    ^Stdafx.h
+  }
+
+  Resource_Files{
+    app.ico
+    app.rc
+  }
+}

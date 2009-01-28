@@ -1,0 +1,16 @@
+workspace(*) {
+  cmdline += -feature_file QuickFAST.features
+  src/QuickFAST.mpc
+  src/Examples/Examples.mpc
+  
+  exclude(!vc8, !vc9) {
+    //C++/Cli Visual Studio Projects
+    src/DotNet/QuickFASTDotNet.mpc
+  
+    //C# Visual Studio Projects
+    specific {
+      cmdline += -language csharp
+      src/DotNetTests/QuickFASTDotNetTests.mpc
+    }
+  }
+}

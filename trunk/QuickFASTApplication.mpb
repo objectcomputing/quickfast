@@ -1,0 +1,6 @@
+project {
+  requires += QuickFAST
+  includes += $(QUICKFAST_ROOT)/src
+  libpaths += $(QUICKFAST_ROOT)/lib
+  libs += QuickFAST
+}

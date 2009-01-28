@@ -1,0 +1,13 @@
+project : QuickFASTApplication{
+  exeout = $(QUICKFAST_ROOT)/bin
+  includes += $(QUICKFAST_ROOT)/src/Examples
+  pch_header = Examples/ExamplesPch.h
+  pch_source = Examples/ExamplesPch.cpp
+  after += QuickFAST
+  Source_Files {
+    Examples
+  }
+  Header_Files {
+    Examples
+  }
+}

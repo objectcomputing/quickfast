@@ -1,0 +1,49 @@
+project(InterpretFAST) : boost_base, QuickFASTExample{
+  exename = InterpretFAST
+  Source_Files {
+    InterpretFAST
+  }
+  Header_Files {
+    InterpretFAST
+  }
+}
+
+project(PerformanceTest) : boost_base, QuickFASTExample{
+  exename = PerformanceTest
+  Source_Files {
+    PerformanceTest
+  }
+  Header_Files {
+    PerformanceTest
+  }
+}
+
+project(FileToTCP) : boost_base, boost_filesystem, QuickFASTExample{
+  exename = FileToTCP
+  Source_Files {
+    FileToTCP
+  }
+  Header_Files {
+    FileToTCP
+  }
+}
+
+project(FileToMulticast) : boost_base, boost_filesystem, QuickFASTExample{
+  exename = FileToMulticast
+  Source_Files {
+    FileToMulticast
+  }
+  Header_Files {
+    FileToMulticast
+  }
+}
+
+project(MulticastDecoder) : boost_base, boost_filesystem, QuickFASTExample{
+  exename = MulticastDecoder
+  Source_Files {
+    MulticastDecoder
+  }
+  Header_Files {
+    MulticastDecoder
+  }
+}

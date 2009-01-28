@@ -1,0 +1,21 @@
+project {
+  requires += nunit
+  lit_libs += nunit.framework.dll
+
+
+  //libout = $(QuickFAST_ROOT)/lib
+
+  after = QuickFASTDotNet
+  sharedname = QuickFASTDoNetTests
+
+  specific {
+    guid = 9CCB9524-05A4-43b4-8B64-1A3D222CFA2A
+  }
+
+  Source_Files {
+    Properties{
+      Properties\AssemblyInfo.cs
+    }
+    *.cs
+  }
+}
