@@ -30,13 +30,6 @@ FieldUInt64::getType() const
   return Field::UINT64;
 }
 
-void
-FieldUInt64::setValue(uint64 value)
-{
-  value_ = value;
-  valid_ = true;
-}
-
 uint64
 FieldUInt64::toUInt64() const
 {

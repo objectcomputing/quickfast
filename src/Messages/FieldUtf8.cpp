@@ -27,13 +27,6 @@ FieldUtf8::FieldUtf8()
 {
 }
 
-void
-FieldUtf8::setValue(const uchar * buffer, size_t length)
-{
-  value_ = std::string(reinterpret_cast<const char *>(buffer), length);
-  valid_ = true;
-}
-
 FieldUtf8::~FieldUtf8()
 {
 }
@@ -58,13 +51,6 @@ FieldUtf8::toString() const
     FieldNotPresent ex("Field not present");
   }
   return value_;
-}
-
-void
-FieldUtf8::setValue(const std::string & value)
-{
-  value_ = value;
-  valid_ = true;
 }
 
 const std::string &

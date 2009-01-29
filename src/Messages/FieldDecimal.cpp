@@ -29,13 +29,6 @@ FieldDecimal::getType() const
   return Field::DECIMAL;
 }
 
-void
-FieldDecimal::setValue(Decimal value)
-{
-  value_ = value;
-  valid_ = true;
-}
-
 const Decimal &
 FieldDecimal::toDecimal() const
 {

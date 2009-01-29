@@ -20,11 +20,11 @@ namespace QuickFAST{
       virtual ~FieldSequence();
     public:
       /// @brief Construct a field given a sequence for it to contain
-      /// @param file is set to point to the created field
       /// @param sequence the entries for this FieldSequence
+      /// @returns a constant pointer to the immutable field
       static FieldCPtr create(Messages::SequenceCPtr sequence);
       /// @brief Construct a NULL field (not an empty string)
-      /// @param file is set to point to the created field
+      /// @returns a constant pointer to the immutable field
       static FieldCPtr createNull();
 
       /// @brief Set the sequence directly(for debugging)

@@ -30,13 +30,6 @@ FieldInt32::getType() const
   return Field::INT32;
 }
 
-void
-FieldInt32::setValue(int32 value)
-{
-  value_ = value;
-  valid_ = true;
-}
-
 int32
 FieldInt32::toInt32() const
 {

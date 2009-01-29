@@ -19,17 +19,16 @@ namespace QuickFAST{
       /// @brief Construct a NULL field
       FieldInt64();
     public:
+      /// @brief Construct the field from am int64 value
+      /// @param value the value to be stored in the field
+      /// @returns a constant pointer to the immutable field
       static FieldCPtr create(int64 value);
-      /// @brief Construct a NULL field (not an empty string)
-      /// @param file is set to point to the created field
+      /// @brief Construct a NULL field
+      /// @returns a constant pointer to the immutable field
       static FieldCPtr createNull();
 
       /// @brief a typical virtual destructor.
       virtual ~FieldInt64();
-
-      /// @brief change value
-      /// @param value the new value for the field
-      void setValue(int64 value);
 
       // implement selected virtual methods from Field
       virtual Field::FieldType getType()const;

@@ -44,4 +44,4 @@ namespace QuickFAST{
     bool running_;
   };
 }
-#endif STOPWATCH_H
+#endif // STOPWATCH_H

@@ -30,13 +30,6 @@ FieldUInt32::getType()const
   return Field::UINT32;
 }
 
-void
-FieldUInt32::setValue(uint32 value)
-{
-  value_ = value;
-  valid_ = true;
-}
-
 uint32
 FieldUInt32::toUInt32() const
 {

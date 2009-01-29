@@ -44,13 +44,6 @@ FieldAscii::isString() const
   return true;
 }
 
-void
-FieldAscii::setValue(const std::string & value)
-{
-  value_ = value;
-  valid_ = true;
-}
-
 const std::string &
 FieldAscii::toString() const
 {

@@ -1,3 +1,28 @@
+Thu Jan 29 17:29:12 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Examples/Examples/StopWatch.h:
+        Fix comment on #endif
+
+        * src/Messages/FieldAscii.h:
+        * src/Messages/FieldAscii.cpp:
+        * src/Messages/FieldByteVector.h:
+        * src/Messages/FieldByteVector.cpp:
+        * src/Messages/FieldDecimal.h:
+        * src/Messages/FieldDecimal.cpp:
+        * src/Messages/FieldGroup.h:
+        * src/Messages/FieldInt32.h:
+        * src/Messages/FieldInt32.cpp:
+        * src/Messages/FieldInt64.h:
+        * src/Messages/FieldInt64.cpp:
+        * src/Messages/FieldSequence.h:
+        * src/Messages/FieldUInt32.h:
+        * src/Messages/FieldUInt32.cpp:
+        * src/Messages/FieldUInt64.h:
+        * src/Messages/FieldUInt64.cpp:
+        * src/Messages/FieldUtf8.h:
+        * src/Messages/FieldUtf8.cpp:
+        Clean up doxygen
+
 Wed Jan 28 20:30:02 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * .:

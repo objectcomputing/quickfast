@@ -19,20 +19,16 @@ namespace QuickFAST{
       /// @param value is the initial value for the field.
       FieldDecimal(const Decimal & value);
     public:
+      /// @brief Construct the field from a Decimal value
+      /// @param value the value to be stored in the field
+      /// @returns a constant pointer to the immutable field
       static FieldCPtr create(const Decimal & value);
-      /// @brief Construct a NULL field (not an empty string)
-      /// @param file is set to point to the created field
+      /// @brief Construct a NULL field
+      /// @returns a constant pointer to the immutable field
       static FieldCPtr createNull();
 
       /// @brief a typical virtual destructor.
       virtual ~FieldDecimal();
-
-      /// @brief change value
-      /// @param value the new value for the field
-      void setValue(uint64 value);
-      /// @brief change value
-      /// @param value the new value for the field
-      void setValue(Decimal value);
 
       // implement selected virtual methods from Field
       virtual Field::FieldType getType()const;

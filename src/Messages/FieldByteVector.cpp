@@ -42,23 +42,6 @@ FieldByteVector::isString() const
   return true;
 }
 
-void
-FieldByteVector::setValue(const std::string & value)
-{
-  value_ = value;
-  valid_ = true;
-}
-
-void
-FieldByteVector::setValue(
-  const uchar * buffer,
-  size_t length)
-{
-  value_ = std::string(reinterpret_cast<const char *>(buffer),length);
-  valid_ = true;
-}
-
-
 const std::string &
 FieldByteVector::toByteVector() const
 {
