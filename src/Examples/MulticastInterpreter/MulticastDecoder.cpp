@@ -14,7 +14,7 @@
 
 using namespace QuickFAST;
 
-MulticastDecoder::MulticastDecoder()
+MulticastInterpreter::MulticastInterpreter()
 : bufferSize_(5000)
 , outputFile_(0)
 , echoFile_(0)
@@ -34,20 +34,20 @@ MulticastDecoder::MulticastDecoder()
 {
 }
 
-MulticastDecoder::~MulticastDecoder()
+MulticastInterpreter::~MulticastInterpreter()
 {
 }
 
 
 bool
-MulticastDecoder::init(int argc, char * argv[])
+MulticastInterpreter::init(int argc, char * argv[])
 {
   commandArgParser_.addHandler(this);
   return commandArgParser_.parse(argc, argv);
 }
 
 int
-MulticastDecoder::parseSingleArg(int argc, char * argv[])
+MulticastInterpreter::parseSingleArg(int argc, char * argv[])
 {
   int consumed = 0;
   std::string opt(argv[0]);
@@ -143,7 +143,7 @@ MulticastDecoder::parseSingleArg(int argc, char * argv[])
 }
 
 void
-MulticastDecoder::usage(std::ostream & out) const
+MulticastInterpreter::usage(std::ostream & out) const
 {
   out << "  -b size       : Size of largest expected message. (default 5000)" << std::endl;
   out << "  -t file       : Template file (required)" << std::endl;
@@ -164,7 +164,7 @@ MulticastDecoder::usage(std::ostream & out) const
 }
 
 bool
-MulticastDecoder::applyArgs()
+MulticastInterpreter::applyArgs()
 {
   bool ok = true;
   try
@@ -252,7 +252,7 @@ MulticastDecoder::applyArgs()
 }
 
 int
-MulticastDecoder::run()
+MulticastInterpreter::run()
 {
   int result = 0;
   try
@@ -290,13 +290,13 @@ MulticastDecoder::run()
 }
 
 void
-MulticastDecoder::startReceive(Buffer * data)
+MulticastInterpreter::startReceive(Buffer * data)
 {
   socket_.async_receive_from(
     boost::asio::buffer(data->get(), bufferSize_),
     senderEndpoint_,
     strand_.wrap(
-      boost::bind(&MulticastDecoder::handleReceive,
+      boost::bind(&MulticastInterpreter::handleReceive,
         this,
         boost::asio::placeholders::error,
         data,
@@ -306,7 +306,7 @@ MulticastDecoder::startReceive(Buffer * data)
 }
 
 void
-MulticastDecoder::handleReceive(
+MulticastInterpreter::handleReceive(
   const boost::system::error_code& error,
   Buffer * data,
   size_t bytesReceived)
@@ -354,7 +354,7 @@ MulticastDecoder::handleReceive(
 
 
 void
-MulticastDecoder::fini()
+MulticastInterpreter::fini()
 {
 }
 

@@ -1,3 +1,20 @@
+Fri Jan 30 19:00:54 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Common/QuickFASTPch.h:
+        Continue to extend documentation
+
+        * src/Examples/Examples.mpc:
+        * src/Examples/MulticastInterpreter:
+        * src/Examples/MulticastInterpreter/MulticastDecoder.h:
+        * src/Examples/MulticastInterpreter/MulticastDecoder.cpp:
+        * src/Examples/MulticastInterpreter/main.cpp:
+        * src/Examples/MulticastDecoder:
+        * src/Examples/MulticastDecoder/MulticastDecoder.h:
+        * src/Examples/MulticastDecoder/MulticastDecoder.cpp:
+        * src/Examples/MulticastDecoder/main.cpp:
+        Renaming MulticastDecoder to be MulticastInterpreter because
+        I want to use the name for an actual decoder object.
+
 Thu Jan 29 17:29:12 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Examples/Examples/StopWatch.h:

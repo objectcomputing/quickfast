@@ -4,14 +4,14 @@
 //
 
 #include <Examples/ExamplesPch.h>
-#include <MulticastDecoder/MulticastDecoder.h>
+#include <MulticastInterpreter/MulticastDecoder.h>
 
 using namespace QuickFAST;
 
 int main(int argc, char* argv[])
 {
   int result = -1;
-  MulticastDecoder application;
+  MulticastInterpreter application;
   if(application.init(argc, argv))
   {
     result = application.run();

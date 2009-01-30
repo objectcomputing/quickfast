@@ -2,8 +2,8 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
-#ifndef MULTICASTDECODER_H
-#define MULTICASTDECODER_H
+#ifndef MULTICASTINTERPRETER_H
+#define MULTICASTINTERPRETER_H
 #include <Codecs/DataSource.h>
 #include <Codecs/Decoder_fwd.h>
 
@@ -12,12 +12,12 @@
 #include <Codecs/MessageConsumer_fwd.h>
 
 namespace QuickFAST{
-  class MulticastDecoder : public CommandArgHandler
+  class MulticastInterpreter : public CommandArgHandler
   {
     typedef boost::scoped_array<unsigned char> Buffer;
   public:
-    MulticastDecoder();
-    ~MulticastDecoder();
+    MulticastInterpreter();
+    ~MulticastInterpreter();
 
     bool init(int argc, char * argv[]);
     int run();
@@ -72,4 +72,4 @@ namespace QuickFAST{
     Buffer data2_;
   };
 }
-#endif // MULTICASTDECODER_H
+#endif // MULTICASTINTERPRETER_H

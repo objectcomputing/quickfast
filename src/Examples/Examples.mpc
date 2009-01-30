@@ -38,12 +38,12 @@ project(FileToMulticast) : boost_base, boost_filesystem, QuickFASTExample{
   }
 }
 
-project(MulticastDecoder) : boost_base, boost_filesystem, QuickFASTExample{
-  exename = MulticastDecoder
+project(MulticastInterpreter) : boost_base, boost_filesystem, QuickFASTExample{
+  exename = MulticastInterpreter
   Source_Files {
-    MulticastDecoder
+    MulticastInterpreter
   }
   Header_Files {
-    MulticastDecoder
+    MulticastInterpreter
   }
 }
