@@ -1,3 +1,12 @@
+Fri Jan 30 19:33:45 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.h:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+        * src/Examples/MulticastInterpreter/main.cpp:
+        * src/Examples/MulticastInterpreter/MulticastDecoder.h:
+        * src/Examples/MulticastInterpreter/MulticastDecoder.cpp:
+        Complete the renaming s/MulticastDecoder/MulticastInterpreter/
+
 Fri Jan 30 19:00:54 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Common/QuickFASTPch.h:

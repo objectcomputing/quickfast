@@ -4,7 +4,7 @@
 //
 
 #include <Examples/ExamplesPch.h>
-#include <MulticastInterpreter/MulticastDecoder.h>
+#include <MulticastInterpreter/MulticastInterpreter.h>
 
 using namespace QuickFAST;
 
