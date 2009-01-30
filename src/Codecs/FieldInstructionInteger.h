@@ -342,7 +342,7 @@ namespace QuickFAST{
           {
             if(isMandatory())
             {
-              if(decoder.strict())
+              if(decoder.getStrict())
               {
                 throw EncodingError("[ERR D5] Copy operator missing mandatory integer field/no initial value");
               }
@@ -540,7 +540,7 @@ namespace QuickFAST{
           {
             if(isMandatory())
             {
-              if(decoder.strict())
+              if(decoder.getStrict())
               {
                 throw EncodingError("[ERRD5]: Missing initial value for Increment operator");
               }

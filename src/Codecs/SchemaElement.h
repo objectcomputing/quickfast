@@ -10,12 +10,9 @@
 #define SCHEMAELEMENT_H
 
 #include <Common/QuickFAST_Export.h>
-//#include "SchemaElementVisitor.h"
 #include <Codecs/Template_fwd.h>
 #include <Codecs/FieldInstruction_fwd.h>
 #include <Codecs/FieldOp_fwd.h>
-//#include <Codecs/FieldInstructionMantissa.h>
-//#include <Codecs/FieldInstructionExponent.h>
 #include <Codecs/SegmentBody_fwd.h>
 
 namespace QuickFAST

@@ -1,3 +1,25 @@
+Fri Jan 30 22:57:15 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Decoder.h:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/MessageConsumer_fwd.h:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/MulticastDecoder_fwd.h:
+        * src/Codecs/SchemaElement.h:
+        * src/Codecs/SynchronousDecoder.h:
+        * src/Codecs/XMLTemplateParser.h:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.h:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+        * src/Messages/Field.h:
+        * src/Messages/Field.cpp:
+        * src/Messages/FieldUInt32.h:
+        * src/Messages/FieldUInt32.cpp:
+        * src/Messages/Field_fwd.h:
+        Separate MulticastDecoder functionality into separate component
+        and move it into Codecs.
+
+
 Fri Jan 30 19:33:45 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Examples/MulticastInterpreter/MulticastInterpreter.h:

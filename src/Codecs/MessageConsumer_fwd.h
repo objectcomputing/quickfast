@@ -9,6 +9,8 @@
 namespace QuickFAST{
   namespace Codecs{
     class MessageConsumer;
+    /// @brief A smart pointer to a MessageConsumer.
+    typedef boost::shared_ptr<MessageConsumer> MessageConsumerPtr;
   }
 }
 #endif /* MESSAGECONSUMER_FWD_H */

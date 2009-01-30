@@ -44,7 +44,7 @@ namespace QuickFAST{
 
       /// @brief get the current status of the strict property.
       /// @returns true if strict checking is enabled.
-      bool strict()const
+      bool getStrict()const
       {
         return strict_;
       }

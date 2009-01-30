@@ -173,7 +173,13 @@ Field::toSequence() const
   UnsupportedConversion ex("Field cannot be converted to Sequence");
   throw ex;
 }
-#ifdef INLINE_CONFUSES_COMPILER
+
+void
+Field::freeField()const
+{
+  delete this;
+}
+
 void
 Messages::intrusive_ptr_add_ref(const Messages::Field * ptr)
 {
@@ -185,7 +191,7 @@ Messages::intrusive_ptr_release(const Messages::Field * ptr)
 {
   if(--ptr->refcount_ == 0)
   {
-    delete ptr;
+    ptr->freeField();
+//    delete ptr;
   }
 }
-#endif //INLINE_CONFUSES_COMPILER

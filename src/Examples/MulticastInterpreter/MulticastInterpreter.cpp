@@ -16,11 +16,7 @@ using namespace QuickFAST;
 
 MulticastInterpreter::MulticastInterpreter()
 : bufferSize_(5000)
-, outputFile_(0)
-, echoFile_(0)
 , echoType_(Codecs::DataSource::HEX)
-, echoMessage_(true)
-, echoField_(false)
 , messageLimit_(0)
 , verboseDecode_(false)
 , verboseExecution_(false)
@@ -28,9 +24,10 @@ MulticastInterpreter::MulticastInterpreter()
 , portNumber_(30001)
 , listenAddressName_("0.0.0.0")
 , multicastAddressName_("239.255.0.1")
-, strand_(ioService_)
-, socket_(ioService_)
-, inputCount_(0)
+, echoMessage_(true)
+, echoField_(false)
+, outputFile_(0)
+, echoFile_(0)
 {
 }
 
@@ -188,8 +185,16 @@ MulticastInterpreter::applyArgs()
     if(ok)
     {
       Codecs::XMLTemplateParser parser;
-      decoder_ = new Codecs::Decoder(parser.parse(templateFile_));
+      decoder_ = new Codecs::MulticastDecoder(
+        parser.parse(templateFile_),
+        multicastAddressName_,
+        listenAddressName_,
+        portNumber_);
       decoder_->setStrict(strict_);
+      decoder_->setLimit(messageLimit_);
+      decoder_->setBufferSize(bufferSize_);
+      decoder_->setVerboseDecode(verboseDecode_);
+      decoder_->setVerboseExecution(verboseExecution_);
     }
 
     if(outputFileName_.empty())
@@ -207,8 +212,6 @@ MulticastInterpreter::applyArgs()
           << std::endl;
       }
     }
-
-    consumer_ = new MessageInterpreter(*outputFile_);
 
     if(! echoFileName_.empty())
     {
@@ -229,12 +232,6 @@ MulticastInterpreter::applyArgs()
       }
     }
 
-    multicastAddress_ = boost::asio::ip::address::from_string(multicastAddressName_);
-    listenAddress_ = boost::asio::ip::address::from_string(listenAddressName_);
-    endpoint_ = boost::asio::ip::udp::endpoint(listenAddress_, portNumber_);
-    socket_.open(endpoint_.protocol());
-    socket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
-    socket_.bind(endpoint_);
   }
   catch (std::exception& e)
   {
@@ -246,8 +243,6 @@ MulticastInterpreter::applyArgs()
     commandArgParser_.usage(std::cerr);
   }
 
-  data_.reset(new unsigned char[bufferSize_]);
-  data2_.reset(new unsigned char[bufferSize_]);
   return ok;
 }
 
@@ -255,31 +250,29 @@ int
 MulticastInterpreter::run()
 {
   int result = 0;
+  Codecs::MessageConsumerPtr consumer(new MessageInterpreter(*outputFile_));
+  decoder_->start(consumer);
+
   try
   {
-    // Join the multicast group.
-    socket_.set_option(
-        boost::asio::ip::multicast::join_group(multicastAddress_));
-    startReceive(&data_);
-    startReceive(&data2_);
-
     StopWatch lapse;
-//    boost::thread t(boost::bind(&boost::asio::io_service::run, &ioService_));
-    ioService_.run();
-//    t.join();
+    decoder_->run();
     unsigned long receiveLapse = lapse.freeze();
-    std::cout << "Received "
-      << inputCount_
-      << " messages in "
-      << std::fixed << std::setprecision(3)
-      << receiveLapse
-      << " milliseonds. [";
-    std::cout << std::fixed << std::setprecision(3)
-      << double(receiveLapse)/double(inputCount_) << " msec/message. = "
-      << std::fixed << std::setprecision(0)
-      << 1000. * double(inputCount_)/double(receiveLapse) << " message/second.]"
-      << std::endl;
-
+    size_t messageCount = decoder_->messageCount();
+    if(messageCount > 0)
+    {
+      std::cout << "Received "
+        << messageCount
+        << " messages in "
+        << std::fixed << std::setprecision(3)
+        << receiveLapse
+        << " milliseonds. [";
+      std::cout << std::fixed << std::setprecision(3)
+        << double(receiveLapse)/double(messageCount) << " msec/message. = "
+        << std::fixed << std::setprecision(0)
+        << 1000. * double(messageCount)/double(receiveLapse) << " message/second.]"
+        << std::endl;
+    }
   }
   catch (std::exception& e)
   {
@@ -287,69 +280,6 @@ MulticastInterpreter::run()
     result = -1;
   }
   return result;
-}
-
-void
-MulticastInterpreter::startReceive(Buffer * data)
-{
-  socket_.async_receive_from(
-    boost::asio::buffer(data->get(), bufferSize_),
-    senderEndpoint_,
-    strand_.wrap(
-      boost::bind(&MulticastInterpreter::handleReceive,
-        this,
-        boost::asio::placeholders::error,
-        data,
-        boost::asio::placeholders::bytes_transferred)
-        )
-      );
-}
-
-void
-MulticastInterpreter::handleReceive(
-  const boost::system::error_code& error,
-  Buffer * data,
-  size_t bytesReceived)
-{
-  if (!error)
-  {
-    ++inputCount_;
-    if(verboseExecution_)
-    {
-      std::cout << "Received[" << inputCount_ << "]: " << bytesReceived << " bytes" << std::endl;
-    }
-    try
-    {
-      Codecs::DataSourceBuffer source(data->get(), bytesReceived);
-      Messages::Message message(decoder_->getTemplateRegistry()->maxFieldCount());
-      decoder_->reset();
-      decoder_->decodeMessage(source, message);
-
-      if(!consumer_->consumeMessage(message))
-      {
-        if(verboseExecution_)
-        {
-          std::cerr << "Consumer requested early termination." << std::endl;
-        }
-        ioService_.stop();
-        return;
-      }
-      startReceive(data);
-    }
-    catch (const std::exception &ex)
-    {
-      std::cerr << "Decoding error: " << ex.what() << std::endl;
-    }
-    if(inputCount_ > messageLimit_)
-    {
-      ioService_.stop();
-    }
-  }
-  else
-  {
-    std::cerr << "Error code: " << error.message() << std::endl;
-    ioService_.stop();
-  }
 }
 
 

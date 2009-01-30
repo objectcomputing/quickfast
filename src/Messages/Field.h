@@ -178,16 +178,12 @@ namespace QuickFAST{
       bool valid_;
 
     private:
-#ifdef INLINE_CONFUSES_COMPILER
       friend void QuickFAST_Export intrusive_ptr_add_ref(const Field * ptr);
       friend void QuickFAST_Export intrusive_ptr_release(const Field * ptr);
-#else // INLINE_CONFUSES_COMPILER
-      friend void intrusive_ptr_add_ref(const Field * ptr);
-      friend void intrusive_ptr_release(const Field * ptr);
-#endif // INLINE_CONFUSES_COMPILER
+      virtual void freeField()const;
       mutable unsigned long refcount_;
     };
-#ifdef INLINE_CONFUSES_COMPILER // gcc 3.6 apparently doesn't handle inline correctly?
+
     /// @brief Support boost::intrusive_ptr
     /// @param ptr to target Field
     void QuickFAST_Export intrusive_ptr_add_ref(const Messages::Field * ptr);
@@ -195,27 +191,6 @@ namespace QuickFAST{
     /// @brief Support boost::intrusive_ptr
     /// @param ptr to target Field
     void QuickFAST_Export intrusive_ptr_release(const Messages::Field * ptr);
-#else // INLINE_CONFUSES_COMPILER
-    /// @brief Support boost::intrusive_ptr
-    /// @param ptr to target Field
-    inline
-    void intrusive_ptr_add_ref(const Messages::Field * ptr)
-    {
-      ++ptr->refcount_;
-    }
-
-    /// @brief Support boost::intrusive_ptr
-    /// @param ptr to target Field
-    inline
-    void intrusive_ptr_release(const Messages::Field * ptr)
-    {
-      if(--ptr->refcount_ == 0)
-      {
-        delete ptr;
-      }
-    }
-
-#endif // INLINE_CONFUSES_COMPILER
   }
 }
 #endif // FIELD_H

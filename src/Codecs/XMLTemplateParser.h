@@ -10,6 +10,8 @@
 #define XMLTEMPLATEPARSER_H
 
 #include "XMLTemplateParser_fwd.h"
+#include <Codecs/TemplateRegistry.h>
+
 #include <Codecs/TemplateRegistry_fwd.h>
 #include <Codecs/SchemaElement_fwd.h>
 #include <Common/QuickFAST_Export.h>
