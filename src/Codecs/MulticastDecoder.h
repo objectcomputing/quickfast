@@ -14,15 +14,23 @@
 
 namespace QuickFAST{
   namespace Codecs {
+
+    /// @brief Support decoding of FAST messages received via multicast.
     class QuickFAST_Export MulticastDecoder
     {
       typedef boost::scoped_array<unsigned char> Buffer;
     public:
+      /// @brief construct given templates and multicast information
+      /// @param templateRegistry the templates to use for decoding
+      /// @param multicastAddressName multicast address as a text string
+      /// @param listendAddressName listen address as a text string
+      /// @param portNumber port number
       MulticastDecoder(
         TemplateRegistryPtr templateRegistry,
         const std::string & multicastAddressName,
         const std::string & listendAddressName,
         unsigned short portNumber);
+
       ~MulticastDecoder();
 
       /// @brief Enable some debugging/diagnostic information to be written to an ostream
@@ -57,21 +65,23 @@ namespace QuickFAST{
         messageLimit_ = messageLimit;
       }
 
+      /// @brief the largest expected multicast packet
       void setBufferSize(size_t bufferSize)
       {
         bufferSize_ = bufferSize;
       }
 
+      /// @enables noisy decoding at the message level
       void setVerboseDecode(bool verbose)
       {
         verboseDecode_ = verbose;
       }
 
+      /// @enables noisy decoding at the execution progress level
       void setVerboseExecution(bool verbose)
       {
         verboseExecution_ = verbose;
       }
-
 
       /// @brief How many messages have been decoded.
       /// @returns the number of messages that have been decoded.
@@ -80,8 +90,10 @@ namespace QuickFAST{
         return messageCount_;
       }
 
+      /// Start the decoding process.  Returns immediately
       void start(MessageConsumerPtr consumer);
 
+      /// Run the event loop.
       void run();
 
     private:
