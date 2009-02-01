@@ -8,9 +8,11 @@
 #define STOPWATCH_H
 
 namespace QuickFAST{
+  /// @brief Measure the wall-clock lapse between creation and freeze()
   class StopWatch
   {
   public:
+    /// @brief Create the stopwatch and start it running.
     StopWatch()
       : start_(boost::posix_time::microsec_clock::universal_time())
       , running_(true)
@@ -21,12 +23,14 @@ namespace QuickFAST{
     {
     }
 
+    /// @brief stop or pause the clock and return lapsed time
     unsigned long freeze()
     {
       running_ = true;
       return lapse();
     }
 
+    /// @brief retrieve the lapsed time in milliseconds.  Freeze if necessary.
     unsigned long lapse()
     {
       if(running_)

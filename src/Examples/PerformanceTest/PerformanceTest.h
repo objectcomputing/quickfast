@@ -10,14 +10,24 @@
 #include <Examples/CommandArgParser.h>
 
 namespace QuickFAST{
+  /// @brief A simple performance test that measures the time used to decode the messages in a file.
+  ///
+  /// Also a good program to run when profiling.
   class PerformanceTest : public CommandArgHandler
   {
   public:
     PerformanceTest();
     ~PerformanceTest();
 
+    /// @brief parse command line arguments, and initialize.
+    /// @param argc from main
+    /// @param argv from main
+    /// @returns true if everything is ok.
     bool init(int argc, char * argv[]);
+    /// @brief run the program
+    /// @returns a value to be used as an exit code of the program (0 means all is well)
     int run();
+    /// @brief do final cleanup after a run.
     void fini();
 
   private:

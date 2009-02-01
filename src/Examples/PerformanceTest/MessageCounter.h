@@ -11,6 +11,8 @@
 #include <Messages/FieldIdentity.h>
 namespace QuickFAST{
 
+  /// @brief A MessageConsumer that simply counts the number of
+  /// messages decoded.
   class MessageCounter : public Codecs::MessageConsumer
   {
   public:
@@ -18,7 +20,8 @@ namespace QuickFAST{
     virtual ~MessageCounter();
 
     virtual bool consumeMessage(Messages::Message & message);
-
+    /// @brief get the count
+    /// @returns the number of calls to consumeMessage()
     size_t getMesssageCount()const
     {
       return messageCount_;

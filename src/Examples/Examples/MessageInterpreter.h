@@ -11,14 +11,17 @@
 #include <Messages/FieldIdentity.h>
 namespace QuickFAST{
 
+  /// @brief A message consumer that attempts to produce a human readable version
+  /// of a message that has been decoded by QuickFAST.
   class MessageInterpreter : public Codecs::MessageConsumer
   {
   public:
+    /// @brief Construct given a ostream to which to write the interpreted results.
     MessageInterpreter(std::ostream & out);
     virtual ~MessageInterpreter();
-
     virtual bool consumeMessage(Messages::Message & message);
 
+  private:
     void formatMessage(Messages::Message & message);
     void formatSequence(
       const Messages::FieldIdentity & identity,

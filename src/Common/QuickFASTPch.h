@@ -122,6 +122,16 @@
 /// The application should catch exceptions thrown by the encoder and tell the the data destination
 /// to discard any partially encoded information.
 ///
+/// <h4>
+/// For examples of how QuickFAST can be used in an application </h4>
+/// @see QuickFAST::InterpretFAST
+/// @see QuickFAST::MulticastInterpreter
+/// @see QuickFAST::PerformanceTest
+///
+/// These examples use some support programs
+/// @see QuickFAST::FileToTCP
+/// @see QuickFAST::FileToMulticast
+///
 /// @todo: Discuss threading issues.
 /// @todo: Discuss message buffering issues.
 ///

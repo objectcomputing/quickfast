@@ -1,3 +1,17 @@
+Sun Feb  1 23:42:46 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Common/QuickFASTPch.h:
+        * src/Doxyfile:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/StopWatch.h:
+        * src/Examples/FileToMulticast/FileToMulticast.h:
+        * src/Examples/FileToTCP/FileToTCP.h:
+        * src/Examples/InterpretFAST/InterpretFAST.h:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.h:
+        * src/Examples/PerformanceTest/MessageCounter.h:
+        * src/Examples/PerformanceTest/PerformanceTest.h:
+        Include Examples in Doxygen
+
 Sun Feb  1 18:19:03 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MulticastDecoder.h:

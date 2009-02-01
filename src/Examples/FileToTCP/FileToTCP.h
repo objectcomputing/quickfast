@@ -9,14 +9,32 @@
 #include <stdio.h>
 
 namespace QuickFAST{
+  /// @brief Send the contents of a FAST encoded data file via TCP/IP.
+  ///
+  /// The contents of a data file are sent to a TCP/IP socket.  No attempt
+  /// is made to identify message boundaries which is consistent with normal
+  /// TCP/IP buffering behavior.
+  ///
+  /// Use the -? option for more information.
+  ///
+  /// This program is not really FAST-aware. It is just part of a testing
+  /// framework for other programs.
+
   class FileToTCP : public CommandArgHandler
   {
   public:
     FileToTCP();
     ~FileToTCP();
 
+    /// @brief parse command line arguments, and initialize.
+    /// @param argc from main
+    /// @param argv from main
+    /// @returns true if everything is ok.
     bool init(int argc, char * argv[]);
+    /// @brief run the program
+    /// @returns a value to be used as an exit code of the program (0 means all is well)
     int run();
+    /// @brief do final cleanup after a run.
     void fini();
 
   private:
