@@ -1,3 +1,11 @@
+Sun Feb  1 18:19:03 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Common/AsioService.h:
+        * src/Common/AsioService.cpp:
+        Generalized wrapper around boost::io_service
+
 Fri Jan 30 23:08:16 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MulticastDecoder.h:

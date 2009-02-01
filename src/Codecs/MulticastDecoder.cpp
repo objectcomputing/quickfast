@@ -34,6 +34,27 @@ MulticastDecoder::MulticastDecoder(
 {
 }
 
+MulticastDecoder::MulticastDecoder(
+  TemplateRegistryPtr templateRegistry,
+  boost::asio::io_service & ioService,
+  const std::string & multicastAddressName,
+  const std::string & listenAddressName,
+  unsigned short portNumber)
+: AsioService(ioService)
+, decoder_(templateRegistry)
+, messageCount_(0)
+, messageLimit_(0)
+, bufferSize_(5000)
+, verboseDecode_(false)
+, verboseExecution_(false)
+, strand_(ioService_)
+, listenAddress_(boost::asio::ip::address::from_string(listenAddressName))
+, multicastAddress_(boost::asio::ip::address::from_string(multicastAddressName))
+, endpoint_(listenAddress_, portNumber)
+, socket_(ioService_)
+{
+}
+
 MulticastDecoder::~MulticastDecoder()
 {
 }
@@ -57,16 +78,6 @@ MulticastDecoder::start(
     boost::asio::ip::multicast::join_group(multicastAddress_));
   startReceive(&data_);
   startReceive(&data2_);
-}
-
-void
-MulticastDecoder::run()
-{
-//    boost::thread t(boost::bind(&boost::asio::io_service::run, &ioService_));
-  std::cout << "running" << std::endl;
-  ioService_.run();
-  std::cout << "stopping" << std::endl;
-//    t.join();
 }
 
 void

@@ -8,15 +8,14 @@
 #include <Codecs/DataSource.h>
 #include <Codecs/Decoder.h>
 #include <Codecs/TemplateRegistry_fwd.h>
-
-#include <boost/asio.hpp>
 #include <Codecs/MessageConsumer_fwd.h>
+#include <Common/AsioService.h>
 
 namespace QuickFAST{
   namespace Codecs {
 
     /// @brief Support decoding of FAST messages received via multicast.
-    class QuickFAST_Export MulticastDecoder
+    class QuickFAST_Export MulticastDecoder : public AsioService
     {
       typedef boost::scoped_array<unsigned char> Buffer;
     public:
@@ -27,6 +26,19 @@ namespace QuickFAST{
       /// @param portNumber port number
       MulticastDecoder(
         TemplateRegistryPtr templateRegistry,
+        const std::string & multicastAddressName,
+        const std::string & listendAddressName,
+        unsigned short portNumber);
+
+      /// @brief construct given templates, shared io_service, and multicast information
+      /// @param templateRegistry the templates to use for decoding
+      /// @param ioService an ioService to be shared with other objects
+      /// @param multicastAddressName multicast address as a text string
+      /// @param listendAddressName listen address as a text string
+      /// @param portNumber port number
+      MulticastDecoder(
+        TemplateRegistryPtr templateRegistry,
+        boost::asio::io_service & ioService,
         const std::string & multicastAddressName,
         const std::string & listendAddressName,
         unsigned short portNumber);
@@ -71,13 +83,13 @@ namespace QuickFAST{
         bufferSize_ = bufferSize;
       }
 
-      /// @enables noisy decoding at the message level
+      /// @brief enables noisy decoding at the message level
       void setVerboseDecode(bool verbose)
       {
         verboseDecode_ = verbose;
       }
 
-      /// @enables noisy decoding at the execution progress level
+      /// @brief enables noisy decoding at the execution progress level
       void setVerboseExecution(bool verbose)
       {
         verboseExecution_ = verbose;
@@ -92,9 +104,6 @@ namespace QuickFAST{
 
       /// Start the decoding process.  Returns immediately
       void start(MessageConsumerPtr consumer);
-
-      /// Run the event loop.
-      void run();
 
     private:
       void handleReceive(
@@ -111,7 +120,6 @@ namespace QuickFAST{
       size_t bufferSize_;
       bool verboseDecode_;
       bool verboseExecution_;
-      boost::asio::io_service ioService_;
       boost::asio::strand strand_;
       boost::asio::ip::address listenAddress_;
       boost::asio::ip::address multicastAddress_;
