@@ -7,38 +7,89 @@
 
 using namespace ::QuickFAST;
 
+boost::asio::io_service AsioService::privateIoService_;
+
 AsioService::AsioService()
-  : privateIoService_(new boost::asio::io_service)
-  , ioService_(*privateIoService_)
+  : stopping_(false)
+  , threadCount_(0)
+  , threadCapacity_(0)
+  , ioService_(privateIoService_)
 {
 }
 
 AsioService::AsioService(boost::asio::io_service & ioService)
-  : privateIoService_(0)
+  : stopping_(false)
+  , threadCount_(0)
+  , threadCapacity_(0)
   , ioService_(ioService)
 {
 }
-
 
 AsioService::~AsioService()
 {
 }
 
 void
-AsioService::run(size_t extraThreadCount /*= 0*/)
+AsioService::stopService()
 {
-  typedef boost::scoped_ptr<boost::thread> ThreadPtr;
-  boost::scoped_array<ThreadPtr> threads(new ThreadPtr[extraThreadCount]);
-  for(size_t nThread = 0; nThread < extraThreadCount; ++nThread)
+  stopping_ = true;
+  ioService_.stop();
+}
+
+void
+AsioService::startThreads(size_t threadCount)
+{
+  if(threadCount > threadCapacity_)
   {
-    threads[nThread].reset(
-      new boost::thread(boost::bind(&boost::asio::io_service::run, &ioService_)));
+    boost::scoped_array<ThreadPtr> newThreads(new ThreadPtr[threadCount]);
+    for(size_t nThread = 0; nThread < threadCount_; ++nThread)
+    {
+      newThreads[nThread] = threads_[nThread];
+    }
+    threads_.swap(newThreads);
+    threadCapacity_ = threadCount;
   }
-  ioService_.run();
-  for(size_t nThread = extraThreadCount; nThread < 0;)
+  while(threadCount_ < threadCount)
   {
-     --nThread;
-    threads[nThread]->join();
+    threads_[threadCount_].reset(
+      new boost::thread(boost::bind(&AsioService::run, this)));
+    ++threadCount_;
+  }
+}
+
+void
+AsioService::joinThreads()
+{
+  while(threadCount_ > 0)
+  {
+     --threadCount_;
+    threads_[threadCount_]->join();
+    threads_[threadCount_].reset();
+  }
+}
+
+void
+AsioService::runThreads(size_t extraThreadCount /*= 0*/)
+{
+  startThreads(extraThreadCount);
+  run();
+  joinThreads();
+}
+
+void
+AsioService::run()
+{
+  while(! stopping_)
+  {
+    try
+    {
+      ioService_.run();
+    }
+    catch (const std::exception & ex)
+    {
+      // todo: logging?
+      std::cerr << ex.what();
+    }
   }
 }
 

@@ -1,3 +1,10 @@
+Mon Feb  2 18:15:13 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Common/AsioService.h:
+        * src/Common/AsioService.cpp:
+        Add full(er) support for io_service event loop handling
+        All AsioService derived classes use a common io_service (by default, anyway)
+
 Sun Feb  1 23:42:46 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Common/QuickFASTPch.h:
