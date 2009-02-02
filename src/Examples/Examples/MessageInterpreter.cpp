@@ -11,6 +11,7 @@
 #include <Messages/Group.h>
 
 using namespace QuickFAST;
+using namespace Examples;
 
 MessageInterpreter::MessageInterpreter(std::ostream & out)
   : out_(out)

@@ -84,21 +84,22 @@
 /// <h3>"Prepackaged" decoders.</h3>
 /// The QuickFAST::Codecs::SynchronousDecoder and QuickFAST::Codecs::MulticastDecoder
 /// objects support simpler approach to writing a decoder application.  To use either
-/// of these objects, create an application object that implements the
-/// QuickFAST::Codecs::MessageConsumer interface.
+/// of these objects, you need an application object that can handle the incoming messages.
+/// This object should implement the QuickFAST::Codecs::MessageConsumer interface.
 ///
-/// The SynchronousDecoder or MulticastDecoder handle the details of receiving and decoding
-/// incoming messages then call the consumeeMessage() method of your object for each incoming
-/// message.
+/// The SynchronousDecoder or MulticastDecoder handles the details of receiving and decoding
+/// incoming messages.  Each time a complete messages has been decoded, the consumeMessage()
+/// method of your MessageConsumer object will be called.
 ///
 /// The SynchronousDecoder can be used to receive messages from a DataSource that either has
 /// all incoming data available (reading from a file, for example.) or that blocks waiting
 /// for incoming data to arrive when necessary.
 ///
 /// The MulticastDecoder using nonblocking boost::asio to dispatch incoming data to the
-/// decoder out of an event loop run by a boost::io_service object.  Multiple threads can
-/// be available dispatch from multiple incoming channels.  See the boost::asio documentation
-/// for details.
+/// decoder out of an event loop run by a boost::io_service object.  Multiple input channels
+/// can be supported--each with it's own independent decoder.  Multiple threads can be used.
+/// be used, to allow parallel processing, although each decoder will only be executing in one
+/// thread at a time.  See the boost::asio documentation for details.
 ///
 /// <h3>Using QuickFAST in an application that sends FAST data.</h3>
 /// To send FAST encoded data, a typical application would:<ul>
@@ -111,13 +112,14 @@
 ///  <li>Create an empty QuickFAST::Messages::Message</li>
 ///  <li>Add fields to the message by <ul>
 ///   <li>creating a QuickFAST::Messages::FieldIdentity to identify the field, and</li>
-///   <li>creating the appropriate implementation of QuickFAST::Messages::Field to represent the feild value.</li>
+///   <li>creating the appropriate implementation of QuickFAST::Messages::Field to represent the field value.</li>
 ///   <li>adding the field to the message using the addField() method.</li></ul></li>
 ///  <li>Pass the populated message and the data destination to the encoders encodeMessage() method.</li>
 /// </ul></ul>
 ///
-/// The encoder will call the endMessage() method on the data destination.  This can be used
-/// as a signal for the destination to actually transmit or otherwise process the encoded message.
+/// The encoder will send the encoded data to the DataDestination, then call the DataDestination::endMessage()
+/// method.  This call is a signal for the destination to actually transmit or otherwise process the encoded
+/// message.
 ///
 /// The application should catch exceptions thrown by the encoder and tell the the data destination
 /// to discard any partially encoded information.

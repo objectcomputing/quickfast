@@ -16,6 +16,7 @@
 #include <Common/Profiler.h>
 
 using namespace QuickFAST;
+using namespace Examples;
 
 PerformanceTest::PerformanceTest()
   : resetOnMessage_(false)

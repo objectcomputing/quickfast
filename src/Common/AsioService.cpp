@@ -14,6 +14,7 @@ AsioService::AsioService()
   , threadCount_(0)
   , threadCapacity_(0)
   , ioService_(privateIoService_)
+  , strand_(ioService_)
 {
 }
 
@@ -22,6 +23,7 @@ AsioService::AsioService(boost::asio::io_service & ioService)
   , threadCount_(0)
   , threadCapacity_(0)
   , ioService_(ioService)
+  , strand_(ioService_)
 {
 }
 
@@ -83,7 +85,11 @@ AsioService::run()
   {
     try
     {
-      ioService_.run();
+      size_t count = ioService_.run();
+      if(count == 0)
+      {
+        return;
+      }
     }
     catch (const std::exception & ex)
     {

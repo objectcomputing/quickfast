@@ -9,6 +9,7 @@
 #include <boost/asio.hpp>
 
 using namespace QuickFAST;
+using namespace Examples;
 using boost::asio::ip::tcp;
 
 FileToTCP::FileToTCP()

@@ -26,7 +26,6 @@ MulticastDecoder::MulticastDecoder(
 , bufferSize_(5000)
 , verboseDecode_(false)
 , verboseExecution_(false)
-, strand_(ioService_)
 , listenAddress_(boost::asio::ip::address::from_string(listenAddressName))
 , multicastAddress_(boost::asio::ip::address::from_string(multicastAddressName))
 , endpoint_(listenAddress_, portNumber)
@@ -47,7 +46,6 @@ MulticastDecoder::MulticastDecoder(
 , bufferSize_(5000)
 , verboseDecode_(false)
 , verboseExecution_(false)
-, strand_(ioService_)
 , listenAddress_(boost::asio::ip::address::from_string(listenAddressName))
 , multicastAddress_(boost::asio::ip::address::from_string(multicastAddressName))
 , endpoint_(listenAddress_, portNumber)
@@ -65,33 +63,32 @@ MulticastDecoder::start(
 {
   consumer_ = consumer;
 
-  data_.reset(new unsigned char[bufferSize_]);
-  data2_.reset(new unsigned char[bufferSize_]);
+  buffer1_.reset(new unsigned char[bufferSize_]);
+  buffer2_.reset(new unsigned char[bufferSize_]);
 
   socket_.open(endpoint_.protocol());
   socket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
   socket_.bind(endpoint_);
 
-
   // Join the multicast group.
   socket_.set_option(
     boost::asio::ip::multicast::join_group(multicastAddress_));
-  startReceive(&data_);
-  startReceive(&data2_);
+  startReceive(&buffer1_, &buffer2_);
 }
 
 void
-MulticastDecoder::startReceive(Buffer * data)
+MulticastDecoder::startReceive(Buffer * buffer, Buffer * altBuffer)
 {
   socket_.async_receive_from(
-    boost::asio::buffer(data->get(), bufferSize_),
+    boost::asio::buffer(buffer->get(), bufferSize_),
     senderEndpoint_,
     strand_.wrap(
       boost::bind(&MulticastDecoder::handleReceive,
         this,
         boost::asio::placeholders::error,
-        data,
-        boost::asio::placeholders::bytes_transferred)
+        buffer,
+        boost::asio::placeholders::bytes_transferred,
+        altBuffer)
         )
       );
 }
@@ -99,11 +96,14 @@ MulticastDecoder::startReceive(Buffer * data)
 void
 MulticastDecoder::handleReceive(
   const boost::system::error_code& error,
-  Buffer * data,
-  size_t bytesReceived)
+  Buffer * buffer,
+  size_t bytesReceived,
+  Buffer * altBuffer)
 {
   if (!error)
   {
+    // accept data into the other buffer while we process this buffer
+    startReceive(altBuffer, buffer);
     ++messageCount_;
     if(verboseExecution_)
     {
@@ -111,7 +111,7 @@ MulticastDecoder::handleReceive(
     }
     try
     {
-      DataSourceBuffer source(data->get(), bytesReceived);
+      DataSourceBuffer source(buffer->get(), bytesReceived);
       Messages::Message message(decoder_.getTemplateRegistry()->maxFieldCount());
       decoder_.reset();
       decoder_.decodeMessage(source, message);
@@ -125,13 +125,12 @@ MulticastDecoder::handleReceive(
         ioService_.stop();
         return;
       }
-      startReceive(data);
     }
     catch (const std::exception &ex)
     {
       std::cerr << "Decoding error: " << ex.what() << std::endl;
     }
-    if(messageCount_ > messageLimit_)
+    if(messageCount_ > messageLimit_ && messageLimit_ != 0)
     {
       ioService_.stop();
     }

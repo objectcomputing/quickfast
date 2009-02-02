@@ -109,9 +109,10 @@ namespace QuickFAST{
       void handleReceive(
         const boost::system::error_code& error,
         Buffer * data,
-        size_t bytesReceived);
+        size_t bytesReceived,
+        Buffer * altBuffer);
 
-      void startReceive(Buffer * data);
+      void startReceive(Buffer * buffer, Buffer * altBuffer);
 
     private:
       Decoder decoder_;
@@ -120,15 +121,14 @@ namespace QuickFAST{
       size_t bufferSize_;
       bool verboseDecode_;
       bool verboseExecution_;
-      boost::asio::strand strand_;
       boost::asio::ip::address listenAddress_;
       boost::asio::ip::address multicastAddress_;
       boost::asio::ip::udp::endpoint endpoint_;
       boost::asio::ip::udp::endpoint senderEndpoint_;
       boost::asio::ip::udp::socket socket_;
 
-      Buffer data_;
-      Buffer data2_;
+      Buffer buffer1_;
+      Buffer buffer2_;
       MessageConsumerPtr consumer_;
     };
   }

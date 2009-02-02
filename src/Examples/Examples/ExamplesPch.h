@@ -43,5 +43,9 @@
 //#include <boost/asio.hpp>
 
 
-
+namespace QuickFAST{
+  /// Example programs to demonstrate and test QuickFAST.
+  namespace Examples{
+  }
+}
 #endif // EXAMPLES_PCH_H

@@ -11,6 +11,7 @@
 #include <Examples/MessageInterpreter.h>
 
 using namespace QuickFAST;
+using namespace Examples;
 
 InterpretFAST::InterpretFAST()
   : verboseParse_(false)

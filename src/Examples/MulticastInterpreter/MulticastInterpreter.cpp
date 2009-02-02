@@ -13,6 +13,7 @@
 #include <Examples/MessageInterpreter.h>
 
 using namespace QuickFAST;
+using namespace Examples;
 
 MulticastInterpreter::MulticastInterpreter()
 : bufferSize_(5000)

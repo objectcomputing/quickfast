@@ -1,3 +1,34 @@
+Mon Feb  2 23:44:32 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Common/AsioService.h:
+        * src/Common/AsioService.cpp:
+        * src/Common/QuickFASTPch.h:
+        * src/Examples/Examples/ExamplesPch.h:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/Examples/StopWatch.h:
+        * src/Examples/FileToMulticast/FileToMulticast.h:
+        * src/Examples/FileToMulticast/FileToMulticast.cpp:
+        * src/Examples/FileToMulticast/main.cpp:
+        * src/Examples/FileToTCP/FileToTCP.h:
+        * src/Examples/FileToTCP/FileToTCP.cpp:
+        * src/Examples/FileToTCP/main.cpp:
+        * src/Examples/InterpretFAST/InterpretFAST.h:
+        * src/Examples/InterpretFAST/InterpretFAST.cpp:
+        * src/Examples/InterpretFAST/main.cpp:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.h:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+        * src/Examples/MulticastInterpreter/main.cpp:
+        * src/Examples/PerformanceTest/MessageCounter.h:
+        * src/Examples/PerformanceTest/MessageCounter.cpp:
+        * src/Examples/PerformanceTest/PerformanceTest.h:
+        * src/Examples/PerformanceTest/PerformanceTest.cpp:
+        * src/Examples/PerformanceTest/main.cpp:
+        Move examples to QuickFAST::Examples namespace
+        More doxygen.
+
 Mon Feb  2 18:15:13 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Common/AsioService.h:

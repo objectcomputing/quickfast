@@ -6,6 +6,7 @@
 #include "FileToMulticast.h"
 #include <Examples/StopWatch.h>
 using namespace QuickFAST;
+using namespace Examples;
 
 namespace {
   void waitForEnter()

@@ -11,6 +11,7 @@
 #include <Messages/Group.h>
 
 using namespace QuickFAST;
+using namespace Examples;
 
 MessageCounter::MessageCounter()
   : messageCount_(0)

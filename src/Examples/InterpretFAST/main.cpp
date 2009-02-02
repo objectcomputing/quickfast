@@ -7,6 +7,7 @@
 #include <InterpretFAST/InterpretFAST.h>
 
 using namespace QuickFAST;
+using namespace Examples;
 
 int main(int argc, char* argv[])
 {

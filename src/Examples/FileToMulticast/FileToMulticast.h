@@ -9,71 +9,75 @@
 #include <stdio.h>
 
 namespace QuickFAST{
-  /// @brief Multicast the contents of a FAST encoded data file.
-  ///
-  /// This program uses an echo file produced by the InterpretFAST program
-  /// to identify the message boundaries in a FAST encoded data file.
-  /// It multicasts each message in a separate datagram.
-  /// Use the -? option for more information.
-  ///
-  /// This program is not really FAST-aware. It is just part of a testing
-  /// framework for other programs.
-  class FileToMulticast : public CommandArgHandler
-  {
-  public:
-    FileToMulticast();
-    ~FileToMulticast();
+  namespace Examples{
 
-    /// @brief parse command line arguments, and initialize.
-    /// @param argc from main
-    /// @param argv from main
-    /// @returns true if everything is ok.
-    bool init(int argc, char * argv[]);
-    /// @brief run the program
-    /// @returns a value to be used as an exit code of the program (0 means all is well)
-    int run();
-    /// @brief do final cleanup after a run.
-    void fini();
+    /// @brief Multicast the contents of a FAST encoded data file.
+    ///
+    /// This program uses an echo file produced by the InterpretFAST program
+    /// to identify the message boundaries in a FAST encoded data file.
+    /// It multicasts each message in a separate datagram.
+    ///
+    /// Use the -? command line option for more information.
+    ///
+    /// This program is not really FAST-aware. It is just part of a testing
+    /// framework for other programs.
+    class FileToMulticast : public CommandArgHandler
+    {
+    public:
+      FileToMulticast();
+      ~FileToMulticast();
 
-  private:
-    bool parseIndexFile();
-    void sendBurst();
+      /// @brief parse command line arguments, and initialize.
+      /// @param argc from main
+      /// @param argv from main
+      /// @returns true if everything is ok.
+      bool init(int argc, char * argv[]);
+      /// @brief run the program
+      /// @returns a value to be used as an exit code of the program (0 means all is well)
+      int run();
+      /// @brief do final cleanup after a run.
+      void fini();
 
-  private:
-    virtual int parseSingleArg(int argc, char * argv[]);
-    virtual void usage(std::ostream & out) const;
-    virtual bool applyArgs();
-  private:
-    unsigned short portNumber_;
-    std::string sendAddress_;
-    std::string dataFileName_;
-    std::string indexFileName_;
-    size_t sendCount_;
-    size_t sendMicroseconds_;
-    size_t burst_;
-    bool pauseEveryPass_;
-    bool pauseEveryMessage_;
-    bool verbose_;
+    private:
+      bool parseIndexFile();
+      void sendBurst();
 
-    boost::asio::io_service ioService_;
-    boost::asio::ip::address multicastAddress_;
-    boost::asio::ip::udp::endpoint endpoint_;
-    boost::asio::ip::udp::socket socket_;
-    boost::asio::strand strand_;
-    boost::asio::deadline_timer timer_;
+    private:
+      virtual int parseSingleArg(int argc, char * argv[]);
+      virtual void usage(std::ostream & out) const;
+      virtual bool applyArgs();
+    private:
+      unsigned short portNumber_;
+      std::string sendAddress_;
+      std::string dataFileName_;
+      std::string indexFileName_;
+      size_t sendCount_;
+      size_t sendMicroseconds_;
+      size_t burst_;
+      bool pauseEveryPass_;
+      bool pauseEveryMessage_;
+      bool verbose_;
 
-    CommandArgParser commandArgParser_;
-    FILE * dataFile_;
+      boost::asio::io_service ioService_;
+      boost::asio::ip::address multicastAddress_;
+      boost::asio::ip::udp::endpoint endpoint_;
+      boost::asio::ip::udp::socket socket_;
+      boost::asio::strand strand_;
+      boost::asio::deadline_timer timer_;
 
-    typedef std::pair<size_t, size_t> MessagePosition; // position in file: start, length
-    typedef std::vector<MessagePosition> MessageIndex;
-    MessageIndex messageIndex_;
+      CommandArgParser commandArgParser_;
+      FILE * dataFile_;
 
-    boost::scoped_array<unsigned char> buffer_;
-    size_t bufferSize_;
-    size_t nPass_;
-    size_t nMsg_;
-    size_t totalMessageCount_;
-  };
+      typedef std::pair<size_t, size_t> MessagePosition; // position in file: start, length
+      typedef std::vector<MessagePosition> MessageIndex;
+      MessageIndex messageIndex_;
+
+      boost::scoped_array<unsigned char> buffer_;
+      size_t bufferSize_;
+      size_t nPass_;
+      size_t nMsg_;
+      size_t totalMessageCount_;
+    };
+  }
 }
 #endif // FILETOMULTICAST_H
