@@ -20,7 +20,7 @@ project(*) : boost_base {
   }
 }
 
-project(*tests) : boost_unit_test_framework {
+project(*tests) : boost_unit_test_framework, boost_filesystem, boost_thread {
   exeout = $(QUICKFAST_ROOT)/bin
   exename = QuickFASTTest
   includes += $(QUICKFAST_ROOT)/src

@@ -1,4 +1,4 @@
-project(InterpretFAST) : boost_base, QuickFASTExample{
+project(InterpretFAST) : boost_base, boost_filesystem, boost_thread, QuickFASTExample {
   exename = InterpretFAST
   Source_Files {
     InterpretFAST
@@ -8,7 +8,7 @@ project(InterpretFAST) : boost_base, QuickFASTExample{
   }
 }
 
-project(PerformanceTest) : boost_base, QuickFASTExample{
+project(PerformanceTest) : boost_base, boost_filesystem, boost_thread, QuickFASTExample {
   exename = PerformanceTest
   Source_Files {
     PerformanceTest
@@ -18,7 +18,7 @@ project(PerformanceTest) : boost_base, QuickFASTExample{
   }
 }
 
-project(FileToTCP) : boost_base, boost_filesystem, QuickFASTExample{
+project(FileToTCP) : boost_base, boost_filesystem, boost_thread, QuickFASTExample {
   exename = FileToTCP
   Source_Files {
     FileToTCP
@@ -28,7 +28,7 @@ project(FileToTCP) : boost_base, boost_filesystem, QuickFASTExample{
   }
 }
 
-project(FileToMulticast) : boost_base, boost_filesystem, QuickFASTExample{
+project(FileToMulticast) : boost_base, boost_filesystem, boost_thread, QuickFASTExample {
   exename = FileToMulticast
   Source_Files {
     FileToMulticast
@@ -38,7 +38,7 @@ project(FileToMulticast) : boost_base, boost_filesystem, QuickFASTExample{
   }
 }
 
-project(MulticastInterpreter) : boost_base, boost_filesystem, QuickFASTExample{
+project(MulticastInterpreter) : boost_base, boost_filesystem, boost_thread, QuickFASTExample {
   exename = MulticastInterpreter
   Source_Files {
     MulticastInterpreter
