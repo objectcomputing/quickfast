@@ -435,12 +435,15 @@ namespace QuickFAST{
 
       INTEGER_TYPE value = typedValue_;
       Messages::FieldCPtr previousField;
+#ifndef NO_PROFILING
       bool found;
       {PROFILE_POINT("int::decDelta::find");
       found = dictionary->find(getKey(), previousField);
       }
       if(found)
-//      if(dictionary->find(getKey(), previousField))
+#else // NO_PROFILING
+      if(dictionary->find(getKey(), previousField))
+#endif // NO_PROFILING
       {
         PROFILE_POINT("int::decDelta::fromDictionary");
         if(previousField->isType(value))

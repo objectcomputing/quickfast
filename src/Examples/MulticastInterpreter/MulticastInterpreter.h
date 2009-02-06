@@ -6,11 +6,10 @@
 #define MULTICASTINTERPRETER_H
 #include <Codecs/DataSource.h>
 #include <Codecs/MulticastDecoder.h>
-
+#include <Codecs/MessageConsumer_fwd.h>
 #include <Examples/CommandArgParser.h>
 
 #include <boost/asio.hpp>
-#include <Codecs/MessageConsumer_fwd.h>
 
 
 namespace QuickFAST{

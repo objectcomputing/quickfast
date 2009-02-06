@@ -42,6 +42,11 @@ Decoder::decodeSegment(
   {
     return false;
   }
+  if(this->verboseOut_)
+  {
+    pmap.setVerbose(verboseOut_);
+  }
+
   if(pmap.checkNextField())
   {
     static const std::string tid("templateID");
@@ -99,7 +104,7 @@ bool
 Decoder::decodeSegmentBody(
   DataSource & source,
   Codecs::PresenceMap & pmap,
-  Codecs::SegmentBodyCPtr segment,
+  Codecs::SegmentBodyCPtr segment, //todo: reference to avoid copy?
   Messages::FieldSet & fieldSet)
 {
   size_t instructionCount = segment->size();

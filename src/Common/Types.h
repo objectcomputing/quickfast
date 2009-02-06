@@ -19,7 +19,7 @@ namespace QuickFAST{
   /// @brief 64 bit unsigned integer
   typedef unsigned long long uint64;
   /// @brief the mantissa portion of a Decimal
-  typedef signed long mantissa_t;
+  typedef signed long long mantissa_t;
   /// @brief the exponent portion of a Decimal
   typedef signed char exponent_t;
   class Decimal;

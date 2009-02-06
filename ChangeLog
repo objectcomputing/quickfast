@@ -1,3 +1,19 @@
+Fri Feb  6 00:37:55 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionInt64.h:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionMantissa.h:
+        * src/Codecs/FieldInstructionUInt64.h:
+        * src/Common/Types.h:
+        * src/Examples/Examples/CommandArgHandler.h:
+        * src/Examples/Examples/CommandArgParser.h:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.h:
+        Decoding problems.  Typedef for FieldUInt64 was incorrect, and
+        Decimal mantissa was coded to be int32 rather than int64.
+
+
 Thu Feb  5 18:46:37 UTC 2009  Jonathan Pollack  <pollack_j@ociweb.com>
 
         * src/Examples/Examples.mpc:

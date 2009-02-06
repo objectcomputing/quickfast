@@ -6,7 +6,6 @@
 #endif
 #ifndef COMMANDARGHANDLER_H
 #define COMMANDARGHANDLER_H
-#include <Common/QuickFAST_Export.h>
 
 namespace QuickFAST
 {

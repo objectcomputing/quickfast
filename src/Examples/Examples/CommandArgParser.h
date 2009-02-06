@@ -6,7 +6,6 @@
 #endif
 #ifndef COMMANDARGPARSER_H
 #define COMMANDARGPARSER_H
-#include <Common/QuickFAST_Export.h>
 #include <Examples/CommandArgHandler.h>
 
 namespace QuickFAST

@@ -12,7 +12,10 @@
 namespace QuickFAST{
   namespace Codecs{
     /// @brief An implementation for the &lt;int64> field instruction.
-    typedef FieldInstructionInteger<int64, Messages::FieldInt64, true> FieldInstructionInt64;
+    typedef FieldInstructionInteger<
+      int64,
+      Messages::FieldInt64,
+      true> FieldInstructionInt64;
   }
 }
 #endif // FIELDINSTRUCTIONINT64_H

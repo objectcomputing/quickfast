@@ -89,7 +89,7 @@ FieldInstructionDecimal::decodeNop(
   ++it;
   if(it != mxSet.end())
   {
-    mantissa = mantissa_t(it->getField()->toInt32());
+    mantissa = mantissa_t(it->getField()->toInt64());
   }
   NESTED_PROFILE_PAUSE(1);
   NESTED_PROFILE_POINT(2, "decimal::UseValues");
@@ -351,7 +351,7 @@ FieldInstructionDecimal::encodeNop(
     Messages::FieldCPtr exponentField(Messages::FieldInt32::create(exponent));
     fieldSet.addField(this->exponentInstruction_->getIdentity(), exponentField);
 
-    Messages::FieldCPtr mantissaField(Messages::FieldInt32::create(mantissa));
+    Messages::FieldCPtr mantissaField(Messages::FieldInt64::create(mantissa));
     fieldSet.addField(mantissaInstruction_->getIdentity(), mantissaField);
 
     exponentInstruction_->encode(
