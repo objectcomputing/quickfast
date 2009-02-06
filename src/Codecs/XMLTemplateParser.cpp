@@ -642,9 +642,11 @@ TemplateBuilder::parseSequence(const std::string & tag, const AttributeMap& attr
     field->setId(id);
   }
   std::string presence;
+  bool mandatory = true;
   if(getOptionalAttribute(attributes, "presence", presence))
   {
-    field->setPresence(presence == "mandatory");
+    mandatory = presence == "mandatory";
+    field->setPresence(mandatory);
   }
   std::string dictionary;
   if(getOptionalAttribute(attributes, "dictionary", dictionary))
@@ -654,6 +656,7 @@ TemplateBuilder::parseSequence(const std::string & tag, const AttributeMap& attr
   SegmentBodyPtr body(new SegmentBody);
   field->setSegmentBody(body);
   body->allowLengthField();
+  body->setMandatoryLength(mandatory);
 
   schemaElements_.top().second->addInstruction(field);
   schemaElements_.push(StackEntry(tag, body));

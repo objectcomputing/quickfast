@@ -12,6 +12,7 @@ SegmentBody::SegmentBody(size_t pmapBits)
 : presenceMapBits_(pmapBits)
 , initialPresenceMapBits_(pmapBits)
 , allowLengthField_(false)
+, mandatoryLength_(true)
 {
 }
 
@@ -84,6 +85,7 @@ SegmentBody::addLengthInstruction(FieldInstructionPtr & field)
   {
     throw TemplateDefinitionError("Only one <length> element may appear in context.");
   }
+  field->setPresence(mandatoryLength_);
   lengthInstruction_ = field;
 }
 

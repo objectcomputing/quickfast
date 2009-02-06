@@ -109,6 +109,10 @@ namespace QuickFAST{
       /// @returns true if one exists for this SegmentBody
       bool getLengthInstruction(FieldInstructionCPtr & value)const;
 
+      void setMandatoryLength(bool mandatory)
+      {
+        mandatoryLength_ = mandatory;
+      }
     protected:
       /// @brief the application data type for this set of fields
       std::string applicationType_;
@@ -126,6 +130,8 @@ namespace QuickFAST{
       InstructionVector instructions_;
       /// @brief true if this is being used as the body of a sequence
       bool allowLengthField_;
+      /// @brief is the length field mandatory?
+      bool mandatoryLength_;
       /// @brief the field instruction for sequence length if this is the body of a sequence
       FieldInstructionCPtr lengthInstruction_;
     };

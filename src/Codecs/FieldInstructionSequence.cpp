@@ -6,6 +6,7 @@
 #include <Codecs/DataSource.h>
 #include <Codecs/Decoder.h>
 #include <Codecs/Encoder.h>
+#include <Codecs/FieldInstructionUInt32.h>
 #include <Messages/Message.h>
 #include <Messages/FieldSequence.h>
 #include <Messages/Sequence.h>
@@ -36,38 +37,37 @@ FieldInstructionSequence::decodeNop(
   Codecs::Decoder & decoder,
   Messages::FieldSet & fieldSet) const
 {
-  if(!isMandatory())
-  {
-    if(!pmap.checkNextField())
-    {
-      return true;
-    }
-  }
-
   if(!segment_)
   {
     throw TemplateDefinitionError("SegmentBody not defined for Group instruction.");
   }
   size_t length = 0;
   Codecs::FieldInstructionCPtr lengthInstruction;
-  if(!segment_->getLengthInstruction(lengthInstruction))
-  {
-    decoder.reportFatal("", "Length instruction not available for sequence.");
-  }
-
-  // todo: performance could be improved by bypassing the field set
-  source.beginField(lengthInstruction->getIdentity().name());
+  Messages::FieldIdentity lengthIdentity("length","");
   Messages::FieldSet lengthSet(1);
-  if(!lengthInstruction->decode(source, pmap, decoder, lengthSet))
+  if(segment_->getLengthInstruction(lengthInstruction))
   {
-    return false;
+    source.beginField(lengthInstruction->getIdentity().name());
+    if(!lengthInstruction->decode(source, pmap, decoder, lengthSet))
+    {
+      return false;
+    }
+  }
+  else
+  {
+    FieldInstructionUInt32 defaultLengthInstruction;
+    defaultLengthInstruction.setPresence(isMandatory());
+    if(!defaultLengthInstruction.decode(source, pmap, decoder, lengthSet))
+    {
+      return false;
+    }
   }
 
   Messages::FieldSet::const_iterator fld = lengthSet.begin();
   if(fld == lengthSet.end())
   {
-    /// @todo: report this?
-    return false;
+    // this optional sequence is not present
+    return true;
   }
   length = fld->getField()->toUInt32();
 
@@ -107,17 +107,23 @@ FieldInstructionSequence::encodeNop(
     Messages::SequenceCPtr sequence = field->toSequence();
     size_t length = sequence->size();
 
-    Codecs::FieldInstructionCPtr lengthInstruction;
-    if(!segment_->getLengthInstruction(lengthInstruction))
-    {
-      throw EncodingError("Length instruction not available for sequence.");
-    }
     // todo: performance could be improved here
     Messages::FieldCPtr lengthField(Messages::FieldUInt32::create(length));
     Messages::FieldSet lengthSet(1);
 
-    lengthSet.addField(lengthInstruction->getIdentity(), lengthField);
-    lengthInstruction->encode(destination, pmap, encoder, lengthSet);
+    Codecs::FieldInstructionCPtr lengthInstruction;
+    if(segment_->getLengthInstruction(lengthInstruction))
+    {
+      lengthSet.addField(lengthInstruction->getIdentity(), lengthField);
+      lengthInstruction->encode(destination, pmap, encoder, lengthSet);
+    }
+    else
+    {
+       FieldInstructionUInt32 lengthInstruction;
+       lengthInstruction.setPresence(isMandatory());
+       Messages::FieldIdentity lengthIdentity("length","");
+       lengthInstruction.encode(destination, pmap, encoder, lengthSet);
+    }
 
     for(size_t pos = 0; pos < length; ++pos)
     {
