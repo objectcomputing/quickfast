@@ -23,9 +23,9 @@ namespace QuickFASTDotNet{
       Sequence();
 
       /// @brief Allows addressing of a given Field in this FieldSet by index.
-      property FieldSet^ default[int]
+      property FieldSet^ default[unsigned int]
       {
-        FieldSet^ get(int index);
+        FieldSet^ get(unsigned int index);
       }
 
       /// @brief Gets and sets the appliction type this FieldSet pertains to.

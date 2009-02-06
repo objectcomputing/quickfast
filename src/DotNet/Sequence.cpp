@@ -26,7 +26,7 @@ namespace QuickFASTDotNet{
     {
     }
 
-    FieldSet^ Sequence::default::get(int index)
+    FieldSet^ Sequence::default::get(unsigned int index)
     {
         const QuickFAST::Messages::Sequence& sequence = sequencePtr_.GetRef();
         if(sequence.size() <= index || index < 0)

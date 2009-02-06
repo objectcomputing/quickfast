@@ -1,3 +1,25 @@
+Fri Feb 6 23:37:21 UTC 2009  Curt Campbell  <campbellc@ociweb.com>
+
+        * QuickFastDotNetTests.nunit
+
+          Added a NUnit file for .NET projects to source control.
+          
+        * src/DotNet/Decimal.h
+        * src/DotNet/Sequence.cpp
+        * src/DotNet/Sequence.h
+
+          Fixe some compile time warnings.
+
+        * QuickFASTApplication.mpb
+        * src/DotNet/QuickFASTDotNet.mpc
+        * src/DotNetTests/QuickFASTDotNetTests.mpc
+        * src/QuickFAST.mpc
+
+          Changed the output directories for versions
+          compiled under VC8 and VC9.  Output files are now
+          placed in the Output/Debug and Output/Release
+          directories.
+
 Fri Feb  6 15:41:32 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionSequence.cpp:

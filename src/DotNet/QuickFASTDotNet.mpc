@@ -10,6 +10,9 @@ project(*) : boost_base {
 
   specific {
     guid = 38BCB440-725D-4bdc-9BDD-CA5D76AACAE7
+    Release::libout = $(QUICKFAST_ROOT)/Output/Release
+    Debug::libout = $(QUICKFAST_ROOT)/Output/Debug
+
     AssemblyDebug  = 1
   }
 

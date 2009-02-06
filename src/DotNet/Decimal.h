@@ -7,10 +7,10 @@ namespace QuickFASTDotNet{
 
     public value struct Decimal
     {
-      int Mantissa;
+      __int64  Mantissa;
       signed char Exponent;
 
-      Decimal(int mantissa, signed char exponent):
+      Decimal(__int64 mantissa, signed char exponent):
         Mantissa(mantissa),
         Exponent(exponent)
       {

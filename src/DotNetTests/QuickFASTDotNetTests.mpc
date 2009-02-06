@@ -3,7 +3,7 @@ project {
   lit_libs += nunit.framework.dll
 
 
-  //libout = $(QuickFAST_ROOT)/lib
+  libout = $(QuickFAST_ROOT)/Output
 
   after = QuickFASTDotNet
   sharedname = QuickFASTDoNetTests
