@@ -211,9 +211,14 @@ namespace
       )
     {
       std::string tag(XMLString::transcode(localname));
+      // don't finalize here for templates.  Because it's optional
+      // it will be forcibly finalized at end of document
       if(schemaElements_.top().first == tag)
       {
-        schemaElements_.top().second->finalize();
+        if(tag != "templates")
+        {
+          schemaElements_.top().second->finalize();
+        }
         schemaElements_.pop();
       }
       if(out_)
@@ -811,7 +816,7 @@ XMLTemplateParser::parse(
   reader->setFeature(xercesc::XMLUni::fgXercesLoadExternalDTD, true);
 
   // enable validation
-  //reader->setFeature(xercesc::XMLUni::fgSAX2CoreValidation, true);
+//  reader->setFeature(xercesc::XMLUni::fgSAX2CoreValidation, true);
 
   xmlData.seekg(0, std::ios::end);
   int length = xmlData.tellg();

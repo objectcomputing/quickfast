@@ -27,6 +27,8 @@
 #include <Codecs/DataSourceStream.h>
 #include <Codecs/DataDestinationString.h>
 #include <Codecs/Decoder.h>
+#include <Codecs/DictionaryIndexer.h>
+#include <Codecs/TemplateRegistry.h>
 #include <Tests/FieldInstructionMock.h>
 #include <Tests/DataDestinationMock.h>
 
@@ -38,17 +40,20 @@ BOOST_AUTO_TEST_CASE(testFieldOperationDispatch)
   // The tests below make sure the dispatch gets to the
   // right place.
 
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   // create an "empty" presence map.
   Codecs::PresenceMap pmap(1);
 
   Tests::FieldInstructionMock field;
   field.setPresence(false);
   // NOP operator is the default
+  field.indexDictionaries(indexer, "global", "", "");
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 0);
 
   // create enough infrastructure to call decode
   Codecs::DataSourceString source("");
-  Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
   Messages::FieldSet fieldSet1(10);
 
@@ -149,17 +154,21 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_1_1)
 
   const char testData[] = "";
   Codecs::DataSourceString source(testData);
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   Codecs::PresenceMap pmap(1);
   Codecs::FieldInstructionUInt32 field("Flag", "");
   field.setPresence(true);
   FieldOpPtr fieldOp(new Codecs::FieldOpConstant);
   fieldOp->setValue("0");
   field.setFieldOp(fieldOp);
+  field.indexDictionaries(indexer, "global", "", "");
+
   // verify no presence map needed
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 0);
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
@@ -210,6 +219,8 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_1_2)
 // None   N/A   None    0    None
   const char testData[] = "";
   Codecs::DataSourceString source(testData);
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   Codecs::PresenceMap pmap(2);
   pmap.setNextField(true);
   pmap.setNextField(false);
@@ -220,11 +231,12 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_1_2)
   FieldOpPtr fieldOp(new Codecs::FieldOpConstant);
   fieldOp->setValue("0");
   field.setFieldOp(fieldOp);
+  field.indexDictionaries(indexer, "global", "", "");
   // verify 1 presence map bit needed
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
@@ -275,6 +287,8 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_2_1)
   // 1      N/A   1       1     0x81: 1000 0001
   const char testData[] = "\x81";
   Codecs::DataSourceString source(testData);
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   Codecs::PresenceMap pmap(2);
   pmap.setNextField(false);
   pmap.setNextField(true);
@@ -285,11 +299,12 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_2_1)
   FieldOpPtr fieldOp(new Codecs::FieldOpDefault);
   fieldOp->setValue("0");
   field.setFieldOp(fieldOp);
+  field.indexDictionaries(indexer, "global", "", "");
   // verify 1 presence map bit needed
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   // test a: pmap = 0
@@ -342,18 +357,21 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_2_2)
   // none   N/A   None    0     None
   const char testData[] = "";
   Codecs::DataSourceString source(testData);
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   Codecs::PresenceMap pmap(1);
   pmap.setNextField(false);
   pmap.rewind();
 
   Codecs::FieldInstructionInt32 field("Flag", "");
   field.setPresence(false);
-  field.setFieldOp(FieldOpCPtr(new Codecs::FieldOpDefault));
+  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpDefault));
+  field.indexDictionaries(indexer, "global", "", "");
   // verify 1 presence map bit needed
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
@@ -394,6 +412,8 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_3_1)
   std::string testString(testData, sizeof(testData)-1);
   Codecs::DataSourceString source(testString);
 
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(3);
   pmap.setNextField(true);
@@ -403,11 +423,12 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_3_1)
 
   Codecs::FieldInstructionAscii field("Flag", "");
   field.setPresence(true);
-  field.setFieldOp(FieldOpCPtr(new Codecs::FieldOpCopy));
+  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpCopy));
+  field.indexDictionaries(indexer, "global", "", "");
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
@@ -467,6 +488,8 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_3_2)
   std::string testString(testData, sizeof(testData)-1);
   Codecs::DataSourceString source(testString);
 
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(3);
   pmap.setNextField(true);
@@ -476,11 +499,12 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_3_2)
 
   Codecs::FieldInstructionAscii field("Flag", "");
   field.setPresence(false);
-  field.setFieldOp(FieldOpCPtr(new Codecs::FieldOpCopy));
+  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpCopy));
+  field.indexDictionaries(indexer, "global", "", "");
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
@@ -532,6 +556,8 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_4_1)
   std::string testString(testData, sizeof(testData)-1);
   Codecs::DataSourceString source(testString);
 
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(4);
   pmap.setNextField(false);
@@ -545,10 +571,11 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_4_1)
   FieldOpPtr fieldOp(new Codecs::FieldOpIncrement);
   fieldOp->setValue("1");
   field.setFieldOp(fieldOp);
+  field.indexDictionaries(indexer, "global", "", "");
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
@@ -615,16 +642,19 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_1)
   std::string testString(testData, sizeof(testData)-1);
   Codecs::DataSourceString source(testString);
 
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(1);
 
   Codecs::FieldInstructionUInt32 field("Price", "");
   field.setPresence(true);
-  field.setFieldOp(FieldOpCPtr(new Codecs::FieldOpDelta));
+  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpDelta));
+  field.indexDictionaries(indexer, "global", "", "");
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 0);
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
@@ -692,16 +722,19 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_2)
   std::string testString(testData, sizeof(testData)-1);
   Codecs::DataSourceString source(testString);
 
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(1);
 
   Codecs::FieldInstructionDecimal field("Price", "");
   field.setPresence(true);
-  field.setFieldOp(FieldOpCPtr(new Codecs::FieldOpDelta));
+  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpDelta));
+  field.indexDictionaries(indexer, "global", "", "");
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 0);
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Messages::FieldSet fieldSet1(10);
@@ -764,6 +797,8 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_3)
   std::string testString(testData, sizeof(testData)-1);
   Codecs::DataSourceString source(testString);
 
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -772,10 +807,11 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_3)
   FieldOpPtr fieldOp(new Codecs::FieldOpDelta);
   fieldOp->setValue("12000");
   field.setFieldOp(fieldOp);
+  field.indexDictionaries(indexer, "global", "", "");
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 0);
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Messages::FieldSet fieldSet1(10);
@@ -841,16 +877,19 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_4)
   std::string testString(testData, sizeof(testData)-1);
   Codecs::DataSourceString source(testString);
 
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(1);
 
   Codecs::FieldInstructionAscii field("Security", "");
   field.setPresence(true);
-  field.setFieldOp(FieldOpCPtr(new Codecs::FieldOpDelta));
+  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpDelta));
+  field.indexDictionaries(indexer, "global", "", "");
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 0);
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Messages::FieldSet fieldSet1(10);
@@ -917,6 +956,8 @@ BOOST_AUTO_TEST_CASE(testAsciiTailMandatory)
   std::string testString(testData, sizeof(testData)-1);
   Codecs::DataSourceString source(testString);
 
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(3);
   pmap.setNextField(true);
@@ -926,11 +967,12 @@ BOOST_AUTO_TEST_CASE(testAsciiTailMandatory)
 
   Codecs::FieldInstructionAscii field("Security", "");
   field.setPresence(true);
-  field.setFieldOp(FieldOpCPtr(new Codecs::FieldOpTail));
+  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpTail));
+  field.indexDictionaries(indexer, "global", "", "");
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Messages::FieldSet fieldSet1(10);
@@ -1003,6 +1045,8 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_6) // SPEC ERROR: _3 s/b _1
   std::string testString(testData, sizeof(testData)-1);
   Codecs::DataSourceString source(testString);
 
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(5);
   pmap.setNextField(true);
@@ -1022,9 +1066,10 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_6) // SPEC ERROR: _3 s/b _1
   Codecs::FieldInstructionMantissaPtr mantissa(new FieldInstructionMantissa("value|mantissa", ""));
   mantissa->setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpCopy));
   field.setMantissaInstruction(mantissa);
+  field.indexDictionaries(indexer, "global", "", "");
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Messages::FieldSet fieldSet1(10);
@@ -1081,6 +1126,8 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Copy_Mandatory)
   std::string testString(testData, sizeof(testData)-1);
   Codecs::DataSourceString source(testString);
 
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(3);
   pmap.setNextField(true);
@@ -1090,11 +1137,12 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Copy_Mandatory)
 
   Codecs::FieldInstructionUtf8 field("Flag", "");
   field.setPresence(true);
-  field.setFieldOp(FieldOpCPtr(new Codecs::FieldOpCopy));
+  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpCopy));
+  field.indexDictionaries(indexer, "global", "", "");
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
@@ -1154,6 +1202,8 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Copy_optional)
   std::string testString(testData, sizeof(testData)-1);
   Codecs::DataSourceString source(testString);
 
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(3);
   pmap.setNextField(true);
@@ -1163,11 +1213,12 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Copy_optional)
 
   Codecs::FieldInstructionUtf8 field("Flag", "");
   field.setPresence(false);
-  field.setFieldOp(FieldOpCPtr(new Codecs::FieldOpCopy));
+  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpCopy));
+  field.indexDictionaries(indexer, "global", "", "");
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
@@ -1222,16 +1273,19 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Delta_Mandatory)
   std::string testString(testData, sizeof(testData)-1);
   Codecs::DataSourceString source(testString);
 
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(1);
 
   Codecs::FieldInstructionUtf8 field("Security", "");
   field.setPresence(true);
-  field.setFieldOp(FieldOpCPtr(new Codecs::FieldOpDelta));
+  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpDelta));
+  field.indexDictionaries(indexer, "global", "", "");
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 0);
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Messages::FieldSet fieldSet1(10);
@@ -1298,6 +1352,8 @@ BOOST_AUTO_TEST_CASE(testUtf8_Tail_Mandatory)
   std::string testString(testData, sizeof(testData)-1);
   Codecs::DataSourceString source(testString);
 
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(3);
   pmap.setNextField(true);
@@ -1307,11 +1363,12 @@ BOOST_AUTO_TEST_CASE(testUtf8_Tail_Mandatory)
 
   Codecs::FieldInstructionUtf8 field("Security", "");
   field.setPresence(true);
-  field.setFieldOp(FieldOpCPtr(new Codecs::FieldOpTail));
+  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpTail));
+  field.indexDictionaries(indexer, "global", "", "");
   BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
 
   // We neeed the helper routines in the decoder
-  QuickFAST::Codecs::TemplateRegistryPtr registry;
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Messages::FieldSet fieldSet1(10);

@@ -7,7 +7,6 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/DataDestination.h>
 #include <Codecs/Encoder.h>
-#include <Codecs/Dictionary.h>
 #include <Messages/Message.h>
 #include <Messages/FieldAscii.h>
 
@@ -161,8 +160,6 @@ FieldInstructionAscii::decodeCopy(
   Messages::FieldSet & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeCopy");
-  DictionaryPtr dictionary;
-  getDictionary(decoder, dictionary);
 
   if(pmap.checkNextField())
   {
@@ -177,13 +174,13 @@ FieldInstructionAscii::decodeCopy(
       fieldSet.addField(
         identity_,
         field);
-      dictionary->add(getKey(), field);
+      fieldOp_->setDictionaryValue(decoder, field);
     }
   }
   else // pmap says not in stream
   {
     Messages::FieldCPtr previousField;
-    if(!dictionary->find(getKey(), previousField))
+    if(!fieldOp_->findDictionaryField(decoder, previousField))
     {
       previousField = initialValue_;
     }
@@ -231,10 +228,8 @@ FieldInstructionAscii::decodeDelta(
   }
   const std::string & deltaValue = deltaField->toString();
 
-  DictionaryPtr dictionary;
-  getDictionary(decoder, dictionary);
   Messages::FieldCPtr previousField;
-  if(!dictionary->find(getKey(), previousField))
+  if(!fieldOp_->findDictionaryField(decoder, previousField))
   {
     previousField = initialValue_;
   }
@@ -257,7 +252,7 @@ FieldInstructionAscii::decodeDelta(
     fieldSet.addField(
       identity_,
       field);
-    dictionary->add(getKey(), field);
+    fieldOp_->setDictionaryValue(decoder, field);
   }
   else
   { // operate on end of string
@@ -272,7 +267,7 @@ FieldInstructionAscii::decodeDelta(
     fieldSet.addField(
       identity_,
       field);
-    dictionary->add(getKey(), field);
+    fieldOp_->setDictionaryValue(decoder, field);
   }
   return true;
 }
@@ -293,15 +288,13 @@ FieldInstructionAscii::decodeTail(
     {
       return false;
     }
-    DictionaryPtr dictionary;
-    getDictionary(decoder, dictionary);
 
     if(bool(tailField)) // NULL?
     {
       const std::string & tailValue = tailField->toString();
 
       Messages::FieldCPtr previousField;
-      if(!dictionary->find(getKey(), previousField))
+      if(!fieldOp_->findDictionaryField(decoder, previousField))
       {
         previousField = initialValue_;
       }
@@ -318,23 +311,20 @@ FieldInstructionAscii::decodeTail(
       fieldSet.addField(
         identity_,
         field);
-      dictionary->add(getKey(), field);
+      fieldOp_->setDictionaryValue(decoder, field);
     }
     else // null
     {
-      dictionary->add(getKey(), Messages::FieldAscii::createNull());
+      fieldOp_->setDictionaryValue(decoder,  Messages::FieldAscii::createNull());
     }
   }
   else // pmap says not in stream
   {
-    DictionaryPtr dictionary;
-    getDictionary(decoder, dictionary);
-
     Messages::FieldCPtr previousField;
-    if(!dictionary->find(getKey(), previousField))
+    if(!fieldOp_->findDictionaryField(decoder, previousField))
     {
       previousField = initialValue_;
-        dictionary->add(getKey(), previousField);
+      fieldOp_->setDictionaryValue(decoder, previousField);
     }
     if(bool(previousField) && previousField->isDefined())
     {
@@ -480,10 +470,8 @@ FieldInstructionAscii::encodeCopy(
   std::string previousValue;
 
   // ... then initialize them from the dictionary
-  DictionaryPtr dictionary;
-  getDictionary(encoder, dictionary);
   Messages::FieldCPtr previousField;
-  if(dictionary->find(getKey(), previousField))
+  if(fieldOp_->findDictionaryField(encoder, previousField))
   {
     if(!previousField->isType(Messages::Field::ASCII))
     {
@@ -517,7 +505,7 @@ FieldInstructionAscii::encodeCopy(
       {
         encodeAscii(destination, value);
       }
-      dictionary->add(getKey(), Messages::FieldAscii::create(value));
+      fieldOp_->setDictionaryValue(encoder, Messages::FieldAscii::create(value));
     }
   }
   else // not defined in fieldset
@@ -532,7 +520,7 @@ FieldInstructionAscii::encodeCopy(
       // we have to null the previous value to avoid copy
       pmap.setNextField(true);// value in stream
       destination.putByte(nullAscii);
-      dictionary->add(getKey(), Messages::FieldAscii::createNull());
+      fieldOp_->setDictionaryValue(encoder, Messages::FieldAscii::createNull());
     }
     else
     {
@@ -553,10 +541,8 @@ FieldInstructionAscii::encodeDelta(
   std::string previousValue;
 
   // ... then initialize them from the dictionary
-  DictionaryPtr dictionary;
-  getDictionary(encoder, dictionary);
   Messages::FieldCPtr previousField;
-  if(dictionary->find(getKey(), previousField))
+  if(fieldOp_->findDictionaryField(encoder, previousField))
   {
     if(!previousField->isType(Messages::Field::ASCII))
     {
@@ -595,7 +581,7 @@ FieldInstructionAscii::encodeDelta(
     if(!previousIsKnown  || value != previousValue)
     {
       field = Messages::FieldAscii::create(value);
-      dictionary->add(getKey(), field);
+      fieldOp_->setDictionaryValue(encoder, field);
     }
 
   }
@@ -622,10 +608,8 @@ FieldInstructionAscii::encodeTail(
   std::string previousValue;
 
   // ... then initialize them from the dictionary
-  DictionaryPtr dictionary;
-  getDictionary(encoder, dictionary);
   Messages::FieldCPtr previousField;
-  if(dictionary->find(getKey(), previousField))
+  if(fieldOp_->findDictionaryField(encoder, previousField))
   {
     if(!previousField->isType(Messages::Field::ASCII))
     {
@@ -665,7 +649,7 @@ FieldInstructionAscii::encodeTail(
     if(!previousIsKnown  || value != previousValue)
     {
       field = Messages::FieldAscii::create(value);
-      dictionary->add(getKey(), field);
+      fieldOp_->setDictionaryValue(encoder, field);
     }
   }
   else // not defined in fieldset

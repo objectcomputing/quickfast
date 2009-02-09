@@ -40,19 +40,7 @@ SegmentBody::setApplicationType(const std::string & type, const std::string & ty
 void
 SegmentBody::setDictionaryName(const std::string & name)
 {
-  if(name != dictionaryName_)
-  {
-    size_t count = instructions_.size();
-    for( size_t pos = 0; pos < count; ++pos)
-    {
-      const std::string oldName = instructions_[pos]->getDictionaryName();
-      if(oldName.empty() || oldName == dictionaryName_)
-      {
-        instructions_[pos]->setDictionaryName(name);
-      }
-    }
-    dictionaryName_ = name;
-  }
+  dictionaryName_ = name;
 }
 
 void
@@ -167,4 +155,37 @@ SegmentBody::fieldCount() const
     count += instructions_[pos]->fieldCount(*this);
   }
   return count;
+}
+
+void
+SegmentBody::indexDictionaries(
+  DictionaryIndexer & indexer,
+  const std::string & dictionaryName,
+  const std::string & typeName,
+  const std::string & typeNamespace
+  )
+{
+  std::string name = dictionaryName;
+  if(!dictionaryName_.empty())
+  {
+    name = dictionaryName_;
+  }
+  std::string type = typeName;
+  std::string typeNs = typeNamespace;
+  if(!applicationType_.empty())
+  {
+    type = applicationType_;
+    typeNs = applicationNamespace_;
+
+  }
+  if(bool(lengthInstruction_))
+  {
+    lengthInstruction_->indexDictionaries(indexer, name, type, typeNs);
+  }
+  for(InstructionVector::iterator it = instructions_.begin();
+    it != instructions_.end();
+    ++it)
+  {
+    (*it)->indexDictionaries(indexer, name, type, typeNs);
+  }
 }

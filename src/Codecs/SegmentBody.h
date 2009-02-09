@@ -7,8 +7,9 @@
 #ifndef SEGMENTBODY_H
 #define SEGMENTBODY_H
 #include "SegmentBody_fwd.h"
-#include "FieldInstruction_fwd.h"
-#include "SchemaElement.h"
+#include <Codecs/FieldInstruction_fwd.h>
+#include <Codecs/DictionaryIndexer_fwd.h>
+#include <Codecs/SchemaElement.h>
 #include <Common/QuickFAST_Export.h>
 
 namespace QuickFAST{
@@ -32,10 +33,10 @@ namespace QuickFAST{
       /// @brief Implement the dictionary= attribute.
       ///
       /// Defines an dictionary to be used for this element.
-      /// Not applicable to all field instructions so the default implementation
-      /// throws a TemplateDefinition error.
       /// @param name is the dictionary= attribute of the segment-defining element
-      virtual void setDictionaryName(const std::string & name);
+      /// @throws TemplateDefinition if not applicable
+      virtual void setDictionaryName(
+        const std::string & name);
 
       virtual void setApplicationType(const std::string & type, const std::string & ns);
       virtual void addLengthInstruction(FieldInstructionPtr & field);
@@ -48,6 +49,13 @@ namespace QuickFAST{
       const std::string & getApplicationType()const
       {
         return applicationType_;
+      }
+
+      /// @brief Return the namespace for the application type
+      /// @returns the type's namespace
+      const std::string & getApplicationTypeNamespace()const
+      {
+        return applicationNamespace_;
       }
 
       /// @brief Enable the addLengthInstruction() method.
@@ -109,10 +117,24 @@ namespace QuickFAST{
       /// @returns true if one exists for this SegmentBody
       bool getLengthInstruction(FieldInstructionCPtr & value)const;
 
+      /// @brief Set the mandatory/optional flag for the length instruction
+      /// @param mandatory true if this Segment is a required Sequence
       void setMandatoryLength(bool mandatory)
       {
         mandatoryLength_ = mandatory;
       }
+
+      /// @brief Assign a dictionary entry to the field in this segment
+      /// @param indexer assigns the index.
+      /// @param dictionaryName is the parent's dictionary name (inherited unless overridden)
+      /// @param typeName is the application type for the parent of this segment
+      /// @param typeNamespace is the namespace to qualify the application type.
+      void indexDictionaries(
+        DictionaryIndexer & indexer,
+        const std::string & dictionaryName,
+        const std::string & typeName,
+        const std::string & typeNamespace);
+
     protected:
       /// @brief the application data type for this set of fields
       std::string applicationType_;
@@ -120,6 +142,7 @@ namespace QuickFAST{
       std::string applicationNamespace_;
       /// @brief the default dictionary to be used for this set of fields
       std::string dictionaryName_;
+
       /// @brief the maximum number of presence map bits needed to encode these fields
       size_t presenceMapBits_;
       /// @brief the number of presence map bits before any fields are added.
@@ -133,7 +156,7 @@ namespace QuickFAST{
       /// @brief is the length field mandatory?
       bool mandatoryLength_;
       /// @brief the field instruction for sequence length if this is the body of a sequence
-      FieldInstructionCPtr lengthInstruction_;
+      FieldInstructionPtr lengthInstruction_;
     };
   }
 }

@@ -39,6 +39,16 @@ namespace QuickFAST{
       /// @brief Construct and empty registry.
       TemplateRegistry();
 
+      /// @brief special constructor for test/debug.
+      /// DO NOT USE IN PRODUCTION CODE
+      /// @param pmapBits how many pmap bits are needed by the largest template
+      /// @param fieldCount how many fields are defined by the largest template
+      /// @param dictionarySize how many slots are needed in the dictionary
+      TemplateRegistry(
+        size_t pmapBits,
+        size_t fieldCount,
+        size_t dictionarySize);
+
       /// @brief Virtual destructor.
       virtual ~TemplateRegistry()
       {
@@ -46,7 +56,7 @@ namespace QuickFAST{
 
       /// @brief Add a definition to the registry
       /// @param value smart pointer to the template to be added
-      void addTemplate(TemplateCPtr value);
+      virtual void addTemplate(TemplatePtr value);
 
       virtual void finalize();
 
@@ -61,6 +71,13 @@ namespace QuickFAST{
         return presenceMapBits_;
       }
 
+      /// @brief How many entries are needed in the dictionaries associated with this registry
+      /// @brief returns an count of dictionary indexes used.
+      size_t dictionarySize() const
+      {
+        return dictionarySize_;
+      }
+
       /// @brief Returns the maximum number of fields that will be produced by any template in the registry.
       ///
       /// Does not include "nested" fields -- unmerged groups and sequences count as one each.
@@ -69,7 +86,6 @@ namespace QuickFAST{
       {
         return maxFieldCount_;
       }
-
 
       /// @brief Use Template ID to find a template.
       /// @param[in] templateId the desired template
@@ -165,7 +181,10 @@ namespace QuickFAST{
 
     private:
       TemplateIdMap templates_;
+      typedef std::vector<TemplatePtr> MutableTemplates;
+      MutableTemplates mutableTemplates_;
       size_t presenceMapBits_;
+      size_t dictionarySize_;
       size_t maxFieldCount_;
       std::string name_;
       std::string namespace_;

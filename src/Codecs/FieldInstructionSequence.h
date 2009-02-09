@@ -41,7 +41,7 @@ namespace QuickFAST{
 
       /// @brief set the segment body which defines the contents of the sequence.
       /// @param segment is a set of field instructions that define a sequence entry
-      void setSegmentBody(Codecs::SegmentBodyCPtr segment)
+      void setSegmentBody(Codecs::SegmentBodyPtr segment)
       {
         segment_ = segment;
       }
@@ -58,10 +58,16 @@ namespace QuickFAST{
         Codecs::Encoder & encoder,
         const Messages::FieldSet & fieldSet) const;
 
+      virtual void indexDictionaries(
+        DictionaryIndexer & indexer,
+        const std::string & dictionaryName,
+        const std::string & typeName,
+        const std::string & typeNamespace);
+
     private:
       void interpretValue(const std::string & value);
     private:
-      Codecs::SegmentBodyCPtr segment_;
+      Codecs::SegmentBodyPtr segment_;
     };
   }
 }

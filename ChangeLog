@@ -1,9 +1,50 @@
+Mon Feb  9 17:05:00 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Context.cpp:
+        * src/Codecs/DictionaryIndexer.h:
+        * src/Codecs/DictionaryIndexer.cpp:
+        * src/Codecs/DictionaryIndexer_fwd.h:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.h:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionGroup.h:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionSequence.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FieldOp.cpp:
+        * src/Codecs/SchemaElement.h:
+        * src/Codecs/SchemaElement.cpp:
+        * src/Codecs/SegmentBody.h:
+        * src/Codecs/SegmentBody.cpp:
+        * src/Codecs/TemplateRegistry.h:
+        * src/Codecs/TemplateRegistry.cpp:
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/Messages/FieldSet.h:
+        * src/Tests/testFieldInstructions.cpp:
+        * src/Tests/testFieldOperations.cpp:
+        * src/Codecs/Dictionary.h:
+        * src/Codecs/Dictionary.cpp:
+        * src/Codecs/Dictionary_fwd.h:
+        Reworked dictionary support to get the name inheritence right
+        and improve performance.
+        {warning, this revision has some build-time conflict between the .NET and C++ builds
+         Curt is working on it.  If it doesn't build on C++, revert the MPC/MPB/MPW files to rev 46
+         Or just wait for Curt's fix.}
+
+
 Fri Feb 6 23:37:21 UTC 2009  Curt Campbell  <campbellc@ociweb.com>
 
         * QuickFastDotNetTests.nunit
 
           Added a NUnit file for .NET projects to source control.
-          
+
         * src/DotNet/Decimal.h
         * src/DotNet/Sequence.cpp
         * src/DotNet/Sequence.h

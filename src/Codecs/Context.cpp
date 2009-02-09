@@ -5,7 +5,6 @@
 
 #include "Context.h"
 #include <Codecs/TemplateRegistry.h>
-#include <Codecs/Dictionary.h>
 #include <Common/Exceptions.h>
 
 using namespace ::QuickFAST;
@@ -15,8 +14,8 @@ Context::Context(Codecs::TemplateRegistryCPtr registry)
 : verboseOut_(0)
 , logOut_(0)
 , templateRegistry_(registry)
-, globalDictionary_(new Dictionary)
-, templateDictionary_(new Dictionary)
+, indexedDictionarySize_(registry->dictionarySize())
+, indexedDictionary_(new Messages::FieldCPtr[indexedDictionarySize_])
 {
 }
 
@@ -27,11 +26,10 @@ Context::~Context()
 void
 Context::reset()
 {
-  globalDictionary_.reset(new Dictionary);
-  templateDictionary_.reset();
-  namedDictionaries_.clear();
-  typeDictionaries_.clear();
-  templateDictionaries_.clear();
+  for(size_t nDict = 0; nDict < indexedDictionarySize_; ++nDict)
+  {
+    indexedDictionary_[nDict].reset();
+  }
 }
 
 
@@ -45,38 +43,25 @@ Context::findTemplate(const std::string & name, const std::string & nameSpace, T
 }
 
 
-const DictionaryPtr &
-Context::getGlobalDictionary()const
+bool
+Context::findDictionaryField(size_t index, Messages::FieldCPtr & field)
 {
-  return globalDictionary_;
-}
-
-const DictionaryPtr &
-Context::getTemplateDictionary()const
-{
-  return templateDictionary_;
-}
-
-const DictionaryPtr &
-Context::getTypeDictionary(const std::string & appName)
-{
-  NamedDictionaryMap::iterator pEntry = typeDictionaries_.find(appName);
-  if(pEntry == typeDictionaries_.end())
+  if(index >= indexedDictionarySize_)
   {
-    typeDictionaries_[appName] = DictionaryPtr(new Dictionary);
+    throw TemplateDefinitionError("Find invalid dictionary index: should not occur.");
   }
-  return typeDictionaries_[appName];
+  field = indexedDictionary_[index];
+  return bool(field);
 }
 
-const DictionaryPtr &
-Context::getNamedDictionary(const std::string & name)
+void
+Context::setDictionaryField(size_t index, const Messages::FieldCPtr & field)
 {
-  NamedDictionaryMap::iterator pEntry = namedDictionaries_.find(name);
-  if(pEntry == namedDictionaries_.end())
+  if(index >= indexedDictionarySize_)
   {
-    namedDictionaries_[name] = DictionaryPtr(new Dictionary);
+    throw TemplateDefinitionError("Set invalid dictionary index: should not occur.");
   }
-  return namedDictionaries_[name];
+  indexedDictionary_[index] = field;
 }
 
 void

@@ -7,7 +7,6 @@
 #include <Codecs/DataDestination.h>
 #include <Codecs/Decoder.h>
 #include <Codecs/Encoder.h>
-#include <Codecs/Dictionary.h>
 #include <Messages/Message.h>
 #include <Messages/Field.h>
 
@@ -154,9 +153,6 @@ FieldInstructionBlob::decodeCopy(
   Messages::FieldSet & fieldSet) const
 {
   PROFILE_POINT("blob::decodeCopy");
-  DictionaryPtr dictionary;
-  getDictionary(decoder, dictionary);
-
   if(pmap.checkNextField())
   {
     // field is in the stream, use it
@@ -170,13 +166,13 @@ FieldInstructionBlob::decodeCopy(
       fieldSet.addField(
         identity_,
         field);
-      dictionary->add(getKey(), field);
+      fieldOp_->setDictionaryValue(decoder, field);
     }
   }
   else // pmap says not in stream
   {
     Messages::FieldCPtr previousField;
-    if(!dictionary->find(getKey(), previousField))
+    if(!fieldOp_->findDictionaryField(decoder, previousField))
     {
       previousField = initialValue_;
     }
@@ -223,11 +219,8 @@ FieldInstructionBlob::decodeDelta(
     return false;
   }
   const std::string & deltaValue = deltaField->toString();
-
-  DictionaryPtr dictionary;
-  getDictionary(decoder, dictionary);
   Messages::FieldCPtr previousField;
-  if(!dictionary->find(getKey(), previousField))
+  if(!fieldOp_->findDictionaryField(decoder, previousField))
   {
     previousField = initialValue_;
   }
@@ -249,7 +242,7 @@ FieldInstructionBlob::decodeDelta(
     fieldSet.addField(
       identity_,
       field);
-    dictionary->add(getKey(), field);
+    fieldOp_->setDictionaryValue(decoder, field);
   }
   else
   { // operate on end of string
@@ -263,7 +256,7 @@ FieldInstructionBlob::decodeDelta(
     fieldSet.addField(
       identity_,
       field);
-    dictionary->add(getKey(), field);
+    fieldOp_->setDictionaryValue(decoder, field);
   }
   return true;
 }
@@ -284,15 +277,12 @@ FieldInstructionBlob::decodeTail(
     {
       return false;
     }
-    DictionaryPtr dictionary;
-    getDictionary(decoder, dictionary);
-
     if(bool(tailField)) // NULL?
     {
       const std::string & tailValue = tailField->toString();
 
       Messages::FieldCPtr previousField;
-      if(!dictionary->find(getKey(), previousField))
+      if(!fieldOp_->findDictionaryField(decoder, previousField))
       {
         previousField = initialValue_;
       }
@@ -308,23 +298,20 @@ FieldInstructionBlob::decodeTail(
       fieldSet.addField(
         identity_,
         field);
-      dictionary->add(getKey(), field);
+      fieldOp_->setDictionaryValue(decoder, field);
     }
     else // null
     {
-      dictionary->add(getKey(), createEmptyField());
+      fieldOp_->setDictionaryValue(decoder, createEmptyField());
     }
   }
   else // pmap says not in stream
   {
-    DictionaryPtr dictionary;
-    getDictionary(decoder, dictionary);
-
     Messages::FieldCPtr previousField;
-    if(!dictionary->find(getKey(), previousField))
+    if(!fieldOp_->findDictionaryField(decoder, previousField))
     {
       previousField = initialValue_;
-        dictionary->add(getKey(), previousField);
+      fieldOp_->setDictionaryValue(decoder, previousField);
     }
     if(bool(previousField) && previousField->isDefined())
     {
@@ -494,10 +481,8 @@ FieldInstructionBlob::encodeCopy(
   std::string previousValue;
 
   // ... then initialize them from the dictionary
-  DictionaryPtr dictionary;
-  getDictionary(encoder, dictionary);
   Messages::FieldCPtr previousField;
-  if(dictionary->find(getKey(), previousField))
+  if(fieldOp_->findDictionaryField(encoder, previousField))
   {
     if(!previousField->isString())
     {
@@ -532,7 +517,7 @@ FieldInstructionBlob::encodeCopy(
         encodeBlob(destination, encoder.getWorkingBuffer(), value);
       }
       Messages::FieldCPtr newField(createField(value));
-      dictionary->add(getKey(), newField);
+      fieldOp_->setDictionaryValue(encoder, newField);
     }
   }
   else // not defined in fieldset
@@ -548,7 +533,7 @@ FieldInstructionBlob::encodeCopy(
       pmap.setNextField(true);// value in stream
       destination.putByte(nullBlob);
       Messages::FieldCPtr newField = this->createEmptyField();
-      dictionary->add(getKey(), newField);
+      fieldOp_->setDictionaryValue(encoder, newField);
     }
     else
     {
@@ -571,10 +556,8 @@ FieldInstructionBlob::encodeDelta(
   std::string previousValue;
 
   // ... then initialize them from the dictionary
-  DictionaryPtr dictionary;
-  getDictionary(encoder, dictionary);
   Messages::FieldCPtr previousField;
-  if(dictionary->find(getKey(), previousField))
+  if(fieldOp_->findDictionaryField(encoder, previousField))
   {
     if(!previousField->isString())
     {
@@ -613,7 +596,7 @@ FieldInstructionBlob::encodeDelta(
     if(!previousIsKnown  || value != previousValue)
     {
       field = createField(value);
-      dictionary->add(getKey(), field);
+      fieldOp_->setDictionaryValue(encoder, field);
     }
 
   }
@@ -640,10 +623,8 @@ FieldInstructionBlob::encodeTail(
   std::string previousValue;
 
   // ... then initialize them from the dictionary
-  DictionaryPtr dictionary;
-  getDictionary(encoder, dictionary);
   Messages::FieldCPtr previousField;
-  if(dictionary->find(getKey(), previousField))
+  if(fieldOp_->findDictionaryField(encoder, previousField))
   {
     if(!previousField->isString())
     {
@@ -683,7 +664,7 @@ FieldInstructionBlob::encodeTail(
     if(!previousIsKnown  || value != previousValue)
     {
       field = createField(value);
-      dictionary->add(getKey(), field);
+      fieldOp_->setDictionaryValue(encoder, field);
     }
   }
   else // not defined in fieldset

@@ -19,7 +19,6 @@
 #include <Messages/FieldIdentity.h>
 #include <Codecs/DataSource.h>
 #include <Codecs/Context.h>
-#include <Codecs/Dictionary_fwd.h>
 #include <Codecs/FieldOp.h>
 #include <Codecs/PresenceMap.h>
 
@@ -99,7 +98,7 @@ namespace QuickFAST{
       /// @brief Set a field operation
       ///
       /// Assigns the appropriate dispatching object to this field instruction.
-      void setFieldOp(FieldOpCPtr fieldOp);
+      void setFieldOp(FieldOpPtr fieldOp);
 
       /// @brief Get the currently used field operation
       bool getFieldOp(FieldOpCPtr & fieldOp) const;
@@ -154,15 +153,6 @@ namespace QuickFAST{
         return identity_.mandatory();
       }
 
-      /// @brief Return the fields key.
-      /// @return the dictionary key for this field
-      const std::string & getKey()const
-      {
-        return fieldOp_->getKey().empty()
-          ? identity_.name()
-          : fieldOp_->getKey();
-      }
-
       /// @brief Implement the dictionary= attribute.
       ///
       /// Defines an dictionary to be used for this element.
@@ -171,18 +161,13 @@ namespace QuickFAST{
       /// @param name is the dictionary= attribute of the segment-defining element
       virtual void setDictionaryName(const std::string & name);
 
-      /// @brief get the name of the dictionary to be used for this field
-      const std::string & getDictionaryName() const
-      {
-        return fieldOp_->getDictionaryName();
-      }
 
       /// @brief set the segment body which defines the contents of a sequence or group.
       ///
       /// Does not apply to other field instructions so the default implementation
       /// throws a TemplateDefinition error.
       /// @param segment is a set of field instructions that define the element
-      virtual void setSegmentBody(Codecs::SegmentBodyCPtr segment);
+      virtual void setSegmentBody(Codecs::SegmentBodyPtr segment);
 
       /// @brief How many presence map bits does this field instruction use.
       ///
@@ -195,6 +180,17 @@ namespace QuickFAST{
       /// Includes merged groups and templateRefs. If not merged, then the answer is 1
       /// @brief parent SegmentBody is needed to check for merge
       virtual size_t fieldCount(const SegmentBody & parent)const;
+
+      /// @brief Assign a dictionary index to this field and any subfields.
+      /// @param indexer assigns the index.
+      /// @param dictionaryName is the parent's dictionary name (inherited unless overridden)
+      /// @param typeName is the application type for this instruction
+      /// @param typeNamespace is the namespace to qualify the application type.
+      virtual void indexDictionaries(
+        DictionaryIndexer & indexer,
+        const std::string & dictionaryName,
+        const std::string & typeName,
+        const std::string & typeNamespace);
 
       /// @brief Decode the field from a data source.
       ///
@@ -544,9 +540,6 @@ namespace QuickFAST{
         WorkingBuffer & buffer,
         size_t length);
 
-      /// @brief Find the dictionary for this instruction
-      void getDictionary(Codecs::Context & context, DictionaryPtr & dictionary) const;
-
     private:
       /// @brief Interpret initial or default value attribute.
       /// @param value for this instruction as specified in XML
@@ -572,7 +565,7 @@ namespace QuickFAST{
       /// Cached applicationTypeNamespace.applicationType
       std::string qualifiedApplicationType_;
       /// Pointer to field operator dispatcher.
-      FieldOpCPtr fieldOp_;
+      FieldOpPtr fieldOp_;
     };
 
     ///////////////////////////////

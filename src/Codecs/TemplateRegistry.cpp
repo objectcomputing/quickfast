@@ -4,18 +4,47 @@
 #include <Common/QuickFASTPch.h>
 #include "TemplateRegistry.h"
 #include <Codecs/Template.h>
+#include <Codecs/DictionaryIndexer.h>
+
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
 
 TemplateRegistry::TemplateRegistry()
 : presenceMapBits_(1) // every template requires 1 bit for the template ID
+, dictionarySize_(0)
 , maxFieldCount_(0)
 {
 }
 
+TemplateRegistry::TemplateRegistry(
+  size_t pmapBits,
+  size_t fieldCount,
+  size_t dictionarySize)
+: presenceMapBits_(pmapBits)
+, dictionarySize_(dictionarySize)
+, maxFieldCount_(fieldCount)
+{
+
+}
+
+
 void
 TemplateRegistry::finalize()
 {
+  DictionaryIndexer indexer;
+  for(MutableTemplates::iterator mit = mutableTemplates_.begin();
+    mit != mutableTemplates_.end();
+    ++mit)
+  {
+    (*mit)->indexDictionaries(
+      indexer,
+      dictionaryName_,
+      "", // typeref n/a at <templates> level
+      ""); // typeNs
+  }
+  dictionarySize_ = indexer.size();
+  std::cout << "Dictionary entries: " << dictionarySize_ << std::endl;
+
   presenceMapBits_ = 1;
   maxFieldCount_ = 0;
   for(TemplateIdMap::const_iterator it = templates_.begin();
@@ -38,10 +67,11 @@ TemplateRegistry::finalize()
 
 
 void
-TemplateRegistry::addTemplate(TemplateCPtr value)
+TemplateRegistry::addTemplate(TemplatePtr value)
 {
   template_id_t id = value->getId();
   templates_[id] = value;
+  mutableTemplates_.push_back(value);
   size_t bits = value->presenceMapBitCount();
   if(bits > presenceMapBits_)
   {

@@ -11,6 +11,7 @@
 
 #include <Messages/Field_fwd.h>
 #include <Messages/FieldSet_fwd.h>
+#include <Codecs/Context_fwd.h>
 #include <Codecs/FieldInstruction_fwd.h>
 #include <Codecs/SchemaElement.h>
 #include <Codecs/DataSource_fwd.h>
@@ -18,6 +19,7 @@
 #include <Codecs/Decoder_fwd.h>
 #include <Codecs/Encoder_fwd.h>
 #include <Codecs/PresenceMap.h>
+#include <Codecs/DictionaryIndexer_fwd.h>
 
 namespace QuickFAST{
   namespace Codecs{
@@ -26,6 +28,8 @@ namespace QuickFAST{
     /// Supports applying an encoding/decoding operation to a particular field type.
     /// This is a double-dispatch problem, so the virtual methods defined for this class
     /// call the appropriate virtual methods in the targeted FieldInstruction.
+    ///
+    /// @todo: suppress dictionary index for operations that don't use a dictionary
     class QuickFAST_Export FieldOp
       : public SchemaElement
     {
@@ -92,25 +96,11 @@ namespace QuickFAST{
         valueIsDefined_ = true;
       }
 
-      /// @brief get the key= attribute
-      /// @returns the key specified (empty if key= was not used.)
-      const std::string & getKey()const
-      {
-        return key_;
-      }
-
       /// @brief Implement the key= attribute
       /// @param key is the value of the attribute.
       void setKey(const std::string & key)
       {
         key_ = key;
-      }
-
-      /// @brief Get the namespace for the key
-      /// @returns the namespace (if any)
-      const std::string & getKeyNamespace()const
-      {
-        return keyNamespace_;
       }
 
       /// @brief implement the nsKey= attribute
@@ -120,12 +110,21 @@ namespace QuickFAST{
         keyNamespace_ = keyNamespace;
       }
 
-      /// @brief get the name of the dictionary to use for this operation
-      /// @returns the dictionary name or an empty string if none
-      const std::string & getDictionaryName()const
-      {
-        return dictionaryName_;
-      }
+
+      /// @brief Store the current value in the dictionary entry assigned to this field.
+      /// @param context contains the dictionaries for this encode/decode
+      /// @param value is the entry to store in the dictionary
+      void setDictionaryValue(
+        Context & context,
+        const Messages::FieldCPtr & value);
+
+      /// @brief Retrieve the current value for this field from the dictionary.
+      /// @param context contains the dictionaries for this encode/decode
+      /// @param value will point to the entry that was found
+      /// @returns true if a valid entry was found.
+      bool findDictionaryField(
+        Context & context,
+        Messages::FieldCPtr & value);
 
       /// @brief Implement the dictionary= attribute
       /// @param name is the name of the dictionary to use.
@@ -133,6 +132,21 @@ namespace QuickFAST{
       {
         dictionaryName_ = name;
       }
+
+      /// @brief Assign a dictionary entry to the field associated with this operation.
+      /// @param indexer assigns the index.
+      /// @param dictionaryName is the parent's dictionary name (inherited unless overridden)
+      /// @param typeName is the application type for this instruction
+      /// @param typeNamespace is the namespace to qualify the application type.
+      /// @param fieldName is the name of this field.
+      /// @param fieldNamespace qualifies fieldName
+      void indexDictionaries(
+        DictionaryIndexer & indexer,
+        const std::string & dictionaryName,
+        const std::string & typeName,
+        const std::string & typeNamespace,
+        const std::string & fieldName,
+        const std::string & fieldNamespace);
 
     protected:
             /// Value specified by the operator associated with this instruction [as a string]
@@ -147,6 +161,10 @@ namespace QuickFAST{
       /// Dictionary name to be used for this operation
       std::string dictionaryName_;
 
+      /// An index to gain quick access to the dictionary entry for this op
+      size_t dictionaryIndex_;
+      /// true if dictionaryIndex_ is valid;
+      bool dictionaryIndexValid_;
     };
   }
 }

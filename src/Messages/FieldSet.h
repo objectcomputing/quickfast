@@ -87,9 +87,10 @@ namespace QuickFAST{
 
       /// @brief identify the application type associated with
       /// this set of fields via typeref.
-      void setApplicationType(const std::string & type)
+      void setApplicationType(const std::string & type, const std::string & ns)
       {
         applicationType_ = type;
+        applicationTypeNs_ = ns;
       }
 
       /// @brief get the application type associated with
@@ -123,6 +124,8 @@ namespace QuickFAST{
     protected:
       /// Application type as set by &lt;typeRef>
       std::string applicationType_;
+      /// Namespace for the Application type as set by &lt;typeRef>
+      std::string applicationTypeNs_;
     private:
       /// The collection of fields
       MessageField * fields_;

@@ -42,12 +42,12 @@ namespace QuickFAST
 
       /// @brief Add a template to a container
       /// @param value smart pointer to the template to be added
-      virtual void addTemplate(TemplateCPtr value);
+      virtual void addTemplate(TemplatePtr value);
 
       /// @brief Set a field operation
       ///
       /// Assigns the appropriate dispatching object to a fieldInstruction.
-      virtual void setFieldOp(FieldOpCPtr fieldOp);
+      virtual void setFieldOp(FieldOpPtr fieldOp);
 
       /// @brief Implement the TypeRef element.
       ///

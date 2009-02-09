@@ -170,9 +170,6 @@ FieldInstructionDecimal::decodeCopy(
   Messages::FieldSet & fieldSet) const
 {
   PROFILE_POINT("decimal::decodeCopy");
-  DictionaryPtr dictionary;
-  getDictionary(decoder, dictionary);
-
   exponent_t exponent = 0;
   mantissa_t mantissa = 0;
   if(pmap.checkNextField())
@@ -186,7 +183,7 @@ FieldInstructionDecimal::decodeCopy(
       fieldSet.addField(
         identity_,
         newField);
-      dictionary->add(getKey(), newField);
+      fieldOp_->setDictionaryValue(decoder, newField);
     }
     else
     {
@@ -194,7 +191,7 @@ FieldInstructionDecimal::decodeCopy(
       if(checkNullInteger(exponent))
       {
         Messages::FieldCPtr newField(Messages::FieldDecimal::createNull());
-        dictionary->add(getKey(), newField);
+        fieldOp_->setDictionaryValue(decoder, newField);
       }
       else
       {
@@ -204,7 +201,7 @@ FieldInstructionDecimal::decodeCopy(
         fieldSet.addField(
           identity_,
           newField);
-        dictionary->add(getKey(), newField);
+        fieldOp_->setDictionaryValue(decoder, newField);
       }
     }
 
@@ -212,7 +209,7 @@ FieldInstructionDecimal::decodeCopy(
   else // pmap says not present, use copy
   {
     Messages::FieldCPtr previousField;
-    if(dictionary->find(getKey(), previousField))
+    if(fieldOp_->findDictionaryField(decoder, previousField))
     {
       //Decimal previous;
       if(previousField->isDefined())
@@ -246,7 +243,7 @@ FieldInstructionDecimal::decodeCopy(
         fieldSet.addField(
           identity_,
           newField);
-        dictionary->add(getKey(), newField);
+        fieldOp_->setDictionaryValue(decoder, newField);
       }
       else
       {
@@ -281,12 +278,9 @@ FieldInstructionDecimal::decodeDelta(
   int64 mantissaDelta;
   decodeSignedInteger(source, decoder, mantissaDelta, true);
 
-  DictionaryPtr dictionary;
-  getDictionary(decoder, dictionary);
-
   Decimal value(typedValue_);
   Messages::FieldCPtr previousField;
-  if(dictionary->find(getKey(), previousField))
+  if(fieldOp_->findDictionaryField(decoder, previousField))
   {
     if(previousField->isType(Messages::Field::DECIMAL))
     {
@@ -303,7 +297,7 @@ FieldInstructionDecimal::decodeDelta(
   fieldSet.addField(
     identity_,
     newField);
-  dictionary->add(getKey(), newField);
+  fieldOp_->setDictionaryValue(decoder, newField);
   return true;
 }
 void
@@ -474,10 +468,8 @@ FieldInstructionDecimal::encodeCopy(
   Decimal previousValue(0,0);
 
   // ... then initialize them from the dictionary
-  DictionaryPtr dictionary;
-  getDictionary(encoder, dictionary);
   Messages::FieldCPtr previousField;
-  if(dictionary->find(getKey(), previousField))
+  if(fieldOp_->findDictionaryField(encoder, previousField))
   {
     if(!previousField->isType(Messages::Field::DECIMAL))
     {
@@ -508,7 +500,7 @@ FieldInstructionDecimal::encodeCopy(
         pmap.setNextField(true);// value in stream
         encodeNullableDecimal(destination, encoder.getWorkingBuffer(), value.getExponent(), value.getMantissa());
         field = Messages::FieldDecimal::create(value);
-        dictionary->add(getKey(), field);
+        fieldOp_->setDictionaryValue(encoder, field);
       }
     }
   }
@@ -524,7 +516,7 @@ FieldInstructionDecimal::encodeCopy(
       pmap.setNextField(true);// value in stream
       destination.putByte(nullDecimal);
       field = Messages::FieldDecimal::createNull();
-      dictionary->add(getKey(), field);
+      fieldOp_->setDictionaryValue(encoder, field);
     }
     else
     {
@@ -548,10 +540,8 @@ FieldInstructionDecimal::encodeDelta(
   Decimal previousValue(typedValue_);
 
   // ... then initialize them from the dictionary
-  DictionaryPtr dictionary;
-  getDictionary(encoder, dictionary);
   Messages::FieldCPtr previousField;
-  if(dictionary->find(getKey(), previousField))
+  if(fieldOp_->findDictionaryField(encoder, previousField))
   {
     if(!previousField->isType(Messages::Field::DECIMAL))
     {
@@ -587,7 +577,7 @@ FieldInstructionDecimal::encodeDelta(
     if(!previousIsKnown  || value != previousValue)
     {
       field = Messages::FieldDecimal::create(value);
-      dictionary->add(getKey(), field);
+      fieldOp_->setDictionaryValue(encoder, field);
     }
 
   }
@@ -614,3 +604,18 @@ FieldInstructionDecimal::maxPresenceMapBits()const
 {
   return 2;
 }
+
+void
+FieldInstructionDecimal::indexDictionaries(
+  DictionaryIndexer & indexer,
+  const std::string & dictionaryName,
+  const std::string & typeName,
+  const std::string & typeNamespace)
+{
+  FieldInstruction::indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
+  exponentInstruction_->indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
+  mantissaInstruction_->indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
+}
+
+
+

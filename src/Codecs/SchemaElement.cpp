@@ -15,7 +15,7 @@ SchemaElement::finalize()
 }
 
 void
-SchemaElement::addTemplate(TemplateCPtr value)
+SchemaElement::addTemplate(TemplatePtr value)
 {
   throw TemplateDefinitionError("<template> not allowed in this context.");
 }
@@ -26,7 +26,7 @@ SchemaElement::setApplicationType(const std::string & type, const std::string & 
   throw TemplateDefinitionError("<typeRef> not allowed in this context.");
 }
 void
-SchemaElement::setFieldOp(FieldOpCPtr fieldOp)
+SchemaElement::setFieldOp(FieldOpPtr fieldOp)
 {
   throw TemplateDefinitionError("Field operation not allowed in this context.");
 }

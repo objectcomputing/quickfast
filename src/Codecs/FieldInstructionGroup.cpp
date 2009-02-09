@@ -50,7 +50,7 @@ FieldInstructionGroup::decodeNop(
     if(fieldSet.getApplicationType() != segmentBody_->getApplicationType())
     {
       Messages::GroupPtr group(new Messages::Group(segmentBody_->fieldCount()));
-      group->setApplicationType(segmentBody_->getApplicationType());
+      group->setApplicationType(segmentBody_->getApplicationType(), segmentBody_->getApplicationTypeNamespace());
       decoder.decodeGroup(source, segmentBody_, *group);
       Messages::FieldCPtr field(Messages::FieldGroup::create(group));
       fieldSet.addField(
@@ -142,3 +142,14 @@ FieldInstructionGroup::fieldCount(const SegmentBody & parent)const
     return 1;
   }
 }
+
+void
+FieldInstructionGroup::indexDictionaries(
+  DictionaryIndexer & indexer,
+  const std::string & dictionaryName,
+  const std::string & typeName,
+  const std::string & typeNamespace)
+{
+  segmentBody_->indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
+}
+

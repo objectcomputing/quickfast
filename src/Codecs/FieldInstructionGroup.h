@@ -38,7 +38,7 @@ namespace QuickFAST{
       virtual ~FieldInstructionGroup();
 
       /// @brief define the segment body of this group
-      void setSegmentBody(Codecs::SegmentBodyCPtr segmentBody)
+      void setSegmentBody(Codecs::SegmentBodyPtr segmentBody)
       {
         segmentBody_ = segmentBody;
       }
@@ -58,10 +58,16 @@ namespace QuickFAST{
         Codecs::Encoder & encoder,
         const Messages::FieldSet & fieldSet) const;
 
+      virtual void indexDictionaries(
+        DictionaryIndexer & indexer,
+        const std::string & dictionaryName,
+        const std::string & typeName,
+        const std::string & typeNamespace);
+
     private:
       void interpretValue(const std::string & value);
     private:
-      Codecs::SegmentBodyCPtr segmentBody_;
+      Codecs::SegmentBodyPtr segmentBody_;
     };
   }
 }

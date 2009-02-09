@@ -9,9 +9,9 @@
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
 #include <Common/WorkingBuffer.h>
-#include <Codecs/Dictionary_fwd.h>
 #include <Codecs/TemplateRegistry_fwd.h>
 #include <Codecs/Template_fwd.h>
+#include <Messages/Field_fwd.h>
 
 namespace QuickFAST{
   namespace Codecs{
@@ -57,20 +57,16 @@ namespace QuickFAST{
 
       //////////////////////////////
       // Support for decoding fields
-      /// @brief Find global dictionary
-      /// @returns a pointer to the dictionary
-      const DictionaryPtr & getGlobalDictionary()const;
-      /// @brief Find dictionary associated with the current template
-      /// @returns a pointer to the dictionary
-      const DictionaryPtr & getTemplateDictionary()const;
-      /// @brief Find dictionary by application type
-      /// @param appName the application type to identify the dictionary
-      /// @returns a pointer to the dictionary
-      const DictionaryPtr & getTypeDictionary(const std::string & appName);
-      /// @brief Find dictionary by user defined name
-      /// @param name the user defined name to identify the dictionary
-      /// @returns a pointer to the dictionary
-      const DictionaryPtr & getNamedDictionary(const std::string & name);
+      /// @brief Find the definition of a field in the dictionary
+      /// @brief index identifies the dictionary entry corresponding to this field
+      /// @brief field receives the pointer to the value found
+      /// @returns true if a valid entry was found
+      bool findDictionaryField(size_t index, Messages::FieldCPtr & field);
+
+      /// @brief Sets the definition of a field in the dictionary
+      /// @brief index identifies the dictionary entry corresponding to this field
+      /// @brief field points to the value to be set.
+      void setDictionaryField(size_t index, const Messages::FieldCPtr & field);
 
       /// @brief Report a recoverable error
       /// @param errorCode as defined in the FIX standard (or invented for QuickFAST)
@@ -150,15 +146,9 @@ namespace QuickFAST{
     private:
       Codecs::TemplateRegistryCPtr templateRegistry_;
       template_id_t templateId_;
-      DictionaryPtr globalDictionary_;
-      DictionaryPtr templateDictionary_;
-
-      typedef std::map<std::string, DictionaryPtr> NamedDictionaryMap;
-      NamedDictionaryMap namedDictionaries_;
-      NamedDictionaryMap typeDictionaries_;
-
-      typedef std::map<template_id_t, DictionaryPtr> TemplateDictionaryMap;
-      TemplateDictionaryMap templateDictionaries_;
+      size_t indexedDictionarySize_;
+      typedef boost::scoped_array<Messages::FieldCPtr> IndexedDictionary;
+      IndexedDictionary indexedDictionary_;
       WorkingBuffer workingBuffer_;
     };
   }

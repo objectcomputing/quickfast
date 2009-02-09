@@ -11,7 +11,6 @@
 #include <Codecs/Encoder.h>
 #include <Codecs/DataSource.h>
 #include <Codecs/DataDestination.h>
-#include <Codecs/Dictionary.h>
 #include <Messages/Message.h>
 #include <Messages/Field.h>
 
@@ -257,9 +256,6 @@ namespace QuickFAST{
       Messages::FieldSet & fieldSet) const
     {
       PROFILE_POINT("int::decodeCopy");
-      DictionaryPtr dictionary;
-      getDictionary(decoder, dictionary);
-
       if(pmap.checkNextField())
       {
         INTEGER_TYPE value = typedValue_;
@@ -279,7 +275,7 @@ namespace QuickFAST{
           fieldSet.addField(
             identity_,
             newField);
-          dictionary->add(getKey(), newField);
+          fieldOp_->setDictionaryValue(decoder, newField);
         }
         else
         {
@@ -287,7 +283,7 @@ namespace QuickFAST{
           if(checkNullInteger(value))
           {
             Messages::FieldCPtr newField(FIELD_CLASS::createNull());
-            dictionary->add(getKey(), newField);
+            fieldOp_->setDictionaryValue(decoder, newField);
           }
           else
           {
@@ -295,7 +291,7 @@ namespace QuickFAST{
             fieldSet.addField(
               identity_,
               newField);
-            dictionary->add(getKey(), newField);
+            fieldOp_->setDictionaryValue(decoder, newField);
           }
         }
 
@@ -303,7 +299,7 @@ namespace QuickFAST{
       else // pmap says not present, use copy
       {
         Messages::FieldCPtr previousField;
-        if(dictionary->find(getKey(), previousField))
+        if(fieldOp_->findDictionaryField(decoder, previousField))
         {
           if(previousField->isDefined())
           {
@@ -336,7 +332,7 @@ namespace QuickFAST{
             fieldSet.addField(
               identity_,
               initialField_);
-            dictionary->add(getKey(), initialField_);
+            fieldOp_->setDictionaryValue(decoder, initialField_);
           }
           else
           {
@@ -350,7 +346,7 @@ namespace QuickFAST{
               fieldSet.addField(
                 identity_,
                 newField);
-              dictionary->add(getKey(), newField);
+              fieldOp_->setDictionaryValue(decoder, newField);
             }
           }
         }
@@ -430,19 +426,19 @@ namespace QuickFAST{
         }
       }
       NESTED_PROFILE_POINT(0, "int::decDelta::nonNull");
-      DictionaryPtr dictionary;
-      getDictionary(decoder, dictionary);
 
       INTEGER_TYPE value = typedValue_;
       Messages::FieldCPtr previousField;
 #ifndef NO_PROFILING
       bool found;
       {PROFILE_POINT("int::decDelta::find");
-      found = dictionary->find(getKey(), previousField);
+      found = fieldOp_->findDictionaryField(decoder, previousField);
+
       }
       if(found)
 #else // NO_PROFILING
-      if(dictionary->find(getKey(), previousField))
+      if(fieldOp_->findDictionaryField(decoder, previousField))
+
 #endif // NO_PROFILING
       {
         PROFILE_POINT("int::decDelta::fromDictionary");
@@ -464,7 +460,7 @@ namespace QuickFAST{
         newField);
       } //PROFILE
       {PROFILE_POINT("int::decDelta::add2Dic");
-      dictionary->add(getKey(), newField);
+      fieldOp_->setDictionaryValue(decoder, newField);
       } //PROFILE
       return true;
     }
@@ -479,9 +475,6 @@ namespace QuickFAST{
       Messages::FieldSet & fieldSet) const
     {
       PROFILE_POINT("int::decodeIncrement");
-      DictionaryPtr dictionary;
-      getDictionary(decoder, dictionary);
-
       if(pmap.checkNextField())
       {
         //PROFILE_POINT("int::decodeIncrement::present");
@@ -500,7 +493,7 @@ namespace QuickFAST{
           fieldSet.addField(
             identity_,
             newField);
-          dictionary->add(getKey(), newField);
+          fieldOp_->setDictionaryValue(decoder, newField);
         }
         else
         {
@@ -512,7 +505,7 @@ namespace QuickFAST{
             fieldSet.addField(
               identity_,
               newField);
-            dictionary->add(getKey(), newField);
+          fieldOp_->setDictionaryValue(decoder, newField);
           }
         }
       }
@@ -521,7 +514,7 @@ namespace QuickFAST{
         //PROFILE_POINT("int::decodeIncrement::absent");
         INTEGER_TYPE value = typedValue_;
         Messages::FieldCPtr previousField;
-        if(dictionary->find(getKey(), previousField))
+        if(fieldOp_->findDictionaryField(decoder, previousField))
         {
           if(previousField->isType(value))
           {
@@ -560,7 +553,7 @@ namespace QuickFAST{
         fieldSet.addField(
           identity_,
           newField);
-        dictionary->add(getKey(), newField);
+          fieldOp_->setDictionaryValue(decoder, newField);
       }
       return true;
     }
@@ -713,10 +706,8 @@ namespace QuickFAST{
       INTEGER_TYPE previousValue = 0;
 
       // ... then initialize them from the dictionary
-      DictionaryPtr dictionary;
-      getDictionary(encoder, dictionary);
       Messages::FieldCPtr previousField;
-      if(dictionary->find(getKey(), previousField))
+      if(fieldOp_->findDictionaryField(encoder, previousField))
       {
         if(!previousField->isType(typedValue_))
         {
@@ -760,7 +751,7 @@ namespace QuickFAST{
             encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), value);
           }
           field = FIELD_CLASS::create(value);
-          dictionary->add(getKey(), field);
+          fieldOp_->setDictionaryValue(encoder, field);
         }
       }
       else // not defined in fieldset
@@ -775,7 +766,7 @@ namespace QuickFAST{
           pmap.setNextField(true);// value in stream
           destination.putByte(nullInteger);
           field = FIELD_CLASS::createNull();
-          dictionary->add(getKey(), field);
+          fieldOp_->setDictionaryValue(encoder, field);
         }
         else
         {
@@ -799,10 +790,8 @@ namespace QuickFAST{
       INTEGER_TYPE previousValue = 0;
 
       // ... then initialize them from the dictionary
-      DictionaryPtr dictionary;
-      getDictionary(encoder, dictionary);
       Messages::FieldCPtr previousField;
-      if(dictionary->find(getKey(), previousField))
+      if(fieldOp_->findDictionaryField(encoder, previousField))
       {
         if(!previousField->isType(typedValue_))
         {
@@ -834,7 +823,7 @@ namespace QuickFAST{
         if(!previousIsKnown  || value != previousValue)
         {
           field = FIELD_CLASS::create(value);
-          dictionary->add(getKey(), field);
+          fieldOp_->setDictionaryValue(encoder, field);
         }
 
       }
@@ -863,10 +852,8 @@ namespace QuickFAST{
       INTEGER_TYPE previousValue = 0;
 
       // ... then initialize them from the dictionary
-      DictionaryPtr dictionary;
-      getDictionary(encoder, dictionary);
       Messages::FieldCPtr previousField;
-      if(dictionary->find(getKey(), previousField))
+      if(fieldOp_->findDictionaryField(encoder, previousField))
       {
         if(!previousField->isType(typedValue_))
         {
@@ -910,7 +897,7 @@ namespace QuickFAST{
           }
         }
         field = FIELD_CLASS::create(value);
-        dictionary->add(getKey(), field);
+        fieldOp_->setDictionaryValue(encoder, field);
       }
       else // not defined in fieldset
       {
@@ -921,7 +908,7 @@ namespace QuickFAST{
         pmap.setNextField(true);// value in stream
         destination.putByte(nullInteger);
         field = FIELD_CLASS::createNull();
-        dictionary->add(getKey(), field);
+        fieldOp_->setDictionaryValue(encoder, field);
       }
     }
   }

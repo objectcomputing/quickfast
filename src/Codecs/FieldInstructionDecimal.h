@@ -134,6 +134,12 @@ namespace QuickFAST{
         Codecs::Encoder & encoder,
         const Messages::FieldSet & fieldSet) const;
 
+      virtual void indexDictionaries(
+        DictionaryIndexer & indexer,
+        const std::string & dictionaryName,
+        const std::string & typeName,
+        const std::string & typeNamespace);
+
     private:
       void encodeDecimal(
         Codecs::DataDestination & destination,

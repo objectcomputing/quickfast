@@ -6,7 +6,6 @@
 #include <Codecs/DataSource.h>
 #include <Codecs/DataDestination.h>
 #include <Codecs/FieldOpNop.h>
-#include <Codecs/Dictionary.h>
 #include <Codecs/Context.h>
 #include <Common/Exceptions.h>
 
@@ -36,7 +35,7 @@ FieldInstruction::setPresence(bool mandatory)
 }
 
 void
-FieldInstruction::setFieldOp(FieldOpCPtr fieldOp)
+FieldInstruction::setFieldOp(FieldOpPtr fieldOp)
 {
   fieldOp_ = fieldOp;
   if(fieldOp->hasValue())
@@ -274,26 +273,19 @@ FieldInstruction::decodeByteVector(
 }
 
 void
-FieldInstruction::getDictionary(
-  Codecs::Context & context,
-  DictionaryPtr & dictionary) const
+FieldInstruction::indexDictionaries(
+  DictionaryIndexer & indexer,
+  const std::string & dictionaryName,
+  const std::string & typeName,
+  const std::string & typeNamespace)
 {
-  if(fieldOp_->getDictionaryName().empty() || fieldOp_->getDictionaryName() == "global")
-  {
-    dictionary = context.getGlobalDictionary();
-  }
-  else if(fieldOp_->getDictionaryName() == "template")
-  {
-    dictionary = context.getTemplateDictionary();
-  }
-  else if(fieldOp_->getDictionaryName() == "application")
-  {
-    dictionary = context.getTypeDictionary(applicationType_);
-  }
-  else
-  {
-    dictionary = context.getNamedDictionary(fieldOp_->getDictionaryName());
-  }
+  fieldOp_->indexDictionaries(
+    indexer,
+    dictionaryName,
+    typeName,
+    typeNamespace,
+    identity_.getLocalName(),
+    identity_.getNamespace());
 }
 
 void
@@ -466,7 +458,7 @@ FieldInstruction::setDictionaryName(const std::string & name)
 }
 
 void
-FieldInstruction::setSegmentBody(Codecs::SegmentBodyCPtr segment)
+FieldInstruction::setSegmentBody(Codecs::SegmentBodyPtr segment)
 {
   throw TemplateDefinitionError("Group or Segment definition error.");
 }

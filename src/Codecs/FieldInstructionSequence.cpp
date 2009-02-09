@@ -82,7 +82,7 @@ FieldInstructionSequence::decodeNop(
     }
 
     Messages::FieldSetPtr entrySet(new Messages::FieldSet(segment_->fieldCount()));
-    entrySet->setApplicationType(segment_->getApplicationType());
+    entrySet->setApplicationType(segment_->getApplicationType(), segment_->getApplicationTypeNamespace());
     decoder.decodeGroup(source, segment_, *entrySet);
     sequence->addEntry(entrySet);
   }
@@ -147,5 +147,15 @@ void
 FieldInstructionSequence::interpretValue(const std::string & value)
 {
   throw TemplateDefinitionError("Value not needed by Sequence instruction.");
+}
+
+void
+FieldInstructionSequence::indexDictionaries(
+  DictionaryIndexer & indexer,
+  const std::string & dictionaryName,
+  const std::string & typeName,
+  const std::string & typeNamespace)
+{
+  segment_->indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
 }
 
