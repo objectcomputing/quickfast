@@ -1,3 +1,9 @@
+Thu Feb 12 18:37:07 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * QuickFAST.mpc:
+
+          Removed this file. It was  unused.
+
 Mon Feb  9 17:05:00 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Context.h:
