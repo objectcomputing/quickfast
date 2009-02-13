@@ -43,8 +43,9 @@ namespace QuickFASTDotNet{
       property System::String^ ApplicationType
       {
         System::String^ get();
-        void set(System::String^ applicationType);
       }
+
+      void SetApplicationType(System::String^ applicationType, System::String^ nameSpace);
 
       /// @brief number of fields in this field set.
       property int Count

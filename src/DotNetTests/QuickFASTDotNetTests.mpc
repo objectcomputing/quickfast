@@ -9,7 +9,7 @@ project {
   sharedname = QuickFASTDoNetTests
 
   specific {
-    guid = 9CCB9524-05A4-43b4-8B64-1A3D222CFA2A
+    guid = 9CCB9524-05A4-43B4-8B64-1A3D222CFA2A
   }
 
   Source_Files {

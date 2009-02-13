@@ -51,9 +51,10 @@ namespace QuickFASTDotNet{
       return StlDotNet::string_cast(spFieldSet_->getApplicationType());
     }
 
-    void FieldSet::ApplicationType::set(String^ applicationType)
+    void FieldSet::SetApplicationType(System::String^ applicationType, System::String^ nameSpace)
     {
-      spFieldSet_->setApplicationType(StlDotNet::string_cast<std::string>(applicationType));
+      spFieldSet_->setApplicationType(StlDotNet::string_cast<std::string>(applicationType),
+                                      StlDotNet::string_cast<std::string>(nameSpace));     
     }
 
     bool FieldSet::IsPresent(System::String^ name)
