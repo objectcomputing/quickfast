@@ -26,7 +26,7 @@ namespace QuickFASTDotNetTests
 
 
         [Test]
-        [Description("Test decod and encode round trip.")]
+        [Description("Test decode and encode round trip.")]
         public void TestRoundTrip()
         {
             FileStream templateStream = new FileStream("..\\TestData\\templates.xml", FileMode.Open);

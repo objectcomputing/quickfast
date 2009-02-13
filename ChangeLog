@@ -1,3 +1,27 @@
+Fri Feb 13 23:16:01 UTC  Curt Campbell  <campbellc@ociweb.com>
+
+        * Output/TestData	TestData
+        * Output/TestData/fixfast.dat
+        * Output/TestData/marketdata.out
+        * Output/TestData/templates.xml
+
+          Added to source control.
+
+        * src/DotNet/Field.cpp
+
+          Fixed the cause of a class cast exception which caused a unit test to fail.
+
+        * src/DotNetTests/EncodeDecodeTests.cs
+
+          Corrected a spelling error on a test description.
+
+        * src/DotNetTests/TestData/fixfast.dat
+        * src/DotNetTests/TestData/marketdata.out
+        * src/DotNetTests/TestData/templates.xml
+        * src/DotNetTests/TestData/testoutput.dat
+
+          Removed from source control.
+
 Fri Feb 13 19:33:42 UTC 2009  Curt Campbell  <campbellc@ociweb.com>
 
         * QuickFASTExample.mpb

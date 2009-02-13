@@ -54,7 +54,7 @@ namespace QuickFASTDotNet{
         retVal = FTFieldCPtr(QuickFAST::Messages::FieldInt32::create(safe_cast<Int32Field^>(field)->Value));
         break;
       case FieldType::Int64:
-        retVal = FTFieldCPtr(QuickFAST::Messages::FieldInt64::create(safe_cast<UInt64Field^>(field)->Value));
+        retVal = FTFieldCPtr(QuickFAST::Messages::FieldInt64::create(safe_cast<Int64Field^>(field)->Value));
         break;
       case FieldType::UInt32:
         retVal = FTFieldCPtr(QuickFAST::Messages::FieldUInt32::create(safe_cast<UInt32Field^>(field)->Value));
