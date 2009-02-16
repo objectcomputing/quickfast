@@ -5,7 +5,6 @@
 
 #include "UnmanagedPtr.h"
 #include "StlDotNet.h"
-#include "DebugView.h"
 
 namespace QuickFASTDotNet{
   namespace Messages{

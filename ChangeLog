@@ -1,3 +1,13 @@
+Mon Feb 16 18:12:12 UTC 2009  Curt Campbell  <campbellc@ociweb.com>
+
+        * src/DotNet/DebugView.cpp
+        * src/DotNet/DebugView.h
+        Removed from source control
+        
+        * src/DotNet/FieldSet.h
+        * src/DotNet/Sequence.h
+        Removed references to DebugView.h
+
 Mon Feb 16 15:24:03 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * setup.cmd:
@@ -23,7 +33,7 @@ Mon Feb 16 15:24:03 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
 Fri Feb 13 23:16:01 UTC  Curt Campbell  <campbellc@ociweb.com>
 
-        * Output/TestData	TestData
+        * Output/TestData
         * Output/TestData/fixfast.dat
         * Output/TestData/marketdata.out
         * Output/TestData/templates.xml
