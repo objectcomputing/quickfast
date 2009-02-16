@@ -14,6 +14,13 @@ FieldOpDefault::usesPresenceMap(bool mandatory)const
 }
 
 bool
+FieldOpDefault::usesDictionary() const
+{
+  return false;
+}
+
+
+bool
 FieldOpDefault::decode(
   const Codecs::FieldInstruction & instruction,
   Codecs::DataSource & source,

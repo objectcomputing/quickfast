@@ -13,6 +13,11 @@ FieldOpCopy::usesPresenceMap(bool mandatory)const
   return true;
 }
 
+bool
+FieldOpCopy::usesDictionary() const
+{
+  return true;
+}
 
 bool
 FieldOpCopy::decode(

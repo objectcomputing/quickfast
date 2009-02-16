@@ -17,6 +17,11 @@ namespace QuickFAST{
       {
         return false;
       }
+      virtual bool usesDictionary() const
+      {
+        return false;
+      }
+
 
       virtual bool decode(
         const Codecs::FieldInstruction & instruction,

@@ -43,7 +43,6 @@ TemplateRegistry::finalize()
       ""); // typeNs
   }
   dictionarySize_ = indexer.size();
-  std::cout << "Dictionary entries: " << dictionarySize_ << std::endl;
 
   presenceMapBits_ = 1;
   maxFieldCount_ = 0;

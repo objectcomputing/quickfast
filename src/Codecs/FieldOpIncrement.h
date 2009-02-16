@@ -14,6 +14,7 @@ namespace QuickFAST{
     {
     public:
       virtual bool usesPresenceMap(bool mandatory)const;
+      virtual bool usesDictionary() const;
 
       virtual bool decode(
         const Codecs::FieldInstruction & instruction,

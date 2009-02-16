@@ -1,3 +1,26 @@
+Mon Feb 16 15:24:03 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * setup.cmd:
+        Add Output... to path
+
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FieldOp.cpp:
+        * src/Codecs/FieldOpConstant.h:
+        * src/Codecs/FieldOpConstant.cpp:
+        * src/Codecs/FieldOpCopy.h:
+        * src/Codecs/FieldOpCopy.cpp:
+        * src/Codecs/FieldOpDefault.h:
+        * src/Codecs/FieldOpDefault.cpp:
+        * src/Codecs/FieldOpDelta.h:
+        * src/Codecs/FieldOpDelta.cpp:
+        * src/Codecs/FieldOpIncrement.h:
+        * src/Codecs/FieldOpIncrement.cpp:
+        * src/Codecs/FieldOpNop.h:
+        * src/Codecs/FieldOpTail.h:
+        * src/Codecs/FieldOpTail.cpp:
+        * src/Codecs/TemplateRegistry.cpp:
+        Reduce size of dictionary by eliminating unused entries.
+
 Fri Feb 13 23:16:01 UTC  Curt Campbell  <campbellc@ociweb.com>
 
         * Output/TestData	TestData
@@ -28,17 +51,17 @@ Fri Feb 13 19:33:42 UTC 2009  Curt Campbell  <campbellc@ociweb.com>
         * src/DotNet/QuickFASTDotNet.mpc
         * src/DotNetTests/QuickFASTDotNetTests.mpc
         * src/QuickFAST.mpc
-        
+
           Changed the output directories on the remaining projects
-          for versions compiled under VC8 and VC9.  Output 
-          files are now placed in the Output/Debug and 
+          for versions compiled under VC8 and VC9.  Output
+          files are now placed in the Output/Debug and
           Output/Release directories.
-          
+
         * src/DotNet/FieldSet.cpp
         * src/DotNet/FieldSet.h
 
           Fixed a compiler error introduced at some point when
-          setApplicationType was modified on the the unmanaged 
+          setApplicationType was modified on the the unmanaged
           FieldSet class.
 
 Thu Feb 12 18:37:07 UTC 2009  Dale Wilson  <wilsond@ociweb.com>

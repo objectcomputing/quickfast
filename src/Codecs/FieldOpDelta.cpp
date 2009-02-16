@@ -15,6 +15,12 @@ FieldOpDelta::usesPresenceMap(bool mandatory)const
 }
 
 bool
+FieldOpDelta::usesDictionary() const
+{
+  return true;
+}
+
+bool
 FieldOpDelta::decode(
   const Codecs::FieldInstruction & instruction,
   Codecs::DataSource & source,

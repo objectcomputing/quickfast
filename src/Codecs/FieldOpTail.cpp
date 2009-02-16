@@ -14,6 +14,12 @@ FieldOpTail::usesPresenceMap(bool mandatory)const
 }
 
 bool
+FieldOpTail::usesDictionary() const
+{
+  return true;
+}
+
+bool
 FieldOpTail::decode(
   const Codecs::FieldInstruction & instruction,
   Codecs::DataSource & source,

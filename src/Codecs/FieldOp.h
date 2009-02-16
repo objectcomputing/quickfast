@@ -42,6 +42,10 @@ namespace QuickFAST{
       /// @returns true if a presence map bit is used.
       virtual bool usesPresenceMap(bool mandatory)const = 0;
 
+      /// @brief Does this operation use a dictionary entry?
+      /// @returns true if a dictionary entry might be needed by this operation.
+      virtual bool usesDictionary() const = 0;
+
       /// @brief Dispatch decode to the correct operator
       /// @param instruction defines the type of data being decoded
       /// @param source supplies the stream of FAST encoded data

@@ -27,25 +27,28 @@ FieldOp::indexDictionaries(
   const std::string & fieldName,
   const std::string & fieldNamespace)
 {
-  std::string name = dictionaryName;
-  if(!dictionaryName_.empty())
+  if(usesDictionary())
   {
-    name = dictionaryName_;
+    std::string name = dictionaryName;
+    if(!dictionaryName_.empty())
+    {
+      name = dictionaryName_;
+    }
+    std::string key = fieldName;
+    std::string keyNamespace = fieldNamespace;
+    if(!key_.empty())
+    {
+      key = key_;
+      keyNamespace = keyNamespace_;
+    }
+    dictionaryIndex_ = indexer.getIndex(
+      dictionaryName,
+      typeName,
+      typeNamespace,
+      key,
+      keyNamespace);
+    dictionaryIndexValid_ = true;
   }
-  std::string key = fieldName;
-  std::string keyNamespace = fieldNamespace;
-  if(!key_.empty())
-  {
-    key = key_;
-    keyNamespace = keyNamespace_;
-  }
-  dictionaryIndex_ = indexer.getIndex(
-    dictionaryName,
-    typeName,
-    typeNamespace,
-    key,
-    keyNamespace);
-  dictionaryIndexValid_ = true;
 }
 
 

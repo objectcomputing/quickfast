@@ -14,6 +14,12 @@ FieldOpConstant::usesPresenceMap(bool mandatory)const
 }
 
 bool
+FieldOpConstant::usesDictionary() const
+{
+  return false;
+}
+
+bool
 FieldOpConstant::decode(
   const Codecs::FieldInstruction & instruction,
   Codecs::DataSource & source,

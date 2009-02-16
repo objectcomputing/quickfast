@@ -14,6 +14,12 @@ FieldOpIncrement::usesPresenceMap(bool mandatory)const
 }
 
 bool
+FieldOpIncrement::usesDictionary() const
+{
+  return true;
+}
+
+bool
 FieldOpIncrement::decode(
   const Codecs::FieldInstruction & instruction,
   Codecs::DataSource & source,
