@@ -34,6 +34,7 @@ FieldSet::FieldSet(const FieldSet & rhs)
 FieldSet::~FieldSet()
 {
   clear();
+  delete [] reinterpret_cast<unsigned char *>(fields_);
 }
 
 void

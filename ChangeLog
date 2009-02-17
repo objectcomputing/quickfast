@@ -1,9 +1,25 @@
+Tue Feb 17 18:17:12 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * bin/setdebug.cmd:
+        * bin/setrelease.cmd:
+        * setup.cmd:
+        Putting the executables in Output/Debug and Output/Release made .NET happy,
+        but it made it harder to switch between debug and release executables.
+        This change in setup.cmd, along with new command files, setdebug and setrelease
+        addresses that.
+
+        * src/Messages/FieldSet.cpp:
+        Fixed a memory leak.
+
+        * src/Tests/testFieldInstructions.cpp:
+        Added a call to _CrtSetBreakAlloc on Visual Studio builds to help diagnose memory leaks.
+
 Mon Feb 16 18:12:12 UTC 2009  Curt Campbell  <campbellc@ociweb.com>
 
         * src/DotNet/DebugView.cpp
         * src/DotNet/DebugView.h
         Removed from source control
-        
+
         * src/DotNet/FieldSet.h
         * src/DotNet/Sequence.h
         Removed references to DebugView.h

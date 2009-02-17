@@ -32,45 +32,52 @@
 
 using namespace QuickFAST;
 
-static void testFieldInstructionBaseClass(
-  FieldInstruction & instruction,
-  size_t expectPresenceMapBits,
-  bool acceptsOperator = true)
+BOOST_AUTO_TEST_CASE(theFirstTest)
 {
-  BOOST_CHECK(instruction.isMandatory());
-  instruction.setPresence(false);
-  BOOST_CHECK(!instruction.isMandatory());
+  // with any luck, this will be the first test run
+#ifdef _MSC_VER
+  _CrtSetBreakAlloc(99999); // see documentation of this function for debugging memory leaks.
+#endif
+  BOOST_CHECK(true); // entertain boost test that objects to tests which don't actually test anything.
+}
 
-  instruction.setId("id");
-  BOOST_CHECK_EQUAL(instruction.getId(), "id");
-
-  const Messages::FieldIdentity & identity = instruction.getIdentity();
-  BOOST_CHECK(!identity.mandatory());
-  BOOST_CHECK_EQUAL(identity.id(),"id");
-  BOOST_CHECK_EQUAL(identity.name(), "NS::Name");
-
-  BOOST_CHECK_EQUAL(instruction.presenceMapBitsRequired(), 0);
-
-// FieldInstruction no longer exposes key (OBE)
-//  BOOST_CHECK_EQUAL(instruction.getKey(), instruction.getName());
-  if(acceptsOperator)
+namespace
+{
+  void testFieldInstructionBaseClass(
+    FieldInstruction & instruction,
+    size_t expectPresenceMapBits,
+    bool acceptsOperator = true)
   {
-    FieldOpPtr fieldOp(new FieldOpNop);
-    fieldOp->setKey("alternate");
-    fieldOp->setDictionaryName("global");
-    instruction.setFieldOp(fieldOp);
-// FieldInstruction no longer exposes key (OBE)
-//    std::string key = instruction.getKey();
-//    BOOST_CHECK_EQUAL(key, "alternate");
+    BOOST_CHECK(instruction.isMandatory());
+    instruction.setPresence(false);
+    BOOST_CHECK(!instruction.isMandatory());
 
-    instruction.setFieldOp(FieldOpPtr(new FieldOpConstant));
-    BOOST_CHECK_EQUAL(instruction.presenceMapBitsRequired(), expectPresenceMapBits);
-    instruction.setFieldOp(FieldOpPtr(new FieldOpCopy));
-    BOOST_CHECK_EQUAL(instruction.presenceMapBitsRequired(), expectPresenceMapBits);
-    instruction.setFieldOp(FieldOpPtr(new FieldOpDefault));
-    BOOST_CHECK_EQUAL(instruction.presenceMapBitsRequired(), expectPresenceMapBits);
-    instruction.setFieldOp(FieldOpPtr(new FieldOpDelta));
+    instruction.setId("id");
+    BOOST_CHECK_EQUAL(instruction.getId(), "id");
+
+    const Messages::FieldIdentity & identity = instruction.getIdentity();
+    BOOST_CHECK(!identity.mandatory());
+    BOOST_CHECK_EQUAL(identity.id(),"id");
+    BOOST_CHECK_EQUAL(identity.name(), "NS::Name");
+
     BOOST_CHECK_EQUAL(instruction.presenceMapBitsRequired(), 0);
+
+    if(acceptsOperator)
+    {
+      FieldOpPtr fieldOp(new FieldOpNop);
+      fieldOp->setKey("alternate");
+      fieldOp->setDictionaryName("global");
+      instruction.setFieldOp(fieldOp);
+
+      instruction.setFieldOp(FieldOpPtr(new FieldOpConstant));
+      BOOST_CHECK_EQUAL(instruction.presenceMapBitsRequired(), expectPresenceMapBits);
+      instruction.setFieldOp(FieldOpPtr(new FieldOpCopy));
+      BOOST_CHECK_EQUAL(instruction.presenceMapBitsRequired(), expectPresenceMapBits);
+      instruction.setFieldOp(FieldOpPtr(new FieldOpDefault));
+      BOOST_CHECK_EQUAL(instruction.presenceMapBitsRequired(), expectPresenceMapBits);
+      instruction.setFieldOp(FieldOpPtr(new FieldOpDelta));
+      BOOST_CHECK_EQUAL(instruction.presenceMapBitsRequired(), 0);
+    }
   }
 }
 
