@@ -101,7 +101,7 @@ PerformanceTest::usage(std::ostream & out) const
   out << "  -t file     : Template file (required)" << std::endl;
   out << "  -f file     : FAST Message file (required)" << std::endl;
   out << "  -p file     : File to which performance measurements are written. (default standard output)" << std::endl;
-  out << "  -profile file : File to which profiler statistics are written (very optional)" << std::endl;
+  out << "  -profiler file : File to which profiler statistics are written (very optional)" << std::endl;
   out << "  -head n     : process only the first 'n' messages" << std::endl;
   out << "  -c count    : repeat the test 'count' times" << std::endl;
   out << "  -r          : Toggle 'reset decoder on every message' (default false)." << std::endl;

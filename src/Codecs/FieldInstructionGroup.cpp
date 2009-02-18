@@ -45,7 +45,7 @@ FieldInstructionGroup::decodeNop(
   {
     if(!segmentBody_)
     {
-      throw TemplateDefinitionError("Segment not defined for Group instruction.");
+      decoder.reportFatal("[ERR U08}", "Segment not defined for Group instruction.");
     }
     if(fieldSet.getApplicationType() != segmentBody_->getApplicationType())
     {
@@ -105,7 +105,7 @@ FieldInstructionGroup::encodeNop(
       // possibility #2: option group not present.
       if(isMandatory())
       {
-        throw EncodingError("Missing mandatory group.");
+        encoder.reportFatal("[ERR U09]", "Missing mandatory group.");
       }
       // let our counterparty know it's just not there.
       pmap.setNextField(false);
@@ -127,7 +127,7 @@ FieldInstructionGroup::presenceMapBitsRequired() const
 void
 FieldInstructionGroup::interpretValue(const std::string & value)
 {
-  throw TemplateDefinitionError("Value not needed by Group instruction.");
+  throw TemplateDefinitionError("[ERR U11] Value not needed by Group instruction.");
 }
 
 size_t

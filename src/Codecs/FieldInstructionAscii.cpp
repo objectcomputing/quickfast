@@ -146,7 +146,7 @@ FieldInstructionAscii::decodeDefault(
     }
     else if(isMandatory())
     {
-      throw EncodingError("[ERR D5]Mandatory default operator with no value.");
+      decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.");
     }
   }
   return true;
@@ -195,7 +195,7 @@ FieldInstructionAscii::decodeCopy(
     {
       if(isMandatory())
       {
-        throw EncodingError("[ERR D6] No value available for mandatory copy field.");
+        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.");
       }
     }
   }
@@ -244,8 +244,8 @@ FieldInstructionAscii::decodeDelta(
     // don't chop more than is there
     if(static_cast<uint32>(deltaLength) > previousLength)
     {
-      throw EncodingError("[ERR D7] String head delta length exceeds length of previous string.");
-//      deltaLength = previousLength;
+      decoder.reportError("[ERR D7]", "String head delta length exceeds length of previous string.");
+      deltaLength = previousLength;
     }
     Messages::FieldCPtr field = Messages::FieldAscii::create(
       deltaValue + previousValue.substr(deltaLength));
@@ -259,8 +259,8 @@ FieldInstructionAscii::decodeDelta(
     // don't chop more than is there
     if(static_cast<uint32>(deltaLength) > previousLength)
     {
-      throw EncodingError("[ERR D7] String tail delta length exceeds length of previous string.");
-//      deltaLength = previousLength;
+      decoder.reportError("[ERR D7]", "String tail delta length exceeds length of previous string.");
+      deltaLength = previousLength;
     }
     Messages::FieldCPtr field = Messages::FieldAscii::create(
       previousValue.substr(0, previousLength - deltaLength) + deltaValue);
@@ -336,7 +336,7 @@ FieldInstructionAscii::decodeTail(
     {
       if(isMandatory())
       {
-        throw EncodingError("[ERR D6] No value available for mandatory copy field.");
+        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.");
       }
     }
   }
@@ -368,7 +368,7 @@ FieldInstructionAscii::encodeNop(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U9}", "Missing mandatory field.");
     }
     destination.putByte(nullAscii);
   }
@@ -389,7 +389,7 @@ FieldInstructionAscii::encodeConstant(
     const std::string & constant = initialValue_->toAscii();
     if(value != constant)
     {
-      throw EncodingError("Constant value does not match application data.");
+      encoder.reportFatal("[ERR U10}", "Constant value does not match application data.");
     }
 
     if(!isMandatory())
@@ -401,7 +401,7 @@ FieldInstructionAscii::encodeConstant(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U9}", "Missing mandatory field.");
     }
     pmap.setNextField(false);
   }
@@ -442,7 +442,7 @@ FieldInstructionAscii::encodeDefault(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U9}", "Missing mandatory field.");
     }
     if(fieldOp_->hasValue())
     {
@@ -475,7 +475,7 @@ FieldInstructionAscii::encodeCopy(
   {
     if(!previousField->isType(Messages::Field::ASCII))
     {
-      throw TemplateDefinitionError("[ERR D4] Previous value type mismatch.");
+      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
     }
     previousIsKnown = true;
     previousNotNull = previousField->isDefined();
@@ -512,7 +512,7 @@ FieldInstructionAscii::encodeCopy(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U9}", "Missing mandatory field.");
     }
     if((previousIsKnown && previousNotNull)
       || !previousIsKnown)
@@ -546,7 +546,7 @@ FieldInstructionAscii::encodeDelta(
   {
     if(!previousField->isType(Messages::Field::ASCII))
     {
-      throw TemplateDefinitionError("[ERR D4] Previous value type mismatch.");
+      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
     }
     previousIsKnown = true;
     previousNotNull = previousField->isDefined();
@@ -589,7 +589,7 @@ FieldInstructionAscii::encodeDelta(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U9}", "Missing mandatory field.");
     }
     destination.putByte(nullAscii);
   }
@@ -613,7 +613,7 @@ FieldInstructionAscii::encodeTail(
   {
     if(!previousField->isType(Messages::Field::ASCII))
     {
-      throw TemplateDefinitionError("[ERR D4] Previous value type mismatch.");
+      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
     }
     previousIsKnown = true;
     previousNotNull = previousField->isDefined();
@@ -656,7 +656,7 @@ FieldInstructionAscii::encodeTail(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U9}", "Missing mandatory field.");
     }
     destination.putByte(nullAscii);
   }

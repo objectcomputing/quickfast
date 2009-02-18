@@ -61,28 +61,31 @@ FieldInstructionDecimal::decodeNop(
   Messages::FieldSet & fieldSet) const
 {
   PROFILE_POINT("decimal::decodeNop");
+  NESTED_PROFILE_POINT(d,"decimal::AllocateFieldSet");
 
   ///@todo: this is an expensive way to get the exponent and mantissa values
   /// we need to refactor FieldInstructionInteger to provide a separate method
   /// to retrieve the values (or lack thereof) without creating fields.
   /// However -- this works for now.
   Messages::FieldSet mxSet(2);
-  {PROFILE_POINT("decimal::DecodeExponent");
+  NESTED_PROFILE_POINT(a, "decimal::DecodeExponent");
+  NESTED_PROFILE_PAUSE(d);
   if(!exponentInstruction_->decode(source, pmap, decoder, mxSet))
   {
     return false;
   }
-  } // PROFILE
+
   if(mxSet.size() == 0)
   {
     // null field
     return true;
   }
 
-  {PROFILE_POINT("decimal::DecodeMantissa");
+  NESTED_PROFILE_POINT(b, "decimal::DecodeMantissa");
+  NESTED_PROFILE_PAUSE(a);
   mantissaInstruction_->decode(source, pmap, decoder, mxSet);
-  }
   NESTED_PROFILE_POINT(1, "decimal::RetrieveValues");
+  NESTED_PROFILE_PAUSE(b);
   Messages::FieldSet::const_iterator it = mxSet.begin();
   exponent_t exponent = exponent_t(it->getField()->toInt32());
   mantissa_t mantissa = typedMantissa_;
@@ -91,8 +94,8 @@ FieldInstructionDecimal::decodeNop(
   {
     mantissa = mantissa_t(it->getField()->toInt64());
   }
-  NESTED_PROFILE_PAUSE(1);
   NESTED_PROFILE_POINT(2, "decimal::UseValues");
+  NESTED_PROFILE_PAUSE(1);
 
   Decimal value(mantissa, exponent, false);
   Messages::FieldCPtr field(Messages::FieldDecimal::create(value));
@@ -156,7 +159,7 @@ FieldInstructionDecimal::decodeDefault(
     }
     else if(isMandatory())
     {
-      throw EncodingError("[ERR D5]Mandatory default operator with no value.");
+      decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.");
     }
   }
   return true;
@@ -222,14 +225,14 @@ FieldInstructionDecimal::decodeCopy(
         }
         else
         {
-          throw TemplateDefinitionError("[ERR D4] Previous value type mismatch.");
+          decoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
         }
       }
       else // field present but not defined
       {
         if(isMandatory())
         {
-          throw TemplateDefinitionError("[ERR D6] Mandatory field is missing.");
+          decoder.reportFatal("[ERR D6]", "Mandatory field is missing.");
         }
       }
     }
@@ -249,7 +252,7 @@ FieldInstructionDecimal::decodeCopy(
       {
         if(isMandatory())
         {
-          throw EncodingError("[ERR D5] Copy operator missing mandatory Decimal field/no initial value");
+          decoder.reportFatal("[ERR D5]", "Copy operator missing mandatory Decimal field/no initial value");
         }
       }
     }
@@ -288,7 +291,7 @@ FieldInstructionDecimal::decodeDelta(
     }
     else
     {
-      throw TemplateDefinitionError("[ERR D4] Previous value type mismatch.");
+      decoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
     }
   }
   value.setExponent(exponent_t(value.getExponent() + exponentDelta));
@@ -363,7 +366,7 @@ FieldInstructionDecimal::encodeNop(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
     }
     Messages::FieldSet fieldSet(2);
     exponentInstruction_->encode(
@@ -388,7 +391,7 @@ FieldInstructionDecimal::encodeConstant(
     Decimal value = field->toDecimal();
     if(value != typedValue_)
     {
-      throw EncodingError("Constant value does not match application data.");
+      encoder.reportFatal("[ERR U10]", "Constant value does not match application data.");
     }
 
     if(!isMandatory())
@@ -400,7 +403,7 @@ FieldInstructionDecimal::encodeConstant(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
     }
     pmap.setNextField(false);
   }
@@ -440,7 +443,7 @@ FieldInstructionDecimal::encodeDefault(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
     }
     if(fieldOp_->hasValue())
     {
@@ -473,7 +476,7 @@ FieldInstructionDecimal::encodeCopy(
   {
     if(!previousField->isType(Messages::Field::DECIMAL))
     {
-      throw TemplateDefinitionError("[ERR D4] Previous value type mismatch.");
+      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
     }
     previousIsKnown = true;
     previousNotNull = previousField->isDefined();
@@ -508,7 +511,7 @@ FieldInstructionDecimal::encodeCopy(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
     }
     if((previousIsKnown && previousNotNull)
       || !previousIsKnown)
@@ -545,7 +548,7 @@ FieldInstructionDecimal::encodeDelta(
   {
     if(!previousField->isType(Messages::Field::DECIMAL))
     {
-      throw TemplateDefinitionError("[ERR D4] Previous value type mismatch.");
+      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
     }
     previousIsKnown = true;
     previousNotNull = previousField->isDefined();
@@ -585,7 +588,7 @@ FieldInstructionDecimal::encodeDelta(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
     }
     destination.putByte(nullInteger);
   }

@@ -6,8 +6,8 @@
 #include <Codecs/DataSource.h>
 #include <Codecs/DataDestination.h>
 #include <Codecs/FieldOpNop.h>
-#include <Codecs/Context.h>
-#include <Common/Exceptions.h>
+#include <Codecs/Decoder.h>
+#include <Codecs/Encoder.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
@@ -83,7 +83,8 @@ FieldInstruction::decodeConstant(
   Codecs::Decoder & decoder,
   Messages::FieldSet & fieldSet) const
 {
-  throw UnsupportedConversion("[ERR S2] Const Field Operator not supported for this data type.");
+  decoder.reportFatal("[ERR S2]", "Const Field Operator not supported for this data type.");
+  return false;
 }
 
 bool
@@ -93,7 +94,8 @@ FieldInstruction::decodeDefault(
   Codecs::Decoder & decoder,
   Messages::FieldSet & fieldSet) const
 {
-  throw UnsupportedConversion("[ERR S2] Default Field Operator not supported for this data type.");
+  decoder.reportFatal("[ERR S2]", "Default Field Operator not supported for this data type.");
+  return false;
 }
 
 bool
@@ -103,7 +105,8 @@ FieldInstruction::decodeCopy(
     Codecs::Decoder & decoder,
     Messages::FieldSet & fieldSet) const
 {
-  throw UnsupportedConversion("[ERR S2] Copy Field Operator not supported for this data type.");
+  decoder.reportFatal("[ERR S2]", "Copy Field Operator not supported for this data type.");
+  return false;
 }
 
 
@@ -115,7 +118,8 @@ FieldInstruction::decodeDelta(
   Codecs::Decoder & decoder,
   Messages::FieldSet & fieldSet) const
 {
-  throw UnsupportedConversion("[ERR S2] Delta Field Operator not supported for this data type.");
+  decoder.reportFatal("[ERR S2]", "Delta Field Operator not supported for this data type.");
+  return false;
 }
 
 bool
@@ -125,7 +129,8 @@ FieldInstruction::decodeIncrement(
   Codecs::Decoder & decoder,
   Messages::FieldSet & fieldSet) const
 {
-  throw UnsupportedConversion("[ERR S2] Increment Field Operator not supported for this data type.");
+  decoder.reportFatal("[ERR S2]", "Increment Field Operator not supported for this data type.");
+  return false;
 }
 
 bool
@@ -135,7 +140,8 @@ FieldInstruction::decodeTail(
   Codecs::Decoder & decoder,
   Messages::FieldSet & fieldSet) const
 {
-  throw UnsupportedConversion("[ERR S2]Tail Field Operator not supported for this data type.");
+  decoder.reportFatal("[ERR S2]", "Tail Field Operator not supported for this data type.");
+  return false;
 }
 
 void
@@ -145,7 +151,7 @@ FieldInstruction::encodeConstant(
   Codecs::Encoder & encoder,
   const Messages::FieldSet & fieldSet) const
 {
-  throw UnsupportedConversion("[ERR S2]Constant Field Operator not supported for this data type.");
+  encoder.reportFatal("[ERR S2]", "Constant Field Operator not supported for this data type.");
 }
 
 
@@ -156,7 +162,7 @@ FieldInstruction::encodeDefault(
   Codecs::Encoder & encoder,
   const Messages::FieldSet & fieldSet) const
 {
-  throw UnsupportedConversion("[ERR S2]Default Field Operator not supported for this data type.");
+  encoder.reportFatal("[ERR S2]", "Default Field Operator not supported for this data type.");
 }
 
 
@@ -167,7 +173,7 @@ FieldInstruction::encodeCopy(
   Codecs::Encoder & encoder,
   const Messages::FieldSet & fieldSet) const
 {
-  throw UnsupportedConversion("[ERR S2]Copy Field Operator not supported for this data type.");
+  encoder.reportFatal("[ERR S2]", "Copy Field Operator not supported for this data type.");
 }
 
 void
@@ -177,7 +183,7 @@ FieldInstruction::encodeDelta(
   Codecs::Encoder & encoder,
   const Messages::FieldSet & fieldSet) const
 {
-  throw UnsupportedConversion("[ERR S2]Delta Field Operator not supported for this data type.");
+  encoder.reportFatal("[ERR S2]", "Delta Field Operator not supported for this data type.");
 }
 
 void
@@ -187,7 +193,7 @@ FieldInstruction::encodeIncrement(
   Codecs::Encoder & encoder,
   const Messages::FieldSet & fieldSet) const
 {
-  throw UnsupportedConversion("[ERR S2]Increment Field Operator not supported for this data type.");
+  encoder.reportFatal("[ERR S2]", "Increment Field Operator not supported for this data type.");
 }
 
 void
@@ -197,7 +203,7 @@ FieldInstruction::encodeTail(
   Codecs::Encoder & encoder,
   const Messages::FieldSet & fieldSet) const
 {
-  throw UnsupportedConversion("[ERR S2]Tail Field Operator not supported for this data type.");
+  encoder.reportFatal("[ERR S2]", "Tail Field Operator not supported for this data type.");
 }
 
 bool

@@ -138,7 +138,7 @@ FieldInstructionBlob::decodeDefault(
     }
     else if(isMandatory())
     {
-      throw EncodingError("[ERR D5]Mandatory default operator with no value.");
+      decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.");
     }
 
   }
@@ -187,7 +187,7 @@ FieldInstructionBlob::decodeCopy(
     {
       if(isMandatory())
       {
-        throw EncodingError("[ERR D6] No value available for mandatory copy field.");
+        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.");
       }
     }
   }
@@ -323,7 +323,7 @@ FieldInstructionBlob::decodeTail(
     {
       if(isMandatory())
       {
-        throw EncodingError("[ERR D6] No value available for mandatory copy field.");
+        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.");
       }
     }
   }
@@ -379,7 +379,7 @@ FieldInstructionBlob::encodeNop(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
     }
     destination.putByte(nullBlob);
   }
@@ -400,7 +400,7 @@ FieldInstructionBlob::encodeConstant(
     const std::string & constant = initialValue_->toString();
     if(value != constant)
     {
-      throw EncodingError("Constant value does not match application data.");
+      encoder.reportFatal("[ERR U10]", "Constant value does not match application data.");
     }
 
     if(!isMandatory())
@@ -412,7 +412,7 @@ FieldInstructionBlob::encodeConstant(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
     }
     pmap.setNextField(false);
   }
@@ -453,7 +453,7 @@ FieldInstructionBlob::encodeDefault(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
     }
     if(fieldOp_->hasValue())
     {
@@ -486,7 +486,7 @@ FieldInstructionBlob::encodeCopy(
   {
     if(!previousField->isString())
     {
-      throw TemplateDefinitionError("[ERR D4] Previous value type mismatch.");
+      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
     }
     previousIsKnown = true;
     previousNotNull = previousField->isDefined();
@@ -524,7 +524,7 @@ FieldInstructionBlob::encodeCopy(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
     }
     if((previousIsKnown && previousNotNull)
       || !previousIsKnown)
@@ -561,7 +561,7 @@ FieldInstructionBlob::encodeDelta(
   {
     if(!previousField->isString())
     {
-      throw TemplateDefinitionError("[ERR D4] Previous value type mismatch.");
+      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
     }
     previousIsKnown = true;
     previousNotNull = previousField->isDefined();
@@ -604,7 +604,7 @@ FieldInstructionBlob::encodeDelta(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
     }
     destination.putByte(nullBlob);
   }
@@ -628,7 +628,7 @@ FieldInstructionBlob::encodeTail(
   {
     if(!previousField->isString())
     {
-      throw TemplateDefinitionError("[ERR D4] Previous value type mismatch.");
+      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
     }
     previousIsKnown = true;
     previousNotNull = previousField->isDefined();
@@ -671,7 +671,7 @@ FieldInstructionBlob::encodeTail(
   {
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory field.");
+      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
     }
     destination.putByte(nullBlob);
   }

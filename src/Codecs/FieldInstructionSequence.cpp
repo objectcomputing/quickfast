@@ -39,7 +39,7 @@ FieldInstructionSequence::decodeNop(
 {
   if(!segment_)
   {
-    throw TemplateDefinitionError("SegmentBody not defined for Group instruction.");
+    decoder.reportFatal("[ERR U07]", "SegmentBody not defined for Group instruction.");
   }
   size_t length = 0;
   Codecs::FieldInstructionCPtr lengthInstruction;
@@ -136,7 +136,7 @@ FieldInstructionSequence::encodeNop(
     // possibility #2: option group not present.
     if(isMandatory())
     {
-      throw EncodingError("Missing mandatory group.");
+      encoder.reportFatal("[ERR U09]", "Missing mandatory group.");
     }
     // let our counterparty know it's just not there.
     pmap.setNextField(false);

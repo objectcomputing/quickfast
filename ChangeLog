@@ -1,3 +1,19 @@
+Wed Feb 18 17:37:14 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        Encoding/decoding errors are reported to context rather than thrown
+        to support run-time configurable strictness.
+
+        * src/Examples/PerformanceTest/PerformanceTest.cpp:
+        Fix a typo in -profiler
+
 Tue Feb 17 18:17:12 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * bin/setdebug.cmd:

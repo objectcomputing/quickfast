@@ -303,23 +303,28 @@ namespace QuickFAST{
         {
           if(previousField->isDefined())
           {
-            if(previousField->isType(typedValue_))
+            if(!previousField->isType(typedValue_))
             {
+              // this will probably throw a template definition error
+              decoder.reportError("[ERR D4]", "Previous value type mismatch.");
+              // but in case it doesn't ...
+              previousField = FIELD_CLASS::create(0);
+            }
+            fieldSet.addField(
+              identity_,
+              previousField);
+          }
+          else // field present but not defined
+         {
+            if(isMandatory())
+            {
+              // this will probably throw a template definition error
+              decoder.reportError("[ERR D6]", "Mandatory field is missing.");
+              // but in case it doesn't ...
+              previousField = FIELD_CLASS::create(0);
               fieldSet.addField(
                 identity_,
                 previousField);
-
-            }
-            else
-            {
-              throw TemplateDefinitionError("[ERR D4] Previous value type mismatch.");
-            }
-          }
-          else // field present but not defined
-          {
-            if(isMandatory())
-            {
-              throw TemplateDefinitionError("[ERR D6] Mandatory field is missing.");
             }
           }
         }
@@ -338,10 +343,7 @@ namespace QuickFAST{
           {
             if(isMandatory())
             {
-              if(decoder.getStrict())
-              {
-                throw EncodingError("[ERR D5] Copy operator missing mandatory integer field/no initial value");
-              }
+              decoder.reportError("[ERR D5]", "Copy operator missing mandatory integer field/no initial value");
               Messages::FieldCPtr newField(FIELD_CLASS::create(0));
               fieldSet.addField(
                 identity_,
@@ -400,7 +402,7 @@ namespace QuickFAST{
         }
         else if(isMandatory())
         {
-          throw EncodingError("[ERR D5]Mandatory default operator with no value.");
+          decoder.reportError("[ERR D5]", "Mandatory default operator with no value.");
         }
       }
       return true;
@@ -442,14 +444,12 @@ namespace QuickFAST{
 #endif // NO_PROFILING
       {
         PROFILE_POINT("int::decDelta::fromDictionary");
-        if(previousField->isType(value))
+        if(!previousField->isType(value))
         {
-          previousField->getValue(value);
+          decoder.reportError("[ERR D4]", " Previous value type mismatch.");
+          previousField = FIELD_CLASS::create(0);
         }
-        else
-        {
-          throw TemplateDefinitionError("[ERR D4] Previous value type mismatch.");
-        }
+        previousField->getValue(value);
       }
       value = INTEGER_TYPE(value + delta);
       Messages::FieldCPtr newField(FIELD_CLASS::create(value));
@@ -516,15 +516,13 @@ namespace QuickFAST{
         Messages::FieldCPtr previousField;
         if(fieldOp_->findDictionaryField(decoder, previousField))
         {
-          if(previousField->isType(value))
+          if(!previousField->isType(value))
           {
-            previousField->getValue(value);
-            value += 1;
+            decoder.reportError("[ERR D4]", "Previous value type mismatch.");
+            previousField = FIELD_CLASS::create(0);
           }
-          else
-          {
-            throw TemplateDefinitionError("[ERR D4] Previous value type mismatch.");
-          }
+          previousField->getValue(value);
+          value += 1;
         }
         else
         {
@@ -536,10 +534,7 @@ namespace QuickFAST{
           {
             if(isMandatory())
             {
-              if(decoder.getStrict())
-              {
-                throw EncodingError("[ERRD5]: Missing initial value for Increment operator");
-              }
+              decoder.reportError("[ERRD5]", "Missing initial value for Increment operator");
               value = 0;
             }
             else
@@ -593,9 +588,20 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          throw EncodingError("Missing mandatory field.");
+          encoder.reportError("[ERR x0]", "Missing mandatory field.");
+          if(SIGNED)
+          {
+            encodeSignedInteger(destination, encoder.getWorkingBuffer(), 0);
+          }
+          else
+          {
+            encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), 0);
+          }
         }
-        destination.putByte(nullInteger);
+        else
+        {
+          destination.putByte(nullInteger);
+        }
       }
     }
 
@@ -616,7 +622,7 @@ namespace QuickFAST{
         field->getValue(value);
         if(value != typedValue_)
         {
-          throw EncodingError("Constant value does not match application data.");
+          encoder.reportError("[ERR ?]", "Constant value does not match application data.");
         }
 
         if(!isMandatory())
@@ -628,7 +634,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          throw EncodingError("Missing mandatory field.");
+          encoder.reportError("[ERR ?]", "Missing mandatory field.");
         }
         pmap.setNextField(false);
       }
@@ -677,7 +683,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          throw EncodingError("Missing mandatory field.");
+          encoder.reportError("[ERR ??]", "Missing mandatory field.");
         }
         if(fieldOp_->hasValue())
         {
@@ -711,7 +717,7 @@ namespace QuickFAST{
       {
         if(!previousField->isType(typedValue_))
         {
-          throw TemplateDefinitionError("[ERR D4] Previous value type mismatch.");
+          encoder.reportError("[ERR D4]", "Previous value type mismatch.");
         }
         previousIsKnown = true;
         previousNotNull = previousField->isDefined();
@@ -758,19 +764,30 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          throw EncodingError("Missing mandatory field.");
-        }
-        if((previousIsKnown && previousNotNull)
-          || !previousIsKnown)
-        {
-          pmap.setNextField(true);// value in stream
-          destination.putByte(nullInteger);
-          field = FIELD_CLASS::createNull();
-          fieldOp_->setDictionaryValue(encoder, field);
+          encoder.reportError("[ERR ??]", "Missing mandatory field.");
+          if(SIGNED)
+          {
+            encodeSignedInteger(destination, encoder.getWorkingBuffer(), 0);
+          }
+          else
+          {
+            encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), 0);
+          }
         }
         else
         {
-          pmap.setNextField(false);
+          if((previousIsKnown && previousNotNull)
+            || !previousIsKnown)
+          {
+            pmap.setNextField(true);// value in stream
+            destination.putByte(nullInteger);
+            field = FIELD_CLASS::createNull();
+            fieldOp_->setDictionaryValue(encoder, field);
+          }
+          else
+          {
+            pmap.setNextField(false);
+          }
         }
       }
     }
@@ -795,13 +812,16 @@ namespace QuickFAST{
       {
         if(!previousField->isType(typedValue_))
         {
-          throw TemplateDefinitionError("[ERR D4] Previous value type mismatch.");
+          encoder.reportError("[ERR D4]", "Previous value type mismatch.");
         }
-        previousIsKnown = true;
-        previousNotNull = previousField->isDefined();
-        if(previousNotNull)
+        else
         {
-          previousField->getValue(previousValue);
+          previousIsKnown = true;
+          previousNotNull = previousField->isDefined();
+          if(previousNotNull)
+          {
+            previousField->getValue(previousValue);
+          }
         }
       }
 
@@ -831,9 +851,13 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          throw EncodingError("Missing mandatory field.");
+          encoder.reportError("[ERR ??]", "Missing mandatory field.");
+          encodeSignedInteger(destination, encoder.getWorkingBuffer(), 0);
         }
-        destination.putByte(nullInteger);
+        else
+        {
+          destination.putByte(nullInteger);
+        }
       }
     }
 
@@ -857,13 +881,16 @@ namespace QuickFAST{
       {
         if(!previousField->isType(typedValue_))
         {
-          throw TemplateDefinitionError("[ERR D4] Previous value type mismatch.");
+          encoder.reportError("[ERR D4]", "Previous value type mismatch.");
         }
-        previousIsKnown = true;
-        previousNotNull = previousField->isDefined();
-        if(previousNotNull)
+        else
         {
-          previousField->getValue(previousValue);
+          previousIsKnown = true;
+          previousNotNull = previousField->isDefined();
+          if(previousNotNull)
+          {
+            previousField->getValue(previousValue);
+          }
         }
       }
 
@@ -903,7 +930,17 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          throw EncodingError("Missing mandatory field.");
+          encoder.reportError("[ERR ??]", "Missing mandatory field.");
+          if(SIGNED)
+          {
+            encodeSignedInteger(destination, encoder.getWorkingBuffer(), 0);
+          }
+          else
+          {
+            encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), 0);
+          }
+          field = FIELD_CLASS::create(0);
+          fieldOp_->setDictionaryValue(encoder, field);
         }
         pmap.setNextField(true);// value in stream
         destination.putByte(nullInteger);
