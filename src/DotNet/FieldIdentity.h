@@ -14,7 +14,9 @@ namespace QuickFASTDotNet{
     public ref class FieldIdentity
     {
     public:
-      typedef  QuickFAST::Messages::FieldIdentity TFieldIdentity;
+      typedef QuickFAST::Messages::FieldIdentityCPtr TcspFieldIdentity;
+      typedef QuickFAST::Messages::FieldIdentityPtr TspFieldIdentity;
+      typedef QuickFAST::Messages::FieldIdentity TFieldIdentity;
 
 
       /// @brief Construct an anonomous FieldIdentity
@@ -71,16 +73,23 @@ namespace QuickFASTDotNet{
 
     internal:
 
-      FieldIdentity(const TFieldIdentity& fieldIdentity);
+      FieldIdentity(const TspFieldIdentity& fieldIdentity);
+      FieldIdentity(const TcspFieldIdentity& fieldIdentity);
 
       property TFieldIdentity& Ref
       {
         TFieldIdentity& get();
       }
 
+      property TspFieldIdentity& SmartPtr
+      {
+        TspFieldIdentity& get();
+      }
+
+
     private:
 
-      UnmanagedPtr<QuickFAST::Messages::FieldIdentity> spFieldIdentity_;
+      BoostPtrHolder<TspFieldIdentity> spFieldIdentity_;
 
       FieldIdentity(FieldIdentity^ rhs);
 

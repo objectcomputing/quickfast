@@ -6,7 +6,7 @@
 #endif
 #ifndef FIELDIDENTITY_H
 #define FIELDIDENTITY_H
-#include <Common/QuickFAST_Export.h>
+#include "FieldIdentity_fwd.h"
 #include <Common/Types.h>
 #include <Messages/Field_fwd.h>
 
@@ -34,6 +34,10 @@ namespace QuickFAST{
       /// @brief Construct an anonomous FieldIdentity
       FieldIdentity();
 
+    private:
+      /// @brief private constructor prevents stack or static allocations, or embedding
+      ~FieldIdentity();
+    public:
       /// @brief set name after construction
       /// @param name the localname for the field
       void setName(const std::string & name)
@@ -128,7 +132,48 @@ namespace QuickFAST{
       std::string fullName_; // cached for performance
       field_id_t id_;
       bool mandatory_;
+    private:
+      friend void QuickFAST_Export intrusive_ptr_add_ref(const FieldIdentity * ptr);
+      friend void QuickFAST_Export intrusive_ptr_release(const FieldIdentity * ptr);
+      friend void QuickFAST_Export intrusive_ptr_add_ref(FieldIdentity * ptr);
+      friend void QuickFAST_Export intrusive_ptr_release(FieldIdentity * ptr);
+      virtual void freeFieldIdentity()const;
+      mutable unsigned long refcount_;
     };
+
+    inline
+    void QuickFAST_Export
+    intrusive_ptr_add_ref(const Messages::FieldIdentity * ptr)
+    {
+      ++ptr->refcount_;
+    }
+
+    inline
+    void QuickFAST_Export
+    intrusive_ptr_release(const Messages::FieldIdentity * ptr)
+    {
+      if(--ptr->refcount_ == 0)
+      {
+        ptr->freeFieldIdentity();
+      }
+    }
+
+    inline
+    void QuickFAST_Export
+    intrusive_ptr_add_ref(Messages::FieldIdentity * ptr)
+    {
+      ++ptr->refcount_;
+    }
+
+    inline
+    void QuickFAST_Export
+    intrusive_ptr_release(Messages::FieldIdentity * ptr)
+    {
+      if(--ptr->refcount_ == 0)
+      {
+        ptr->freeFieldIdentity();
+      }
+    }
   }
 }
 #endif // FIELDIDENTITY_H

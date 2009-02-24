@@ -47,6 +47,7 @@ FieldInstructionTemplateRef::decodeNop(
     {
       decoder.reportFatal("[ERR D9]", "Unknown template name for static templateref.");
     }
+
     bool present = true;
     if(!isMandatory())
     {
@@ -116,7 +117,7 @@ FieldInstructionTemplateRef::encodeNop(
     // retrieve the field corresponding to this templateRef
     // which if it exists should be a FieldGroup
     Messages::FieldCPtr field;
-    if(fieldSet.getField(identity_.name(), field))
+    if(fieldSet.getField(identity_->name(), field))
     {
       Messages::GroupCPtr group = field->toGroup();
       encoder.encodeGroup(
@@ -133,8 +134,6 @@ FieldInstructionTemplateRef::encodeNop(
     }
   }
 }
-
-
 
 void
 FieldInstructionTemplateRef::interpretValue(const std::string & value)

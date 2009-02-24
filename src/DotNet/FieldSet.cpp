@@ -37,7 +37,7 @@ namespace QuickFASTDotNet{
         QuickFAST::Messages::FieldCPtr fieldPtr;
         spFieldSet_->getField(stdFieldName, fieldPtr);
 
-        QuickFAST::Messages::FieldIdentity fieldIdentity;
+        QuickFAST::Messages::FieldIdentityCPtr fieldIdentity;
         if(!spFieldSet_->getIdentity(stdFieldName, fieldIdentity))
         {
           throw gcnew System::Collections::Generic::KeyNotFoundException(System::String::Format("Field name '{0}' not found.", fieldName));
@@ -54,7 +54,7 @@ namespace QuickFASTDotNet{
     void FieldSet::SetApplicationType(System::String^ applicationType, System::String^ nameSpace)
     {
       spFieldSet_->setApplicationType(StlDotNet::string_cast<std::string>(applicationType),
-                                      StlDotNet::string_cast<std::string>(nameSpace));     
+                                      StlDotNet::string_cast<std::string>(nameSpace));
     }
 
     bool FieldSet::IsPresent(System::String^ name)
@@ -67,7 +67,7 @@ namespace QuickFASTDotNet{
 
     void FieldSet::AddField(FieldIdentity^ identity, Field^ newField)
     {
-      spFieldSet_->addField(identity->Ref, cast_field(newField));
+      spFieldSet_->addField(identity->SmartPtr, cast_field(newField));
     }
 
     Field^ FieldSet::GetField(System::String^ name)
@@ -79,9 +79,9 @@ namespace QuickFASTDotNet{
 
     FieldIdentity^ FieldSet::GetIdentity(System::String^ name)
     {
-      FieldIdentity^ retVal = gcnew FieldIdentity();
-      spFieldSet_->getIdentity(StlDotNet::string_cast<std::string>(name), retVal->Ref);
-      return retVal;
+      QuickFAST::Messages::FieldIdentityCPtr spFieldIdentity;
+      spFieldSet_->getIdentity(StlDotNet::string_cast<std::string>(name), spFieldIdentity);
+      return gcnew FieldIdentity(spFieldIdentity);
     }
 
     bool FieldSet::IsReadOnly::get()

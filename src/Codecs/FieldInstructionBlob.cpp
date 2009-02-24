@@ -363,7 +363,7 @@ FieldInstructionBlob::encodeNop(
 {
     // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_.name(), field))
+  if(fieldSet.getField(identity_->name(), field))
   {
     std::string value = field->toString();
     if(!isMandatory())
@@ -394,7 +394,7 @@ FieldInstructionBlob::encodeConstant(
 {
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_.name(), field))
+  if(fieldSet.getField(identity_->name(), field))
   {
     const std::string & value = field->toString();
     const std::string & constant = initialValue_->toString();
@@ -428,7 +428,7 @@ FieldInstructionBlob::encodeDefault(
 {
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_.name(), field))
+  if(fieldSet.getField(identity_->name(), field))
   {
     std::string value = field->toString();
     const std::string & defaultValue = initialValue_->toString();
@@ -498,7 +498,7 @@ FieldInstructionBlob::encodeCopy(
 
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_.name(), field))
+  if(fieldSet.getField(identity_->name(), field))
   {
     std::string value = field->toString();
     if(previousIsKnown && previousValue == value)
@@ -573,7 +573,7 @@ FieldInstructionBlob::encodeDelta(
 
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_.name(), field))
+  if(fieldSet.getField(identity_->name(), field))
   {
     std::string value = field->toString();
     size_t prefix = longestMatchingPrefix(previousValue, value);
@@ -640,7 +640,7 @@ FieldInstructionBlob::encodeTail(
 
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_.name(), field))
+  if(fieldSet.getField(identity_->name(), field))
   {
     std::string value = field->toString();
     size_t prefix = longestMatchingPrefix(previousValue, value);

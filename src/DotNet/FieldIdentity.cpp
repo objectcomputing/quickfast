@@ -23,9 +23,15 @@ FieldIdentity::FieldIdentity(System::String^ fieldName)
   this->LocalName = fieldName;
 }
 
-FieldIdentity::FieldIdentity(const TFieldIdentity& fieldIdentity)
-  :spFieldIdentity_(new TFieldIdentity(fieldIdentity))
+FieldIdentity::FieldIdentity(const TspFieldIdentity& fieldIdentity)
+  :spFieldIdentity_(fieldIdentity)
 {
+}
+
+FieldIdentity::FieldIdentity(const TcspFieldIdentity& fieldIdentity)
+  :spFieldIdentity_(new TFieldIdentity(*fieldIdentity))
+{
+
 }
 
 FieldIdentity::FieldIdentity(System::String^ fieldNamespace, System::String^ fieldName, System::String^ Id)
@@ -96,4 +102,9 @@ FieldIdentity^ FieldIdentity::Clone()
 FieldIdentity::TFieldIdentity& FieldIdentity::Ref::get()
 {
   return spFieldIdentity_.GetRef();
+}
+
+FieldIdentity::TspFieldIdentity& FieldIdentity::SmartPtr::get()
+{
+  return spFieldIdentity_.GetBoostPtr();
 }

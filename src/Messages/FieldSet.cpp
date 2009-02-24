@@ -85,11 +85,12 @@ FieldSet::isPresent(const std::string & name) const
 }
 
 void
-FieldSet::addField(const FieldIdentity & identity, FieldCPtr value)
+FieldSet::addField(FieldIdentityCPtr identity, FieldCPtr value)
 {
   PROFILE_POINT("FieldSet::addField");
   if(used_ >= capacity_)
   {
+    PROFILE_POINT("FieldSet::grow");
     // todo complain.  This should not happen
     reserve((used_ * 3) / 2);
   }
@@ -113,7 +114,7 @@ FieldSet::getField(const std::string &name, FieldCPtr & value) const
 }
 
 bool
-FieldSet::getIdentity(const std::string &name, FieldIdentity & identity) const
+FieldSet::getIdentity(const std::string &name, FieldIdentityCPtr & identity) const
 {
   for(size_t index = 0; index < used_; ++index)
   {

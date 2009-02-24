@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE(theFirstTest)
 {
   // with any luck, this will be the first test run
 #ifdef _MSC_VER
-  _CrtSetBreakAlloc(99999); // see documentation of this function for debugging memory leaks.
+  _CrtSetBreakAlloc(16586*10); // see documentation of this function for debugging memory leaks.
 #endif
   BOOST_CHECK(true); // entertain boost test that objects to tests which don't actually test anything.
 }
@@ -55,10 +55,10 @@ namespace
     instruction.setId("id");
     BOOST_CHECK_EQUAL(instruction.getId(), "id");
 
-    const Messages::FieldIdentity & identity = instruction.getIdentity();
-    BOOST_CHECK(!identity.mandatory());
-    BOOST_CHECK_EQUAL(identity.id(),"id");
-    BOOST_CHECK_EQUAL(identity.name(), "NS::Name");
+    Messages::FieldIdentityCPtr identity = instruction.getIdentity();
+    BOOST_CHECK(!identity->mandatory());
+    BOOST_CHECK_EQUAL(identity->id(),"id");
+    BOOST_CHECK_EQUAL(identity->name(), "NS::Name");
 
     BOOST_CHECK_EQUAL(instruction.presenceMapBitsRequired(), 0);
 

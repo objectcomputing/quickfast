@@ -179,7 +179,7 @@ Field::freeField()const
 {
   delete this;
 }
-
+#if 0
 void
 Messages::intrusive_ptr_add_ref(const Messages::Field * ptr)
 {
@@ -192,6 +192,7 @@ Messages::intrusive_ptr_release(const Messages::Field * ptr)
   if(--ptr->refcount_ == 0)
   {
     ptr->freeField();
-//    delete ptr;
   }
 }
+
+#endif

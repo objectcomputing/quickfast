@@ -25,11 +25,11 @@ namespace QuickFAST{
     private:
       void formatMessage(Messages::Message & message);
       void formatSequence(
-        const Messages::FieldIdentity & identity,
-        Messages::FieldCPtr & field);
-      void formatGroup(Messages::FieldCPtr & field);
+        Messages::FieldIdentityCPtr & identity,
+        const Messages::FieldCPtr & field);
+      void formatGroup(const Messages::FieldCPtr & field);
 
-      void displayFieldValue(Messages::FieldCPtr field);
+      void displayFieldValue(const Messages::FieldCPtr & field);
 
     private:
       void newline();

@@ -13,17 +13,11 @@
 namespace QuickFAST{
   namespace Messages{
     class Field;
-    /// @brief A smart pointer to a Field
-    /// Commented out because Field is immutable
-//    typedef boost::shared_ptr<Field> FieldCPtr;
-    /// @brief A smart pointer to a const Field
-    /// commented out in order to try intrusive
-//    typedef boost::shared_ptr<const Field> FieldCPtr;
     /// @brief An intrusive smart pointer to a const Field
     typedef boost::intrusive_ptr<const Field> FieldCPtr;
 
-      void QuickFAST_Export intrusive_ptr_add_ref(const Field * ptr);
-      void QuickFAST_Export intrusive_ptr_release(const Field * ptr);
+    void QuickFAST_Export intrusive_ptr_add_ref(const Field * ptr);
+    void QuickFAST_Export intrusive_ptr_release(const Field * ptr);
   }
 }
 #endif // FIELD_FWD_H

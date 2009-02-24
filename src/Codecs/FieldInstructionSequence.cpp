@@ -43,11 +43,10 @@ FieldInstructionSequence::decodeNop(
   }
   size_t length = 0;
   Codecs::FieldInstructionCPtr lengthInstruction;
-  Messages::FieldIdentity lengthIdentity("length","");
   Messages::FieldSet lengthSet(1);
   if(segment_->getLengthInstruction(lengthInstruction))
   {
-    source.beginField(lengthInstruction->getIdentity().name());
+    source.beginField(lengthInstruction->getIdentity()->name());
     if(!lengthInstruction->decode(source, pmap, decoder, lengthSet))
     {
       return false;
@@ -102,7 +101,7 @@ FieldInstructionSequence::encodeNop(
 {
   // retrieve the field corresponding to this sequence
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_.name(), field))
+  if(fieldSet.getField(identity_->name(), field))
   {
     Messages::SequenceCPtr sequence = field->toSequence();
     size_t length = sequence->size();
@@ -121,7 +120,6 @@ FieldInstructionSequence::encodeNop(
     {
        FieldInstructionUInt32 lengthInstruction;
        lengthInstruction.setPresence(isMandatory());
-       Messages::FieldIdentity lengthIdentity("length","");
        lengthInstruction.encode(destination, pmap, encoder, lengthSet);
     }
 

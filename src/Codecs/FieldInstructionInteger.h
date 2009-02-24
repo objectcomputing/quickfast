@@ -564,7 +564,7 @@ namespace QuickFAST{
     {
       // get the value from the application data
       Messages::FieldCPtr field;
-      if(fieldSet.getField(identity_.name(), field))
+      if(fieldSet.getField(identity_->name(), field))
       {
         INTEGER_TYPE value;
         field->getValue(value);
@@ -616,7 +616,7 @@ namespace QuickFAST{
     {
       // get the value from the application data
       Messages::FieldCPtr field;
-      if(fieldSet.getField(identity_.name(), field))
+      if(fieldSet.getField(identity_->name(), field))
       {
         INTEGER_TYPE value;
         field->getValue(value);
@@ -651,7 +651,7 @@ namespace QuickFAST{
     {
       // get the value from the application data
       Messages::FieldCPtr field;
-      if(fieldSet.getField(identity_.name(), field))
+      if(fieldSet.getField(identity_->name(), field))
       {
         INTEGER_TYPE value;
         field->getValue(value);
@@ -729,7 +729,7 @@ namespace QuickFAST{
 
       // get the value from the application data
       Messages::FieldCPtr field;
-      if(fieldSet.getField(identity_.name(), field))
+      if(fieldSet.getField(identity_->name(), field))
       {
         INTEGER_TYPE value;
         field->getValue(value);
@@ -827,7 +827,7 @@ namespace QuickFAST{
 
       // get the value from the application data
       Messages::FieldCPtr field;
-      if(fieldSet.getField(identity_.name(), field))
+      if(fieldSet.getField(identity_->name(), field))
       {
         INTEGER_TYPE value;
         field->getValue(value);
@@ -896,7 +896,7 @@ namespace QuickFAST{
 
       // get the value from the application data
       Messages::FieldCPtr field;
-      if(fieldSet.getField(identity_.name(), field))
+      if(fieldSet.getField(identity_->name(), field))
       {
         INTEGER_TYPE value;
         field->getValue(value);

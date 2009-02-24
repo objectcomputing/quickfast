@@ -352,7 +352,7 @@ FieldInstructionAscii::encodeNop(
 {
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_.name(), field))
+  if(fieldSet.getField(identity_->name(), field))
   {
     std::string value = field->toAscii();
     if(!isMandatory())
@@ -383,7 +383,7 @@ FieldInstructionAscii::encodeConstant(
 {
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_.name(), field))
+  if(fieldSet.getField(identity_->name(), field))
   {
     const std::string & value = field->toAscii();
     const std::string & constant = initialValue_->toAscii();
@@ -417,7 +417,7 @@ FieldInstructionAscii::encodeDefault(
 {
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_.name(), field))
+  if(fieldSet.getField(identity_->name(), field))
   {
     std::string value = field->toAscii();
     const std::string & defaultValue = initialValue_->toAscii();
@@ -487,7 +487,7 @@ FieldInstructionAscii::encodeCopy(
 
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_.name(), field))
+  if(fieldSet.getField(identity_->name(), field))
   {
     std::string value = field->toAscii();
     if(previousIsKnown && previousValue == value)
@@ -558,7 +558,7 @@ FieldInstructionAscii::encodeDelta(
 
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_.name(), field))
+  if(fieldSet.getField(identity_->name(), field))
   {
     std::string value = field->toAscii();
     size_t prefix = longestMatchingPrefix(previousValue, value);
@@ -625,7 +625,7 @@ FieldInstructionAscii::encodeTail(
 
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_.name(), field))
+  if(fieldSet.getField(identity_->name(), field))
   {
     std::string value = field->toAscii();
     size_t prefix = longestMatchingPrefix(previousValue, value);

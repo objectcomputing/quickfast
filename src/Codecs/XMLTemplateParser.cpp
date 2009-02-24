@@ -200,7 +200,7 @@ namespace
       {
         std::string errMsg("unknown XML tag: ");
         errMsg += tag;
-        throw std::runtime_error(errMsg);
+        throw TemplateDefinitionError(errMsg);
       }
     }
 
@@ -332,7 +332,7 @@ TemplateBuilder::getRequiredAttribute(
     std::string errMsg;
     errMsg +=
       "Missing required attribute \"" + name + "\"";
-    throw std::runtime_error(errMsg);
+    throw TemplateDefinitionError(errMsg);
   }
   return it->second;
 }

@@ -68,7 +68,7 @@ namespace QuickFAST{
       /// @brief field points to the value to be set.
       void setDictionaryField(size_t index, const Messages::FieldCPtr & field);
 
-      /// @brief Report a recoverable error
+      /// @brief Report a warning
       /// @param errorCode as defined in the FIX standard (or invented for QuickFAST)
       ///                  i.e [R123]
       /// @param message a text description of the problem.

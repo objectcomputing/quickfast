@@ -83,7 +83,7 @@ FieldInstructionGroup::encodeNop(
 {
   // retrieve the field corresponding to this group
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_.name(), field))
+  if(fieldSet.getField(identity_->name(), field))
   {
     Messages::GroupCPtr group = field->toGroup();
     encoder.encodeGroup(destination, segmentBody_, *group);

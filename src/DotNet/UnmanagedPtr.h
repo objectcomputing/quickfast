@@ -46,8 +46,8 @@ template <typename T>
 ref class BoostPtrHolder
 {
 public:
-  typedef typename T::pointer TPointer;
-  typedef typename T::value_type TValue;
+  typedef typename T::element_type* TPointer;
+  typedef typename T::element_type TValue;
   typedef BoostPtrHolder<T> TMyType;
 
   BoostPtrHolder(): ptr_(new T){}

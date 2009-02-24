@@ -184,13 +184,22 @@ namespace QuickFAST{
       mutable unsigned long refcount_;
     };
 
-    /// @brief Support boost::intrusive_ptr
-    /// @param ptr to target Field
-    void QuickFAST_Export intrusive_ptr_add_ref(const Messages::Field * ptr);
+    inline
+    void
+    Messages::intrusive_ptr_add_ref(const Messages::Field * ptr)
+    {
+      ++ptr->refcount_;
+    }
 
-    /// @brief Support boost::intrusive_ptr
-    /// @param ptr to target Field
-    void QuickFAST_Export intrusive_ptr_release(const Messages::Field * ptr);
+    inline
+    void
+    Messages::intrusive_ptr_release(const Messages::Field * ptr)
+    {
+      if(--ptr->refcount_ == 0)
+      {
+        ptr->freeField();
+      }
+    }
   }
 }
 #endif // FIELD_H

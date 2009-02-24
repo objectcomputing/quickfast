@@ -14,13 +14,14 @@ using namespace ::QuickFAST::Codecs;
 
 FieldInstruction::FieldInstruction(
       const std::string & name, const std::string & fieldNamespace)
-  : identity_(name, fieldNamespace)
+  : identity_(new Messages::FieldIdentity(name, fieldNamespace))
   , fieldOp_(new FieldOpNop)
 {
 }
 
 FieldInstruction::FieldInstruction()
-  : fieldOp_(new FieldOpNop)
+  : identity_(new Messages::FieldIdentity)
+  , fieldOp_(new FieldOpNop)
 {
 }
 
@@ -31,7 +32,7 @@ FieldInstruction::~FieldInstruction()
 void
 FieldInstruction::setPresence(bool mandatory)
 {
-  identity_.setMandatory(mandatory);
+  identity_->setMandatory(mandatory);
 }
 
 void
@@ -58,7 +59,7 @@ FieldInstruction::getFieldOp(FieldOpCPtr & fieldOp) const
 size_t
 FieldInstruction::presenceMapBitsRequired()const
 {
-  if(fieldOp_->usesPresenceMap(identity_.mandatory()))
+  if(fieldOp_->usesPresenceMap(identity_->mandatory()))
   {
     return maxPresenceMapBits();
   }
@@ -290,8 +291,8 @@ FieldInstruction::indexDictionaries(
     dictionaryName,
     typeName,
     typeNamespace,
-    identity_.getLocalName(),
-    identity_.getNamespace());
+    identity_->getLocalName(),
+    identity_->getNamespace());
 }
 
 void

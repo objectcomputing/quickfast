@@ -1,3 +1,89 @@
+Tue Feb 24 15:31:23 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/DotNet/FieldIdentity.h:
+        * src/DotNet/FieldIdentity.cpp:
+        * src/DotNet/FieldSet.cpp:
+        * src/DotNet/UnmanagedPtr.h:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/MulticastInterpreter:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.h:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+        * src/Messages/Field.h:
+        * src/Messages/Field.cpp:
+        * src/Messages/FieldIdentity.h:
+        * src/Messages/FieldIdentity.cpp:
+        * src/Messages/FieldIdentity_fwd.h:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/Field_fwd.h:
+        * src/Messages/MessageField.h:
+        * src/Tests/testFieldInstructions.cpp:
+        * src/Tests/testXMLTemplateParser.cpp:
+        Merged Branch FieldIdentityPtr into trunk.
+
+Tue Feb 24 15:11:47 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+        IN BRANCH FieldIdentityPtr
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Messages/Field.h:
+        * src/Messages/Field.cpp:
+        * src/Messages/FieldIdentity.h:
+        * src/Messages/FieldIdentity.cpp:
+        * src/Messages/FieldIdentity_fwd.h:
+        Inline code for intrusive Field pointers.
+
+Fri Feb 20 22:07:39 UTC 2009  Curt Campbell  <campbellc@ociweb.com>
+        IN BRANCH FieldIdentityPtr
+        * src/DotNet/FieldIdentity.cpp
+        * src/DotNet/FieldIdentity.h
+        * src/DotNet/FieldSet.cpp
+        * src/DotNet/UnmanagedPtr.h
+        Fixed broken build due to use of intrusive pointer
+        in last check-in.
+
+Wed Feb 18 17:17:39 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+        IN BRANCH FieldIdentityPtr
+        * src/Codecs/Context.h:
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/PerformanceTest/PerformanceTest.cpp:
+        * src/Messages/Field.h:
+        * src/Messages/FieldIdentity.h:
+        * src/Messages/FieldIdentity.cpp:
+        * src/Messages/FieldIdentity_fwd.h:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/Field_fwd.h:
+        * src/Messages/MessageField.h:
+        * src/Tests/testFieldInstructions.cpp:
+        * src/Tests/testXMLTemplateParser.cpp:
+        Switch to intrusive pointer for FieldIdentity
+        
+
 Wed Feb 18 17:37:14 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstruction.cpp:
