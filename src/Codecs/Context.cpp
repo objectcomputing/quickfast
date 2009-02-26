@@ -85,11 +85,11 @@ Context::reportWarning(const std::string & errorCode, const std::string & messag
 void
 Context::reportError(const std::string & errorCode, const std::string & message)
 {
-  throw EncodingError(errorCode + message);
+  throw EncodingError(errorCode + ' ' + message);
 }
 
 void
 Context::reportFatal(const std::string & errorCode, const std::string & message)
 {
-  throw EncodingError(errorCode + message);
+  throw EncodingError(errorCode + ' ' +  message);
 }

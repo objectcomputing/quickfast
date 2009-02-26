@@ -58,7 +58,7 @@ namespace QuickFAST{
       /// The FieldCPtr is copied, not the actual Field object.
       /// @param identity identifies this field
       /// @param value is the value to be assigned.
-      void addField(FieldIdentityCPtr identity, FieldCPtr value);
+      void addField(const FieldIdentityCPtr & identity, const FieldCPtr & value);
 
 
       /// @brief Get the value of the specified field.

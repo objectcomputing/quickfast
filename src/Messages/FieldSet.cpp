@@ -85,7 +85,7 @@ FieldSet::isPresent(const std::string & name) const
 }
 
 void
-FieldSet::addField(FieldIdentityCPtr identity, FieldCPtr value)
+FieldSet::addField(const FieldIdentityCPtr & identity, const FieldCPtr & value)
 {
   PROFILE_POINT("FieldSet::addField");
   if(used_ >= capacity_)

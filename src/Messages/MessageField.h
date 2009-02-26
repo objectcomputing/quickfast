@@ -26,7 +26,7 @@ namespace QuickFAST{
     {
     public:
       /// @brief Construct from an identity and a typed value.
-      MessageField(FieldIdentityCPtr & identity, FieldCPtr & field)
+      MessageField(const FieldIdentityCPtr & identity, const FieldCPtr & field)
         : identity_(identity)
         , field_(field)
       {

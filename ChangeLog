@@ -1,3 +1,21 @@
+Thu Feb 26 19:14:13 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/Context.cpp:
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/Encoder.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Messages/FieldAscii.cpp:
+        * src/Messages/FieldGroup.cpp:
+        * src/Messages/FieldIdentity.h:
+        * src/Messages/FieldSequence.cpp:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/MessageField.h:
+        Address encoding problems reported in Issues #3 and #4.
+
+        * src/Tests/testRoundTrip.cpp:
+        Add unit test to reveal problems form Issues #1, #3, and #4
+
 Thu Feb 26 01:19:24 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/Encoder.cpp:
         * src/Codecs/FieldInstructionSequence.cpp:

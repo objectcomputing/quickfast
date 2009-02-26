@@ -24,6 +24,7 @@ Encoder::encodeMessage(
   template_id_t templateId,
   const Messages::Message & message)
 {
+  this->setTemplateId(templateId);
   encodeSegment(destination, templateId, message);
   destination.endMessage();
 }
@@ -34,10 +35,10 @@ Encoder::encodeSegment(
   template_id_t templateId,
   const Messages::FieldSet & fieldSet)
 {
-  Codecs::PresenceMap pmap(getTemplateRegistry()->presenceMapBits());
   Codecs::TemplateCPtr templatePtr;
-  if(getTemplateRegistry()->getTemplate(getTemplateId(), templatePtr))
+  if(getTemplateRegistry()->getTemplate(templateId, templatePtr))
   {
+    Codecs::PresenceMap pmap(templatePtr->presenceMapBitCount());
     DestinationBufferPtr header = destination.startBuffer();
     destination.startBuffer();
     encodeSegmentBody(destination, pmap, templatePtr, fieldSet);

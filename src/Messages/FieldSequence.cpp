@@ -9,7 +9,8 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldSequence::FieldSequence(Messages::SequenceCPtr sequence)
-: sequence_(sequence)
+  : Field(true)
+  , sequence_(sequence)
 {
 }
 

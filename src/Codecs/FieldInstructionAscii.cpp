@@ -368,7 +368,7 @@ FieldInstructionAscii::encodeNop(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9}", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
     }
     destination.putByte(nullAscii);
   }
@@ -401,7 +401,7 @@ FieldInstructionAscii::encodeConstant(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9}", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
     }
     pmap.setNextField(false);
   }
@@ -442,7 +442,7 @@ FieldInstructionAscii::encodeDefault(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9}", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
     }
     if(fieldOp_->hasValue())
     {
@@ -512,7 +512,7 @@ FieldInstructionAscii::encodeCopy(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9}", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
     }
     if((previousIsKnown && previousNotNull)
       || !previousIsKnown)
@@ -589,7 +589,7 @@ FieldInstructionAscii::encodeDelta(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9}", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
     }
     destination.putByte(nullAscii);
   }
@@ -656,7 +656,7 @@ FieldInstructionAscii::encodeTail(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9}", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
     }
     destination.putByte(nullAscii);
   }

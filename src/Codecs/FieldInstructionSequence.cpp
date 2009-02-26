@@ -130,8 +130,8 @@ FieldInstructionSequence::encodeNop(
 
     for(size_t pos = 0; pos < length; ++pos)
     {
-      Messages::FieldSetCPtr entry = (*sequence)[pos];
-      encoder.encodeGroup(destination, segment_, fieldSet);
+      const Messages::FieldSetCPtr & entry = (*sequence)[pos];
+      encoder.encodeGroup(destination, segment_, *entry);
     }
   }
   else

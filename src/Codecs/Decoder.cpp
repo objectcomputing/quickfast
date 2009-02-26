@@ -107,11 +107,13 @@ Decoder::decodeSegmentBody(
   Codecs::SegmentBodyCPtr segment, //todo: reference to avoid copy?
   Messages::FieldSet & fieldSet)
 {
+  fieldSet.setApplicationType(
+    segment->getApplicationType(),
+    segment->getApplicationTypeNamespace());
   size_t instructionCount = segment->size();
-// not supported yet  fieldSet.reserve(segment->fieldCount());
   for( size_t nField = 0; nField < instructionCount; ++nField)
   {
-    PROFILE_POINT("field");
+    PROFILE_POINT("decode field");
     Codecs::FieldInstructionCPtr instruction;
     if(segment->getInstruction(nField, instruction))
     {

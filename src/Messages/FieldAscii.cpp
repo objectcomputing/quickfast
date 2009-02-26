@@ -12,7 +12,6 @@ FieldAscii::FieldAscii(const std::string & value)
   : Field(true)
   , value_(value)
 {
-  valid_ = true;
 }
 
 FieldAscii::FieldAscii(const uchar * value, size_t length)
