@@ -1,3 +1,9 @@
+Thu Feb 26 23:44:29 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Tests/testRoundTrip.cpp:
+        Tests Issue #2.
+        Checks to be sure the data made it round-trip intact.
+
 Thu Feb 26 19:14:13 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/Context.cpp:
         * src/Codecs/Decoder.cpp:
