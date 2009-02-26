@@ -87,7 +87,7 @@ PresenceMap::encode(DataDestination & destination)
     bpos--;
   }
   bits_[bpos] |= stopBit;
-  for(size_t pos = 0; pos <= bpos; ++ bpos)
+  for(size_t pos = 0; pos <= bpos; ++pos)
   {
     destination.putByte(bits_[pos]);
   }

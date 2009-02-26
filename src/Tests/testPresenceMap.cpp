@@ -7,9 +7,11 @@
 #include <Common/Types.h>
 #include <Codecs/PresenceMap.h>
 #include <Codecs/DataSourceString.h>
-using namespace ::QuickFAST;
+#include <Codecs/DataDestinationString.h>
 
-BOOST_AUTO_TEST_CASE(testPmap)
+using namespace QuickFAST;
+
+BOOST_AUTO_TEST_CASE(testPmapDecoding)
 {
   Codecs::PresenceMap pmap(1);
   for(size_t n = 0; n < 10; ++n) // more than 7 anyway
@@ -91,4 +93,36 @@ BOOST_AUTO_TEST_CASE(testPmap)
   BOOST_CHECK(!p1.checkNextField());
   BOOST_CHECK(!p1.checkNextField());
 
+}
+
+BOOST_AUTO_TEST_CASE(testPmapEncoding1)
+{
+  Codecs::PresenceMap pmap(10);
+  for(size_t nbit = 0; nbit < 10; ++nbit)
+  {
+    pmap.setNextField(true);
+  }
+  Codecs::DataDestinationString destination;
+  pmap.encode(destination);
+  destination.endMessage();
+  const std::string & result = destination.getValue();
+  BOOST_CHECK_EQUAL(result.length(), 2);
+  const char expected[] = "\x7F\xF0";
+  BOOST_CHECK(result == expected);
+}
+
+BOOST_AUTO_TEST_CASE(testPmapEncoding2)
+{
+  Codecs::PresenceMap pmap(10);
+  for(size_t nbit = 0; nbit < 10; ++nbit)
+  {
+    pmap.setNextField(false);
+  }
+  Codecs::DataDestinationString destination;
+  pmap.encode(destination);
+  destination.endMessage();
+  const std::string & result = destination.getValue();
+  BOOST_CHECK_EQUAL(result.length(), 1);
+  const char expected[] = "\x80";
+  BOOST_CHECK(result == expected);
 }

@@ -12,7 +12,6 @@
 #include <sstream>
 
 using namespace QuickFAST;
-#if 0
 BOOST_AUTO_TEST_CASE(testXMLTemplateParser)
 {
   Codecs::XMLTemplateParser parser;
@@ -70,4 +69,3 @@ BOOST_AUTO_TEST_CASE(testXMLTemplateParser)
     BOOST_CHECK(instruction->getMantissaInstruction(mantissa));
   }
 }
-#endif

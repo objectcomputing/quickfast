@@ -1,3 +1,13 @@
+Thu Feb 26 00:42:45 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/PresenceMap.cpp:
+        Issue #3: Infinite loop encoding presence map.
+
+        * src/Tests/testPresenceMap.cpp:
+        Add test for issue #3
+
+        * src/Tests/testXMLTemplateParser.cpp:
+        Renable test in spite of memory leak.
+
 Tue Feb 24 15:31:23 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Context.h:
@@ -82,7 +92,7 @@ Wed Feb 18 17:17:39 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
         * src/Tests/testFieldInstructions.cpp:
         * src/Tests/testXMLTemplateParser.cpp:
         Switch to intrusive pointer for FieldIdentity
-        
+
 
 Wed Feb 18 17:37:14 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
