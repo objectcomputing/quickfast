@@ -39,7 +39,7 @@ FieldInstructionSequence::decodeNop(
 {
   if(!segment_)
   {
-    decoder.reportFatal("[ERR U07]", "SegmentBody not defined for Group instruction.");
+    decoder.reportFatal("[ERR U07]", "SegmentBody not defined for Sequence instruction.");
   }
   size_t length = 0;
   Codecs::FieldInstructionCPtr lengthInstruction;
@@ -99,6 +99,11 @@ FieldInstructionSequence::encodeNop(
   Codecs::Encoder & encoder,
   const Messages::FieldSet & fieldSet) const
 {
+  if(!segment_)
+  {
+    encoder.reportFatal("[ERR U07]", "SegmentBody not defined for Sequence instruction.");
+  }
+
   // retrieve the field corresponding to this sequence
   Messages::FieldCPtr field;
   if(fieldSet.getField(identity_->name(), field))

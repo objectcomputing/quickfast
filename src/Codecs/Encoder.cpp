@@ -57,17 +57,18 @@ Encoder::encodeGroup(
   Codecs::SegmentBodyCPtr group,
   const Messages::FieldSet & fieldSet)
 {
+  size_t presenceMapBits = group->presenceMapBitCount();
+  Codecs::PresenceMap pmap(presenceMapBits);
   DestinationBufferPtr previousBuffer = destination.getBuffer();
-  Codecs::PresenceMap pmap(getTemplateRegistry()->presenceMapBits());
   DestinationBufferPtr header;
-  if(getTemplateRegistry()->presenceMapBits() != 0)
+  if(presenceMapBits > 0)
   {
    header = destination.startBuffer();
+    // start a buffer for the body of the group
+    destination.startBuffer();
   }
-  // start a buffer for the body of the group
-  destination.startBuffer();
   encodeSegmentBody(destination, pmap, group, fieldSet);
-  if(header) // if we expected a pmap
+  if(presenceMapBits > 0)
   {
     destination.selectBuffer(header);
     pmap.encode(destination);
