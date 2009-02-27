@@ -37,13 +37,21 @@ namespace QuickFAST{
       virtual void setMantissaInstruction(FieldInstructionPtr mantissa)
       {
         mantissaInstruction_ = mantissa;
+        if(!bool(exponentInstruction_))
+        {
+          exponentInstruction_.reset(new FieldInstructionExponent(identity_->getLocalName() + "|decimal_exponent", identity_->getNamespace()));
+          if(!isMandatory())
+          {
+            exponentInstruction_->setPresence(false);
+          }
+        }
       }
 
       /// @brief Get the mantissa field instruction.
       virtual bool getMantissaInstruction(FieldInstructionCPtr & mantissa) const
       {
         mantissa = mantissaInstruction_;
-        return true;
+        return bool(mantissa);
       }
 
       /// @brief Support &lt;exponent> element.
@@ -56,13 +64,17 @@ namespace QuickFAST{
         {
           exponentInstruction_->setPresence(false);
         }
+        if(!bool(mantissaInstruction_))
+        {
+          mantissaInstruction_.reset(new FieldInstructionMantissa(identity_->name() + "|decimal_mantissa", identity_->getNamespace()));
+        }
       }
 
       /// @brief Get the exponent field instruction.
       virtual bool getExponentInstruction(FieldInstructionCPtr & exponent) const
       {
         exponent = exponentInstruction_;
-        return true;
+        return bool(exponent);
       }
 
       /// @brief Set the default/constant/copy, etc value.

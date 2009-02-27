@@ -27,6 +27,7 @@ namespace QuickFAST{
         : localName_(name)
         , fieldNamespace_(fieldNamespace)
         , mandatory_(true)
+        , refcount_(0)
       {
         qualifyName();
       }

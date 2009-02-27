@@ -1,3 +1,16 @@
+Fri Feb 27 01:14:09 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionDecimal.h:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        Try for a little more speed on Decimal NOP encode/decode
+
+        * src/Common/Profiler.h:
+        Move the enable/disable symbol to the top of the file so I can find it.
+
+        * src/Messages/FieldIdentity.h:
+        * src/Messages/FieldIdentity.cpp:
+        Fix a memory leak; uninitialized refcount.
+
 Thu Feb 26 23:44:29 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Tests/testRoundTrip.cpp:

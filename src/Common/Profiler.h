@@ -8,6 +8,10 @@
 #define PROFILER_H
 #include <Common/QuickFAST_Export.h>
 
+/// enable or disable generation of profiler code.
+#define PROFILER_ENABLEx
+
+
 // Note: boost's microsecond_clock was slow enough to skew the results
 // hence the win32 GetTickCount stuff.
 #ifdef _WIN32
@@ -140,8 +144,6 @@ namespace QuickFAST{
   };
 }
 
-/// enable or disable generation of profiler code.
-#define PROFILER_ENABLEx
 #ifdef PROFILER_ENABLE
 /// Define the start point of a block of code to be profiled.
 # define PROFILE_POINT(name)   \

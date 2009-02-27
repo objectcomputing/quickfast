@@ -24,8 +24,8 @@ FieldInstructionDecimal::FieldInstructionDecimal(
   , typedExponent_(0)
   , typedMantissa_(0)
   , typedValue_(0,0)
-  , mantissaInstruction_(new FieldInstructionMantissa(name + "|decimal_mantissa", fieldNamespace))
-  , exponentInstruction_(new FieldInstructionExponent(name + "|decimal_exponent", fieldNamespace))
+//  , mantissaInstruction_(new FieldInstructionMantissa(name + "|decimal_mantissa", fieldNamespace))
+//  , exponentInstruction_(new FieldInstructionExponent(name + "|decimal_exponent", fieldNamespace))
 {
 }
 
@@ -33,8 +33,8 @@ FieldInstructionDecimal::FieldInstructionDecimal()
   : typedExponent_(0)
   , typedMantissa_(0)
   , typedValue_(0,0)
-  , mantissaInstruction_(new FieldInstructionMantissa(identity_->getLocalName() + "|decimal_mantissa", identity_->getNamespace()))
-  , exponentInstruction_(new FieldInstructionExponent(identity_->getLocalName() + "|decimal_exponent", identity_->getNamespace()))
+//  , mantissaInstruction_(new FieldInstructionMantissa(identity_->getLocalName() + "|decimal_mantissa", identity_->getNamespace()))
+//  , exponentInstruction_(new FieldInstructionExponent(identity_->getLocalName() + "|decimal_exponent", identity_->getNamespace()))
 {
 }
 
@@ -46,7 +46,7 @@ void
 FieldInstructionDecimal::setPresence(bool mandatory)
 {
   FieldInstruction::setPresence(mandatory);
-  if(!mandatory)
+  if(!mandatory && bool(exponentInstruction_))
   {
     exponentInstruction_->setPresence(mandatory);
   }
@@ -63,43 +63,65 @@ FieldInstructionDecimal::decodeNop(
   PROFILE_POINT("decimal::decodeNop");
   NESTED_PROFILE_POINT(d,"decimal::AllocateFieldSet");
 
-  ///@todo: this is an expensive way to get the exponent and mantissa values
-  /// we need to refactor FieldInstructionInteger to provide a separate method
-  /// to retrieve the values (or lack thereof) without creating fields.
-  /// However -- this works for now.
-  Messages::FieldSet mxSet(2);
-  NESTED_PROFILE_POINT(a, "decimal::DecodeExponent");
-  NESTED_PROFILE_PAUSE(d);
-  if(!exponentInstruction_->decode(source, pmap, decoder, mxSet))
+  if(bool(exponentInstruction_))
   {
-    return false;
-  }
 
-  if(mxSet.size() == 0)
+    ///@todo: this is an expensive way to get the exponent and mantissa values
+    /// we need to refactor FieldInstructionInteger to provide a separate method
+    /// to retrieve the values (or lack thereof) without creating fields.
+    /// However -- this works for now.
+    Messages::FieldSet mxSet(2);
+    NESTED_PROFILE_POINT(a, "decimal::DecodeExponent");
+    NESTED_PROFILE_PAUSE(d);
+    if(!exponentInstruction_->decode(source, pmap, decoder, mxSet))
+    {
+      return false;
+    }
+
+    if(mxSet.size() == 0)
+    {
+      // null field
+      return true;
+    }
+
+    NESTED_PROFILE_POINT(b, "decimal::DecodeMantissa");
+    NESTED_PROFILE_PAUSE(a);
+    mantissaInstruction_->decode(source, pmap, decoder, mxSet);
+    NESTED_PROFILE_POINT(1, "decimal::RetrieveValues");
+    NESTED_PROFILE_PAUSE(b);
+    Messages::FieldSet::const_iterator it = mxSet.begin();
+    exponent_t exponent = exponent_t(it->getField()->toInt32());
+    mantissa_t mantissa = typedMantissa_;
+    ++it;
+    if(it != mxSet.end())
+    {
+      mantissa = mantissa_t(it->getField()->toInt64());
+    }
+    NESTED_PROFILE_POINT(2, "decimal::UseValues");
+    NESTED_PROFILE_PAUSE(1);
+    Decimal value(mantissa, exponent, false);
+    Messages::FieldCPtr field(Messages::FieldDecimal::create(value));
+    fieldSet.addField(identity_, field);
+  }
+  else
   {
-    // null field
-    return true;
+    exponent_t exponent = 0;
+    decodeSignedInteger(source, decoder, exponent);
+    if(!isMandatory())
+    {
+      if(checkNullInteger(exponent))
+      {
+        return true;
+      }
+    }
+    mantissa_t mantissa;
+    decodeSignedInteger(source, decoder, mantissa);
+    Decimal value(mantissa, exponent);
+    Messages::FieldCPtr newField(Messages::FieldDecimal::create(value));
+    fieldSet.addField(
+      identity_,
+      newField);
   }
-
-  NESTED_PROFILE_POINT(b, "decimal::DecodeMantissa");
-  NESTED_PROFILE_PAUSE(a);
-  mantissaInstruction_->decode(source, pmap, decoder, mxSet);
-  NESTED_PROFILE_POINT(1, "decimal::RetrieveValues");
-  NESTED_PROFILE_PAUSE(b);
-  Messages::FieldSet::const_iterator it = mxSet.begin();
-  exponent_t exponent = exponent_t(it->getField()->toInt32());
-  mantissa_t mantissa = typedMantissa_;
-  ++it;
-  if(it != mxSet.end())
-  {
-    mantissa = mantissa_t(it->getField()->toInt64());
-  }
-  NESTED_PROFILE_POINT(2, "decimal::UseValues");
-  NESTED_PROFILE_PAUSE(1);
-
-  Decimal value(mantissa, exponent, false);
-  Messages::FieldCPtr field(Messages::FieldDecimal::create(value));
-  fieldSet.addField(identity_, field);
   return true;
 }
 
@@ -343,24 +365,45 @@ FieldInstructionDecimal::encodeNop(
     exponent_t exponent = value.getExponent();
     mantissa_t mantissa = value.getMantissa();
 
-    // @todo: replace this with something more efficient
-    Messages::FieldSet fieldSet(2);
-    Messages::FieldCPtr exponentField(Messages::FieldInt32::create(exponent));
-    fieldSet.addField(this->exponentInstruction_->getIdentity(), exponentField);
+    if(bool(exponentInstruction_))
+    {
+      Messages::FieldSet fieldSet(2);
+      Messages::FieldCPtr exponentField(Messages::FieldInt32::create(exponent));
+      fieldSet.addField(exponentInstruction_->getIdentity(), exponentField);
 
-    Messages::FieldCPtr mantissaField(Messages::FieldInt64::create(mantissa));
-    fieldSet.addField(mantissaInstruction_->getIdentity(), mantissaField);
+      Messages::FieldCPtr mantissaField(Messages::FieldInt64::create(mantissa));
+      fieldSet.addField(mantissaInstruction_->getIdentity(), mantissaField);
 
-    exponentInstruction_->encode(
-      destination,
-      pmap,
-      encoder,
-      fieldSet);
-    mantissaInstruction_->encode(
-      destination,
-      pmap,
-      encoder,
-      fieldSet);
+      exponentInstruction_->encode(
+        destination,
+        pmap,
+        encoder,
+        fieldSet);
+      mantissaInstruction_->encode(
+        destination,
+        pmap,
+        encoder,
+        fieldSet);
+    }
+    else
+    {
+      if(!isMandatory())
+      {
+        encodeNullableDecimal(
+          destination,
+          encoder.getWorkingBuffer(),
+          value.getExponent(),
+          value.getMantissa());
+      }
+      else
+      {
+        encodeDecimal(
+          destination,
+          encoder.getWorkingBuffer(),
+          value.getExponent(),
+          value.getMantissa());
+      }
+    }
   }
   else // not defined in fieldset
   {
@@ -368,12 +411,19 @@ FieldInstructionDecimal::encodeNop(
     {
       encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
     }
-    Messages::FieldSet fieldSet(2);
-    exponentInstruction_->encode(
-      destination,
-      pmap,
-      encoder,
-      fieldSet);
+    if(exponentInstruction_)
+    {
+      Messages::FieldSet fieldSet(2);
+      exponentInstruction_->encode(
+        destination,
+        pmap,
+        encoder,
+        fieldSet);
+    }
+    else
+    {
+      destination.putByte('\x80');
+    }
   }
 }
 
@@ -616,8 +666,11 @@ FieldInstructionDecimal::indexDictionaries(
   const std::string & typeNamespace)
 {
   FieldInstruction::indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
-  exponentInstruction_->indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
-  mantissaInstruction_->indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
+  if(bool(exponentInstruction_))
+  {
+    exponentInstruction_->indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
+    mantissaInstruction_->indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
+  }
 }
 
 
