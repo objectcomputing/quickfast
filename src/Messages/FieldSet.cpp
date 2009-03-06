@@ -20,7 +20,9 @@ FieldSet::FieldSet(size_t res)
 }
 
 FieldSet::FieldSet(const FieldSet & rhs)
-: fields_(reinterpret_cast<MessageField *>(new unsigned char[sizeof(MessageField) * rhs.used_]))
+: applicationType_(rhs.applicationType_)
+, applicationTypeNs_(rhs.applicationTypeNs_)
+, fields_(reinterpret_cast<MessageField *>(new unsigned char[sizeof(MessageField) * rhs.used_]))
 , capacity_(rhs.capacity_)
 , used_(rhs.used_)
 {

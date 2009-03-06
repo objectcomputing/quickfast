@@ -239,12 +239,12 @@ FieldInstructionAscii::decodeDelta(
   if( deltaLength < 0)
   {
     // operate on front of string
-    // compensete for the excess -11 encoding that allows -0 != +0
+    // compensete for the excess -1 encoding that allows -0 != +0
     deltaLength = -(deltaLength + 1);
     // don't chop more than is there
     if(static_cast<uint32>(deltaLength) > previousLength)
     {
-      decoder.reportError("[ERR D7]", "String head delta length exceeds length of previous string.");
+      decoder.reportWarning("[ERR D7]", "String head delta length exceeds length of previous string.", *identity_);
       deltaLength = previousLength;
     }
     Messages::FieldCPtr field = Messages::FieldAscii::create(
@@ -259,7 +259,10 @@ FieldInstructionAscii::decodeDelta(
     // don't chop more than is there
     if(static_cast<uint32>(deltaLength) > previousLength)
     {
-      decoder.reportError("[ERR D7]", "String tail delta length exceeds length of previous string.");
+#if 0 // handy when debugging
+      std::cout << "decode ascii delta length: " << deltaLength << " previous: " << previousLength << std::endl;
+#endif
+      decoder.reportError("[ERR D7]", "String tail delta length exceeds length of previous string.", *identity_);
       deltaLength = previousLength;
     }
     Messages::FieldCPtr field = Messages::FieldAscii::create(
@@ -575,6 +578,12 @@ FieldInstructionAscii::encodeDelta(
     {
       deltaCount += 1;
     }
+#if 0 // handy when debugging
+    std::cout << "Encode ascii delta prefix: " << prefix  << " suffix: " << suffix << std::endl;
+    std::cout << "Previous["<<previousValue <<"]" << std::endl;
+    std::cout << "   value[" << value <<      "]" << std::endl;
+    std::cout << "count:" << deltaCount << " Delta["<< deltaValue << ']' << std::endl;
+#endif
     encodeSignedInteger(destination, encoder.getWorkingBuffer(), deltaCount);
     encodeAscii(destination, deltaValue);
 

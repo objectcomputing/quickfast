@@ -306,7 +306,7 @@ namespace QuickFAST{
             if(!previousField->isType(typedValue_))
             {
               // this will probably throw a template definition error
-              decoder.reportError("[ERR D4]", "Previous value type mismatch.");
+              decoder.reportError("[ERR D4]", "Previous value type mismatch.", *identity_);
               // but in case it doesn't ...
               previousField = FIELD_CLASS::create(0);
             }
@@ -319,7 +319,7 @@ namespace QuickFAST{
             if(isMandatory())
             {
               // this will probably throw a template definition error
-              decoder.reportError("[ERR D6]", "Mandatory field is missing.");
+              decoder.reportError("[ERR D6]", "Mandatory field is missing.", *identity_);
               // but in case it doesn't ...
               previousField = FIELD_CLASS::create(0);
               fieldSet.addField(
@@ -343,7 +343,10 @@ namespace QuickFAST{
           {
             if(isMandatory())
             {
-              decoder.reportError("[ERR D5]", "Copy operator missing mandatory integer field/no initial value");
+              decoder.reportError(
+                "[ERR D5]",
+                "Copy operator missing mandatory integer field/no initial value",
+                *identity_);
               Messages::FieldCPtr newField(FIELD_CLASS::create(0));
               fieldSet.addField(
                 identity_,
@@ -402,7 +405,7 @@ namespace QuickFAST{
         }
         else if(isMandatory())
         {
-          decoder.reportError("[ERR D5]", "Mandatory default operator with no value.");
+          decoder.reportError("[ERR D5]", "Mandatory default operator with no value.", *identity_);
         }
       }
       return true;
@@ -446,7 +449,7 @@ namespace QuickFAST{
         PROFILE_POINT("int::decDelta::fromDictionary");
         if(!previousField->isType(value))
         {
-          decoder.reportError("[ERR D4]", " Previous value type mismatch.");
+          decoder.reportError("[ERR D4]", " Previous value type mismatch.", *identity_);
           previousField = FIELD_CLASS::create(0);
         }
         previousField->getValue(value);
@@ -518,7 +521,7 @@ namespace QuickFAST{
         {
           if(!previousField->isType(value))
           {
-            decoder.reportError("[ERR D4]", "Previous value type mismatch.");
+            decoder.reportError("[ERR D4]", "Previous value type mismatch.", *identity_);
             previousField = FIELD_CLASS::create(0);
           }
           previousField->getValue(value);
@@ -534,7 +537,7 @@ namespace QuickFAST{
           {
             if(isMandatory())
             {
-              decoder.reportError("[ERRD5]", "Missing initial value for Increment operator");
+              decoder.reportError("[ERRD5]", "Missing initial value for Increment operator", *identity_);
               value = 0;
             }
             else
@@ -588,7 +591,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR x0]", "Missing mandatory field.");
+          encoder.reportError("[ERR x0]", "Missing mandatory field.", *identity_);
           if(SIGNED)
           {
             encodeSignedInteger(destination, encoder.getWorkingBuffer(), 0);
@@ -622,7 +625,7 @@ namespace QuickFAST{
         field->getValue(value);
         if(value != typedValue_)
         {
-          encoder.reportError("[ERR ?]", "Constant value does not match application data.");
+          encoder.reportError("[ERR ?]", "Constant value does not match application data.", *identity_);
         }
 
         if(!isMandatory())
@@ -634,7 +637,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR ?]", "Missing mandatory field.");
+          encoder.reportError("[ERR ?]", "Missing mandatory field.", *identity_);
         }
         pmap.setNextField(false);
       }
@@ -683,7 +686,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR ??]", "Missing mandatory field.");
+          encoder.reportError("[ERR ??]", "Missing mandatory field.", *identity_);
         }
         if(fieldOp_->hasValue())
         {
@@ -717,7 +720,7 @@ namespace QuickFAST{
       {
         if(!previousField->isType(typedValue_))
         {
-          encoder.reportError("[ERR D4]", "Previous value type mismatch.");
+          encoder.reportError("[ERR D4]", "Previous value type mismatch.", *identity_);
         }
         previousIsKnown = true;
         previousNotNull = previousField->isDefined();
@@ -764,7 +767,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR ??]", "Missing mandatory field.");
+          encoder.reportError("[ERR ??]", "Missing mandatory field.", *identity_);
           if(SIGNED)
           {
             encodeSignedInteger(destination, encoder.getWorkingBuffer(), 0);
@@ -812,7 +815,7 @@ namespace QuickFAST{
       {
         if(!previousField->isType(typedValue_))
         {
-          encoder.reportError("[ERR D4]", "Previous value type mismatch.");
+          encoder.reportError("[ERR D4]", "Previous value type mismatch.", *identity_);
         }
         else
         {
@@ -851,7 +854,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR ??]", "Missing mandatory field.");
+          encoder.reportError("[ERR ??]", "Missing mandatory field.", *identity_);
           encodeSignedInteger(destination, encoder.getWorkingBuffer(), 0);
         }
         else
@@ -881,7 +884,7 @@ namespace QuickFAST{
       {
         if(!previousField->isType(typedValue_))
         {
-          encoder.reportError("[ERR D4]", "Previous value type mismatch.");
+          encoder.reportError("[ERR D4]", "Previous value type mismatch.", *identity_);
         }
         else
         {
@@ -930,7 +933,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR ??]", "Missing mandatory field.");
+          encoder.reportError("[ERR ??]", "Missing mandatory field.", *identity_);
           if(SIGNED)
           {
             encodeSignedInteger(destination, encoder.getWorkingBuffer(), 0);

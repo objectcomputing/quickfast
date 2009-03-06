@@ -36,15 +36,16 @@ Decoder::decodeSegment(
    Messages::FieldSet & fieldSet)
 {
   Codecs::PresenceMap pmap(getTemplateRegistry()->presenceMapBits());
+  if(this->verboseOut_)
+  {
+    pmap.setVerbose(verboseOut_);
+  }
+
   static const std::string pmp("PMAP");
   source.beginField(pmp);
   if(!pmap.decode(source))
   {
     return false;
-  }
-  if(this->verboseOut_)
-  {
-    pmap.setVerbose(verboseOut_);
   }
 
   if(pmap.checkNextField())
@@ -84,6 +85,11 @@ Decoder::decodeGroup(
 {
   size_t presenceMapBits = group->presenceMapBitCount();
   Codecs::PresenceMap pmap(presenceMapBits);
+  if(this->verboseOut_)
+  {
+    pmap.setVerbose(verboseOut_);
+  }
+
   if(presenceMapBits > 0)
   {
     static const std::string pm("PMAP");

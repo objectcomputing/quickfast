@@ -1,3 +1,29 @@
+Fri Mar  6 20:42:11 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Context.cpp:
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/Encoder.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/PresenceMap.cpp:
+        * src/Tests/testRoundTrip.cpp:
+        Round trip was passing in debug, but failing in release.
+        Turns out there were two problems:
+           an off-by-one bug in the presence map that stored uninitialized data.
+           the encoder wasn't using a presence map bit for the template ID.
+        While I was fixing these, I improved the encoding/decoding exception messages
+        to include the field name where the problem was encountered (most of the time, there
+        are a couple of places where I would have had to incur a performance hit to make
+        the field name available, so those are still un-named.
+        Note: this might be Issue #5, but I haven't verified it yet.
+        The testRoundTrip revealed the problem.
+
+        * src/Messages/FieldSet.cpp:
+        Copy constructor copies application type and application type namespace.
+        Issue # 6
+        testRoundTrip has been extended so that it would have detected the problem.
+
 Fri Feb 27 01:14:09 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionDecimal.h:

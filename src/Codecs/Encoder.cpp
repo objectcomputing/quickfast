@@ -24,7 +24,6 @@ Encoder::encodeMessage(
   template_id_t templateId,
   const Messages::Message & message)
 {
-  this->setTemplateId(templateId);
   encodeSegment(destination, templateId, message);
   destination.endMessage();
 }
@@ -39,12 +38,29 @@ Encoder::encodeSegment(
   if(getTemplateRegistry()->getTemplate(templateId, templatePtr))
   {
     Codecs::PresenceMap pmap(templatePtr->presenceMapBitCount());
+    if(this->verboseOut_)
+    {
+      pmap.setVerbose(verboseOut_);
+    }
+
+
     DestinationBufferPtr header = destination.startBuffer();
     destination.startBuffer();
+    // can we "copy" the template ID?
+    if(templateId == templateId_)
+    {
+      pmap.setNextField(false);
+    }
+    else
+    {
+      pmap.setNextField(true);
+      FieldInstruction::encodeUnsignedInteger(destination, getWorkingBuffer(), templateId);
+      templateId_ = templateId;
+    }
+
     encodeSegmentBody(destination, pmap, templatePtr, fieldSet);
     destination.selectBuffer(header);
     pmap.encode(destination);
-    FieldInstruction::encodeUnsignedInteger(destination, getWorkingBuffer(), getTemplateId());
   }
   else
   {
@@ -60,6 +76,11 @@ Encoder::encodeGroup(
 {
   size_t presenceMapBits = group->presenceMapBitCount();
   Codecs::PresenceMap pmap(presenceMapBits);
+  if(this->verboseOut_)
+  {
+    pmap.setVerbose(verboseOut_);
+  }
+
   DestinationBufferPtr previousBuffer = destination.getBuffer();
   DestinationBufferPtr header;
   if(presenceMapBits > 0)
@@ -113,9 +134,14 @@ Encoder::encodeSegmentBody(
   size_t instructionCount = segment->size();
   for( size_t nField = 0; nField < instructionCount; ++nField)
   {
+    PROFILE_POINT("emcode field");
     Codecs::FieldInstructionCPtr instruction;
     if(segment->getInstruction(nField, instruction))
     {
+      if(verboseOut_)
+      {
+        (*verboseOut_) << "Encode instruction[" <<nField << "]: " << instruction->getIdentity()->name() << std::endl;
+      }
       instruction->encode(destination, pmap, *this, fieldSet);
     }
   }

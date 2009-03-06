@@ -6,6 +6,7 @@
 #include "Context.h"
 #include <Codecs/TemplateRegistry.h>
 #include <Common/Exceptions.h>
+#include <Messages/FieldIdentity.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
@@ -14,6 +15,7 @@ Context::Context(Codecs::TemplateRegistryCPtr registry)
 : verboseOut_(0)
 , logOut_(0)
 , templateRegistry_(registry)
+, templateId_(~0)
 , indexedDictionarySize_(registry->dictionarySize())
 , indexedDictionary_(new Messages::FieldCPtr[indexedDictionarySize_])
 {
@@ -30,6 +32,7 @@ Context::reset()
   {
     indexedDictionary_[nDict].reset();
   }
+  templateId_ = ~0;
 }
 
 
@@ -83,9 +86,30 @@ Context::reportWarning(const std::string & errorCode, const std::string & messag
 }
 
 void
+Context::reportWarning(
+  const std::string & errorCode,
+  const std::string & message,
+  const Messages::FieldIdentity & identity)
+{
+  if(logOut_)
+  {
+    (*logOut_) << errorCode << ' ' << message  << " Field: " << identity.name()<< std::endl;
+  }
+}
+
+void
 Context::reportError(const std::string & errorCode, const std::string & message)
 {
   throw EncodingError(errorCode + ' ' + message);
+}
+
+void
+Context::reportError(
+  const std::string & errorCode,
+  const std::string & message,
+  const Messages::FieldIdentity & identity)
+{
+  throw EncodingError(errorCode + ' ' + message + " Field: " + identity.name());
 }
 
 void

@@ -47,6 +47,7 @@ PresenceMap::grow()
 {
   // todo: consider reporting this as a recoverable error due to performance impact
   boost::scoped_array<uchar> newBuffer(new uchar [byteLength_+1]);
+  newBuffer[byteLength_] = 0;
   std::copy(bits_.get(), bits_.get()+byteLength_, newBuffer.get());
   bits_.swap(newBuffer);
   byteLength_ += 1;
@@ -71,6 +72,11 @@ PresenceMap::encodeBytesNeeded()const
     return 0;
   }
   size_t bpos = bytePosition_;
+  // if the last byte is unused, don't write it.
+  if(bitMask_ == startByteMask)
+  {
+    bpos -= 1;
+  }
   while(bpos > 0 && bits_[bpos] == 0)
   {
     bpos--;
@@ -81,7 +87,16 @@ PresenceMap::encodeBytesNeeded()const
 void
 PresenceMap::encode(DataDestination & destination)
 {
+  if(bytePosition_ == 0 && bitMask_ == startByteMask)
+  {
+    return;
+  }
   size_t bpos = bytePosition_;
+  // if the last byte is unused, don't write it.
+  if(bitMask_ == startByteMask)
+  {
+    bpos -= 1;
+  }
   while(bpos > 0 && bits_[bpos] == 0)
   {
     bpos--;
@@ -91,12 +106,22 @@ PresenceMap::encode(DataDestination & destination)
   {
     destination.putByte(bits_[pos]);
   }
+  if(vout_)
+  {
+    (*vout_) << "pmap["  <<  byteLength_ << "]->" << std::hex;
+    for(size_t pos = 0; pos < byteLength_; ++pos)
+    {
+      (*vout_) << ' ' << std::setw(2) << unsigned short(bits_[pos]);
+    }
+    (*vout_) << std::dec << std::endl;
+  }
 }
 
 bool
 PresenceMap::decode(Codecs::DataSource & source)
 {
   reset();
+
   uchar byte;
   if(!source.getByte(byte))
   {
@@ -112,6 +137,17 @@ PresenceMap::decode(Codecs::DataSource & source)
     }
   }
   appendByte(pos, byte);
+
+  if(vout_)
+  {
+    (*vout_) << "pmap["  <<  byteLength_ << "]<-" << std::hex;
+    for(size_t pos = 0; pos < byteLength_; ++pos)
+    {
+      (*vout_) << ' ' << std::setw(2) <<  unsigned short(bits_[pos]);
+    }
+    (*vout_) << std::dec << std::endl;
+  }
+
   return true;
 }
 
@@ -131,13 +167,13 @@ PresenceMap::checkNextField()
     return false;
   }
   bool result = (bits_[bytePosition_] & bitMask_) != 0;
+  if(vout_)(*vout_) << "check pmap[" << bytePosition_ << '/' <<  byteLength_ << ',' << std::hex << unsigned short(bitMask_) << std::dec << ']' <<(result?'T' : 'F') << std::endl;
   bitMask_ >>= 1;
   if(bitMask_ == 0)
   {
     bitMask_ = startByteMask;
     bytePosition_ += 1;
   }
-  if(vout_)(*vout_) << "pmap:" <<(result?'T' : 'F') << std::endl;
   return result;
 }
 
@@ -174,6 +210,7 @@ PresenceMap::setNextField(bool present)
   {
     bits_[bytePosition_] &= ~bitMask_;
   }
+  if(vout_)(*vout_) << "set pmap[" << bytePosition_ << '/' <<  byteLength_ << ',' << std::hex << unsigned short(bitMask_) << std::dec << ']' <<(present?'T' : 'F') << std::endl;
   bitMask_ >>= 1;
   if(bitMask_ == 0)
   {

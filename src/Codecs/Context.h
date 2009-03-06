@@ -12,6 +12,7 @@
 #include <Codecs/TemplateRegistry_fwd.h>
 #include <Codecs/Template_fwd.h>
 #include <Messages/Field_fwd.h>
+#include <Messages/FieldIdentity_fwd.h>
 
 namespace QuickFAST{
   namespace Codecs{
@@ -73,12 +74,35 @@ namespace QuickFAST{
       ///                  i.e [R123]
       /// @param message a text description of the problem.
       virtual void reportWarning(const std::string & errorCode, const std::string & message);
+      /// @brief Report a warning
+      /// @param errorCode as defined in the FIX standard (or invented for QuickFAST)
+      ///                  i.e [R123]
+      /// @param message a text description of the problem.
+      /// @param identity identifies the field being Xcoded
+      virtual void reportWarning(
+        const std::string & errorCode,
+        const std::string & message,
+        const Messages::FieldIdentity & identity);
+
       /// @brief Report a recoverable error
       /// @param errorCode as defined in the FIX standard (or invented for QuickFAST)
       ///                  i.e [R123]
       /// @param message a text description of the problem.
       /// @throws EncodingError unless overridden.
       virtual void reportError(const std::string & errorCode, const std::string & message);
+
+      /// @brief Report a recoverable error
+      /// @param errorCode as defined in the FIX standard (or invented for QuickFAST)
+      ///                  i.e [R123]
+      /// @param message a text description of the problem.
+      /// @param identity identifies the field being Xcoded
+      /// @throws EncodingError unless overridden.
+      virtual void reportError(
+        const std::string & errorCode,
+        const std::string & message,
+        const Messages::FieldIdentity & identity
+        );
+
       /// @brief Report a fatal error (always throws)
       /// @param errorCode as defined in the FIX standard (or invented for QuickFAST)
       ///                  i.e [R123]
@@ -143,9 +167,9 @@ namespace QuickFAST{
       /// if an ostream is supplied log unusual Xcoder events
       std::ostream * logOut_;
 
-    private:
       Codecs::TemplateRegistryCPtr templateRegistry_;
       template_id_t templateId_;
+    private:
       size_t indexedDictionarySize_;
       typedef boost::scoped_array<Messages::FieldCPtr> IndexedDictionary;
       IndexedDictionary indexedDictionary_;
