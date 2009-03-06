@@ -76,7 +76,6 @@ namespace{
     //msg.addField(identity_ticSiz, Messages::FieldDecimal::create(Decimal(123, -1)));
     BOOST_CHECK(message.getField("ticSiz", value));
     BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(123, -1));
-
     //msg.addField(identity_setId, Messages::FieldUInt32::create(5));
     BOOST_CHECK(message.getField("setId", value));
     BOOST_CHECK_EQUAL(value->toUInt32(), 5);
@@ -195,8 +194,6 @@ BOOST_AUTO_TEST_CASE(testRoundTripSequenceNoPMAP)
   Codecs::TemplateRegistryPtr templateRegistry =
     parser.parse(templateStream);
 
-//  std::cout << "Building Message." << std::endl;
-
   BOOST_CHECK(templateRegistry);
   BOOST_CHECK_EQUAL(templateRegistry->maxFieldCount(), 12);
 
@@ -284,30 +281,16 @@ BOOST_AUTO_TEST_CASE(testRoundTripSequenceNoPMAP)
 
   msg.addField(identity_MDFeedTypes, Messages::FieldSequence::create(sequence_MDFeedTypes));
 
-//  std::cout << "Encoding Message." << std::endl;
-
   Codecs::Encoder encoder(templateRegistry);
-//  encoder.setVerboseOutput(std::cout);
   Codecs::DataDestinationString destination;
   template_id_t templId = 3; // from the XML above
   encoder.encodeMessage(destination, templId, msg);
   const std::string & fastString = destination.getValue();
 
-/*  std::cout << std::hex;
-  for(size_t fspos = 0; fspos < fastString.size(); ++fspos)
-  {
-    std::cout << ' ' << std::setw(2) << (unsigned short(fastString[fspos])& 0xFF);
-  }
-  std::cout << std::dec;
-  std::cout << "Decoding Message." << std::endl;
-*/
   Codecs::Decoder decoder(templateRegistry);
-//  decoder.setVerboseOutput(std::cout);
   Codecs::DataSourceString source(fastString);
-//  source.setEcho(std::cout, Codecs::DataSource::HEX, true, true);
   Messages::Message msgOut(templateRegistry->maxFieldCount());
   decoder.decodeMessage(source, msgOut);
-//  std::cout << "Validating Message." << std::endl;
 
   validateMessage1(msgOut);
   Messages::Message messageCopy(msgOut);

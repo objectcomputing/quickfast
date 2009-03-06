@@ -1,3 +1,9 @@
+Fri Mar  6 21:02:07 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Tests/testRoundTrip.cpp:
+        Remove some debugging messages from testRoundTrip.cpp
+        Verify that Issue #5 was fixed by the previous check-in.
+
 Fri Mar  6 20:42:11 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Context.h:
