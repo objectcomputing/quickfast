@@ -167,7 +167,9 @@ namespace QuickFAST{
       /// if an ostream is supplied log unusual Xcoder events
       std::ostream * logOut_;
 
+      /// The template registry to be used during this Xcoding process
       Codecs::TemplateRegistryCPtr templateRegistry_;
+      /// The ID of the currently active template
       template_id_t templateId_;
     private:
       size_t indexedDictionarySize_;

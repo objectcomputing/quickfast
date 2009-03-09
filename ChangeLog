@@ -1,3 +1,19 @@
+Mon Mar  9 15:47:51 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        * src/Codecs/MessageConsumer.h:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/PerformanceTest/MessageCounter.h:
+        * src/Examples/PerformanceTest/MessageCounter.cpp:
+        * src/Messages/FieldIdentity_fwd.h:
+        * src/Messages/Field_fwd.h:
+        Add a stop() method to MulticastDecoder in hopes of shutting down cleanly.
+        Add additional methods to MessageConsumer to report decoding events including
+        the end of the decoding process.
+
 Fri Mar  6 21:02:07 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Tests/testRoundTrip.cpp:

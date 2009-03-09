@@ -16,7 +16,11 @@ namespace QuickFAST{
     /// @brief An intrusive smart pointer to a const Field
     typedef boost::intrusive_ptr<const Field> FieldCPtr;
 
+    /// @brief Support for intrusive_ptr -- add a reference
+    /// @param ptr points to the object managed by the pointer.
     void QuickFAST_Export intrusive_ptr_add_ref(const Field * ptr);
+    /// @brief Support for intrusive_ptr -- release a reference
+    /// @param ptr points to the object managed by the pointer.
     void QuickFAST_Export intrusive_ptr_release(const Field * ptr);
   }
 }

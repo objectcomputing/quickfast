@@ -20,7 +20,15 @@ namespace QuickFAST{
       /// @brief Construct given a ostream to which to write the interpreted results.
       MessageInterpreter(std::ostream & out);
       virtual ~MessageInterpreter();
+
+      ////////////////////////////
+      // Implement MessageConsumer
       virtual bool consumeMessage(Messages::Message & message);
+      virtual bool wantLog(unsigned short level);
+      virtual bool logMessage(unsigned short level, const std::string & logMessage);
+      virtual bool reportDecodingError(const std::string & errorMessage);
+      virtual bool reportCommunicationError(const std::string & errorMessage);
+      virtual void decodingStopped();
 
     private:
       void formatMessage(Messages::Message & message);

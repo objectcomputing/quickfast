@@ -29,3 +29,35 @@ MessageCounter::consumeMessage(Messages::Message & message)
   return true;
 }
 
+bool
+MessageCounter::wantLog(unsigned short level)
+{
+  return false;
+}
+
+bool
+MessageCounter::logMessage(unsigned short level, const std::string & logMessage)
+{
+  return true;
+}
+
+bool
+MessageCounter::reportDecodingError(const std::string & errorMessage)
+{
+  std::cerr << "Decoding error: " << errorMessage << std::endl;
+  return false;
+}
+
+bool
+MessageCounter::reportCommunicationError(const std::string & errorMessage)
+{
+  std::cerr << "Communication error: " << errorMessage << std::endl;
+  return false;
+}
+
+void
+MessageCounter::decodingStopped()
+{
+}
+
+

@@ -20,7 +20,15 @@ namespace QuickFAST{
       MessageCounter();
       virtual ~MessageCounter();
 
+      ////////////////////////////
+      // Implement MessageConsumer
       virtual bool consumeMessage(Messages::Message & message);
+      virtual bool wantLog(unsigned short level);
+      virtual bool logMessage(unsigned short level, const std::string & logMessage);
+      virtual bool reportDecodingError(const std::string & errorMessage);
+      virtual bool reportCommunicationError(const std::string & errorMessage);
+      virtual void decodingStopped();
+
       /// @brief get the count
       /// @returns the number of calls to consumeMessage()
       size_t getMesssageCount()const

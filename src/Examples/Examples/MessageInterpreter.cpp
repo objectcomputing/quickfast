@@ -25,6 +25,44 @@ MessageInterpreter::~MessageInterpreter()
 }
 
 bool
+MessageInterpreter::wantLog(unsigned short level)
+{
+  return level < LOG_INFO;
+}
+
+bool
+MessageInterpreter::logMessage(unsigned short level, const std::string & logMessage)
+{
+  //out_
+  std::cerr << logMessage << std::endl;
+  return true;
+}
+
+
+bool
+MessageInterpreter::reportDecodingError(const std::string & errorMessage)
+{
+  //out_
+  std::cerr << "Decoding error: " << errorMessage << std::endl;
+  return false;
+}
+
+bool
+MessageInterpreter::reportCommunicationError(const std::string & errorMessage)
+{
+  //out_
+  std::cerr << "Communication error: " << errorMessage << std::endl;
+  return false;
+}
+
+void
+MessageInterpreter::decodingStopped()
+{
+  out_ << "End of data" << std::endl;
+}
+
+
+bool
 MessageInterpreter::consumeMessage(Messages::Message & message)
 {
   recordCount_ += 1;

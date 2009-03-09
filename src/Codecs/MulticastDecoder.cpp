@@ -21,6 +21,8 @@ MulticastDecoder::MulticastDecoder(
   const std::string & listenAddressName,
   unsigned short portNumber)
 : decoder_(templateRegistry)
+, stopping_(false)
+, error_(false)
 , messageCount_(0)
 , messageLimit_(0)
 , bufferSize_(5000)
@@ -77,6 +79,14 @@ MulticastDecoder::start(
 }
 
 void
+MulticastDecoder::stop()
+{
+  stopping_ = true;
+  // attempt to cancel any requests in progress.
+  socket_.cancel();
+}
+
+void
 MulticastDecoder::startReceive(Buffer * buffer, Buffer * altBuffer)
 {
   socket_.async_receive_from(
@@ -100,14 +110,20 @@ MulticastDecoder::handleReceive(
   size_t bytesReceived,
   Buffer * altBuffer)
 {
+  if(stopping_)
+  {
+    return;
+  }
   if (!error)
   {
     // accept data into the other buffer while we process this buffer
     startReceive(altBuffer, buffer);
     ++messageCount_;
-    if(verboseExecution_)
+    if(consumer_->wantLog(MessageConsumer::LOG_VERBOSE))
     {
-      std::cout << "Received[" << messageCount_ << "]: " << bytesReceived << " bytes" << std::endl;
+      std::stringstream message;
+      message << "Received[" << messageCount_ << "]: " << bytesReceived << " bytes";
+      consumer_->logMessage(MessageConsumer::LOG_VERBOSE, message.str());
     }
     try
     {
@@ -118,27 +134,40 @@ MulticastDecoder::handleReceive(
 
       if(!consumer_->consumeMessage(message))
       {
-        if(verboseExecution_)
+        if(consumer_->wantLog(MessageConsumer::LOG_INFO))
         {
-          std::cerr << "Consumer requested early termination." << std::endl;
+          consumer_->logMessage(MessageConsumer::LOG_INFO, "Consumer requested early termination.");
         }
-        ioService_.stop();
+        stopping_ = true;
+        socket_.cancel();
         return;
       }
     }
     catch (const std::exception &ex)
     {
-      std::cerr << "Decoding error: " << ex.what() << std::endl;
+      if(!consumer_->reportDecodingError(ex.what()))
+      {
+        error_ = true;
+        errorMessage_ =
+        stopping_ = true;
+        socket_.cancel();
+      }
     }
     if(messageCount_ > messageLimit_ && messageLimit_ != 0)
     {
-      ioService_.stop();
+      stopping_ = true;
+      socket_.cancel();
     }
   }
   else
   {
-    std::cerr << "Error code: " << error.message() << std::endl;
-    ioService_.stop();
+    if(!consumer_->reportCommunicationError(error.message()))
+    {
+      error_ = true;
+      errorMessage_ = error.message();
+      stopping_ = true;
+      socket_.cancel();
+    }
   }
 }
 

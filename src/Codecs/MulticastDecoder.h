@@ -105,6 +105,22 @@ namespace QuickFAST{
       /// Start the decoding process.  Returns immediately
       void start(MessageConsumerPtr consumer);
 
+      /// Stop the decoding process.
+      ///
+      /// Returns immediately, however decoding may continue until
+      /// the decoder reaches a clean stopping point.  In particular
+      /// the MessageConsumer may receive additional messages after
+      /// stop is called.
+      ///
+      /// MessageConsumer::decodingStopped() will be called when
+      /// the stop request is complete.
+      void stop();
+
+      /// @brief did an error occur during decoding?
+      /// @param message receives an error message if this function returns true.
+      /// @returns true if the decoding ended due to an error.
+      bool hadError(std::string & message);
+
     private:
       void handleReceive(
         const boost::system::error_code& error,
@@ -116,6 +132,9 @@ namespace QuickFAST{
 
     private:
       Decoder decoder_;
+      bool stopping_;
+      bool error_;
+      std::string errorMessage_;
       size_t messageCount_;
       size_t messageLimit_;
       size_t bufferSize_;
