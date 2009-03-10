@@ -1,3 +1,8 @@
+Tue Mar 10 17:53:03 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/TemplateRegistry.cpp:
+        Issue #8: findNamedTemplate was always returning true.
+
 Mon Mar  9 15:47:51 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Context.h:
