@@ -1,3 +1,15 @@
+Fri Mar 13 19:23:07 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionFiller.h:
+        * src/Codecs/FieldInstructionFiller.cpp:
+        * src/Codecs/FieldOpArcaNop.h:
+        * src/Codecs/XMLTemplateParser.cpp:
+        Add new field instruction <filler name= id= > that consumes a PMAP bit,
+        but does not define a field.
+        Add a new field operation <arca_nop/> that consumes a PMAP bit, but otherwise
+        acts like a NOP [unspecified] instruction.
+        These are needed to decode ARCA data streams.
+
 Fri Mar 13 17:14:57 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstruction.h:

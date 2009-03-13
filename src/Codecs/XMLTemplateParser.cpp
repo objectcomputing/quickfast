@@ -22,6 +22,7 @@
 #include <Codecs/FieldInstructionGroup.h>
 #include <Codecs/FieldInstructionSequence.h>
 #include <Codecs/FieldInstructionTemplateRef.h>
+#include <Codecs/FieldInstructionFiller.h>
 
 #include <Codecs/FieldOpConstant.h>
 #include <Codecs/FieldOpDefault.h>
@@ -29,6 +30,7 @@
 #include <Codecs/FieldOpDelta.h>
 #include <Codecs/FieldOpIncrement.h>
 #include <Codecs/FieldOpTail.h>
+#include <Codecs/FieldOpArcaNop.h>
 
 #include <Common/Exceptions.h>
 
@@ -179,6 +181,10 @@ namespace
       {
         parseSequence(tag, attributeMap);
       }
+      else if (tag == "filler")
+      {
+        parseFiller(tag, attributeMap);
+      }
       else if (tag == "constant")
       {
         parseConstant(tag, attributeMap);
@@ -218,6 +224,10 @@ namespace
       else if (tag == "templateRef")
       {
         parseTemplateRef(tag, attributeMap);
+      }
+      else if (tag == "arca_nop")
+      {
+        parseARCANop(tag, attributeMap);
       }
       else
       {
@@ -339,6 +349,11 @@ namespace
     void parseIncrement(const std::string & tag, const AttributeMap& attributes);
     void parseTail(const std::string & tag, const AttributeMap& attributes);
     void parseTemplateRef(const std::string & tag, const AttributeMap& attributes);
+
+    ///////////////
+    // ARCA Support
+    void parseARCANop(const std::string & tag, const AttributeMap& attributes);
+    void parseFiller(const std::string & tag, const AttributeMap& attributes);
 
     void parseInitialValue(const std::string & tag, const AttributeMap& attributes, FieldOpPtr op);
     void parseOp(const std::string & tag, const AttributeMap& attributes, FieldOpPtr op);
@@ -794,6 +809,32 @@ TemplateBuilder::parseLength(const std::string & tag, const AttributeMap& attrib
 }
 
 void
+TemplateBuilder::parseTemplateRef(const std::string & tag, const AttributeMap& attributes)
+{
+  std::string name;
+  getOptionalAttribute(attributes, "name", name);
+  std::string ns;
+  getOptionalAttribute(attributes, "ns", ns);
+  FieldInstructionPtr field(new FieldInstructionTemplateRef(name, ns));
+  schemaElements_.top().second->addInstruction(field);
+  // Is this push necessary?
+  schemaElements_.push(StackEntry(tag, field));
+}
+
+void
+TemplateBuilder::parseFiller(const std::string & tag, const AttributeMap& attributes)
+{
+  std::string name;
+  getOptionalAttribute(attributes, "name", name);
+  std::string ns;
+  getOptionalAttribute(attributes, "ns", ns);
+  FieldInstructionPtr field(new FieldInstructionFiller(name, ns));
+  schemaElements_.top().second->addInstruction(field);
+  // Is this push necessary?
+  schemaElements_.push(StackEntry(tag, field));
+}
+
+void
 TemplateBuilder::parseConstant(const std::string & tag, const AttributeMap& attributes)
 {
   getRequiredAttribute(attributes, "value");
@@ -837,16 +878,9 @@ TemplateBuilder::parseTail(const std::string & tag, const AttributeMap& attribut
 }
 
 void
-TemplateBuilder::parseTemplateRef(const std::string & tag, const AttributeMap& attributes)
+TemplateBuilder::parseARCANop(const std::string & tag, const AttributeMap& attributes)
 {
-  std::string name;
-  getOptionalAttribute(attributes, "name", name);
-  std::string ns;
-  getOptionalAttribute(attributes, "ns", ns);
-  FieldInstructionPtr field(new FieldInstructionTemplateRef(name, ns));
-  schemaElements_.top().second->addInstruction(field);
-  // Is this push necessary?
-  schemaElements_.push(StackEntry(tag, field));
+  FieldOpPtr op(new FieldOpArcaNop);
 }
 
 void
