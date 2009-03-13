@@ -23,6 +23,26 @@ Field::typeName(FieldType type)
 {
   switch(type)
   {
+  case INT8:
+    {
+      static const std::string sts("int8");
+      return sts;
+    }
+  case UINT8:
+    {
+      static const std::string sts("uint8");
+      return sts;
+    }
+  case INT16:
+    {
+      static const std::string sts("int16");
+      return sts;
+    }
+  case UINT16:
+    {
+      static const std::string sts("uint16");
+      return sts;
+    }
   case INT32:
     {
       static const std::string sts("int32");
@@ -86,6 +106,34 @@ bool
 Field::isDefined() const
 {
   return valid_;
+}
+
+uchar
+Field::toUInt8() const
+{
+  UnsupportedConversion ex("Field cannot be converted to UInt8");
+  throw ex;
+}
+
+int8
+Field::toInt8() const
+{
+  UnsupportedConversion ex("Field cannot be converted to Int8");
+  throw ex;
+}
+
+uint16
+Field::toUInt16() const
+{
+  UnsupportedConversion ex("Field cannot be converted to UInt16");
+  throw ex;
+}
+
+int16
+Field::toInt16() const
+{
+  UnsupportedConversion ex("Field cannot be converted to Int16");
+  throw ex;
 }
 
 uint32

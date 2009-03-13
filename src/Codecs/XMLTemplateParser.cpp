@@ -5,6 +5,10 @@
 #include "XMLTemplateParser.h"
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/Template.h>
+#include <Codecs/FieldInstructionInt8.h>
+#include <Codecs/FieldInstructionUInt8.h>
+#include <Codecs/FieldInstructionInt16.h>
+#include <Codecs/FieldInstructionUInt16.h>
 #include <Codecs/FieldInstructionInt32.h>
 #include <Codecs/FieldInstructionUInt32.h>
 #include <Codecs/FieldInstructionInt64.h>
@@ -122,6 +126,22 @@ namespace
       else if (tag == "typeRef")
       {
         parseTypeRef(tag, attributeMap);
+      }
+      else if (tag == "int8")
+      {
+        parseInt8(tag, attributeMap);
+      }
+      else if (tag == "uInt8")
+      {
+        parseUInt8(tag, attributeMap);
+      }
+      else if (tag == "int16")
+      {
+        parseInt16(tag, attributeMap);
+      }
+      else if (tag == "uInt16")
+      {
+        parseUInt16(tag, attributeMap);
       }
       else if (tag == "int32")
       {
@@ -296,6 +316,10 @@ namespace
     void parseTemplateRegistry(const std::string & tag, const AttributeMap& attributes);
     void parseTemplate(const std::string & tag, const AttributeMap& attributes);
     void parseTypeRef(const std::string & tag, const AttributeMap& attributes);
+    void parseInt8(const std::string & tag, const AttributeMap& attributes);
+    void parseUInt8(const std::string & tag, const AttributeMap& attributes);
+    void parseInt16(const std::string & tag, const AttributeMap& attributes);
+    void parseUInt16(const std::string & tag, const AttributeMap& attributes);
     void parseInt32(const std::string & tag, const AttributeMap& attributes);
     void parseUInt32(const std::string & tag, const AttributeMap& attributes);
     void parseInt64(const std::string & tag, const AttributeMap& attributes);
@@ -426,6 +450,89 @@ TemplateBuilder::parseTypeRef(const std::string & tag, const AttributeMap& attri
   std::string ns;
   getOptionalAttribute(attributes, "ns", ns);
   schemaElements_.top().second->setApplicationType(name, ns);
+}
+void
+TemplateBuilder::parseInt8(const std::string & tag, const AttributeMap& attributes)
+{
+  std::string name = getRequiredAttribute(attributes, "name");
+  std::string ns;
+  getOptionalAttribute(attributes, "ns", ns);
+  FieldInstructionPtr field(new FieldInstructionInt8(name, ns));
+  std::string id;
+  if (getOptionalAttribute(attributes, "id", id))
+  {
+    field->setId(id);
+  }
+  std::string presence;
+  if(getOptionalAttribute(attributes, "presence", presence))
+  {
+    field->setPresence(presence == "mandatory");
+  }
+  schemaElements_.top().second->addInstruction(field);
+  schemaElements_.push(StackEntry(tag, field));
+}
+
+void
+TemplateBuilder::parseUInt8(const std::string & tag, const AttributeMap& attributes)
+{
+  std::string name = getRequiredAttribute(attributes, "name");
+  std::string ns;
+  getOptionalAttribute(attributes, "ns", ns);
+  FieldInstructionPtr field(new FieldInstructionUInt8(name, ns));
+  std::string id;
+  if (getOptionalAttribute(attributes, "id", id))
+  {
+    field->setId(id);
+  }
+  std::string presence;
+  if(getOptionalAttribute(attributes, "presence", presence))
+  {
+    field->setPresence(presence == "mandatory");
+  }
+  schemaElements_.top().second->addInstruction(field);
+  schemaElements_.push(StackEntry(tag, field));
+}
+
+void
+TemplateBuilder::parseInt16(const std::string & tag, const AttributeMap& attributes)
+{
+  std::string name = getRequiredAttribute(attributes, "name");
+  std::string ns;
+  getOptionalAttribute(attributes, "ns", ns);
+  FieldInstructionPtr field(new FieldInstructionInt16(name, ns));
+  std::string id;
+  if (getOptionalAttribute(attributes, "id", id))
+  {
+    field->setId(id);
+  }
+  std::string presence;
+  if(getOptionalAttribute(attributes, "presence", presence))
+  {
+    field->setPresence(presence == "mandatory");
+  }
+  schemaElements_.top().second->addInstruction(field);
+  schemaElements_.push(StackEntry(tag, field));
+}
+
+void
+TemplateBuilder::parseUInt16(const std::string & tag, const AttributeMap& attributes)
+{
+  std::string name = getRequiredAttribute(attributes, "name");
+  std::string ns;
+  getOptionalAttribute(attributes, "ns", ns);
+  FieldInstructionPtr field(new FieldInstructionUInt16(name, ns));
+  std::string id;
+  if (getOptionalAttribute(attributes, "id", id))
+  {
+    field->setId(id);
+  }
+  std::string presence;
+  if(getOptionalAttribute(attributes, "presence", presence))
+  {
+    field->setPresence(presence == "mandatory");
+  }
+  schemaElements_.top().second->addInstruction(field);
+  schemaElements_.push(StackEntry(tag, field));
 }
 
 void

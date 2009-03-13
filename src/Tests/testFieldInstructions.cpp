@@ -8,6 +8,10 @@
 #include <Codecs/FieldInstructionAscii.h>
 #include <Codecs/FieldInstructionUtf8.h>
 #include <Codecs/FieldInstructionByteVector.h>
+#include <Codecs/FieldInstructionInt8.h>
+#include <Codecs/FieldInstructionUInt8.h>
+#include <Codecs/FieldInstructionInt16.h>
+#include <Codecs/FieldInstructionUInt16.h>
 #include <Codecs/FieldInstructionInt32.h>
 #include <Codecs/FieldInstructionUInt32.h>
 #include <Codecs/FieldInstructionInt64.h>
@@ -96,6 +100,30 @@ BOOST_AUTO_TEST_CASE(testFieldInstructionUtf8)
 BOOST_AUTO_TEST_CASE(testFieldInstructionByteVector)
 {
   Codecs::FieldInstructionByteVector instruction("Name", "NS");
+  testFieldInstructionBaseClass(instruction, 1);
+}
+
+BOOST_AUTO_TEST_CASE(testFieldInstructionInt8)
+{
+  Codecs::FieldInstructionInt8 instruction("Name", "NS");
+  testFieldInstructionBaseClass(instruction, 1);
+}
+
+BOOST_AUTO_TEST_CASE(testFieldInstructionUInt8)
+{
+  Codecs::FieldInstructionUInt8 instruction("Name", "NS");
+  testFieldInstructionBaseClass(instruction, 1);
+}
+
+BOOST_AUTO_TEST_CASE(testFieldInstructionInt16)
+{
+  Codecs::FieldInstructionInt16 instruction("Name", "NS");
+  testFieldInstructionBaseClass(instruction, 1);
+}
+
+BOOST_AUTO_TEST_CASE(testFieldInstructionUInt16)
+{
+  Codecs::FieldInstructionUInt16 instruction("Name", "NS");
   testFieldInstructionBaseClass(instruction, 1);
 }
 

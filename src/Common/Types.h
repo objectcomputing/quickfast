@@ -10,6 +10,12 @@
 namespace QuickFAST{
   /// @brief Unsigned character. AKA: a byte
   typedef unsigned char uchar;
+  /// @brief Signed 8 bit integer. AKA: char on some, but not all platforms.
+  typedef signed char int8;
+  /// @brief 16 bit signed integer
+  typedef signed short int16;
+  /// @brief 16 bit unsigned integer
+  typedef unsigned short uint16;
   /// @brief 32 bit signed integer
   typedef signed long int32;
   /// @brief 32 bit unsigned integer

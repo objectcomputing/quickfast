@@ -587,13 +587,14 @@ namespace QuickFAST{
       // extend the sign bit
       if((byte & signBit) != 0)
       {
-        value = -1;
+        value = IntType(-1);
       }
       // Assume an 8 bit byte;
       // Check the seven data bits and the sign bit to make sure no significant
       // information is lost.
-      IntType overflowMask = IntType(-1) << (sizeof(IntType) * byteSize - (dataShift+1));
-      IntType overflowCheck = value << (sizeof(IntType) * byteSize - (dataShift+1));
+      size_t shift = sizeof(IntType) * byteSize - (dataShift + 1);
+      IntType overflowMask(IntType(-1) << shift);
+      IntType overflowCheck(value << shift);
       // if we're allowing oversize values ignore a sign bit overflow
       if(oversize)
       {
@@ -650,8 +651,9 @@ namespace QuickFAST{
       // Assume an 8 bit byte;
       // Check the seven data bitsbit to make sure no significant
       // information is lost.
-      UnsignedIntType overflowMask = UnsignedIntType(-1) << (sizeof(UnsignedIntType) * byteSize - dataShift);
-      UnsignedIntType overflowCheck = value << (sizeof(UnsignedIntType) * byteSize - dataShift);
+      unsigned short shift = sizeof(UnsignedIntType) * byteSize - dataShift;
+      UnsignedIntType overflowMask(UnsignedIntType(-1) << shift);
+      UnsignedIntType overflowCheck(value << shift);
 
       while((byte & stopBit) == 0)
       {

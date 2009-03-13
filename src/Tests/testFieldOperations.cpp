@@ -8,6 +8,10 @@
 #include <Codecs/FieldInstructionAscii.h>
 #include <Codecs/FieldInstructionUtf8.h>
 #include <Codecs/FieldInstructionByteVector.h>
+#include <Codecs/FieldInstructionInt8.h>
+#include <Codecs/FieldInstructionUInt8.h>
+#include <Codecs/FieldInstructionInt16.h>
+#include <Codecs/FieldInstructionUInt16.h>
 #include <Codecs/FieldInstructionInt32.h>
 #include <Codecs/FieldInstructionUInt32.h>
 #include <Codecs/FieldInstructionInt64.h>

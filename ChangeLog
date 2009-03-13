@@ -1,3 +1,28 @@
+Fri Mar 13 17:14:57 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstructionInt16.h:
+        * src/Codecs/FieldInstructionInt8.h:
+        * src/Codecs/FieldInstructionUInt16.h:
+        * src/Codecs/FieldInstructionUInt8.h:
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/Common/Types.h:
+        * src/Messages/Field.h:
+        * src/Messages/Field.cpp:
+        * src/Messages/FieldInt16.h:
+        * src/Messages/FieldInt16.cpp:
+        * src/Messages/FieldInt8.h:
+        * src/Messages/FieldInt8.cpp:
+        * src/Messages/FieldUInt16.h:
+        * src/Messages/FieldUInt16.cpp:
+        * src/Messages/FieldUInt8.h:
+        * src/Messages/FieldUInt8.cpp:
+        * src/Tests/testFieldInstructions.cpp:
+        * src/Tests/testFieldOperations.cpp:
+        Add support for nonstandard integral field types used by ARCA:
+         int8, uInt8, int16, uInt16
+
+
 Fri Mar 13 14:29:22 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * .:

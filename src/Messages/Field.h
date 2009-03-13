@@ -25,6 +25,10 @@ namespace QuickFAST{
       /// the FAST standard.
       enum FieldType
       {
+        INT8,     // not FAST Standard
+        UINT8,    // not FAST Standard
+        INT16,    // not FAST Standard
+        UINT16,   // not FAST Standard
         INT32,
         UINT32,
         INT64,
@@ -50,10 +54,6 @@ namespace QuickFAST{
       /// @return true if the field has a value.
       virtual bool isDefined() const;
 
-      /// @brief Get the field type
-      /// @returns the enumerated field type
-      virtual FieldType getType()const = 0;
-
       /// @brief Check for a particular type of field
       /// @returns true if the field is the desired type
       bool isType(FieldType type) const
@@ -61,7 +61,108 @@ namespace QuickFAST{
         return type == getType();
       }
 
-      /// @brief Retrieve the field value as a uint32
+      /// @brief Get the field type
+      /// @returns the enumerated field type
+      virtual FieldType getType()const = 0;
+
+      ////////
+      // UINT8
+
+      /// @brief Retrieve the field value as an uchar
+      /// @returns the value
+      virtual uchar toUInt8() const;
+
+      /// @brief An alternative way to check data type.
+      ///
+      /// This is convenenient for template-based code.
+      bool isType(uchar type)const
+      {
+        return isType(Field::UINT8);
+      }
+
+      /// @brief An alternative way to retrieve the value.
+      ///
+      /// This is convenenient for template-based code.
+      void getValue(uchar & value)const
+      {
+        value = toUInt8();
+      }
+
+      ////////
+      // INT8
+
+      /// @brief Retrieve the field value as an int8
+      /// @returns the value
+      virtual int8 toInt8() const;
+
+
+      /// @brief An alternative way to check the type
+      ///
+      /// This is convenenient for template-based code.
+      bool isType(int8 type)const
+      {
+        return isType(INT8);
+      }
+
+      /// @brief An alternative way to retrieve the value.
+      ///
+      /// This is convenenient for template-based code.
+      void getValue(int8 & value)const
+      {
+        value = toInt8();
+      }
+
+
+      /////////
+      // UINT16
+
+      /// @brief Retrieve the field value as an uint16
+      /// @returns the value
+      virtual uint16 toUInt16() const;
+
+      /// @brief An alternative way to check data type.
+      ///
+      /// This is convenenient for template-based code.
+      bool isType(uint16 type)const
+      {
+        return isType(Field::UINT16);
+      }
+
+      /// @brief An alternative way to retrieve the value.
+      ///
+      /// This is convenenient for template-based code.
+      void getValue(uint16 & value)const
+      {
+        value = toUInt16();
+      }
+
+      /////////
+      // INT16
+
+      /// @brief Retrieve the field value as an int16
+      /// @returns the value
+      virtual int16 toInt16() const;
+
+      /// @brief An alternative way to check the type
+      ///
+      /// This is convenenient for template-based code.
+      bool isType(int16 type)const
+      {
+        return isType(INT16);
+      }
+
+      /// @brief An alternative way to retrieve the value.
+      ///
+      /// This is convenenient for template-based code.
+      void getValue(int16 & value)const
+      {
+        value = toInt16();
+      }
+
+      /////////
+      // UINT32
+
+      /// @brief Retrieve the field value as an uint32
       /// @returns the value
       virtual uint32 toUInt32() const;
 
@@ -82,6 +183,13 @@ namespace QuickFAST{
       }
 
 
+      /////////
+      // INT32
+
+      /// @brief Retrieve the field value as an int32
+      /// @returns the value
+      virtual int32 toInt32() const;
+
       /// @brief An alternative way to check the type
       ///
       /// This is convenenient for template-based code.
@@ -98,9 +206,12 @@ namespace QuickFAST{
         value = toInt32();
       }
 
-      /// @brief Retrieve the field value as a int32
+      /////////
+      // UINT64
+
+      /// @brief Retrieve the field value as an uint64
       /// @returns the value
-      virtual int32 toInt32() const;
+      virtual uint64 toUInt64() const;
 
       /// @brief An alternative way to check the type
       ///
@@ -118,9 +229,12 @@ namespace QuickFAST{
         value = toUInt64();
       }
 
-      /// @brief Retrieve the field value as a uint64
+      /////////
+      // INT64
+
+      /// @brief Retrieve the field value as an int64
       /// @returns the value
-      virtual uint64 toUInt64() const;
+      virtual int64 toInt64() const;
 
       /// @brief An alternative way to check the type
       ///
@@ -137,10 +251,6 @@ namespace QuickFAST{
       {
         value = toInt64();
       }
-
-      /// @brief Retrieve the field value as a int64
-      /// @returns the value
-      virtual int64 toInt64() const;
 
       /// @brief Retrieve the field value as a Decimal
       /// @returns the value
