@@ -1,3 +1,19 @@
+Fri Mar 13 19:56:06 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * .:
+        * Doc:
+        * Output/TestData:
+        * data:
+        * data/ARCATemplates.xml:
+        * data/arca.dat:
+        * data/arca.fast:
+        * data/arca_files_notice:
+        * src:
+        Add svn:ignore properties as appropriate
+        Add arca test data to repository.
+        This data was distributed by FIXProtocol.org as part of fastapi-1.0
+        See arca_files_notice for the license that applies to the arca test data.
+
 Fri Mar 13 19:23:07 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionFiller.h:
