@@ -32,7 +32,7 @@ FieldInstructionTemplateRef::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::FieldSet & fieldSet) const
+  Messages::DecodedFields & fieldSet) const
 {
   if(templateName_.empty())
   {

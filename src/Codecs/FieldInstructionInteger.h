@@ -61,37 +61,37 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::FieldSet & fieldSet) const;
+        Messages::DecodedFields & fieldSet) const;
 
       virtual bool decodeConstant(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::FieldSet & fieldSet) const;
+        Messages::DecodedFields & fieldSet) const;
 
       virtual bool decodeDefault(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::FieldSet & fieldSet) const;
+        Messages::DecodedFields & fieldSet) const;
 
       virtual bool decodeCopy(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::FieldSet & fieldSet) const;
+        Messages::DecodedFields & fieldSet) const;
 
       virtual bool decodeDelta(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::FieldSet & fieldSet) const;
+        Messages::DecodedFields & fieldSet) const;
 
       virtual bool decodeIncrement(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::FieldSet & fieldSet) const;
+        Messages::DecodedFields & fieldSet) const;
 
       virtual void encodeNop(
         Codecs::DataDestination & destination,
@@ -186,7 +186,7 @@ namespace QuickFAST{
       Codecs::DataSource & source,
       Codecs::PresenceMap & pmap,
       Codecs::Decoder & decoder,
-      Messages::FieldSet & fieldSet) const
+      Messages::DecodedFields & fieldSet) const
     {
       PROFILE_POINT("int::decodeNop");
 
@@ -230,7 +230,7 @@ namespace QuickFAST{
       Codecs::DataSource & source,
       Codecs::PresenceMap & pmap,
       Codecs::Decoder & decoder,
-      Messages::FieldSet & fieldSet) const
+      Messages::DecodedFields & fieldSet) const
     {
       PROFILE_POINT("int::decodeConstant");
       if(!isMandatory() && !pmap.checkNextField())
@@ -253,7 +253,7 @@ namespace QuickFAST{
       Codecs::DataSource & source,
       Codecs::PresenceMap & pmap,
       Codecs::Decoder & decoder,
-      Messages::FieldSet & fieldSet) const
+      Messages::DecodedFields & fieldSet) const
     {
       PROFILE_POINT("int::decodeCopy");
       if(pmap.checkNextField())
@@ -366,7 +366,7 @@ namespace QuickFAST{
       Codecs::DataSource & source,
       Codecs::PresenceMap & pmap,
       Codecs::Decoder & decoder,
-      Messages::FieldSet & fieldSet) const
+      Messages::DecodedFields & fieldSet) const
     {
       PROFILE_POINT("int::decodeDefault");
       if(pmap.checkNextField())
@@ -418,7 +418,7 @@ namespace QuickFAST{
       Codecs::DataSource & source,
       Codecs::PresenceMap & pmap,
       Codecs::Decoder & decoder,
-      Messages::FieldSet & fieldSet) const
+      Messages::DecodedFields & fieldSet) const
     {
       PROFILE_POINT("int::decodeDelta");
       int64 delta;
@@ -475,7 +475,7 @@ namespace QuickFAST{
       Codecs::DataSource & source,
       Codecs::PresenceMap & pmap,
       Codecs::Decoder & decoder,
-      Messages::FieldSet & fieldSet) const
+      Messages::DecodedFields & fieldSet) const
     {
       PROFILE_POINT("int::decodeIncrement");
       if(pmap.checkNextField())

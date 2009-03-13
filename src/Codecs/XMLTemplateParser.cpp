@@ -68,8 +68,10 @@ namespace
     {
       for (size_t index = 0; index < attributes.getLength(); ++index)
       {
-        std::string name = XMLString::transcode(attributes.getQName(index));
-        std::string value = XMLString::transcode(attributes.getValue(index));
+        boost::scoped_array<char> nameRaw(XMLString::transcode(attributes.getQName(index)));
+        std::string name(nameRaw.get());
+        boost::scoped_array<char> valueRaw(XMLString::transcode(attributes.getValue(index)));
+        std::string value(valueRaw.get());
         attrs[name] = value;
       }
     }
@@ -96,7 +98,8 @@ namespace
       makeAttrs(attributes, attributeMap);
 
       // then switch on element tag
-      std::string tag(XMLString::transcode(localname));
+      boost::scoped_array<char> tagRaw(XMLString::transcode(localname));
+      std::string tag(tagRaw.get());
       if(out_)
       {
         *out_ << std::string(2*schemaElements_.size(), ' ') << '<' << tag;
@@ -210,7 +213,8 @@ namespace
       const XMLCh* const qname
       )
     {
-      std::string tag(XMLString::transcode(localname));
+      boost::scoped_array<char> tagRaw(XMLString::transcode(localname));
+      std::string tag(tagRaw.get());
       // don't finalize here for templates.  Because it's optional
       // it will be forcibly finalized at end of document
       if(schemaElements_.top().first == tag)
@@ -257,21 +261,24 @@ namespace
       const SAXParseException& exc
       )
     {
-      throw TemplateDefinitionError(XMLString::transcode(exc.getMessage()));
+      boost::scoped_array<char> msgRaw(XMLString::transcode(exc.getMessage()));
+      throw TemplateDefinitionError(msgRaw.get());
     }
 
     virtual void error(
       const SAXParseException& exc
       )
     {
-      throw TemplateDefinitionError(XMLString::transcode(exc.getMessage()));
+      boost::scoped_array<char> msgRaw(XMLString::transcode(exc.getMessage()));
+      throw TemplateDefinitionError(msgRaw.get());
     }
 
     virtual void fatalError(
       const SAXParseException& exc
       )
     {
-      throw TemplateDefinitionError(XMLString::transcode(exc.getMessage()));
+      boost::scoped_array<char> msgRaw(XMLString::transcode(exc.getMessage()));
+      throw TemplateDefinitionError(msgRaw.get());
     }
 
   private:

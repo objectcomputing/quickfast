@@ -58,7 +58,7 @@ FieldInstructionBlob::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::FieldSet & fieldSet) const
+  Messages::DecodedFields & fieldSet) const
 {
   PROFILE_POINT("blob::decodeNop");
   // note NOP never uses pmap.  It uses a null value instead for optional fields
@@ -80,7 +80,7 @@ FieldInstructionBlob::decodeConstant(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::FieldSet & fieldSet) const
+  Messages::DecodedFields & fieldSet) const
 {
   PROFILE_POINT("blob::decodeConstant");
   if(isMandatory())
@@ -110,7 +110,7 @@ FieldInstructionBlob::decodeDefault(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::FieldSet & fieldSet) const
+  Messages::DecodedFields & fieldSet) const
 {
   PROFILE_POINT("blob::decodeDefault");
   if(pmap.checkNextField())
@@ -150,7 +150,7 @@ FieldInstructionBlob::decodeCopy(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::FieldSet & fieldSet) const
+  Messages::DecodedFields & fieldSet) const
 {
   PROFILE_POINT("blob::decodeCopy");
   if(pmap.checkNextField())
@@ -199,7 +199,7 @@ FieldInstructionBlob::decodeDelta(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::FieldSet & fieldSet) const
+  Messages::DecodedFields & fieldSet) const
 {
   PROFILE_POINT("blob::decodeDelta");
   int32 deltaLength;
@@ -266,7 +266,7 @@ FieldInstructionBlob::decodeTail(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::FieldSet & fieldSet) const
+  Messages::DecodedFields & fieldSet) const
 {
   PROFILE_POINT("blob::decodeTail");
   if(pmap.checkNextField())

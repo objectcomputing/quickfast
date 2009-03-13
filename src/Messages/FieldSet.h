@@ -6,20 +6,23 @@
 #endif
 #ifndef FIELDSET_H
 #define FIELDSET_H
-#include "Message_fwd.h"
+#include "FieldSet_fwd.h"
 #include <Common/QuickFAST_Export.h>
+#include <Messages/DecodedFields.h>
 #include <Messages/MessageField.h>
 #include <Messages/Field_fwd.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief Internal representation of a set of fields to be encoded or decoded.
-    class QuickFAST_Export FieldSet{
+    class QuickFAST_Export FieldSet
+      : public DecodedFields
+    {
       FieldSet();
     public:
       /// Constant iterator for the collection
       typedef const MessageField * const_iterator;
       /// @brief Construct an empty FieldSet
-      FieldSet(size_t res);
+      explicit FieldSet(size_t res);
       /// @brief Copy Constructor
       /// @param rhs is the FieldSet to be copied into this one
       FieldSet(const FieldSet & rhs);
@@ -113,6 +116,9 @@ namespace QuickFAST{
         }
         swap_i(used_, rhs.used_);
       }
+
+      virtual DecodedFields * createdNestedFields(size_t size)const;
+
     private:
       template<typename T>
       void swap_i(T & l, T & r)

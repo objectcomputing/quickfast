@@ -1,3 +1,53 @@
+Fri Mar 13 14:29:22 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * .:
+        * src/Codecs/Decoder.h:
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.h:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.h:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionGroup.h:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionSequence.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FieldOpConstant.h:
+        * src/Codecs/FieldOpConstant.cpp:
+        * src/Codecs/FieldOpCopy.h:
+        * src/Codecs/FieldOpCopy.cpp:
+        * src/Codecs/FieldOpDefault.h:
+        * src/Codecs/FieldOpDefault.cpp:
+        * src/Codecs/FieldOpDelta.h:
+        * src/Codecs/FieldOpDelta.cpp:
+        * src/Codecs/FieldOpIncrement.h:
+        * src/Codecs/FieldOpIncrement.cpp:
+        * src/Codecs/FieldOpNop.h:
+        * src/Codecs/FieldOpTail.h:
+        * src/Codecs/FieldOpTail.cpp:
+        * src/Codecs/SegmentBody.h:
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/Examples/MulticastInterpreter:
+        * src/Messages/DecodedFields.h:
+        * src/Messages/DecodedFields_fwd.h:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Tests/FieldInstructionMock.h:
+        Fix compiler errors in Issues #9 and #10
+        Merge changes from FieldSetTemplate branch into trunk.
+         -- Create the "DecodedFields.h" interface to allow decodeded
+            messages to be sent to something other than Messages::Message
+            Messages::Message implements DecodedFields.
+            Applications can avoid the overhead of a generic message structure
+            by providing their own implementation of DecodedFields.
+
 Tue Mar 10 17:53:03 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/TemplateRegistry.cpp:

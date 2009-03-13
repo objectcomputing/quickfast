@@ -8,7 +8,8 @@
 #include <Codecs/PresenceMap.h>
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/FieldInstruction.h>
-#include <Messages/Message.h>
+#include <Messages/DecodedFields.h>
+//#include <Messages/Message.h>
 #include <Common/Profiler.h>
 
 using namespace ::QuickFAST;
@@ -23,7 +24,7 @@ Decoder::Decoder(Codecs::TemplateRegistryPtr registry)
 bool
 Decoder::decodeMessage(
    DataSource & source,
-   Messages::Message & message)
+   Messages::DecodedFields & message)
 {
   PROFILE_POINT("decode");
   source.beginMessage();
@@ -33,7 +34,7 @@ Decoder::decodeMessage(
 bool
 Decoder::decodeSegment(
    DataSource & source,
-   Messages::FieldSet & fieldSet)
+   Messages::DecodedFields & fieldSet)
 {
   Codecs::PresenceMap pmap(getTemplateRegistry()->presenceMapBits());
   if(this->verboseOut_)
@@ -81,7 +82,7 @@ void
 Decoder::decodeGroup(
   DataSource & source,
   Codecs::SegmentBodyCPtr group,
-  Messages::FieldSet & fieldSet)
+  Messages::DecodedFields & fieldSet)
 {
   size_t presenceMapBits = group->presenceMapBitCount();
   Codecs::PresenceMap pmap(presenceMapBits);
@@ -111,7 +112,7 @@ Decoder::decodeSegmentBody(
   DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::SegmentBodyCPtr segment, //todo: reference to avoid copy?
-  Messages::FieldSet & fieldSet)
+  Messages::DecodedFields & fieldSet)
 {
   fieldSet.setApplicationType(
     segment->getApplicationType(),

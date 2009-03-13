@@ -110,7 +110,7 @@ namespace QuickFAST{
       /// @brief Access the instruction with the assumption that it exists.
       /// @param[in] index identifies the desired field.
       /// @returns a reference to the field instruction.
-      FieldInstructionCPtr SegmentBody::getInstruction(size_t index)const;
+      FieldInstructionCPtr getInstruction(size_t index)const;
 
       /// @brief Access the FieldInstructs for the length field (if any)
       /// @param value receives the length field instruction

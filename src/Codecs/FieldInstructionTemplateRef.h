@@ -44,7 +44,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::FieldSet & fieldSet) const;
+        Messages::DecodedFields & fieldSet) const;
 
       virtual void encodeNop(
         Codecs::DataDestination & destination,

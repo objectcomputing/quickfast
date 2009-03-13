@@ -25,7 +25,7 @@ FieldOpCopy::decode(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::FieldSet & fieldSet) const
+  Messages::DecodedFields & fieldSet) const
 {
   return instruction.decodeCopy(source, pmap, decoder, fieldSet);
 }
