@@ -16,6 +16,7 @@ namespace QuickFASTDotNet{
       typedef QuickFAST::Messages::Message TMessage;
 
       Message();
+      Message(unsigned int expectedNumberOfFields);
 
     internal:
 

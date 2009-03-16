@@ -19,7 +19,8 @@ namespace QuickFASTDotNet{
         endOfStream_(false),
         templateRegistry_(templateRegistry),
         dataSource_(new DotNetDataSource(instream)),
-        decoder_(new QuickFAST::Codecs::Decoder(templateRegistry->NativeTemplateRegistry))
+        decoder_(new QuickFAST::Codecs::Decoder(templateRegistry->NativeTemplateRegistry)),
+        maxFieldCount_(templateRegistry_->MaxFieldCount)
     {
 
     }
@@ -29,8 +30,11 @@ namespace QuickFASTDotNet{
       try
       {
         typedef QuickFASTDotNet::Messages::Message FTManagedMessage;
-        FTManagedMessage^ message = gcnew FTManagedMessage;
-        decoder_->decodeMessage(dataSource_.GetRef(), message->MessageRef);
+        FTManagedMessage^ message = gcnew FTManagedMessage(maxFieldCount_);
+        if (! decoder_->decodeMessage(dataSource_.GetRef(), message->MessageRef))
+        {
+          endOfStream_ = true;
+        }
 
         return message;
       }
@@ -60,9 +64,49 @@ namespace QuickFASTDotNet{
       }
     }
 
+
     void Decoder::Decode(MessageReceivedDelegate^ callback)
     {
-      throw gcnew System::NotImplementedException();
+      try
+      {
+        typedef QuickFASTDotNet::Messages::Message FTManagedMessage;
+        FTManagedMessage^ message = gcnew FTManagedMessage(maxFieldCount_);
+        if (! decoder_->decodeMessage(dataSource_.GetRef(), message->MessageRef))
+        {
+          endOfStream_ = true;
+        }
+        
+        callback(message);
+      }
+      catch(const QuickFAST::UnsupportedConversion& error)
+      {
+        throw gcnew UnsupportedConversion(error);
+      }
+      catch(const QuickFAST::OverflowError& error)
+      {
+        throw gcnew OverflowError(error);
+      }
+      catch(const QuickFAST::FieldNotPresent& error)
+      {
+        throw gcnew FieldNotPresent(error);
+      }
+      catch(const QuickFAST::EncodingError& error)
+      {
+        throw gcnew EncodingError(error);
+      }
+      catch(const QuickFAST::TemplateDefinitionError& error)
+      {
+        throw gcnew TemplateDefinitionError(error);
+      }
+      catch(const QuickFAST::UsageError& error)
+      {
+        throw gcnew UsageError(error);
+      }
+    }
+
+    void Decoder::Reset()
+    {
+      decoder_->reset();
     }
   }
 }

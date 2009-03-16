@@ -11,6 +11,7 @@ workspace(*) {
     specific {
       cmdline += -language csharp
       src/DotNetTests/QuickFASTDotNetTests.mpc
+      src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.mpc
     }
   }
 }

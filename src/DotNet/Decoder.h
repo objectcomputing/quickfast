@@ -21,9 +21,10 @@ namespace QuickFASTDotNet{
 
       virtual bool readByte(QuickFAST::uchar & byte)
       {
-        byte = static_cast<QuickFAST::uchar>(inStream_->ReadByte());
+        int read = inStream_->ReadByte();
+        byte = static_cast<QuickFAST::uchar>(read);
 
-        return static_cast<int>(byte) != -1;
+        return read != -1;
       }
 
     private:
@@ -39,7 +40,8 @@ namespace QuickFASTDotNet{
     /// a MessageReceivedDelegate object.  When a message arrives on the stream, the Decoder
     /// class uses the MessageReceivedDelegate to signal the caller and return the newly arrived
     /// message.
-    public delegate void MessageReceivedDelegate(QuickFASTDotNet::Messages::Message^ message);
+    /// @returns true if the Delegate is able to be called again, false otherwise.
+    public delegate bool MessageReceivedDelegate(QuickFASTDotNet::Messages::Message^ message);
 
 
 
@@ -71,6 +73,16 @@ namespace QuickFASTDotNet{
         bool get() { return endOfStream_; }
       }
 
+      /// @brief Indicates whether the decoder is strict checking of conformance to the FAST standard
+      ///
+      /// If strict is false some conditions such as integer overflow or inefficient encoding
+      /// will be ignored.
+      property bool Strict
+      {
+        bool get() { return decoder_->getStrict(); }
+        void set(bool strict) { decoder_->setStrict(strict); }
+      }
+
       /// @brief Decodes the next message from the stream.
       ///
       Messages::Message^ Decode();
@@ -79,12 +91,27 @@ namespace QuickFASTDotNet{
       ///
       void Decode(MessageReceivedDelegate^ callback);
 
+      /// @brief  Reset the decoder's state to initial conditions.
+      ///
+      void Reset();
+
+      /// @brief Indicates whether a message is available in the data source.
+      ///
+      /// This method can be used to avoid beginning the decode process until
+      /// a complete message is available for decoding.
+      /// @returns -1 if end of data; 0 if no message available now; 1 if a message should be decoded
+      property int MessageAvailable
+      {
+        int get() { return dataSource_->messageAvailable(); }
+      }
+
     private:
       System::IO::Stream^ stream_;
       bool endOfStream_;
       TemplateRegistry^ templateRegistry_;
       UnmanagedPtr<DotNetDataSource> dataSource_;
       UnmanagedPtr<QuickFAST::Codecs::Decoder> decoder_;
+      unsigned int maxFieldCount_;
     };
   }
 }

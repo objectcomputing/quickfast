@@ -1,3 +1,32 @@
+Mon Mar 16 23:25:54 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
+
+        * QuickFASTDotNetApplication.mpb:
+        * QuickFASTDotNetExample.mpb:
+        Added projects for Dot Net applications.
+
+        * src/DotNet/SynchronousDecoder.cpp:
+        * src/DotNet/SynchronousDecoder.h:
+        Added a synchronous decoder for the Dot Net wrapper.
+
+        * src/DotNet/Decoder.cpp:
+        * src/DotNet/Decoder.h:
+        * src/DotNet/Message.cpp:
+        * src/DotNet/Message.h:
+        * src/DotNet/TemplateRegistry.h:
+        Changes to support the Performance test and increase the exposed
+        information and configuration options.
+
+        * QuickFAST.mwc:
+        * src/DotNetExamples:
+        * src/DotNetExamples/PerformanceTestDotNet:
+        * src/DotNetExamples/PerformanceTestDotNet/MessageCounter.cs:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.cs:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.mpc:
+        * src/DotNetExamples/PerformanceTestDotNet/Properties:
+        * src/DotNetExamples/PerformanceTestDotNet/Properties/AssemblyInfo.cs:
+        * src/DotNetExamples/PerformanceTestDotNet/StopWatch.cs:
+        Added C sharp version of the Performance Test.
+
 Fri Mar 13 19:56:06 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * .:

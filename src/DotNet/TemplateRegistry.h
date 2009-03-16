@@ -17,6 +17,20 @@ namespace QuickFASTDotNet {
     public:
       static TemplateRegistry^ Parse(System::IO::Stream^ xmlStream);
 
+      /// @brief The number of templates in the registry.
+      property unsigned int Size
+      {
+        unsigned int get() { return templateRegistry_->size(); }
+      }
+
+      /// @brief Returns the maximum number of fields that will be produced by any template in the registry.
+      ///
+      /// Does not include "nested" fields -- unmerged groups and sequences count as one each.
+      property unsigned int MaxFieldCount
+      {
+        unsigned int get() { return templateRegistry_->maxFieldCount(); }
+      }
+
     internal:
       TemplateRegistry(QuickFAST::Codecs::TemplateRegistryPtr templateRegistry):
             templateRegistry_(templateRegistry)

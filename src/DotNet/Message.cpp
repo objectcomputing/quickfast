@@ -13,5 +13,12 @@ namespace QuickFASTDotNet {
     {
 
     }
+
+    Message::Message(unsigned int expectedNumberOfFields):
+        pMessage_(new QuickFAST::Messages::Message(expectedNumberOfFields)),
+        FieldSet(QuickFAST::Messages::FieldSetPtr(pMessage_))
+    {
+
+    }
   }
 }
