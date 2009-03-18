@@ -6,8 +6,8 @@
 #endif
 #ifndef DATASOURCEBUFFER_H
 #define DATASOURCEBUFFER_H
-#include "DataSource.h"
 #include <Common/QuickFAST_Export.h>
+#include <Codecs/DataSource.h>
 namespace QuickFAST{
   namespace Codecs{
     /// A data source that uses an existing buffer.

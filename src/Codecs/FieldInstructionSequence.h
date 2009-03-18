@@ -6,7 +6,7 @@
 #endif
 #ifndef FIELDINSTRUCTIONSEQUENCE_H
 #define FIELDINSTRUCTIONSEQUENCE_H
-#include "FieldInstruction.h"
+#include <Codecs/FieldInstruction.h>
 #include <Codecs/SegmentBody_fwd.h>
 
 namespace QuickFAST{

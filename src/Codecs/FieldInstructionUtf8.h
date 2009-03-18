@@ -6,7 +6,7 @@
 #endif
 #ifndef FIELDINSTRUCTIONUTF8_H
 #define FIELDINSTRUCTIONUTF8_H
-#include "FieldInstructionBlob.h"
+#include <Codecs/FieldInstructionBlob.h>
 namespace QuickFAST{
   namespace Codecs{
     /// @brief Implement &lt;string charset="unicode"> field instruction.

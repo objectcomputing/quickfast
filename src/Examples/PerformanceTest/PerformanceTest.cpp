@@ -3,14 +3,16 @@
 // See the file license.txt for licensing information.
 //
 
-#include "Examples/ExamplesPch.h"
+#include <Examples/ExamplesPch.h>
 #include "PerformanceTest.h"
 #include <Codecs/DataSourceStream.h>
 #include <Codecs/DataSourceBufferedStream.h>
 #include <Codecs/SynchronousDecoder.h>
 #include <Codecs/TemplateRegistry.h>
+#include <Messages/Message.h>
 
 #include <PerformanceTest/MessageCounter.h>
+#include <PerformanceTest/NullMessage.h>
 
 #include <Examples/StopWatch.h>
 #include <Common/Profiler.h>
@@ -21,6 +23,7 @@ using namespace Examples;
 PerformanceTest::PerformanceTest()
   : resetOnMessage_(false)
   , strict_(true)
+  , useNullMessage_(false)
   , performanceFile_(0)
   , profileFile_(0)
   , head_(0)
@@ -76,6 +79,10 @@ PerformanceTest::parseSingleArg(int argc, char * argv[])
       performanceFileName_ = argv[1];
       consumed = 2;
     }
+    else if(opt == "-null")
+    {
+      useNullMessage_ = true;
+    }
     else if(opt == "-head" && argc > 1)
     {
       head_ = boost::lexical_cast<size_t>(argv[1]);
@@ -105,6 +112,7 @@ PerformanceTest::usage(std::ostream & out) const
   out << "  -head n     : process only the first 'n' messages" << std::endl;
   out << "  -c count    : repeat the test 'count' times" << std::endl;
   out << "  -r          : Toggle 'reset decoder on every message' (default false)." << std::endl;
+  out << "  -null       : Use null message to receive fields." << std::endl;
   out << "  -s          : Toggle 'strict decoding rules' (default true)." << std::endl;
 }
 
@@ -218,10 +226,15 @@ PerformanceTest::run()
     for(size_t nPass = 0; nPass < count_; ++nPass)
     {
       std::cout << "Decoding input; pass " << nPass + 1 << " of " << count_ << std::endl;
-      MessageCounter handler;
       fastFile_.seekg(0, std::ios::beg);
       Codecs::DataSourceBufferedStream source(fastFile_);
-      Codecs::SynchronousDecoder decoder(templateRegistry);
+#ifndef NULL_CONSUMER
+      MessageCounter handler;
+      Codecs::SynchronousDecoder<Messages::Message, Codecs::MessageConsumer> decoder(templateRegistry);
+#else
+      NullMessageConsumer handler;
+      Codecs::SynchronousDecoder<Examples::NullMessage, Examples::NullMessageConsumer> decoder(templateRegistry);
+#endif
       decoder.setResetOnMessage(resetOnMessage_);
       decoder.setStrict(strict_);
       StopWatch decodeTimer;

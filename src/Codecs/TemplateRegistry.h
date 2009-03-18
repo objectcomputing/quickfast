@@ -9,11 +9,10 @@
 #define TEMPLATEREGISTRY_H
 
 #include "TemplateRegistry_fwd.h"
-#include "SchemaElement.h"
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
+#include <Codecs/SchemaElement.h>
 #include <Codecs/Template_fwd.h>
-#include <map>
 
 namespace QuickFAST{
   namespace Codecs{

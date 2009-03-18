@@ -6,7 +6,7 @@
 #endif
 #ifndef FIELDDECIMAL_H
 #define FIELDDECIMAL_H
-#include "Field.h"
+#include <Messages/Field.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief A field containing a scaled decimal number

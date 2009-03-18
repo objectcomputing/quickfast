@@ -6,7 +6,7 @@
 #endif
 #ifndef FIELDINSTRUCTIONTEMPLATEREF_H
 #define FIELDINSTRUCTIONTEMPLATEREF_H
-#include "FieldInstruction.h"
+#include <Codecs/FieldInstruction.h>
 namespace QuickFAST{
   namespace Codecs{
     /// @brief Implement &lt;templateRef> field instruction.

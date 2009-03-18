@@ -19,6 +19,7 @@
 #include <Codecs/FieldInstructionAscii.h>
 #include <Codecs/FieldInstructionUtf8.h>
 #include <Codecs/FieldInstructionByteVector.h>
+#include <Codecs/FieldInstructionBitMap.h>
 #include <Codecs/FieldInstructionGroup.h>
 #include <Codecs/FieldInstructionSequence.h>
 #include <Codecs/FieldInstructionTemplateRef.h>
@@ -172,6 +173,10 @@ namespace
       else if (tag == "byteVector")
       {
         parseByteVector(tag, attributeMap);
+      }
+      else if (tag == "bitmap")
+      {
+        parseBitMap(tag, attributeMap);
       }
       else if (tag == "group")
       {
@@ -339,6 +344,7 @@ namespace
     void parseMantissa(const std::string & tag, const AttributeMap& attributes);
     void parseString(const std::string & tag, const AttributeMap& attributes);
     void parseByteVector(const std::string & tag, const AttributeMap& attributes);
+    void parseBitMap(const std::string & tag, const AttributeMap& attributes);
     void parseGroup(const std::string & tag, const AttributeMap& attributes);
     void parseSequence(const std::string & tag, const AttributeMap& attributes);
     void parseLength(const std::string & tag, const AttributeMap& attributes);
@@ -733,6 +739,28 @@ TemplateBuilder::parseByteVector(const std::string & tag, const AttributeMap& at
   schemaElements_.top().second->addInstruction(field);
   schemaElements_.push(StackEntry(tag, field));
 }
+
+void
+TemplateBuilder::parseBitMap(const std::string & tag, const AttributeMap& attributes)
+{
+  std::string name = getRequiredAttribute(attributes, "name");
+  std::string ns;
+  getOptionalAttribute(attributes, "ns", ns);
+  FieldInstructionPtr field(new FieldInstructionBitMap(name, ns));
+  std::string id;
+  if (getOptionalAttribute(attributes, "id", id))
+  {
+    field->setId(id);
+  }
+  std::string presence;
+  if(getOptionalAttribute(attributes, "presence", presence))
+  {
+    field->setPresence(presence == "mandatory");
+  }
+  schemaElements_.top().second->addInstruction(field);
+  schemaElements_.push(StackEntry(tag, field));
+}
+
 
 void
 TemplateBuilder::parseGroup(const std::string & tag, const AttributeMap& attributes)

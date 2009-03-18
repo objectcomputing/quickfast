@@ -8,7 +8,6 @@
 #define FIELDINSTRUCTION_H
 
 #include "FieldInstruction_fwd.h"
-#include "SchemaElement.h"
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
 #include <Common/Constants.h>
@@ -18,6 +17,7 @@
 #include <Messages/Message_fwd.h>
 #include <Messages/DecodedFields_fwd.h>
 #include <Messages/FieldIdentity.h>
+#include <Codecs/SchemaElement.h>
 #include <Codecs/DataSource.h>
 #include <Codecs/Context.h>
 #include <Codecs/FieldOp.h>

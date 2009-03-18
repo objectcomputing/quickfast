@@ -17,7 +17,7 @@ project(*) : boost_base {
     Codecs
     Messages
   }
-  
+
   specific(!vc8, vc9) {
     libout = $(QUICKFAST_ROOT)/lib
   }
@@ -26,6 +26,8 @@ project(*) : boost_base {
     Debug::libout = $(QUICKFAST_ROOT)/Output/Debug
   }
   specific(make) {
+    // FieldInstructionInteger generates spuriouswarnings based on
+    // signed/unsigned template arguments.
     cppflags += -Wunreachable-code
   }
 }
@@ -41,9 +43,9 @@ project(*tests) : boost_unit_test_framework, boost_filesystem, boost_thread {
     Release::exeout = $(QUICKFAST_ROOT)/Output/Release
     Debug::exeout = $(QUICKFAST_ROOT)/Output/Debug
     Release::libpaths += $(QUICKFAST_ROOT)/Output/Release
-    Debug::libpaths += $(QUICKFAST_ROOT)/Output/Debug  
+    Debug::libpaths += $(QUICKFAST_ROOT)/Output/Debug
   }
-  
+
   libpaths += $(XERCES_LIBPATH)
   libs += QuickFAST
   libs += $(XERCES_LIBNAME)

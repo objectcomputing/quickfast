@@ -58,10 +58,6 @@ namespace QuickFAST{
       /// this set of fields via typeref.
       virtual const std::string & getApplicationType()const = 0;
 
-      /// @brief get the namespace to qualify application type.
-      virtual const std::string & getApplicationTypeNs()const = 0;
-
-      /// @brief create an empty version of this container for nexted fields.
       virtual DecodedFields * createdNestedFields(size_t size)const  = 0;
 
     private:

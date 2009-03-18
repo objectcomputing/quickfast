@@ -4,51 +4,54 @@
 #ifdef _MSC_VER
 # pragma once
 #endif
-#ifndef FIELDASCII_H
-#define FIELDASCII_H
+#ifndef FIELDBITMAP_H
+#define FIELDBITMAP_H
 #include <Messages/Field.h>
+#include <Common/BitMap.h>
 namespace QuickFAST{
   namespace Messages{
-    /// @brief A field containing ascii data.
+    /// @brief A field containing arbitrary binary data
     ///
-    /// In the XML template file this field is described as &lt;string charset="ascii">
-    class QuickFAST_Export FieldAscii : public Field
-{
+    /// In the XML template file this field is described as &lt;bitmap>
+    class QuickFAST_Export FieldBitMap
+      : public Field
+    {
       /// @brief Construct the field from a value in a std::string
       /// @param value the value to be stored in the field
-      explicit FieldAscii(const std::string & value);
-      /// @brief Construct the field from a value in byte buffer
-      /// @param value the start of the value to be stored in the field
-      /// @param length how many characters are in the value
-      FieldAscii(const uchar * value, size_t length);
-      /// @brief Construct a NULL field (not an empty string)
-      FieldAscii();
+      explicit FieldBitMap(const BitMap & value);
+
+      /// @brief Construct the field from a value in a std::string
+      /// @param buffer the start of the value to be stored in the field
+      /// @param length how many bytes are in the value
+      FieldBitMap(const uchar * buffer, size_t length);
+      /// @brief Construct a NULL field (not an empty field)
+      FieldBitMap();
 
     public:
       /// @brief Construct the field from a value in a std::string
       /// @param value the value to be stored in the field
       /// @returns a constant pointer to the immutable field
-      static FieldCPtr create(const std::string & value);
+      static FieldCPtr create(const BitMap & value);
+
       /// @brief Construct the field from a value in byte buffer
       /// @param buffer the start of the value to be stored in the field
       /// @param length how many bytes (not characters) are in the value
       /// @returns a constant pointer to the immutable field
       static FieldCPtr create(const uchar * buffer, size_t length);
-      /// @brief Construct a NULL field (not an empty string)
+
+      /// @brief Construct a NULL field
       /// @returns a constant pointer to the immutable field
       static FieldCPtr createNull();
 
       /// @brief a typical virtual destructor.
-      virtual ~FieldAscii();
+      virtual ~FieldBitMap();
 
       // implement selected virtual methods from Field
       virtual Field::FieldType getType()const;
-      virtual bool isString() const;
-      virtual const std::string & toAscii() const;
-      virtual const std::string & toString() const;
+      virtual const BitMap & toBitMap() const;
     private:
-      std::string value_;
+      BitMap value_;
     };
   }
 }
-#endif // FIELDASCII_H
+#endif // FIELDBITMAP_H

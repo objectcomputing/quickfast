@@ -4,28 +4,29 @@
 #ifdef _MSC_VER
 # pragma once
 #endif
-#ifndef FIELDINSTRUCTIONASCII_H
-#define FIELDINSTRUCTIONASCII_H
+#ifndef FIELDINSTRUCTIONBITMAP_H
+#define FIELDINSTRUCTIONBITMAP_H
 #include <Codecs/FieldInstruction.h>
+
 namespace QuickFAST{
   namespace Codecs{
-    /// @brief Implement &lt;string charset="ascii"> field instruction.
-    class QuickFAST_Export FieldInstructionAscii
+    /// @brief Implement &lt;byteVector> field instruction.
+    class QuickFAST_Export FieldInstructionBitMap
       : public FieldInstruction
     {
     public:
       /// @brief construct with a name and a namespace
       /// @param name is the local name
       /// @param fieldNamespace is the namespace to qualify this name
-      FieldInstructionAscii(
+      FieldInstructionBitMap(
         const std::string & name,
         const std::string & fieldNamespace);
 
       /// @brief construct anonomous field instruction
-      FieldInstructionAscii();
+      FieldInstructionBitMap();
 
       /// @brief a typical virtual destructor.
-      virtual ~FieldInstructionAscii();
+      virtual ~FieldInstructionBitMap();
 
       virtual bool decodeNop(
         Codecs::DataSource & source,
@@ -33,7 +34,7 @@ namespace QuickFAST{
         Codecs::Decoder & decoder,
         Messages::DecodedFields & fieldSet) const;
 
-      virtual bool decodeConstant(
+/*      virtual bool decodeConstant(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
@@ -62,13 +63,13 @@ namespace QuickFAST{
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::DecodedFields & fieldSet) const;
-
+*/
       virtual void encodeNop(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
         const Messages::FieldSet & fieldSet) const;
-
+/*
       virtual void encodeConstant(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
@@ -98,19 +99,19 @@ namespace QuickFAST{
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
         const Messages::FieldSet & fieldSet) const;
+*/
 
     private:
-     virtual bool decodeFromSource(
+      bool decodeFromSource(
         Codecs::DataSource & source,
         bool mandatory,
         WorkingBuffer & buffer,
         Messages::FieldCPtr & field) const;
 
-      void interpretValue(const std::string & value);
+      virtual void interpretValue(const std::string & value);
     private:
       Messages::FieldCPtr initialValue_;
-
     };
   }
 }
-#endif // FIELDINSTRUCTIONASCII_H
+#endif // FIELDINSTRUCTIONBITMAP_H

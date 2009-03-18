@@ -6,7 +6,7 @@
 #endif
 #ifndef FIELDUINT8_H
 #define FIELDUINT8_H
-#include "Field.h"
+#include <Messages/Field.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief A field containing an unsigned 8 bit integer

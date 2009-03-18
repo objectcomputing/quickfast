@@ -6,8 +6,8 @@
 #endif
 #ifndef DATASOURCEBUFFEREDSTREAM_H
 #define DATASOURCEBUFFEREDSTREAM_H
-#include "DataSource.h"
 #include <Common/QuickFAST_Export.h>
+#include <Codecs/DataSource.h>
 namespace QuickFAST{
   namespace Codecs{
     /// A data source that reads input from an istream into a big buffer then

@@ -8,6 +8,13 @@ project {
     Release::libpaths += $(QUICKFAST_ROOT)/Output/Release
     Debug::libpaths += $(QUICKFAST_ROOT)/Output/Debug  
   }
+  specific(make) {
+    // FieldInstructionInteger generates spuriouswarnings based on 
+    // signed/unsigned template arguments.
+    cppflags += -Wunreachable-code
+  }
+  
+  
   
   libs += QuickFAST
 }

@@ -6,7 +6,7 @@
 #endif
 #ifndef FIELDINSTRUCTIONBYTEVECTOR_H
 #define FIELDINSTRUCTIONBYTEVECTOR_H
-#include "FieldInstructionBlob.h"
+#include <Codecs/FieldInstructionBlob.h>
 namespace QuickFAST{
   namespace Codecs{
     /// @brief Implement &lt;byteVector> field instruction.

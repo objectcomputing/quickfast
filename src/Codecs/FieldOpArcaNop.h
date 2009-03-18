@@ -6,7 +6,7 @@
 #endif
 #ifndef FIELDOPARCANOP_H
 #define FIELDOPARCANOP_H
-#include "FieldOp.h"
+#include <Codecs/FieldOp.h>
 namespace QuickFAST{
   namespace Codecs{
     /// @brief Dispatch to the appropriate method in a FieldInstruction when no operator is specified.

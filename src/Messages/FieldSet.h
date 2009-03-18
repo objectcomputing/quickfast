@@ -103,6 +103,11 @@ namespace QuickFAST{
         return applicationType_;
       }
 
+      const std::string & getApplicationTypeNs()const
+      {
+        return applicationTypeNs_;
+      }
+
       /// @brief swap the contents of this FieldSet with another one.
       /// Fast and no-throw.
       /// @param rhs the FieldSet with which to swap

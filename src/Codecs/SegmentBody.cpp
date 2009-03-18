@@ -3,7 +3,7 @@
 // See the file license.txt for licensing information.
 #include <Common/QuickFASTPch.h>
 #include "SegmentBody.h"
-#include "FieldInstruction.h"
+#include <Codecs/FieldInstruction.h>
 #include <Common/Exceptions.h>
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;

@@ -4,11 +4,11 @@
 //
 #include <Common/QuickFASTPch.h>
 #include "SynchronousDecoder.h"
+#if 0
 #include <Codecs/DataSource.h>
 #include <Codecs/MessageConsumer.h>
 #include <Codecs/TemplateRegistry.h>
 #include <Messages/Message.h>
-
 using namespace QuickFAST;
 using namespace Codecs;
 
@@ -60,3 +60,4 @@ SynchronousDecoder::decode(
   }
 }
 
+#endif

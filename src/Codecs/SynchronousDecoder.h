@@ -14,7 +14,8 @@
 namespace QuickFAST{
   namespace Codecs{
     /// @brief Support Synchronous (blocking) decoding of a FAST data stream
-    class QuickFAST_Export SynchronousDecoder
+    template<typename MessageType = Messages::Message, typename MessageConsumerType = Codecs::MessageConsumer>
+    class /*QuickFAST_Export*/ SynchronousDecoder
     {
     public:
       /// @brief Construct given a template registry
@@ -75,7 +76,7 @@ namespace QuickFAST{
       /// or messageCount() messages have been decoded.
       void decode(
         DataSource & source,
-        MessageConsumer & consumer);
+        MessageConsumerType & consumer);
 
     private:
       SynchronousDecoder();
@@ -88,6 +89,69 @@ namespace QuickFAST{
       size_t messageCountLimit_;
       size_t maxFieldCount_;
     };
+  }
+}
+    //////////////////
+    // Implementation
+//#include <Codecs/DataSource.h>
+//#include <Codecs/MessageConsumer.h>
+//#include <Codecs/TemplateRegistry.h>
+//#include <Messages/Message.h>
+
+namespace QuickFAST{
+  namespace Codecs{
+    template<typename MessageType, typename MessageConsumerType>
+    SynchronousDecoder<MessageType, MessageConsumerType>::SynchronousDecoder(
+      Codecs::TemplateRegistryPtr templateRegistry)
+    : decoder_(templateRegistry)
+    , resetOnMessage_(false)
+    , messageCount_(0)
+    , messageCountLimit_(size_t(-1))
+    , maxFieldCount_(templateRegistry->maxFieldCount())
+    {
+    }
+
+    template<typename MessageType, typename MessageConsumerType>
+    SynchronousDecoder<MessageType, MessageConsumerType>::~SynchronousDecoder()
+    {
+    }
+
+    template<typename MessageType, typename MessageConsumerType>
+    void
+    SynchronousDecoder<MessageType, MessageConsumerType>::setResetOnMessage(bool reset)
+    {
+      resetOnMessage_ = reset;
+    }
+
+    template<typename MessageType, typename MessageConsumerType>
+    void
+    SynchronousDecoder<MessageType, MessageConsumerType>::setVerboseOutput(std::ostream & out)
+    {
+      decoder_.setVerboseOutput(out);
+    }
+
+    template<typename MessageType, typename MessageConsumerType>
+    void
+    SynchronousDecoder<MessageType, MessageConsumerType>::decode(
+      Codecs::DataSource & source,
+      MessageConsumerType & consumer)
+    {
+      bool more = true;
+      while(source.messageAvailable() > 0 && messageCount_ < messageCountLimit_)
+      {
+        MessageType message(maxFieldCount_);
+        if(resetOnMessage_)
+        {
+          decoder_.reset();
+        }
+        if(!decoder_.decodeMessage(source, message))
+        {
+          std::cout << "EOF during decode." << std::endl;
+        }
+        more = consumer.consumeMessage(message);
+        messageCount_ += 1;
+      }
+    }
   }
 }
 

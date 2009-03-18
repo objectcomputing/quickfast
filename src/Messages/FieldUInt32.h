@@ -6,7 +6,7 @@
 #endif
 #ifndef FIELDUINT32_H
 #define FIELDUINT32_H
-#include "Field.h"
+#include <Messages/Field.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief A field containing an unsigned 32 bit integer

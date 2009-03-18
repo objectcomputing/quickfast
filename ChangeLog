@@ -1,3 +1,73 @@
+Wed Mar 18 20:58:08 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/QuickFAST.mpc:
+        * QuickFASTApplication.mpb:
+        Disable gcc warning about unreachable code
+
+        * data/ARCATemplates.xml:
+        Move comment inside.  XERCES doesn't like leading comments.
+
+        * src/Codecs/Context.cpp:
+        * src/Codecs/DataDestinationString.h:
+        * src/Codecs/DataSourceBuffer.h:
+        * src/Codecs/DataSourceBufferedStream.h:
+        * src/Codecs/DataSourceString.h:
+        * src/Codecs/DecodedFields.h:
+        * src/Codecs/DecodedFields_fwd.h:
+        * src/Codecs/Decoder.h:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstructionAscii.h:
+        * src/Codecs/FieldInstructionBitMap.h:
+        * src/Codecs/FieldInstructionBitMap.cpp:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionByteVector.h:
+        * src/Codecs/FieldInstructionFiller.h:
+        * src/Codecs/FieldInstructionGroup.h:
+        * src/Codecs/FieldInstructionSequence.h:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionUtf8.h:
+        * src/Codecs/FieldOpArcaNop.h:
+        * src/Codecs/FieldOpNop.h:
+        * src/Codecs/FieldOpTail.h:
+        * src/Codecs/SegmentBody.cpp:
+        * src/Codecs/SynchronousDecoder.h:
+        * src/Codecs/SynchronousDecoder.cpp:
+        * src/Codecs/Template.cpp:
+        * src/Codecs/TemplateRegistry.h:
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/Common/BitMap.h:
+        * src/Common/Bitmap.cpp:
+        * src/Examples/Examples/CommandArgParser.cpp:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/InterpretFAST/InterpretFAST.cpp:
+        * src/Examples/PerformanceTest/MessageCounter.cpp:
+        * src/Examples/PerformanceTest/NullMessage.h:
+        * src/Examples/PerformanceTest/NullMessage.cpp:
+        * src/Examples/PerformanceTest/PerformanceTest.h:
+        * src/Examples/PerformanceTest/PerformanceTest.cpp:
+        * src/Messages/DecodedFields.h:
+        * src/Messages/Field.h:
+        * src/Messages/Field.cpp:
+        * src/Messages/FieldAscii.h:
+        * src/Messages/FieldAscii.cpp:
+        * src/Messages/FieldBitMap.h:
+        * src/Messages/FieldBitmap.cpp:
+        * src/Messages/FieldByteVector.h:
+        * src/Messages/FieldDecimal.h:
+        * src/Messages/FieldInt16.h:
+        * src/Messages/FieldInt32.h:
+        * src/Messages/FieldInt64.h:
+        * src/Messages/FieldInt8.h:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldUInt16.h:
+        * src/Messages/FieldUInt32.h:
+        * src/Messages/FieldUInt64.h:
+        * src/Messages/FieldUInt8.h:
+        * src/Messages/FieldUtf8.h:
+        * src/Messages/Message.h:
+        Add support for ARCA bitfields.
+        Fix some formatting issues.
+
 Wed Mar 18 19:21:13 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Context.cpp

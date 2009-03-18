@@ -6,7 +6,7 @@
 #endif
 #ifndef FIELDBYTEVECTOR_H
 #define FIELDBYTEVECTOR_H
-#include "Field.h"
+#include <Messages/Field.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief A field containing arbitrary binary data

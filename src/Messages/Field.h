@@ -9,6 +9,7 @@
 #include "Field_fwd.h"
 #include <Common/Types.h>
 #include <Common/Decimal.h>
+#include <Common/BitMap.h>
 #include <Messages/Group_fwd.h>
 #include <Messages/Sequence_fwd.h>
 namespace QuickFAST{
@@ -37,6 +38,7 @@ namespace QuickFAST{
         ASCII,
         UTF8,
         BYTEVECTOR,
+        BITMAP,   // not FAST Standard
         SEQUENCE,
         GROUP
       };
@@ -267,6 +269,10 @@ namespace QuickFAST{
       /// @brief Retrieve the field value as a byte vector
       /// @returns the value
       virtual const std::string & toByteVector() const;
+
+      /// @brief Retrieve the field value as a byte vector
+      /// @returns the value
+      virtual const BitMap & toBitMap() const;
 
       /// @brief Is this field a kind of string (Ascii, Utf8, or ByteVector)?
       virtual bool isString()const;

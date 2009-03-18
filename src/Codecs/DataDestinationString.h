@@ -6,7 +6,7 @@
 #endif
 #ifndef DATADESTINATIONSTRING_H
 #define DATADESTINATIONSTRING_H
-#include "DataDestination.h"
+#include <Codecs/DataDestination.h>
 namespace QuickFAST{
   namespace Codecs{
     /// @brief A data buffer that collects the output into a string.

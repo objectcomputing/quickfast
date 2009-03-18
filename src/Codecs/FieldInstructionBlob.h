@@ -6,7 +6,7 @@
 #endif
 #ifndef FIELDINSTRUCTIONBLOB_H
 #define FIELDINSTRUCTIONBLOB_H
-#include "FieldInstruction.h"
+#include <Codecs/FieldInstruction.h>
 namespace QuickFAST{
   namespace Codecs{
     /// @brief A basic implementation for ByteVector and Utf8 field Instructions.

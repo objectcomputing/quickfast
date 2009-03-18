@@ -6,7 +6,7 @@
 #endif
 #ifndef FIELDUTF8_H
 #define FIELDUTF8_H
-#include "Field.h"
+#include <Messages/Field.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief A field containing unicode data.

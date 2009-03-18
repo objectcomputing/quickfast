@@ -6,7 +6,7 @@
 #endif
 #ifndef FIELDOPTAIL_H
 #define FIELDOPTAIL_H
-#include "FieldOp.h"
+#include <Codecs/FieldOp.h>
 namespace QuickFAST{
   namespace Codecs{
     /// @brief Dispatch the &lt;tail> operation to the appropriate method in a FieldInstruction.

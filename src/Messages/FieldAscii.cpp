@@ -18,7 +18,6 @@ FieldAscii::FieldAscii(const uchar * value, size_t length)
   : Field(true)
   , value_(reinterpret_cast<const char *>(value), length)
 {
-  valid_ = true;
 }
 
 FieldAscii::FieldAscii()
@@ -54,7 +53,7 @@ FieldAscii::toAscii() const
 {
   if(!valid_)
   {
-    FieldNotPresent ex("Field not present");
+    throw FieldNotPresent("Field not present");
   }
   return value_;
 }

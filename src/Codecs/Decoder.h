@@ -14,7 +14,6 @@
 #include <Codecs/Template.h>
 #include <Codecs/SegmentBody_fwd.h>
 #include <Messages/DecodedFields_fwd.h>
-//#include <Messages/FieldSet_fwd.h>
 
 #include <Common/Exceptions.h>
 

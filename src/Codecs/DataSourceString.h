@@ -6,8 +6,8 @@
 #endif
 #ifndef DATASOURCESTRING_H
 #define DATASOURCESTRING_H
-#include "DataSource.h"
 #include <Common/QuickFAST_Export.h>
+#include <Codecs/DataSource.h>
 namespace QuickFAST{
   namespace Codecs{
     /// @brief A DataSource that reads input from a text string.

@@ -6,7 +6,7 @@
 #endif
 #ifndef FIELDUINT16_H
 #define FIELDUINT16_H
-#include "Field.h"
+#include <Messages/Field.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief A field containing an unsigned 16 bit integer

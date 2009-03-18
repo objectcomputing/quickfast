@@ -8,7 +8,7 @@
 #define MESSAGE_H
 #include "Message_fwd.h"
 #include <Common/Types.h>
-#include "FieldSet.h"
+#include <Messages/FieldSet.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief Internal representation of a Message to be encoded or decoded.

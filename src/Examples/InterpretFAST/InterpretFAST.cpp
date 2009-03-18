@@ -7,6 +7,7 @@
 #include <Codecs/DataSourceStream.h>
 #include <Codecs/SynchronousDecoder.h>
 #include <Codecs/TemplateRegistry.h>
+#include <Messages/Message.h>
 
 #include <Examples/MessageInterpreter.h>
 
@@ -266,7 +267,8 @@ InterpretFAST::run()
     MessageInterpreter handler(* outputFile_);
     Codecs::DataSourceStream source(fastFile_);
 
-    Codecs::SynchronousDecoder decoder(templateRegistry);
+    Codecs::SynchronousDecoder<Messages::Message, Codecs::MessageConsumer> decoder(templateRegistry);
+//    Codecs::SynchronousDecoder decoder(templateRegistry);
     decoder.setStrict(strict_);
     decoder.setResetOnMessage(resetOnMessage_);
 

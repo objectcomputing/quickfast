@@ -40,6 +40,7 @@ namespace QuickFAST{
     private:
       bool resetOnMessage_;
       bool strict_;
+      bool useNullMessage_;
       std::string templateFileName_;
       std::ifstream templateFile_;
       std::string fastFileName_;

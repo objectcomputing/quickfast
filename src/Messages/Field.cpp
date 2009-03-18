@@ -185,6 +185,15 @@ Field::toByteVector()const
   throw ex;
 }
 
+const BitMap &
+Field::toBitMap() const
+{
+  UnsupportedConversion ex("Field cannot be converted to BitMap");
+  throw ex;
+}
+
+
+
 bool
 Field::isString()const
 {
