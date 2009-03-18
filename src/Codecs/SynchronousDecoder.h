@@ -93,9 +93,9 @@ namespace QuickFAST{
 }
     //////////////////
     // Implementation
-//#include <Codecs/DataSource.h>
+#include <Codecs/DataSource.h>
 //#include <Codecs/MessageConsumer.h>
-//#include <Codecs/TemplateRegistry.h>
+#include <Codecs/TemplateRegistry.h>
 //#include <Messages/Message.h>
 
 namespace QuickFAST{
