@@ -68,7 +68,7 @@ namespace QuickFAST{
       /// @param[in] segment defines the group [a subset of a template]
       /// @param[in] fieldSet to which the decoded fields will be added
       void
-      Decoder::decodeGroup(
+      decodeGroup(
         DataSource & source,
         SegmentBodyCPtr segment,
         Messages::DecodedFields & fieldSet);

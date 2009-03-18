@@ -111,7 +111,7 @@ PresenceMap::encode(DataDestination & destination)
     (*vout_) << "pmap["  <<  byteLength_ << "]->" << std::hex;
     for(size_t pos = 0; pos < byteLength_; ++pos)
     {
-      (*vout_) << ' ' << std::setw(2) << unsigned short(bits_[pos]);
+      (*vout_) << ' ' << std::setw(2) << static_cast<unsigned short>(bits_[pos]);
     }
     (*vout_) << std::dec << std::endl;
   }
@@ -143,7 +143,7 @@ PresenceMap::decode(Codecs::DataSource & source)
     (*vout_) << "pmap["  <<  byteLength_ << "]<-" << std::hex;
     for(size_t pos = 0; pos < byteLength_; ++pos)
     {
-      (*vout_) << ' ' << std::setw(2) <<  unsigned short(bits_[pos]);
+      (*vout_) << ' ' << std::setw(2) <<  static_cast<unsigned short>(bits_[pos]);
     }
     (*vout_) << std::dec << std::endl;
   }
@@ -167,7 +167,9 @@ PresenceMap::checkNextField()
     return false;
   }
   bool result = (bits_[bytePosition_] & bitMask_) != 0;
-  if(vout_)(*vout_) << "check pmap[" << bytePosition_ << '/' <<  byteLength_ << ',' << std::hex << unsigned short(bitMask_) << std::dec << ']' <<(result?'T' : 'F') << std::endl;
+  if(vout_)(*vout_) << "check pmap[" << bytePosition_ << '/' <<  byteLength_ << ',' 
+    << std::hex << static_cast<unsigned short>(bitMask_) << std::dec << ']' <<(result?'T' : 'F') 
+    << std::endl;
   bitMask_ >>= 1;
   if(bitMask_ == 0)
   {
@@ -210,7 +212,9 @@ PresenceMap::setNextField(bool present)
   {
     bits_[bytePosition_] &= ~bitMask_;
   }
-  if(vout_)(*vout_) << "set pmap[" << bytePosition_ << '/' <<  byteLength_ << ',' << std::hex << unsigned short(bitMask_) << std::dec << ']' <<(present?'T' : 'F') << std::endl;
+  if(vout_)(*vout_) << "set pmap[" << bytePosition_ << '/' <<  byteLength_ << ',' 
+    << std::hex << static_cast<unsigned short>(bitMask_) << std::dec << ']' <<(present?'T' : 'F') 
+    << std::endl;
   bitMask_ >>= 1;
   if(bitMask_ == 0)
   {

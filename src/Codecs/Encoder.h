@@ -47,7 +47,7 @@ namespace QuickFAST{
       /// @param[in] group defines the group [a subset of a template]
       /// @param[in] fieldSet to which the encoded fields will be added
       void
-      Encoder::encodeGroup(
+      encodeGroup(
         DataDestination & destination,
         Codecs::SegmentBodyCPtr group,
         const Messages::FieldSet & fieldSet);
