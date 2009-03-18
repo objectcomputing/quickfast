@@ -13,6 +13,7 @@ namespace QuickFAST
             string fastFileName_;
             System.IO.FileStream fastFile_;
             string performanceFileName_;
+            System.IO.FileStream performanceFileStream_;
             System.IO.TextWriter performanceFile_;
 
             bool resetOnMessage_;
@@ -37,9 +38,10 @@ namespace QuickFAST
                 {
                     fastFile_.Close();
                 }
-                if (performanceFile_ != System.IO.TextWriter.Null)
+                if (performanceFileName_ != null && performanceFileStream_ != System.IO.FileStream.Null)
                 {
-                    performanceFile_.Close();
+                    performanceFileStream_.Close();
+
                 }
             }
 
@@ -160,8 +162,8 @@ namespace QuickFAST
                     {
                         try
                         {
-
-                            performanceFile_ = new System.IO.StreamWriter(performanceFileName_);
+                            performanceFileStream_ = new System.IO.FileStream(performanceFileName_, System.IO.FileMode.OpenOrCreate);
+                            performanceFile_ = new System.IO.StreamWriter(performanceFileStream_);
                         }
 
                         catch (System.IO.IOException iex)
@@ -236,6 +238,7 @@ namespace QuickFAST
                         performanceFile_.Write(" milliseonds. [");
                         performanceFile_.Write("{0:F3} msec/message. = ", (double)decodeLapse / (double)messageCount);
                         performanceFile_.WriteLine("{0:F3} messages/second]", (double)1000 * (double)messageCount / (double)decodeLapse);
+                        performanceFile_.Flush();
                     }
                 }
                 catch (Exception ex)
