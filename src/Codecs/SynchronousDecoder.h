@@ -14,7 +14,7 @@
 namespace QuickFAST{
   namespace Codecs{
     /// @brief Support Synchronous (blocking) decoding of a FAST data stream
-    template<typename MessageType = Messages::Message, typename MessageConsumerType = Codecs::MessageConsumer>
+    template<typename MessageType, typename MessageConsumerType>
     class /*QuickFAST_Export*/ SynchronousDecoder
     {
     public:
