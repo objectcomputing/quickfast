@@ -31,9 +31,9 @@ namespace QuickFAST{
       virtual void decodingStopped();
 
     private:
-      void formatMessage(Messages::Message & message);
+      void formatMessage(const Messages::Message & message);
       void formatSequence(
-        Messages::FieldIdentityCPtr & identity,
+        const Messages::FieldIdentityCPtr & identity,
         const Messages::FieldCPtr & field);
       void formatGroup(const Messages::FieldCPtr & field);
 

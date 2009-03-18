@@ -73,13 +73,13 @@ MessageInterpreter::consumeMessage(Messages::Message & message)
 }
 
 void
-MessageInterpreter::formatMessage(Messages::Message & message)
+MessageInterpreter::formatMessage(const Messages::Message & message)
 {
   for( Messages::Message::const_iterator it = message.begin();
     it != message.end();
     ++it)
   {
-    Messages::FieldIdentityCPtr & identity = it->getIdentity();
+    const Messages::FieldIdentityCPtr & identity = it->getIdentity();
     const Messages::FieldCPtr & field = it->getField();
     Messages::Field::FieldType type = field->getType();
     if(type == Messages::Field::SEQUENCE)
@@ -105,7 +105,7 @@ MessageInterpreter::newline()
 
 void
 MessageInterpreter::formatSequence(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentityCPtr & identity,
   const Messages::FieldCPtr & field)
 {
   Messages::SequenceCPtr sequence = field->toSequence();
@@ -129,7 +129,7 @@ MessageInterpreter::formatSequence(
       ++fsit)
     {
       // todo: refactor with message decoding
-      Messages::FieldIdentityCPtr & identity = fsit->getIdentity();
+      const Messages::FieldIdentityCPtr & identity = fsit->getIdentity();
       const Messages::FieldCPtr & field = fsit->getField();
       Messages::Field::FieldType type = field->getType();
       if(type == Messages::Field::SEQUENCE)

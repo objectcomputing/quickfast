@@ -1,3 +1,9 @@
+Wed Mar 18 18:04:13 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Examples/Examples/MessageInterpreter.cpp
+        * src/Examples/Examples/MessageInterpreter.h
+        More gcc build errors.
+
 Wed Mar 18 16:42:49 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/Encoder.h
         * src/Codecs/PresenceMap.cpp
