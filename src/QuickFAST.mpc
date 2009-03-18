@@ -25,6 +25,9 @@ project(*) : boost_base {
     Release::libout = $(QUICKFAST_ROOT)/Output/Release
     Debug::libout = $(QUICKFAST_ROOT)/Output/Debug
   }
+  specific(make) {
+    cppflags += -Wunreachable-code
+  }
 }
 
 project(*tests) : boost_unit_test_framework, boost_filesystem, boost_thread {

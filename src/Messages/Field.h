@@ -296,14 +296,14 @@ namespace QuickFAST{
 
     inline
     void
-    intrusive_ptr_add_ref(const Messages::Field * ptr)
+    intrusive_ptr_add_ref(const Field * ptr)
     {
       ++ptr->refcount_;
     }
 
     inline
     void
-    intrusive_ptr_release(const Messages::Field * ptr)
+    intrusive_ptr_release(const Field * ptr)
     {
       if(--ptr->refcount_ == 0)
       {

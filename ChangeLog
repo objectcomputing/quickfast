@@ -1,3 +1,14 @@
+Wed Mar 18 19:21:13 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.cpp
+        * src/Messages/Field.h
+        * src/QuickFAST.mpc
+        gcc build error: undefined intrusive_ptr_ functions
+        Also disabled unreachable code warning because the
+        unreachable code is intentional based on template
+        arguments.
+
+
 Wed Mar 18 19:21:25 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
 
         * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.cs:
