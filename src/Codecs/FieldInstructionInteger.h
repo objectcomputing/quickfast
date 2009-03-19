@@ -573,7 +573,8 @@ namespace QuickFAST{
         field->getValue(value);
         if(!isMandatory())
         {
-          if(value >= 0)
+          // gcc produces bogus warning on the following line see GCC Bugzilla Bug 11856
+          if(!SIGNED || value >= 0)
           {
             ++value;
           }
@@ -667,7 +668,8 @@ namespace QuickFAST{
           pmap.setNextField(true); // != default.  Send value
           if(!isMandatory())
           {
-            if(value >= 0)
+            // gcc produces bogus warning on the following line see GCC Bugzilla Bug 11856
+            if(!SIGNED || value >= 0)
             {
               ++value;
             }
@@ -745,7 +747,8 @@ namespace QuickFAST{
         {
           if(!isMandatory())
           {
-            if(value >= 0)
+            // gcc produces bogus warning on the following line see GCC Bugzilla Bug 11856
+            if(!SIGNED || value >= 0)
             {
               ++value;
             }
@@ -911,7 +914,8 @@ namespace QuickFAST{
         {
           if(!isMandatory())
           {
-            if(value >= 0)
+            // gcc produces bogus warning on the following line see GCC Bugzilla Bug 11856
+            if(!SIGNED || value >= 0)
             {
               ++value;
             }
