@@ -28,7 +28,7 @@ project(*) : boost_base {
   specific(make) {
     // FieldInstructionInteger generates spuriouswarnings based on
     // signed/unsigned template arguments.
-    cppflags += -Wunreachable-code
+    cppflags += -Wtype-limits
   }
 }
 
