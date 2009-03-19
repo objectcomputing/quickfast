@@ -224,7 +224,11 @@ FieldInstructionBlob::decodeDelta(
   {
     previousField = initialValue_;
   }
-  const std::string previousValue = previousField->toString();
+  std::string previousValue;
+  if(previousField->isDefined())
+  {
+    previousValue = previousField->toString();
+  }
   size_t previousLength = previousValue.length();
 
   if( deltaLength < 0)
@@ -286,7 +290,11 @@ FieldInstructionBlob::decodeTail(
       {
         previousField = initialValue_;
       }
-      const std::string previousValue = previousField->toString();
+      std::string previousValue;
+      if(previousField->isDefined())
+      {
+        previousValue = previousField->toString();
+      }
 
       size_t tailLength = tailValue.length();
       size_t previousLength = previousValue.length();
