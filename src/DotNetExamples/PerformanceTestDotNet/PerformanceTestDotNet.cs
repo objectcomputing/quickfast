@@ -20,6 +20,7 @@ namespace QuickFAST
             bool strict_;
             uint count_;
 
+
             public PerformanceTestDotNet()
             {
                 templateFileName_ = null;
@@ -27,6 +28,7 @@ namespace QuickFAST
                 performanceFileName_ = null;
                 count_ = 1;
             }
+
 
             ~PerformanceTestDotNet()
             {
@@ -44,6 +46,7 @@ namespace QuickFAST
 
                 }
             }
+
 
             public void usage()
             {
@@ -192,6 +195,7 @@ namespace QuickFAST
                 return ok;
             }
 
+
             public int run()
             {
                 try
@@ -210,10 +214,12 @@ namespace QuickFAST
                     performanceFile_.Write(" milliseconds. [");
                     performanceFile_.Write("{0:F3} msec/template. = ", (double)parseLapse / (double)templateCount);
                     performanceFile_.WriteLine("{0:F0} template/second.]", (double)1000 * (double)templateCount / (double)parseLapse);
+                    performanceFile_.Flush();
 
                     for (ulong nPass = 0; nPass < count_; ++nPass)
                     {
                         System.Console.WriteLine("Decoding input; pass {0} of {1}", nPass + 1, count_);
+                        System.Console.Out.Flush();
                         MessageCounter handler = new MessageCounter();
 
                         fastFile_.Seek(0, System.IO.SeekOrigin.Begin);
@@ -226,10 +232,10 @@ namespace QuickFAST
                         StopWatch decodeTimer = new StopWatch();
                         { //PROFILE_POINT("Main");
                             decoder.Decode(handlerDelegate);
-                            //}
                         }//PROFILE_POINT
                         long decodeLapse = decodeTimer.freeze();
                         messageCount = handler.getMesssageCount();
+//                        messageCount = decoder.MessageCount;
 #if DEBUG
                         performanceFile_.Write("[debug] ");
 #endif // DEBUG
@@ -248,8 +254,6 @@ namespace QuickFAST
 
                 return 0;
             }
-
-
 
 
             static int Main(string[] args)

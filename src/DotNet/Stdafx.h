@@ -49,4 +49,9 @@
 #include "Messages/Sequence_fwd.h"
 #include "Messages/Sequence.h"
 #include "Messages/Group_fwd.h"
+#include "Messages/FieldInt8.h"
+#include "Messages/FieldUInt8.h"
+#include "Messages/FieldInt16.h"
+#include "Messages/FieldUInt16.h"
+#include "Messages/FieldBitmap.h"
 

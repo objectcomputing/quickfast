@@ -1,3 +1,14 @@
+Mon Mar 23 19:32:38 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
+
+        * src/DotNet/Field.cpp:
+        * src/DotNet/Field.h:
+        * src/DotNet/Stdafx.h:
+         Added code to handle the new types for ARCA formatted data.
+
+        * src/DotNet/SynchronousDecoder.cpp:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.cs:
+        Optimizations to improve time performance.
+
 Thu Mar 19 20:17:03 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionInteger.h:

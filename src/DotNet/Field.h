@@ -28,7 +28,12 @@ namespace QuickFASTDotNet{
       UnicodeString,
       ByteVector,
       Sequence,
-      Group
+      Group,
+      Int8,     // not FAST Standard
+      UInt8,    // not FAST Standard
+      Int16,    // not FAST Standard
+      UInt16,   // not FAST Standard
+      Bitmap    // not FAST Standard
     };
 
     /// @brief Field interface.  It has a single property which returns the type of
@@ -427,6 +432,203 @@ namespace QuickFASTDotNet{
 
     private:
       Sequence^ value_;
+    };
+
+
+
+
+    /// @brief A field containing a signed 8 bit integer
+    ///
+    /// In the XML template file this field is described as &lt;int8>
+    public ref class Int8Field: public Field
+    {
+    public:
+      Int8Field(char value): value_(value){}
+      property char Value {
+        char get() { return value_;}
+        void set(char rhs) { value_ = rhs; }
+      }
+
+      property QuickFASTDotNet::Messages::FieldType FieldType {
+        virtual QuickFASTDotNet::Messages::FieldType get() = QuickFASTDotNet::Messages::Field::FieldType::get {
+          return QuickFASTDotNet::Messages::FieldType::Int8;
+        }
+      }
+
+      virtual System::String^ ToString() override
+      {
+        return System::String::Format("FieldType: {0}, Value: {1}", this->FieldType, System::Convert::ToString(value_));
+      }
+
+      virtual bool Equals(System::Object^ obj) override
+      {
+        Int8Field^ castedObj = safe_cast<Int8Field^>(obj);
+        if(castedObj != nullptr)
+        {
+          return castedObj->value_ == value_;
+        }
+
+        return false;
+      }
+
+    private:
+      char value_;
+    };
+
+
+    /// @brief A field containing an unsigned 8 bit integer
+    ///
+    /// In the XML template file this field is described as &lt;uint8>
+    public ref class UInt8Field: public Field
+    {
+    public:
+      UInt8Field(unsigned char value): value_(value){}
+      property unsigned char Value {
+        unsigned char get() { return value_;}
+        void set(unsigned char rhs) { value_ = rhs; }
+      }
+
+      property QuickFASTDotNet::Messages::FieldType FieldType {
+        virtual QuickFASTDotNet::Messages::FieldType get() = QuickFASTDotNet::Messages::Field::FieldType::get {
+          return QuickFASTDotNet::Messages::FieldType::UInt8;
+        }
+      }
+
+      virtual System::String^ ToString() override
+      {
+        return System::String::Format("FieldType: {0}, Value: {1}", this->FieldType, System::Convert::ToString(value_));
+      }
+
+      virtual bool Equals(System::Object^ obj) override
+      {
+        UInt8Field^ castedObj = safe_cast<UInt8Field^>(obj);
+        if(castedObj != nullptr)
+        {
+          return castedObj->value_ == value_;
+        }
+
+        return false;
+      }
+
+    private:
+      unsigned char value_;
+    };
+
+
+    /// @brief A field containing a signed 16 bit integer
+    ///
+    /// In the XML template file this field is described as &lt;int8>
+    public ref class Int16Field: public Field
+    {
+    public:
+      Int16Field(short value): value_(value){}
+      property short Value {
+        short get() { return value_;}
+        void set(short rhs) { value_ = rhs; }
+      }
+
+      property QuickFASTDotNet::Messages::FieldType FieldType {
+        virtual QuickFASTDotNet::Messages::FieldType get() = QuickFASTDotNet::Messages::Field::FieldType::get {
+          return QuickFASTDotNet::Messages::FieldType::Int16;
+        }
+      }
+
+      virtual System::String^ ToString() override
+      {
+        return System::String::Format("FieldType: {0}, Value: {1}", this->FieldType, System::Convert::ToString(value_));
+      }
+
+      virtual bool Equals(System::Object^ obj) override
+      {
+        Int16Field^ castedObj = safe_cast<Int16Field^>(obj);
+        if(castedObj != nullptr)
+        {
+          return castedObj->value_ == value_;
+        }
+
+        return false;
+      }
+
+    private:
+      short value_;
+    };
+
+
+    /// @brief A field containing an unsigned 16 bit integer
+    ///
+    /// In the XML template file this field is described as &lt;uint16>
+    public ref class UInt16Field: public Field
+    {
+    public:
+      UInt16Field(unsigned short value): value_(value){}
+      property unsigned short Value {
+        unsigned short get() { return value_;}
+        void set(unsigned short rhs) { value_ = rhs; }
+      }
+
+      property QuickFASTDotNet::Messages::FieldType FieldType {
+        virtual QuickFASTDotNet::Messages::FieldType get() = QuickFASTDotNet::Messages::Field::FieldType::get {
+          return QuickFASTDotNet::Messages::FieldType::UInt16;
+        }
+      }
+
+      virtual System::String^ ToString() override
+      {
+        return System::String::Format("FieldType: {0}, Value: {1}", this->FieldType, System::Convert::ToString(value_));
+      }
+
+      virtual bool Equals(System::Object^ obj) override
+      {
+        UInt16Field^ castedObj = safe_cast<UInt16Field^>(obj);
+        if(castedObj != nullptr)
+        {
+          return castedObj->value_ == value_;
+        }
+
+        return false;
+      }
+
+    private:
+      unsigned short value_;
+    };
+
+
+    /// @brief A field containing an unsigned 16 bit integer
+    ///
+    /// In the XML template file this field is described as &lt;bitmap>
+    public ref class BitmapField: public Field
+    {
+    public:
+      BitmapField(cli::array<unsigned char>^ value): value_(value){}
+      property cli::array<unsigned char>^ Value {
+        cli::array<unsigned char>^ get() { return value_;}
+        void set(cli::array<unsigned char>^ rhs) { value_ = rhs; }
+      }
+
+      property QuickFASTDotNet::Messages::FieldType FieldType {
+        virtual QuickFASTDotNet::Messages::FieldType get() = QuickFASTDotNet::Messages::Field::FieldType::get {
+          return QuickFASTDotNet::Messages::FieldType::Bitmap;
+        }
+      }
+
+      virtual System::String^ ToString() override
+      {
+        return System::String::Format("FieldType: {0}, Value: {1}", this->FieldType, System::Convert::ToString(value_));
+      }
+
+      virtual bool Equals(System::Object^ obj) override
+      {
+        BitmapField^ castedObj = safe_cast<BitmapField^>(obj);
+        if(castedObj != nullptr)
+        {
+          return castedObj->value_->Equals(value_);
+        }
+
+        return false;
+      }
+
+    private:
+      cli::array<unsigned char>^ value_;
     };
 
 

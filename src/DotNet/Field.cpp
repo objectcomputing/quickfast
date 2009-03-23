@@ -69,6 +69,27 @@ namespace QuickFASTDotNet{
       case FieldType::UnicodeString:
         retVal = FTFieldCPtr(QuickFAST::Messages::FieldUtf8::create(StlDotNet::string_cast<std::string>(safe_cast<UnicodeStringField^>(field)->Value)));
         break;
+      case FieldType::Int8:
+        retVal = FTFieldCPtr(QuickFAST::Messages::FieldInt8::create(safe_cast<Int8Field^>(field)->Value));
+        break;
+      case FieldType::UInt8:
+        retVal = FTFieldCPtr(QuickFAST::Messages::FieldUInt8::create(safe_cast<UInt8Field^>(field)->Value));
+        break;
+      case FieldType::Int16:
+        retVal = FTFieldCPtr(QuickFAST::Messages::FieldInt16::create(safe_cast<Int16Field^>(field)->Value));
+        break;
+      case FieldType::UInt16:
+        retVal = FTFieldCPtr(QuickFAST::Messages::FieldUInt16::create(safe_cast<UInt16Field^>(field)->Value));
+        break;
+      case FieldType::Bitmap:
+        {
+          BitmapField^ bmField = safe_cast<BitmapField^>(field);
+          int bufferLen = bmField->Value->Length;
+          QuickFAST::uchar* buffer = new QuickFAST::uchar[bufferLen];
+          Marshal::Copy(bmField->Value, 0, System::IntPtr(buffer), bufferLen);
+          retVal = FTFieldCPtr(QuickFAST::Messages::FieldBitMap::create(buffer, bufferLen));
+        }
+        break;
       default:
         throw gcnew UnexpectedError();
         ;
@@ -111,6 +132,21 @@ namespace QuickFASTDotNet{
         break;
       case QuickFAST::Messages::Field::GROUP:
         retVal = gcnew GroupField(gcnew FieldSet(*field->toGroup()));
+        break;
+      case QuickFAST::Messages::Field::INT8:
+        retVal = gcnew Int8Field(field->toInt8());
+        break;
+      case QuickFAST::Messages::Field::UINT8:
+        retVal = gcnew UInt8Field(field->toUInt8());
+        break;
+      case QuickFAST::Messages::Field::INT16:
+        retVal = gcnew Int16Field(field->toInt16());
+        break;
+      case QuickFAST::Messages::Field::UINT16:
+        retVal = gcnew UInt16Field(field->toUInt16());
+        break;
+      case QuickFAST::Messages::Field::BITMAP:
+        retVal = gcnew UInt16Field(field->toUInt16());
         break;
       default:
         throw gcnew UnexpectedError();

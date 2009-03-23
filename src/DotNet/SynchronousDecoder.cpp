@@ -33,27 +33,31 @@ namespace QuickFASTDotNet{
 
     void SynchronousDecoder::Decode(MessageReceivedDelegate^ callback)
     {
-      //throw gcnew System::NotImplementedException();
       typedef QuickFASTDotNet::Messages::Message FTManagedMessage;
       bool more = true;
+      FTManagedMessage^ message = gcnew FTManagedMessage(maxFieldCount_);
+      QuickFAST::Codecs::DataSource & source = dataSource_.GetRef();
+      QuickFAST::Messages::DecodedFields & messageRef = message->MessageRef;
+
       try
       {
-
-        while(dataSource_->messageAvailable() > 0 && messageCount_ < messageCountLimit_)
+        while(more && messageCount_ < messageCountLimit_)
         {
-          FTManagedMessage^ message = gcnew FTManagedMessage(maxFieldCount_);
           if(resetOnMessage_)
           {
             decoder_->reset();
           }
 
-          if (! decoder_->decodeMessage(dataSource_.GetRef(), message->MessageRef))
+          if (! decoder_->decodeMessage(source, messageRef))
           {
+            more = false;
             // The c++ version outputs a message to std out
           }
-
-          more = callback(message);
-          messageCount_ += 1;
+          else
+          {
+            more |= callback(message);
+            messageCount_ += 1;
+          }
         }
       }
       catch(const QuickFAST::UnsupportedConversion& error)
