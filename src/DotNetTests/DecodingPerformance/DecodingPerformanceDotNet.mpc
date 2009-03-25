@@ -1,0 +1,16 @@
+project(*): QuickFASTDotNetExample {
+  exename = DecodingPerformance
+  managed = 1
+
+  specific {
+    guid = 68e1b016-014b-4a67-a3fe-d974a01eb547
+  }
+
+  Source_Files {
+    Properties{
+      Properties\AssemblyInfo.cs
+    }
+    *.cs
+  }
+}
+

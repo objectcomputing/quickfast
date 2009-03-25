@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using QuickFASTDotNet.Messages;
@@ -7,16 +7,16 @@ namespace QuickFASTDotNet
 {
     namespace Examples
     {
-        class MessageCounter
+        public class MessageProcessor
         {
             private ulong messageCount_ = 0;
 
-            public MessageCounter()
+            public MessageProcessor()
             {
                 messageCount_ = 0;
             }
 
-            public ulong  getMesssageCount ()
+            public ulong getMesssageCount()
             {
                 return messageCount_;
             }

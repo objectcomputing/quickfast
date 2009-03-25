@@ -10,7 +10,9 @@ workspace(*) {
     //C# Visual Studio Projects
     specific {
       cmdline += -language csharp
+      src/DotNetExamples/DotNetExampleCode/DotNetExampleCode.mpc
       src/DotNetTests/QuickFASTDotNetTests.mpc
+      src/DotNetTests/DecodingPerformance/DecodingPerformanceDotNet.mpc
       src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.mpc
     }
   }

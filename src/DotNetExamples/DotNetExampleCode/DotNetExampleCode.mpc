@@ -1,0 +1,16 @@
+project(DotNetExampleCode): QuickFASTDotNetExample {
+//  sharedname = DotNetExampleCode
+  managed = 1
+
+  specific {
+    guid = fc6dc70f-756e-48b7-9768-1e1ee2b5615f
+  }
+
+  Source_Files {
+    Properties{
+      Properties\AssemblyInfo.cs
+    }
+    *.cs
+  }
+}
+

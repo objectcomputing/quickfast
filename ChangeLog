@@ -1,3 +1,29 @@
+Wed Mar 25 20:35:43 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
+
+        * QuickFAST.mwc:
+        * QuickFASTDotNetExample.mpb:
+        * src/DotNetExamples/DotNetExampleCode:
+        * src/DotNetExamples/DotNetExampleCode/DotNetExampleCode.mpc:
+        * src/DotNetExamples/DotNetExampleCode/Properties:
+        * src/DotNetExamples/DotNetExampleCode/Properties/AssemblyInfo.cs:
+        * src/DotNetExamples/DotNetExampleCode/StopWatch.cs:
+        * src/DotNetExamples/PerformanceTestDotNet/StopWatch.cs:
+        Moved the StopWatch code into a new shared library for the dot net
+        examples to use.
+
+        * src/DotNetExamples/PerformanceTestDotNet/MessageCounter.cs:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.cs:
+        Namespace changes for the new shared library.
+
+        * src/DotNetTests/DecodingPerformance:
+        * src/DotNetTests/DecodingPerformance/DecodingPerformance.cs:
+        * src/DotNetTests/DecodingPerformance/DecodingPerformanceDotNet.mpc:
+        * src/DotNetTests/DecodingPerformance/MessageProcessor.cs:
+        * src/DotNetTests/DecodingPerformance/Properties:
+        * src/DotNetTests/DecodingPerformance/Properties/AssemblyInfo.cs:
+        Added beginning of test to test performance of decoding and
+        extrating data from the messages.
+
 Mon Mar 23 19:32:38 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
 
         * src/DotNet/Field.cpp:

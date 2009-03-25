@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace QuickFAST
+namespace QuickFASTDotNet
 {
     namespace Examples
     {
-        class StopWatch
+        public class StopWatch
         {
             [DllImport("Kernel32.dll")]
             private static extern bool QueryPerformanceCounter(
