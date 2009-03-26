@@ -1,4 +1,5 @@
 project : QuickFASTDotNetApplication {
+  requires += dotnet
   after += DotNetExampleCode
   
   specific(!vc8, !vc9) {

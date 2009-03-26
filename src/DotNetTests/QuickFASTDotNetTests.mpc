@@ -1,4 +1,5 @@
 project {
+  requires += dotnet
   requires += nunit
   lit_libs += nunit.framework.dll
 

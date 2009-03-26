@@ -1,4 +1,5 @@
 project(*) : boost_base {
+  requires += dotnet
   sharedname = QuickFASTDotNet
   managed = 1
   after = QuickFAST

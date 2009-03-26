@@ -1,3 +1,12 @@
+Thu Mar 26 16:01:36 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * QuickFASTDotNetApplication.mpb:
+        * QuickFASTDotNetExample.mpb:
+        * src/DotNet/QuickFASTDotNet.mpc:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.mpc:
+        * src/DotNetTests/QuickFASTDotNetTests.mpc:
+        Dot NET support requires dotnet feature.
+
 Wed Mar 25 20:35:43 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
 
         * QuickFAST.mwc:
