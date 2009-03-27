@@ -3,7 +3,7 @@
 // See the file license.txt for licensing information.
 #include "StdAfx.h"
 #include "SynchronousDecoder.h"
-#include "Decoder.h"
+//#include "Decoder.h"
 #include "Message.h"
 #include "TemplateRegistry.h"
 #include "Exceptions.h"
@@ -17,9 +17,8 @@ namespace QuickFASTDotNet{
 
     SynchronousDecoder::SynchronousDecoder(TemplateRegistry^ templateRegistry, System::IO::Stream^ instream):
         stream_(instream),
-        endOfStream_(false),
         templateRegistry_(templateRegistry),
-        dataSource_(new DotNetDataSource(instream)),
+        dataSource_(new DataSourceBuffered(instream)),
         decoder_(new QuickFAST::Codecs::Decoder(templateRegistry->NativeTemplateRegistry)),
         resetOnMessage_(false),
         messageCount_(0),

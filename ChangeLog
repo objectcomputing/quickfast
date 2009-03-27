@@ -1,3 +1,23 @@
+Fri Mar 27 06:33:29 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
+
+        * src/DotNet/DataSource.cpp:
+        * src/DotNet/DataSource.h:
+        * src/DotNet/DataSourceBuffered.cpp:
+        * src/DotNet/DataSourceBuffered.h:
+        * src/DotNet/Decoder.h:
+        * src/DotNet/SynchronousDecoder.cpp:
+        * src/DotNet/SynchronousDecoder.h:
+        Added a buffered data source that reads all the data from the managed data stream
+        into an unmanaged data buffer to avoid the managed/unmanged boundary transition
+        during the decode.
+
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.cs:
+        Peform timing operations twice to remove the affect of the JIT compilation.
+
+        * src/DotNetExamples/DotNetExampleCode/DotNetExampleCode.mpc:
+        * src/DotNetTests/DecodingPerformance/DecodingPerformanceDotNet.mpc:
+        Added missing dotnet feature.
+
 Thu Mar 26 16:01:36 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * QuickFASTDotNetApplication.mpb:

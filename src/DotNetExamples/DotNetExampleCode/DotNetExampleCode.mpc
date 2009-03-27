@@ -1,5 +1,16 @@
-project(DotNetExampleCode): QuickFASTDotNetExample {
-//  sharedname = DotNetExampleCode
+project(*): QuickFASTDotNetApplication {
+  requires += dotnet
+  sharedname = DotNetExampleCode
+
+  specific(!vc8, !vc9) {
+    exeout = $(QUICKFAST_ROOT)/bin
+  }
+  
+  specific(vc8, vc9) {
+    Release::exeout = $(QUICKFAST_ROOT)/Output/Release
+    Debug::exeout = $(QUICKFAST_ROOT)/Output/Debug
+  }
+
   managed = 1
 
   specific {

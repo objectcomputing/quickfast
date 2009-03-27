@@ -196,14 +196,14 @@ namespace QuickFASTDotNet
             }
 
 
-            public int run()
+            public int parseTemplates(ref QuickFASTDotNet.Codecs.TemplateRegistry templateRegistry)
             {
                 try
                 {
                     System.Console.WriteLine("Parsing templates");
-
+                    System.Console.Out.Flush();
                     QuickFASTDotNet.Examples.StopWatch parseTimer = new QuickFASTDotNet.Examples.StopWatch();
-                    QuickFASTDotNet.Codecs.TemplateRegistry templateRegistry = QuickFASTDotNet.Codecs.TemplateRegistry.Parse(templateFile_);
+                    templateRegistry = QuickFASTDotNet.Codecs.TemplateRegistry.Parse(templateFile_);
                     long parseLapse = parseTimer.freeze();
                     uint templateCount = templateRegistry.Size;
                     performanceFile_.Write("Parsed ");
@@ -216,6 +216,20 @@ namespace QuickFASTDotNet
                     performanceFile_.WriteLine("{0:F0} template/second.]", (double)1000 * (double)templateCount / (double)parseLapse);
                     performanceFile_.Flush();
 
+                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+
+                return 0;
+            }
+
+
+            public int decodeMessages(QuickFASTDotNet.Codecs.TemplateRegistry templateRegistry)
+            {
+                try
+                {
                     for (ulong nPass = 0; nPass < count_; ++nPass)
                     {
                         System.Console.WriteLine("Decoding input; pass {0} of {1}", nPass + 1, count_);
@@ -226,16 +240,24 @@ namespace QuickFASTDotNet
                         QuickFASTDotNet.Codecs.SynchronousDecoder decoder = new QuickFASTDotNet.Codecs.SynchronousDecoder(templateRegistry, fastFile_);
                         decoder.ResetOnMessage = resetOnMessage_;
                         decoder.Strict = strict_;
+
                         QuickFASTDotNet.Codecs.MessageReceivedDelegate handlerDelegate;
                         handlerDelegate = new QuickFASTDotNet.Codecs.MessageReceivedDelegate(handler.MessageReceived);
                         ulong messageCount = 0;
+
+                        //GCSettings.LatencyMode = GCLatencyMode.LowLatency;
+                        //Thread.Sleep(100);
+
                         StopWatch decodeTimer = new StopWatch();
                         { //PROFILE_POINT("Main");
                             decoder.Decode(handlerDelegate);
                         }//PROFILE_POINT
                         long decodeLapse = decodeTimer.freeze();
+
+                        //GCSettings.LatencyMode = GCLatencyMode.Interactive;
+
                         messageCount = handler.getMesssageCount();
-//                        messageCount = decoder.MessageCount;
+                        //                        messageCount = decoder.MessageCount;
 #if DEBUG
                         performanceFile_.Write("[debug] ");
 #endif // DEBUG
@@ -256,16 +278,35 @@ namespace QuickFASTDotNet
             }
 
 
+
+            public int run()
+            {
+                int result = 0;
+                QuickFASTDotNet.Codecs.TemplateRegistry templateRegistry = null;
+                result += parseTemplates(ref templateRegistry);
+                System.Console.WriteLine("Running second run so JIT will have already run");
+                result += parseTemplates(ref templateRegistry);
+
+                result += decodeMessages(templateRegistry);
+                System.Console.WriteLine("Running second run so JIT will have already run");
+                result += decodeMessages(templateRegistry);
+
+                return result;
+            }
+
+
             static int Main(string[] args)
             {
-                PerformanceTestDotNet application = new PerformanceTestDotNet();
-                if (application.init(ref args))
                 {
-                    application.run();
-                }
-                else
-                {
-                    System.Console.WriteLine("ERROR: Failed initialization.");
+                    PerformanceTestDotNet application = new PerformanceTestDotNet();
+                    if (application.init(ref args))
+                    {
+                        application.run();
+                    }
+                    else
+                    {
+                        System.Console.WriteLine("ERROR: Failed initialization.");
+                    }
                 }
                 return 0;
             }

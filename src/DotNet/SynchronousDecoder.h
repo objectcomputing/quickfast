@@ -5,6 +5,7 @@
 
 #include "UnmanagedPtr.h"
 #include "Decoder.h"
+#include "DataSourceBuffered.h"
 
 namespace QuickFASTDotNet{
   namespace Messages {
@@ -76,9 +77,8 @@ namespace QuickFASTDotNet{
 
     private:
       System::IO::Stream^ stream_;
-      bool endOfStream_;
       TemplateRegistry^ templateRegistry_;
-      UnmanagedPtr<DotNetDataSource> dataSource_;
+      UnmanagedPtr<QuickFASTDotNet::Codecs::DataSourceBuffered> dataSource_;
       UnmanagedPtr<QuickFAST::Codecs::Decoder> decoder_;
       unsigned int maxFieldCount_;
       bool resetOnMessage_;
