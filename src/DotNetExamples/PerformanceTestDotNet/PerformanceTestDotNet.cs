@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime;
 
 namespace QuickFASTDotNet
 {
@@ -245,8 +246,7 @@ namespace QuickFASTDotNet
                         handlerDelegate = new QuickFASTDotNet.Codecs.MessageReceivedDelegate(handler.MessageReceived);
                         ulong messageCount = 0;
 
-                        //GCSettings.LatencyMode = GCLatencyMode.LowLatency;
-                        //Thread.Sleep(100);
+                        GCSettings.LatencyMode = GCLatencyMode.LowLatency;
 
                         StopWatch decodeTimer = new StopWatch();
                         { //PROFILE_POINT("Main");
@@ -254,16 +254,16 @@ namespace QuickFASTDotNet
                         }//PROFILE_POINT
                         long decodeLapse = decodeTimer.freeze();
 
-                        //GCSettings.LatencyMode = GCLatencyMode.Interactive;
+                        GCSettings.LatencyMode = GCLatencyMode.Interactive;
 
                         messageCount = handler.getMesssageCount();
-                        //                        messageCount = decoder.MessageCount;
+                        //messageCount = decoder.MessageCount;
 #if DEBUG
                         performanceFile_.Write("[debug] ");
 #endif // DEBUG
                         performanceFile_.Write("Decoded {0} messages in ", messageCount);
                         performanceFile_.Write(decodeLapse.ToString("F3"));
-                        performanceFile_.Write(" milliseonds. [");
+                        performanceFile_.Write(" milliseconds. [");
                         performanceFile_.Write("{0:F3} msec/message. = ", (double)decodeLapse / (double)messageCount);
                         performanceFile_.WriteLine("{0:F3} messages/second]", (double)1000 * (double)messageCount / (double)decodeLapse);
                         performanceFile_.Flush();

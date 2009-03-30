@@ -3,7 +3,6 @@
 // See the file license.txt for licensing information.
 #include "StdAfx.h"
 #include "SynchronousDecoder.h"
-//#include "Decoder.h"
 #include "Message.h"
 #include "TemplateRegistry.h"
 #include "Exceptions.h"
@@ -83,7 +82,10 @@ namespace QuickFASTDotNet{
       {
         throw gcnew UsageError(error);
       }
+
     }
+
+
 
   }
 }

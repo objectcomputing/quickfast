@@ -13,6 +13,8 @@
 
 #include <vcclr.h>
 
+#pragma unmanaged 
+
 #include <vector>
 #include <map>
 
@@ -55,3 +57,4 @@
 #include "Messages/FieldUInt16.h"
 #include "Messages/FieldBitmap.h"
 
+#pragma managed 

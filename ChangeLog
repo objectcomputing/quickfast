@@ -1,3 +1,14 @@
+Mon Mar 30 22:16:43 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
+
+        * src/DotNet/DataDestination.h:
+        * src/DotNet/DataSourceBuffered.cpp:
+        * src/DotNet/Stdafx.h:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.cs:
+        Moved the readbyte method into the native code compilation for speed.
+
+        * src/DotNet/SynchronousDecoder.cpp:
+        Minor clean up.
+
 Fri Mar 27 06:33:29 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
 
         * src/DotNet/DataSource.cpp:

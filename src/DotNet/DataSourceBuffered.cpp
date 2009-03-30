@@ -21,6 +21,7 @@ namespace QuickFASTDotNet{
       fillBuffer();
     }
 
+#pragma unmanaged
     bool DataSourceBuffered::readByte(QuickFAST::uchar & byte)
     {
       if(pos_ < end_)
@@ -35,6 +36,7 @@ namespace QuickFASTDotNet{
       //}
       return false;
     }
+#pragma managed
 
 
     bool DataSourceBuffered::fillBuffer (void)
