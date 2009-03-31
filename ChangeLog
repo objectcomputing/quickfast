@@ -1,3 +1,23 @@
+Tue Mar 31 14:34:05 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * m.cmd:
+        add -toolsversion=3.5 QuickFAST.mwc to command line.
+        This is a temporary fix to avoid having to upgrade the generated csproj files for a .net build.
+        It will be ignored unless the following patch is applied to %MPC_ROOT\templates\vc8csharp.mpd
+        Index: vc8csharp.mpd
+        ===================================================================
+        --- vc8csharp.mpd       (revision 1527)
+        +++ vc8csharp.mpd       (working copy)
+        @@ -1,4 +1,4 @@
+        -n++<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+        +n++<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"<%if(toolsversion)%> ToolsVersion="<%toolsversion%>"<%endif%>>
+           <PropertyGroup>
+             <ProjectType>Local</ProjectType>
+             <ProductVersion><%prversion("8.0.50727")%></ProductVersion>
+
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.mpc:
+        Build this after DotNetExampleCode
+
 Mon Mar 30 22:16:43 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
 
         * src/DotNet/DataDestination.h:

@@ -1,5 +1,6 @@
 project(PerformanceTestDotNet): QuickFASTDotNetExample {
   requires += dotnet
+  after += DotNetExampleCode
   exename = PerformanceTestDotNet
   managed = 1
 
