@@ -19,10 +19,12 @@ namespace QuickFASTDotNet{
         templateRegistry_(templateRegistry),
         dataSource_(new DataSourceBuffered(instream)),
         decoder_(new QuickFAST::Codecs::Decoder(templateRegistry->NativeTemplateRegistry)),
+        syncDecoder_(new QuickFAST::Codecs::SynchronousDecoder<QuickFAST::Messages::Message, QuickFAST::Codecs::MessageConsumer>(templateRegistry->NativeTemplateRegistry)),
         resetOnMessage_(false),
         messageCount_(0),
         messageCountLimit_(unsigned int(-1)),
-        maxFieldCount_(templateRegistry->MaxFieldCount)
+        maxFieldCount_(templateRegistry->MaxFieldCount),
+        decodeTime_(0)
     {
 
     }
@@ -83,6 +85,48 @@ namespace QuickFASTDotNet{
         throw gcnew UsageError(error);
       }
 
+    }
+
+
+    void SynchronousDecoder::TestSyncDecode()
+    {
+      bool more = true;
+      QuickFAST::Codecs::DataSource & source = dataSource_.GetRef();
+      MessageCounter handler;
+
+      //decodeTime_ = 0;
+      try
+      {
+        //StopWatch decodeTimer;
+        syncDecoder_->decode(source, handler);
+        //decodeTime_ = decodeTimer.lapse();
+      }
+      catch(const QuickFAST::UnsupportedConversion& error)
+      {
+        throw gcnew UnsupportedConversion(error);
+      }
+      catch(const QuickFAST::OverflowError& error)
+      {
+        throw gcnew OverflowError(error);
+      }
+      catch(const QuickFAST::FieldNotPresent& error)
+      {
+        throw gcnew FieldNotPresent(error);
+      }
+      catch(const QuickFAST::EncodingError& error)
+      {
+        throw gcnew EncodingError(error);
+      }
+      catch(const QuickFAST::TemplateDefinitionError& error)
+      {
+        throw gcnew TemplateDefinitionError(error);
+      }
+      catch(const QuickFAST::UsageError& error)
+      {
+        throw gcnew UsageError(error);
+      }
+
+      messageCount_ = handler.getMesssageCount();
     }
 
 

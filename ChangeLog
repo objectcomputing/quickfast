@@ -1,3 +1,10 @@
+Thu Apr 02 22:17:01 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
+
+        * src/DotNet/SynchronousDecoder.cpp:
+        * src/DotNet/SynchronousDecoder.h:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.cs:
+        Added ability to use synchronous decoder for testing timing.
+
 Tue Mar 31 14:34:05 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * m.cmd:

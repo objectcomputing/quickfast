@@ -251,6 +251,7 @@ namespace QuickFASTDotNet
                         StopWatch decodeTimer = new StopWatch();
                         { //PROFILE_POINT("Main");
                             decoder.Decode(handlerDelegate);
+                            //decoder.TestSyncDecode();
                         }//PROFILE_POINT
                         long decodeLapse = decodeTimer.freeze();
 
@@ -261,11 +262,12 @@ namespace QuickFASTDotNet
 #if DEBUG
                         performanceFile_.Write("[debug] ");
 #endif // DEBUG
-                        performanceFile_.Write("Decoded {0} messages in ", messageCount);
-                        performanceFile_.Write(decodeLapse.ToString("F3"));
-                        performanceFile_.Write(" milliseconds. [");
+                        performanceFile_.Write("Decoded {0} messages in {1}  milliseconds. [", messageCount, decodeLapse);
                         performanceFile_.Write("{0:F3} msec/message. = ", (double)decodeLapse / (double)messageCount);
                         performanceFile_.WriteLine("{0:F3} messages/second]", (double)1000 * (double)messageCount / (double)decodeLapse);
+
+                        //performanceFile_.WriteLine("Decoder time is {0} milliseconds", decoder.DecodeTime);
+
                         performanceFile_.Flush();
                     }
                 }
