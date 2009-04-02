@@ -11,6 +11,8 @@
 #include <Messages/DecodedFields.h>
 #include <Messages/MessageField.h>
 #include <Messages/Field_fwd.h>
+#include <Common/MemoryCache.h>
+
 namespace QuickFAST{
   namespace Messages{
     /// @brief Internal representation of a set of fields to be encoded or decoded.
@@ -19,16 +21,25 @@ namespace QuickFAST{
     {
       FieldSet();
     public:
+      /// The kind of memory cache to use for field sets.
+      typedef MemoryCache<Cache::Unsynchronized> BufferCache;
+      /// And a pointer to the cache
+      typedef boost::shared_ptr<BufferCache> BufferCachePtr;
+      static const size_t BufferCacheSize = sizeof(MessageField) * 20;
+      static const size_t BifferCachePreallocate = 10;
+
       /// Constant iterator for the collection
       typedef const MessageField * const_iterator;
       /// @brief Construct an empty FieldSet
-      explicit FieldSet(size_t res);
+      explicit FieldSet(const BufferCachePtr & cache, size_t res);
       /// @brief Copy Constructor
       /// @param rhs is the FieldSet to be copied into this one
       FieldSet(const FieldSet & rhs);
 
       /// @brief Virtual destructor
       virtual ~FieldSet();
+
+      void reset();
 
       /// @brief clear current contents of the field set
       ///
@@ -133,6 +144,7 @@ namespace QuickFAST{
         r = temp;
       }
     protected:
+      BufferCachePtr cache_;
       /// Application type as set by &lt;typeRef>
       std::string applicationType_;
       /// Namespace for the Application type as set by &lt;typeRef>

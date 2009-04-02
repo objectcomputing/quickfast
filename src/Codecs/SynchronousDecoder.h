@@ -136,10 +136,12 @@ namespace QuickFAST{
       Codecs::DataSource & source,
       MessageConsumerType & consumer)
     {
+//      MessageType message(maxFieldCount_);
       bool more = true;
       while(source.messageAvailable() > 0 && messageCount_ < messageCountLimit_)
       {
-        MessageType message(maxFieldCount_);
+//        message.reset();
+        MessageType message(decoder_.getFieldSetCache(), maxFieldCount_);
         if(resetOnMessage_)
         {
           decoder_.reset();

@@ -5,28 +5,32 @@
 #include "FieldSet.h"
 #include <Messages/Field.h>
 #include <Common/Exceptions.h>
+#include <Common/MemoryCache.h>
 
 #include <Common/Profiler.h>
 
-using namespace ::QuickFAST;
-using namespace ::QuickFAST::Messages;
+using namespace QuickFAST;
+using namespace QuickFAST::Messages;
 
-FieldSet::FieldSet(size_t res)
-: fields_(reinterpret_cast<MessageField *>(new unsigned char[sizeof(MessageField) * res]))
+FieldSet::FieldSet(const BufferCachePtr & cache, size_t res)
+: cache_(cache)
+//, fields_(reinterpret_cast<MessageField *>(new char[sizeof(MessageField) * res]))
+, fields_(reinterpret_cast<MessageField *>(cache_->allocate(sizeof(MessageField) * res)))
 , capacity_(res)
 , used_(0)
 {
-  memset(fields_, 0, sizeof(sizeof(MessageField) * capacity_));
+//  memset(fields_, 0, sizeof(sizeof(MessageField) * capacity_));
 }
 
 FieldSet::FieldSet(const FieldSet & rhs)
-: applicationType_(rhs.applicationType_)
+: cache_(rhs.cache_)
+, applicationType_(rhs.applicationType_)
 , applicationTypeNs_(rhs.applicationTypeNs_)
-, fields_(reinterpret_cast<MessageField *>(new unsigned char[sizeof(MessageField) * rhs.used_]))
+//, fields_(reinterpret_cast<MessageField *>(new char[sizeof(MessageField) * rhs.used_]))
+, fields_(reinterpret_cast<MessageField *>(cache_->allocate(sizeof(MessageField) * rhs.capacity_)))
 , capacity_(rhs.capacity_)
 , used_(rhs.used_)
 {
-  memset(fields_, 0, sizeof(sizeof(MessageField) * capacity_));
   for(size_t nField = 0; nField < used_; ++nField)
   {
     new (&fields_[nField]) MessageField(rhs.fields_[nField]);
@@ -35,8 +39,13 @@ FieldSet::FieldSet(const FieldSet & rhs)
 
 FieldSet::~FieldSet()
 {
-  clear();
-  delete [] reinterpret_cast<unsigned char *>(fields_);
+  while(used_ > 0)
+  {
+    --used_;
+    fields_[used_].~MessageField();
+  }
+//  delete [] reinterpret_cast<char *>(fields_);
+  cache_->free(reinterpret_cast<char *>(fields_));
 }
 
 void
@@ -44,16 +53,19 @@ FieldSet::reserve(size_t capacity)
 {
   if(capacity > capacity_)
   {
-    MessageField * buffer = reinterpret_cast<MessageField *>(new unsigned char[sizeof(MessageField) * capacity]);
-    memset(buffer, 0, sizeof(sizeof(MessageField) * capacity_));
+    MessageField * buffer =
+//      reinterpret_cast<MessageField *>(new char[sizeof(MessageField) * capacity]);
+      reinterpret_cast<MessageField *>(cache_->allocate(sizeof(MessageField) * capacity));
+
     for(size_t nField = 0; nField < used_; ++nField)
     {
       new(&buffer[nField]) MessageField(fields_[nField]);
     }
-    unsigned char * oldBuffer = reinterpret_cast<unsigned char *>(fields_);
+    char * oldBuffer = reinterpret_cast<char *>(fields_);
     fields_ = buffer;
     capacity_ = capacity;
-    delete[] oldBuffer;
+//    delete [] oldBuffer;
+    cache_->free(oldBuffer);
   }
 }
 
@@ -69,7 +81,6 @@ FieldSet::clear(size_t capacity)
   {
     reserve(capacity);
   }
-  memset(fields_, 0, sizeof(sizeof(MessageField) * capacity_));
 }
 
 
@@ -132,5 +143,5 @@ FieldSet::getIdentity(const std::string &name, FieldIdentityCPtr & identity) con
 DecodedFields *
 FieldSet::createdNestedFields(size_t size)const
 {
-  return new FieldSet(size);
+  return new FieldSet(cache_, size);
 }

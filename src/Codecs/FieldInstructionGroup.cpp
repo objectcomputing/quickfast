@@ -49,7 +49,7 @@ FieldInstructionGroup::decodeNop(
     }
     if(fieldSet.getApplicationType() != segmentBody_->getApplicationType())
     {
-      Messages::GroupPtr group(new Messages::Group(segmentBody_->fieldCount()));
+      Messages::GroupPtr group(new Messages::Group(decoder.getFieldSetCache(), segmentBody_->fieldCount()));
       group->setApplicationType(segmentBody_->getApplicationType(), segmentBody_->getApplicationTypeNamespace());
       decoder.decodeGroup(source, segmentBody_, *group);
       Messages::FieldCPtr field(Messages::FieldGroup::create(group));

@@ -1,3 +1,31 @@
+Thu Apr  2 19:33:42 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+
+        * src/Common/AtomicOps.h:
+        * src/Common/MemoryCache.h:
+        Add a memory cache: avoids OS level alloc/free for common buffer sizes.
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Context.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/SynchronousDecoder.h:
+        * src/Examples/PerformanceTest/PerformanceTest.cpp:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/Message.h:
+        * src/Messages/Message.cpp:
+        * src/Messages/MessageField.h:
+        * src/Tests/testFieldInstructions.cpp:
+        * src/Tests/testFieldOperations.cpp:
+        * src/Tests/testRoundTrip.cpp:
+
+        * src/Codecs/SynchronousDecoder.cpp:
+          Removed this file.
+
 Tue Mar 31 14:34:05 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * m.cmd:

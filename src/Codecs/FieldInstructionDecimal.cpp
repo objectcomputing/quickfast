@@ -24,8 +24,6 @@ FieldInstructionDecimal::FieldInstructionDecimal(
   , typedExponent_(0)
   , typedMantissa_(0)
   , typedValue_(0,0)
-//  , mantissaInstruction_(new FieldInstructionMantissa(name + "|decimal_mantissa", fieldNamespace))
-//  , exponentInstruction_(new FieldInstructionExponent(name + "|decimal_exponent", fieldNamespace))
 {
 }
 
@@ -33,8 +31,6 @@ FieldInstructionDecimal::FieldInstructionDecimal()
   : typedExponent_(0)
   , typedMantissa_(0)
   , typedValue_(0,0)
-//  , mantissaInstruction_(new FieldInstructionMantissa(identity_->getLocalName() + "|decimal_mantissa", identity_->getNamespace()))
-//  , exponentInstruction_(new FieldInstructionExponent(identity_->getLocalName() + "|decimal_exponent", identity_->getNamespace()))
 {
 }
 
@@ -61,16 +57,17 @@ FieldInstructionDecimal::decodeNop(
   Messages::DecodedFields & fieldSet) const
 {
   PROFILE_POINT("decimal::decodeNop");
-  NESTED_PROFILE_POINT(d,"decimal::AllocateFieldSet");
 
   if(bool(exponentInstruction_))
   {
+    PROFILE_POINT("decimal::explicitExponent");
 
     ///@todo: this is an expensive way to get the exponent and mantissa values
     /// we need to refactor FieldInstructionInteger to provide a separate method
     /// to retrieve the values (or lack thereof) without creating fields.
     /// However -- this works for now.
-    Messages::FieldSet mxSet(2);
+    NESTED_PROFILE_POINT(d,"decimal::AllocateFieldSet");
+    Messages::FieldSet mxSet(decoder.getFieldSetCache(), 2);
     NESTED_PROFILE_POINT(a, "decimal::DecodeExponent");
     NESTED_PROFILE_PAUSE(d);
     if(!exponentInstruction_->decode(source, pmap, decoder, mxSet))
@@ -105,6 +102,7 @@ FieldInstructionDecimal::decodeNop(
   }
   else
   {
+    PROFILE_POINT("decimal::implicitExponent");
     exponent_t exponent = 0;
     decodeSignedInteger(source, decoder, exponent);
     if(!isMandatory())
@@ -367,7 +365,7 @@ FieldInstructionDecimal::encodeNop(
 
     if(bool(exponentInstruction_))
     {
-      Messages::FieldSet fieldSet(2);
+      Messages::FieldSet fieldSet(encoder.getFieldSetCache(), 2);
       Messages::FieldCPtr exponentField(Messages::FieldInt32::create(exponent));
       fieldSet.addField(exponentInstruction_->getIdentity(), exponentField);
 
@@ -413,7 +411,7 @@ FieldInstructionDecimal::encodeNop(
     }
     if(exponentInstruction_)
     {
-      Messages::FieldSet fieldSet(2);
+      Messages::FieldSet fieldSet(encoder.getFieldSetCache(), 2);
       exponentInstruction_->encode(
         destination,
         pmap,

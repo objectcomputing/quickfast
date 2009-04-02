@@ -218,7 +218,8 @@ BOOST_AUTO_TEST_CASE(testRoundTripSequenceNoPMAP)
   Messages::FieldIdentityCPtr identity_mktDepth = new Messages::FieldIdentity("mktDepth");
   Messages::FieldIdentityCPtr identity_mdBookType = new Messages::FieldIdentity("mdBookType");
 
-  Messages::Message msg(templateRegistry->maxFieldCount());
+  Codecs::Decoder decoder(templateRegistry);
+  Messages::Message msg(decoder.getFieldSetCache(), templateRegistry->maxFieldCount());
 
 //   <uInt32 name=\"timestamp\" id=\"52\"><delta/></uInt32>"
   msg.addField(identity_timestamp, Messages::FieldUInt32::create(1));
@@ -245,8 +246,9 @@ BOOST_AUTO_TEST_CASE(testRoundTripSequenceNoPMAP)
 
 //   <sequence name=\"MDFeedTypes\">"
 //     <length name=\"noOfStreams\" id=\"1141\"/>"
+
   Messages::SequencePtr sequence_MDFeedTypes(new Messages::Sequence);
-  Messages::FieldSetPtr entry(new Messages::FieldSet(6)); // todo Hardcoded 6?
+  Messages::FieldSetPtr entry(new Messages::FieldSet(decoder.getFieldSetCache(), 6)); // todo Hardcoded 6?
 
 //     <string name=\"streamType\" id=\"1022\"/>"
   entry->addField(identity_streamType, Messages::FieldAscii::create("streamType"));
@@ -263,7 +265,7 @@ BOOST_AUTO_TEST_CASE(testRoundTripSequenceNoPMAP)
 
   sequence_MDFeedTypes->addEntry(entry);
 
-  entry.reset(new Messages::FieldSet(6));
+  entry.reset(new Messages::FieldSet(decoder.getFieldSetCache(), 6));
 //     <string name=\"streamType\" id=\"1022\"/>"
   entry->addField(identity_streamType, Messages::FieldAscii::create("streamType2"));
 //     <string name=\"streamService\"/>"
@@ -287,9 +289,8 @@ BOOST_AUTO_TEST_CASE(testRoundTripSequenceNoPMAP)
   encoder.encodeMessage(destination, templId, msg);
   const std::string & fastString = destination.getValue();
 
-  Codecs::Decoder decoder(templateRegistry);
   Codecs::DataSourceString source(fastString);
-  Messages::Message msgOut(templateRegistry->maxFieldCount());
+  Messages::Message msgOut(decoder.getFieldSetCache(), templateRegistry->maxFieldCount());
   decoder.decodeMessage(source, msgOut);
 
   validateMessage1(msgOut);

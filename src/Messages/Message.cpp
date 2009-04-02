@@ -9,8 +9,8 @@
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
-Message::Message(size_t expectedNumberOfFields)
-: FieldSet(expectedNumberOfFields)
+Message::Message(boost::shared_ptr<FieldSet::BufferCache> cache, size_t expectedNumberOfFields)
+: FieldSet(cache, expectedNumberOfFields)
 {
   applicationType_ = "any";
 }

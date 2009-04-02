@@ -206,7 +206,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_1)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -263,7 +263,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_2)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -321,7 +321,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_3)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -378,7 +378,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_4)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -436,7 +436,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_5)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -496,7 +496,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_6)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -557,7 +557,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1a)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -613,7 +613,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1b)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -673,7 +673,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1c)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -733,7 +733,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1d)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -793,7 +793,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2a)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -853,7 +853,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2b)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -913,7 +913,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2c)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -973,7 +973,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1a)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1029,7 +1029,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1b)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1090,7 +1090,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1c)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1151,7 +1151,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_2a)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1211,7 +1211,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_2b)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1271,7 +1271,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1a)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1327,7 +1327,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1b)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1387,7 +1387,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1c)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1447,7 +1447,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_2a)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1508,7 +1508,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_2b)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1566,7 +1566,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_1)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1625,7 +1625,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_2)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1684,7 +1684,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_3)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1743,7 +1743,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_4)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1802,7 +1802,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_5)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1864,7 +1864,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_6)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1931,7 +1931,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_7)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 
@@ -1985,7 +1985,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_8)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Messages::FieldSet fieldSet(decoder.getFieldSetCache(), 10);
 
   BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
 

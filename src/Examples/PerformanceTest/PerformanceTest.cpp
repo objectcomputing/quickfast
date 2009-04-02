@@ -202,8 +202,6 @@ PerformanceTest::applyArgs()
 int
 PerformanceTest::run()
 {
-  // There are a lot of shortcuts in this file right now.
-  // It needs a real command line argument parser
   try
   {
     std::cout << "Parsing templates" << std::endl;
@@ -217,7 +215,7 @@ PerformanceTest::run()
       << " templates in "
       << std::fixed << std::setprecision(3)
       << parseLapse
-      << " milliseonds. [";
+      << " milliseconds. [";
     (*performanceFile_) << std::fixed << std::setprecision(3)
       << double(parseLapse)/double(templateCount) << " msec/template. = "
       << std::fixed << std::setprecision(0)
@@ -227,7 +225,12 @@ PerformanceTest::run()
     {
       std::cout << "Decoding input; pass " << nPass + 1 << " of " << count_ << std::endl;
       fastFile_.seekg(0, std::ios::beg);
+#define USE_BUFFERED_STREAM
+#ifdef USE_BUFFERED_STREAM
       Codecs::DataSourceBufferedStream source(fastFile_);
+#else //USE_BUFFERED_STREAM
+      Codecs::DataSourceStream source(fastFile_);
+#endif //USE_BUFFERED_STREAM
 #ifndef NULL_CONSUMER
       MessageCounter handler;
       Codecs::SynchronousDecoder<Messages::Message, Codecs::MessageConsumer> decoder(templateRegistry);

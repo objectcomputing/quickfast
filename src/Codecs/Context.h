@@ -9,10 +9,12 @@
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
 #include <Common/WorkingBuffer.h>
+#include <Common/MemoryCache.h>
 #include <Codecs/TemplateRegistry_fwd.h>
 #include <Codecs/Template_fwd.h>
 #include <Messages/Field_fwd.h>
 #include <Messages/FieldIdentity_fwd.h>
+#include <Messages/FieldSet.h>
 
 namespace QuickFAST{
   namespace Codecs{
@@ -155,6 +157,10 @@ namespace QuickFAST{
       /// @param message to be written
       void logMessage(const std::string & message);
 
+      boost::shared_ptr<Messages::FieldSet::BufferCache>  getFieldSetCache()
+      {
+        return  fieldSetCache_;
+      }
     private:
       Context();
       Context(const Context &);
@@ -176,6 +182,9 @@ namespace QuickFAST{
       typedef boost::scoped_array<Messages::FieldCPtr> IndexedDictionary;
       IndexedDictionary indexedDictionary_;
       WorkingBuffer workingBuffer_;
+
+      boost::shared_ptr<Messages::FieldSet::BufferCache> fieldSetCache_;
+
     };
   }
 }

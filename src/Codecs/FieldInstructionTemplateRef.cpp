@@ -62,7 +62,7 @@ FieldInstructionTemplateRef::decodeNop(
         {
           // application types do not match.  Decode this into a FieldGroup
           size_t fieldCount = target->fieldCount();
-          Messages::GroupPtr group(new Messages::Group(fieldCount));
+          Messages::GroupPtr group(new Messages::Group(decoder.getFieldSetCache(), fieldCount));
           group->setApplicationType(target->getApplicationType(), target->getApplicationTypeNamespace());
           decoder.decodeGroup(
             source,

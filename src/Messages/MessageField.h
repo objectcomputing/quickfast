@@ -39,6 +39,9 @@ namespace QuickFAST{
         , field_(rhs.field_)
       {
       }
+      ~MessageField()
+      {
+      }
 
     public:
 

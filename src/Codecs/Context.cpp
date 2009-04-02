@@ -20,11 +20,13 @@ Context::Context(Codecs::TemplateRegistryCPtr registry)
 , templateId_(~0)
 , indexedDictionarySize_(registry->dictionarySize())
 , indexedDictionary_(new Messages::FieldCPtr[indexedDictionarySize_])
+, fieldSetCache_(new Messages::FieldSet::BufferCache(Messages::FieldSet::BufferCacheSize,Messages::FieldSet::BifferCachePreallocate))
 {
 }
 
 Context::~Context()
 {
+  fieldSetCache_.reset();
 }
 
 void
