@@ -2,6 +2,8 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 #pragma once
+#include <Common/Exceptions.h>
+
 namespace QuickFASTDotNet{
 
   public ref class UnexpectedError: public System::Exception

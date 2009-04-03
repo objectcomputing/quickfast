@@ -2,11 +2,12 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 #include "StdAfx.h"
-#include "Encoder.h"
-#include "TemplateRegistry.h"
-#include "DataDestination.h"
-#include "Message.h"
-#include "Exceptions.h"
+#include <DotNet/Encoder.h>
+#include <DotNet/TemplateRegistry.h>
+#include <DotNet/DataDestination.h>
+#include <DotNet/Message.h>
+#include <DotNet/Exceptions.h>
+#include <Codecs/Encoder.h>
 
 using namespace System;
 using namespace System::IO;

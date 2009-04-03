@@ -3,7 +3,8 @@
 // See the file license.txt for licensing information.
 #pragma once
 
-#include "UnmanagedPtr.h"
+#include <DotNet/UnmanagedPtr.h>
+#include <Codecs/TemplateRegistry.h>
 
 namespace QuickFASTDotNet {
   namespace Codecs{

@@ -13,7 +13,7 @@
 
 #include <vcclr.h>
 
-#pragma unmanaged 
+#pragma unmanaged
 
 #include <vector>
 #include <map>
@@ -23,38 +23,4 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/operators.hpp>
 
-#include "Common/QuickFAST_Export.h"
-#include "Common/Types.h"
-#include "Common/Decimal.h"
-
-#include "Codecs/TemplateRegistry_fwd.h"
-#include "Codecs/Decoder.h"
-#include "Codecs/Encoder.h"
-#include "Codecs/DataSource.h"
-#include "Codecs/DataDestination.h"
-#include "Codecs/DataDestination_fwd.h"
-#include "Codecs/XMLTemplateParser.h"
-
-#include "Messages/Message.h"
-#include "Messages/FieldSet.h"
-#include "Messages/FieldAscii.h"
-#include "Messages/FieldByteVector.h"
-#include "Messages/FieldDecimal.h"
-#include "Messages/FieldGroup.h"
-#include "Messages/FieldInt32.h"
-#include "Messages/FieldInt64.h"
-#include "Messages/FieldUInt32.h"
-#include "Messages/FieldUInt64.h"
-#include "Messages/FieldSequence.h"
-#include "Messages/FieldSet.h"
-#include "Messages/FieldUtf8.h"
-#include "Messages/Sequence_fwd.h"
-#include "Messages/Sequence.h"
-#include "Messages/Group_fwd.h"
-#include "Messages/FieldInt8.h"
-#include "Messages/FieldUInt8.h"
-#include "Messages/FieldInt16.h"
-#include "Messages/FieldUInt16.h"
-#include "Messages/FieldBitmap.h"
-
-#pragma managed 
+#pragma managed

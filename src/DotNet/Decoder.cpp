@@ -2,10 +2,10 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 #include "StdAfx.h"
-#include "Decoder.h"
-#include "Message.h"
-#include "TemplateRegistry.h"
-#include "Exceptions.h"
+#include <DotNet/Decoder.h>
+#include <DotNet/Message.h>
+#include <DotNet/TemplateRegistry.h>
+#include <DotNet/Exceptions.h>
 
 using namespace System;
 using namespace System::IO;
@@ -75,7 +75,7 @@ namespace QuickFASTDotNet{
         {
           endOfStream_ = true;
         }
-        
+
         callback(message);
       }
       catch(const QuickFAST::UnsupportedConversion& error)

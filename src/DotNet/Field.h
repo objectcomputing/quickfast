@@ -3,9 +3,9 @@
 // See the file license.txt for licensing information.
 #pragma once
 
-#include "Decimal.h"
-#include "Sequence.h"
-#include "FieldSet.h"
+#include <DotNet/Decimal.h>
+#include <DotNet/Sequence.h>
+#include <DotNet/FieldSet.h>
 
 
 namespace QuickFASTDotNet{

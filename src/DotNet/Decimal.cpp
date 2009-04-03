@@ -3,4 +3,4 @@
 // See the file license.txt for licensing information.
 
 #include "StdAfx.h"
-#include "Decimal.h"
+#include <DotNet/Decimal.h>

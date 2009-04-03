@@ -2,13 +2,30 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 #include "StdAfx.h"
-#include "Field.h"
-#include "FieldSet.h"
-#include "Sequence.h"
-#include "Decimal.h"
-#include "StlDotNet.h"
-#include "Exceptions.h"
-#include "ManagedHelpers.h"
+#include <DotNet/Field.h>
+#include <DotNet/FieldSet.h>
+#include <DotNet/Sequence.h>
+#include <DotNet/Decimal.h>
+#include <DotNet/StlDotNet.h>
+#include <DotNet/Exceptions.h>
+#include <DotNet/ManagedHelpers.h>
+
+#include "Messages/FieldAscii.h"
+#include "Messages/FieldByteVector.h"
+#include "Messages/FieldDecimal.h"
+#include "Messages/FieldGroup.h"
+#include "Messages/FieldInt32.h"
+#include "Messages/FieldInt64.h"
+#include "Messages/FieldUInt32.h"
+#include "Messages/FieldUInt64.h"
+#include "Messages/FieldSequence.h"
+#include "Messages/FieldSet.h"
+#include "Messages/FieldUtf8.h"
+#include "Messages/FieldInt8.h"
+#include "Messages/FieldUInt8.h"
+#include "Messages/FieldInt16.h"
+#include "Messages/FieldUInt16.h"
+#include "Messages/FieldBitmap.h"
 
 using namespace QuickFASTDotNet::Messages;
 using namespace System;

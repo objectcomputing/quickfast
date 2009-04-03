@@ -3,9 +3,10 @@
 // See the file license.txt for licensing information.
 
 #include "StdAfx.h"
-#include "StlDotNet.h"
-#include "TemplateRegistry.h"
-#include "StlDotNet.h"
+#include <DotNet/TemplateRegistry.h>
+#include <DotNet/StlDotNet.h>
+#include <Codecs/XMLTemplateParser.h>
+
 #include <streambuf>
 #include <istream>
 using namespace System;

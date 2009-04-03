@@ -2,4 +2,4 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 #include "StdAfx.h"
-#include "Exceptions.h"
+#include <DotNet/Exceptions.h>

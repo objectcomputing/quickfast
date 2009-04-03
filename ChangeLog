@@ -1,3 +1,66 @@
+Fri Apr  3 18:10:22 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Common/Profiler.h:
+        * src/DotNet/DataDestination.h:
+        * src/DotNet/DataDestination.cpp:
+        * src/DotNet/DataSource.h:
+        * src/DotNet/Decimal.h:
+        * src/DotNet/Decimal.cpp:
+        * src/DotNet/Decoder.h:
+        * src/DotNet/Decoder.cpp:
+        * src/DotNet/Encoder.cpp:
+        * src/DotNet/Exceptions.h:
+        * src/DotNet/Exceptions.cpp:
+        * src/DotNet/Field.h:
+        * src/DotNet/Field.cpp:
+        * src/DotNet/FieldIdentity.h:
+        * src/DotNet/FieldIdentity.cpp:
+        * src/DotNet/FieldSet.h:
+        * src/DotNet/FieldSet.cpp:
+        * src/DotNet/Message.h:
+        * src/DotNet/Message.cpp:
+        * src/DotNet/Sequence.h:
+        * src/DotNet/Sequence.cpp:
+        * src/DotNet/Stdafx.h:
+        * src/DotNet/SynchronousDecoder.h:
+        * src/DotNet/SynchronousDecoder.cpp:
+        * src/DotNet/TemplateRegistry.h:
+        * src/DotNet/TemplateRegistry.cpp:
+        * src/DotNet/UnmanagedPtr.cpp:
+        * src/DotNetExamples/DotNetExampleCode:
+        * src/DotNetExamples/DotNetExampleCode/.svnignore:
+        * src/DotNetExamples/PerformanceTestDotNet:
+        * src/DotNetExamples/PerformanceTestDotNet/.svnignore:
+        * src/DotNetTests/DecodingPerformance:
+        * src/DotNetTests/DecodingPerformance/.svnignore:
+
+        Fixed include file related build problems.
+        Guidelines for include files in QuickFAST C++
+.
+        Almost all includes should use angle bracket delimiters and paths qualified with respect
+        to $QUICKFAST_ROOT/src.  Exceptions to this are:
+
+        Precompiled headers use the file name given in the mpc file.
+          For QuickFIX.dll and QuickFAST_Tests that is:
+            #include <Common/QuickFASTPch.h>
+          For Examples:
+            #include <Examples/ExamplesPch.h>
+          For QuickFASTDotNet:
+            #include "StdAfx.h"
+        Pcompiled headers should be included ONLY from .cpp files.
+
+        Closely associated files with the same base name should be included using unqualified names in quotes.
+        Example:
+          src/Codex/Decoder.cpp should use:
+            #include "Decoder.h"
+            which in turn should:
+              #include "Decoder_fwd.h"
+
+        A cpp file should include its own header file immediately after the precompiled header file.
+        A normal header should include its own forward declaration header. i.e. xyz.h should include xyz_fwd.h
+        Forward declaration header files should be included only from other .h files.
+
+
 Thu Apr 02 22:17:01 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
 
         * src/DotNet/SynchronousDecoder.cpp:

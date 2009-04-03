@@ -15,10 +15,14 @@
 // Note: boost's microsecond_clock was slow enough to skew the results
 // hence the win32 GetTickCount stuff.
 #ifdef _WIN32
-# ifndef BASETYPES // if we didn't #include <windows.h>
-    typedef unsigned long DWORD;
-    DWORD GetTickCount();
-# endif // DWORD
+# ifndef _WINBASE_ // if we didn't #include <windows.h>
+// this is the ultimate expansion of the declaration for GetTickCount
+// after the macros have been resolved on a 16 bit windows build
+// With luck, it won't conflict with the windows declaration in case
+// the included occur in the wrong order
+typedef unsigned long DWORD;
+__declspec(dllimport) DWORD GetTickCount(void);
+# endif // _WINBASE_
 # define PROFILER_GET_TIME ::GetTickCount()
 # define PROFILER_TIME_TYPE DWORD
 # define PROFILER_DIFF_MSEC(a, b) (a - b)

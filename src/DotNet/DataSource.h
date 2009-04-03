@@ -2,6 +2,7 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 #pragma once
+#include <Codecs/DataSource.h>
 
 namespace QuickFASTDotNet{
 

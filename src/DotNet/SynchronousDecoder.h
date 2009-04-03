@@ -2,9 +2,8 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 #pragma once
-
-#include "UnmanagedPtr.h"
-#include "Decoder.h"
+#include <DotNet/UnmanagedPtr.h>
+#include <DotNet/Decoder.h>
 #include "DataSourceBuffered.h"
 
 #include "Codecs/MessageConsumer.h"
@@ -116,7 +115,7 @@ namespace QuickFASTDotNet{
         void set(bool strict) { decoder_->setStrict(strict); syncDecoder_->setStrict(strict); }
       }
 
-      /// @brief Indicates whether the decoder is reset after each message when 
+      /// @brief Indicates whether the decoder is reset after each message when
       /// decoding more than one message.
       ///
       /// Some data streams reset the Xcoder context at the beginning of each message

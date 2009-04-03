@@ -3,13 +3,12 @@
 // See the file license.txt for licensing information.
 #include "StdAfx.h"
 #include "SynchronousDecoder.h"
-#include "Message.h"
-#include "TemplateRegistry.h"
-#include "Exceptions.h"
+#include <DotNet/Message.h>
+#include <DotNet/TemplateRegistry.h>
+#include <DotNet/Exceptions.h>
 
 using namespace System;
 using namespace System::IO;
-
 
 namespace QuickFASTDotNet{
   namespace Codecs{

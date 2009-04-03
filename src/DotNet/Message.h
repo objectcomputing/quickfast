@@ -3,7 +3,8 @@
 // See the file license.txt for licensing information.
 #pragma once
 
-#include "FieldSet.h"
+#include <DotNet/FieldSet.h>
+#include <Messages/Message.h>
 
 namespace QuickFASTDotNet{
   namespace Messages{

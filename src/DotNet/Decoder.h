@@ -3,8 +3,9 @@
 // See the file license.txt for licensing information.
 #pragma once
 
-#include "UnmanagedPtr.h"
-#include "DataSource.h"
+#include <DotNet/UnmanagedPtr.h>
+#include <DotNet/DataSource.h>
+#include <Codecs/Decoder.h>
 
 namespace QuickFASTDotNet{
   namespace Messages {

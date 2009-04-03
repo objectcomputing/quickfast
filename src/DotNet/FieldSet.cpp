@@ -2,10 +2,10 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 #include "StdAfx.h"
-#include "FieldSet.h"
-#include "Field.h"
-#include "StlDotNet.h"
-#include "FieldIdentity.h"
+#include <DotNet/FieldSet.h>
+#include <DotNet/Field.h>
+#include <DotNet/StlDotNet.h>
+#include <DotNet/FieldIdentity.h>
 
 using namespace System;
 

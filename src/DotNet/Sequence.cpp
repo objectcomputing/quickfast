@@ -2,9 +2,9 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 #include "StdAfx.h"
-#include "Sequence.h"
-#include "FieldSet.h"
-#include "StlDotNet.h"
+#include <DotNet/Sequence.h>
+#include <DotNet/FieldSet.h>
+#include <DotNet/StlDotNet.h>
 
 using namespace System;
 

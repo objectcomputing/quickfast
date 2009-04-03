@@ -2,7 +2,8 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 #include "StdAfx.h"
-#include "FieldIdentity.h"
+#include <DotNet/FieldIdentity.h>
+#include <Messages/FieldIdentity.h>
 
 using namespace QuickFASTDotNet;
 using namespace Messages;
