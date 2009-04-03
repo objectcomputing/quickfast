@@ -1,3 +1,13 @@
+Fri Apr  3 20:02:36 UTC 2009  Yan Dai  <dai_y@ociweb.com>
+
+        * src/Tests/resources:
+        * src/Tests/resources/unittest_mandatory.xml:
+        * src/Tests/resources/unittest_optional.xml:
+        * src/Tests/testRoundTrip1.cpp:
+
+          Added test cases for combination of various field types, field operators,
+          and presence.
+
 Fri Apr  3 18:10:22 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Common/Profiler.h:
