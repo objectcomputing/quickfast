@@ -1,3 +1,12 @@
+Mon Apr  6 15:04:43 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionDecimal.h:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        Unit test revealed mishandling of default value defined in XML.
+
+        * src/DotNet/DataSourceBuffered.cpp:
+        Avoid type conversion warning.
+
 Fri Apr  3 20:02:36 UTC 2009  Yan Dai  <dai_y@ociweb.com>
 
         * src/Tests/resources:

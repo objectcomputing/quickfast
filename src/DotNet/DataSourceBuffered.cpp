@@ -42,7 +42,7 @@ namespace QuickFASTDotNet{
     bool DataSourceBuffered::fillBuffer (void)
     {
       bool filledBuffer = false;
-      long length = inStream_->Length - inStream_->Position;
+      long length = long(inStream_->Length - inStream_->Position);
       if (length > 0)
       {
         pos_ = 0;
