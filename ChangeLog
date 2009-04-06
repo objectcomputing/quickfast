@@ -1,3 +1,8 @@
+Mon Apr  6 17:26:17 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Tests/testRoundTrip1.cpp:
+        Gcc build errors.  int64 constant was not qualified with "LL".
+
 Mon Apr  6 17:14:03 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionBitMap.cpp:
