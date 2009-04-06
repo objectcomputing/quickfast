@@ -37,6 +37,7 @@ namespace QuickFAST{
     void swap(BitMap & rhs);
 
   private:
+    std::string value_;
   };
 }
 #endif // BITMAP_H

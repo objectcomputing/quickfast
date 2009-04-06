@@ -32,6 +32,26 @@ FieldInstructionBitMap::~FieldInstructionBitMap()
 {
 }
 
+namespace
+{
+  void
+  appendByte(WorkingBuffer & buffer, unsigned short & savedBits, size_t & savedBitCount, uchar byte)
+  {
+    savedBits <<= savedBitCount;
+    savedBits |= (byte << 1);
+    if(savedBitCount == 0)
+    {
+      savedBitCount = 7;
+    }
+    else
+    {
+      savedBits <<=(8 - savedBitCount);
+      buffer.push(savedBits >> 8);
+      savedBitCount -= 1;
+    }
+  }
+}
+
 bool
 FieldInstructionBitMap::decodeFromSource(
   Codecs::DataSource & source,
@@ -39,7 +59,28 @@ FieldInstructionBitMap::decodeFromSource(
   WorkingBuffer & buffer,
   Messages::FieldCPtr & field) const
 {
-  int todo;
+  buffer.clear(false);
+  unsigned short savedBits = 0;
+  size_t savedBitCount = 0;
+  uchar byte;
+  if(!source.getByte(byte))
+  {
+    return false;
+  }
+  while((byte & stopBit) == 0)
+  {
+    appendByte(buffer, savedBits, savedBitCount, byte);
+    if(!source.getByte(byte))
+    {
+      // todo: exception?
+      return false;
+    }
+  }
+  // write the last byte
+  appendByte(buffer, savedBits, savedBitCount, byte);
+  // and flush it to the buffer if necessary
+  appendByte(buffer, savedBits, savedBitCount, 0);
+  field = Messages::FieldBitMap::create(buffer.begin(), buffer.size());
   return false;
 }
 
@@ -79,7 +120,7 @@ FieldInstructionBitMap::encodeNop(
   if(fieldSet.getField(identity_->name(), field))
   {
     BitMap value = field->toBitMap();
-#if 0
+#if 0 /// encoding not supported (yet)
     if(!isMandatory())
     {
       encodeNullableBitMap(destination, value);
@@ -104,5 +145,6 @@ FieldInstructionBitMap::encodeNop(
 void
 FieldInstructionBitMap::interpretValue(const std::string & value)
 {
+  /// initialization not supported yet.
   return;
 }

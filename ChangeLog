@@ -1,3 +1,11 @@
+Mon Apr  6 17:14:03 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionBitMap.cpp:
+        * src/Common/BitMap.h:
+        * src/Common/BitMap.cpp:
+        Check in the BitMap implementation
+
+
 Mon Apr  6 15:04:43 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionDecimal.h:
