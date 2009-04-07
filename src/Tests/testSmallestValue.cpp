@@ -51,208 +51,209 @@ using namespace QuickFAST;
    //  mandatory, required
 
 namespace{
+
   void validateMessage1(Messages::Message & message)
   {
     BOOST_CHECK_EQUAL(message.getApplicationType(), "unittestdata");
     Messages::FieldCPtr value;
 
     //<int32 name="int32_nop" id="1">
-    //msg.addField(identity_int32_nop, Messages::FieldInt32::create(-1));
+    //msg.addField(identity_int32_nop, Messages::FieldInt32::create(-2147483648));
     BOOST_CHECK(message.getField("int32_nop", value));
-    BOOST_CHECK_EQUAL(value->toInt32(), -1);
+    BOOST_CHECK_EQUAL(value->toInt32(), -2147483648);
     //<uInt32 name="uint32_nop" id="2">
-    //msg.addField(identity_uint32_nop, Messages::FieldUInt32::create(1));
+    //msg.addField(identity_uint32_nop, Messages::FieldUInt32::create(0));
     BOOST_CHECK(message.getField("uint32_nop", value));
-    BOOST_CHECK_EQUAL(value->toUInt32(), 1);
+    BOOST_CHECK_EQUAL(value->toUInt32(), 0);
     //<int64 name="int64_nop" id="3">
-    //msg.addField(identity_int64_nop, Messages::FieldInt64::create(-500000000));
+    //msg.addField(identity_int64_nop, Messages::FieldInt64::create(-9223372036854775808));
     BOOST_CHECK(message.getField("int64_nop", value));
-    BOOST_CHECK_EQUAL(value->toInt64(), -500000000);
+    BOOST_CHECK_EQUAL(value->toInt64(), -9223372036854775808);
 
     //<uInt64 name="uint64_nop" id="4">
-    //msg.addField(identity_uint64_nop, Messages::FieldUInt64::create(500000000));
+    //msg.addField(identity_uint64_nop, Messages::FieldUInt64::create(0));
     BOOST_CHECK(message.getField("uint64_nop", value));
-    BOOST_CHECK_EQUAL(value->toUInt64(), 500000000);
+    BOOST_CHECK_EQUAL(value->toUInt64(), 0);
 
     //<decimal name="decimal_nop" id="5">
-    //msg.addField(identity_decimal_nop, Messages::FieldDecimal::create(Decimal(12345, -4)));
+    //msg.addField(identity_decimal_nop, Messages::FieldDecimal::create(Decimal(9223372036854775808, -63)));
     BOOST_CHECK(message.getField("decimal_nop", value));
-    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal (12345, -4));
+    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal (9223372036854775808, -63));
 
     //<string name="asciistring_nop" charset="ascii" id="6">
-    //msg.addField(identity_asciistring_nop, Messages::FieldAscii::create("asciistringblabla"));
+    //msg.addField(identity_asciistring_nop, Messages::FieldAscii::create(""));
     BOOST_CHECK(message.getField("asciistring_nop", value));
-    BOOST_CHECK_EQUAL(value->toAscii(), "asciistringblabla");
+    BOOST_CHECK_EQUAL(value->toAscii(), "");
 
     //<string name="utf8string_nop" charset="unicode" id="7">
-    //msg.addField(identity_utf8string_nop, Messages::FieldAscii::create("utf8stringblabla"));
+    //msg.addField(identity_utf8string_nop, Messages::FieldAscii::create(""));
     BOOST_CHECK(message.getField("utf8string_nop", value));
-    BOOST_CHECK_EQUAL(value->toUtf8(), "utf8stringblabla");
+    BOOST_CHECK_EQUAL(value->toUtf8(), "");
 
     //<byteVector name="bytevector_nop" id="8">
-    //msg.addField(identity_bytevector_nop, Messages::FieldByteVector::create("bytevectorblabla"));
+    //msg.addField(identity_bytevector_nop, Messages::FieldByteVector::create(""));
     BOOST_CHECK(message.getField("bytevector_nop", value));
-    BOOST_CHECK_EQUAL(value->toByteVector(), "bytevectorblabla");
+    BOOST_CHECK_EQUAL(value->toByteVector(), "");
 
-    //  <int32 name="int32_const" id="9"><constant value="-90"/>
-    //msg.addField(identity_int32_const, Messages::FieldInt32::create(-90));
+    //  <int32 name="int32_const" id="9"><constant value="-2147483648"/>
+    //msg.addField(identity_int32_const, Messages::FieldInt32::create(-2147483648));
     BOOST_CHECK(message.getField("int32_const", value));
-    BOOST_CHECK_EQUAL(value->toInt32(), -90);
+    BOOST_CHECK_EQUAL(value->toInt32(), -2147483648);
 
-    //  <uInt32 name="uint32_const" id="10"><constant value="100"/>
-    //msg.addField(identity_uint32_const, Messages::FieldUInt32::create(100));
+    //  <uInt32 name="uint32_const" id="10"><constant value="0"/>
+    //msg.addField(identity_uint32_const, Messages::FieldUInt32::create(0));
     BOOST_CHECK(message.getField("uint32_const", value));
-    BOOST_CHECK_EQUAL(value->toUInt32(), 100);
+    BOOST_CHECK_EQUAL(value->toUInt32(), 0);
 
-    //  <int64 name="int64_const" id="11"><constant value="-5000000000"/>
-    //msg.addField(identity_int64_const, Messages::FieldInt64::create(-5000000000));
+    //  <int64 name="int64_const" id="11"><constant value="-9223372036854775808"/>
+    //msg.addField(identity_int64_const, Messages::FieldInt64::create(-9223372036854775808));
     BOOST_CHECK(message.getField("int64_const", value));
-    BOOST_CHECK_EQUAL(value->toInt64(), -5000000000);
+    BOOST_CHECK_EQUAL(value->toInt64(), -9223372036854775808);
 
-    //  <uInt64 name="uint64_const" id="12"><constant value="5000000000"/>
-    //msg.addField(identity_uint64_const, Messages::FieldUInt64::create(5000000000));
+    //  <uInt64 name="uint64_const" id="12"><constant value="0"/>
+    //msg.addField(identity_uint64_const, Messages::FieldUInt64::create(0));
     BOOST_CHECK(message.getField("uint64_const", value));
-    BOOST_CHECK_EQUAL(value->toUInt64(), 5000000000);
+    BOOST_CHECK_EQUAL(value->toUInt64(), 0);
 
-    //  <decimal name="decimal_const" id="13"><constant value="1.2345"/>
-    //msg.addField(identity_decimal_const, Messages::FieldDecimal::create(Decimal(12345, -4)));
+    //  <decimal name="decimal_const" id="13"><constant value="-0.000000000000000000000000000000000000000000009223372036854775808"/>
+    //msg.addField(identity_decimal_const, Messages::FieldDecimal::create(Decimal(9223372036854775808, -63)));
     BOOST_CHECK(message.getField("decimal_const", value));
-    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(12345, -4));
+    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(9223372036854775808, -63));
 
-    //  <string name="asciistring_const" charset="ascii" id="14"><constant value="constant asciistring"/>
-    //msg.addField(identity_asciistring_const, Messages::FieldAscii::create("constant asciistring"));
+    //  <string name="asciistring_const" charset="ascii" id="14"><constant value=""/>
+    //msg.addField(identity_asciistring_const, Messages::FieldAscii::create(""));
     BOOST_CHECK(message.getField("asciistring_const", value));
-    BOOST_CHECK_EQUAL(value->toAscii(), "constant asciistring");
+    BOOST_CHECK_EQUAL(value->toAscii(), "");
 
-    //  <string name="utf8string_const" charset="unicode" id="15"><constant value="constant utf8string"/>
-    //msg.addField(identity_utf8string_const, Messages::FieldAscii::create("constant utf8string"));
+    //  <string name="utf8string_const" charset="unicode" id="15"><constant value=""/>
+    //msg.addField(identity_utf8string_const, Messages::FieldAscii::create(""));
     BOOST_CHECK(message.getField("utf8string_const", value));
-    BOOST_CHECK_EQUAL(value->toUtf8(), "constant utf8string");
+    BOOST_CHECK_EQUAL(value->toUtf8(), "");
 
-    //  <byteVector name="bytevector_const" id="16"><constant value="constant bytevector"/>
-    //msg.addField(identity_bytevector_const, Messages::FieldByteVector::create("constant bytevector"));
+    //  <byteVector name="bytevector_const" id="16"><constant value=""/>
+    //msg.addField(identity_bytevector_const, Messages::FieldByteVector::create(""));
     BOOST_CHECK(message.getField("bytevector_const", value));
-    BOOST_CHECK_EQUAL(value->toByteVector(), "constant bytevector");
+    BOOST_CHECK_EQUAL(value->toByteVector(), "");
 
-    //  <int32 name="int32_default" id="17"><default value="-190"/>
-    //msg.addField(identity_int32_default, Messages::FieldInt32::create(-190));
+    //  <int32 name="int32_default" id="17"><default value="-2147483648"/>
+    //msg.addField(identity_int32_default, Messages::FieldInt32::create(-2147483648));
     BOOST_CHECK(message.getField("int32_default", value));
-    BOOST_CHECK_EQUAL(value->toInt32(), -190);
+    BOOST_CHECK_EQUAL(value->toInt32(), -2147483648);
 
-    //  <uInt32 name="uint32_default" id="18"><default value="200"/>
-    //msg.addField(identity_uint32_default, Messages::FieldUInt32::create(200));
+    //  <uInt32 name="uint32_default" id="18"><default value="0"/>
+    //msg.addField(identity_uint32_default, Messages::FieldUInt32::create(0));
     BOOST_CHECK(message.getField("uint32_default", value));
-    BOOST_CHECK_EQUAL(value->toUInt32(), 200);
+    BOOST_CHECK_EQUAL(value->toUInt32(), 0);
 
-    //  <int64 name="int64_default" id="19"><default value="-6000000000"/>
-    //msg.addField(identity_int64_default, Messages::FieldInt64::create(-6000000000));
+    //  <int64 name="int64_default" id="19"><default value="-9223372036854775808"/>
+    //msg.addField(identity_int64_default, Messages::FieldInt64::create(-9223372036854775808));
     BOOST_CHECK(message.getField("int64_default", value));
-    BOOST_CHECK_EQUAL(value->toInt64(), -6000000000);
+    BOOST_CHECK_EQUAL(value->toInt64(), -9223372036854775808);
 
-    //  <uInt64 name="uint64_default" id="20"><default value="6000000000"/>
-    //msg.addField(identity_uint64_default, Messages::FieldUInt64::create(6000000000));
+    //  <uInt64 name="uint64_default" id="20"><default value="0"/>
+    //msg.addField(identity_uint64_default, Messages::FieldUInt64::create(0));
     BOOST_CHECK(message.getField("uint64_default", value));
-    BOOST_CHECK_EQUAL(value->toUInt64(), 6000000000);
+    BOOST_CHECK_EQUAL(value->toUInt64(), 0);
 
-    //  <decimal name="decimal_default" id="21"><default value="5.4321"/>
-    //msg.addField(identity_decimal_default, Messages::FieldDecimal::create(Decimal(54321, -4)));
+    //  <decimal name="decimal_default" id="21"><default value="-0.000000000000000000000000000000000000000000009223372036854775808"/>
+    //msg.addField(identity_decimal_default, Messages::FieldDecimal::create(Decimal(9223372036854775808, -63)));
     BOOST_CHECK(message.getField("decimal_default", value));
-    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(54321, -4));
+    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(9223372036854775808, -63));
 
-    //  <string name="asciistring_default" charset="ascii" id="22"><default value="default asciistring"/>
-    //msg.addField(identity_asciistring_default, Messages::FieldAscii::create("default asciistring"));
+    //  <string name="asciistring_default" charset="ascii" id="22"><default value=""/>
+    //msg.addField(identity_asciistring_default, Messages::FieldAscii::create(""));
     BOOST_CHECK(message.getField("asciistring_default", value));
-    BOOST_CHECK_EQUAL(value->toAscii(), "default asciistring");
+    BOOST_CHECK_EQUAL(value->toAscii(), "");
 
-    //  <string name="utf8string_default" charset="unicode" id="23"><default value="default utf8string"/>
-    //msg.addField(identity_utf8string_default, Messages::FieldAscii::create("default utf8string"));
+    //  <string name="utf8string_default" charset="unicode" id="23"><default value=""/>
+    //msg.addField(identity_utf8string_default, Messages::FieldAscii::create(""));
     BOOST_CHECK(message.getField("utf8string_default", value));
-    BOOST_CHECK_EQUAL(value->toUtf8(), "default utf8string");
+    BOOST_CHECK_EQUAL(value->toUtf8(), "");
 
-    //  <byteVector name="bytevector_default" id="24"><default value="default bytevectorblabla"/>
-    //msg.addField(identity_bytevector_default, Messages::FieldByteVector::create("default bytevectorblabla"));
+    //  <byteVector name="bytevector_default" id="24"><default value=""/>
+    //msg.addField(identity_bytevector_default, Messages::FieldByteVector::create(""));
     BOOST_CHECK(message.getField("bytevector_default", value));
-    BOOST_CHECK_EQUAL(value->toByteVector(), "default bytevectorblabla");
+    BOOST_CHECK_EQUAL(value->toByteVector(), "");
 
     //  <int32 name="int32_copy" id="25"><copy/>
-    //msg.addField(identity_int32_copy, Messages::FieldInt32::create(-1));
+    //msg.addField(identity_int32_copy, Messages::FieldInt32::create(-2147483648));
     BOOST_CHECK(message.getField("int32_copy", value));
-    BOOST_CHECK_EQUAL(value->toInt32(), -1);
+    BOOST_CHECK_EQUAL(value->toInt32(), -2147483648);
 
     //  <uInt32 name="uint32_copy" id="26"><copy/>
-    //msg.addField(identity_uint32_copy, Messages::FieldUInt32::create(1));
+    //msg.addField(identity_uint32_copy, Messages::FieldUInt32::create(0));
     BOOST_CHECK(message.getField("uint32_copy", value));
-    BOOST_CHECK_EQUAL(value->toUInt32(), 1);
+    BOOST_CHECK_EQUAL(value->toUInt32(), 0);
 
     //  <int64 name="int64_copy" id="27"><copy/>
-    //msg.addField(identity_int64_copy, Messages::FieldInt64::create(-5000000000));
+    //msg.addField(identity_int64_copy, Messages::FieldInt64::create(-9223372036854775808));
     BOOST_CHECK(message.getField("int64_copy", value));
-    BOOST_CHECK_EQUAL(value->toInt64(), -5000000000);
+    BOOST_CHECK_EQUAL(value->toInt64(), -9223372036854775808);
 
     //  <uInt64 name="uint64_copy" id="28"><copy/>
-    // msg.addField(identity_uint64_copy, Messages::FieldUInt64::create(5000000000));
+    // msg.addField(identity_uint64_copy, Messages::FieldUInt64::create(0));
     BOOST_CHECK(message.getField("uint64_copy", value));
-    BOOST_CHECK_EQUAL(value->toUInt64(), 5000000000);
+    BOOST_CHECK_EQUAL(value->toUInt64(), 0);
 
-    //  <decimal name="decimal_copy" id="29"><copy value="1.2345"/>
-    //msg.addField(identity_decimal_copy, Messages::FieldDecimal::create(Decimal(12345, -4)));
+    //  <decimal name="decimal_copy" id="29"><copy value="-0.000000000000000000000000000000000000000000009223372036854775808"/>
+    //msg.addField(identity_decimal_copy, Messages::FieldDecimal::create(Decimal(9223372036854775808, -63)));
     BOOST_CHECK(message.getField("decimal_copy", value));
-    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(12345, -4));
+    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(9223372036854775808, -63));
 
     //  <string name="asciistring_copy" charset="ascii" id="30"><copy/>
-    //msg.addField(identity_asciistring_copy, Messages::FieldAscii::create("asciistringblabla"));
+    //msg.addField(identity_asciistring_copy, Messages::FieldAscii::create(""));
     BOOST_CHECK(message.getField("asciistring_copy", value));
-    BOOST_CHECK_EQUAL(value->toAscii(), "asciistringblabla");
+    BOOST_CHECK_EQUAL(value->toAscii(), "");
 
     //  <string name="utf8string_copy" charset="unicode" id="31"><copy/>
-    //msg.addField(identity_utf8string_copy, Messages::FieldAscii::create("utf8stringblabla"));
+    //msg.addField(identity_utf8string_copy, Messages::FieldAscii::create(""));
     BOOST_CHECK(message.getField("utf8string_copy", value));
-    BOOST_CHECK_EQUAL(value->toUtf8(), "utf8stringblabla");
+    BOOST_CHECK_EQUAL(value->toUtf8(), "");
 
     //  <byteVector name="bytevector_copy" id="32"><copy/>
-    //msg.addField(identity_bytevector_copy, Messages::FieldByteVector::create("bytevectorblabla"));
+    //msg.addField(identity_bytevector_copy, Messages::FieldByteVector::create(""));
     BOOST_CHECK(message.getField("bytevector_copy", value));
-    BOOST_CHECK_EQUAL(value->toByteVector(), "bytevectorblabla");
+    BOOST_CHECK_EQUAL(value->toByteVector(), "");
 
     //  <int32 name="int32_delta" id="33"><copy/>
-    //msg.addField(identity_int32_delta, Messages::FieldInt32::create(-1));
+    //msg.addField(identity_int32_delta, Messages::FieldInt32::create(-2147483648));
     BOOST_CHECK(message.getField("int32_delta", value));
-    BOOST_CHECK_EQUAL(value->toInt32(), -1);
+    BOOST_CHECK_EQUAL(value->toInt32(), -2147483648);
 
     //  <uInt32 name="uint32_delta" id="34"><delta/>
-    //msg.addField(identity_uint32_delta, Messages::FieldUInt32::create(1));
+    //msg.addField(identity_uint32_delta, Messages::FieldUInt32::create(0));
     BOOST_CHECK(message.getField("uint32_delta", value));
-    BOOST_CHECK_EQUAL(value->toUInt32(), 1);
+    BOOST_CHECK_EQUAL(value->toUInt32(), 0);
 
     //  <int64 name="int64_delta" id="35"><delta/>
-    //msg.addField(identity_int64_delta, Messages::FieldInt64::create(-1));
+    //msg.addField(identity_int64_delta, Messages::FieldInt64::create(-9223372036854775808));
     BOOST_CHECK(message.getField("int64_delta", value));
-    BOOST_CHECK_EQUAL(value->toInt64(), -1);
+    BOOST_CHECK_EQUAL(value->toInt64(), -9223372036854775808);
 
     //  <uInt64 name="uint64_delta" id="36"><delta/>
-    //msg.addField(identity_uint64_delta, Messages::FieldUInt64::create(1));
+    //msg.addField(identity_uint64_delta, Messages::FieldUInt64::create(0));
     BOOST_CHECK(message.getField("uint64_delta", value));
-    BOOST_CHECK_EQUAL(value->toUInt64(), 1);
+    BOOST_CHECK_EQUAL(value->toUInt64(), 0);
 
     //  <decimal name="decimal_delta" id="37"><delta/>
-    //msg.addField(identity_decimal_delta, Messages::FieldDecimal::create(Decimal(12345, -4)));
+    //msg.addField(identity_decimal_delta, Messages::FieldDecimal::create(Decimal(9223372036854775808, -63)));
     BOOST_CHECK(message.getField("decimal_delta", value));
-    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(12345, -4));
+    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(9223372036854775808, -63));
 
     //  <string name="asciistring_delta" charset="ascii" id="38"><delta/>
-    //msg.addField(identity_asciistring_delta, Messages::FieldAscii::create("blabla"));
+    //msg.addField(identity_asciistring_delta, Messages::FieldAscii::create(""));
     BOOST_CHECK(message.getField("asciistring_delta", value));
-    BOOST_CHECK_EQUAL(value->toAscii(), "blabla");
+    BOOST_CHECK_EQUAL(value->toAscii(), "");
 
     //  <string name="utf8string_delta" charset="unicode" id="39"><delta/>
-    //msg.addField(identity_utf8string_delta, Messages::FieldAscii::create("blabla"));
+    //msg.addField(identity_utf8string_delta, Messages::FieldAscii::create(""));
     BOOST_CHECK(message.getField("utf8string_delta", value));
-    BOOST_CHECK_EQUAL(value->toUtf8(), "blabla");
+    BOOST_CHECK_EQUAL(value->toUtf8(), "");
 
     //  <byteVector name="bytevector_delta" id="40"><delta/>
-    //msg.addField(identity_bytevector_delta, Messages::FieldByteVector::create("blabla"));
+    //msg.addField(identity_bytevector_delta, Messages::FieldByteVector::create(""));
     BOOST_CHECK(message.getField("bytevector_delta", value));
-    BOOST_CHECK_EQUAL(value->toByteVector(), "blabla");
+    BOOST_CHECK_EQUAL(value->toByteVector(), "");
 
     //  <int32 name="int32_incre" id="41"><increment value="1"/>
     //msg.addField(identity_int32_incre, Messages::FieldInt32::create(1));
@@ -275,24 +276,24 @@ namespace{
     BOOST_CHECK_EQUAL(value->toUInt64(), 1);
 
     //  <string name="asciistring_tail" charset="ascii" id="45"><tail/>
-    //msg.addField(identity_asciistring_tail, Messages::FieldAscii::create("blabla"));
+    //msg.addField(identity_asciistring_tail, Messages::FieldAscii::create(""));
     BOOST_CHECK(message.getField("asciistring_tail", value));
-    BOOST_CHECK_EQUAL(value->toAscii(), "blabla");
+    BOOST_CHECK_EQUAL(value->toAscii(), "");
 
     //  <string name="utf8string_tail" charset="unicode" id="46"><tail/>
-    //msg.addField(identity_utf8string_tail, Messages::FieldAscii::create("blabla"));
+    //msg.addField(identity_utf8string_tail, Messages::FieldAscii::create(""));
     BOOST_CHECK(message.getField("utf8string_tail", value));
-    BOOST_CHECK_EQUAL(value->toUtf8(), "blabla");
+    BOOST_CHECK_EQUAL(value->toUtf8(), "");
 
     //  <byteVector name="bytevector_tail" id="47"><tail/>
-    //msg.addField(identity_bytevector_tail, Messages::FieldByteVector::create("blabla"));
+    //msg.addField(identity_bytevector_tail, Messages::FieldByteVector::create(""));
     BOOST_CHECK(message.getField("bytevector_tail", value));
-    BOOST_CHECK_EQUAL(value->toByteVector(), "blabla");
+    BOOST_CHECK_EQUAL(value->toByteVector(), "");
 
   }
 
 
-  void test (const std::string& xml)
+  void smallest_value_test (const std::string& xml)
   {
     std::ifstream templateStream(xml.c_str(), std::ifstream::binary);
 
@@ -318,37 +319,37 @@ namespace{
     Messages::FieldIdentityCPtr identity_utf8string_nop = new Messages::FieldIdentity("utf8string_nop");
     //<byteVector name="bytevector_nop" id="8">
     Messages::FieldIdentityCPtr identity_bytevector_nop = new Messages::FieldIdentity("bytevector_nop");
-    //  <int32 name="int32_const" id="9"><constant value="-90"/>
+    //  <int32 name="int32_const" id="9"><constant value="-2147483648"/>
     Messages::FieldIdentityCPtr identity_int32_const = new Messages::FieldIdentity("int32_const");
-    //  <uInt32 name="uint32_const" id="10"><constant value="100"/>
+    //  <uInt32 name="uint32_const" id="10"><constant value="0"/>
     Messages::FieldIdentityCPtr identity_uint32_const = new Messages::FieldIdentity("uint32_const");
-    //  <int64 name="int64_const" id="11"><constant value="-5000000000"/>
+    //  <int64 name="int64_const" id="11"><constant value="-9223372036854775808"/>
     Messages::FieldIdentityCPtr identity_int64_const = new Messages::FieldIdentity("int64_const");
-    //  <uInt64 name="uint64_const" id="12"><constant value="5000000000"/>
+    //  <uInt64 name="uint64_const" id="12"><constant value="0"/>
     Messages::FieldIdentityCPtr identity_uint64_const = new Messages::FieldIdentity("uint64_const");
-    //<decimal name="decimal_const" id="13"><constant value="1.2345"/>
+    //<decimal name="decimal_const" id="13"><constant value="-0.000000000000000000000000000000000000000000009223372036854775808"/>
     Messages::FieldIdentityCPtr identity_decimal_const = new Messages::FieldIdentity("decimal_const");
-    //  <string name="asciistring_const" charset="ascii" id="14"><constant value="constant asciistring"/>
+    //  <string name="asciistring_const" charset="ascii" id="14"><constant value=""/>
     Messages::FieldIdentityCPtr identity_asciistring_const = new Messages::FieldIdentity("asciistring_const");
-    //  <string name="utf8string_const" charset="unicode" id="15"><constant value="constant utf8string"/>
+    //  <string name="utf8string_const" charset="unicode" id="15"><constant value=""/>
     Messages::FieldIdentityCPtr identity_utf8string_const = new Messages::FieldIdentity("utf8string_const");
-    //  <byteVector name="bytevector_const" id="16"><constant value="constant bytevector"/>
+    //  <byteVector name="bytevector_const" id="16"><constant value=""/>
     Messages::FieldIdentityCPtr identity_bytevector_const = new Messages::FieldIdentity("bytevector_const");
-    //  <int32 name="int32_default" id="17"><default value="-190"/>
+    //  <int32 name="int32_default" id="17"><default value="-2147483648"/>
     Messages::FieldIdentityCPtr identity_int32_default = new Messages::FieldIdentity("int32_default");
-    //  <uInt32 name="uint32_default" id="18"><default value="200"/>
+    //  <uInt32 name="uint32_default" id="18"><default value="0"/>
     Messages::FieldIdentityCPtr identity_uint32_default = new Messages::FieldIdentity("uint32_default");
-    //  <uInt64 name="int64_default" id="19"><default value="-6000000000"/>
+    //  <uInt64 name="int64_default" id="19"><default value="-9223372036854775808"/>
     Messages::FieldIdentityCPtr identity_int64_default = new Messages::FieldIdentity("int64_default");
-    //  <uInt64 name="uint64_default" id="20"><default value="6000000000"/>
+    //  <uInt64 name="uint64_default" id="20"><default value="0"/>
     Messages::FieldIdentityCPtr identity_uint64_default = new Messages::FieldIdentity("uint64_default");
-    //  <decimal name="decimal_default" id="21"><default value="5.4321"/>
+    //  <decimal name="decimal_default" id="21"><default value="-0.0000000000000000000000000000000000000000000092233720368547758"/>
     Messages::FieldIdentityCPtr identity_decimal_default = new Messages::FieldIdentity("decimal_default");
     //  <string name="asciistring_default" charset="ascii" id="22"><default value="default asciistring"/>
     Messages::FieldIdentityCPtr identity_asciistring_default = new Messages::FieldIdentity("asciistring_default");
     //  <string name="utf8string_default" charset="unicode" id="23"><default value="default utf8string"/>
     Messages::FieldIdentityCPtr identity_utf8string_default = new Messages::FieldIdentity("utf8string_default");
-    //  <byteVector name="bytevector_default" id="24"><default value="default bytevectorblabla"/>
+    //  <byteVector name="bytevector_default" id="24"><default value=""/>
     Messages::FieldIdentityCPtr identity_bytevector_default = new Messages::FieldIdentity("bytevector_default");
     //  <int32 name="int32_copy" id="25"><copy/>
     Messages::FieldIdentityCPtr identity_int32_copy = new Messages::FieldIdentity("int32_copy");
@@ -358,7 +359,7 @@ namespace{
     Messages::FieldIdentityCPtr identity_int64_copy = new Messages::FieldIdentity("int64_copy");
     //  <uInt64 name="uint64_copy" id="28"><copy/>
     Messages::FieldIdentityCPtr identity_uint64_copy = new Messages::FieldIdentity("uint64_copy");
-    //  <decimal name="decimal_copy" id="29"><copy value="1.2345"/>
+    //  <decimal name="decimal_copy" id="29"><copy value="-0.000000000000000000000000000000000000000000009223372036854775808"/>
     Messages::FieldIdentityCPtr identity_decimal_copy = new Messages::FieldIdentity("decimal_copy");
     //  <string name="asciistring_copy" charset="ascii" id="30"><copy/>
     Messages::FieldIdentityCPtr identity_asciistring_copy = new Messages::FieldIdentity("asciistring_copy");
@@ -398,85 +399,85 @@ namespace{
     Messages::FieldIdentityCPtr identity_bytevector_tail = new Messages::FieldIdentity("bytevector_tail");
 
     //<int32 name="int32_nop" id="1">
-    msg.addField(identity_int32_nop, Messages::FieldInt32::create(-1));
+    msg.addField(identity_int32_nop, Messages::FieldInt32::create(-2147483648));
     //<uInt32 name="uint32_nop" id="2">
-    msg.addField(identity_uint32_nop, Messages::FieldUInt32::create(1));
+    msg.addField(identity_uint32_nop, Messages::FieldUInt32::create(0));
     //<int64 name="int64_nop" id="3">
-    msg.addField(identity_int64_nop, Messages::FieldInt64::create(-500000000));
+    msg.addField(identity_int64_nop, Messages::FieldInt64::create(-9223372036854775808));
     //<uInt64 name="uint64_nop" id="4">
-    msg.addField(identity_uint64_nop, Messages::FieldUInt64::create(500000000));
+    msg.addField(identity_uint64_nop, Messages::FieldUInt64::create(0));
     //<decimal name="decimal_nop" id="5">
-    msg.addField(identity_decimal_nop, Messages::FieldDecimal::create(Decimal(12345, -4)));
+    msg.addField(identity_decimal_nop, Messages::FieldDecimal::create(Decimal(-9223372036854775808, -63)));
     //<string name="asciistring_nop" charset="ascii" id="6">
-    msg.addField(identity_asciistring_nop, Messages::FieldAscii::create("asciistringblabla"));
+    msg.addField(identity_asciistring_nop, Messages::FieldAscii::create(""));
     //<string name="utf8string_nop" charset="unicode" id="7">
-    msg.addField(identity_utf8string_nop, Messages::FieldAscii::create("utf8stringblabla"));
+    msg.addField(identity_utf8string_nop, Messages::FieldAscii::create(""));
     //<byteVector name="bytevector_nop" id="8">
-    msg.addField(identity_bytevector_nop, Messages::FieldByteVector::create("bytevectorblabla"));
-    //  <int32 name="int32_const" id="9"><constant value="-90"/>
-    msg.addField(identity_int32_const, Messages::FieldInt32::create(-90));
-    //  <uInt32 name="uint32_const" id="10"><constant value="100"/>
-    msg.addField(identity_uint32_const, Messages::FieldUInt32::create(100));
-    //  <int64 name="int64_const" id="11"><constant value="-5000000000"/>
-    msg.addField(identity_int64_const, Messages::FieldInt64::create(-5000000000));
-    //  <uInt64 name="uint64_const" id="12"><constant value="5000000000"/>
-    msg.addField(identity_uint64_const, Messages::FieldUInt64::create(5000000000));
-    //  <decimal name="decimal_const" id="13"><constant value="1.2345"/>
-    msg.addField(identity_decimal_const, Messages::FieldDecimal::create(Decimal(12345, -4)));
-    //  <string name="asciistring_const" charset="ascii" id="14"><constant value="constant asciistring"/>
-    msg.addField(identity_asciistring_const, Messages::FieldAscii::create("constant asciistring"));
-    //  <string name="utf8string_const" charset="unicode" id="15"><constant value="constant utf8string"/>
-    msg.addField(identity_utf8string_const, Messages::FieldAscii::create("constant utf8string"));
-    //  <byteVector name="bytevector_const" id="16"><constant value="constant bytevector"/>
-    msg.addField(identity_bytevector_const, Messages::FieldByteVector::create("constant bytevector"));
-    //  <int32 name="int32_default" id="17"><default value="-190"/>
-    msg.addField(identity_int32_default, Messages::FieldInt32::create(-190));
-    //  <uInt32 name="uint32_default" id="18"><default value="200"/>
-    msg.addField(identity_uint32_default, Messages::FieldUInt32::create(200));
-    //  <int64 name="int64_default" id="19"><default value="-6000000000"/>
-    msg.addField(identity_int64_default, Messages::FieldInt64::create(-6000000000));
-    //  <uInt64 name="uint64_default" id="20"><default value="6000000000"/>
-    msg.addField(identity_uint64_default, Messages::FieldUInt64::create(6000000000));
-    //  <decimal name="decimal_default" id="21"><default value="5.4321"/>
-    msg.addField(identity_decimal_default, Messages::FieldDecimal::create(Decimal(54321, -4)));
-    //  <string name="asciistring_default" charset="ascii" id="22"><default value="default asciistring"/>
-    msg.addField(identity_asciistring_default, Messages::FieldAscii::create("default asciistring"));
-    //  <string name="utf8string_default" charset="unicode" id="23"><default value="default utf8string"/>
-    msg.addField(identity_utf8string_default, Messages::FieldAscii::create("default utf8string"));
-    //  <byteVector name="bytevector_default" id="24"><default value="default bytevectorblabla"/>
-    msg.addField(identity_bytevector_default, Messages::FieldByteVector::create("default bytevectorblabla"));
+    msg.addField(identity_bytevector_nop, Messages::FieldByteVector::create(""));
+    //  <int32 name="int32_const" id="9"><constant value="-2147483648"/>
+    msg.addField(identity_int32_const, Messages::FieldInt32::create(-2147483648));
+    //  <uInt32 name="uint32_const" id="10"><constant value="0"/>
+    msg.addField(identity_uint32_const, Messages::FieldUInt32::create(0));
+    //  <int64 name="int64_const" id="11"><constant value="-9223372036854775808"/>
+    msg.addField(identity_int64_const, Messages::FieldInt64::create(-9223372036854775808));
+    //  <uInt64 name="uint64_const" id="12"><constant value="9223372036854775808"/>
+    msg.addField(identity_uint64_const, Messages::FieldUInt64::create(0));
+    //  <decimal name="decimal_const" id="13"><constant value="-0.000000000000000000000000000000000000000000009223372036854775808"/>
+    msg.addField(identity_decimal_const, Messages::FieldDecimal::create(Decimal(-9223372036854775808, -63)));
+    //  <string name="asciistring_const" charset="ascii" id="14"><constant value=""/>
+    msg.addField(identity_asciistring_const, Messages::FieldAscii::create(""));
+    //  <string name="utf8string_const" charset="unicode" id="15"><constant value=""/>
+    msg.addField(identity_utf8string_const, Messages::FieldAscii::create(""));
+    //  <byteVector name="bytevector_const" id="16"><constant value=""/>
+    msg.addField(identity_bytevector_const, Messages::FieldByteVector::create(""));
+    //  <int32 name="int32_default" id="17"><default value="-2147483648"/>
+    msg.addField(identity_int32_default, Messages::FieldInt32::create(-2147483648));
+    //  <uInt32 name="uint32_default" id="18"><default value="0"/>
+    msg.addField(identity_uint32_default, Messages::FieldUInt32::create(0));
+    //  <int64 name="int64_default" id="19"><default value="-9223372036854775808"/>
+    msg.addField(identity_int64_default, Messages::FieldInt64::create(-9223372036854775808));
+    //  <uInt64 name="uint64_default" id="20"><default value="0"/>
+    msg.addField(identity_uint64_default, Messages::FieldUInt64::create(0));
+    //  <decimal name="decimal_default" id="21"><default value="-0.0000000000000000000000000000000000000000000092233720368547758"/>
+    msg.addField(identity_decimal_default, Messages::FieldDecimal::create(Decimal(-9223372036854775808, -63)));
+    //  <string name="asciistring_default" charset="ascii" id="22"><default value=""/>
+    msg.addField(identity_asciistring_default, Messages::FieldAscii::create(""));
+    //  <string name="utf8string_default" charset="unicode" id="23"><default value=""/>
+    msg.addField(identity_utf8string_default, Messages::FieldAscii::create(""));
+    //  <byteVector name="bytevector_default" id="24"><default value=""/>
+    msg.addField(identity_bytevector_default, Messages::FieldByteVector::create(""));
     //  <int32 name="int32_copy" id="25"><copy/>
-    msg.addField(identity_int32_copy, Messages::FieldInt32::create(-1));
+    msg.addField(identity_int32_copy, Messages::FieldInt32::create(-2147483648));
     //  <uInt32 name="uint32_copy" id="26"><copy/>
-    msg.addField(identity_uint32_copy, Messages::FieldUInt32::create(1));
+    msg.addField(identity_uint32_copy, Messages::FieldUInt32::create(0));
     //  <int64 name="int64_copy" id="27"><copy/>
-    msg.addField(identity_int64_copy, Messages::FieldInt64::create(-5000000000));
+    msg.addField(identity_int64_copy, Messages::FieldInt64::create(-9223372036854775808));
     //  <uInt64 name="uint64_copy" id="28"><copy/>
-    msg.addField(identity_uint64_copy, Messages::FieldUInt64::create(5000000000));
-    //  <decimal name="decimal_copy" id="29"><copy value="1.2345"/>
-    msg.addField(identity_decimal_copy, Messages::FieldDecimal::create(Decimal(12345, -4)));
+    msg.addField(identity_uint64_copy, Messages::FieldUInt64::create(0));
+    //  <decimal name="decimal_copy" id="29"><copy value="-0.000000000000000000000000000000000000000000009223372036854775808"/>
+    msg.addField(identity_decimal_copy, Messages::FieldDecimal::create(Decimal(-9223372036854775808, -63)));
     //  <string name="asciistring_copy" charset="ascii" id="30"><copy/>
-    msg.addField(identity_asciistring_copy, Messages::FieldAscii::create("asciistringblabla"));
+    msg.addField(identity_asciistring_copy, Messages::FieldAscii::create(""));
     //  <string name="utf8string_copy" charset="unicode" id="31"><copy/>
-    msg.addField(identity_utf8string_copy, Messages::FieldAscii::create("utf8stringblabla"));
+    msg.addField(identity_utf8string_copy, Messages::FieldAscii::create(""));
     //  <byteVector name="bytevector_copy" id="32"><copy/>
-    msg.addField(identity_bytevector_copy, Messages::FieldByteVector::create("bytevectorblabla"));
+    msg.addField(identity_bytevector_copy, Messages::FieldByteVector::create(""));
     //  <int32 name="int32_delta" id="33"><copy/>
-    msg.addField(identity_int32_delta, Messages::FieldInt32::create(-1));
+    msg.addField(identity_int32_delta, Messages::FieldInt32::create(-2147483648));
     //  <uInt32 name="uint32_delta" id="34"><delta/>
-    msg.addField(identity_uint32_delta, Messages::FieldUInt32::create(1));
+    msg.addField(identity_uint32_delta, Messages::FieldUInt32::create(0));
     //  <int64 name="int64_delta" id="35"><delta/>
-    msg.addField(identity_int64_delta, Messages::FieldInt64::create(-1));
+    msg.addField(identity_int64_delta, Messages::FieldInt64::create(-9223372036854775808));
     //  <uInt64 name="uint64_delta" id="36"><delta/>
-    msg.addField(identity_uint64_delta, Messages::FieldUInt64::create(1));
+    msg.addField(identity_uint64_delta, Messages::FieldUInt64::create(0));
     //  <decimal name="decimal_delta" id="37"><delta/>
-    msg.addField(identity_decimal_delta, Messages::FieldDecimal::create(Decimal(12345, -4)));
+    msg.addField(identity_decimal_delta, Messages::FieldDecimal::create(Decimal(-9223372036854775808, -63)));
     //  <string name="asciistring_delta" charset="ascii" id="38"><delta/>
-    msg.addField(identity_asciistring_delta, Messages::FieldAscii::create("blabla"));
+    msg.addField(identity_asciistring_delta, Messages::FieldAscii::create(""));
     //  <string name="utf8string_delta" charset="unicode" id="39"><delta/>
-    msg.addField(identity_utf8string_delta, Messages::FieldAscii::create("blabla"));
+    msg.addField(identity_utf8string_delta, Messages::FieldAscii::create(""));
     //  <byteVector name="bytevector_delta" id="40"><delta/>
-    msg.addField(identity_bytevector_delta, Messages::FieldByteVector::create("blabla"));
+    msg.addField(identity_bytevector_delta, Messages::FieldByteVector::create(""));
     //  <int32 name="int32_incre" id="41"><increment value="1"/>
     msg.addField(identity_int32_incre, Messages::FieldInt32::create(1));
     //  <uInt32 name="uint32_incre" id="42"><increment value="1"/>
@@ -486,11 +487,11 @@ namespace{
     //  <uInt64 name="uint64_incre" id="44"><increment value="1"/>
     msg.addField(identity_uint64_incre, Messages::FieldUInt64::create(1));
     //  <string name="asciistring_tail" charset="ascii" id="45"><tail/>
-    msg.addField(identity_asciistring_tail, Messages::FieldAscii::create("blabla"));
+    msg.addField(identity_asciistring_tail, Messages::FieldAscii::create(""));
     //  <string name="utf8string_tail" charset="unicode" id="46"><tail/>
-    msg.addField(identity_utf8string_tail, Messages::FieldAscii::create("blabla"));
+    msg.addField(identity_utf8string_tail, Messages::FieldAscii::create(""));
     //  <byteVector name="bytevector_tail" id="47"><tail/>
-    msg.addField(identity_bytevector_tail, Messages::FieldByteVector::create("blabla"));
+    msg.addField(identity_bytevector_tail, Messages::FieldByteVector::create(""));
 
     Codecs::Encoder encoder(templateRegistry);
     //encoder.setVerboseOutput (std::cout);
@@ -517,21 +518,14 @@ namespace{
     BOOST_CHECK(fastString == reencoded);
 
   }
-
 }
 
 
-BOOST_AUTO_TEST_CASE(TestRoundTripMandatory)
-{
-  std::string xml (std::getenv ("QUICKFAST_ROOT"));
-  xml += "/src/Tests/resources/unittest_mandatory.xml";
-  test (xml);
-}
 
-BOOST_AUTO_TEST_CASE(TestRoundTripOptional)
+BOOST_AUTO_TEST_CASE(TestSmallestValue)
 {
   std::string xml (std::getenv ("QUICKFAST_ROOT"));
-  xml += "/src/Tests/resources/unittest_optional.xml";
-  test (xml);
+  xml += "/src/Tests/resources/smallest_value.xml";
+  smallest_value_test (xml);
 }
 

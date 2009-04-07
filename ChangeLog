@@ -1,3 +1,18 @@
+Tue Apr  7 21:47:22 UTC 2009  Yan Dai  <dai_y@ociweb.com>
+
+
+        * src/Tests/resources/biggest_value.xml:
+        * src/Tests/resources/smallest_value.xml:
+        * src/Tests/testBiggestValue.cpp:
+        * src/Tests/testSmallestValue.cpp:
+        
+          Added new tests to test bound values.
+          
+        * src/Tests/testRoundTrip1.cpp:
+
+          Fixed one type field check that was missed in previous commit and corrected
+          namespace scope.
+          
 Mon Apr  6 17:26:17 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Tests/testRoundTrip1.cpp:
