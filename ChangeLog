@@ -1,9 +1,16 @@
+Tue Apr  7 23:18:50 UTC 2009  Yan Dai  <dai_y@ociweb.com>
+
+        * src/Tests/resources/smallest_value.xml:
+        * src/Tests/testSmallestValue.cpp:
+
+          Corrected the decimal lowest bound value in comments and xml file.
+          
 Tue Apr  7 22:14:58 UTC 2009  Yan Dai  <dai_y@ociweb.com>
 
         * src/Tests/testSmallestValue.cpp:
 
           Corrected the decimal lowest bound value.
-          
+
 Tue Apr  7 21:47:22 UTC 2009  Yan Dai  <dai_y@ociweb.com>
 
 
