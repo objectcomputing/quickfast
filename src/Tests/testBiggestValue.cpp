@@ -475,7 +475,7 @@ namespace{
     //  <int32 name="int32_delta" id="33"><copy/>
     msg.addField(identity_int32_delta, Messages::FieldInt32::create(2147483647));
     //  <uInt32 name="uint32_delta" id="34"><delta/>
-    msg.addField(identity_uint32_delta, Messages::FieldUInt32::create(4294967295));
+    msg.addField(identity_uint32_delta, Messages::FieldUInt32::create(4294967295UL));
     //  <int64 name="int64_delta" id="35"><delta/>
     msg.addField(identity_int64_delta, Messages::FieldInt64::create(9223372036854775807LL));
     //  <uInt64 name="uint64_delta" id="36"><delta/>
