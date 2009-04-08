@@ -22,5 +22,6 @@
 #include <boost/scoped_array.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/operators.hpp>
+#include <boost/intrusive_ptr.hpp>
 
 #pragma managed
