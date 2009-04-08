@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Object Computing Inc.")]
 [assembly: AssemblyProduct("PerformanceTestDotNet")]
-[assembly: AssemblyCopyright("Copyright © Object Computing Inc. 2009")]
+[assembly: AssemblyCopyright("Copyright ©  2009 Object Computing,Inc.  See License.txt")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("af3cf76b-93d6-4391-bff2-e7099d0ad95e")]
+[assembly: Guid("AF3CF76B-93D6-4391-BFF2-E7099D0AD95E")]
 
 // Version information for an assembly consists of the following four values:
 //

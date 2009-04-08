@@ -4,7 +4,7 @@ project(*): QuickFASTDotNetExample {
   managed = 1
 
   specific {
-    guid = 68e1b016-014b-4a67-a3fe-d974a01eb547
+    guid = 68E1B016-014B-4A67-A3FE-D974A01EB547
   }
 
   Source_Files {

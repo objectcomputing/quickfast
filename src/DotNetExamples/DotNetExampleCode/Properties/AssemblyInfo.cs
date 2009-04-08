@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("DotNetExampleCode")]
-[assembly: AssemblyCopyright("Copyright ©  2009")]
+[assembly: AssemblyCopyright("Copyright ©  2009 Object Computing,Inc.  See License.txt")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("fc6dc70f-756e-48b7-9768-1e1ee2b5615f")]
+[assembly: Guid("FC6DC70F-756E-48B7-9768-1E1EE2B5615F")]
 
 // Version information for an assembly consists of the following four values:
 //

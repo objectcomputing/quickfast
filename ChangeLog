@@ -1,10 +1,28 @@
+Wed Apr  8 19:31:58 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/DotNetExamples/DotNetExampleCode/DotNetExampleCode.mpc:
+        * src/DotNetExamples/DotNetExampleCode/Properties/AssemblyInfo.cs:
+        * src/DotNetExamples/PerformanceTestDotNet/Properties/AssemblyInfo.cs:
+        * src/DotNetTests/DecodingPerformance/DecodingPerformanceDotNet.mpc:
+        * src/DotNetTests/DecodingPerformance/Properties/AssemblyInfo.cs:
+        Visual Studio quirk.  If the GUIDs aren't uppercased the modules are not built.
+
+        * src/Tests/resources/biggest_value.xml:
+        * src/Tests/testBiggestValue.cpp:
+        Disable test for largest int64 and uint64 due to bug in boost:lexical_cast
+         https://svn.boost.org/trac/boost/ticket/2295
+        Add "LL" qualifier on integral constants to avoid compiler warning messages.
+
+        * src/Tests/testSmallestValue.cpp:
+        Add "LL" qualifier on integral constants to avoid compiler warning messages.
+
 Tue Apr  7 23:18:50 UTC 2009  Yan Dai  <dai_y@ociweb.com>
 
         * src/Tests/resources/smallest_value.xml:
         * src/Tests/testSmallestValue.cpp:
 
           Corrected the decimal lowest bound value in comments and xml file.
-          
+
 Tue Apr  7 22:14:58 UTC 2009  Yan Dai  <dai_y@ociweb.com>
 
         * src/Tests/testSmallestValue.cpp:
