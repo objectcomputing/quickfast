@@ -1,3 +1,14 @@
+Thu Apr 09 17:27:35 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
+
+        * src/DotNetExamples/InterpretFASTDotNet:
+        * src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.cs:
+        * src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.mpc:
+        * src/DotNetExamples/InterpretFASTDotNet/MessageInterpreter.cs:
+        * src/DotNetExamples/InterpretFASTDotNet/Properties:
+        * src/DotNetExamples/InterpretFASTDotNet/Properties/AssemblyInfo.cs:
+        * QuickFAST.mwc:
+        Added C# version of the InterpretFAST example.
+
 Wed Apr 08 20:26:53 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
 
         * src/DotNet/Stdafx.h:
