@@ -63,6 +63,7 @@ namespace QuickFAST{
         , fullName_(rhs.fullName_)
         , id_(rhs.id_)
         , mandatory_(rhs.mandatory_)
+        , refcount_(0)
       {
       }
 

@@ -228,6 +228,37 @@ namespace QuickFASTDotNet
 //                        performanceFile_.WriteLine("{0:F3} messages/second]", (double)1000 * (double)messageCount / (double)decodeLapse);
 //                        performanceFile_.Flush();
 //                    }
+
+
+                    //if (verboseExecution_)
+                    //{
+                    //    System.Console.WriteLine("Parsing templates");
+                    //}
+                    //QuickFASTDotNet.Codecs.TemplateRegistry templateRegistry = QuickFASTDotNet.Codecs.TemplateRegistry.Parse(templateFile_);
+                    //if (verboseExecution_)
+                    //{
+                    //    System.Console.WriteLine("Parsed {0} templates.", templateRegistry.Size);
+                    //    System.Console.WriteLine("Decoding messages");
+                    //}
+
+                    //MessageInterpreter handler = new MessageInterpreter(outputFile_);
+                    ////                    QuickFASTDotNet.Codecs.Decoder decoder = new QuickFASTDotNet.Codecs.Decoder(templateRegistry, fastFile_);
+                    //QuickFASTDotNet.Codecs.SynchronousDecoder decoder = new QuickFASTDotNet.Codecs.SynchronousDecoder(templateRegistry, fastFile_);
+                    ////                    decoder.ResetOnMessage = resetOnMessage_;
+                    //decoder.Strict = strict_;
+                    //QuickFASTDotNet.Codecs.MessageReceivedDelegate handlerDelegate;
+                    //handlerDelegate = new QuickFASTDotNet.Codecs.MessageReceivedDelegate(handler.MessageReceived);
+
+                    //decoder.Decode(handlerDelegate);
+                    //if (verboseExecution_)
+                    //{
+                    //    System.Console.WriteLine("Decoded {0} messages.", decoder.MessageCount);
+                    //    //                        System.Console.WriteLine("Decoded {0} messages.", 1);
+                    //}
+                    //System.GC.Collect();
+
+
+
                 }
                 catch (Exception ex)
                 {

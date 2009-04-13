@@ -28,7 +28,16 @@ namespace QuickFASTDotNet
                 recordCount_ += 1;
                 out_.Write("Record #{0} ",  recordCount_);
                 out_.Flush();
-                formatMessage(message);
+                try
+                {
+                    formatMessage(message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("MessageReceived failed extracting data from message {0}", recordCount_);
+                    Console.WriteLine(ex.ToString());
+                    return false;
+                }
                 out_.WriteLine();
                 return true;
             }

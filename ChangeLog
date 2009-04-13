@@ -1,3 +1,24 @@
+Mon Apr 13 17:26:47 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
+
+        * src/DotNet/SynchronousDecoder.cpp:
+        Fixed incorrect handling of failed message decoding.
+        
+        * src/DotNet/UnmanagedPtr.h:
+        Added code (NOT ACTIVE) that will inform the system Garbage collection
+        about some of the non manged memory that is allocated by the object.
+        
+        * src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.cs:
+        * src/DotNetExamples/InterpretFASTDotNet/MessageInterpreter.cs:
+        Minor fixes.
+
+        * src/Messages/FieldIdentity.h:
+        Added the setting of the ref count for the copy constructor.
+
+        * src/DotNetTests/DecodingPerformance/DecodingPerformance.cs:
+        Copied in some commented out code for it to use later.  This program
+        will be very similar to the InterpretFASTDotNet program except it will
+        time the extraction of data from the message.
+
 Thu Apr 09 17:27:35 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
 
         * src/DotNetExamples/InterpretFASTDotNet:

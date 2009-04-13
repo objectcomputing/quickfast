@@ -54,7 +54,7 @@ namespace QuickFASTDotNet{
           }
           else
           {
-            more |= callback(message);
+            more &= callback(message);
             messageCount_ += 1;
           }
         }

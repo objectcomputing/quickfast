@@ -3,16 +3,18 @@
 // See the file license.txt for licensing information.
 #pragma once
 
+using namespace System;
 
 /// Non ref counted smart pointer.
 template<typename T>
 ref class UnmanagedPtr
 {
 public:
-  UnmanagedPtr():ptr_(0){}
+  UnmanagedPtr():ptr_(0), size_(0){}
 
-  UnmanagedPtr(T* ptr):ptr_(ptr)
+  UnmanagedPtr(T* ptr):ptr_(ptr), size_(sizeof(*ptr_))
   {
+    //System::GC::AddMemoryPressure(size_);
   }
 
   T& GetRef()
@@ -30,13 +32,16 @@ public:
 
 private:
   T* ptr_;
+  long long size_;
 
   void Release()
   {
     if(ptr_ != 0)
     {
       delete ptr_;
+      //System::GC::RemoveMemoryPressure(size_);
       ptr_ = 0;
+      size_ = 0;
     }
   }
 };
@@ -50,8 +55,12 @@ public:
   typedef typename T::element_type TValue;
   typedef BoostPtrHolder<T> TMyType;
 
-  BoostPtrHolder(): ptr_(new T){}
-  BoostPtrHolder(const T& rhs):ptr_(new T(rhs)){}
+  BoostPtrHolder(): ptr_(new T), size_(0) {}
+  BoostPtrHolder(const T& rhs):ptr_(new T(rhs)), size_(sizeof(*ptr_))
+  {
+    //System::GC::AddMemoryPressure(size_);
+  }
+
 
   ~BoostPtrHolder()
   {
@@ -94,10 +103,13 @@ public:
     if(ptr_ != 0)
     {
       delete ptr_;
+      //System::GC::RemoveMemoryPressure(size_);
       ptr_ = 0;
+      size_ = 0;
     }
   }
 
 private:
   T* ptr_;
+  long long size_;
 };

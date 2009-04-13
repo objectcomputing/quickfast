@@ -36,7 +36,7 @@ namespace QuickFASTDotNet
                 System.Console.WriteLine("Usage of this program:");
                 System.Console.WriteLine("  -t file     : Template file (required)");
                 System.Console.WriteLine("  -f file     : FAST Message file (required)");
-                System.Console.WriteLine("  -p file     : File to which performance measurements are written. (default standard output)");
+                System.Console.WriteLine("  -o file     : File to which performance measurements are written. (default standard output)");
                 System.Console.WriteLine("  -r          : Toggle 'reset decoder on every message' (default false).");
                 System.Console.WriteLine("  -s          : Toggle 'strict decoding rules' (default true).");
                 System.Console.WriteLine("  -vx         : Toggle 'noisy execution progress' (default false).");
@@ -200,7 +200,6 @@ namespace QuickFASTDotNet
                     {
                         System.Console.WriteLine("Decoded {0} messages.", decoder.MessageCount);
                     }
-
                 }
                 catch (Exception ex)
                 {
