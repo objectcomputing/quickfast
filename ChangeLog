@@ -1,3 +1,13 @@
+Tue Apr 14 23:17:22 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
+
+        * src/DotNet/FieldSet.h:
+        * src/DotNet/Sequence.cpp:
+        * src/DotNet/Sequence.h:
+        Added references of the parent objects to the enumerator classes.
+        The optimized build was optimizing away members while the
+        enumerator was still using references to contained unmanaged
+        memory.
+
 Mon Apr 13 17:26:47 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
 
         * src/DotNet/SynchronousDecoder.cpp:

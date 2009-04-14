@@ -55,12 +55,12 @@ namespace QuickFASTDotNet{
 
       virtual TEnumerator^ GetEnumerator() = System::Collections::IEnumerable::GetEnumerator
       {
-        return gcnew FieldEnumerator(spFieldSet_->begin(), spFieldSet_->end());
+        return gcnew FieldEnumerator(spFieldSet_->begin(), spFieldSet_->end(), this);
       }
 
       virtual TGenericEnumerator^ GetSpecializedEnumerator() = TGenericEnumerable::GetEnumerator
       {
-        return gcnew FieldEnumerator(spFieldSet_->begin(), spFieldSet_->end());
+        return gcnew FieldEnumerator(spFieldSet_->begin(), spFieldSet_->end(), this);
       }
 
       /// @brief Is the specified field present in this set?
@@ -158,7 +158,11 @@ namespace QuickFASTDotNet{
         typedef QuickFAST::Messages::FieldSet::const_iterator const_iterator;
         typedef StlDotNet::IteratorHolder<const_iterator> TIteratorHolder;
 
-        FieldEnumerator(const_iterator it, const_iterator end): itHolder_(new TIteratorHolder(it, end))
+        // The enumerator requires a reference to the source of the interators
+        // to prevent their source from being prematurely released.
+        FieldEnumerator(const_iterator it, const_iterator end, FieldSet^ parent)
+          : itHolder_(new TIteratorHolder(it, end))
+          , parent_(parent)
         {
         }
 
@@ -177,6 +181,7 @@ namespace QuickFASTDotNet{
 
       private:
         UnmanagedPtr<StlDotNet::IteratorHolder<const_iterator> > itHolder_;
+        FieldSet^ parent_;
       };
 
       TFieldSetPtr spFieldSet_;

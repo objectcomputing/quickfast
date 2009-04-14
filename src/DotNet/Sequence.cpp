@@ -59,12 +59,12 @@ namespace QuickFASTDotNet{
 
     System::Collections::IEnumerator^ Sequence::GetEnumerator()
     {
-      return gcnew SequenceEnumerator(sequencePtr_->begin(), sequencePtr_->end());
+      return gcnew SequenceEnumerator(sequencePtr_->begin(), sequencePtr_->end(), this);
     }
 
     System::Collections::Generic::IEnumerator<FieldSet^>^ Sequence::GetSpecializedEnumerator()
     {
-      return gcnew SequenceEnumerator(sequencePtr_->begin(), sequencePtr_->end());
+      return gcnew SequenceEnumerator(sequencePtr_->begin(), sequencePtr_->end(), this);
     }
 
     FieldSet^ Sequence::SequenceEnumerator::GenericCurrent::get()

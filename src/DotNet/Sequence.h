@@ -113,7 +113,13 @@ namespace QuickFASTDotNet{
       public:
         typedef QuickFAST::Messages::Sequence::const_iterator const_iterator;
         typedef StlDotNet::IteratorHolder<const_iterator> TIteratorHolder;
-        SequenceEnumerator(const_iterator it, const_iterator end): itHolder_(new TIteratorHolder(it, end))
+
+        // The enumerator requires a reference to the source of the interators
+        // to prevent their source from being prematurely released.
+        SequenceEnumerator(const_iterator it, const_iterator end, Sequence^ parent)
+          : itHolder_(new TIteratorHolder(it, end))
+          , parent_(parent)
+
         {
         }
 
@@ -132,6 +138,7 @@ namespace QuickFASTDotNet{
 
       private:
         UnmanagedPtr<StlDotNet::IteratorHolder<const_iterator> > itHolder_;
+        Sequence^ parent_;
       };
 
 
