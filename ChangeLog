@@ -1,3 +1,8 @@
+Wed Apr 15 19:13:50 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/DotNet/UnmanagedPtr.h:
+        Remove "using namespace" from header file.
+
 Tue Apr 14 23:17:22 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
 
         * src/DotNet/FieldSet.h:
@@ -12,11 +17,11 @@ Mon Apr 13 17:26:47 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
 
         * src/DotNet/SynchronousDecoder.cpp:
         Fixed incorrect handling of failed message decoding.
-        
+
         * src/DotNet/UnmanagedPtr.h:
         Added code (NOT ACTIVE) that will inform the system Garbage collection
         about some of the non manged memory that is allocated by the object.
-        
+
         * src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.cs:
         * src/DotNetExamples/InterpretFASTDotNet/MessageInterpreter.cs:
         Minor fixes.

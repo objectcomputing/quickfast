@@ -3,8 +3,6 @@
 // See the file license.txt for licensing information.
 #pragma once
 
-using namespace System;
-
 /// Non ref counted smart pointer.
 template<typename T>
 ref class UnmanagedPtr
