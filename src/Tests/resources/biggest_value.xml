@@ -28,7 +28,7 @@
       <constant value="18446744073709551615"/>
     </uInt64>
     -->
-    <decimal name="decimal_const" id="13"><constant value="9223372036854775807000000000000000000000000000000000000000000000"/>
+    <decimal name="decimal_const" id="13"><constant value="9223372036854775807000000000000000000000000000000000000000000000000000000000000000"/>
     </decimal>
     <string name="asciistring_const" charset="ascii" id="14"><constant value=""/>
     </string>
@@ -47,7 +47,7 @@
         <default value="18446744073709551615"/>
     </uInt64>
     -->
-    <decimal name="decimal_default" id="21"><default value="9223372036854775807000000000000000000000000000000000000000000000"/>
+    <decimal name="decimal_default" id="21"><default value="9223372036854775807000000000000000000000000000000000000000000000000000000000000000"/>
     </decimal>
     <string name="asciistring_default" charset="ascii" id="22"><default value=""/>
     </string>
@@ -63,7 +63,7 @@
     </int64>
     <uInt64 name="uint64_copy" id="28"><copy/>
     </uInt64>
-    <decimal name="decimal_copy" id="29"><copy value="9223372036854775807000000000000000000000000000000000000000000000"/>
+    <decimal name="decimal_copy" id="29"><copy value="9223372036854775807000000000000000000000000000000000000000000000000000000000000000"/>
     </decimal>
     <string name="asciistring_copy" charset="ascii" id="30"><copy/>
     </string>

@@ -115,7 +115,7 @@ namespace{
     BOOST_CHECK(message.getField("uint64_const", value));
     BOOST_CHECK_EQUAL(value->toUInt64(), 0);
 
-    //  <decimal name="decimal_const" id="13"><constant value="-9223372036854775808000000000000000000000000000000000000000000000"/>
+    //  <decimal name="decimal_const" id="13"><constant value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
     //msg.addField(identity_decimal_const, Messages::FieldDecimal::create(Decimal(-9223372036854775808, 63)));
     BOOST_CHECK(message.getField("decimal_const", value));
     BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(-9223372036854775808LL, 63));
@@ -155,7 +155,7 @@ namespace{
     BOOST_CHECK(message.getField("uint64_default", value));
     BOOST_CHECK_EQUAL(value->toUInt64(), 0);
 
-    //  <decimal name="decimal_default" id="21"><default value="-9223372036854775808000000000000000000000000000000000000000000000"/>
+    //  <decimal name="decimal_default" id="21"><default value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
     //msg.addField(identity_decimal_default, Messages::FieldDecimal::create(Decimal(-9223372036854775808, 63)));
     BOOST_CHECK(message.getField("decimal_default", value));
     BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(-9223372036854775808LL, 63));
@@ -195,7 +195,7 @@ namespace{
     BOOST_CHECK(message.getField("uint64_copy", value));
     BOOST_CHECK_EQUAL(value->toUInt64(), 0);
 
-    //  <decimal name="decimal_copy" id="29"><copy value="-9223372036854775808000000000000000000000000000000000000000000000"/>
+    //  <decimal name="decimal_copy" id="29"><copy value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
     //msg.addField(identity_decimal_copy, Messages::FieldDecimal::create(Decimal(-9223372036854775808, 63)));
     BOOST_CHECK(message.getField("decimal_copy", value));
     BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(-9223372036854775808LL, 63));
@@ -275,20 +275,17 @@ namespace{
     BOOST_CHECK(message.getField("uint64_incre", value));
     BOOST_CHECK_EQUAL(value->toUInt64(), 1);
 
-    //  <string name="asciistring_tail" charset="ascii" id="45"><tail/>
+    //  <string name="asciistring_tail" presence="optional" charset="ascii" id="45"><tail/>
     //msg.addField(identity_asciistring_tail, Messages::FieldAscii::create(""));
-    BOOST_CHECK(message.getField("asciistring_tail", value));
-    BOOST_CHECK_EQUAL(value->toAscii(), "");
+    BOOST_CHECK_EQUAL(message.getField("asciistring_tail", value), false);
 
-    //  <string name="utf8string_tail" charset="unicode" id="46"><tail/>
+    //  <string name="utf8string_tail" presence="optional" charset="unicode" id="46"><tail/>
     //msg.addField(identity_utf8string_tail, Messages::FieldAscii::create(""));
-    BOOST_CHECK(message.getField("utf8string_tail", value));
-    BOOST_CHECK_EQUAL(value->toUtf8(), "");
+    BOOST_CHECK_EQUAL(message.getField("utf8string_tail", value), false);
 
-    //  <byteVector name="bytevector_tail" id="47"><tail/>
+    //  <byteVector name="bytevector_tail" presence="optional" id="47"><tail/>
     //msg.addField(identity_bytevector_tail, Messages::FieldByteVector::create(""));
-    BOOST_CHECK(message.getField("bytevector_tail", value));
-    BOOST_CHECK_EQUAL(value->toByteVector(), "");
+    BOOST_CHECK_EQUAL(message.getField("bytevector_tail", value), false);
 
   }
 
@@ -327,7 +324,7 @@ namespace{
     Messages::FieldIdentityCPtr identity_int64_const = new Messages::FieldIdentity("int64_const");
     //  <uInt64 name="uint64_const" id="12"><constant value="0"/>
     Messages::FieldIdentityCPtr identity_uint64_const = new Messages::FieldIdentity("uint64_const");
-    //<decimal name="decimal_const" id="13"><constant value="-9223372036854775808000000000000000000000000000000000000000000000"/>
+    //<decimal name="decimal_const" id="13"><constant value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
     Messages::FieldIdentityCPtr identity_decimal_const = new Messages::FieldIdentity("decimal_const");
     //  <string name="asciistring_const" charset="ascii" id="14"><constant value=""/>
     Messages::FieldIdentityCPtr identity_asciistring_const = new Messages::FieldIdentity("asciistring_const");
@@ -343,7 +340,7 @@ namespace{
     Messages::FieldIdentityCPtr identity_int64_default = new Messages::FieldIdentity("int64_default");
     //  <uInt64 name="uint64_default" id="20"><default value="0"/>
     Messages::FieldIdentityCPtr identity_uint64_default = new Messages::FieldIdentity("uint64_default");
-    //  <decimal name="decimal_default" id="21"><default value="-9223372036854775808000000000000000000000000000000000000000000000"/>
+    //  <decimal name="decimal_default" id="21"><default value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
     Messages::FieldIdentityCPtr identity_decimal_default = new Messages::FieldIdentity("decimal_default");
     //  <string name="asciistring_default" charset="ascii" id="22"><default value="default asciistring"/>
     Messages::FieldIdentityCPtr identity_asciistring_default = new Messages::FieldIdentity("asciistring_default");
@@ -359,7 +356,7 @@ namespace{
     Messages::FieldIdentityCPtr identity_int64_copy = new Messages::FieldIdentity("int64_copy");
     //  <uInt64 name="uint64_copy" id="28"><copy/>
     Messages::FieldIdentityCPtr identity_uint64_copy = new Messages::FieldIdentity("uint64_copy");
-    //  <decimal name="decimal_copy" id="29"><copy value="-9223372036854775808000000000000000000000000000000000000000000000"/>
+    //  <decimal name="decimal_copy" id="29"><copy value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
     Messages::FieldIdentityCPtr identity_decimal_copy = new Messages::FieldIdentity("decimal_copy");
     //  <string name="asciistring_copy" charset="ascii" id="30"><copy/>
     Messages::FieldIdentityCPtr identity_asciistring_copy = new Messages::FieldIdentity("asciistring_copy");
@@ -391,11 +388,11 @@ namespace{
     Messages::FieldIdentityCPtr identity_int64_incre = new Messages::FieldIdentity("int64_incre");
     //  <uInt64 name="uint64_incre" id="44"><increment value="1"/>
     Messages::FieldIdentityCPtr identity_uint64_incre = new Messages::FieldIdentity("uint64_incre");
-    //  <string name="asciistring_tail" charset="ascii" id="45"><tail/>
+    //  <string name="asciistring_tail" presence="optional" charset="ascii" id="45"><tail/>
     Messages::FieldIdentityCPtr identity_asciistring_tail = new Messages::FieldIdentity("asciistring_tail");
-    //  <string name="utf8string_tail" charset="unicode" id="46"><tail/>
+    //  <string name="utf8string_tail" presence="optional" charset="unicode" id="46"><tail/>
     Messages::FieldIdentityCPtr identity_utf8string_tail = new Messages::FieldIdentity("utf8string_tail");
-    //  <byteVector name="bytevector_tail" id="47"><tail/>
+    //  <byteVector name="bytevector_tail" presence="optional" id="47"><tail/>
     Messages::FieldIdentityCPtr identity_bytevector_tail = new Messages::FieldIdentity("bytevector_tail");
 
     //<int32 name="int32_nop" id="1">
@@ -422,7 +419,7 @@ namespace{
     msg.addField(identity_int64_const, Messages::FieldInt64::create(-9223372036854775808LL));
     //  <uInt64 name="uint64_const" id="12"><constant value="9223372036854775808"/>
     msg.addField(identity_uint64_const, Messages::FieldUInt64::create(0));
-    //  <decimal name="decimal_const" id="13"><constant value="-9223372036854775808000000000000000000000000000000000000000000000"/>
+    //  <decimal name="decimal_const" id="13"><constant value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
     msg.addField(identity_decimal_const, Messages::FieldDecimal::create(Decimal(-9223372036854775808LL, 63)));
     //  <string name="asciistring_const" charset="ascii" id="14"><constant value=""/>
     msg.addField(identity_asciistring_const, Messages::FieldAscii::create(""));
@@ -438,7 +435,7 @@ namespace{
     msg.addField(identity_int64_default, Messages::FieldInt64::create(-9223372036854775808LL));
     //  <uInt64 name="uint64_default" id="20"><default value="0"/>
     msg.addField(identity_uint64_default, Messages::FieldUInt64::create(0));
-    //  <decimal name="decimal_default" id="21"><default value="-9223372036854775808000000000000000000000000000000000000000000000"/>
+    //  <decimal name="decimal_default" id="21"><default value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
     msg.addField(identity_decimal_default, Messages::FieldDecimal::create(Decimal(-9223372036854775808LL, 63)));
     //  <string name="asciistring_default" charset="ascii" id="22"><default value=""/>
     msg.addField(identity_asciistring_default, Messages::FieldAscii::create(""));
@@ -454,7 +451,7 @@ namespace{
     msg.addField(identity_int64_copy, Messages::FieldInt64::create(-9223372036854775808LL));
     //  <uInt64 name="uint64_copy" id="28"><copy/>
     msg.addField(identity_uint64_copy, Messages::FieldUInt64::create(0));
-    //  <decimal name="decimal_copy" id="29"><copy value="-9223372036854775808000000000000000000000000000000000000000000000"/>
+    //  <decimal name="decimal_copy" id="29"><copy value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
     msg.addField(identity_decimal_copy, Messages::FieldDecimal::create(Decimal(-9223372036854775808LL, 63)));
     //  <string name="asciistring_copy" charset="ascii" id="30"><copy/>
     msg.addField(identity_asciistring_copy, Messages::FieldAscii::create(""));
@@ -486,11 +483,14 @@ namespace{
     msg.addField(identity_int64_incre, Messages::FieldInt64::create(1));
     //  <uInt64 name="uint64_incre" id="44"><increment value="1"/>
     msg.addField(identity_uint64_incre, Messages::FieldUInt64::create(1));
-    //  <string name="asciistring_tail" charset="ascii" id="45"><tail/>
+    // The specs states that the optional presence tail can be NULL. If it's NULL,
+    // it is considered as absent. It seems implies the mandatory tail can not 
+    // be NULL.
+    //  <string name="asciistring_tail" presence="optional" charset="ascii" id="45"><tail/>
     msg.addField(identity_asciistring_tail, Messages::FieldAscii::create(""));
-    //  <string name="utf8string_tail" charset="unicode" id="46"><tail/>
+    //  <string name="utf8string_tail" presence="optional" charset="unicode" id="46"><tail/>
     msg.addField(identity_utf8string_tail, Messages::FieldAscii::create(""));
-    //  <byteVector name="bytevector_tail" id="47"><tail/>
+    //  <byteVector name="bytevector_tail" presence="optional" id="47"><tail/>
     msg.addField(identity_bytevector_tail, Messages::FieldByteVector::create(""));
 
     Codecs::Encoder encoder(templateRegistry);
