@@ -1,3 +1,10 @@
+Mon Apr 20 21:22:29 UTC 2009  Yan Dai  <dai_y@ociweb.com>
+
+        * src/Tests/resources/biggest_value.xml:
+        * src/Tests/testBiggestValue.cpp:
+
+          Added a random buffer to test non-null string or bytevector values.
+
 Fri Apr 17 20:34:26 UTC 2009  Yan Dai  <dai_y@ociweb.com>
 
         * src/Common/Decimal.cpp:
