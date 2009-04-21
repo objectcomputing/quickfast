@@ -1,3 +1,10 @@
+Tue Apr 21 18:06:57 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
+
+        * src/DotNetTests/DecodingPerformance/DecodingPerformance.cs:
+        * src/DotNetTests/DecodingPerformance/MessageProcessor.cs:
+
+          Implemented the timing of data access and counting types of fields.
+
 Mon Apr 20 21:22:29 UTC 2009  Yan Dai  <dai_y@ociweb.com>
 
         * src/Tests/resources/biggest_value.xml:
