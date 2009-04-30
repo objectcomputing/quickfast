@@ -1,3 +1,19 @@
+Thu Apr 30 19:48:28 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder_fwd.h:
+        * src/Codecs/SynchronousDecoder.h:
+        Convert MulticastDecoder to template class
+        based on message type and message consumer type.
+        MulticastDecoder now decodes all messages in a packet.
+        Add reset methods to SynchronousDecoder and MulticastDecoder
+        Addresses Issues #12 and #14
+
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/SynchronousDecoder.cpp:
+        MulticastDecoder is now a template class.  The implementation is inline.
+        SynchronousDecoder is now a template class.  The implementation is inline.
+
 Tue Apr 21 18:06:57 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
 
         * src/DotNetTests/DecodingPerformance/DecodingPerformance.cs:
