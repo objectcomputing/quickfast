@@ -5,7 +5,7 @@
 #ifndef MULTICASTDECODER_FWD_H
 #define MULTICASTDECODER_FWD_H
 #include <Messages/Message_fwd.h>
-#include <Codecs/MessageConsumer_fwd.h>
+#include <Codecs/MessageConsumer.h>
 
 namespace QuickFAST{
   namespace Codecs{

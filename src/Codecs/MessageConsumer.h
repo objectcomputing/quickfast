@@ -12,7 +12,7 @@
 namespace QuickFAST{
   namespace Codecs{
     /// @brief interface to be implemented by a consumer of decoded messages.
-    class QuickFAST_Export MessageConsumer
+    class MessageConsumer
     {
     public:
       /// The importance of being a log message.
