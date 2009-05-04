@@ -1,3 +1,13 @@
+Mon May  4 15:39:41 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/Encoder.cpp:
+        * src/Codecs/Template.h:
+        * src/Codecs/XMLTemplateParser.cpp:
+        Add the reset attribute to the template element, i.e. <template reset="Y"> will force
+        a reset of the dictionaries before decoding or encoding with this template.
+        Addresses Issue #13
+
 Fri May  1 14:47:53 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MessageConsumer.h:

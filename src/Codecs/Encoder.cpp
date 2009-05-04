@@ -37,6 +37,11 @@ Encoder::encodeSegment(
   Codecs::TemplateCPtr templatePtr;
   if(getTemplateRegistry()->getTemplate(templateId, templatePtr))
   {
+    if(templatePtr->getReset())
+    {
+      reset();
+    }
+
     Codecs::PresenceMap pmap(templatePtr->presenceMapBitCount());
     if(this->verboseOut_)
     {

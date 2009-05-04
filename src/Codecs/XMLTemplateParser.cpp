@@ -460,6 +460,18 @@ TemplateBuilder::parseTemplate(const std::string & tag, const AttributeMap& attr
     target->setDictionaryName(dictionary);
   }
 
+  std::string reset;
+  if (getOptionalAttribute(attributes, "reset", reset))
+  {
+    char yn = reset[0];
+    yn = toupper(yn);
+    if(yn != 'Y' && yn != 'N' && yn != 'T' && yn != 'F')
+    {
+      throw TemplateDefinitionError("Invalid \"reset=\" option.");
+    }
+    target->setReset(yn == 'Y' || yn == 'T');
+  }
+
   schemaElements_.top().second->addTemplate(target);
   schemaElements_.push(StackEntry(tag, target));
 }

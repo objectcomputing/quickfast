@@ -63,6 +63,13 @@ namespace QuickFAST{
         namespace_ = templateNamespace;
       }
 
+      /// @brief Set the reset-dictionaries-before-xcoding" flat
+      /// @param reset true means reset, false means don't
+      void setReset(bool reset)
+      {
+        reset_ = reset;
+      }
+
       /// @brief Retrieve the template id
       /// @returns the template id.
       template_id_t getId()const
@@ -89,11 +96,19 @@ namespace QuickFAST{
         return namespace_;
       }
 
+      /// @brief should the dictionaries be reset for this template?
+      /// @returns true if they should be reset.
+      bool getReset()const
+      {
+        return reset_;
+      }
+
     private:
       uint32 templateId_;
       std::string templateName_;
       std::string templateNamespace_;
       std::string namespace_;
+      bool reset_; // if true reset dictionaries before Xcoding this template
     };
   }
 }
