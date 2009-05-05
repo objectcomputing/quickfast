@@ -1,3 +1,10 @@
+Tue May  5 20:35:50 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MulticastDecoder.h:
+        Typo in argument name.
+        * src/QuickFAST.mpc:
+        Depend on boost_system
+
 Mon May  4 15:39:41 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Decoder.cpp:
