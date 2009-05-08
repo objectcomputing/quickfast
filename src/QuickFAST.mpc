@@ -18,7 +18,7 @@ project(*) : boost_base {
     Messages
   }
 
-  specific(!vc8, vc9) {
+  specific(!vc8, !vc9) {
     libout = $(QUICKFAST_ROOT)/lib
   }
   specific(vc8, vc9) {
@@ -29,6 +29,9 @@ project(*) : boost_base {
     // FieldInstructionInteger generates spuriouswarnings based on
     // signed/unsigned template arguments.
     cppflags += -Wtype-limits
+  }
+  specific(vc8) { // vc9 doesn't need this
+    macros += _WIN32_WINNT=0x0501
   }
 }
 
@@ -44,6 +47,9 @@ project(*tests) : boost_unit_test_framework, boost_filesystem, boost_system, boo
     Debug::exeout = $(QUICKFAST_ROOT)/Output/Debug
     Release::libpaths += $(QUICKFAST_ROOT)/Output/Release
     Debug::libpaths += $(QUICKFAST_ROOT)/Output/Debug
+  }
+  specific(vc8) { // vc9 doesn't need this
+    macros += _WIN32_WINNT=0x0501
   }
 
   libpaths += $(XERCES_LIBPATH)

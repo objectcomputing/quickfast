@@ -1,3 +1,19 @@
+Fri May  8 16:48:51 UTC 2009  Adam Mitz  <mitza@ociweb.com>
+
+        * QuickFAST.features:
+        * QuickFASTApplication.mpb:
+        * m.cmd:
+        * setup.cmd:
+        * src/QuickFAST.mpc:
+          VC8 compatibility.  Boost ASIO requires _WIN32_WINNT to be defined.
+          setup.cmd now auto-detects VC8 if VC9 is not present.
+
+        * src/Common/Decimal.cpp:
+          Work around a bug in VC8's standard C++ library.
+
+        * src/DotNetTests/EncodeDecodeTests.cs:
+          Use a C# "using" block for all file streams so they are closed.
+
 Fri May  8 16:39:48 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * bin/setdebug.cmd:

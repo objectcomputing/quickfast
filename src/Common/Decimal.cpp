@@ -46,6 +46,11 @@ Decimal::parse(const std::string & value)
 
   bool overflow = false;
 
+  // VC8 stringstream is truncating a large string instead of throwing
+  // the exception, so we'll always fall back on the overflow code.
+#if defined _MSC_VER && _MSC_VER < 1500
+  overflow = true;
+#else
   try {
     mantissa_ = boost::lexical_cast<mantissa_t>(mantissaString);
   }
@@ -53,6 +58,7 @@ Decimal::parse(const std::string & value)
   {
     overflow = true;
   }
+#endif
 
   if (overflow && autoNormalize_)
   {
