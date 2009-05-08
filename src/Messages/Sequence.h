@@ -78,6 +78,8 @@ namespace QuickFAST{
       std::string applicationType_;
       Entries entries_;
 
+      Sequence(const Sequence&);
+      Sequence& operator=(const Sequence&);
     };
   }
 }

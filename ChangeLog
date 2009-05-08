@@ -1,3 +1,33 @@
+Fri May  8 20:58:51 UTC 2009  Adam Mitz  <mitza@ociweb.com>
+
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/Message.h:
+        * src/Messages/Sequence.h:
+          Messages, FieldSets, and Sequences are no longer copyable.
+
+        * src/Tests/testBiggestValue.cpp:
+        * src/Tests/testRoundTrip.cpp:
+        * src/Tests/testRoundTrip1.cpp:
+        * src/Tests/testSmallestValue.cpp:
+          Removed parts of tests that copied Messages.
+
+        * src/DotNet/Field.cpp:
+        * src/DotNet/FieldSet.h:
+        * src/DotNet/FieldSet.cpp:
+        * src/DotNet/Sequence.h:
+        * src/DotNet/Sequence.cpp:
+          Removed "copy" constructors (those that copied the native objects).
+          DotNet FieldSet and Sequence are now wrappers around their *const*
+          native counterparts, so methods like SetApplicationType()
+          and AddField() are no longer available.  These would only be needed
+          for doing encoding in .NET, which is not yet supported.
+
+        * src/DotNetTests/FieldTests.cs:
+        * src/DotNetTests/MessageTests.cs:
+          Parts of tests that depended on modifying FieldSets and Messages are
+          now disabled (conditionally compiled with QUICKFAST_DOTNET_ENCODING).
+
 Fri May  8 18:39:02 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * setup.cmd:

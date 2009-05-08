@@ -94,6 +94,7 @@ namespace QuickFASTDotNetTests
             Assert.That(field.Value, Is.EqualTo(value));
         }
 
+#if QUICKFAST_DOTNET_ENCODING
         [Test]
         [Ignore("Ignore until EqualTo() is implemented")]
         public void TestSequenceFieldContruction()
@@ -105,5 +106,6 @@ namespace QuickFASTDotNetTests
             SequenceField field = new SequenceField(value);
             Assert.That(field.Value, Is.EqualTo(value));
         }
+#endif
     }
 }

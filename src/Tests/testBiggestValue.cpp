@@ -518,8 +518,6 @@ namespace{
     decoder.decodeMessage(source, msgOut);
 
     validateMessage1(msgOut, buffer);
-    Messages::Message messageCopy(msgOut);
-    validateMessage1(messageCopy, buffer);
 
     // wanna see it again?
     encoder.encodeMessage(destination, templId, msgOut);

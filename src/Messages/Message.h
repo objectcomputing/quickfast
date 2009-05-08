@@ -16,15 +16,13 @@ namespace QuickFAST{
     class QuickFAST_Export Message : public FieldSet
     {
       Message();
+      Message(const Message&);
+      Message& operator=(const Message&);
+
     public:
       /// @brief Construct an empty Message
       Message(size_t expectedNumberOfFields);
 
-      /// @brief Copy construct Message
-      Message(const Message & rhs)
-      : FieldSet(rhs)
-      {
-      }
     };
   }
 }

@@ -9,6 +9,8 @@ namespace QuickFASTDotNetTests
     [TestFixture]
     public class MessageTests
     {
+
+#if QUICKFAST_DOTNET_ENCODING
         [Test]
         public void BuildMessage()
         {
@@ -25,7 +27,6 @@ namespace QuickFASTDotNetTests
             QuickFASTDotNet.Messages.ByteVectorField testField = new QuickFASTDotNet.Messages.ByteVectorField(null);
             Assert.That(field, Is.EqualTo(testAsciiField));
         }
-
 
         [Test]
         public void TestBuildMessage()
@@ -79,7 +80,7 @@ namespace QuickFASTDotNetTests
             message.AddField(TradeDate, new UInt32Field(20081017));
             message.AddField(MDEntries, new SequenceField(sequence));
         }
-
+#endif
 
         private void SetupIdentities()
         {

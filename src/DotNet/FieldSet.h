@@ -22,7 +22,7 @@ namespace QuickFASTDotNet{
     {
     public:
       typedef QuickFAST::Messages::FieldSet TFieldSet;
-      typedef BoostPtrHolder<QuickFAST::Messages::FieldSetPtr>  TFieldSetPtr;
+      typedef BoostPtrHolder<QuickFAST::Messages::FieldSetCPtr> TFieldSetCPtr;
 
       typedef System::Collections::IEnumerable TEnumerable;
       typedef System::Collections::IEnumerator TEnumerator;
@@ -45,7 +45,8 @@ namespace QuickFASTDotNet{
         System::String^ get();
       }
 
-      void SetApplicationType(System::String^ applicationType, System::String^ nameSpace);
+      //Not yet implemented -- only for the encoder.
+      //void SetApplicationType(System::String^ applicationType, System::String^ nameSpace);
 
       /// @brief number of fields in this field set.
       property int Count
@@ -74,7 +75,8 @@ namespace QuickFASTDotNet{
       /// The FieldCPtr is copied, not the actual Field object.
       /// @param identity identifies this field
       /// @param value is the value to be assigned.
-      void AddField(FieldIdentity^ identity, Field^ newField);
+      //Not yet implemented -- only for the encoder.
+      //void AddField(FieldIdentity^ identity, Field^ newField);
 
       Field^ GetField(System::String^ name);
 
@@ -130,22 +132,19 @@ namespace QuickFASTDotNet{
       };
 
 
-      /// @brief Constructs a new FieldSet instance making a copy of the QuickFAST::Messages::FieldSet object
-      FieldSet(const QuickFAST::Messages::FieldSet& fieldSet);
-
       /// @brief Constructs a new FieldSet instance increasing the ref count of the QuickFAST::Messages::FieldSetPtr shared_ptr.
-      FieldSet(const QuickFAST::Messages::FieldSetPtr& fieldSet);
+      FieldSet(const QuickFAST::Messages::FieldSetCPtr& fieldSet);
 
       /// Returns a reference to the unmanaged FieldSet entity.
-      property TFieldSet& FieldSetRef
+      property const TFieldSet& FieldSetRef
       {
-        TFieldSet& get() { return spFieldSet_.GetRef(); }
+        const TFieldSet& get() { return spFieldSet_.GetRef(); }
       }
 
       /// Gets a reference to the BoostPtrHolder holding the FieldSetPtr boost shared_ptr
-      property TFieldSetPtr% FieldSetPtr
+      property TFieldSetCPtr% FieldSetCPtr
       {
-        TFieldSetPtr% get() { return spFieldSet_; }
+        TFieldSetCPtr% get() { return spFieldSet_; }
       }
 
     private:
@@ -184,7 +183,7 @@ namespace QuickFASTDotNet{
         FieldSet^ parent_;
       };
 
-      TFieldSetPtr spFieldSet_;
+      TFieldSetCPtr spFieldSet_;
       bool isReadOnly_;
     };
   }

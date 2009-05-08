@@ -18,13 +18,7 @@ namespace QuickFASTDotNet{
     {
     }
 
-    FieldSet::FieldSet(const QuickFAST::Messages::FieldSet& fieldSet)
-      :spFieldSet_(QuickFAST::Messages::FieldSetPtr(new QuickFAST::Messages::FieldSet(fieldSet)))
-      ,isReadOnly_(true)
-    {
-    }
-
-    FieldSet::FieldSet(const QuickFAST::Messages::FieldSetPtr& fieldSet)
+    FieldSet::FieldSet(const QuickFAST::Messages::FieldSetCPtr& fieldSet)
       :spFieldSet_(fieldSet)
       ,isReadOnly_(false)
     {
@@ -51,11 +45,13 @@ namespace QuickFASTDotNet{
       return StlDotNet::string_cast(spFieldSet_->getApplicationType());
     }
 
+/* Not yet implemented -- only for the encoder.  Will need a mutable FieldSetPtr.
     void FieldSet::SetApplicationType(System::String^ applicationType, System::String^ nameSpace)
     {
       spFieldSet_->setApplicationType(StlDotNet::string_cast<std::string>(applicationType),
                                       StlDotNet::string_cast<std::string>(nameSpace));
     }
+*/
 
     bool FieldSet::IsPresent(System::String^ name)
     {
@@ -65,10 +61,12 @@ namespace QuickFASTDotNet{
       return spFieldSet_->isPresent(stdNameStr);
     }
 
+    /* Not yet implemented -- only for the encoder.  Will need a mutable FieldSetPtr.
     void FieldSet::AddField(FieldIdentity^ identity, Field^ newField)
     {
       spFieldSet_->addField(identity->SmartPtr, cast_field(newField));
     }
+    */
 
     Field^ FieldSet::GetField(System::String^ name)
     {

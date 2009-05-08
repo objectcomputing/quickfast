@@ -18,7 +18,7 @@ namespace QuickFASTDotNet{
     {
     public:
       typedef QuickFAST::Messages::Sequence TSequence;
-      typedef BoostPtrHolder<QuickFAST::Messages::SequencePtr> TSequencePtr;
+      typedef BoostPtrHolder<QuickFAST::Messages::SequenceCPtr> TSequenceCPtr;
 
       Sequence();
 
@@ -32,7 +32,8 @@ namespace QuickFASTDotNet{
       property System::String^ ApplicationType
       {
         System::String^ get();
-        void set(System::String^ applicationType);
+        // Not yet implemented -- only for the encoder
+        //void set(System::String^ applicationType);
       }
 
       ///@brief Gets the number of FieldSet's in this Sequence object.
@@ -42,7 +43,8 @@ namespace QuickFASTDotNet{
       }
 
       ///@brief Adds a field set to this sequence.
-      void Add(FieldSet^ newFieldSet);
+      // Not yet implemented -- only for the encoder.
+      //void Add(FieldSet^ newFieldSet);
 
       virtual System::Collections::IEnumerator^ GetEnumerator() = System::Collections::IEnumerable::GetEnumerator;
 
@@ -87,22 +89,18 @@ namespace QuickFASTDotNet{
       };
 
 
-
-      ///@brief Constructs a managed Sequence making a copy of the unmanaged QuickFAST::Messages::Sequence object.
-      Sequence(const TSequence& sequence);
-
       ///@brief Constructs a managed Sequence increasing the referenc count of the shared_ptr
-      Sequence(const QuickFAST::Messages::SequencePtr& sequence);
+      Sequence(const QuickFAST::Messages::SequenceCPtr& sequence);
 
       ///@brief returns a reference to the unmanaged Sequence object contained in this managed Sequence
-      property TSequence& Ref
+      property const TSequence& Ref
       {
-        TSequence& get() { return sequencePtr_.GetRef(); }
+        const TSequence& get() { return sequencePtr_.GetRef(); }
       }
 
-      property TSequencePtr% SequencePtr
+      property TSequenceCPtr% SequenceCPtr
       {
-        TSequencePtr% get() { return sequencePtr_; }
+        TSequenceCPtr% get() { return sequencePtr_; }
       }
 
     private:
@@ -142,7 +140,7 @@ namespace QuickFASTDotNet{
       };
 
 
-      TSequencePtr sequencePtr_;
+      TSequenceCPtr sequencePtr_;
 
     };
   }

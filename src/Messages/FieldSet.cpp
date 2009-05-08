@@ -19,20 +19,6 @@ FieldSet::FieldSet(size_t res)
   memset(fields_, 0, sizeof(sizeof(MessageField) * capacity_));
 }
 
-FieldSet::FieldSet(const FieldSet & rhs)
-: applicationType_(rhs.applicationType_)
-, applicationTypeNs_(rhs.applicationTypeNs_)
-, fields_(reinterpret_cast<MessageField *>(new unsigned char[sizeof(MessageField) * rhs.used_]))
-, capacity_(rhs.capacity_)
-, used_(rhs.used_)
-{
-  memset(fields_, 0, sizeof(sizeof(MessageField) * capacity_));
-  for(size_t nField = 0; nField < used_; ++nField)
-  {
-    new (&fields_[nField]) MessageField(rhs.fields_[nField]);
-  }
-}
-
 FieldSet::~FieldSet()
 {
   clear();
