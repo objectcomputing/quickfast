@@ -1,3 +1,9 @@
+Fri May  8 15:11:30 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Common/WorkingBuffer.cpp:
+        VC8:  std::string((char *)0, (size_t)0); throws rather than creating null string.
+        Change working buffer so the buffer is always allocated even when it's empty.
+
 Tue May  5 20:35:50 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MulticastDecoder.h:

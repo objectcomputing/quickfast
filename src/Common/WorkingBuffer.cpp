@@ -9,9 +9,10 @@ using namespace ::QuickFAST;
 static const size_t initialCapacity = 20;
 WorkingBuffer::WorkingBuffer()
 : reverse_(false)
-, capacity_(0)
+, capacity_(initialCapacity)
 , startPos_(0)
 , endPos_(0)
+, buffer_(new uchar[initialCapacity])
 {
 }
 
