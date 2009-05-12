@@ -11,19 +11,16 @@ using namespace System;
 namespace QuickFASTDotNet{
   namespace Messages{
 
-    Sequence::Sequence()
-      :sequencePtr_(QuickFAST::Messages::SequenceCPtr(new TSequence))
-    {
-    }
-
     Sequence::Sequence(const QuickFAST::Messages::SequenceCPtr& message)
       :sequencePtr_(message)
     {
+      // Because of the way the derived class constructor for MutableSequence works,
+      // this class may *not* depend on sequencePtr_ being non-NULL here.
     }
 
     FieldSet^ Sequence::default::get(unsigned int index)
     {
-        QuickFAST::Messages::SequenceCPtr sequence = sequencePtr_.GetBoostPtr();
+      QuickFAST::Messages::SequenceCPtr sequence = sequencePtr_.GetBoostPtr();
         if(sequence->size() <= index)
         {
           throw gcnew ArgumentOutOfRangeException();
@@ -36,24 +33,10 @@ namespace QuickFASTDotNet{
       return StlDotNet::string_cast(sequencePtr_->getApplicationType());
     }
 
-    /* Not yet implemented -- only for the encoder.  Will need a mutable FieldSetPtr.
-    void Sequence::ApplicationType::set(String^ applicationType)
-    {
-      sequencePtr_->setApplicationType(StlDotNet::string_cast<std::string>(applicationType));
-    }
-    */
-
     int Sequence::Count::get()
     {
       return sequencePtr_->size();
     }
-
-    /* Not yet implemented -- only for the encoder.  Will need a mutable FieldSetPtr.
-    void Sequence::Add(FieldSet^ newFieldSet)
-    {
-      sequencePtr_->addEntry(newFieldSet->FieldSetCPtr.GetBoostPtr());
-    }
-    */
 
     System::Collections::IEnumerator^ Sequence::GetEnumerator()
     {

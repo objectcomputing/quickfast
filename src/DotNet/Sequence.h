@@ -20,20 +20,16 @@ namespace QuickFASTDotNet{
       typedef QuickFAST::Messages::Sequence TSequence;
       typedef BoostPtrHolder<QuickFAST::Messages::SequenceCPtr> TSequenceCPtr;
 
-      Sequence();
-
       /// @brief Allows addressing of a given Field in this FieldSet by index.
       property FieldSet^ default[unsigned int]
       {
         FieldSet^ get(unsigned int index);
       }
 
-      /// @brief Gets and sets the appliction type this FieldSet pertains to.
+      /// @brief Gets the appliction type this FieldSet pertains to.
       property System::String^ ApplicationType
       {
         System::String^ get();
-        // Not yet implemented -- only for the encoder
-        //void set(System::String^ applicationType);
       }
 
       ///@brief Gets the number of FieldSet's in this Sequence object.
@@ -41,10 +37,6 @@ namespace QuickFASTDotNet{
       {
         int get();
       }
-
-      ///@brief Adds a field set to this sequence.
-      // Not yet implemented -- only for the encoder.
-      //void Add(FieldSet^ newFieldSet);
 
       virtual System::Collections::IEnumerator^ GetEnumerator() = System::Collections::IEnumerable::GetEnumerator;
 
@@ -88,9 +80,8 @@ namespace QuickFASTDotNet{
         Sequence^ viewedContainer_;
       };
 
-
-      ///@brief Constructs a managed Sequence increasing the referenc count of the shared_ptr
-      Sequence(const QuickFAST::Messages::SequenceCPtr& sequence);
+      ///@brief Constructs a managed Sequence increasing the reference count of the shared_ptr
+      explicit Sequence(const QuickFAST::Messages::SequenceCPtr& sequence);
 
       ///@brief returns a reference to the unmanaged Sequence object contained in this managed Sequence
       property const TSequence& Ref
@@ -139,9 +130,8 @@ namespace QuickFASTDotNet{
         Sequence^ parent_;
       };
 
-
+    protected private:
       TSequenceCPtr sequencePtr_;
-
     };
   }
 }

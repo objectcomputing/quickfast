@@ -6,6 +6,7 @@
 #include <DotNet/Decoder.h>
 #include "DataSourceBuffered.h"
 
+#include "Messages/Message.h"
 #include "Codecs/MessageConsumer.h"
 #include "Codecs/SynchronousDecoder.h"
 #include <iostream>

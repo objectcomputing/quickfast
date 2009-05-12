@@ -86,26 +86,23 @@ namespace QuickFASTDotNetTests
         }
 
         [Test]
-        [Ignore("Ignore until there is a way to create an instance of the FielsSet")]
         public void TestGroupFieldContruction()
         {
-            FieldSet value = new FieldSet();
+            MutableFieldSet value = new MutableFieldSet();
             GroupField field = new GroupField(value);
             Assert.That(field.Value, Is.EqualTo(value));
         }
 
-#if QUICKFAST_DOTNET_ENCODING
         [Test]
         [Ignore("Ignore until EqualTo() is implemented")]
         public void TestSequenceFieldContruction()
         {
-            FieldSet fieldSet = new FieldSet();
-            Sequence value = new Sequence();
+            FieldSet fieldSet = new MutableFieldSet();
+            MutableSequence value = new MutableSequence();
             value.Add(fieldSet);
 
             SequenceField field = new SequenceField(value);
             Assert.That(field.Value, Is.EqualTo(value));
         }
-#endif
     }
 }

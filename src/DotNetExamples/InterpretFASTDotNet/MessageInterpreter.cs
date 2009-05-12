@@ -23,7 +23,7 @@ namespace QuickFASTDotNet
             }
 
 
-            public bool MessageReceived(Message message)
+            public bool MessageReceived(FieldSet message)
             {
                 recordCount_ += 1;
                 out_.Write("Record #{0} ",  recordCount_);
@@ -43,7 +43,7 @@ namespace QuickFASTDotNet
             }
 
 
-            void formatMessage(Message message)
+            void formatMessage(FieldSet message)
             {
 
                 formatFieldSet(message);

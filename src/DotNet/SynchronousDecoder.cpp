@@ -3,7 +3,7 @@
 // See the file license.txt for licensing information.
 #include "StdAfx.h"
 #include "SynchronousDecoder.h"
-#include <DotNet/Message.h>
+#include <DotNet/MutableFieldSet.h>
 #include <DotNet/TemplateRegistry.h>
 #include <DotNet/Exceptions.h>
 
@@ -32,11 +32,11 @@ namespace QuickFASTDotNet{
 
     void SynchronousDecoder::Decode(MessageReceivedDelegate^ callback)
     {
-      typedef QuickFASTDotNet::Messages::Message FTManagedMessage;
+      typedef QuickFASTDotNet::Messages::MutableFieldSet FTManagedMessage;
       bool more = true;
       FTManagedMessage^ message = gcnew FTManagedMessage(maxFieldCount_);
       QuickFAST::Codecs::DataSource & source = dataSource_.GetRef();
-      QuickFAST::Messages::DecodedFields & messageRef = message->MessageRef;
+      QuickFAST::Messages::DecodedFields & messageRef = message->FieldSetRef;
 
       try
       {

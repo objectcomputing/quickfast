@@ -5,7 +5,7 @@
 
 namespace QuickFASTDotNet{
   namespace Messages {
-    ref class Message;
+    ref class FieldSet;
   }
 
   namespace Codecs{
@@ -30,7 +30,7 @@ namespace QuickFASTDotNet{
       /// @brief Encode the next message.
       /// @param[in] templateId identifies the template to use for encoding.
       /// @param[in] message containing the fields to be encoded.
-      void Encode(unsigned int templateId, Messages::Message^ message);
+      void Encode(unsigned int templateId, Messages::FieldSet^ message);
 
     private:
       TemplateRegistry^ templateRegistry_;

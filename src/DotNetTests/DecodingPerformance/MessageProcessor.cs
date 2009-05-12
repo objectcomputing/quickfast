@@ -106,13 +106,13 @@ namespace QuickFASTDotNet
             }
 
 
-            public bool MessageReceived(Message message)
+            public bool MessageReceived(FieldSet message)
             {
                 accessMessage(message);
                 return true;
             }
 
-            void accessMessage(Message message)
+            void accessMessage(FieldSet message)
             {
                 StopWatch parseTimer = new StopWatch();
                 accessFieldSet(message);

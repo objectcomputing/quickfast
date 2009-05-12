@@ -12,16 +12,11 @@ using namespace System;
 namespace QuickFASTDotNet{
   namespace Messages {
 
-    FieldSet::FieldSet()
-      :spFieldSet_(QuickFAST::Messages::FieldSetPtr(new QuickFAST::Messages::FieldSet(20))) // @TODO get an accurate field count
-      ,isReadOnly_(false)
-    {
-    }
-
     FieldSet::FieldSet(const QuickFAST::Messages::FieldSetCPtr& fieldSet)
       :spFieldSet_(fieldSet)
-      ,isReadOnly_(false)
     {
+      // Because of the way the derived class constructor for MutableFieldSet works,
+      // this class may *not* depend on spFieldSet_ being non-NULL here.
     }
 
     FieldSet::TKeyValuePair FieldSet::default::get(String^ fieldName)
@@ -45,14 +40,6 @@ namespace QuickFASTDotNet{
       return StlDotNet::string_cast(spFieldSet_->getApplicationType());
     }
 
-/* Not yet implemented -- only for the encoder.  Will need a mutable FieldSetPtr.
-    void FieldSet::SetApplicationType(System::String^ applicationType, System::String^ nameSpace)
-    {
-      spFieldSet_->setApplicationType(StlDotNet::string_cast<std::string>(applicationType),
-                                      StlDotNet::string_cast<std::string>(nameSpace));
-    }
-*/
-
     bool FieldSet::IsPresent(System::String^ name)
     {
       std::string stdNameStr;
@@ -60,13 +47,6 @@ namespace QuickFASTDotNet{
 
       return spFieldSet_->isPresent(stdNameStr);
     }
-
-    /* Not yet implemented -- only for the encoder.  Will need a mutable FieldSetPtr.
-    void FieldSet::AddField(FieldIdentity^ identity, Field^ newField)
-    {
-      spFieldSet_->addField(identity->SmartPtr, cast_field(newField));
-    }
-    */
 
     Field^ FieldSet::GetField(System::String^ name)
     {
@@ -80,11 +60,6 @@ namespace QuickFASTDotNet{
       QuickFAST::Messages::FieldIdentityCPtr spFieldIdentity;
       spFieldSet_->getIdentity(StlDotNet::string_cast<std::string>(name), spFieldIdentity);
       return gcnew FieldIdentity(spFieldIdentity);
-    }
-
-    bool FieldSet::IsReadOnly::get()
-    {
-      return isReadOnly_;
     }
 
     void FieldSet::Add(TKeyValuePair item)
@@ -124,7 +99,7 @@ namespace QuickFASTDotNet{
 
     bool FieldSet::FieldEnumerator::MoveNext()
     {
-      return (++itHolder_->it == itHolder_->end)? false: true;
+      return (++itHolder_->it != itHolder_->end);
     }
 
     void FieldSet::FieldEnumerator::Reset()

@@ -21,7 +21,7 @@ namespace QuickFASTDotNetTests
                 dataStream = new FileStream("..\\TestData\\fixfast.dat", FileMode.Open))
             {
                 Decoder decoder = new Decoder(TemplateRegistry.Parse(templateStream), dataStream);
-                Message message = decoder.Decode();
+                FieldSet message = decoder.Decode();
             }
         }
 
@@ -37,7 +37,7 @@ namespace QuickFASTDotNetTests
                 TemplateRegistry templateRegistry = TemplateRegistry.Parse(templateStream);
                 Decoder decoder = new Decoder(templateRegistry, dataStream);
 
-                Message message = decoder.Decode();
+                FieldSet message = decoder.Decode();
                 string outputFile = "..\\TestData\\testoutput.dat";
                 if (File.Exists(outputFile))
                 {

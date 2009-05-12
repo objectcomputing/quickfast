@@ -1,3 +1,45 @@
+Tue May 12 22:32:31 UTC 2009  Adam Mitz  <mitza@ociweb.com>
+
+        * src/Codecs/Encoder.h:
+        * src/Codecs/Encoder.cpp:
+
+          encodeMessage() now takes a FieldSet instead of a Message because it
+          only needs the methods defined on FieldSet.  Enables the .NET change:
+
+        * src/DotNet/MutableFieldSet.h:
+        * src/DotNet/MutableFieldSet.cpp:
+        * src/DotNet/MutableSequence.h:
+        * src/DotNet/MutableSequence.cpp:
+
+          Added mutable variations for FieldSet and Sequence which derive from
+          their immutable counterparts and add mutating methods.
+
+        * src/DotNet/Message.h:
+        * src/DotNet/Message.cpp:
+
+          Removed these files.  The .NET side no longer hass a Message class,
+          instead just use a FieldSet (or MutableFieldSet).
+
+        * src/DotNet/Decoder.h:
+        * src/DotNet/Decoder.cpp:
+        * src/DotNet/Encoder.h:
+        * src/DotNet/Encoder.cpp:
+        * src/DotNet/FieldSet.h:
+        * src/DotNet/FieldSet.cpp:
+        * src/DotNet/Sequence.h:
+        * src/DotNet/Sequence.cpp:
+        * src/DotNet/SynchronousDecoder.h:
+        * src/DotNet/SynchronousDecoder.cpp:
+        * src/DotNetExamples/InterpretFASTDotNet/MessageInterpreter.cs:
+        * src/DotNetExamples/PerformanceTestDotNet/MessageCounter.cs:
+        * src/DotNetTests/DecodingPerformance/MessageProcessor.cs:
+        * src/DotNetTests/EncodeDecodeTests.cs:
+        * src/DotNetTests/FieldTests.cs:
+        * src/DotNetTests/MessageTests.cs:
+
+          Refactoring change Message -> FieldSet
+          Re-enabled tests that were disabled last week.
+
 Fri May  8 20:58:51 UTC 2009  Adam Mitz  <mitza@ociweb.com>
 
         * src/Messages/FieldSet.h:

@@ -31,8 +31,6 @@ namespace QuickFASTDotNet{
       typedef System::Collections::Generic::IEnumerator<TKeyValuePair> TGenericEnumerator;
       typedef System::Collections::Generic::IEnumerable<TKeyValuePair> TGenericEnumerable;
 
-      FieldSet();
-
       property TKeyValuePair default[System::String^]
       {
         TKeyValuePair get(System::String^ fieldName);
@@ -44,9 +42,6 @@ namespace QuickFASTDotNet{
       {
         System::String^ get();
       }
-
-      //Not yet implemented -- only for the encoder.
-      //void SetApplicationType(System::String^ applicationType, System::String^ nameSpace);
 
       /// @brief number of fields in this field set.
       property int Count
@@ -70,14 +65,6 @@ namespace QuickFASTDotNet{
       /// unknown or doesn't currently have a value in this set.
       bool IsPresent(System::String^ name);
 
-      /// @brief Add a field to the set.
-      ///
-      /// The FieldCPtr is copied, not the actual Field object.
-      /// @param identity identifies this field
-      /// @param value is the value to be assigned.
-      //Not yet implemented -- only for the encoder.
-      //void AddField(FieldIdentity^ identity, Field^ newField);
-
       Field^ GetField(System::String^ name);
 
       /// @brief Get the identity information for the specified field
@@ -88,11 +75,11 @@ namespace QuickFASTDotNet{
 
 
       /// @brief indicates whether this fieldset is readonly or not.
-      property bool IsReadOnly {	virtual bool get ();}
+      property bool IsReadOnly { virtual bool get() { return true; } }
       virtual void Add(TKeyValuePair item);
       virtual void Clear();
       virtual bool Contains(TKeyValuePair item);
-      virtual void CopyTo(array<TKeyValuePair>^ array, 	int arrayIndex);
+      virtual void CopyTo(array<TKeyValuePair>^ array, int arrayIndex);
       virtual bool Remove(TKeyValuePair item);
 
       virtual String^ ToString() override
@@ -133,7 +120,7 @@ namespace QuickFASTDotNet{
 
 
       /// @brief Constructs a new FieldSet instance increasing the ref count of the QuickFAST::Messages::FieldSetPtr shared_ptr.
-      FieldSet(const QuickFAST::Messages::FieldSetCPtr& fieldSet);
+      explicit FieldSet(const QuickFAST::Messages::FieldSetCPtr& fieldSet);
 
       /// Returns a reference to the unmanaged FieldSet entity.
       property const TFieldSet& FieldSetRef
@@ -183,8 +170,8 @@ namespace QuickFASTDotNet{
         FieldSet^ parent_;
       };
 
+    protected private:
       TFieldSetCPtr spFieldSet_;
-      bool isReadOnly_;
     };
   }
 }

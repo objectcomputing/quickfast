@@ -3,7 +3,7 @@
 // See the file license.txt for licensing information.
 #include "StdAfx.h"
 #include <DotNet/Decoder.h>
-#include <DotNet/Message.h>
+#include <DotNet/MutableFieldSet.h>
 #include <DotNet/TemplateRegistry.h>
 #include <DotNet/Exceptions.h>
 
@@ -25,13 +25,13 @@ namespace QuickFASTDotNet{
 
     }
 
-    QuickFASTDotNet::Messages::Message^ Decoder::Decode()
+    QuickFASTDotNet::Messages::FieldSet^ Decoder::Decode()
     {
       try
       {
-        typedef QuickFASTDotNet::Messages::Message FTManagedMessage;
+        typedef QuickFASTDotNet::Messages::MutableFieldSet FTManagedMessage;
         FTManagedMessage^ message = gcnew FTManagedMessage(maxFieldCount_);
-        if (! decoder_->decodeMessage(dataSource_.GetRef(), message->MessageRef))
+        if (! decoder_->decodeMessage(dataSource_.GetRef(), message->FieldSetRef))
         {
           endOfStream_ = true;
         }
@@ -69,9 +69,9 @@ namespace QuickFASTDotNet{
     {
       try
       {
-        typedef QuickFASTDotNet::Messages::Message FTManagedMessage;
+        typedef QuickFASTDotNet::Messages::MutableFieldSet FTManagedMessage;
         FTManagedMessage^ message = gcnew FTManagedMessage(maxFieldCount_);
-        if (! decoder_->decodeMessage(dataSource_.GetRef(), message->MessageRef))
+        if (! decoder_->decodeMessage(dataSource_.GetRef(), message->FieldSetRef))
         {
           endOfStream_ = true;
         }
