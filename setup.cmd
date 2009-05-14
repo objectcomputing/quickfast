@@ -50,7 +50,6 @@ set QUICKFAST_ROOT=%CD%
 
 if %VCVER%==9 (
   set VC_ROOT=C:\Program Files\Microsoft Visual Studio 9.0\VC\bin
-  set MWC_EXTRA=-value_template toolsversion=3.5
   @call "%VS90COMNTOOLS%VSVARS32.BAT" >nul
 ) else (
   set VC_ROOT=C:\Program Files\Microsoft Visual Studio 8\VC\bin

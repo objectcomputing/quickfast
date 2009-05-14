@@ -1,3 +1,17 @@
+Thu May 14 15:32:01 UTC 2009  Adam Mitz  <mitza@ociweb.com>
+
+        * m.cmd:
+        * setup.cmd:
+
+          Removed a work-around for C# 2008.  MPC is now updated to handle
+          this version (use the latest MPC from subversion).
+
+        * src/DotNetExamples/PerformanceTestDotNet/MessageInterpreter.cs:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.cs:
+
+          Added a -i, "interpret" option to this test.  See the comment at the
+          top of PerformanceTestDotNet/MessageInterpreter.cs.
+
 Tue May 12 22:32:31 UTC 2009  Adam Mitz  <mitza@ociweb.com>
 
         * src/Codecs/Encoder.h:
