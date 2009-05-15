@@ -2,6 +2,7 @@ workspace(*) {
   cmdline += -feature_file QuickFAST.features
   src/QuickFAST.mpc
   src/Examples/Examples.mpc
+  src/OrderBook/OrderBook.mpc
   
   exclude(!vc8, !vc9) {
     //C++/Cli Visual Studio Projects
