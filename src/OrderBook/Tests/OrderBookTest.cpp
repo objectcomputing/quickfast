@@ -1,6 +1,5 @@
 #include <OrderBookPch.h>
 #include <Book.h>
-#include <MessageInterpreter.h>
 #include <Codecs/XMLTemplateParser.h>
 #include <Codecs/MessageConsumer.h>
 #include <Codecs/DataSourceStream.h>
