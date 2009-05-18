@@ -1,3 +1,11 @@
+Mon May 18 19:51:34 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/SynchronousDecoder.h:
+        * src/DotNet/SynchronousDecoder.h:
+        * src/DotNet/SynchronousDecoder.cpp:
+        Unnecessary includes lead to build problems in some environments (Winbase symbol defn conflicts)
+        Remove the includes and all is well.
+
 Mon May 18 19:11:51 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionFiller.h:

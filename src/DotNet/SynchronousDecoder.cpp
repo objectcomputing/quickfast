@@ -93,12 +93,9 @@ namespace QuickFASTDotNet{
       QuickFAST::Codecs::DataSource & source = dataSource_.GetRef();
       MessageCounter handler;
 
-      //decodeTime_ = 0;
       try
       {
-        //StopWatch decodeTimer;
         syncDecoder_->decode(source, handler);
-        //decodeTime_ = decodeTimer.lapse();
       }
       catch(const QuickFAST::UnsupportedConversion& error)
       {
@@ -124,7 +121,6 @@ namespace QuickFASTDotNet{
       {
         throw gcnew UsageError(error);
       }
-
       messageCount_ = handler.getMesssageCount();
     }
 

@@ -11,53 +11,13 @@
 #include "Codecs/SynchronousDecoder.h"
 #include <iostream>
 
-#include <boost/date_time/posix_time/posix_time.hpp>
-
 namespace QuickFASTDotNet{
   namespace Messages {
     ref class Message;
   }
 
   namespace Codecs{
-
 #pragma unmanaged
-    class StopWatch
-    {
-    public:
-      /// @brief Create the stopwatch and start it running.
-      StopWatch()
-        : start_(boost::posix_time::microsec_clock::universal_time())
-        , running_(true)
-      {
-      }
-
-      ~StopWatch()
-      {
-      }
-
-      unsigned long freeze()
-      {
-        running_ = true;
-        return lapse();
-      }
-
-      unsigned long lapse()
-      {
-        if(running_)
-        {
-          stop_ = boost::posix_time::microsec_clock::universal_time();
-          running_ = false;
-        }
-
-        return static_cast<unsigned long>((stop_ - start_).total_milliseconds());
-      }
-
-    private:
-      boost::posix_time::ptime start_;
-      boost::posix_time::ptime  stop_;
-      bool running_;
-    };
-
     class MessageCounter : public QuickFAST::Codecs::MessageConsumer
     {
     public:
@@ -95,7 +55,6 @@ namespace QuickFASTDotNet{
     private:
       size_t messageCount_;
     };
-
 #pragma managed
 
 

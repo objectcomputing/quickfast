@@ -114,7 +114,7 @@ namespace QuickFAST{
           }
           if(!decoder_.decodeMessage(source, message))
           {
-            std::cout << "EOF during decode." << std::endl;
+            decoder_.reportError("[ERR U11]","EOF during decode.");
           }
           more = consumer.consumeMessage(message);
           messageCount_ += 1;
