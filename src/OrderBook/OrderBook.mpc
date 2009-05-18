@@ -1,4 +1,4 @@
-project(*) : boost_base {
+project(*) : boost_base, boost_thread {
   sharedname = OrderBook
   dynamicflags += ORDERBOOK_BUILD_DLL
   includes += $(QUICKFAST_ROOT)/src
@@ -32,7 +32,7 @@ project(*) : boost_base {
   libs += QuickFAST
 }
 
-project(*tests) : boost_unit_test_framework {
+project(*tests) : boost_unit_test_framework, boost_system, boost_thread {
   exename = OrderBookTest
   includes += $(QUICKFAST_ROOT)/src
   includes += $(QUICKFAST_ROOT)/src/OrderBook
