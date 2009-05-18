@@ -28,6 +28,7 @@ namespace QuickFAST{
     {
       typedef boost::scoped_array<unsigned char> Buffer;
     public:
+      ///@brief declare a pointer to the [templated] consumer.
       typedef boost::shared_ptr<MessageConsumerType> ConsumerPtr;
       /// @brief construct given templates and multicast information
       /// @param templateRegistry the templates to use for decoding
@@ -303,6 +304,8 @@ namespace QuickFAST{
       ConsumerPtr consumer_;
     };
 
+    ///@brief Instantiate the template for the most common case
+    /// This provides the same functionality as the previous, nontemplatized, version of MulticastDecoder
     typedef MulticastDecoderT<Messages::Message, Codecs::MessageConsumer> MulticastDecoder;
   }
 }

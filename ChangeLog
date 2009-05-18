@@ -1,3 +1,14 @@
+Mon May 18 19:11:51 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionFiller.h:
+        * src/Codecs/MulticastDecoder.h:
+
+        * src/Examples/PerformanceTest/NullMessage.h:
+
+        * src/Messages/DecodedFields.h:
+        * src/Messages/FieldSet.h:
+        Updating documentation to eliminate Doxygen warnings
+
 Thu May 14 15:32:01 UTC 2009  Adam Mitz  <mitza@ociweb.com>
 
         * m.cmd:

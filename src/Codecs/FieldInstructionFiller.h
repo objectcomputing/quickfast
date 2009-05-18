@@ -14,7 +14,7 @@ namespace QuickFAST{
     ///
     /// ARCA uses the presence map in nonstandard (actually pre-standard) ways.
     /// Presence map bits are assigned to fields that do not actually appear in
-    /// the data stream or the application type.  The &less;filler> tag tells
+    /// the data stream or the application type.  The &lt;filler> tag tells
     /// QuickFAST to consume these bits.
     class QuickFAST_Export FieldInstructionFiller : public FieldInstruction
     {
