@@ -5,7 +5,7 @@
 #include <DotNet/Encoder.h>
 #include <DotNet/TemplateRegistry.h>
 #include <DotNet/DataDestination.h>
-#include <DotNet/Message.h>
+#include <DotNet/FieldSet.h>
 #include <DotNet/Exceptions.h>
 #include <Codecs/Encoder.h>
 
@@ -22,14 +22,14 @@ namespace QuickFASTDotNet{
 
     }
 
-    void Encoder::Encode(unsigned int templateId, Messages::Message^ message)
+    void Encoder::Encode(unsigned int templateId, Messages::FieldSet^ message)
     {
       try
       {
         DataDestinationImpl dataDestination(outStream_);
         QuickFAST::Codecs::Encoder encoder(templateRegistry_->NativeTemplateRegistry);
         DataDestinationImpl dataDest(outStream_);
-        encoder.encodeMessage(dataDest, templateId, message->MessageRef);
+        encoder.encodeMessage(dataDest, templateId, message->FieldSetRef);
       }
       catch(const QuickFAST::UnsupportedConversion& error)
       {

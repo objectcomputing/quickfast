@@ -25,7 +25,7 @@
     </int64>
     <uInt64 name="uint64_const" id="12"><constant value="0"/>
     </uInt64>
-    <decimal name="decimal_const" id="13"><constant value="-9223372036854775808000000000000000000000000000000000000000000000"/>
+    <decimal name="decimal_const" id="13"><constant value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
     </decimal>
     <string name="asciistring_const" charset="ascii" id="14"><constant value=""/>
     </string>
@@ -41,7 +41,7 @@
     </int64>
     <uInt64 name="uint64_default" id="20"><default value="0"/>
     </uInt64>
-    <decimal name="decimal_default" id="21"><default value="-9223372036854775808000000000000000000000000000000000000000000000"/>
+    <decimal name="decimal_default" id="21"><default value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
     </decimal>
     <string name="asciistring_default" charset="ascii" id="22"><default value=""/>
     </string>
@@ -57,7 +57,7 @@
     </int64>
     <uInt64 name="uint64_copy" id="28"><copy/>
     </uInt64>
-    <decimal name="decimal_copy" id="29"><copy value="-9223372036854775808000000000000000000000000000000000000000000000"/>
+    <decimal name="decimal_copy" id="29"><copy value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
     </decimal>
     <string name="asciistring_copy" charset="ascii" id="30"><copy/>
     </string>
@@ -89,11 +89,11 @@
     </int64>
     <uInt64 name="uint64_incre" id="44"><increment value="1"/>
     </uInt64>
-    <string name="asciistring_tail" charset="ascii" id="45"><tail/>
+    <string name="asciistring_tail" presence="optional" charset="ascii" id="45"><tail/>
     </string>
-    <string name="utf8string_tail" charset="unicode" id="46"><tail/>
+    <string name="utf8string_tail" presence="optional" charset="unicode" id="46"><tail/>
     </string>
-    <byteVector name="bytevector_tail" id="47"><tail/>
+    <byteVector name="bytevector_tail" presence="optional" id="47"><tail/>
     </byteVector>
     </template>
 </templates>

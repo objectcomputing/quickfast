@@ -21,7 +21,7 @@ namespace QuickFASTDotNet
                 return messageCount_;
             }
 
-            public bool MessageReceived(Message message)
+            public bool MessageReceived(FieldSet message)
             {
                 messageCount_++;
                 return true;

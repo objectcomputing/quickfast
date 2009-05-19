@@ -4,6 +4,7 @@
 #include <Common/QuickFASTPch.h>
 #include "Decimal.h"
 #include <Common/Exceptions.h>
+#include <boost/algorithm/string/trim.hpp>
 
 using namespace ::QuickFAST;
 
@@ -31,16 +32,42 @@ Decimal::~Decimal()
 void
 Decimal::parse(const std::string & value)
 {
-  size_t dotPos = value.find('.');
-  std::string wholeString = value.substr(0,dotPos);
+  std::string str = value;
+  boost::algorithm::trim(str);
+  size_t dotPos = str.find(".");
+  std::string wholeString = str.substr(0,dotPos);
   std::string fracString;
   if(dotPos != std::string::npos)
   {
-    fracString = value.substr(dotPos+1);
+    fracString = str.substr(dotPos+1);
   }
   std::string mantissaString = wholeString+fracString;
-  mantissa_ = boost::lexical_cast<mantissa_t>(mantissaString);
   exponent_ = -exponent_t(fracString.size());
+
+  bool overflow = false;
+
+  // VC8 stringstream is truncating a large string instead of throwing
+  // the exception, so we'll always fall back on the overflow code.
+#if defined _MSC_VER && _MSC_VER < 1500
+  overflow = true;
+#else
+  try {
+    mantissa_ = boost::lexical_cast<mantissa_t>(mantissaString);
+  }
+  catch (std::exception &)
+  {
+    overflow = true;
+  }
+#endif
+
+  if (overflow && autoNormalize_)
+  {
+    size_t pos = mantissaString.find_last_not_of ("0");
+    exponent_ += exponent_t(mantissaString.length () - pos - 1);
+    mantissaString = mantissaString.substr (0, pos + 1);
+    mantissa_ = boost::lexical_cast<mantissa_t>(mantissaString);
+  }
+
   if(autoNormalize_)
   {
     normalize();

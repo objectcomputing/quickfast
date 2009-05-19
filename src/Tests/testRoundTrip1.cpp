@@ -507,8 +507,6 @@ namespace{
     decoder.decodeMessage(source, msgOut);
 
     validateMessage1(msgOut);
-    Messages::Message messageCopy(msgOut);
-    validateMessage1(messageCopy);
 
     // wanna see it again?
     encoder.encodeMessage(destination, templId, msgOut);

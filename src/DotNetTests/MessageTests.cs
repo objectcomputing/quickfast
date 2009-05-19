@@ -9,6 +9,7 @@ namespace QuickFASTDotNetTests
     [TestFixture]
     public class MessageTests
     {
+
         [Test]
         public void BuildMessage()
         {
@@ -17,7 +18,7 @@ namespace QuickFASTDotNetTests
 
             QuickFASTDotNet.Messages.AsciStringField testAsciiField = new QuickFASTDotNet.Messages.AsciStringField("Some ascii value.");
 
-            QuickFASTDotNet.Messages.Message message = new QuickFASTDotNet.Messages.Message();
+            QuickFASTDotNet.Messages.MutableFieldSet message = new QuickFASTDotNet.Messages.MutableFieldSet();
 
             message.AddField(identity, testAsciiField);
 
@@ -26,14 +27,13 @@ namespace QuickFASTDotNetTests
             Assert.That(field, Is.EqualTo(testAsciiField));
         }
 
-
         [Test]
         public void TestBuildMessage()
         {
             //Build a message here.            
 
             //Build the field sets that will be included in the sequence.
-            FieldSet fieldSet = new FieldSet();
+            MutableFieldSet fieldSet = new MutableFieldSet();
 
             fieldSet.AddField(MDUpdateAction, new UInt32Field(2));
             fieldSet.AddField(MDPriceLevel, new UInt32Field(1));
@@ -48,11 +48,11 @@ namespace QuickFASTDotNetTests
             fieldSet.AddField(TradingSessionID, new AsciStringField("2"));
 
             //Add the first FieldSet.
-            Sequence sequence = new Sequence();
+            MutableSequence sequence = new MutableSequence();
             sequence.Add(fieldSet);
 
             //Build the second FieldSet
-            fieldSet = new FieldSet();
+            fieldSet = new MutableFieldSet();
 
             fieldSet.AddField(MDUpdateAction, new UInt32Field(0));
             fieldSet.AddField(MDPriceLevel, new UInt32Field(3));
@@ -70,7 +70,7 @@ namespace QuickFASTDotNetTests
             sequence.Add(fieldSet);
 
             //Build the main message body.
-            Message message = new Message();
+            MutableFieldSet message = new MutableFieldSet();
             message.AddField(ApplVerID, new AsciStringField("8"));
             message.AddField(MessageType, new AsciStringField("X"));
             message.AddField(SenderCompID, new AsciStringField("CME"));
@@ -79,7 +79,6 @@ namespace QuickFASTDotNetTests
             message.AddField(TradeDate, new UInt32Field(20081017));
             message.AddField(MDEntries, new SequenceField(sequence));
         }
-
 
         private void SetupIdentities()
         {

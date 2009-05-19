@@ -64,6 +64,10 @@ Decoder::decodeSegment(
   Codecs::TemplateCPtr templatePtr;
   if(getTemplateRegistry()->getTemplate(getTemplateId(), templatePtr))
   {
+    if(templatePtr->getReset())
+    {
+      reset();
+    }
     if(!decodeSegmentBody(source, pmap, templatePtr, fieldSet))
     {
       throw EncodingError("Unexpected end of file in message body.");

@@ -20,6 +20,7 @@ namespace QuickFASTDotNet
             bool resetOnMessage_;
             bool strict_;
             uint count_;
+            bool interpret_ = false;
 
 
             public PerformanceTestDotNet()
@@ -58,7 +59,7 @@ namespace QuickFASTDotNet
                 System.Console.WriteLine("  -c count    : repeat the test 'count' times");
                 System.Console.WriteLine("  -r          : Toggle 'reset decoder on every message' (default false).");
                 System.Console.WriteLine("  -s          : Toggle 'strict decoding rules' (default true).");
-
+                System.Console.WriteLine("  -i          : Interpret messages instead of just counting them.");
             }
 
 
@@ -120,6 +121,10 @@ namespace QuickFASTDotNet
                     else if (opt == "-h")
                     {
                         ok = false;
+                    }
+                    else if (opt == "-i")
+                    {
+                        interpret_ = true;
                     }
                 }
 
@@ -236,6 +241,7 @@ namespace QuickFASTDotNet
                         System.Console.WriteLine("Decoding input; pass {0} of {1}", nPass + 1, count_);
                         System.Console.Out.Flush();
                         MessageCounter handler = new MessageCounter();
+                        MessageInterpreter interpreter = new MessageInterpreter();
 
                         fastFile_.Seek(0, System.IO.SeekOrigin.Begin);
                         QuickFASTDotNet.Codecs.SynchronousDecoder decoder = new QuickFASTDotNet.Codecs.SynchronousDecoder(templateRegistry, fastFile_);
@@ -243,8 +249,9 @@ namespace QuickFASTDotNet
                         decoder.Strict = strict_;
 
                         QuickFASTDotNet.Codecs.MessageReceivedDelegate handlerDelegate;
-                        handlerDelegate = new QuickFASTDotNet.Codecs.MessageReceivedDelegate(handler.MessageReceived);
-                        ulong messageCount = 0;
+                        handlerDelegate = interpret_
+                            ? new QuickFASTDotNet.Codecs.MessageReceivedDelegate(interpreter.MessageReceived)
+                            : new QuickFASTDotNet.Codecs.MessageReceivedDelegate(handler.MessageReceived);
 
                         GCSettings.LatencyMode = GCLatencyMode.LowLatency;
 
@@ -257,7 +264,9 @@ namespace QuickFASTDotNet
 
                         GCSettings.LatencyMode = GCLatencyMode.Interactive;
 
-                        messageCount = handler.getMesssageCount();
+                        ulong messageCount = interpret_
+                            ? interpreter.getMessageCount()
+                            : handler.getMesssageCount();
                         //messageCount = decoder.MessageCount;
 #if DEBUG
                         performanceFile_.Write("[debug] ");

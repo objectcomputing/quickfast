@@ -9,7 +9,7 @@
 
 namespace QuickFASTDotNet{
   namespace Messages {
-    ref class Message;
+    ref class FieldSet;
   }
 
   namespace Codecs{
@@ -43,7 +43,7 @@ namespace QuickFASTDotNet{
     /// class uses the MessageReceivedDelegate to signal the caller and return the newly arrived
     /// message.
     /// @returns true if the Delegate is able to be called again, false otherwise.
-    public delegate bool MessageReceivedDelegate(QuickFASTDotNet::Messages::Message^ message);
+    public delegate bool MessageReceivedDelegate(QuickFASTDotNet::Messages::FieldSet^ message);
 
 
 
@@ -87,7 +87,7 @@ namespace QuickFASTDotNet{
 
       /// @brief Decodes the next message from the stream.
       ///
-      Messages::Message^ Decode();
+      Messages::FieldSet^ Decode();
 
       /// @brief  Asychronously decodes the next message.
       ///

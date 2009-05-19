@@ -63,8 +63,7 @@ namespace QuickFASTDotNet{
       case FieldType::Group:
         {
           GroupField^ gField = safe_cast<GroupField^>(field);
-          retVal  = FTFieldCPtr(QuickFAST::Messages::FieldGroup::create(QuickFAST::Messages::GroupCPtr(new QuickFAST::Messages::Group(gField->Value->FieldSetRef))));
-          //retVal = FTFieldCPtr(new QuickFAST::Messages::FieldGroup(safe_cast<GroupField^>(field)->Value->FieldSetPtr.GetBoostPtr()));
+          retVal = QuickFAST::Messages::FieldGroup::create(gField->Value->FieldSetCPtr);
         }
         break;
       case FieldType::Int32:
@@ -80,8 +79,7 @@ namespace QuickFASTDotNet{
         retVal = FTFieldCPtr(QuickFAST::Messages::FieldUInt64::create(safe_cast<UInt64Field^>(field)->Value));
         break;
       case FieldType::Sequence:
-        retVal = FTFieldCPtr(QuickFAST::Messages::FieldSequence::create(QuickFAST::Messages::SequenceCPtr(new QuickFAST::Messages::Sequence(safe_cast<SequenceField^>(field)->Value->Ref))));
-        //retVal = FTFieldCPtr(new QuickFAST::Messages::FieldSequence(safe_cast<SequenceField^>(field)->Value->BoostPtr));
+        retVal = QuickFAST::Messages::FieldSequence::create(safe_cast<SequenceField^>(field)->Value->SequenceCPtr);
         break;
       case FieldType::UnicodeString:
         retVal = FTFieldCPtr(QuickFAST::Messages::FieldUtf8::create(StlDotNet::string_cast<std::string>(safe_cast<UnicodeStringField^>(field)->Value)));
@@ -145,10 +143,10 @@ namespace QuickFASTDotNet{
         retVal = gcnew ByteVectorField(Encoding::ASCII->GetBytes(StlDotNet::string_cast(field->toByteVector())));
         break;
       case QuickFAST::Messages::Field::SEQUENCE:
-        retVal = gcnew SequenceField(gcnew Sequence(*field->toSequence()));
+        retVal = gcnew SequenceField(gcnew Sequence(field->toSequence()));
         break;
       case QuickFAST::Messages::Field::GROUP:
-        retVal = gcnew GroupField(gcnew FieldSet(*field->toGroup()));
+        retVal = gcnew GroupField(gcnew FieldSet(field->toGroup()));
         break;
       case QuickFAST::Messages::Field::INT8:
         retVal = gcnew Int8Field(field->toInt8());

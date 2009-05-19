@@ -43,7 +43,6 @@ namespace QuickFAST{
       /// @param value is the value to be assigned.
       virtual void addField(const FieldIdentityCPtr & identity, const FieldCPtr & value) = 0;
 
-
       /// @brief Get the identity information for the specified field
       /// @param[in] name identifies the desired field
       /// @param[out] identity is the information for the field that was found
@@ -61,7 +60,8 @@ namespace QuickFAST{
       /// @brief get the namespace to qualify application type.
       virtual const std::string & getApplicationTypeNs()const = 0;
 
-      /// @brief create an empty version of this container for nexted fields.
+      /// @brief create an empty version of this container for nexted fields./
+      /// @param size is the number of fields to expect in the new container
       virtual DecodedFields * createdNestedFields(size_t size)const  = 0;
 
     private:

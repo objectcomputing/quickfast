@@ -18,7 +18,6 @@ namespace QuickFASTDotNet
 
             bool resetOnMessage_;
             bool strict_;
-            uint count_;
 
 
             public DecodingPerformance()
@@ -26,7 +25,6 @@ namespace QuickFASTDotNet
                 templateFileName_ = null;
                 fastFileName_ = null;
                 performanceFileName_ = null;
-                count_ = 1;
             }
 
 
@@ -36,7 +34,6 @@ namespace QuickFASTDotNet
                 System.Console.WriteLine("  -t file     : Template file (required)");
                 System.Console.WriteLine("  -f file     : FAST Message file (required)");
                 System.Console.WriteLine("  -p file     : File to which performance measurements are written. (default standard output)");
-                System.Console.WriteLine("  -c count    : repeat the test 'count' times");
                 System.Console.WriteLine("  -r          : Toggle 'reset decoder on every message' (default false).");
                 System.Console.WriteLine("  -s          : Toggle 'strict decoding rules' (default true).");
             }
@@ -48,7 +45,6 @@ namespace QuickFASTDotNet
                 bool readTemplateName = false;
                 bool readSourceName = false;
                 bool readPerfName = false;
-                bool readCount = false;
                 bool ok = true;
 
                 foreach (string opt in args)
@@ -67,11 +63,6 @@ namespace QuickFASTDotNet
                     {
                         performanceFileName_ = opt;
                         readPerfName = false;
-                    }
-                    else if (readCount)
-                    {
-                        count_ = System.Convert.ToUInt32(opt);
-                        readCount = false;
                     }
                     else if (opt == "-r")
                     {
@@ -92,10 +83,6 @@ namespace QuickFASTDotNet
                     else if (opt == "-p")
                     {
                         readPerfName = true;
-                    }
-                    else if (opt == "-c")
-                    {
-                        readCount = true;
                     }
                     else if (opt == "-h")
                     {
@@ -182,21 +169,21 @@ namespace QuickFASTDotNet
                 int result = 0;
                 try
                 {
-//                    System.Console.WriteLine("Parsing templates");
+                    System.Console.WriteLine("Parsing templates");
 
-//                    QuickFASTDotNet.Examples.StopWatch parseTimer = new QuickFASTDotNet.Examples.StopWatch();
-//                    QuickFASTDotNet.Codecs.TemplateRegistry templateRegistry = QuickFASTDotNet.Codecs.TemplateRegistry.Parse(templateFile_);
-//                    long parseLapse = parseTimer.freeze();
-//                    uint templateCount = templateRegistry.Size;
-//                    performanceFile_.Write("Parsed ");
-//                    performanceFile_.Write(templateCount);
-//                    performanceFile_.Write(" templates in ");
-//                    performanceFile_.Write(parseLapse.ToString("F3"));
-//                    performanceFile_.WriteLine(" milliseconds.");
-//                    performanceFile_.Write(" milliseconds. [");
-//                    performanceFile_.Write("{0:F3} msec/template. = ", (double)parseLapse / (double)templateCount);
-//                    performanceFile_.WriteLine("{0:F0} template/second.]", (double)1000 * (double)templateCount / (double)parseLapse);
-//                    performanceFile_.Flush();
+                    QuickFASTDotNet.Examples.StopWatch parseTimer = new QuickFASTDotNet.Examples.StopWatch();
+                    QuickFASTDotNet.Codecs.TemplateRegistry templateRegistry = QuickFASTDotNet.Codecs.TemplateRegistry.Parse(templateFile_);
+                    long parseLapse = parseTimer.freeze();
+                    uint templateCount = templateRegistry.Size;
+                    performanceFile_.Write("Parsed ");
+                    performanceFile_.Write(templateCount);
+                    performanceFile_.Write(" templates in ");
+                    performanceFile_.Write(parseLapse.ToString("F3"));
+                    performanceFile_.WriteLine(" milliseconds.");
+                    performanceFile_.Write(" milliseconds. [");
+                    performanceFile_.Write("{0:F3} msec/template. = ", (double)parseLapse / (double)templateCount);
+                    performanceFile_.WriteLine("{0:F0} template/second.]", (double)1000 * (double)templateCount / (double)parseLapse);
+                    performanceFile_.Flush();
 
 //                    for (ulong nPass = 0; nPass < count_; ++nPass)
 //                    {
@@ -241,21 +228,27 @@ namespace QuickFASTDotNet
                     //    System.Console.WriteLine("Decoding messages");
                     //}
 
-                    //MessageInterpreter handler = new MessageInterpreter(outputFile_);
-                    ////                    QuickFASTDotNet.Codecs.Decoder decoder = new QuickFASTDotNet.Codecs.Decoder(templateRegistry, fastFile_);
+                    QuickFASTDotNet.Examples.MessageProcessor handler = new QuickFASTDotNet.Examples.MessageProcessor();
+                    QuickFASTDotNet.Codecs.Decoder decoder = new QuickFASTDotNet.Codecs.Decoder(templateRegistry, fastFile_);
                     //QuickFASTDotNet.Codecs.SynchronousDecoder decoder = new QuickFASTDotNet.Codecs.SynchronousDecoder(templateRegistry, fastFile_);
-                    ////                    decoder.ResetOnMessage = resetOnMessage_;
-                    //decoder.Strict = strict_;
-                    //QuickFASTDotNet.Codecs.MessageReceivedDelegate handlerDelegate;
-                    //handlerDelegate = new QuickFASTDotNet.Codecs.MessageReceivedDelegate(handler.MessageReceived);
+                    decoder.Strict = strict_;
+                    QuickFASTDotNet.Codecs.MessageReceivedDelegate handlerDelegate;
+                    handlerDelegate = new QuickFASTDotNet.Codecs.MessageReceivedDelegate(handler.MessageReceived);
 
-                    //decoder.Decode(handlerDelegate);
-                    //if (verboseExecution_)
-                    //{
-                    //    System.Console.WriteLine("Decoded {0} messages.", decoder.MessageCount);
-                    //    //                        System.Console.WriteLine("Decoded {0} messages.", 1);
-                    //}
-                    //System.GC.Collect();
+                    decoder.Decode(handlerDelegate);
+
+                    System.Console.WriteLine("Decoded 1 message in {0} milliseconds.", handler.MesssageTime);
+                    System.Console.WriteLine("{0}{1} int32s ", '\t', handler.Int32Count);
+                    System.Console.WriteLine("{0}{1} uint32s ", '\t', handler.UInt32Count);
+                    System.Console.WriteLine("{0}{1} int64s ", '\t', handler.Int64Count);
+                    System.Console.WriteLine("{0}{1} uint64s ", '\t', handler.UInt64Count);
+                    System.Console.WriteLine("{0}{1} decimals ", '\t', handler.DecimalCount);
+                    System.Console.WriteLine("{0}{1} ascii strs ", '\t', handler.AsciStringCount);
+                    System.Console.WriteLine("{0}{1} unicode strs ", '\t', handler.UnicodeStringCount);
+                    System.Console.WriteLine("{0}{1} byte vectors ", '\t', handler.ByteVectorCount);
+                    System.Console.WriteLine("{0}{1} seqs ", '\t', handler.SequenceCount);
+                    System.Console.WriteLine("{0}{1} groups ", '\t', handler.GroupCount);
+                    System.Console.WriteLine("{0}{1} non std fields ", '\t', handler.NonStandardCount);
 
 
 
@@ -275,8 +268,6 @@ namespace QuickFASTDotNet
             {
                 int result = 0;
                 DecodingPerformance app = new DecodingPerformance();
-
-                app.usage();
 
                 if (app.init(ref args))
                 {

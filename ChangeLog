@@ -1,12 +1,235 @@
+Mon May 18 19:51:34 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/SynchronousDecoder.h:
+        * src/DotNet/SynchronousDecoder.h:
+        * src/DotNet/SynchronousDecoder.cpp:
+        Unnecessary includes lead to build problems in some environments (Winbase symbol defn conflicts)
+        Remove the includes and all is well.
+
+Mon May 18 19:11:51 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionFiller.h:
+        * src/Codecs/MulticastDecoder.h:
+
+        * src/Examples/PerformanceTest/NullMessage.h:
+
+        * src/Messages/DecodedFields.h:
+        * src/Messages/FieldSet.h:
+        Updating documentation to eliminate Doxygen warnings
+
+Thu May 14 15:32:01 UTC 2009  Adam Mitz  <mitza@ociweb.com>
+
+        * m.cmd:
+        * setup.cmd:
+
+          Removed a work-around for C# 2008.  MPC is now updated to handle
+          this version (use the latest MPC from subversion).
+
+        * src/DotNetExamples/PerformanceTestDotNet/MessageInterpreter.cs:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.cs:
+
+          Added a -i, "interpret" option to this test.  See the comment at the
+          top of PerformanceTestDotNet/MessageInterpreter.cs.
+
+Tue May 12 22:32:31 UTC 2009  Adam Mitz  <mitza@ociweb.com>
+
+        * src/Codecs/Encoder.h:
+        * src/Codecs/Encoder.cpp:
+
+          encodeMessage() now takes a FieldSet instead of a Message because it
+          only needs the methods defined on FieldSet.  Enables the .NET change:
+
+        * src/DotNet/MutableFieldSet.h:
+        * src/DotNet/MutableFieldSet.cpp:
+        * src/DotNet/MutableSequence.h:
+        * src/DotNet/MutableSequence.cpp:
+
+          Added mutable variations for FieldSet and Sequence which derive from
+          their immutable counterparts and add mutating methods.
+
+        * src/DotNet/Message.h:
+        * src/DotNet/Message.cpp:
+
+          Removed these files.  The .NET side no longer hass a Message class,
+          instead just use a FieldSet (or MutableFieldSet).
+
+        * src/DotNet/Decoder.h:
+        * src/DotNet/Decoder.cpp:
+        * src/DotNet/Encoder.h:
+        * src/DotNet/Encoder.cpp:
+        * src/DotNet/FieldSet.h:
+        * src/DotNet/FieldSet.cpp:
+        * src/DotNet/Sequence.h:
+        * src/DotNet/Sequence.cpp:
+        * src/DotNet/SynchronousDecoder.h:
+        * src/DotNet/SynchronousDecoder.cpp:
+        * src/DotNetExamples/InterpretFASTDotNet/MessageInterpreter.cs:
+        * src/DotNetExamples/PerformanceTestDotNet/MessageCounter.cs:
+        * src/DotNetTests/DecodingPerformance/MessageProcessor.cs:
+        * src/DotNetTests/EncodeDecodeTests.cs:
+        * src/DotNetTests/FieldTests.cs:
+        * src/DotNetTests/MessageTests.cs:
+
+          Refactoring change Message -> FieldSet
+          Re-enabled tests that were disabled last week.
+
+Fri May  8 20:58:51 UTC 2009  Adam Mitz  <mitza@ociweb.com>
+
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/Message.h:
+        * src/Messages/Sequence.h:
+          Messages, FieldSets, and Sequences are no longer copyable.
+
+        * src/Tests/testBiggestValue.cpp:
+        * src/Tests/testRoundTrip.cpp:
+        * src/Tests/testRoundTrip1.cpp:
+        * src/Tests/testSmallestValue.cpp:
+          Removed parts of tests that copied Messages.
+
+        * src/DotNet/Field.cpp:
+        * src/DotNet/FieldSet.h:
+        * src/DotNet/FieldSet.cpp:
+        * src/DotNet/Sequence.h:
+        * src/DotNet/Sequence.cpp:
+          Removed "copy" constructors (those that copied the native objects).
+          DotNet FieldSet and Sequence are now wrappers around their *const*
+          native counterparts, so methods like SetApplicationType()
+          and AddField() are no longer available.  These would only be needed
+          for doing encoding in .NET, which is not yet supported.
+
+        * src/DotNetTests/FieldTests.cs:
+        * src/DotNetTests/MessageTests.cs:
+          Parts of tests that depended on modifying FieldSets and Messages are
+          now disabled (conditionally compiled with QUICKFAST_DOTNET_ENCODING).
+
+Fri May  8 18:39:02 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * setup.cmd:
+        Misspelled label
+
+Fri May  8 16:48:51 UTC 2009  Adam Mitz  <mitza@ociweb.com>
+
+        * QuickFAST.features:
+        * QuickFASTApplication.mpb:
+        * m.cmd:
+        * setup.cmd:
+        * src/QuickFAST.mpc:
+          VC8 compatibility.  Boost ASIO requires _WIN32_WINNT to be defined.
+          setup.cmd now auto-detects VC8 if VC9 is not present.
+
+        * src/Common/Decimal.cpp:
+          Work around a bug in VC8's standard C++ library.
+
+        * src/DotNetTests/EncodeDecodeTests.cs:
+          Use a C# "using" block for all file streams so they are closed.
+
+Fri May  8 16:39:48 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * bin/setdebug.cmd:
+        * bin/setrelease.cmd:
+        Syntax error: missing trailing % on environment symbol
+
+Fri May  8 15:11:30 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Common/WorkingBuffer.cpp:
+        VC8:  std::string((char *)0, (size_t)0); throws rather than creating null string.
+        Change working buffer so the buffer is always allocated even when it's empty.
+
+Tue May  5 20:35:50 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MulticastDecoder.h:
+        Typo in argument name.
+        * src/QuickFAST.mpc:
+        Depend on boost_system
+
+Mon May  4 15:39:41 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/Encoder.cpp:
+        * src/Codecs/Template.h:
+        * src/Codecs/XMLTemplateParser.cpp:
+        Add the reset attribute to the template element, i.e. <template reset="Y"> will force
+        a reset of the dictionaries before decoding or encoding with this template.
+        Addresses Issue #13
+
+Fri May  1 14:47:53 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MessageConsumer.h:
+        * src/Codecs/MulticastDecoder_fwd.h:
+        Issue #13: Message not reset when multiple messages appear in a packet.
+
+Thu Apr 30 19:48:28 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder_fwd.h:
+        * src/Codecs/SynchronousDecoder.h:
+        Convert MulticastDecoder to template class
+        based on message type and message consumer type.
+        MulticastDecoder now decodes all messages in a packet.
+        Add reset methods to SynchronousDecoder and MulticastDecoder
+        Addresses Issues #12 and #14
+
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/SynchronousDecoder.cpp:
+        MulticastDecoder is now a template class.  The implementation is inline.
+        SynchronousDecoder is now a template class.  The implementation is inline.
+
+Tue Apr 21 18:06:57 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
+
+        * src/DotNetTests/DecodingPerformance/DecodingPerformance.cs:
+        * src/DotNetTests/DecodingPerformance/MessageProcessor.cs:
+
+          Implemented the timing of data access and counting types of fields.
+
+Mon Apr 20 21:22:29 UTC 2009  Yan Dai  <dai_y@ociweb.com>
+
+        * src/Tests/resources/biggest_value.xml:
+        * src/Tests/testBiggestValue.cpp:
+
+          Added a random buffer to test non-null string or bytevector values.
+
+Fri Apr 17 20:34:26 UTC 2009  Yan Dai  <dai_y@ociweb.com>
+
+        * src/Common/Decimal.cpp:
+
+          Made parse() to handle strings represent a bigger than longlong
+          value which fail on lexical_cast. The right zeros will be trimmed
+          from matissa string and the exponent will be updated accordingly.
+
+        * src/Tests/resources/biggest_value.xml:
+        * src/Tests/resources/smallest_value.xml:
+        * src/Tests/testBiggestValue.cpp:
+        * src/Tests/testSmallestValue.cpp:
+
+          - Made tail presence to be optional since the spec implies mandatory
+            tail should not be null.
+          - Corrected the decimal biggest and lowest value (with 63 zeros)
+
+Wed Apr 15 19:13:50 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/DotNet/UnmanagedPtr.h:
+        Remove "using namespace" from header file.
+
+Tue Apr 14 23:17:22 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
+
+        * src/DotNet/FieldSet.h:
+        * src/DotNet/Sequence.cpp:
+        * src/DotNet/Sequence.h:
+        Added references of the parent objects to the enumerator classes.
+        The optimized build was optimizing away members while the
+        enumerator was still using references to contained unmanaged
+        memory.
+
 Mon Apr 13 17:26:47 UTC 2009  Trevor Fields  <fields_t@ociweb.com>
 
         * src/DotNet/SynchronousDecoder.cpp:
         Fixed incorrect handling of failed message decoding.
-        
+
         * src/DotNet/UnmanagedPtr.h:
         Added code (NOT ACTIVE) that will inform the system Garbage collection
         about some of the non manged memory that is allocated by the object.
-        
+
         * src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.cs:
         * src/DotNetExamples/InterpretFASTDotNet/MessageInterpreter.cs:
         Minor fixes.

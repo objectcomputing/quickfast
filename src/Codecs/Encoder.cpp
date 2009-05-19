@@ -22,7 +22,7 @@ void
 Encoder::encodeMessage(
   DataDestination & destination,
   template_id_t templateId,
-  const Messages::Message & message)
+  const Messages::FieldSet & message)
 {
   encodeSegment(destination, templateId, message);
   destination.endMessage();
@@ -37,6 +37,11 @@ Encoder::encodeSegment(
   Codecs::TemplateCPtr templatePtr;
   if(getTemplateRegistry()->getTemplate(templateId, templatePtr))
   {
+    if(templatePtr->getReset())
+    {
+      reset();
+    }
+
     Codecs::PresenceMap pmap(templatePtr->presenceMapBitCount());
     if(this->verboseOut_)
     {

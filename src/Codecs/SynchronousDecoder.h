@@ -7,21 +7,32 @@
 #ifndef SYNCHRONOUSDECODER_H
 #define SYNCHRONOUSDECODER_H
 
-#include <Common/QuickFAST_Export.h>
+#include <Codecs/TemplateRegistry.h>
 #include <Codecs/Decoder.h>
+#include <Codecs/DataSource.h>
 #include <Codecs/MessageConsumer_fwd.h>
 
 namespace QuickFAST{
   namespace Codecs{
     /// @brief Support Synchronous (blocking) decoding of a FAST data stream
     template<typename MessageType, typename MessageConsumerType>
-    class /*QuickFAST_Export*/ SynchronousDecoder
+    class SynchronousDecoder
     {
     public:
       /// @brief Construct given a template registry
       /// @param templateRegistry contains the templates to be used during decoding.
-      explicit SynchronousDecoder(TemplateRegistryPtr templateRegistry);
-      ~SynchronousDecoder();
+      explicit SynchronousDecoder(TemplateRegistryPtr templateRegistry)
+      : decoder_(templateRegistry)
+      , resetOnMessage_(false)
+      , messageCount_(0)
+      , messageCountLimit_(size_t(-1))
+      , maxFieldCount_(templateRegistry->maxFieldCount())
+      {
+      }
+
+      ~SynchronousDecoder()
+      {
+      }
 
       /// @brief Set the flag to reset the decoder for every message
       ///
@@ -29,14 +40,29 @@ namespace QuickFAST{
       /// This is particulary true when the data stream uses a datagram-per-message
       /// approach (UDP and Unreliable Multicast).
       /// @param reset true if the decoder should be reset for each message; default false
-      void setResetOnMessage(bool reset);
+      void setResetOnMessage(bool reset)
+      {
+        resetOnMessage_ = reset;
+      }
+
+      /// @brief immediate reset
+      void reset()
+      {
+        decoder_.reset();
+      }
 
       /// @brief Enable some debugging/diagnostic information to be written to an ostream
       /// @param out the ostream to receive the data
-      void setVerboseOutput(std::ostream & out);
+      void setVerboseOutput(std::ostream & out)
+      {
+        decoder_.setVerboseOutput(out);
+      }
 
       /// @brief Clear the verbose output that was enabled by setVerboseOutput()
-      void disableVerboseOutput();
+      void disableVerboseOutput()
+      {
+        decoder_.disableVerboseOutput();
+      }
 
       /// @brief Enable/disable strict checking of conformance to the FAST standard
       ///
@@ -76,7 +102,24 @@ namespace QuickFAST{
       /// or messageCount() messages have been decoded.
       void decode(
         DataSource & source,
-        MessageConsumerType & consumer);
+        MessageConsumerType & consumer)
+      {
+        bool more = true;
+        while(source.messageAvailable() > 0 && messageCount_ < messageCountLimit_)
+        {
+          MessageType message(maxFieldCount_);
+          if(resetOnMessage_)
+          {
+            decoder_.reset();
+          }
+          if(!decoder_.decodeMessage(source, message))
+          {
+            decoder_.reportError("[ERR U11]","EOF during decode.");
+          }
+          more = consumer.consumeMessage(message);
+          messageCount_ += 1;
+        }
+      }
 
     private:
       SynchronousDecoder();
@@ -89,69 +132,6 @@ namespace QuickFAST{
       size_t messageCountLimit_;
       size_t maxFieldCount_;
     };
-  }
-}
-    //////////////////
-    // Implementation
-#include <Codecs/DataSource.h>
-//#include <Codecs/MessageConsumer.h>
-#include <Codecs/TemplateRegistry.h>
-//#include <Messages/Message.h>
-
-namespace QuickFAST{
-  namespace Codecs{
-    template<typename MessageType, typename MessageConsumerType>
-    SynchronousDecoder<MessageType, MessageConsumerType>::SynchronousDecoder(
-      Codecs::TemplateRegistryPtr templateRegistry)
-    : decoder_(templateRegistry)
-    , resetOnMessage_(false)
-    , messageCount_(0)
-    , messageCountLimit_(size_t(-1))
-    , maxFieldCount_(templateRegistry->maxFieldCount())
-    {
-    }
-
-    template<typename MessageType, typename MessageConsumerType>
-    SynchronousDecoder<MessageType, MessageConsumerType>::~SynchronousDecoder()
-    {
-    }
-
-    template<typename MessageType, typename MessageConsumerType>
-    void
-    SynchronousDecoder<MessageType, MessageConsumerType>::setResetOnMessage(bool reset)
-    {
-      resetOnMessage_ = reset;
-    }
-
-    template<typename MessageType, typename MessageConsumerType>
-    void
-    SynchronousDecoder<MessageType, MessageConsumerType>::setVerboseOutput(std::ostream & out)
-    {
-      decoder_.setVerboseOutput(out);
-    }
-
-    template<typename MessageType, typename MessageConsumerType>
-    void
-    SynchronousDecoder<MessageType, MessageConsumerType>::decode(
-      Codecs::DataSource & source,
-      MessageConsumerType & consumer)
-    {
-      bool more = true;
-      while(source.messageAvailable() > 0 && messageCount_ < messageCountLimit_)
-      {
-        MessageType message(maxFieldCount_);
-        if(resetOnMessage_)
-        {
-          decoder_.reset();
-        }
-        if(!decoder_.decodeMessage(source, message))
-        {
-          std::cout << "EOF during decode." << std::endl;
-        }
-        more = consumer.consumeMessage(message);
-        messageCount_ += 1;
-      }
-    }
   }
 }
 

@@ -1,5 +1,5 @@
 @echo off
-if "A" == "A%DEBUG_PATH" goto undefined
+if "A" == "A%DEBUG_PATH%" goto undefined
 PATH=%DEBUG_PATH%
 echo Debug mode set
 goto end

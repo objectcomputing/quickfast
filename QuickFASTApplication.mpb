@@ -13,8 +13,9 @@ project {
     // signed/unsigned template arguments.
     cppflags += -Wtype-limits
   }
-  
-  
-  
+  specific(vc8) { // vc9 doesn't need this
+    macros += _WIN32_WINNT=0x0501
+  }
+
   libs += QuickFAST
 }

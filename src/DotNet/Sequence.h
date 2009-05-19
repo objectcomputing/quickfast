@@ -18,9 +18,7 @@ namespace QuickFASTDotNet{
     {
     public:
       typedef QuickFAST::Messages::Sequence TSequence;
-      typedef BoostPtrHolder<QuickFAST::Messages::SequencePtr> TSequencePtr;
-
-      Sequence();
+      typedef BoostPtrHolder<QuickFAST::Messages::SequenceCPtr> TSequenceCPtr;
 
       /// @brief Allows addressing of a given Field in this FieldSet by index.
       property FieldSet^ default[unsigned int]
@@ -28,11 +26,10 @@ namespace QuickFASTDotNet{
         FieldSet^ get(unsigned int index);
       }
 
-      /// @brief Gets and sets the appliction type this FieldSet pertains to.
+      /// @brief Gets the appliction type this FieldSet pertains to.
       property System::String^ ApplicationType
       {
         System::String^ get();
-        void set(System::String^ applicationType);
       }
 
       ///@brief Gets the number of FieldSet's in this Sequence object.
@@ -40,9 +37,6 @@ namespace QuickFASTDotNet{
       {
         int get();
       }
-
-      ///@brief Adds a field set to this sequence.
-      void Add(FieldSet^ newFieldSet);
 
       virtual System::Collections::IEnumerator^ GetEnumerator() = System::Collections::IEnumerable::GetEnumerator;
 
@@ -86,23 +80,18 @@ namespace QuickFASTDotNet{
         Sequence^ viewedContainer_;
       };
 
-
-
-      ///@brief Constructs a managed Sequence making a copy of the unmanaged QuickFAST::Messages::Sequence object.
-      Sequence(const TSequence& sequence);
-
-      ///@brief Constructs a managed Sequence increasing the referenc count of the shared_ptr
-      Sequence(const QuickFAST::Messages::SequencePtr& sequence);
+      ///@brief Constructs a managed Sequence increasing the reference count of the shared_ptr
+      explicit Sequence(const QuickFAST::Messages::SequenceCPtr& sequence);
 
       ///@brief returns a reference to the unmanaged Sequence object contained in this managed Sequence
-      property TSequence& Ref
+      property const TSequence& Ref
       {
-        TSequence& get() { return sequencePtr_.GetRef(); }
+        const TSequence& get() { return sequencePtr_.GetRef(); }
       }
 
-      property TSequencePtr% SequencePtr
+      property TSequenceCPtr% SequenceCPtr
       {
-        TSequencePtr% get() { return sequencePtr_; }
+        TSequenceCPtr% get() { return sequencePtr_; }
       }
 
     private:
@@ -113,7 +102,13 @@ namespace QuickFASTDotNet{
       public:
         typedef QuickFAST::Messages::Sequence::const_iterator const_iterator;
         typedef StlDotNet::IteratorHolder<const_iterator> TIteratorHolder;
-        SequenceEnumerator(const_iterator it, const_iterator end): itHolder_(new TIteratorHolder(it, end))
+
+        // The enumerator requires a reference to the source of the interators
+        // to prevent their source from being prematurely released.
+        SequenceEnumerator(const_iterator it, const_iterator end, Sequence^ parent)
+          : itHolder_(new TIteratorHolder(it, end))
+          , parent_(parent)
+
         {
         }
 
@@ -132,11 +127,11 @@ namespace QuickFASTDotNet{
 
       private:
         UnmanagedPtr<StlDotNet::IteratorHolder<const_iterator> > itHolder_;
+        Sequence^ parent_;
       };
 
-
-      TSequencePtr sequencePtr_;
-
+    protected private:
+      TSequenceCPtr sequencePtr_;
     };
   }
 }

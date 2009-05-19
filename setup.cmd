@@ -29,8 +29,12 @@ set SETUP_CHECKING=XERCES_ROOT=%XERCES_ROOT%
 if not exist "%XERCES_ROOT%\lib" goto setup_is_bad
 set SETUP_CHECKING=BOOST_ROOT=%BOOST_ROOT%
 if not exist "%BOOST_ROOT%\lib" goto setup_is_bad
+set VCVER=9
 set SETUP_CHECKING=VS90COMNTOOLS=%VS90COMNTOOLS%
-if not exist "%VS90COMNTOOLS%VSVARS32.BAT" goto setup_is_bad
+if exist "%VS90COMNTOOLS%VSVARS32.BAT" goto setup_is_ok
+set SETUP_CHECKING=VS80COMNTOOLS=%VS80COMNTOOLS%
+if not exist "%VS80COMNTOOLS%VSVARS32.BAT" goto setup_is_bad
+set VCVER=8
 set SETUP_CHECKING=
 goto setup_is_ok
 
@@ -44,9 +48,14 @@ set XERCES_LIBPATH=%XERCES_ROOT%\lib
 set XERCES_INCLUDE=%XERCES_ROOT%\include
 set QUICKFAST_ROOT=%CD%
 
-set VC_ROOT=C:\Program Files\Microsoft Visual Studio 9.0\VC\bin
+if %VCVER%==9 (
+  set VC_ROOT=C:\Program Files\Microsoft Visual Studio 9.0\VC\bin
+  @call "%VS90COMNTOOLS%VSVARS32.BAT" >nul
+) else (
+  set VC_ROOT=C:\Program Files\Microsoft Visual Studio 8\VC\bin
+  @call "%VS80COMNTOOLS%VSVARS32.BAT" >nul
+)
 
-@call "%VS90COMNTOOLS%VSVARS32.BAT" >nul
 set RELEASE_PATH=%QUICKFAST_ROOT%\bin;%QUICKFAST_ROOT%\Output\Release;%MPC_ROOT%;%BOOST_ROOT%\lib;%QUICKFAST_ROOT%\lib;%XERCES_ROOT%\bin;%BASE_PATH%
 set DEBUG_PATH=%QUICKFAST_ROOT%\bin;%QUICKFAST_ROOT%\Output\Debug;%MPC_ROOT%;%BOOST_ROOT%\lib;%QUICKFAST_ROOT%\lib;%XERCES_ROOT%\bin;%BASE_PATH%
 set PATH=%DEBUG_PATH%

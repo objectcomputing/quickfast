@@ -42,11 +42,14 @@ namespace QuickFAST{
 #include <Codecs/MessageConsumer.h>
 namespace QuickFAST{
   namespace Examples{
+    ///@brief A message consumer that simply counts the messages
     class NullMessageConsumer : public Codecs::MessageConsumer
     {
     public:
       NullMessageConsumer();
       virtual ~NullMessageConsumer();
+      //////////////////////////////////////
+      // Implement MessageConsumer Interface
       virtual bool consumeMessage(Examples::NullMessage & message);
       virtual bool consumeMessage(Messages::Message & message);
       virtual bool wantLog(unsigned short level);

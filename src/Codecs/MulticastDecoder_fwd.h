@@ -4,7 +4,15 @@
 //
 #ifndef MULTICASTDECODER_FWD_H
 #define MULTICASTDECODER_FWD_H
+#include <Messages/Message_fwd.h>
+#include <Codecs/MessageConsumer.h>
+
 namespace QuickFAST{
-  class MulticastDecoder;
+  namespace Codecs{
+    template<typename MessageType, typename MessageConsumerType>
+    class MulticastDecoderT;
+
+    typedef MulticastDecoderT<Messages::Message, Codecs::MessageConsumer> MulticastDecoder;
+  }
 }
 #endif // MULTICASTDECODER_FWD_H

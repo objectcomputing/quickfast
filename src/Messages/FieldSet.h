@@ -18,14 +18,14 @@ namespace QuickFAST{
       : public DecodedFields
     {
       FieldSet();
+      FieldSet(const FieldSet&);
+      FieldSet& operator=(const FieldSet&);
+
     public:
       /// Constant iterator for the collection
       typedef const MessageField * const_iterator;
       /// @brief Construct an empty FieldSet
       explicit FieldSet(size_t res);
-      /// @brief Copy Constructor
-      /// @param rhs is the FieldSet to be copied into this one
-      FieldSet(const FieldSet & rhs);
 
       /// @brief Virtual destructor
       virtual ~FieldSet();
@@ -103,6 +103,7 @@ namespace QuickFAST{
         return applicationType_;
       }
 
+      /// @brief get the namespace for the application type
       const std::string & getApplicationTypeNs()const
       {
         return applicationTypeNs_;
@@ -122,6 +123,7 @@ namespace QuickFAST{
         swap_i(used_, rhs.used_);
       }
 
+      /// @brief act as a factory to create new fields sets to be nested within this one
       virtual DecodedFields * createdNestedFields(size_t size)const;
 
     private:
