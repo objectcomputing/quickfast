@@ -11,7 +11,7 @@
 #include <Codecs/TemplateRegistry.h>
 #include <Messages/Message.h>
 
-#include <PerformanceTest/MessageCounter.h>
+#include <Examples/MessagePerformance.h>
 #include <PerformanceTest/NullMessage.h>
 
 #include <Examples/StopWatch.h>
@@ -28,6 +28,7 @@ PerformanceTest::PerformanceTest()
   , profileFile_(0)
   , head_(0)
   , count_(1)
+  , interpret_(false)
 {
 }
 
@@ -79,6 +80,11 @@ PerformanceTest::parseSingleArg(int argc, char * argv[])
       performanceFileName_ = argv[1];
       consumed = 2;
     }
+    else if(opt == "-i" && argc > 1)
+    {
+      interpret_ = boost::lexical_cast<size_t>(argv[1]);
+      consumed = 2;
+    }
     else if(opt == "-null")
     {
       useNullMessage_ = true;
@@ -111,6 +117,7 @@ PerformanceTest::usage(std::ostream & out) const
   out << "  -profiler file : File to which profiler statistics are written (very optional)" << std::endl;
   out << "  -head n     : process only the first 'n' messages" << std::endl;
   out << "  -c count    : repeat the test 'count' times" << std::endl;
+  out << "  -i count    : retrieve (interprete) field values count times." << std::endl;
   out << "  -r          : Toggle 'reset decoder on every message' (default false)." << std::endl;
   out << "  -null       : Use null message to receive fields." << std::endl;
   out << "  -s          : Toggle 'strict decoding rules' (default true)." << std::endl;
@@ -228,13 +235,8 @@ PerformanceTest::run()
       std::cout << "Decoding input; pass " << nPass + 1 << " of " << count_ << std::endl;
       fastFile_.seekg(0, std::ios::beg);
       Codecs::DataSourceBufferedStream source(fastFile_);
-#ifndef NULL_CONSUMER
-      MessageCounter handler;
+      MessagePerformance handler(head_, interpret_);
       Codecs::SynchronousDecoder<Messages::Message, Codecs::MessageConsumer> decoder(templateRegistry);
-#else
-      NullMessageConsumer handler;
-      Codecs::SynchronousDecoder<Examples::NullMessage, Examples::NullMessageConsumer> decoder(templateRegistry);
-#endif
       decoder.setResetOnMessage(resetOnMessage_);
       decoder.setStrict(strict_);
       StopWatch decodeTimer;
@@ -242,7 +244,7 @@ PerformanceTest::run()
       decoder.decode(source, handler);
       }//PROFILE_POINT
       unsigned long decodeLapse = decodeTimer.freeze();
-      size_t messageCount = handler.getMesssageCount();
+      size_t messageCount = handler.getMessageCount();
       (*performanceFile_)
 #ifdef _DEBUG
         << "[debug] "

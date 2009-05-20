@@ -34,14 +34,16 @@ namespace QuickFASTDotNet{
     {
       typedef QuickFASTDotNet::Messages::MutableFieldSet FTManagedMessage;
       bool more = true;
-      FTManagedMessage^ message = gcnew FTManagedMessage(maxFieldCount_);
-      QuickFAST::Codecs::DataSource & source = dataSource_.GetRef();
-      QuickFAST::Messages::DecodedFields & messageRef = message->FieldSetRef;
 
       try
       {
         while(more && messageCount_ < messageCountLimit_)
         {
+
+          FTManagedMessage^ message = gcnew FTManagedMessage(maxFieldCount_);
+          QuickFAST::Codecs::DataSource & source = dataSource_.GetRef();
+          QuickFAST::Messages::DecodedFields & messageRef = message->FieldSetRef;
+
           if(resetOnMessage_)
           {
             decoder_->reset();

@@ -18,10 +18,14 @@ namespace QuickFASTDotNet
         public class MessageInterpreter
         {
             private ulong recordCount_ = 0;
+            ulong recordLimit_ = 0;
+            ulong recordDuplicate_ = 1;
 
-            public MessageInterpreter()
+            public MessageInterpreter(ulong recordLimit, ulong recordDuplicate)
             {
                 recordCount_ = 0;
+                recordLimit_ = recordLimit;
+                recordDuplicate_ = recordDuplicate;
             }
 
             public ulong getMessageCount()
@@ -32,10 +36,13 @@ namespace QuickFASTDotNet
             public bool MessageReceived(FieldSet message)
             {
                 recordCount_ += 1;
-                if (0 == recordCount_ % 1000) Console.Write(".");
                 try
                 {
-                    formatMessage(message);
+                    for (ulong nDup = 0; nDup < recordDuplicate_; ++nDup)
+                    {
+                        formatMessage(message);
+                    }
+
                 }
                 catch (Exception ex)
                 {
@@ -43,7 +50,7 @@ namespace QuickFASTDotNet
                     Console.WriteLine(ex.ToString());
                     return false;
                 }
-                return true;
+                return recordLimit_ == 0 || recordCount_ < recordLimit_;
             }
 
 

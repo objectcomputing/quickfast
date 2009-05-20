@@ -19,8 +19,9 @@ namespace QuickFASTDotNet
 
             bool resetOnMessage_;
             bool strict_;
-            uint count_;
-            bool interpret_ = false;
+            uint loop_;
+            uint limit_;
+            uint duplicate_;
 
 
             public PerformanceTestDotNet()
@@ -28,7 +29,9 @@ namespace QuickFASTDotNet
                 templateFileName_ = null;
                 fastFileName_ = null;
                 performanceFileName_ = null;
-                count_ = 1;
+                loop_ = 1;
+                limit_ = 0;
+                duplicate_ = 0;
             }
 
 
@@ -59,7 +62,8 @@ namespace QuickFASTDotNet
                 System.Console.WriteLine("  -c count    : repeat the test 'count' times");
                 System.Console.WriteLine("  -r          : Toggle 'reset decoder on every message' (default false).");
                 System.Console.WriteLine("  -s          : Toggle 'strict decoding rules' (default true).");
-                System.Console.WriteLine("  -i          : Interpret messages instead of just counting them.");
+                System.Console.WriteLine("  -i count  : Interpret messages count times instead of just counting them.");
+                System.Console.WriteLine("  -l limit    : Process only the first 'limit' messages.");
             }
 
 
@@ -70,6 +74,8 @@ namespace QuickFASTDotNet
                 bool readSourceName = false;
                 bool readPerfName = false;
                 bool readCount = false;
+                bool readLimit = false;
+                bool readDuplicate = false;
                 bool ok = true;
 
                 foreach (string opt in args)
@@ -91,40 +97,54 @@ namespace QuickFASTDotNet
                     }
                     else if (readCount)
                     {
-                        count_ = System.Convert.ToUInt32(opt);
+                        loop_ = System.Convert.ToUInt32(opt);
                         readCount = false;
+                    }
+                    else if (readLimit)
+                    {
+                      limit_ = System.Convert.ToUInt32(opt);
+                      readLimit = false;
+                    }
+                    else if (readDuplicate)
+                    {
+                      duplicate_ = System.Convert.ToUInt32(opt);
+                      readDuplicate = false;
                     }
                     else if (opt == "-r")
                     {
-                        resetOnMessage_ = !resetOnMessage_;
+                      resetOnMessage_ = !resetOnMessage_;
                     }
                     else if (opt == "-s")
                     {
-                        strict_ = !strict_;
+                      strict_ = !strict_;
                     }
                     else if (opt == "-t")
                     {
-                        readTemplateName = true;
+                      readTemplateName = true;
                     }
                     else if (opt == "-f")
                     {
-                        readSourceName = true;
+                      readSourceName = true;
                     }
                     else if (opt == "-p")
                     {
-                        readPerfName = true;
+                      readPerfName = true;
                     }
                     else if (opt == "-c")
                     {
-                        readCount = true;
+                      readCount = true;
                     }
                     else if (opt == "-h")
                     {
-                        ok = false;
+                      ok = false;
                     }
                     else if (opt == "-i")
                     {
-                        interpret_ = true;
+                      readDuplicate = true;
+                    }
+                    else if (opt == "-l")
+                    {
+                      readLimit = true;
                     }
                 }
 
@@ -236,12 +256,11 @@ namespace QuickFASTDotNet
             {
                 try
                 {
-                    for (ulong nPass = 0; nPass < count_; ++nPass)
+                    for (ulong nPass = 0; nPass < loop_; ++nPass)
                     {
-                        System.Console.WriteLine("Decoding input; pass {0} of {1}", nPass + 1, count_);
+                        System.Console.WriteLine("Decoding input; pass {0} of {1}", nPass + 1, loop_);
                         System.Console.Out.Flush();
-                        MessageCounter handler = new MessageCounter();
-                        MessageInterpreter interpreter = new MessageInterpreter();
+                        MessageInterpreter interpreter = new MessageInterpreter(limit_, duplicate_);
 
                         fastFile_.Seek(0, System.IO.SeekOrigin.Begin);
                         QuickFASTDotNet.Codecs.SynchronousDecoder decoder = new QuickFASTDotNet.Codecs.SynchronousDecoder(templateRegistry, fastFile_);
@@ -249,25 +268,21 @@ namespace QuickFASTDotNet
                         decoder.Strict = strict_;
 
                         QuickFASTDotNet.Codecs.MessageReceivedDelegate handlerDelegate;
-                        handlerDelegate = interpret_
-                            ? new QuickFASTDotNet.Codecs.MessageReceivedDelegate(interpreter.MessageReceived)
-                            : new QuickFASTDotNet.Codecs.MessageReceivedDelegate(handler.MessageReceived);
+                        handlerDelegate = new QuickFASTDotNet.Codecs.MessageReceivedDelegate(interpreter.MessageReceived);
 
                         GCSettings.LatencyMode = GCLatencyMode.LowLatency;
 
                         StopWatch decodeTimer = new StopWatch();
                         { //PROFILE_POINT("Main");
+
                             decoder.Decode(handlerDelegate);
-                            //decoder.TestSyncDecode();
+
                         }//PROFILE_POINT
                         long decodeLapse = decodeTimer.freeze();
 
                         GCSettings.LatencyMode = GCLatencyMode.Interactive;
 
-                        ulong messageCount = interpret_
-                            ? interpreter.getMessageCount()
-                            : handler.getMesssageCount();
-                        //messageCount = decoder.MessageCount;
+                        ulong messageCount = interpreter.getMessageCount();
 #if DEBUG
                         performanceFile_.Write("[debug] ");
 #endif // DEBUG

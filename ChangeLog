@@ -1,3 +1,22 @@
+Wed May 20 21:46:31 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/DotNet/SynchronousDecoder.cpp:
+
+        * src/DotNetExamples/PerformanceTestDotNet/MessageInterpreter.cs:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.cs:
+
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/Examples/MessagePerformance.h:
+        * src/Examples/Examples/MessagePerformance.cpp:
+
+        * src/Examples/PerformanceTest/PerformanceTest.h:
+        * src/Examples/PerformanceTest/PerformanceTest.cpp:
+        Diagnose and fix performance problem in DotNet wrappers.
+        Enhance Performance tests to add more control of field retrieval.
+
+        * src/DotNetExamples/PerformanceTestDotNet/MessageCounter.cs:
+          Removed this file.  Functionality is now in MessageInterpreter.cs
+
 Mon May 18 19:51:34 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/SynchronousDecoder.h:
