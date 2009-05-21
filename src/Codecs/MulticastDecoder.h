@@ -221,10 +221,10 @@ namespace QuickFAST{
           try
           {
             DataSourceBuffer source(buffer->get(), bytesReceived);
-            MessageType message(decoder_.getTemplateRegistry()->maxFieldCount());
             decoder_.reset();
             while(source.bytesAvailable() > 0 && !stopping_)
             {
+              MessageType message(decoder_.getTemplateRegistry()->maxFieldCount());
               decoder_.decodeMessage(source, message);
 
               if(!consumer_->consumeMessage(message))
