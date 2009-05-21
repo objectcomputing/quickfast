@@ -1,3 +1,11 @@
+Thu May 21 14:00:03 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/DotNetExamples/InterpretFASTDotNet:
+        * src/DotNetExamples/InterpretFASTDotNet/.svnignore:
+        * src/DotNetTests:
+        * src/DotNetTests/.svnignore:
+        Set svn:ignore property in various places
+
 Thu May 21 13:50:52 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MulticastDecoder.h:
