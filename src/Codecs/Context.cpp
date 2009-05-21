@@ -28,13 +28,16 @@ Context::~Context()
 }
 
 void
-Context::reset()
+Context::reset(bool resetTemplateId /*= true*/)
 {
   for(size_t nDict = 0; nDict < indexedDictionarySize_; ++nDict)
   {
     indexedDictionary_[nDict].reset();
   }
-  templateId_ = ~0;
+  if(resetTemplateId)
+  {
+    templateId_ = ~0;
+  }
 }
 
 

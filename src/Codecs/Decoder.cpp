@@ -66,7 +66,7 @@ Decoder::decodeSegment(
   {
     if(templatePtr->getReset())
     {
-      reset();
+      reset(false);
     }
     if(!decodeSegmentBody(source, pmap, templatePtr, fieldSet))
     {

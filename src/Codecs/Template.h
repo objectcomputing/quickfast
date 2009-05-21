@@ -24,6 +24,7 @@ namespace QuickFAST{
       Template()
         : SegmentBody(1) // init pmap bit count to one for the templateID
         , templateId_(0)
+        , reset_(false)
       {
       }
 

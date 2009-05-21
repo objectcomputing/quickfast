@@ -1,3 +1,14 @@
+Thu May 21 13:39:06 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Context.cpp:
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/Encoder.cpp:
+        * src/Codecs/Template.h:
+        Addresses:
+        Issue 17b: Context::reset_ not being initialized.
+        Issue 17a: Reset template attribute being applied to template ID.
+
 Wed May 20 21:46:31 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/DotNet/SynchronousDecoder.cpp:

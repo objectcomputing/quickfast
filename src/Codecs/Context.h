@@ -28,7 +28,9 @@ namespace QuickFAST{
       virtual ~Context();
 
       /// @brief Reset decoding state to initial conditions
-      void reset();
+      /// @param resetTemplateId Normally you want to reset the template ID
+      ///        however there are cases when you don't.
+      void reset(bool resetTemplateId = true);
 
       /// @brief Remember the id of the template driving the Xcoding.
       void setTemplateId(const template_id_t & templateId)

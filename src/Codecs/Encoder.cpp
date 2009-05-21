@@ -39,7 +39,7 @@ Encoder::encodeSegment(
   {
     if(templatePtr->getReset())
     {
-      reset();
+      reset(true);
     }
 
     Codecs::PresenceMap pmap(templatePtr->presenceMapBitCount());
