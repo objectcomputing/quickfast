@@ -28,10 +28,6 @@ public:
   !UnmanagedPtr() { Release(); }
   ~UnmanagedPtr() { Release(); }
 
-private:
-  T* ptr_;
-  long long size_;
-
   void Release()
   {
     if(ptr_ != 0)
@@ -42,6 +38,11 @@ private:
       size_ = 0;
     }
   }
+
+private:
+  T* ptr_;
+  long long size_;
+
 };
 
 

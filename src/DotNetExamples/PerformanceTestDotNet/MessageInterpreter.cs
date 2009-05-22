@@ -66,12 +66,12 @@ namespace QuickFASTDotNet
 
                 foreach (System.Collections.Generic.KeyValuePair<FieldIdentity, Field> pair in fieldset)
                 {
-                    FieldType type = pair.Value.FieldType;
-                    if (type == FieldType.Sequence)
+                    FieldType type = pair.Value.Type;
+                    if (type == FieldType.SEQUENCE)
                     {
                         formatSequence(pair.Key, pair.Value);
                     }
-                    else if (type == FieldType.Group)
+                    else if (type == FieldType.GROUP)
                     {
                         formatGroup(pair.Value);
                     }
@@ -85,8 +85,7 @@ namespace QuickFASTDotNet
 
             void formatSequence(FieldIdentity identity, Field field)
             {
-                SequenceField sf = (SequenceField)field;
-                Sequence seq = sf.Value;
+                Sequence seq = field.toSequence;
                 foreach (FieldSet fieldset in seq)
                 {
                     formatFieldSet(fieldset);
@@ -96,61 +95,60 @@ namespace QuickFASTDotNet
 
             void formatGroup(Field field)
             {
-                GroupField gf = (GroupField)field;
-                FieldSet fs = gf.Value;
+                FieldSet fs = field.toGroup;
                 formatFieldSet(fs);
             }
 
 
             void displayFieldValue(Field field)
             {
-                switch (field.FieldType)
+                switch (field.Type)
                 {
-                    case Messages.FieldType.Int32:
+                    case Messages.FieldType.INT32:
                         {
-                            Int32Field val = (Int32Field)field;
+                            int val = field.toInt32;
                             break;
                         }
-                    case Messages.FieldType.UInt32:
+                    case Messages.FieldType.UINT32:
                         {
-                            UInt32Field val = (UInt32Field)field;
+                            uint val = field.toUInt32;
                             break;
                         }
-                    case Messages.FieldType.Int64:
+                    case Messages.FieldType.INT64:
                         {
-                            Int64Field val = (Int64Field)field;
+                            long val = field.toInt64;
                             break;
                         }
-                    case Messages.FieldType.UInt64:
+                    case Messages.FieldType.UINT64:
                         {
-                            UInt64Field val = (UInt64Field)field;
+                            ulong val = field.toUInt64;
                             break;
                         }
-                    case Messages.FieldType.Decimal:
+                    case Messages.FieldType.DECIMAL:
                         {
-                            DecimalField val = (DecimalField)field;
+                            QuickFASTDotNet.Decimal val = field.toDecimal;
                             break;
                         }
-                    case Messages.FieldType.AsciString:
+                    case Messages.FieldType.ASCII:
                         {
-                            AsciStringField val = (AsciStringField)field;
+                            String val = field.toAscii;
                             break;
                         }
-                    case Messages.FieldType.UnicodeString:
+                    case Messages.FieldType.UTF8:
                         {
-                            UnicodeStringField val = (UnicodeStringField)field;
+                            String val = field.toUtf8;
                             break;
                         }
-                    case Messages.FieldType.ByteVector:
+                    case Messages.FieldType.BYTEVECTOR:
                         {
-                            ByteVectorField val = (ByteVectorField)field;
+                            byte[] val = field.toByteVector;
                             break;
                         }
-                    case Messages.FieldType.Sequence:
+                    case Messages.FieldType.SEQUENCE:
                         {
                             break;
                         }
-                    case Messages.FieldType.Group:
+                    case Messages.FieldType.GROUP:
                         {
                             break;
                         }

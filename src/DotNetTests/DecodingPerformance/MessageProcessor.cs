@@ -124,12 +124,12 @@ namespace QuickFASTDotNet
             {
                 foreach (System.Collections.Generic.KeyValuePair<FieldIdentity, Field> pair in fieldset)
                 {
-                    FieldType type = pair.Value.FieldType;
-                    if (type == FieldType.Sequence)
+                    FieldType type = pair.Value.Type;
+                    if (type == FieldType.SEQUENCE)
                     {
                         accessSequence(pair.Key, pair.Value);
                     }
-                    else if (type == FieldType.Group)
+                    else if (type == FieldType.GROUP)
                     {
                         accessGroup(pair.Value);
                     }
@@ -144,8 +144,7 @@ namespace QuickFASTDotNet
             void accessSequence(FieldIdentity identity, Field field)
             {
                 sequenceCount_++;
-                SequenceField sf = (SequenceField) field;
-                Sequence seq = sf.Value;
+                Sequence seq = field.toSequence;
                 int count = seq.Count;
 
                 foreach (FieldSet fieldset in seq)
@@ -163,65 +162,64 @@ namespace QuickFASTDotNet
 
             void accessFieldValue(Field field)
             {
-                switch (field.FieldType)
+                switch (field.Type)
                 {
-                    case Messages.FieldType.Int32:
+                    case Messages.FieldType.INT32:
                         {
                             int32Count_++;
-                            Int32Field val = (Int32Field)field;
+                            int val = field.toInt32;
                             break;
                         }
-                    case Messages.FieldType.UInt32:
+                    case Messages.FieldType.UINT32:
                         {
                             uInt32Count_++;
-                            UInt32Field val = (UInt32Field)field;
+                            uint val = field.toUInt32;
                             break;
                         }
-                    case Messages.FieldType.Int64:
+                    case Messages.FieldType.INT64:
                         {
                             int64Count_++;
-                            Int64Field val = (Int64Field)field;
+                            long val = field.toInt64;
                             break;
                         }
-                    case Messages.FieldType.UInt64:
+                    case Messages.FieldType.UINT64:
                         {
                             uInt64Count_++;
-                            UInt64Field val = (UInt64Field)field;
+                            ulong val = field.toUInt64;
                             break;
                         }
-                    case Messages.FieldType.Decimal:
+                    case Messages.FieldType.DECIMAL:
                         {
                             decimalCount_++;
-                            DecimalField val = (DecimalField)field;
+                            Decimal val = field.toDecimal;
                             break;
                         }
-                    case Messages.FieldType.AsciString:
+                    case Messages.FieldType.ASCII:
                         {
                             asciStringCount_++;
-                            AsciStringField val = (AsciStringField)field;
+                            String val = field.toAscii;
                             break;
                         }
-                    case Messages.FieldType.UnicodeString:
+                    case Messages.FieldType.UTF8:
                         {
                             unicodeStringCount_++;
-                            UnicodeStringField val = (UnicodeStringField)field;
+                            String val = field.toUtf8;
                             break;
                         }
-                    case Messages.FieldType.ByteVector:
+                    case Messages.FieldType.BYTEVECTOR:
                         {
                             byteVectorCount_++;
-                            // todo: we probably should hex dump this
-                            ByteVectorField val = (ByteVectorField)field;
+                            byte[] val = field.toByteVector;
                             break;
                         }
-                    case Messages.FieldType.Sequence:
+                    case Messages.FieldType.SEQUENCE:
                         {
                             // execution shouldnt be here
                             System.Console.WriteLine("ERROR: Unexpected attempt to display a sequence.");
                             sequenceCount_++;
                             break;
                         }
-                    case Messages.FieldType.Group:
+                    case Messages.FieldType.GROUP:
                         {
                             // execution shouldnt be here
                             System.Console.WriteLine("ERROR: Unexpected attempt to display a group.");

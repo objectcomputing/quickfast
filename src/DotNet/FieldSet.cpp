@@ -32,7 +32,7 @@ namespace QuickFASTDotNet{
           throw gcnew System::Collections::Generic::KeyNotFoundException(System::String::Format("Field name '{0}' not found.", fieldName));
         }
 
-        return TKeyValuePair(gcnew FieldIdentity(fieldIdentity), cast_field(fieldPtr));
+        return TKeyValuePair(gcnew FieldIdentity(fieldIdentity), gcnew Field(fieldPtr));
     }
 
     String^ FieldSet::ApplicationType::get()
@@ -52,7 +52,7 @@ namespace QuickFASTDotNet{
     {
       QuickFAST::Messages::FieldCPtr field;
       spFieldSet_->getField(StlDotNet::string_cast<std::string>(name), field);
-      return cast_field(field);
+      return gcnew Field(field);
     }
 
     FieldIdentity^ FieldSet::GetIdentity(System::String^ name)
@@ -89,7 +89,7 @@ namespace QuickFASTDotNet{
 
     FieldSet::TKeyValuePair FieldSet::FieldEnumerator::GenericCurrent::get()
     {
-      return TKeyValuePair(gcnew FieldIdentity(itHolder_->it->getIdentity()), cast_field(itHolder_->it->getField()));
+      return TKeyValuePair(gcnew FieldIdentity(itHolder_->it->getIdentity()), gcnew Field(itHolder_->it->getField()));
     }
 
     Object^ FieldSet::FieldEnumerator::Current::get()

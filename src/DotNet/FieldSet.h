@@ -10,7 +10,7 @@
 namespace QuickFASTDotNet{
   namespace Messages {
 
-    interface class Field;
+    ref class Field;
     ref class FieldIdentity;
 
     /// @brief Internal representation of a set of fields to be encoded or decoded.

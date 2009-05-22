@@ -10,7 +10,7 @@
 namespace QuickFASTDotNet{
   namespace Messages{
 
-    
+
     MutableFieldSet::MutableFieldSet()
       : FieldSet(QuickFAST::Messages::FieldSetCPtr())
       , mutableFieldSetPtr_(QuickFAST::Messages::FieldSetPtr(new TFieldSet(20))) // @TODO get an accurate field count
@@ -33,7 +33,9 @@ namespace QuickFASTDotNet{
 
     void MutableFieldSet::AddField(FieldIdentity^ identity, Field^ newField)
     {
+#if 0 // not implemented yet.  Get the decoder working
       mutableFieldSetPtr_->addField(identity->SmartPtr, cast_field(newField));
+#endif
     }
   }
 }

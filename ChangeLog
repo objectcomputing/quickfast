@@ -1,3 +1,26 @@
+Fri May 22 14:37:13 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/DotNet/Decoder.h:
+        Add destructor & dosposer
+
+        * src/DotNet/UnmanagedPtr.h:
+        Make Release() public to support dosposers
+
+        * src/DotNet/MutableFieldSet.cpp:
+        Disable AddField() thereby disabling encoding while I focus on the decoder.
+
+        * src/DotNet/Field.h:
+        * src/DotNet/Field.cpp:
+        * src/DotNet/FieldSet.h:
+        * src/DotNet/FieldSet.cpp:
+        * src/DotNetExamples/InterpretFASTDotNet/MessageInterpreter.cs:
+        * src/DotNetExamples/PerformanceTestDotNet/MessageInterpreter.cs:
+        * src/DotNetTests/DecodingPerformance/MessageProcessor.cs:
+        Correct the mismatch between C++ FieldType and DotNet FieldType
+        Eliminate the elaborate and expensive "cast"of fields by switching
+        on FieldType.   Can you say "polymorphism"?  How about "virtual?"
+
+
 Thu May 21 14:00:03 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/DotNetExamples/InterpretFASTDotNet:
