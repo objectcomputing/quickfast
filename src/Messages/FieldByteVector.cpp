@@ -9,31 +9,25 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldByteVector::FieldByteVector(const std::string & value)
-  : Field(true)
+  : Field(Field::BYTEVECTOR, true)
   , value_(value)
 {
 }
 
 FieldByteVector::FieldByteVector(const uchar * buffer, size_t length)
-  : Field(true)
+  : Field(Field::BYTEVECTOR, true)
   , value_(std::string(reinterpret_cast<const char *>(buffer), length))
 {
 }
 
 FieldByteVector::FieldByteVector()
-  : Field(false)
+  : Field(Field::BYTEVECTOR, false)
   , value_()
 {
 }
 
 FieldByteVector::~FieldByteVector()
 {
-}
-
-Field::FieldType
-FieldByteVector::getType() const
-{
-  return Field::BYTEVECTOR;
 }
 
 bool

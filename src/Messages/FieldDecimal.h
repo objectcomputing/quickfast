@@ -31,7 +31,6 @@ namespace QuickFAST{
       virtual ~FieldDecimal();
 
       // implement selected virtual methods from Field
-      virtual Field::FieldType getType()const;
       virtual const Decimal & toDecimal() const;
     private:
       Decimal value_;

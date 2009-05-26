@@ -9,19 +9,13 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldSequence::FieldSequence(Messages::SequenceCPtr sequence)
-  : Field(true)
+  : Field(Field::SEQUENCE, true)
   , sequence_(sequence)
 {
 }
 
 FieldSequence::~FieldSequence()
 {
-}
-
-Field::FieldType
-FieldSequence::getType()const
-{
-  return Field::SEQUENCE;
 }
 
 uint32

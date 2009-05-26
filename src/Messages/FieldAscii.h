@@ -42,7 +42,6 @@ namespace QuickFAST{
       virtual ~FieldAscii();
 
       // implement selected virtual methods from Field
-      virtual Field::FieldType getType()const;
       virtual bool isString() const;
       virtual const std::string & toAscii() const;
       virtual const std::string & toString() const;

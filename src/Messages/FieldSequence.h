@@ -31,7 +31,6 @@ namespace QuickFAST{
 //      void setSequence(Messages::SequenceCPtr sequence);
 
       // implement selected virtual methods from Field
-      virtual Field::FieldType getType()const;
       virtual uint32 toUInt32()const;
       virtual const Messages::SequenceCPtr & toSequence() const;
     private:

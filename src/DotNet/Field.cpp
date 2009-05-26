@@ -39,84 +39,85 @@ using namespace Messages;
 bool
 Field::isDefined::get()
 {
-  return cppField_->isDefined();
+  return pField_->isDefined();
 }
-
 
 FieldType
 Field::Type::get()
 {
-  return static_cast<FieldType>(cppField_->getType());
+//  return static_cast<FieldType>(pField_->getType());
+  return type_;
+//  return (FieldType)(pField_->getType());
 }
 
 int
 Field::toInt32::get()
 {
-  return cppField_->toInt32();
+  return pField_->toInt32();
 }
 
 unsigned int
 Field::toUInt32::get()
 {
-  return cppField_->toUInt32();
+  return pField_->toUInt32();
 }
 __int64
 Field::toInt64::get()
 {
-  return cppField_->toInt64();
+  return pField_->toInt64();
 }
 unsigned __int64
 Field::toUInt64::get()
 {
-  return cppField_->toUInt64();
+  return pField_->toUInt64();
 }
 
 short
 Field::toInt16::get()
 {
-  return cppField_->toInt16();
+  return pField_->toInt16();
 }
 
 unsigned short
 Field::toUInt16::get()
 {
-  return cppField_->toUInt16();
+  return pField_->toUInt16();
 }
 
 char
 Field::toInt8::get()
 {
-  return cppField_->toInt8();
+  return pField_->toInt8();
 }
 
 unsigned char
 Field::toUInt8::get()
 {
-  return cppField_->toUInt8();
+  return pField_->toUInt8();
 }
 
 ::QuickFASTDotNet::Decimal
 Field::toDecimal::get()
 {
-  return ::QuickFASTDotNet::Decimal(cppField_->toDecimal());
+  return ::QuickFASTDotNet::Decimal(pField_->toDecimal());
 }
 
 System::String ^
 Field::toAscii::get()
 {
-  return gcnew System::String(cppField_->toAscii().c_str());
+  return gcnew System::String(pField_->toAscii().c_str());
 }
 
 System::String ^
 Field::toUtf8::get()
 {
-  return gcnew System::String(cppField_->toUtf8().c_str());
+  return gcnew System::String(pField_->toUtf8().c_str());
 }
 
 cli::array<unsigned char> ^
 Field::toByteVector::get()
 {
-  std::string v = cppField_->toByteVector();
+  std::string v = pField_->toByteVector();
   cli::array<unsigned char>^ result = gcnew cli::array<unsigned char>(v.length());
   int count = static_cast<int>(v.length());
   for(int p = 0; p < count; ++p)
@@ -129,11 +130,11 @@ Field::toByteVector::get()
 FieldSet ^
 Field::toGroup::get()
 {
-  return gcnew FieldSet(cppField_->toGroup());
+  return gcnew FieldSet(pField_->toGroup());
 }
 
 Sequence ^
 Field::toSequence::get()
 {
-  return gcnew Sequence(cppField_->toSequence());
+  return gcnew Sequence(pField_->toSequence());
 }

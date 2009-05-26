@@ -62,6 +62,12 @@ namespace QuickFAST{
         return entries_[index];
       }
 
+      /// @brief access an entry by index.
+      FieldSetCPtr & operator [](size_t index)
+      {
+        return entries_[index];
+      }
+
       /// @brief Support iteration from the beginning
       const_iterator begin() const
       {

@@ -20,25 +20,19 @@ namespace
 FieldCPtr FieldUInt8::nullField_ = new FieldUInt8;
 
 FieldUInt8::FieldUInt8(uchar value)
-  : Field(true)
+  : Field(Field::UINT8, true)
   , value_(value)
 {
 }
 
 FieldUInt8::FieldUInt8()
-  : Field(false)
+  : Field(Field::UINT8, false)
   , value_(0)
 {
 }
 
 FieldUInt8::~FieldUInt8()
 {
-}
-
-Field::FieldType
-FieldUInt8::getType()const
-{
-  return Field::UINT8;
 }
 
 uchar

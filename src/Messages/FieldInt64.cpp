@@ -9,25 +9,19 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldInt64::FieldInt64(int64 value)
-  : Field(true)
+  : Field(Field::INT64, true)
   , value_(value)
 {
 }
 
 FieldInt64::FieldInt64()
-  : Field(false)
+  : Field(Field::INT64, false)
   , value_(0)
 {
 }
 
 FieldInt64::~FieldInt64()
 {
-}
-
-Field::FieldType
-FieldInt64::getType() const
-{
-  return Field::INT64;
 }
 
 int64

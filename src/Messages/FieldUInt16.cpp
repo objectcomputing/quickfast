@@ -20,25 +20,19 @@ namespace
 FieldCPtr FieldUInt16::nullField_ = new FieldUInt16;
 
 FieldUInt16::FieldUInt16(uint16 value)
-  : Field(true)
+  : Field(Field::UINT16, true)
   , value_(value)
 {
 }
 
 FieldUInt16::FieldUInt16()
-  : Field(false)
+  : Field(Field::UINT16, false)
   , value_(0)
 {
 }
 
 FieldUInt16::~FieldUInt16()
 {
-}
-
-Field::FieldType
-FieldUInt16::getType()const
-{
-  return Field::UINT16;
 }
 
 uint16

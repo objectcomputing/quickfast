@@ -4,6 +4,7 @@
 #pragma once
 
 #include <DotNet/UnmanagedPtr.h>
+#include <DotNet/BoostPtr.h>
 #include <DotNet/Sequence.h>
 
 namespace QuickFASTDotNet{

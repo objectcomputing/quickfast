@@ -8,8 +8,9 @@
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
-Field::Field(bool valid)
-: valid_(valid)
+Field::Field(FieldType type, bool valid)
+: type_(type)
+, valid_(valid)
 , refcount_(0)
 {
 }

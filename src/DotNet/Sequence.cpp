@@ -18,10 +18,10 @@ namespace QuickFASTDotNet{
       // this class may *not* depend on sequencePtr_ being non-NULL here.
     }
 
-    FieldSet^ Sequence::default::get(unsigned int index)
+    FieldSet^ Sequence::default::get(int index)
     {
       QuickFAST::Messages::SequenceCPtr sequence = sequencePtr_.GetBoostPtr();
-        if(sequence->size() <= index)
+        if(sequence->size() <= static_cast<size_t>(index))
         {
           throw gcnew ArgumentOutOfRangeException();
         }

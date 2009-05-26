@@ -9,25 +9,19 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldInt32::FieldInt32(int32 value)
-  : Field(true)
+  : Field(Field::INT32, true)
   , value_(value)
 {
 }
 
 FieldInt32::FieldInt32()
-  : Field(false)
+  : Field(Field::INT32, false)
   , value_(0)
 {
 }
 
 FieldInt32::~FieldInt32()
 {
-}
-
-Field::FieldType
-FieldInt32::getType() const
-{
-  return Field::INT32;
 }
 
 int32

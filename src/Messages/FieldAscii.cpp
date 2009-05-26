@@ -9,31 +9,25 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldAscii::FieldAscii(const std::string & value)
-  : Field(true)
+  : Field(Field::ASCII, true)
   , value_(value)
 {
 }
 
 FieldAscii::FieldAscii(const uchar * value, size_t length)
-  : Field(true)
+  : Field(Field::ASCII, true)
   , value_(reinterpret_cast<const char *>(value), length)
 {
 }
 
 FieldAscii::FieldAscii()
-  : Field(false)
+  : Field(Field::ASCII, false)
   , value_()
 {
 }
 
 FieldAscii::~FieldAscii()
 {
-}
-
-Field::FieldType
-FieldAscii::getType() const
-{
-  return Field::ASCII;
 }
 
 bool

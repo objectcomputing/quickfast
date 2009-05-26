@@ -4,6 +4,7 @@
 #pragma once
 
 #include <DotNet/UnmanagedPtr.h>
+#include <DotNet/BoostPtr.h>
 #include <DotNet/StlDotNet.h>
 #include <Messages/FieldIdentity_fwd.h>
 
@@ -82,9 +83,9 @@ namespace QuickFASTDotNet{
         TFieldIdentity& get();
       }
 
-      property TspFieldIdentity& SmartPtr
+      property TspFieldIdentity SmartPtr
       {
-        TspFieldIdentity& get();
+        TspFieldIdentity get();
       }
 
 

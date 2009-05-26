@@ -48,7 +48,7 @@ namespace QuickFAST{
 
     protected:
       /// Protected constructor reinforces pure virtual
-      Field(bool valid = false);
+      Field(FieldType type, bool valid = false);
     public:
       /// @brief a typical virtual destructor.
       virtual ~Field() = 0;
@@ -65,7 +65,11 @@ namespace QuickFAST{
 
       /// @brief Get the field type
       /// @returns the enumerated field type
-      virtual FieldType getType()const = 0;
+//      virtual FieldType getType()const = 0;
+      FieldType getType() const
+      {
+        return type_;
+      }
 
       ////////
       // UINT8
@@ -290,6 +294,7 @@ namespace QuickFAST{
       virtual const Messages::SequenceCPtr & toSequence() const;
 
     protected:
+      FieldType type_;
       /// false means this is a NULL value
       bool valid_;
 

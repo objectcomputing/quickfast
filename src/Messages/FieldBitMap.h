@@ -47,7 +47,6 @@ namespace QuickFAST{
       virtual ~FieldBitMap();
 
       // implement selected virtual methods from Field
-      virtual Field::FieldType getType()const;
       virtual const BitMap & toBitMap() const;
     private:
       BitMap value_;

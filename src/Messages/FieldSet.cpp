@@ -3,7 +3,6 @@
 // See the file license.txt for licensing information.
 #include <Common/QuickFASTPch.h>
 #include "FieldSet.h"
-#include <Messages/Field.h>
 #include <Common/Exceptions.h>
 
 #include <Common/Profiler.h>
@@ -58,6 +57,15 @@ FieldSet::clear(size_t capacity)
   memset(fields_, 0, sizeof(sizeof(MessageField) * capacity_));
 }
 
+const MessageField &
+FieldSet::operator[](size_t index)const
+{
+  if(index >= used_)
+  {
+    throw UsageError("Accessing FieldSet entry", "index out of range.");
+  }
+  return fields_[index];
+}
 
 bool
 FieldSet::isPresent(const std::string & name) const
@@ -119,4 +127,12 @@ DecodedFields *
 FieldSet::createdNestedFields(size_t size)const
 {
   return new FieldSet(size);
+}
+
+void
+FieldSet::getFieldInfo(size_t index, std::string & name, Field::FieldType & type, FieldCPtr & fieldPtr)const
+{
+  name = fields_[index].name();
+  type = fields_[index].getField()->getType();
+  fieldPtr = fields_[index].getField();
 }

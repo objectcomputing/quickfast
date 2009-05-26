@@ -105,7 +105,7 @@ FieldIdentity::TFieldIdentity& FieldIdentity::Ref::get()
   return spFieldIdentity_.GetRef();
 }
 
-FieldIdentity::TspFieldIdentity& FieldIdentity::SmartPtr::get()
+FieldIdentity::TspFieldIdentity FieldIdentity::SmartPtr::get()
 {
   return spFieldIdentity_.GetBoostPtr();
 }

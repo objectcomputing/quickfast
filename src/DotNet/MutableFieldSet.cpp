@@ -15,14 +15,14 @@ namespace QuickFASTDotNet{
       : FieldSet(QuickFAST::Messages::FieldSetCPtr())
       , mutableFieldSetPtr_(QuickFAST::Messages::FieldSetPtr(new TFieldSet(20))) // @TODO get an accurate field count
     {
-      spFieldSet_.GetBoostPtr() = mutableFieldSetPtr_.GetBoostPtr();
+        spFieldSet_.Assign(mutableFieldSetPtr_.GetBoostPtr());
     }
 
     MutableFieldSet::MutableFieldSet(unsigned int expectedNumberOfFields)
       : FieldSet(QuickFAST::Messages::FieldSetCPtr())
       , mutableFieldSetPtr_(QuickFAST::Messages::FieldSetPtr(new TFieldSet(expectedNumberOfFields)))
     {
-      spFieldSet_.GetBoostPtr() = mutableFieldSetPtr_.GetBoostPtr();
+      spFieldSet_.Assign(mutableFieldSetPtr_.GetBoostPtr());
     }
 
     void MutableFieldSet::SetApplicationType(System::String^ applicationType, System::String^ nameSpace)

@@ -9,24 +9,18 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldDecimal::FieldDecimal()
-  : Field(false)
+  : Field(Field::DECIMAL, false)
 {
 }
 
 FieldDecimal::FieldDecimal(const Decimal & value)
-  : Field(true)
+  : Field(Field::DECIMAL, true)
   , value_(value)
 {
 }
 
 FieldDecimal::~FieldDecimal()
 {
-}
-
-Field::FieldType
-FieldDecimal::getType() const
-{
-  return Field::DECIMAL;
 }
 
 const Decimal &

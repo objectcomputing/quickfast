@@ -43,7 +43,6 @@ namespace QuickFAST{
       virtual ~FieldUtf8();
 
       // implement selected virtual methods from Field
-      virtual Field::FieldType getType()const;
       virtual const std::string & toUtf8() const;
       virtual bool isString() const;
       virtual const std::string & toString() const;

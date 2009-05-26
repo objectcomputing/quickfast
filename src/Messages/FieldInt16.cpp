@@ -9,25 +9,19 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldInt16::FieldInt16(int16 value)
-  : Field(true)
+  : Field(Field::INT16, true)
   , value_(value)
 {
 }
 
 FieldInt16::FieldInt16()
-  : Field(false)
+  : Field(Field::INT16, false)
   , value_(0)
 {
 }
 
 FieldInt16::~FieldInt16()
 {
-}
-
-Field::FieldType
-FieldInt16::getType() const
-{
-  return Field::INT16;
 }
 
 int16

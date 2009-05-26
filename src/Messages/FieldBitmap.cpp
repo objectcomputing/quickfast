@@ -9,31 +9,25 @@ using namespace QuickFAST;
 using namespace QuickFAST::Messages;
 
 FieldBitMap::FieldBitMap(const BitMap & value)
-  : Field(true)
+  : Field(Field::BITMAP,true)
   , value_(value)
 {
 }
 
 FieldBitMap::FieldBitMap(const uchar * value, size_t length)
-  : Field(true)
+  : Field(Field::BITMAP, true)
   , value_(value, length)
 {
 }
 
 FieldBitMap::FieldBitMap()
-  : Field(false)
+  : Field(Field::BITMAP, false)
   , value_()
 {
 }
 
 FieldBitMap::~FieldBitMap()
 {
-}
-
-Field::FieldType
-FieldBitMap::getType() const
-{
-  return Field::BITMAP;
 }
 
 const BitMap &

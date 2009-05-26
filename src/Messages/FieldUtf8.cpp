@@ -9,32 +9,26 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldUtf8::FieldUtf8(const std::string & value)
-  : Field(true)
+  : Field(Field::UTF8, true)
   , value_(value)
 {
 }
 
 FieldUtf8::FieldUtf8(const uchar * buffer, size_t length)
-  : Field(true)
+  : Field(Field::UTF8, true)
   , value_(std::string(reinterpret_cast<const char *>(buffer), length))
 {
 }
 
 
 FieldUtf8::FieldUtf8()
-  : Field(false)
+  : Field(Field::UTF8, false)
   , value_()
 {
 }
 
 FieldUtf8::~FieldUtf8()
 {
-}
-
-Field::FieldType
-FieldUtf8::getType()const
-{
-  return Field::UTF8;
 }
 
 bool

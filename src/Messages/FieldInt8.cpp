@@ -9,25 +9,19 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldInt8::FieldInt8(int8 value)
-  : Field(true)
+  : Field(Field::INT8, true)
   , value_(value)
 {
 }
 
 FieldInt8::FieldInt8()
-  : Field(false)
+  : Field(Field::INT8, false)
   , value_(0)
 {
 }
 
 FieldInt8::~FieldInt8()
 {
-}
-
-Field::FieldType
-FieldInt8::getType() const
-{
-  return Field::INT8;
 }
 
 int8

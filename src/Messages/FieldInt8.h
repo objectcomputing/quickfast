@@ -32,7 +32,6 @@ namespace QuickFAST{
       virtual ~FieldInt8();
 
       // implement selected virtual methods from Field
-      virtual Field::FieldType getType()const;
       virtual int8 toInt8() const;
     private:
       int8 value_;

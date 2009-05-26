@@ -10,7 +10,7 @@
 #include <Common/QuickFAST_Export.h>
 #include <Messages/DecodedFields.h>
 #include <Messages/MessageField.h>
-#include <Messages/Field_fwd.h>
+#include <Messages/Field.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief Internal representation of a set of fields to be encoded or decoded.
@@ -49,6 +49,10 @@ namespace QuickFAST{
       {
         return used_;
       }
+
+      /// @brief support indexing the set
+      /// @param index 0 <= index < size()
+      const MessageField & operator[](size_t index)const;
 
       /// @brief Is the specified field present in this set?
       /// @param name Identifies the field.
@@ -125,6 +129,15 @@ namespace QuickFAST{
 
       /// @brief act as a factory to create new fields sets to be nested within this one
       virtual DecodedFields * createdNestedFields(size_t size)const;
+
+
+      /// @brief For DotNet: get everything in one call
+      ///
+      void getFieldInfo(
+        size_t index,
+        std::string & name,
+        Field::FieldType & type,
+        FieldCPtr & fieldPtr)const;
 
     private:
       template<typename T>

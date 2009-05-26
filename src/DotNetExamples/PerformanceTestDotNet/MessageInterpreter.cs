@@ -63,46 +63,49 @@ namespace QuickFASTDotNet
 
             void formatFieldSet(FieldSet fieldset)
             {
-
-                foreach (System.Collections.Generic.KeyValuePair<FieldIdentity, Field> pair in fieldset)
+                int size = fieldset.Count;
+                for(int nField = 0; nField < size; ++nField)
                 {
-                    FieldType type = pair.Value.Type;
+                    String fieldName = "fieldset.GetNameIndexed(nField)";
+                    Field field = fieldset.GetFieldIndexed(nField);
+
+                    FieldType type = field.Type;
                     if (type == FieldType.SEQUENCE)
                     {
-                        formatSequence(pair.Key, pair.Value);
+                        formatSequence(fieldName, field);
                     }
                     else if (type == FieldType.GROUP)
                     {
-                        formatGroup(pair.Value);
+                        formatGroup(fieldName, field);
                     }
                     else
                     {
-                        displayFieldValue(pair.Value);
+                        displayFieldValue(type,fieldName, field);
                     }
                 }
             }
 
-
-            void formatSequence(FieldIdentity identity, Field field)
+            void formatSequence(String name, Field field)
             {
                 Sequence seq = field.toSequence;
-                foreach (FieldSet fieldset in seq)
+                int count = seq.Count;
+                for(int nSeq = 0; nSeq < count; ++nSeq)
                 {
-                    formatFieldSet(fieldset);
+                    formatFieldSet(seq[nSeq]);
                 }
             }
 
 
-            void formatGroup(Field field)
+            void formatGroup(String name, Field field)
             {
                 FieldSet fs = field.toGroup;
                 formatFieldSet(fs);
             }
 
 
-            void displayFieldValue(Field field)
+            void displayFieldValue(FieldType type, String name, Field field)
             {
-                switch (field.Type)
+                switch (type)
                 {
                     case Messages.FieldType.INT32:
                         {

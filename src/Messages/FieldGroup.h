@@ -26,7 +26,6 @@ namespace QuickFAST{
       virtual ~FieldGroup();
 
       // implement selected virtual methods from Field
-      virtual Field::FieldType getType()const;
       virtual const Messages::GroupCPtr & toGroup() const;
     private:
       Messages::GroupCPtr group_;

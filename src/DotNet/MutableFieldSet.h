@@ -4,6 +4,7 @@
 #pragma once
 
 #include <DotNet/UnmanagedPtr.h>
+#include <DotNet/BoostPtr.h>
 #include <DotNet/FieldSet.h>
 
 namespace QuickFASTDotNet{
@@ -15,7 +16,8 @@ namespace QuickFASTDotNet{
     public ref class MutableFieldSet: public FieldSet
     {
     public:
-      typedef BoostPtrHolder<QuickFAST::Messages::FieldSetPtr> TFieldSetPtr;
+      typedef QuickFAST::Messages::FieldSetPtr TMutableFieldSetPtr;
+      typedef BoostPtrHolder<TMutableFieldSetPtr> TFieldSetPtr;
 
       MutableFieldSet();
       explicit MutableFieldSet(unsigned int expectedNumberOfFields);

@@ -20,25 +20,19 @@ namespace
 FieldCPtr FieldUInt32::nullField_ = new FieldUInt32;
 
 FieldUInt32::FieldUInt32(uint32 value)
-  : Field(true)
+  : Field(Field::UINT32, true)
   , value_(value)
 {
 }
 
 FieldUInt32::FieldUInt32()
-  : Field(false)
+  : Field(Field::UINT32, false)
   , value_(0)
 {
 }
 
 FieldUInt32::~FieldUInt32()
 {
-}
-
-Field::FieldType
-FieldUInt32::getType()const
-{
-  return Field::UINT32;
 }
 
 uint32

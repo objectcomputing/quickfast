@@ -31,7 +31,6 @@ namespace QuickFAST{
       virtual ~FieldUInt8();
 
       // implement selected virtual methods from Field
-      virtual Field::FieldType getType()const;
       virtual uchar toUInt8() const;
     private:
       virtual void freeField()const;

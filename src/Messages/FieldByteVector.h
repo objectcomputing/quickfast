@@ -42,7 +42,6 @@ namespace QuickFAST{
       virtual ~FieldByteVector();
 
       // implement selected virtual methods from Field
-      virtual Field::FieldType getType()const;
       virtual const std::string & toByteVector() const;
       virtual bool isString() const;
       virtual const std::string & toString() const;

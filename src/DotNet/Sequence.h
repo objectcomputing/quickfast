@@ -4,6 +4,7 @@
 #pragma once
 
 #include <DotNet/UnmanagedPtr.h>
+#include <DotNet/BoostPtr.h>
 #include <DotNet/StlDotNet.h>
 #include <Messages/Sequence.h>
 
@@ -14,16 +15,17 @@ namespace QuickFASTDotNet{
 
     /// Container for a sequence of field groups
     [System::Diagnostics::DebuggerTypeProxy(Sequence::DbView::typeid)]
-    public ref class Sequence: public System::Collections::Generic::IEnumerable<FieldSet^>
+    public ref class Sequence
+      : public System::Collections::Generic::IEnumerable<FieldSet^>
     {
     public:
       typedef QuickFAST::Messages::Sequence TSequence;
       typedef BoostPtrHolder<QuickFAST::Messages::SequenceCPtr> TSequenceCPtr;
 
       /// @brief Allows addressing of a given Field in this FieldSet by index.
-      property FieldSet^ default[unsigned int]
+      property FieldSet^ default[int]
       {
-        FieldSet^ get(unsigned int index);
+        FieldSet^ get(int index);
       }
 
       /// @brief Gets the appliction type this FieldSet pertains to.

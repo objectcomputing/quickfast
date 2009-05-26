@@ -1,3 +1,66 @@
+Tue May 26 15:16:46 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/DotNet/BoostPtr.h:
+        * src/DotNet/Decoder.h:
+        * src/DotNet/Field.h:
+        * src/DotNet/Field.cpp:
+        * src/DotNet/FieldIdentity.h:
+        * src/DotNet/FieldIdentity.cpp:
+        * src/DotNet/FieldSet.h:
+        * src/DotNet/FieldSet.cpp:
+        * src/DotNet/MutableFieldSet.h:
+        * src/DotNet/MutableFieldSet.cpp:
+        * src/DotNet/MutableSequence.h:
+        * src/DotNet/Sequence.h:
+        * src/DotNet/Sequence.cpp:
+        * src/DotNet/SynchronousDecoder.h:
+        * src/DotNet/TemplateRegistry.h:
+        * src/DotNet/UnmanagedPtr.h:
+        * src/DotNet/UnmanagedPtr.cpp:
+        * src/DotNetExamples/PerformanceTestDotNet/MessageInterpreter.cs:
+        * src/Messages/Field.h:
+        * src/Messages/Field.cpp:
+        * src/Messages/FieldAscii.h:
+        * src/Messages/FieldAscii.cpp:
+        * src/Messages/FieldBitMap.h:
+        * src/Messages/FieldBitmap.cpp:
+        * src/Messages/FieldByteVector.h:
+        * src/Messages/FieldByteVector.cpp:
+        * src/Messages/FieldDecimal.h:
+        * src/Messages/FieldDecimal.cpp:
+        * src/Messages/FieldGroup.h:
+        * src/Messages/FieldGroup.cpp:
+        * src/Messages/FieldInt16.h:
+        * src/Messages/FieldInt16.cpp:
+        * src/Messages/FieldInt32.h:
+        * src/Messages/FieldInt32.cpp:
+        * src/Messages/FieldInt64.h:
+        * src/Messages/FieldInt64.cpp:
+        * src/Messages/FieldInt8.h:
+        * src/Messages/FieldInt8.cpp:
+        * src/Messages/FieldSequence.h:
+        * src/Messages/FieldSequence.cpp:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/FieldUInt16.h:
+        * src/Messages/FieldUInt16.cpp:
+        * src/Messages/FieldUInt32.h:
+        * src/Messages/FieldUInt32.cpp:
+        * src/Messages/FieldUInt64.h:
+        * src/Messages/FieldUInt64.cpp:
+        * src/Messages/FieldUInt8.h:
+        * src/Messages/FieldUInt8.cpp:
+        * src/Messages/FieldUtf8.h:
+        * src/Messages/FieldUtf8.cpp:
+        * src/Messages/Sequence.h:
+        Working on DotNet performance.    Field now caches the type and the
+        raw C++ pointer to avoid extra transitions between managed and unmanaged code.
+
+
+        * src/DotNet/ReadMe.txt:
+
+          Removed this file.
+
 Fri May 22 14:37:13 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/DotNet/Decoder.h:
