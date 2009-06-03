@@ -32,9 +32,6 @@ namespace QuickFASTDotNet{
       typedef System::Collections::Generic::IEnumerator<TKeyValuePair> TGenericEnumerator;
       typedef System::Collections::Generic::IEnumerable<TKeyValuePair> TGenericEnumerable;
 
-      /// @brief Constructs a new FieldSet instance increasing the ref count of the QuickFAST::Messages::FieldSetPtr shared_ptr.
-      explicit FieldSet(const QuickFAST::Messages::FieldSetCPtr& fieldSet);
-
       property TKeyValuePair default[System::String^]
       {
         TKeyValuePair get(System::String^ fieldName);
@@ -47,14 +44,14 @@ namespace QuickFASTDotNet{
         System::String^ get();
       }
 
+      System::String ^ GetNameIndexed(int index);
+      Field ^ GetFieldIndexed(int index);
+
       /// @brief number of fields in this field set.
       property int Count
       {
         virtual int get() { return spFieldSet_->size(); }
       }
-
-      System::String ^ GetNameIndexed(int index);
-      Field ^ GetFieldIndexed(int index);
 
       virtual TEnumerator^ GetEnumerator() = System::Collections::IEnumerable::GetEnumerator
       {
@@ -125,6 +122,9 @@ namespace QuickFASTDotNet{
         FieldSet^ viewedContainer_;
       };
 
+
+      /// @brief Constructs a new FieldSet instance increasing the ref count of the QuickFAST::Messages::FieldSetPtr shared_ptr.
+      explicit FieldSet(const QuickFAST::Messages::FieldSetCPtr& fieldSet);
 
       /// Returns a reference to the unmanaged FieldSet entity.
       property const TFieldSet& FieldSetRef

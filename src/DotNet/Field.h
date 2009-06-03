@@ -40,23 +40,15 @@ namespace QuickFASTDotNet{
     public ref class Field
     {
     public:
-      Field(QuickFAST::Messages::FieldSetCPtr & spFieldSet, unsigned int index)
+      Field(const QuickFAST::Messages::FieldCPtr & cppField)
+        : cppField_(cppField)
       {
-        std::string name;
-        QuickFAST::Messages::Field::FieldType type;
-        QuickFAST::Messages::FieldCPtr cppField;
-        spFieldSet->getFieldInfo(index, name, type, cppField);
-        cppField_.Assign(cppField);
-        pField_ = cppField.get();
-        type_ = static_cast<FieldType>(type);
-        name_ = gcnew System::String(name.c_str());
       }
 
       ~Field()
       {
         this->!Field();
       }
-
       !Field()
       {
       }
@@ -124,11 +116,7 @@ namespace QuickFASTDotNet{
         Sequence ^ get();
       }
 
-    private:
-      BoostPtrHolder<QuickFAST::Messages::FieldCPtr> cppField_;
-      const QuickFAST::Messages::Field * pField_;
-      FieldType type_;
-      System::String ^ name_;
+      const QuickFAST::Messages::FieldCPtr & cppField_;
     };
 
   }

@@ -35,12 +35,10 @@ FieldSet::GetFieldIndexed(int index)
   spFieldSet_->getFieldInfo(index, name, type, cppField);
   return gcnew Field(name, type, cppField);
 */
-  return gcnew Field(spFieldSet_.GetBoostPtr(), index);
-//  return gcnew Field(spFieldSet_.GetRef()[index].getField());
+  return gcnew Field(spFieldSet_.GetRef()[index].getField());
 }
 
 
-#if 0
 FieldSet::TKeyValuePair FieldSet::default::get(String^ fieldName)
 {
     std::string stdFieldName = StlDotNet::string_cast<std::string>(fieldName);
@@ -56,7 +54,6 @@ FieldSet::TKeyValuePair FieldSet::default::get(String^ fieldName)
 
     return TKeyValuePair(gcnew FieldIdentity(fieldIdentity), gcnew Field(fieldPtr));
 }
-#endif
 
 String^ FieldSet::ApplicationType::get()
 {
@@ -71,14 +68,12 @@ bool FieldSet::IsPresent(System::String^ name)
   return spFieldSet_->isPresent(stdNameStr);
 }
 
-/*
 Field^ FieldSet::GetField(System::String^ name)
 {
   QuickFAST::Messages::FieldCPtr field;
   spFieldSet_->getField(StlDotNet::string_cast<std::string>(name), field);
   return gcnew Field(field);
 }
-*/
 
 FieldIdentity^ FieldSet::GetIdentity(System::String^ name)
 {
@@ -111,12 +106,10 @@ bool FieldSet::Remove(TKeyValuePair item)
 {
   throw gcnew System::NotImplementedException();
 }
-#if 0
 FieldSet::TKeyValuePair FieldSet::FieldEnumerator::GenericCurrent::get()
 {
   return TKeyValuePair(gcnew FieldIdentity(itHolder_->it->getIdentity()), gcnew Field(itHolder_->it->getField()));
 }
-#endif
 
 Object^ FieldSet::FieldEnumerator::Current::get()
 {

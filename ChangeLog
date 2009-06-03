@@ -1,3 +1,11 @@
+Wed Jun  3 20:04:10 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/DotNet/Field.h:
+        * src/DotNet/Field.cpp:
+        * src/DotNet/FieldSet.h:
+        * src/DotNet/FieldSet.cpp:
+        Performance improvements
+
 Tue May 26 15:16:46 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/DotNet/BoostPtr.h:
