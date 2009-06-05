@@ -16,263 +16,38 @@ bit which will always be a one indicating that the template ID/MSG_TYPE is
 in the data stream.
 -->
 <templates xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+  
   <template name="SequenceNumberReset" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
     <uInt16 name="AB_MSG_TYPE" id="0">
       <constant value="1"/>
     </uInt16>
-    <filler name="AB_STOCK_IDX" id="1"/>
-    <uInt32 name="AB_SEQUENCE" id="2">
+    <filler name="AB_STOCK_IDX" id="10"/>
+    <uInt32 name="AB_SEQUENCE" id="20">
       <increment/>
     </uInt32>
   </template>
-
-  <template name="Heartbeat" id="2" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
-    <uInt16 name="AB_MSG_TYPE" id="0">
-      <constant value="2"/>
-    </uInt16>
-    <filler name="FILLER_01" id="1"/>
-    <filler name="FILLER_02" id="2"/>
-    <filler name="FILLER_03" id="3"/>
-    <filler name="FILLER_04" id="4"/>
-    <filler name="FILLER_05" id="5"/>
-    <filler name="FILLER_06" id="6"/>
-    <filler name="FILLER_07" id="7"/>
-    <filler name="FILLER_08" id="8"/>
-    <filler name="FILLER_09" id="9"/>
-    <filler name="FILLER_10" id="10"/>
-    <filler name="FILLER_11" id="11"/>
-    <filler name="FILLER_12" id="12"/>
-    <bitmap name="AB_BITMAP" id="13">
-      <arcaNOP/>
-    </bitmap>
-  </template>
-
-  <template name="MessageUnavailable" id="5" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
-    <uInt16 name="AB_MSG_TYPE" id="0">
-      <constant value="5"/>
-    </uInt16>
-    <filler name="FILLER_01" id="1"/>
-    <filler name="FILLER_02" id="2"/>
-    <filler name="FILLER_03" id="3"/>
-    <filler name="FILLER_04" id="4"/>
-    <filler name="FILLER_05" id="5"/>
-    <filler name="FILLER_06" id="6"/>
-    <filler name="FILLER_07" id="7"/>
-    <filler name="FILLER_08" id="8"/>
-    <filler name="FILLER_09" id="9"/>
-    <filler name="FILLER_10" id="10"/>
-    <filler name="FILLER_11" id="11"/>
-    <filler name="FILLER_12" id="12"/>
-    <bitmap name="AB_BITMAP" id="13">
-      <arcaNOP/>
-    </bitmap>
-  </template>
-
-  <template name="RetransmissionResponse" id="10" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
-    <uInt16 name="AB_MSG_TYPE" id="0">
-      <constant value="10"/>
-    </uInt16>
-    <filler name="FILLER_01" id="1"/>
-    <filler name="FILLER_02" id="2"/>
-    <filler name="FILLER_03" id="3"/>
-    <filler name="FILLER_04" id="4"/>
-    <filler name="FILLER_05" id="5"/>
-    <filler name="FILLER_06" id="6"/>
-    <filler name="FILLER_07" id="7"/>
-    <filler name="FILLER_08" id="8"/>
-    <filler name="FILLER_09" id="9"/>
-    <filler name="FILLER_10" id="10"/>
-    <filler name="FILLER_11" id="11"/>
-    <filler name="FILLER_12" id="12"/>
-    <bitmap name="AB_BITMAP" id="13">
-      <arcaNOP/>
-    </bitmap>
-  </template>
-
-  <template name="RetransmissionRequest" id="20" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
-    <uInt16 name="AB_MSG_TYPE" id="0">
-      <constant value="20"/>
-    </uInt16>
-    <filler name="FILLER_01" id="1"/>
-    <filler name="FILLER_02" id="2"/>
-    <filler name="FILLER_03" id="3"/>
-    <filler name="FILLER_04" id="4"/>
-    <filler name="FILLER_05" id="5"/>
-    <filler name="FILLER_06" id="6"/>
-    <filler name="FILLER_07" id="7"/>
-    <filler name="FILLER_08" id="8"/>
-    <filler name="FILLER_09" id="9"/>
-    <filler name="FILLER_10" id="10"/>
-    <filler name="FILLER_11" id="11"/>
-    <filler name="FILLER_12" id="12"/>
-    <bitmap name="AB_BITMAP" id="13">
-      <arcaNOP/>
-    </bitmap>
-
-  </template>
-  <template name="HeartbeatResponse" id="24" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
-    <uInt16 name="AB_MSG_TYPE" id="0">
-      <constant value="24"/>
-    </uInt16>
-    <filler name="FILLER_01" id="1"/>
-    <filler name="FILLER_02" id="2"/>
-    <filler name="FILLER_03" id="3"/>
-    <filler name="FILLER_04" id="4"/>
-    <filler name="FILLER_05" id="5"/>
-    <filler name="FILLER_06" id="6"/>
-    <filler name="FILLER_07" id="7"/>
-    <filler name="FILLER_08" id="8"/>
-    <filler name="FILLER_09" id="9"/>
-    <filler name="FILLER_10" id="10"/>
-    <filler name="FILLER_11" id="11"/>
-    <filler name="FILLER_12" id="12"/>
-    <bitmap name="AB_BITMAP" id="13">
-      <arcaNOP/>
-    </bitmap>
-  </template>
-
-  <template name="BookRefreshRequest" id="30" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
-    <uInt16 name="AB_MSG_TYPE" id="0">
-      <constant value="30"/>
-    </uInt16>
-    <filler name="FILLER_01" id="1"/>
-    <filler name="FILLER_02" id="2"/>
-    <filler name="FILLER_03" id="3"/>
-    <filler name="FILLER_04" id="4"/>
-    <filler name="FILLER_05" id="5"/>
-    <filler name="FILLER_06" id="6"/>
-    <filler name="FILLER_07" id="7"/>
-    <filler name="FILLER_08" id="8"/>
-    <filler name="FILLER_09" id="9"/>
-    <filler name="FILLER_10" id="10"/>
-    <filler name="FILLER_11" id="11"/>
-    <filler name="FILLER_12" id="12"/>
-    <bitmap name="AB_BITMAP" id="13">
-      <arcaNOP/>
-    </bitmap>
-  </template>
   
-  <template name="ImbalanceRefreshRequest" id="31" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
-    <uInt16 name="AB_MSG_TYPE" id="0">
-      <constant value="31"/>
-    </uInt16>
-    <filler name="FILLER_01" id="1"/>
-    <filler name="FILLER_02" id="2"/>
-    <filler name="FILLER_03" id="3"/>
-    <filler name="FILLER_04" id="4"/>
-    <filler name="FILLER_05" id="5"/>
-    <filler name="FILLER_06" id="6"/>
-    <filler name="FILLER_07" id="7"/>
-    <filler name="FILLER_08" id="8"/>
-    <filler name="FILLER_09" id="9"/>
-    <filler name="FILLER_10" id="10"/>
-    <filler name="FILLER_11" id="11"/>
-    <filler name="FILLER_12" id="12"/>
-    <bitmap name="AB_BITMAP" id="13">
-      <arcaNOP/>
-    </bitmap>
-  </template>
-  
-  <template name="BookRefresh" id="32" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
-    <uInt16 name="AB_MSG_TYPE" id="0">
-      <constant value="32"/>
-    </uInt16>
-    <filler name="FILLER_01" id="1"/>
-    <uInt32 name="AB_SEQUENCE" id="2">
-      <increment/>
-    </uInt32>
-    <uInt32 name="AB_TIME" id="3">
-      <copy/>
-    </uInt32>
-    <uInt32 name="AB_ORDER_ID" id="4">
-      <copy/>
-    </uInt32>
-    <uInt32 name="AB_VOLUME" id="5">
-      <copy/>
-    </uInt32>
-    <uInt32 name="AB_PRICE" id="6">
-      <copy/>
-    </uInt32>
-    <uInt32 name="AB_PRICE_SCALE" id="7">
-      <copy/>
-    </uInt32>
-    <string name="AB_BUY_SELL" id="8">
-      <copy/>
-    </string>
-    <string name="AB_EXCH_ID" id="9">
-      <copy/>
-    </string>
-    <string name="AB_SECURITY_TYPE" id="10">
-      <copy/>
-    </string>
-    <uInt16 name="AB_FIRM_ID" id="11">
-      <copy/>
-    </uInt16>
-  </template>
-  
-  <template name="ImbalanceRefresh" id="33" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
-    <uInt16 name="AB_MSG_TYPE" id="0">
-      <constant value="33"/>
-    </uInt16>
-    <filler name="FILLER_01" id="1"/>
-    <filler name="FILLER_02" id="2"/>
-    <filler name="FILLER_03" id="3"/>
-    <filler name="FILLER_04" id="4"/>
-    <filler name="FILLER_05" id="5"/>
-    <filler name="FILLER_06" id="6"/>
-    <filler name="FILLER_07" id="7"/>
-    <filler name="FILLER_08" id="8"/>
-    <filler name="FILLER_09" id="9"/>
-    <filler name="FILLER_10" id="10"/>
-    <filler name="FILLER_11" id="11"/>
-    <filler name="FILLER_12" id="12"/>
-    <bitmap name="AB_BITMAP" id="13">
-      <arcaNOP/>
-    </bitmap>
-  </template>
-  
-  <template name="SymbolIndexMappingRequest" id="34" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
-    <uInt16 name="AB_MSG_TYPE" id="0">
-      <constant value="34"/>
-    </uInt16>
-    <filler name="FILLER_01" id="1"/>
-    <filler name="FILLER_02" id="2"/>
-    <filler name="FILLER_03" id="3"/>
-    <filler name="FILLER_04" id="4"/>
-    <filler name="FILLER_05" id="5"/>
-    <filler name="FILLER_06" id="6"/>
-    <filler name="FILLER_07" id="7"/>
-    <filler name="FILLER_08" id="8"/>
-    <filler name="FILLER_09" id="9"/>
-    <filler name="FILLER_10" id="10"/>
-    <filler name="FILLER_11" id="11"/>
-    <filler name="FILLER_12" id="12"/>
-    <bitmap name="AB_BITMAP" id="13">
-      <arcaNOP/>
-    </bitmap>
-  </template>
-
   <template name="SymbolIndexMapping" id="35" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
     <uInt16 name="AB_MSG_TYPE" id="0">
       <constant value="35"/>
     </uInt16>
-    <uInt16 name="AB_STOCK_IDX" id="1">
+    <uInt16 name="AB_STOCK_IDX" id="10">
       <copy/>
     </uInt16>
-    <filler name="FILLER_02" id="2"/>
-    <filler name="FILLER_03" id="3"/>
-    <filler name="FILLER_04" id="4"/>
-    <filler name="FILLER_05" id="5"/>
-    <filler name="FILLER_06" id="6"/>
-    <filler name="FILLER_07" id="7"/>
-    <filler name="FILLER_08" id="8"/>
-    <filler name="FILLER_09" id="9"/>
-    <filler name="FILLER_10" id="10"/>
-    <filler name="FILLER_11" id="11"/>
-    <uInt8 name="AB_SESSION_ID" id="12">
+    <filler name="FILLER_02" id="20"/>
+    <filler name="FILLER_03" id="30"/>
+    <filler name="FILLER_04" id="40"/>
+    <filler name="FILLER_05" id="50"/>
+    <filler name="FILLER_06" id="60"/>
+    <filler name="FILLER_07" id="70"/>
+    <filler name="FILLER_08" id="80"/>
+    <filler name="FILLER_09" id="90"/>
+    <filler name="FILLER_10" id="100"/>
+    <filler name="FILLER_11" id="110"/>
+    <uInt8 name="AB_SESSION_ID" id="120">
       <copy/>
     </uInt8>
-    <string name="AB_SYMBOL_STRING" id="13">
+    <string name="AB_SYMBOL_STRING" id="131">
       <arcaNOP/>
     </string>
   </template>
@@ -281,22 +56,22 @@ in the data stream.
     <uInt16 name="AB_MSG_TYPE" id="0">
       <constant value="36"/>
     </uInt16>
-    <uInt16 name="AB_STOCK_IDX" id="1">
+    <uInt16 name="AB_STOCK_IDX" id="10">
       <copy/>
     </uInt16>
-    <uInt32 name="AB_SEQUENCE" id="2">
+    <uInt32 name="AB_SEQUENCE" id="20">
       <increment/>
     </uInt32>
-    <filler name="FILLER_03" id="3"/>
-    <filler name="FILLER_04" id="4"/>
-    <filler name="FILLER_05" id="5"/>
-    <filler name="FILLER_06" id="6"/>
-    <filler name="FILLER_07" id="7"/>
-    <filler name="FILLER_08" id="8"/>
-    <filler name="FILLER_09" id="9"/>
-    <filler name="FILLER_10" id="10"/>
-    <filler name="FILLER_11" id="11"/>
-    <uInt8 name="AB_SESSION_ID" id="12">
+    <filler name="FILLER_03" id="30"/>
+    <filler name="FILLER_04" id="40"/>
+    <filler name="FILLER_05" id="50"/>
+    <filler name="FILLER_06" id="60"/>
+    <filler name="FILLER_07" id="70"/>
+    <filler name="FILLER_08" id="80"/>
+    <filler name="FILLER_09" id="90"/>
+    <filler name="FILLER_10" id="100"/>
+    <filler name="FILLER_11" id="110"/>
+    <uInt8 name="AB_SESSION_ID" id="120">
       <copy/>
     </uInt8>
   </template>
@@ -305,105 +80,63 @@ in the data stream.
     <uInt16 name="AB_MSG_TYPE" id="0">
       <constant value="37"/>
     </uInt16>
-    <filler name="FILLER_01" id="1"/>
-    <filler name="FILLER_02" id="2"/>
-    <filler name="FILLER_03" id="3"/>
-    <filler name="FILLER_04" id="4"/>
-    <filler name="FILLER_05" id="5"/>
-    <filler name="FILLER_06" id="6"/>
-    <filler name="FILLER_07" id="7"/>
-    <filler name="FILLER_08" id="8"/>
-    <filler name="FILLER_09" id="9"/>
-    <filler name="FILLER_10" id="10"/>
-    <uInt16 name="AB_FIRM_ID" id="11">
+    <filler name="FILLER_01" id="10"/>
+    <filler name="FILLER_02" id="20"/>
+    <filler name="FILLER_03" id="30"/>
+    <filler name="FILLER_04" id="40"/>
+    <filler name="FILLER_05" id="50"/>
+    <filler name="FILLER_06" id="60"/>
+    <filler name="FILLER_07" id="70"/>
+    <filler name="FILLER_08" id="80"/>
+    <filler name="FILLER_09" id="90"/>
+    <filler name="FILLER_10" id="100"/>
+    <uInt16 name="AB_FIRM_ID" id="110">
       <copy/>
     </uInt16>
-    <filler name="FILLER_12" id="12"/>
-    <string name="AB_FIRM_STRING" id="13">
+    <filler name="FILLER_12" id="120"/>
+    <string name="AB_FIRM_STRING" id="132">
       <arcaNOP/>
     </string>
   </template>
   
-  <template name="FirmIndexMappingRequest" id="38" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
-    <uInt16 name="AB_MSG_TYPE" id="0">
-      <constant value="38"/>
-    </uInt16>
-    <filler name="FILLER_01" id="1"/>
-    <filler name="FILLER_02" id="2"/>
-    <filler name="FILLER_03" id="3"/>
-    <filler name="FILLER_04" id="4"/>
-    <filler name="FILLER_05" id="5"/>
-    <filler name="FILLER_06" id="6"/>
-    <filler name="FILLER_07" id="7"/>
-    <filler name="FILLER_08" id="8"/>
-    <filler name="FILLER_09" id="9"/>
-    <filler name="FILLER_10" id="10"/>
-    <filler name="FILLER_11" id="11"/>
-    <filler name="FILLER_12" id="12"/>
-    <bitmap name="AB_BITMAP" id="13">
-      <arcaNOP/>
-    </bitmap>
-  </template>
-
-  <template name="GenericBook" id="99" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
-    <uInt16 name="AB_MSG_TYPE" id="0">
-      <constant value="99"/>
-    </uInt16>
-    <filler name="FILLER_01" id="1"/>
-    <filler name="FILLER_02" id="2"/>
-    <filler name="FILLER_03" id="3"/>
-    <filler name="FILLER_04" id="4"/>
-    <filler name="FILLER_05" id="5"/>
-    <filler name="FILLER_06" id="6"/>
-    <filler name="FILLER_07" id="7"/>
-    <filler name="FILLER_08" id="8"/>
-    <filler name="FILLER_09" id="9"/>
-    <filler name="FILLER_10" id="10"/>
-    <filler name="FILLER_11" id="11"/>
-    <filler name="FILLER_12" id="12"/>
-    <bitmap name="AB_BITMAP" id="13">
-      <arcaNOP/>
-    </bitmap>
-  </template>
-
   <template name="Add" id="100" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
     <uInt16 name="AB_MSG_TYPE" id="0">
       <constant value="100"/>
     </uInt16>
-    <uInt16 name="AB_STOCK_IDX" id="1">
+    <uInt16 name="AB_STOCK_IDX" id="10">
       <copy/>
     </uInt16>
-    <uInt32 name="AB_SEQUENCE" id="2">
+    <uInt32 name="AB_SEQUENCE" id="20">
       <increment/>
     </uInt32>
-    <uInt32 name="AB_TIME" id="3">
+    <uInt32 name="AB_TIME" id="30">
       <copy/>
     </uInt32>
-    <uInt32 name="AB_ORDER_ID" id="4">
+    <uInt32 name="AB_ORDER_ID" id="40">
       <copy/>
     </uInt32>
-    <uInt32 name="AB_VOLUME" id="5">
+    <uInt32 name="AB_VOLUME" id="50">
       <copy/>
     </uInt32>
-    <uInt32 name="AB_PRICE" id="6">
+    <uInt32 name="AB_PRICE" id="60">
       <copy/>
     </uInt32>
-    <uInt32 name="AB_PRICE_SCALE" id="7">
+    <uInt32 name="AB_PRICE_SCALE" id="70">
       <copy/>
     </uInt32>
-    <string name="AB_BUY_SELL" id="8">
+    <string name="AB_BUY_SELL" id="80">
       <copy/>
     </string>
-    <string name="AB_EXCH_ID" id="9">
+    <string name="AB_EXCH_ID" id="90">
       <copy/>
     </string>
-    <string name="AB_SECURITY_TYPE" id="10">
+    <string name="AB_SECURITY_TYPE" id="100">
       <copy/>
     </string>
-    <uInt16 name="AB_FIRM_ID" id="11">
+    <uInt16 name="AB_FIRM_ID" id="110">
       <copy/>
     </uInt16>
-    <uInt8 name="AB_SESSION_ID" id="12">
+    <uInt8 name="AB_SESSION_ID" id="120">
       <copy/>
     </uInt8>
   </template>
@@ -412,40 +145,40 @@ in the data stream.
     <uInt16 name="AB_MSG_TYPE" id="0">
       <constant value="101"/>
     </uInt16>
-    <uInt16 name="AB_STOCK_IDX" id="1">
+    <uInt16 name="AB_STOCK_IDX" id="10">
       <copy/>
     </uInt16>
-    <uInt32 name="AB_SEQUENCE" id="2">
+    <uInt32 name="AB_SEQUENCE" id="20">
       <increment/>
     </uInt32>
-    <uInt32 name="AB_TIME" id="3">
+    <uInt32 name="AB_TIME" id="30">
       <copy/>
     </uInt32>
-    <uInt32 name="AB_ORDER_ID" id="4">
+    <uInt32 name="AB_ORDER_ID" id="40">
       <copy/>
     </uInt32>
-    <uInt32 name="AB_VOLUME" id="5">
+    <uInt32 name="AB_VOLUME" id="50">
       <copy/>
     </uInt32>
-    <uInt32 name="AB_PRICE" id="6">
+    <uInt32 name="AB_PRICE" id="60">
       <copy/>
     </uInt32>
-    <uInt32 name="AB_PRICE_SCALE" id="7">
+    <uInt32 name="AB_PRICE_SCALE" id="70">
       <copy/>
     </uInt32>
-    <string name="AB_BUY_SELL" id="8">
+    <string name="AB_BUY_SELL" id="80">
       <copy/>
     </string>
-    <string name="AB_EXCH_ID" id="9">
+    <string name="AB_EXCH_ID" id="90">
       <copy/>
     </string>
-    <string name="AB_SECURITY_TYPE" id="10">
+    <string name="AB_SECURITY_TYPE" id="100">
       <copy/>
     </string>
-    <uInt16 name="AB_FIRM_ID" id="11">
+    <uInt16 name="AB_FIRM_ID" id="110">
       <copy/>
     </uInt16>
-    <uInt8 name="AB_SESSION_ID" id="12">
+    <uInt8 name="AB_SESSION_ID" id="120">
       <copy/>
     </uInt8>
   </template>
@@ -454,34 +187,34 @@ in the data stream.
     <uInt16 name="AB_MSG_TYPE" id="0">
       <constant value="102"/>
     </uInt16>
-    <uInt16 name="AB_STOCK_IDX" id="1">
+    <uInt16 name="AB_STOCK_IDX" id="10">
       <copy/>
     </uInt16>
-    <uInt32 name="AB_SEQUENCE" id="2">
+    <uInt32 name="AB_SEQUENCE" id="20">
       <increment/>
     </uInt32>
-    <uInt32 name="AB_TIME" id="3">
+    <uInt32 name="AB_TIME" id="30">
       <copy/>
     </uInt32>
-    <uInt32 name="AB_ORDER_ID" id="4">
+    <uInt32 name="AB_ORDER_ID" id="40">
       <copy/>
     </uInt32>
-    <filler name="FILLER_05" id="5"/>
-    <filler name="FILLER_06" id="6"/>
-    <filler name="FILLER_07" id="7"/>
-    <string name="AB_BUY_SELL" id="8">
+    <filler name="FILLER_05" id="50"/>
+    <filler name="FILLER_06" id="60"/>
+    <filler name="FILLER_07" id="70"/>
+    <string name="AB_BUY_SELL" id="80">
       <copy/>
     </string>
-    <string name="AB_EXCH_ID" id="9">
+    <string name="AB_EXCH_ID" id="90">
       <copy/>
     </string>
-    <string name="AB_SECURITY_TYPE" id="10">
+    <string name="AB_SECURITY_TYPE" id="100">
       <copy/>
     </string>
-    <uInt16 name="AB_FIRM_ID" id="11">
+    <uInt16 name="AB_FIRM_ID" id="110">
       <copy/>
     </uInt16>
-    <uInt8 name="AB_SESSION_ID" id="12">
+    <uInt8 name="AB_SESSION_ID" id="120">
       <copy/>
     </uInt8>
   </template>
@@ -490,46 +223,46 @@ in the data stream.
     <uInt16 name="AB_MSG_TYPE" id="0">
       <constant value="103"/>
     </uInt16>
-    <uInt16 name="AB_STOCK_IDX" id="1">
+    <uInt16 name="AB_STOCK_IDX" id="10">
       <copy/>
     </uInt16>
-    <uInt32 name="AB_SEQUENCE" id="2">
+    <uInt32 name="AB_SEQUENCE" id="20">
       <increment/>
     </uInt32>
-    <uInt32 name="AB_TIME" id="3">
+    <uInt32 name="AB_TIME" id="30">
       <copy/>
     </uInt32>
-    <!-- error in spec <uInt32 name="AB_ORDER_ID" id="4">
+    <!-- error in spec <uInt32 name="AB_ORDER_ID" id="40">
       <copy/>
     </uInt32>-->
-    <uInt32 name="AB_IMBALANCE" id="4">
+    <uInt32 name="AB_IMBALANCE" id="41">
       <copy/>
     </uInt32>
-    <uInt32 name="AB_VOLUME" id="5">
+    <uInt32 name="AB_VOLUME" id="50">
       <copy/>
     </uInt32>
-    <uInt32 name="AB_PRICE" id="6">
+    <uInt32 name="AB_PRICE" id="60">
       <copy/>
     </uInt32>
-    <uInt32 name="AB_PRICE_SCALE" id="7">
+    <uInt32 name="AB_PRICE_SCALE" id="70">
       <copy/>
     </uInt32>
-    <string name="AB_AUCTION_TYPE" id="8">
+    <string name="AB_AUCTION_TYPE" id="81">
       <copy/>
     </string>
-    <string name="AB_EXCH_ID" id="9">
+    <string name="AB_EXCH_ID" id="90">
       <copy/>
     </string>
-    <string name="AB_SECURITY_TYPE" id="10">
+    <string name="AB_SECURITY_TYPE" id="100">
       <copy/>
     </string>
-    <uInt16 name="AB_AUCTION_TIME" id="11">
+    <uInt16 name="AB_AUCTION_TIME" id="111">
       <copy/>
     </uInt16>
-    <uInt8 name="AB_SESSION_ID" id="12">
+    <uInt8 name="AB_SESSION_ID" id="120">
       <copy/>
     </uInt8>
-    <uInt32 name="AB_MKT_IMBALANCE" id="13">
+    <uInt32 name="AB_MKT_IMBALANCE" id="130">
       <arcaNOP/>
     </uInt32>
   </template>

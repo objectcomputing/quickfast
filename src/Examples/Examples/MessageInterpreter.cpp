@@ -63,11 +63,11 @@ MessageInterpreter::decodingStopped()
 
 
 bool
-MessageInterpreter::consumeMessage(Messages::Message & message)
+MessageInterpreter::consumeMessage(Messages::DecodedFields & message)
 {
   recordCount_ += 1;
   out_ << "Record #" << recordCount_ << ' ' << std::flush;
-  formatMessage(message);
+  formatMessage(dynamic_cast<Messages::Message &>(message));
   out_ << std::endl;
   return true;
 }

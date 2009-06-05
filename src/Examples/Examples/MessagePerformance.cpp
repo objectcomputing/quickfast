@@ -45,7 +45,7 @@ MessagePerformance::decodingStopped()
 
 
 bool
-MessagePerformance::consumeMessage(Messages::Message & message)
+MessagePerformance::consumeMessage(Messages::DecodedFields & message)
 {
   recordCount_ += 1;
   try
@@ -64,8 +64,9 @@ MessagePerformance::consumeMessage(Messages::Message & message)
 }
 
 void
-MessagePerformance::retrieveMessage(const Messages::Message & message)
+MessagePerformance::retrieveMessage(const Messages::DecodedFields & decodedFields)
 {
+  const Messages::Message & message = dynamic_cast<const Messages::Message &>(decodedFields);
   for( Messages::Message::const_iterator it = message.begin();
     it != message.end();
     ++it)

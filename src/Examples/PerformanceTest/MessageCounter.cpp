@@ -23,7 +23,7 @@ MessageCounter::~MessageCounter()
 }
 
 bool
-MessageCounter::consumeMessage(Messages::Message & message)
+MessageCounter::consumeMessage(Messages::DecodedFields & message)
 {
   messageCount_ += 1;
   return true;

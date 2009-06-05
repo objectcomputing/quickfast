@@ -6,13 +6,15 @@
 #define MULTICASTDECODER_FWD_H
 #include <Messages/Message_fwd.h>
 #include <Codecs/MessageConsumer.h>
+#include <Codecs/DataSourceBuffer.h>
 
 namespace QuickFAST{
   namespace Codecs{
-    template<typename MessageType, typename MessageConsumerType>
+    template<typename MessageType, typename MessageConsumerType, typename DataSourceType = DataSourceBuffer>
     class MulticastDecoderT;
 
-    typedef MulticastDecoderT<Messages::Message, Codecs::MessageConsumer> MulticastDecoder;
+    typedef MulticastDecoderT<
+      Messages::Message, Codecs::MessageConsumer> MulticastDecoder;
   }
 }
 #endif // MULTICASTDECODER_FWD_H

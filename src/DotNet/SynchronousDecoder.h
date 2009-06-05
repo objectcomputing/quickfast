@@ -27,7 +27,7 @@ namespace QuickFASTDotNet{
 
       ////////////////////////////
       // Implement MessageConsumer
-      virtual bool consumeMessage(QuickFAST::Messages::Message & message)
+      virtual bool consumeMessage(QuickFAST::Messages::DecodedFields & message)
       {
         messageCount_ += 1;
         return true;

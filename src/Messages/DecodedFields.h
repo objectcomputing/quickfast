@@ -13,7 +13,7 @@
 namespace QuickFAST{
   namespace Messages{
     /// @brief Internal representation of a set of fields to be encoded or decoded.
-    class QuickFAST_Export DecodedFields{
+    class DecodedFields{
     public:
 
       /// @brief Virtual destructor
@@ -47,7 +47,7 @@ namespace QuickFAST{
       /// @param[in] name identifies the desired field
       /// @param[out] identity is the information for the field that was found
       /// @returns true if the field was found
-      virtual bool getIdentity(const std::string &name, FieldIdentityCPtr & identity) const = 0;;
+      virtual bool getIdentity(const std::string &name, FieldIdentityCPtr & identity) const = 0;
 
       /// @brief identify the application type associated with
       /// this set of fields via typeref.

@@ -8,7 +8,7 @@
 #define MESSAGECONSUMER_H
 #include "MessageConsumer_fwd.h"
 #include <Common/QuickFAST_Export.h>
-#include <Messages/Message_fwd.h>
+#include <Messages/DecodedFields_fwd.h>
 namespace QuickFAST{
   namespace Codecs{
     /// @brief interface to be implemented by a consumer of decoded messages.
@@ -28,7 +28,7 @@ namespace QuickFAST{
       /// @brief Accept a decoded message
       /// @param message is the decoded message, valid for the life of this call.
       /// @returns true if decoding should continue; false to stop decoding
-      virtual bool consumeMessage(Messages::Message & message) = 0;
+      virtual bool consumeMessage(Messages::DecodedFields & message) = 0;
 
       /// @brief Does consumer wish to see logs with the given importance level.
       /// @param level is the importance level. low numbers are more important.

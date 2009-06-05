@@ -1,3 +1,31 @@
+Fri Jun  5 13:32:40 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * data/ARCATemplates.xml:
+        Refine ARCA templates to reflect new information.
+
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder_fwd.h:
+        Allow replacable buffering strategies
+
+        * src/Codecs/MessageConsumer.h:
+        * src/Common/Exceptions.h:
+        * src/DotNet/SynchronousDecoder.h:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/Examples/MessagePerformance.h:
+        * src/Examples/Examples/MessagePerformance.cpp:
+        * src/Examples/PerformanceTest/MessageCounter.h:
+        * src/Examples/PerformanceTest/MessageCounter.cpp:
+        * src/Examples/PerformanceTest/NullMessage.h:
+        * src/Examples/PerformanceTest/NullMessage.cpp:
+        * src/Messages/DecodedFields.h:
+        Use base class, DecodedFields, rather than specific Message class
+        to support alternative types of message
+
+        * src/Codecs/DecodedFields.h:
+        * src/Codecs/DecodedFields_fwd.h:
+          Removed these files -- they were duplicates of the ones in Message
+
 Wed Jun  3 20:04:10 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/DotNet/Field.h:

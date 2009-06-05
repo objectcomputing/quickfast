@@ -9,6 +9,8 @@
 #include <Codecs/MessageConsumer.h>
 #include <Messages/Field_fwd.h>
 #include <Messages/FieldIdentity.h>
+#include <Messages/Message_fwd.h>
+
 namespace QuickFAST{
   namespace Examples{
 
@@ -23,7 +25,7 @@ namespace QuickFAST{
 
       ////////////////////////////
       // Implement MessageConsumer
-      virtual bool consumeMessage(Messages::Message & message);
+      virtual bool consumeMessage(Messages::DecodedFields & message);
       virtual bool wantLog(unsigned short level);
       virtual bool logMessage(unsigned short level, const std::string & logMessage);
       virtual bool reportDecodingError(const std::string & errorMessage);

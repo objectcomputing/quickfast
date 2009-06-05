@@ -3,6 +3,8 @@
 // See the file license.txt for licensing information.
 #include <Examples/ExamplesPch.h>
 #include "NullMessage.h"
+//#include <Messages/Message.h>
+
 using namespace QuickFAST;
 using namespace Examples;
 
@@ -97,7 +99,7 @@ NullMessageConsumer::consumeMessage(Examples::NullMessage & message)
 }
 
 bool
-NullMessageConsumer::consumeMessage(Messages::Message & message)
+NullMessageConsumer::consumeMessage(Messages::DecodedFields & message)
 {
   // shouldn't happen.
   messageCount_ += 1;

@@ -9,7 +9,7 @@
 #include <Common/QuickFAST_Export.h>
 namespace QuickFAST{
   /// @brief Exception to be thrown when an attempt is made to convert a value to an incompatable type.
-  class QuickFAST_Export UnsupportedConversion : public std::domain_error{
+  class /* QuickFAST_Export */ UnsupportedConversion : public std::domain_error{
   public:
     /// @brief Construct explaining what's wrong.
     /// @param reason describes the problem.
@@ -20,7 +20,7 @@ namespace QuickFAST{
   };
 
   /// @brief Exception to be thrown when a value does not fit in a field
-  class QuickFAST_Export OverflowError : public std::overflow_error{
+  class /* QuickFAST_Export */ OverflowError : public std::overflow_error{
   public:
     /// @brief Construct explaining what's wrong.
     /// @param reason describes the problem.
@@ -31,7 +31,7 @@ namespace QuickFAST{
   };
 
   /// @brief Exception to be thrown when a mandatory field is not present or a requested field is not found.
-  class QuickFAST_Export FieldNotPresent : public std::invalid_argument{
+  class /* QuickFAST_Export */ FieldNotPresent : public std::invalid_argument{
   public:
     /// @brief Construct explaining what's wrong.
     /// @param reason describes the problem.
@@ -42,7 +42,7 @@ namespace QuickFAST{
   };
 
   /// @brief Exception to be thrown when a dynamic error is detected while encoding or decoding
-  class QuickFAST_Export EncodingError : public std::runtime_error{
+  class /* QuickFAST_Export */ EncodingError : public std::runtime_error{
   public:
     /// @brief Construct explaining what's wrong.
     /// @param reason describes the problem.
@@ -53,7 +53,7 @@ namespace QuickFAST{
   };
 
   /// @brief Exception to be thrown when a static error is detected while parsing or using templates.
-  class QuickFAST_Export TemplateDefinitionError: public std::runtime_error{
+  class /* QuickFAST_Export */ TemplateDefinitionError: public std::runtime_error{
   public:
     /// @brief Construct explaining what's wrong.
     /// @param reason describes the problem.
@@ -64,7 +64,7 @@ namespace QuickFAST{
   };
 
   /// @brief Exception to be thrown when the application misuses QuickFAST
-  class QuickFAST_Export UsageError : public std::invalid_argument{
+  class /* QuickFAST_Export */ UsageError : public std::invalid_argument{
   public:
     /// @brief Construct explaining what's wrong.
     /// @param error describes the problem.

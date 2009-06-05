@@ -23,7 +23,10 @@ namespace QuickFAST{
   namespace Codecs {
 
     /// @brief Support decoding of FAST messages received via multicast.
-    template<typename MessageType, typename MessageConsumerType>
+    template<
+      typename MessageType,
+      typename MessageConsumerType,
+      typename DataSourceType>
     class /*QuickFAST_Export*/ MulticastDecoderT : public AsioService
     {
       typedef boost::scoped_array<unsigned char> Buffer;
@@ -156,7 +159,7 @@ namespace QuickFAST{
         decoder_.reset();
       }
 
-      /// Start the decoding process.  Returns immediately
+      /// @brief Start the decoding process.  Returns immediately
       void start(ConsumerPtr consumer)
       {
         consumer_ = consumer;
@@ -175,7 +178,7 @@ namespace QuickFAST{
       }
 
 
-      /// Stop the decoding process.
+      /// @brief Stop the decoding process.
       ///
       /// Returns immediately, however decoding may continue until
       /// the decoder reaches a clean stopping point.  In particular
@@ -220,7 +223,7 @@ namespace QuickFAST{
           }
           try
           {
-            DataSourceBuffer source(buffer->get(), bytesReceived);
+            DataSourceType source(buffer->get(), bytesReceived);
             decoder_.reset();
             while(source.bytesAvailable() > 0 && !stopping_)
             {
@@ -306,7 +309,8 @@ namespace QuickFAST{
 
     ///@brief Instantiate the template for the most common case
     /// This provides the same functionality as the previous, nontemplatized, version of MulticastDecoder
-    typedef MulticastDecoderT<Messages::Message, Codecs::MessageConsumer> MulticastDecoder;
+    typedef MulticastDecoderT<
+      Messages::Message, Codecs::MessageConsumer> MulticastDecoder;
   }
 }
 #endif // MULTICASTDECODER_H
