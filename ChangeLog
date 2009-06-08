@@ -1,3 +1,71 @@
+Mon Jun  8 21:55:29 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * QuickFASTDotNetApplication.mpb:
+        * src/DotNet/QuickFASTDotNet.mpc:
+        * src/DotNetExamples/DotNetExampleCode/DotNetExampleCode.mpc:
+        * src/DotNetTests/DecodingPerformance/DecodingPerformanceDotNet.mpc:
+        * src/QuickFAST.mpc:
+        Add dependencies
+
+        * src/Codecs/Decoder.h:
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.h:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBitMap.h:
+        * src/Codecs/FieldInstructionBitMap.cpp:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.h:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionFiller.h:
+        * src/Codecs/FieldInstructionFiller.cpp:
+        * src/Codecs/FieldInstructionGroup.h:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionSequence.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FieldOpArcaNop.h:
+        * src/Codecs/FieldOpConstant.h:
+        * src/Codecs/FieldOpConstant.cpp:
+        * src/Codecs/FieldOpCopy.h:
+        * src/Codecs/FieldOpCopy.cpp:
+        * src/Codecs/FieldOpDefault.h:
+        * src/Codecs/FieldOpDefault.cpp:
+        * src/Codecs/FieldOpDelta.h:
+        * src/Codecs/FieldOpDelta.cpp:
+        * src/Codecs/FieldOpIncrement.h:
+        * src/Codecs/FieldOpIncrement.cpp:
+        * src/Codecs/FieldOpNop.h:
+        * src/Codecs/FieldOpTail.h:
+        * src/Codecs/FieldOpTail.cpp:
+        * src/Codecs/MessageConsumer.h:
+        * src/DotNet/SynchronousDecoder.h:
+        * src/DotNet/SynchronousDecoder.cpp:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/Examples/MessagePerformance.h:
+        * src/Examples/Examples/MessagePerformance.cpp:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.h:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+        * src/Examples/PerformanceTest/MessageCounter.h:
+        * src/Examples/PerformanceTest/MessageCounter.cpp:
+        * src/Examples/PerformanceTest/NullMessage.h:
+        * src/Examples/PerformanceTest/NullMessage.cpp:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/MessageBuilder_fwd.h:
+        * src/Tests/FieldInstructionMock.h:
+        * src/Messages/DecodedFields.h:
+        * src/Messages/DecodedFields_fwd.h:
+        Rename DecodedFields to be MessageBuilder.   First step in supporting
+        separate message factories.
+
 Mon Jun  8 20:46:00 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/BufferConsumer.h:

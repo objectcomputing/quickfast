@@ -25,7 +25,7 @@ FieldOpTail::decode(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   return instruction.decodeTail(source, pmap, decoder, fieldSet);
 }

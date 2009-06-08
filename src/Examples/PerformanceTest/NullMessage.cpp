@@ -73,7 +73,7 @@ NullMessage::getApplicationTypeNs()const
   return applicationTypeNamespace_;
 }
 
-Messages::DecodedFields *
+Messages::MessageBuilder *
 NullMessage::createdNestedFields(size_t size)const
 {
   return new NullMessage(size);
@@ -99,7 +99,7 @@ NullMessageConsumer::consumeMessage(Examples::NullMessage & message)
 }
 
 bool
-NullMessageConsumer::consumeMessage(Messages::DecodedFields & message)
+NullMessageConsumer::consumeMessage(Messages::MessageBuilder & message)
 {
   // shouldn't happen.
   messageCount_ += 1;

@@ -34,37 +34,37 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const;
+        Messages::MessageBuilder & fieldSet) const;
 
       virtual bool decodeConstant(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const;
+        Messages::MessageBuilder & fieldSet) const;
 
       virtual bool decodeDefault(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const;
+        Messages::MessageBuilder & fieldSet) const;
 
       virtual bool decodeCopy(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const;
+        Messages::MessageBuilder & fieldSet) const;
 
       virtual bool decodeDelta(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const;
+        Messages::MessageBuilder & fieldSet) const;
 
       virtual bool decodeTail(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const;
+        Messages::MessageBuilder & fieldSet) const;
 
       virtual void encodeNop(
         Codecs::DataDestination & destination,

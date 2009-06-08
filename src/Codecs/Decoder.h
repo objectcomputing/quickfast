@@ -13,7 +13,7 @@
 #include <Codecs/PresenceMap_fwd.h>
 #include <Codecs/Template.h>
 #include <Codecs/SegmentBody_fwd.h>
-#include <Messages/DecodedFields_fwd.h>
+#include <Messages/MessageBuilder_fwd.h>
 
 #include <Common/Exceptions.h>
 
@@ -53,7 +53,7 @@ namespace QuickFAST{
       /// @return true if a message was successfully decoded.  False normally means end of file.
       bool decodeMessage(
         DataSource & source,
-        Messages::DecodedFields & message);
+        Messages::MessageBuilder & message);
 
       /// @brief Decode a group field.
       ///
@@ -70,7 +70,7 @@ namespace QuickFAST{
       decodeGroup(
         DataSource & source,
         SegmentBodyCPtr segment,
-        Messages::DecodedFields & fieldSet);
+        Messages::MessageBuilder & fieldSet);
 
       /// @brief Decode a segment into a fieldSet.
       ///
@@ -78,7 +78,7 @@ namespace QuickFAST{
       /// @param[in] fieldSet to which the decoded fields will be added
       bool decodeSegment(
         DataSource & source,
-        Messages::DecodedFields & fieldSet);
+        Messages::MessageBuilder & fieldSet);
 
       /// @brief Decode the body of a segment into a fieldSet.
       ///
@@ -91,7 +91,7 @@ namespace QuickFAST{
         DataSource & source,
         PresenceMap & pmap,
         SegmentBodyCPtr segment,
-        Messages::DecodedFields & fieldSet);
+        Messages::MessageBuilder & fieldSet);
 
     private:
       /// false makes the decoder more forgiving

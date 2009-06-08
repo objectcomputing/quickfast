@@ -8,14 +8,14 @@
 #define FIELDSET_H
 #include "FieldSet_fwd.h"
 #include <Common/QuickFAST_Export.h>
-#include <Messages/DecodedFields.h>
+#include <Messages/MessageBuilder.h>
 #include <Messages/MessageField.h>
 #include <Messages/Field.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief Internal representation of a set of fields to be encoded or decoded.
     class QuickFAST_Export FieldSet
-      : public DecodedFields
+      : public MessageBuilder
     {
       FieldSet();
       FieldSet(const FieldSet&);
@@ -128,7 +128,7 @@ namespace QuickFAST{
       }
 
       /// @brief act as a factory to create new fields sets to be nested within this one
-      virtual DecodedFields * createdNestedFields(size_t size)const;
+      virtual MessageBuilder * createdNestedFields(size_t size)const;
 
 
       /// @brief For DotNet: get everything in one call

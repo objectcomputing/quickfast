@@ -12,6 +12,11 @@
 #include <Examples/StopWatch.h>
 #include <Examples/MessageInterpreter.h>
 
+
+//////////////
+// temp debugging
+#include <Codecs/MulticastReceiver.h>
+
 using namespace QuickFAST;
 using namespace Examples;
 
@@ -186,8 +191,9 @@ MulticastInterpreter::applyArgs()
     if(ok)
     {
       Codecs::XMLTemplateParser parser;
+      templateRegistry_ = parser.parse(templateFile_);
       decoder_ = new Codecs::MulticastDecoder(
-        parser.parse(templateFile_),
+        templateRegistry_,
         multicastAddressName_,
         listenAddressName_,
         portNumber_);
@@ -247,11 +253,38 @@ MulticastInterpreter::applyArgs()
   return ok;
 }
 
+#if 1
+#include <Codecs/MulticastReceiver.h>
+#include <Codecs/MessageConsumer.h>
+#include <Codecs/BufferDecoder.h>
+#endif
+typedef Codecs::BufferDecoder<
+  Messages::Message,
+  Codecs::MessageConsumer,
+  Codecs::DataSourceBuffer> DecoderType;
+
 int
 MulticastInterpreter::run()
 {
   int result = 0;
+
+
+
+
+
   Codecs::MessageConsumerPtr consumer(new MessageInterpreter(*outputFile_));
+#if 1
+/// TESTING
+  Codecs::MulticastReceiver receiver(
+    listenAddressName_,
+    multicastAddressName_,
+    portNumber_);
+
+  QuickFAST::Codecs::BufferConsumerPtr bd(
+    new DecoderType(templateRegistry_, consumer));
+  receiver.start(bd, 5000);
+#endif
+
   decoder_->start(consumer);
 
   try

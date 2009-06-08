@@ -60,6 +60,7 @@ namespace QuickFAST{
       bool echoMessage_;
       bool echoField_;
 
+      Codecs::TemplateRegistryPtr templateRegistry_;
       Codecs::MulticastDecoder * decoder_;
 
     };

@@ -42,7 +42,7 @@ namespace QuickFASTDotNet{
 
           FTManagedMessage^ message = gcnew FTManagedMessage(maxFieldCount_);
           QuickFAST::Codecs::DataSource & source = dataSource_.GetRef();
-          QuickFAST::Messages::DecodedFields & messageRef = message->FieldSetRef;
+          QuickFAST::Messages::MessageBuilder & messageRef = message->FieldSetRef;
 
           if(resetOnMessage_)
           {

@@ -32,7 +32,7 @@ FieldInstructionGroup::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   bool present = true;
 

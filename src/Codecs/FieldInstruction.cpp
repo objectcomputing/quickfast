@@ -82,7 +82,7 @@ FieldInstruction::decodeConstant(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   decoder.reportFatal("[ERR S2]", "Const Field Operator not supported for this data type.");
   return false;
@@ -93,7 +93,7 @@ FieldInstruction::decodeDefault(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   decoder.reportFatal("[ERR S2]", "Default Field Operator not supported for this data type.");
   return false;
@@ -104,7 +104,7 @@ FieldInstruction::decodeCopy(
     Codecs::DataSource & source,
     Codecs::PresenceMap & pmap,
     Codecs::Decoder & decoder,
-    Messages::DecodedFields & fieldSet) const
+    Messages::MessageBuilder & fieldSet) const
 {
   decoder.reportFatal("[ERR S2]", "Copy Field Operator not supported for this data type.");
   return false;
@@ -117,7 +117,7 @@ FieldInstruction::decodeDelta(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   decoder.reportFatal("[ERR S2]", "Delta Field Operator not supported for this data type.");
   return false;
@@ -128,7 +128,7 @@ FieldInstruction::decodeIncrement(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   decoder.reportFatal("[ERR S2]", "Increment Field Operator not supported for this data type.");
   return false;
@@ -139,7 +139,7 @@ FieldInstruction::decodeTail(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   decoder.reportFatal("[ERR S2]", "Tail Field Operator not supported for this data type.");
   return false;

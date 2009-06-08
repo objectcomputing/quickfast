@@ -8,7 +8,7 @@
 #include <Codecs/PresenceMap.h>
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/FieldInstruction.h>
-#include <Messages/DecodedFields.h>
+#include <Messages/MessageBuilder.h>
 //#include <Messages/Message.h>
 #include <Common/Profiler.h>
 
@@ -24,7 +24,7 @@ Decoder::Decoder(Codecs::TemplateRegistryPtr registry)
 bool
 Decoder::decodeMessage(
    DataSource & source,
-   Messages::DecodedFields & message)
+   Messages::MessageBuilder & message)
 {
   PROFILE_POINT("decode");
   source.beginMessage();
@@ -34,7 +34,7 @@ Decoder::decodeMessage(
 bool
 Decoder::decodeSegment(
    DataSource & source,
-   Messages::DecodedFields & fieldSet)
+   Messages::MessageBuilder & fieldSet)
 {
   Codecs::PresenceMap pmap(getTemplateRegistry()->presenceMapBits());
   if(this->verboseOut_)
@@ -86,7 +86,7 @@ void
 Decoder::decodeGroup(
   DataSource & source,
   Codecs::SegmentBodyCPtr group,
-  Messages::DecodedFields & fieldSet)
+  Messages::MessageBuilder & fieldSet)
 {
   size_t presenceMapBits = group->presenceMapBitCount();
   Codecs::PresenceMap pmap(presenceMapBits);
@@ -116,7 +116,7 @@ Decoder::decodeSegmentBody(
   DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::SegmentBodyCPtr segment, //todo: reference to avoid copy?
-  Messages::DecodedFields & fieldSet)
+  Messages::MessageBuilder & fieldSet)
 {
   fieldSet.setApplicationType(
     segment->getApplicationType(),

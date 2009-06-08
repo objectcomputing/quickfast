@@ -25,7 +25,7 @@ namespace QuickFAST{
 
       ////////////////////////////
       // Implement MessageConsumer
-      virtual bool consumeMessage(Messages::DecodedFields & message);
+      virtual bool consumeMessage(Messages::MessageBuilder & message);
       virtual bool wantLog(unsigned short level);
       virtual bool logMessage(unsigned short level, const std::string & logMessage);
       virtual bool reportDecodingError(const std::string & errorMessage);

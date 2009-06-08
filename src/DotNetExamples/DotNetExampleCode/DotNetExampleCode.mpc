@@ -1,10 +1,8 @@
 project(*): QuickFASTDotNetApplication {
   requires += dotnet
   sharedname = DotNetExampleCode
-
-  specific(!vc8, !vc9) {
-    exeout = $(QUICKFAST_ROOT)/bin
-  }
+  libs += QuickFASTDotNet
+  after += QuickFASTDotNet
 
   specific(vc8, vc9) {
     Release::exeout = $(QUICKFAST_ROOT)/Output/Release

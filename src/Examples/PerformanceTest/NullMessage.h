@@ -6,13 +6,13 @@
 #endif
 #ifndef NULLMESSAGE_H
 #define NULLMESSAGE_H
-#include <Messages/DecodedFields.h>
+#include <Messages/MessageBuilder.h>
 #include <Common/Types.h>
 namespace QuickFAST{
   namespace Examples{
     /// @brief Internal representation of a Null Message
     /// @todo: consider typedef FieldSet Message
-    class NullMessage : public Messages::DecodedFields
+    class NullMessage : public Messages::MessageBuilder
     {
       NullMessage();
     public:
@@ -30,7 +30,7 @@ namespace QuickFAST{
       virtual void setApplicationType(const std::string & type, const std::string & ns);
       virtual const std::string & getApplicationType()const;
       virtual const std::string & getApplicationTypeNs()const;
-      virtual Messages::DecodedFields * createdNestedFields(size_t size)const;
+      virtual Messages::MessageBuilder * createdNestedFields(size_t size)const;
     private:
       int size_;
       std::string applicationType_;
@@ -51,7 +51,7 @@ namespace QuickFAST{
       //////////////////////////////////////
       // Implement MessageConsumer Interface
       virtual bool consumeMessage(Examples::NullMessage & message);
-      virtual bool consumeMessage(Messages::DecodedFields & message);
+      virtual bool consumeMessage(Messages::MessageBuilder & message);
       virtual bool wantLog(unsigned short level);
       virtual bool logMessage(unsigned short level, const std::string & logMessage);
       virtual bool reportDecodingError(const std::string & errorMessage);

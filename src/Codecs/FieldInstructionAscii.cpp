@@ -66,7 +66,7 @@ FieldInstructionAscii::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeNop");
   // note NOP never uses pmap.  It uses a null value instead for optional fields
@@ -88,7 +88,7 @@ FieldInstructionAscii::decodeConstant(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeConstant");
   if(isMandatory())
@@ -118,7 +118,7 @@ FieldInstructionAscii::decodeDefault(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeDefault");
   if(pmap.checkNextField())
@@ -157,7 +157,7 @@ FieldInstructionAscii::decodeCopy(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeCopy");
 
@@ -207,7 +207,7 @@ FieldInstructionAscii::decodeDelta(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeDelta");
   int32 deltaLength;
@@ -284,7 +284,7 @@ FieldInstructionAscii::decodeTail(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeTail");
   if(pmap.checkNextField())

@@ -56,7 +56,7 @@ FieldInstructionDecimal::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("decimal::decodeNop");
   NESTED_PROFILE_POINT(d,"decimal::AllocateFieldSet");
@@ -128,7 +128,7 @@ FieldInstructionDecimal::decodeConstant(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("decimal::decodeConstant");
   if(isMandatory() || pmap.checkNextField())
@@ -146,7 +146,7 @@ FieldInstructionDecimal::decodeDefault(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("decimal::decodeDefault");
   if(pmap.checkNextField())
@@ -190,7 +190,7 @@ FieldInstructionDecimal::decodeCopy(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("decimal::decodeCopy");
   exponent_t exponent = 0;
@@ -285,7 +285,7 @@ FieldInstructionDecimal::decodeDelta(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("decimal::decodeDelta");
   int64 exponentDelta;

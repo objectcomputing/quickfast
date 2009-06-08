@@ -90,7 +90,7 @@ FieldInstructionBitMap::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   // note NOP never uses pmap.  It uses a null value instead for optional fields
   // so it's always safe to do the basic decode.

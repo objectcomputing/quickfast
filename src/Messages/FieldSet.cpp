@@ -123,7 +123,7 @@ FieldSet::getIdentity(const std::string &name, FieldIdentityCPtr & identity) con
   return false;
 }
 
-DecodedFields *
+MessageBuilder *
 FieldSet::createdNestedFields(size_t size)const
 {
   return new FieldSet(size);

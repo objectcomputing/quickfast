@@ -2,6 +2,8 @@ project(*): QuickFASTDotNetExample {
   requires += dotnet
   exename = DecodingPerformance
   managed = 1
+  libs += QuickFASTDotNet
+  after += QuickFASTDotNet
 
   specific {
     guid = 68E1B016-014B-4A67-A3FE-D974A01EB547
