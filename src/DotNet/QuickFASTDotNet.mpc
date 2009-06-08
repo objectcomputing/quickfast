@@ -9,7 +9,7 @@ project(*) : boost_base {
   pch_source = Stdafx.cpp
 
   specific {
-    guid = 38BCB440-725D-4BDC-9BDD-CA5D76AACAE7
+    guid = 87F297F5-2B8A-4D08-A408-7E049B50211D
     Release::libout = $(QUICKFAST_ROOT)/Output/Release
     Debug::libout = $(QUICKFAST_ROOT)/Output/Debug
 
