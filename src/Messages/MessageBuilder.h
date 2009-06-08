@@ -4,20 +4,20 @@
 #ifdef _MSC_VER
 # pragma once
 #endif
-#ifndef DECODEDFIELDS_H
-#define DECODEDFIELDS_H
-#include "DecodedFields_fwd.h"
+#ifndef MESSAGEBUILDER_H
+#define MESSAGEBUILDER_H
+#include "MessageBuilder_fwd.h"
 #include <Common/QuickFAST_Export.h>
 #include <Messages/MessageField.h>
 #include <Messages/Field_fwd.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief Internal representation of a set of fields to be encoded or decoded.
-    class DecodedFields{
+    class MessageBuilder{
     public:
 
       /// @brief Virtual destructor
-      virtual ~DecodedFields(){};
+      virtual ~MessageBuilder(){};
 
       /// @brief clear current contents of the field set
       ///
@@ -25,7 +25,7 @@ namespace QuickFAST{
       /// @param capacity is expected number of fields (0 is no change)
       virtual void clear(size_t capacity = 0)  = 0;
 
-      /// @brief insure the DecodedFields can hold the expected number of fields
+      /// @brief insure the MessageBuilder can hold the expected number of fields
       /// @param capacity is expected number of fields.
       virtual void reserve(size_t capacity)  = 0;
 
@@ -62,10 +62,10 @@ namespace QuickFAST{
 
       /// @brief create an empty version of this container for nexted fields./
       /// @param size is the number of fields to expect in the new container
-      virtual DecodedFields * createdNestedFields(size_t size)const  = 0;
+      virtual MessageBuilder * createdNestedFields(size_t size)const  = 0;
 
     private:
     };
   }
 }
-#endif // DECODEDFIELDS_H
+#endif // MESSAGEBUILDER_H
