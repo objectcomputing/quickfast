@@ -9,7 +9,6 @@
 #include "MessageBuilder_fwd.h"
 #include <Common/QuickFAST_Export.h>
 #include <Messages/MessageField.h>
-#include <Messages/Field_fwd.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief Internal representation of a set of fields to be encoded or decoded.
