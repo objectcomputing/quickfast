@@ -1,0 +1,65 @@
+// Copyright (c) 2009, Object Computing, Inc.
+// All rights reserved.
+// See the file license.txt for licensing information.
+//
+#ifndef MULTICASTRECEIVERHANDLE_H
+#define MULTICASTRECEIVERHANDLE_H
+#include <Common/QuickFAST_Export.h>
+#include <Codecs/BufferConsumer_fwd.h>
+
+namespace QuickFAST{
+  namespace Codecs {
+
+    class MulticastReceiverHandle_i;
+
+    /// @brief Expose the interface to a MulticastReceiver without exposing the interface
+    ///
+    /// This insulates higher level code from knowing any of the implementation details
+    /// of the multicast Receiver.  In particular including boost::asio
+    /// in managed code leads to great trauma and knashing of teeth.
+    class QuickFAST_Export MulticastReceiverHandle
+    {
+    public:
+      /// @brief construct a multicast receiver given multicast information and a consumer
+      /// @param multicastAddressName multicast address as a text string
+      /// @param listenAddressName listen address as a text string
+      /// @param portNumber port number
+      MulticastReceiverHandle(
+        const std::string & multicastAddressName,
+        const std::string & listenAddressName,
+        unsigned short portNumber);
+      ~MulticastReceiverHandle();
+      ///////////////////////////////////////
+      // expose the MulticastReceiver methods
+
+      /// @brief How many packetd have been decoded.
+      /// @returns the number of messages that have been decoded.
+      size_t packetCount() const;
+
+      /// @brief Start accepting packets.  Returns immediately
+      /// @param bufferConsumer accepts and processes the filled buffers
+      /// @param bufferSize determines the maximum size of an incoming packet
+      /// @param bufferCount is how many input buffers to use
+      void start(
+        BufferConsumerPtr  bufferConsumer,
+        size_t bufferSize = 5000,
+        size_t bufferCount = 2
+        );
+
+      /// @brief Stop accepting packets
+      ///
+      /// Returns immediately, however decoding may continue until
+      /// the decoder reaches a clean stopping point.  In particular
+      /// the MessageConsumer may receive additional messages after
+      /// stop is called.
+      ///
+      /// MessageConsumer::decodingStopped() will be called when
+      /// the stop request is complete.
+      void stop();
+
+    private:
+      MulticastReceiverHandle_i * pImpl_;
+    };
+  }
+}
+#endif // MULTICASTRECEIVERHANDLE_H

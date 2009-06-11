@@ -71,17 +71,18 @@ namespace QuickFAST{
         return packetCount_;
       }
 
-
       /// @brief Start accepting packets.  Returns immediately
       /// @param bufferConsumer accepts and processes the filled buffers
       /// @param bufferSize determines the maximum size of an incoming packet
-      void start(BufferConsumerPtr  bufferConsumer,
-        size_t bufferSize = 5000)
+      void start(
+        BufferConsumerPtr  bufferConsumer,
+        size_t bufferSize = 5000,
+        size_t bufferCount = 2)
       {
         consumer_ = bufferConsumer;
         bufferSize_ = bufferSize;
 
-        // todo configure # buffers
+        // todo configure # buffers/ honor bufferCount
         buffer1_.reset(new unsigned char[bufferSize_]);
         buffer2_.reset(new unsigned char[bufferSize_]);
 
@@ -96,7 +97,6 @@ namespace QuickFAST{
           boost::asio::ip::multicast::join_group(multicastAddress_));
         startReceive(&buffer1_, &buffer2_);
       }
-
 
       /// @brief Stop accepting packets
       ///

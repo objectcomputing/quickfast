@@ -1,3 +1,13 @@
+Thu Jun 11 17:41:16 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MulticastReceiver.h:
+        * src/Codecs/MulticastReceiverHandle.h:
+        * src/Codecs/MulticastReceiverHandle.cpp:
+        * src/Codecs/MulticastReceiver_fwd.h:
+        Add preliminary support for configuring # of buffers (not working yet.)
+        Define MulticastReceiverHandle to hide MulticastReceiver implementation
+        [mostly from .NET]
+
 Mon Jun  8 21:55:29 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * QuickFASTDotNetApplication.mpb:
