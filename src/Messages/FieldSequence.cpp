@@ -21,17 +21,10 @@ FieldSequence::~FieldSequence()
 uint32
 FieldSequence::toUInt32()const
 {
-  return sequence_->size();
+  return static_cast<uint32>(sequence_->size());
 }
 
-#if 0
-void
-FieldSequence::setSequence(Messages::SequenceCPtr sequence)
-{
-  sequence_ = sequence;
-  valid_ = true;
-}
-#endif
+
 
 const Messages::SequenceCPtr &
 FieldSequence::toSequence() const

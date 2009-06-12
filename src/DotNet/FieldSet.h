@@ -50,7 +50,7 @@ namespace QuickFASTDotNet{
       /// @brief number of fields in this field set.
       property int Count
       {
-        virtual int get() { return spFieldSet_->size(); }
+        virtual int get() { return int(spFieldSet_->size()); }
       }
 
       virtual TEnumerator^ GetEnumerator() = System::Collections::IEnumerable::GetEnumerator

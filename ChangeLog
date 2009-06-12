@@ -1,3 +1,15 @@
+Fri Jun 12 15:46:45 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * QuickFASTDotNetApplication.mpb:
+        * src/DotNetTests/DecodingPerformance/DecodingPerformanceDotNet.mpc:
+        don't use lib += for DotNet libs
+
+        * src/DotNet/FieldSet.h:
+        * src/DotNet/Sequence.cpp:
+        * src/DotNet/TemplateRegistry.h:
+        * src/Messages/FieldSequence.cpp:
+        Avoid warnings for 64 bit build.
+
 Thu Jun 11 17:41:16 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MulticastReceiver.h:

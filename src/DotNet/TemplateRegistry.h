@@ -21,7 +21,7 @@ namespace QuickFASTDotNet {
       /// @brief The number of templates in the registry.
       property unsigned int Size
       {
-        unsigned int get() { return templateRegistry_->size(); }
+        unsigned int get() { return unsigned int(templateRegistry_->size()); }
       }
 
       /// @brief Returns the maximum number of fields that will be produced by any template in the registry.

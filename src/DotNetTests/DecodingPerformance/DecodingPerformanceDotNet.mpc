@@ -2,7 +2,6 @@ project(*): QuickFASTDotNetExample {
   requires += dotnet
   exename = DecodingPerformance
   managed = 1
-  libs += QuickFASTDotNet
   after += QuickFASTDotNet
 
   specific {

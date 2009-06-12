@@ -35,7 +35,7 @@ namespace QuickFASTDotNet{
 
     int Sequence::Count::get()
     {
-      return sequencePtr_->size();
+      return int(sequencePtr_->size());
     }
 
     System::Collections::IEnumerator^ Sequence::GetEnumerator()
