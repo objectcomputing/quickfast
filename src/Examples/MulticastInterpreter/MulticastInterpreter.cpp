@@ -268,23 +268,7 @@ MulticastInterpreter::run()
 {
   int result = 0;
 
-
-
-
-
   Codecs::MessageConsumerPtr consumer(new MessageInterpreter(*outputFile_));
-#if 1
-/// TESTING
-  Codecs::MulticastReceiver receiver(
-    listenAddressName_,
-    multicastAddressName_,
-    portNumber_);
-
-  QuickFAST::Codecs::BufferConsumerPtr bd(
-    new DecoderType(templateRegistry_, consumer));
-  receiver.start(bd, 5000);
-#endif
-
   decoder_->start(consumer);
 
   try

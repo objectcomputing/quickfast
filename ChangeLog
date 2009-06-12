@@ -1,3 +1,7 @@
+Fri Jun 12 20:41:36 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+        Remove debug code
+
 Fri Jun 12 15:46:45 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * QuickFASTDotNetApplication.mpb:
