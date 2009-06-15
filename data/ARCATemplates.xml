@@ -1,22 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!-- 
-Copyright (c) 2009, Object Computing, Inc.
-All rights reserved.
-See the file license.txt for licensing information.
-
-Information from ArcaBook_Multicast_Spec_.pdf was used to develop these XML 
-templates.  There are some errors in the document.  The ARCA sample source code 
-was used as the definitive reference to resolve any descrepancies.
-
-About AB_MSG_TYPE:  Notice that AB_MSG_TYPE appears in an ARCA message 
-immediately after the presence map.  In normal FAST, this is where the 
-template ID appears.  This XML takes advantage of that by defining 
-AB_MSG_TYPE as a constant field.  The template ID consumes the presence map 
-bit which will always be a one indicating that the template ID/MSG_TYPE is 
-in the data stream.
--->
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <templates xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
-  
+
   <template name="SequenceNumberReset" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
     <uInt16 name="AB_MSG_TYPE" id="0">
       <constant value="1"/>
@@ -26,7 +10,7 @@ in the data stream.
       <increment/>
     </uInt32>
   </template>
-  
+
   <template name="SymbolIndexMapping" id="35" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
     <uInt16 name="AB_MSG_TYPE" id="0">
       <constant value="35"/>
@@ -48,7 +32,7 @@ in the data stream.
       <copy/>
     </uInt8>
     <string name="AB_SYMBOL_STRING" id="131">
-      <arcaNOP/>
+      <arca_nop/>
     </string>
   </template>
 
@@ -95,10 +79,10 @@ in the data stream.
     </uInt16>
     <filler name="FILLER_12" id="120"/>
     <string name="AB_FIRM_STRING" id="132">
-      <arcaNOP/>
+      <arca_nop/>
     </string>
   </template>
-  
+
   <template name="Add" id="100" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
     <uInt16 name="AB_MSG_TYPE" id="0">
       <constant value="100"/>
@@ -121,9 +105,9 @@ in the data stream.
     <uInt32 name="AB_PRICE" id="60">
       <copy/>
     </uInt32>
-    <uInt32 name="AB_PRICE_SCALE" id="70">
+    <uInt8 name="AB_PRICE_SCALE" id="70">
       <copy/>
-    </uInt32>
+    </uInt8>
     <string name="AB_BUY_SELL" id="80">
       <copy/>
     </string>
@@ -163,9 +147,9 @@ in the data stream.
     <uInt32 name="AB_PRICE" id="60">
       <copy/>
     </uInt32>
-    <uInt32 name="AB_PRICE_SCALE" id="70">
+    <uInt8 name="AB_PRICE_SCALE" id="70">
       <copy/>
-    </uInt32>
+    </uInt8>
     <string name="AB_BUY_SELL" id="80">
       <copy/>
     </string>
@@ -244,9 +228,9 @@ in the data stream.
     <uInt32 name="AB_PRICE" id="60">
       <copy/>
     </uInt32>
-    <uInt32 name="AB_PRICE_SCALE" id="70">
+    <uInt8 name="AB_PRICE_SCALE" id="70">
       <copy/>
-    </uInt32>
+    </uInt8>
     <string name="AB_AUCTION_TYPE" id="81">
       <copy/>
     </string>
@@ -263,8 +247,8 @@ in the data stream.
       <copy/>
     </uInt8>
     <uInt32 name="AB_MKT_IMBALANCE" id="130">
-      <arcaNOP/>
+      <arca_nop/>
     </uInt32>
   </template>
-  
+
 </templates>

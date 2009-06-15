@@ -38,6 +38,16 @@ project(FileToMulticast) : boost_base, boost_filesystem, boost_system, boost_thr
   }
 }
 
+project(PCapToMulticast) : boost_base, boost_filesystem, boost_system, boost_thread, QuickFASTExample {
+  exename = PCapToMulticast
+  Source_Files {
+    PCapToMulticast
+  }
+  Header_Files {
+    PCapToMulticast
+  }
+}
+
 project(MulticastInterpreter) : boost_base, boost_filesystem, boost_system, boost_thread, QuickFASTExample {
   exename = MulticastInterpreter
   Source_Files {

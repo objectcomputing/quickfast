@@ -46,6 +46,26 @@ namespace QuickFAST{
         size_t bufferCount = 2
         );
 
+      /// @brief service the multicast receiver event loop
+      ///
+      /// Call start() before calling this method.
+      ///
+      /// If useThisThread is false, returns "immediately" however incoming
+      ///  messages may arrive before this method returns.  Be prepared.
+      ///  Also if useThisThread is false, the application should call stop()
+      ///  then joinThreads(), but before exiting.
+      ///
+      /// If useThisThread is true, does not return until receiving is stopped.
+      ///
+      /// @see joinThreads();
+      void run(unsigned short additionalThreads, bool useThisThread);
+
+    /// @brief wait for the threads started by run() when useThisThread is false
+    ///
+    /// You should probably call stop() first.
+    /// @see startThreads();
+      void joinThreads();
+
       /// @brief Stop accepting packets
       ///
       /// Returns immediately, however decoding may continue until

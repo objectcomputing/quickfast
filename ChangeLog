@@ -1,3 +1,27 @@
+Mon Jun 15 14:05:53 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * data/ARCATemplates.xml:
+        Revise in response to tests against live data
+
+        * src/Codecs/MulticastReceiverHandle.h:
+        * src/Codecs/MulticastReceiverHandle.cpp:
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/Common/AsioService.h:
+        * src/Common/AsioService.cpp:
+        * src/Common/Exceptions.h:
+        * src/Messages/Field.cpp:
+        Improve error messages
+
+        * src/Examples/Examples.mpc:
+        * src/Examples/PCapToMulticast:
+        * src/Examples/PCapToMulticast/PCapToMulticast.h:
+        * src/Examples/PCapToMulticast/PCapToMulticast.cpp:
+        * src/Examples/PCapToMulticast/main.cpp:
+        Add new application.  Read a pcap formant file
+        (the format used by wireshark among others)
+        and multicast the packets in the file.
+
+
 Fri Jun 12 20:41:36 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
         * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
         Remove debug code

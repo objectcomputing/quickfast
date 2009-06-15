@@ -17,6 +17,11 @@ namespace QuickFAST{
       : std::domain_error(reason.c_str())
     {
     }
+
+    UnsupportedConversion(const std::string & actualType, const std::string & desiredType)
+      : std::domain_error((actualType + " cannot be converted to " + desiredType).c_str())
+    {
+    }
   };
 
   /// @brief Exception to be thrown when a value does not fit in a field

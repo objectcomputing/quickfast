@@ -296,24 +296,36 @@ namespace
       const SAXParseException& exc
       )
     {
+      std::stringstream msg;
       boost::scoped_array<char> msgRaw(XMLString::transcode(exc.getMessage()));
-      throw TemplateDefinitionError(msgRaw.get());
+      msg << "Template file warning at line " << exc.getLineNumber()
+          << " column " << exc.getColumnNumber()
+          << ": " << msgRaw.get();
+      throw TemplateDefinitionError(msg.str());
     }
 
     virtual void error(
       const SAXParseException& exc
       )
     {
+      std::stringstream msg;
       boost::scoped_array<char> msgRaw(XMLString::transcode(exc.getMessage()));
-      throw TemplateDefinitionError(msgRaw.get());
+      msg << "Template file error at line " << exc.getLineNumber()
+          << " column " << exc.getColumnNumber()
+          << ": " << msgRaw.get();
+      throw TemplateDefinitionError(msg.str());
     }
 
     virtual void fatalError(
       const SAXParseException& exc
       )
     {
+      std::stringstream msg;
       boost::scoped_array<char> msgRaw(XMLString::transcode(exc.getMessage()));
-      throw TemplateDefinitionError(msgRaw.get());
+      msg << "Template file fatal error at line " << exc.getLineNumber()
+          << " column " << exc.getColumnNumber()
+          << ": " << msgRaw.get();
+      throw TemplateDefinitionError(msg.str());
     }
 
   private:

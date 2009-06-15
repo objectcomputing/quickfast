@@ -63,6 +63,17 @@ MulticastReceiverHandle::start(
   pImpl_->ptr_->start(bufferConsumer, bufferSize, bufferCount);
 }
 
+void
+MulticastReceiverHandle::run(unsigned short additionalThreads, bool useThisThread)
+{
+  pImpl_->ptr_->runThreads(additionalThreads, useThisThread);
+}
+
+void
+MulticastReceiverHandle::joinThreads()
+{
+  pImpl_->ptr_->joinThreads();
+}
 
 void
 MulticastReceiverHandle::stop()
