@@ -1,13 +1,12 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0"?>
 <templates xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
 
   <template name="SequenceNumberReset" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
     <uInt16 name="AB_MSG_TYPE" id="0">
       <constant value="1"/>
     </uInt16>
-    <filler name="AB_STOCK_IDX" id="10"/>
     <uInt32 name="AB_SEQUENCE" id="20">
-      <increment/>
+      <increment pmap="2"/>
     </uInt32>
   </template>
 
@@ -16,23 +15,13 @@
       <constant value="35"/>
     </uInt16>
     <uInt16 name="AB_STOCK_IDX" id="10">
-      <copy/>
+      <copy pmap="1"/>
     </uInt16>
-    <filler name="FILLER_02" id="20"/>
-    <filler name="FILLER_03" id="30"/>
-    <filler name="FILLER_04" id="40"/>
-    <filler name="FILLER_05" id="50"/>
-    <filler name="FILLER_06" id="60"/>
-    <filler name="FILLER_07" id="70"/>
-    <filler name="FILLER_08" id="80"/>
-    <filler name="FILLER_09" id="90"/>
-    <filler name="FILLER_10" id="100"/>
-    <filler name="FILLER_11" id="110"/>
     <uInt8 name="AB_SESSION_ID" id="120">
-      <copy/>
+      <copy pmap="12"/>
     </uInt8>
     <string name="AB_SYMBOL_STRING" id="131">
-      <arca_nop/>
+      <nop/>
     </string>
   </template>
 
@@ -41,22 +30,13 @@
       <constant value="36"/>
     </uInt16>
     <uInt16 name="AB_STOCK_IDX" id="10">
-      <copy/>
+      <copy pmap="1"/>
     </uInt16>
     <uInt32 name="AB_SEQUENCE" id="20">
       <increment/>
     </uInt32>
-    <filler name="FILLER_03" id="30"/>
-    <filler name="FILLER_04" id="40"/>
-    <filler name="FILLER_05" id="50"/>
-    <filler name="FILLER_06" id="60"/>
-    <filler name="FILLER_07" id="70"/>
-    <filler name="FILLER_08" id="80"/>
-    <filler name="FILLER_09" id="90"/>
-    <filler name="FILLER_10" id="100"/>
-    <filler name="FILLER_11" id="110"/>
     <uInt8 name="AB_SESSION_ID" id="120">
-      <copy/>
+      <copy pmap="12"/>
     </uInt8>
   </template>
 
@@ -64,22 +44,11 @@
     <uInt16 name="AB_MSG_TYPE" id="0">
       <constant value="37"/>
     </uInt16>
-    <filler name="FILLER_01" id="10"/>
-    <filler name="FILLER_02" id="20"/>
-    <filler name="FILLER_03" id="30"/>
-    <filler name="FILLER_04" id="40"/>
-    <filler name="FILLER_05" id="50"/>
-    <filler name="FILLER_06" id="60"/>
-    <filler name="FILLER_07" id="70"/>
-    <filler name="FILLER_08" id="80"/>
-    <filler name="FILLER_09" id="90"/>
-    <filler name="FILLER_10" id="100"/>
     <uInt16 name="AB_FIRM_ID" id="110">
-      <copy/>
+      <copy pmap="11"/>
     </uInt16>
-    <filler name="FILLER_12" id="120"/>
     <string name="AB_FIRM_STRING" id="132">
-      <arca_nop/>
+      <nop/>
     </string>
   </template>
 
@@ -88,40 +57,40 @@
       <constant value="100"/>
     </uInt16>
     <uInt16 name="AB_STOCK_IDX" id="10">
-      <copy/>
+      <copy pmap="1"/>
     </uInt16>
     <uInt32 name="AB_SEQUENCE" id="20">
       <increment/>
     </uInt32>
     <uInt32 name="AB_TIME" id="30">
-      <copy/>
+      <copy pmap="3"/>
     </uInt32>
     <uInt32 name="AB_ORDER_ID" id="40">
-      <copy/>
+      <copy pmap="4"/>
     </uInt32>
     <uInt32 name="AB_VOLUME" id="50">
-      <copy/>
+      <copy pmap="5"/>
     </uInt32>
     <uInt32 name="AB_PRICE" id="60">
-      <copy/>
+      <copy pmap="6"/>
     </uInt32>
     <uInt8 name="AB_PRICE_SCALE" id="70">
-      <copy/>
+      <copy pmap="7"/>
     </uInt8>
-    <string name="AB_BUY_SELL" id="80">
-      <copy/>
-    </string>
-    <string name="AB_EXCH_ID" id="90">
-      <copy/>
-    </string>
-    <string name="AB_SECURITY_TYPE" id="100">
-      <copy/>
-    </string>
+    <uInt8 name="AB_BUY_SELL" id="80">
+      <copy pmap="8"/>
+    </uInt8>
+    <uInt8 name="AB_EXCH_ID" id="90">
+      <copy pmap="9"/>
+    </uInt8>
+    <uInt8 name="AB_SECURITY_TYPE" id="100">
+      <copy pmap="10"/>
+    </uInt8>
     <uInt16 name="AB_FIRM_ID" id="110">
-      <copy/>
+      <copy pmap="11"/>
     </uInt16>
     <uInt8 name="AB_SESSION_ID" id="120">
-      <copy/>
+      <copy pmap="12"/>
     </uInt8>
   </template>
 
@@ -130,40 +99,40 @@
       <constant value="101"/>
     </uInt16>
     <uInt16 name="AB_STOCK_IDX" id="10">
-      <copy/>
+      <copy pmap="1"/>
     </uInt16>
     <uInt32 name="AB_SEQUENCE" id="20">
-      <increment/>
+      <increment pmap="2"/>
     </uInt32>
     <uInt32 name="AB_TIME" id="30">
-      <copy/>
+      <copy pmap="3"/>
     </uInt32>
     <uInt32 name="AB_ORDER_ID" id="40">
-      <copy/>
+      <copy pmap="4"/>
     </uInt32>
     <uInt32 name="AB_VOLUME" id="50">
-      <copy/>
+      <copy pmap="5"/>
     </uInt32>
     <uInt32 name="AB_PRICE" id="60">
-      <copy/>
+      <copy pmap="6"/>
     </uInt32>
     <uInt8 name="AB_PRICE_SCALE" id="70">
-      <copy/>
+      <copy pmap="7"/>
     </uInt8>
-    <string name="AB_BUY_SELL" id="80">
-      <copy/>
-    </string>
-    <string name="AB_EXCH_ID" id="90">
-      <copy/>
-    </string>
-    <string name="AB_SECURITY_TYPE" id="100">
-      <copy/>
-    </string>
+    <uInt8 name="AB_BUY_SELL" id="80">
+      <copy pmap="8"/>
+    </uInt8>
+    <uInt8 name="AB_EXCH_ID" id="90">
+      <copy pmap="9"/>
+    </uInt8>
+    <uInt8 name="AB_SECURITY_TYPE" id="100">
+      <copy pmap="10"/>
+    </uInt8>
     <uInt16 name="AB_FIRM_ID" id="110">
-      <copy/>
+      <copy pmap="11"/>
     </uInt16>
     <uInt8 name="AB_SESSION_ID" id="120">
-      <copy/>
+      <copy pmap="12"/>
     </uInt8>
   </template>
 
@@ -172,83 +141,91 @@
       <constant value="102"/>
     </uInt16>
     <uInt16 name="AB_STOCK_IDX" id="10">
-      <copy/>
+      <copy pmap="1"/>
     </uInt16>
     <uInt32 name="AB_SEQUENCE" id="20">
-      <increment/>
+      <increment pmap="2"/>
     </uInt32>
     <uInt32 name="AB_TIME" id="30">
-      <copy/>
+      <copy pmap="3"/>
     </uInt32>
     <uInt32 name="AB_ORDER_ID" id="40">
-      <copy/>
+      <copy pmap="4"/>
     </uInt32>
-    <filler name="FILLER_05" id="50"/>
-    <filler name="FILLER_06" id="60"/>
-    <filler name="FILLER_07" id="70"/>
-    <string name="AB_BUY_SELL" id="80">
-      <copy/>
-    </string>
-    <string name="AB_EXCH_ID" id="90">
-      <copy/>
-    </string>
-    <string name="AB_SECURITY_TYPE" id="100">
-      <copy/>
-    </string>
-    <uInt16 name="AB_FIRM_ID" id="110">
-      <copy/>
-    </uInt16>
-    <uInt8 name="AB_SESSION_ID" id="120">
-      <copy/>
+    <uInt8 name="AB_BUY_SELL" id="80">
+      <copy pmap="8"/>
     </uInt8>
+    <uInt8 name="AB_EXCH_ID" id="90">
+      <copy pmap="9"/>
+    </uInt8>
+    <uInt8 name="AB_SECURITY_TYPE" id="100">
+      <copy pmap="10"/>
+    </uInt8>
+    <uInt8 name="AB_SESSION_ID" id="120">
+      <copy pmap="12"/>
+    </uInt8>
+    <uInt16 name="AB_FIRM_ID" id="110">
+      <copy pmap="11"/>
+    </uInt16>
   </template>
 
   <template name="Imbalance" id="103" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+
     <uInt16 name="AB_MSG_TYPE" id="0">
       <constant value="103"/>
     </uInt16>
+
     <uInt16 name="AB_STOCK_IDX" id="10">
-      <copy/>
+      <copy pmap="1"/>
     </uInt16>
+
     <uInt32 name="AB_SEQUENCE" id="20">
-      <increment/>
+      <increment pmap="2"/>
     </uInt32>
+
     <uInt32 name="AB_TIME" id="30">
-      <copy/>
+      <copy pmap="3"/>
     </uInt32>
-    <!-- error in spec <uInt32 name="AB_ORDER_ID" id="40">
-      <copy/>
-    </uInt32>-->
-    <uInt32 name="AB_IMBALANCE" id="41">
-      <copy/>
-    </uInt32>
+
     <uInt32 name="AB_VOLUME" id="50">
-      <copy/>
+      <copy pmap="5"/>
     </uInt32>
-    <uInt32 name="AB_PRICE" id="60">
-      <copy/>
+
+    <uInt32 name="AB_IMBALANCE" id="41">
+      <copy pmap="4"/>
     </uInt32>
-    <uInt8 name="AB_PRICE_SCALE" id="70">
-      <copy/>
-    </uInt8>
-    <string name="AB_AUCTION_TYPE" id="81">
-      <copy/>
-    </string>
-    <string name="AB_EXCH_ID" id="90">
-      <copy/>
-    </string>
-    <string name="AB_SECURITY_TYPE" id="100">
-      <copy/>
-    </string>
-    <uInt16 name="AB_AUCTION_TIME" id="111">
-      <copy/>
-    </uInt16>
-    <uInt8 name="AB_SESSION_ID" id="120">
-      <copy/>
-    </uInt8>
+
     <uInt32 name="AB_MKT_IMBALANCE" id="130">
-      <arca_nop/>
+      <nop/>
     </uInt32>
+
+    <uInt32 name="AB_PRICE" id="60">
+      <copy pmap="6"/>
+    </uInt32>
+
+    <uInt8 name="AB_PRICE_SCALE" id="70">
+      <copy pmap="7"/>
+    </uInt8>
+
+    <uInt8 name="AB_AUCTION_TYPE" id="81">
+      <copy pmap="8"/>
+    </uInt8>
+
+    <uInt8 name="AB_EXCH_ID" id="90">
+      <copy pmap="9"/>
+    </uInt8>
+
+    <uInt8 name="AB_SECURITY_TYPE" id="100">
+      <copy pmap="10"/>
+    </uInt8>
+
+    <uInt8 name="AB_SESSION_ID" id="120">
+      <copy pmap="12"/>
+    </uInt8>
+
+    <uInt16 name="AB_AUCTION_TIME" id="111">
+      <copy pmap="11"/>
+    </uInt16>
   </template>
 
 </templates>

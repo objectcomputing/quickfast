@@ -1,3 +1,32 @@
+Tue Jun 16 14:16:37 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * data/ARCATemplates.xml:
+
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FieldOp.cpp:
+        * src/Codecs/FieldOpCopy.cpp:
+        * src/Codecs/PresenceMap.h:
+        * src/Codecs/PresenceMap.cpp:
+        * src/Codecs/XMLTemplateParser.cpp:
+        Ah Arca.  Never mind what your documentation says.   You actually
+        send the fields in one order and the PMAP bits in a different order.
+        Added pmap='n' attribute to operators (I may move it to field instruction)
+        Removed the filler and arca_nop field types -- they no longer make sense.
+        Added a <nop> operator in order to have a place to put pmap= (that's why
+        pmap= may move even though it makes sense as the property of an operator.)
+
+        * src/Examples/PCapToMulticast/PCapToMulticast.cpp:
+        Display hex record BEFORE asking: hit any key to send it
+        Accept 'q' from hit any key to quit.
+
+
+        * setup.cmd:
+        Because I installed Zerces 3.01 on my system.
+
+
 Mon Jun 15 14:05:53 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * data/ARCATemplates.xml:

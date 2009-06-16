@@ -101,6 +101,12 @@ namespace QuickFAST{
         valueIsDefined_ = true;
       }
 
+      void setPMapBit(size_t pmapBit)
+      {
+        pmapBit_ = pmapBit;
+        pmapBitValid_ = true;
+      }
+
       /// @brief Implement the key= attribute
       /// @param key is the value of the attribute.
       void setKey(const std::string & key)
@@ -170,6 +176,10 @@ namespace QuickFAST{
       size_t dictionaryIndex_;
       /// true if dictionaryIndex_ is valid;
       bool dictionaryIndexValid_;
+
+      size_t pmapBit_;
+      bool pmapBitValid_;
+
     };
   }
 }

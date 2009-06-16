@@ -13,7 +13,11 @@ namespace {
   void waitForEnter()
   {
     std::cout << "Hit Enter to continue:" << std::flush;
-    std::cin.get();
+    char c = std::cin.get();
+    if(c == 'q')
+    {
+      exit(1);
+    }
   }
 }
 
@@ -547,16 +551,6 @@ PcapToMulticast::sendBurst()
         nMsg_ = 0;
       }
 
-      if(verbose_)
-      {
-        std::cout << "Send message #" << nMsg_ + 1 << " of " << messageIndex_.size() << std::endl;
-        std::cout << "         to: " << multicastAddress_ << '|' << sendAddress_ << ':' << portNumber_ << std::endl;
-      }
-      if(pauseEveryMessage_)
-      {
-        waitForEnter();
-      }
-
       // then send this message
       const MessagePosition & position = messageIndex_[nMsg_];
       nMsg_ += 1;
@@ -570,11 +564,21 @@ PcapToMulticast::sendBurst()
 
       if(verbose_)
       {
+        std::cout << "Send message #" << nMsg_ + 1 << " of " << messageIndex_.size() << std::endl;
+        std::cout << "         to: " << multicastAddress_ << '|' << sendAddress_ << ':' << portNumber_ << std::endl;
+
         std::cout << "Msg:";
-        for(size_t nByte = 0; nByte < 10 && nByte < bytesRead; ++nByte)
+        for(size_t nByte = 0; /*nByte < 10 && */ nByte < bytesRead; ++nByte)
         {
-          std::cout << ' ' << std::hex << std::setw(2) << (unsigned short (buffer_[nByte]) & 0xFF) << std::dec;
+          if(nByte % 16 == 0) std::cout << std::endl;
+          std::cout << ' ' << std::hex << std::setw(2)<< std::setfill('0') << (unsigned short (buffer_[nByte]) & 0xFF) << std::dec;
         }
+        std::cout << std::endl;
+      }
+
+      if(pauseEveryMessage_)
+      {
+        waitForEnter();
       }
       socket_.send_to(boost::asio::buffer(buffer_.get(), messageLength), endpoint_);
     }

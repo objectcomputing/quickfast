@@ -289,6 +289,20 @@ namespace QuickFAST{
         Codecs::Decoder & decoder,
         Messages::MessageBuilder & fieldSet) const;
 
+      /// @brief Decode when &lt;copy> operation is specified using specific pmap bit.
+      ///
+      /// Speical support for Arca's FAST-like-ish encoding scheme.
+      /// @see decode()
+      /// @param[in] source for the FAST data
+      /// @param[in] pmapValue prefetched to  indicate field presence
+      /// @param[in] decoder driving this process
+      /// @param[out] fieldSet
+      virtual bool decodeCopy(
+        Codecs::DataSource & source,
+        bool pmapValue,
+        Codecs::Decoder & decoder,
+        Messages::MessageBuilder & fieldSet) const;
+
       /// @brief Decode when &lt;delta> operation is specified.
       /// @see decode()
       /// @param[in] source for the FAST data
@@ -312,6 +326,20 @@ namespace QuickFAST{
       virtual bool decodeIncrement(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
+        Codecs::Decoder & decoder,
+        Messages::MessageBuilder & fieldSet) const;
+
+      /// @brief Decode when &lt;increment> operation is specified.
+      /// @see decode()
+      /// Not pure because not all types support increment operator.
+      /// Default implementation throws bad operation
+      /// @param[in] source for the FAST data
+      /// @param[in] pmapValue prefetched to  indicate field presence
+      /// @param[in] decoder driving this process
+      /// @param[out] fieldSet
+      virtual bool decodeIncrement(
+        Codecs::DataSource & source,
+        bool pmapValue,
         Codecs::Decoder & decoder,
         Messages::MessageBuilder & fieldSet) const;
 

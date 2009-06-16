@@ -81,6 +81,12 @@ namespace QuickFAST{
         Codecs::Decoder & decoder,
         Messages::MessageBuilder & fieldSet) const;
 
+      virtual bool decodeCopy(
+        Codecs::DataSource & source,
+        bool pmapValue,
+        Codecs::Decoder & decoder,
+        Messages::MessageBuilder & fieldSet) const;
+
       virtual bool decodeDelta(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
@@ -90,6 +96,12 @@ namespace QuickFAST{
       virtual bool decodeIncrement(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
+        Codecs::Decoder & decoder,
+        Messages::MessageBuilder & fieldSet) const;
+
+      virtual bool decodeIncrement(
+        Codecs::DataSource & source,
+        bool pmapValue,
         Codecs::Decoder & decoder,
         Messages::MessageBuilder & fieldSet) const;
 
@@ -255,8 +267,20 @@ namespace QuickFAST{
       Codecs::Decoder & decoder,
       Messages::MessageBuilder & fieldSet) const
     {
+      return decodeCopy(source, pmap.checkNextField(), decoder, fieldSet);
+    }
+
+    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    bool
+    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    decodeCopy(
+        Codecs::DataSource & source,
+        bool pmapValue,
+        Codecs::Decoder & decoder,
+        Messages::MessageBuilder & fieldSet) const
+    {
       PROFILE_POINT("int::decodeCopy");
-      if(pmap.checkNextField())
+      if(pmapValue)
       {
         INTEGER_TYPE value = typedValue_;
         // present in stream
@@ -468,6 +492,7 @@ namespace QuickFAST{
       return true;
     }
 
+
     template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
     bool
     FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
@@ -477,8 +502,20 @@ namespace QuickFAST{
       Codecs::Decoder & decoder,
       Messages::MessageBuilder & fieldSet) const
     {
+      return decodeIncrement(source, pmap.checkNextField(), decoder, fieldSet);
+    }
+
+    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    bool
+    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    decodeIncrement(
+        Codecs::DataSource & source,
+        bool pmapValue,
+        Codecs::Decoder & decoder,
+        Messages::MessageBuilder & fieldSet) const
+    {
       PROFILE_POINT("int::decodeIncrement");
-      if(pmap.checkNextField())
+      if(pmapValue)
       {
         //PROFILE_POINT("int::decodeIncrement::present");
         INTEGER_TYPE value = 0;

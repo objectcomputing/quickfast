@@ -27,7 +27,14 @@ FieldOpCopy::decode(
   Codecs::Decoder & decoder,
   Messages::MessageBuilder & fieldSet) const
 {
-  return instruction.decodeCopy(source, pmap, decoder, fieldSet);
+  if(pmapBitValid_)
+  {
+    return instruction.decodeCopy(source, pmap.checkSpecificField(pmapBit_), decoder, fieldSet);
+  }
+  else
+  {
+    return instruction.decodeCopy(source, pmap, decoder, fieldSet);
+  }
 }
 
 void

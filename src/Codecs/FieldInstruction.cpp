@@ -110,6 +110,16 @@ FieldInstruction::decodeCopy(
   return false;
 }
 
+bool
+FieldInstruction::decodeCopy(
+  Codecs::DataSource & source,
+  bool pmapValue,
+  Codecs::Decoder & decoder,
+  Messages::MessageBuilder & fieldSet) const
+{
+  decoder.reportFatal("[ERR U93]", "Copy with specific presence map bit not supported for this data type.");
+  return false;
+}
 
 
 bool
@@ -131,6 +141,17 @@ FieldInstruction::decodeIncrement(
   Messages::MessageBuilder & fieldSet) const
 {
   decoder.reportFatal("[ERR S2]", "Increment Field Operator not supported for this data type.");
+  return false;
+}
+
+bool
+FieldInstruction::decodeIncrement(
+  Codecs::DataSource & source,
+  bool pmapValue,
+  Codecs::Decoder & decoder,
+  Messages::MessageBuilder & fieldSet) const
+{
+  decoder.reportFatal("[ERR U93]", "Increment with specific presence map bit not supported for this data type.");
   return false;
 }
 
