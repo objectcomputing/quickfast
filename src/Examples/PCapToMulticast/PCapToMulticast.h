@@ -4,7 +4,10 @@
 //
 #ifndef PCAPTOMULTICAST_H
 #define PCAPTOMULTICAST_H
+
+#define PCAP_SUPPORT_IS_HEREx
 #include <Examples/CommandArgParser.h>
+#include <Examples/PCapReader.h>
 #include <boost/asio.hpp>
 #include <stdio.h>
 
@@ -39,7 +42,6 @@ namespace QuickFAST{
       void fini();
 
     private:
-      bool preparsePcapFile();
       void sendBurst();
 
     private:
@@ -65,14 +67,8 @@ namespace QuickFAST{
       boost::asio::deadline_timer timer_;
 
       CommandArgParser commandArgParser_;
-      FILE * dataFile_;
-
-      typedef std::pair<size_t, size_t> MessagePosition; // position in file: start, length
-      typedef std::vector<MessagePosition> MessageIndex;
-      MessageIndex messageIndex_;
-
-      boost::scoped_array<unsigned char> buffer_;
-      size_t bufferSize_;
+//      FILE * dataFile_;
+      PCapReader pcapReader_;
       size_t nPass_;
       size_t nMsg_;
       size_t totalMessageCount_;

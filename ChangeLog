@@ -1,3 +1,12 @@
+Tue Jun 16 15:56:39 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Examples/Examples/PCapReader.h:
+        * src/Examples/Examples/PCapReader.cpp:
+
+        * src/Examples/PCapToMulticast/PCapToMulticast.h:
+        * src/Examples/PCapToMulticast/PCapToMulticast.cpp:
+        Separate PCap file reader into a separate module.
+
 Tue Jun 16 14:16:37 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * data/ARCATemplates.xml:
