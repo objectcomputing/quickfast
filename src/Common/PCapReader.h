@@ -6,12 +6,12 @@
 #endif
 #ifndef PCAPREADER_H
 #define PCAPREADER_H
-
+#include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
 
 namespace QuickFAST
 {
-    class ByteSwapper
+  class ByteSwapper
   {
   public:
     explicit ByteSwapper(bool swap = false)
@@ -71,20 +71,23 @@ namespace QuickFAST
   private:
     bool swap_;
   };
-  class PCapReader
+  class QuickFAST_Export PCapReader
   {
   public:
     PCapReader();
     bool open(const char * filename);
+    void setVerbose(bool verbose);
     bool rewind();
     bool isOk()const;
-    bool read(const char *& buffer, size_t & size);
+    bool read(const unsigned char *& buffer, size_t & size);
+    void seek(size_t address);
   private:
-    boost::scoped_array<char> buffer_;
+    boost::scoped_array<unsigned char> buffer_;
     size_t fileSize_;
     size_t pos_;
     bool ok_;
     ByteSwapper swap;
+    bool verbose_;
   };
 }
 #endif // PCAPREADER_H

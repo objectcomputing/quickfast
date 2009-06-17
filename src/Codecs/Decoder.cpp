@@ -49,10 +49,10 @@ Decoder::decodeSegment(
     return false;
   }
 
+  static const std::string tid("templateID");
+  source.beginField(tid);
   if(pmap.checkNextField())
   {
-    static const std::string tid("templateID");
-    source.beginField(tid);
     template_id_t id;
     FieldInstruction::decodeUnsignedInteger(source, *this, id);
     setTemplateId(id);

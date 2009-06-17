@@ -245,7 +245,7 @@ PcapToMulticast::sendBurst()
 
       // then send this message
 
-      const char * msgBuffer = 0;
+      const unsigned char * msgBuffer = 0;
       size_t bytesRead = 0;
       pcapReader_.read(msgBuffer, bytesRead);
 

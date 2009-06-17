@@ -7,7 +7,7 @@
 
 #define PCAP_SUPPORT_IS_HEREx
 #include <Examples/CommandArgParser.h>
-#include <Examples/PCapReader.h>
+#include <Common/PCapReader.h>
 #include <boost/asio.hpp>
 #include <stdio.h>
 

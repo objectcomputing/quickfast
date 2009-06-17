@@ -27,7 +27,14 @@ FieldOpIncrement::decode(
   Codecs::Decoder & decoder,
   Messages::MessageBuilder & fieldSet) const
 {
-  return instruction.decodeIncrement(source, pmap, decoder, fieldSet);
+  if(pmapBitValid_)
+  {
+    return instruction.decodeIncrement(source, pmap.checkSpecificField(pmapBit_), decoder, fieldSet);
+  }
+  else
+  {
+    return instruction.decodeIncrement(source, pmap, decoder, fieldSet);
+  }
 }
 
 void

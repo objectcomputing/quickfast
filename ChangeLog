@@ -1,3 +1,22 @@
+Wed Jun 17 16:02:57 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Decoder.cpp:
+        Tell the data source when you're decoding the template ID even if the ID is omitted via the PMAP
+
+        * src/Codecs/FieldOpIncrement.cpp:
+        Add support for the pmap='n' attribute.
+
+        * src/Examples/PCapToMulticast/PCapToMulticast.h:
+        * src/Examples/PCapToMulticast/PCapToMulticast.cpp:
+        Change PCapToMulticast to use PCapReader
+
+        * src/Common/PCapReader.h:
+        * src/Common/PCapReader.cpp:
+        * src/Examples/Examples/PCapReader.h:
+        * src/Examples/Examples/PCapReader.cpp:
+        Move PCapReader from Examples to Common (avoids linker/library/reference nightmares)
+        Add setVerbose and seek methods to PCapReader
+
 Tue Jun 16 15:56:39 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Examples/Examples/PCapReader.h:

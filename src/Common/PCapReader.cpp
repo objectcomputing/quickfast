@@ -2,7 +2,7 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
-#include <Examples/ExamplesPch.h>
+#include <Common/QuickFASTPch.h>
 #include "PCapReader.h"
 #include <Winsock2.h>
 using namespace QuickFAST;
@@ -171,8 +171,10 @@ PCapReader::PCapReader()
 , pos_(0)
 , ok_(false)
 , swap(false)
+, verbose_(false)
 {
 }
+
 bool
 PCapReader::open(const char * filename)
 {
@@ -183,7 +185,7 @@ PCapReader::open(const char * filename)
   {
     fseek(file, 0, SEEK_END);
     fileSize_ = ftell(file);
-    buffer_.reset(new char[fileSize_]);
+    buffer_.reset(new unsigned char[fileSize_]);
     fseek(file, 0, SEEK_SET);
     size_t byteCount = fread(buffer_.get(), 1, fileSize_, file);
     ok_ = byteCount == fileSize_;
@@ -235,7 +237,7 @@ PCapReader::isOk()const
 }
 
 bool
-PCapReader::read(const char *& buffer, size_t & size)
+PCapReader::read(const unsigned char *& buffer, size_t & size)
 {
   if(ok_)
   {
@@ -246,6 +248,7 @@ PCapReader::read(const char *& buffer, size_t & size)
     {
       ////////////////////////////
       // process the packet header
+      size_t headerPos = pos_;
       pcap_pkthdr * packetHeader = reinterpret_cast<pcap_pkthdr *>(buffer_.get() + pos_);
       pos_ += sizeof(pcap_pkthdr);
       size_t datalen = swap(packetHeader->caplen);
@@ -271,6 +274,11 @@ PCapReader::read(const char *& buffer, size_t & size)
         {
           buffer = buffer_.get() + pos_;
           size = datalen;
+          if(verbose_)
+          {
+            std::cout << "PCapReader: " << headerPos << ": " << pos_ << ' ' << datalen
+              << "=== 0x" << std::hex  << headerPos << ": 0x" << pos_ << " 0x" << datalen << std::dec << std::endl;
+          }
           ok_ = true;
         }
         pos_ += datalen;
@@ -282,5 +290,17 @@ PCapReader::read(const char *& buffer, size_t & size)
     }
   }
   return ok_;
+}
+
+void
+PCapReader::setVerbose(bool verbose)
+{
+  verbose_ = verbose;
+}
+
+void
+PCapReader::seek(size_t address)
+{
+  pos_ = address;
 }
 
