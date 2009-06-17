@@ -1,4 +1,4 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// C+opyright (c) 2009, Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 #include <Common/QuickFASTPch.h>
@@ -11,9 +11,11 @@
 #include <Messages/FieldSequence.h>
 #include <Messages/Sequence.h>
 #include <Messages/FieldUInt32.h>
+#include <Messages/SingleValueBuilder.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
+
 
 FieldInstructionSequence::FieldInstructionSequence(
   const std::string & name,
@@ -35,7 +37,7 @@ FieldInstructionSequence::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & fieldSet) const
+  Messages::MessageBuilder & messageBuilder) const
 {
   if(!segment_)
   {
@@ -43,7 +45,7 @@ FieldInstructionSequence::decodeNop(
   }
   size_t length = 0;
   Codecs::FieldInstructionCPtr lengthInstruction;
-  Messages::FieldSet lengthSet(1);
+  Messages::SingleValueBuilder<uint32> lengthSet;
   if(segment_->getLengthInstruction(lengthInstruction))
   {
     source.beginField(lengthInstruction->getIdentity()->name());
@@ -61,14 +63,12 @@ FieldInstructionSequence::decodeNop(
       return false;
     }
   }
-
-  Messages::FieldSet::const_iterator fld = lengthSet.begin();
-  if(fld == lengthSet.end())
+  if(!lengthSet.isSet())
   {
     // this optional sequence is not present
     return true;
   }
-  length = fld->getField()->toUInt32();
+  length = lengthSet.value();
 
   Messages::SequencePtr sequence(new Messages::Sequence);
   for(size_t nEntry = 0; nEntry < length; ++nEntry)
@@ -86,7 +86,7 @@ FieldInstructionSequence::decodeNop(
     sequence->addEntry(entrySet);
   }
   Messages::FieldCPtr field(Messages::FieldSequence::create(sequence));
-  fieldSet.addField(
+  messageBuilder.addField(
     identity_,
     field);
   return true;
@@ -97,7 +97,7 @@ FieldInstructionSequence::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::FieldSet & messageBuilder) const
 {
   if(!segment_)
   {
@@ -106,7 +106,7 @@ FieldInstructionSequence::encodeNop(
 
   // retrieve the field corresponding to this sequence
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_->name(), field))
+  if(messageBuilder.getField(identity_->name(), field))
   {
     Messages::SequenceCPtr sequence = field->toSequence();
     size_t length = sequence->size();

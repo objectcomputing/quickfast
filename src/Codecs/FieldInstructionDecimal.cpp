@@ -11,6 +11,7 @@
 #include <Messages/FieldSet.h>
 #include <Messages/FieldDecimal.h>
 #include <Common/Decimal.h>
+#include <Messages/SingleValueBuilder.h>
 
 #include <Common/Profiler.h>
 
@@ -59,44 +60,29 @@ FieldInstructionDecimal::decodeNop(
   Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("decimal::decodeNop");
-  NESTED_PROFILE_POINT(d,"decimal::AllocateFieldSet");
 
   if(bool(exponentInstruction_))
   {
-
-    ///@todo: this is an expensive way to get the exponent and mantissa values
-    /// we need to refactor FieldInstructionInteger to provide a separate method
-    /// to retrieve the values (or lack thereof) without creating fields.
-    /// However -- this works for now.
-    Messages::FieldSet mxSet(2);
-    NESTED_PROFILE_POINT(a, "decimal::DecodeExponent");
-    NESTED_PROFILE_PAUSE(d);
-    if(!exponentInstruction_->decode(source, pmap, decoder, mxSet))
+    Messages::SingleValueBuilder<exponent_t> exponentBuilder;
+    if(!exponentInstruction_->decode(source, pmap, decoder, exponentBuilder))
     {
       return false;
     }
-
-    if(mxSet.size() == 0)
+    if(!exponentBuilder.isSet())
     {
       // null field
       return true;
     }
+    exponent_t exponent = exponentBuilder.value();
 
-    NESTED_PROFILE_POINT(b, "decimal::DecodeMantissa");
-    NESTED_PROFILE_PAUSE(a);
-    mantissaInstruction_->decode(source, pmap, decoder, mxSet);
-    NESTED_PROFILE_POINT(1, "decimal::RetrieveValues");
-    NESTED_PROFILE_PAUSE(b);
-    Messages::FieldSet::const_iterator it = mxSet.begin();
-    exponent_t exponent = exponent_t(it->getField()->toInt32());
-    mantissa_t mantissa = typedMantissa_;
-    ++it;
-    if(it != mxSet.end())
+    Messages::SingleValueBuilder<mantissa_t> mantissaBuilder;
+    mantissaInstruction_->decode(source, pmap, decoder, mantissaBuilder);
+    mantissa_t mantissa = 0;
+    if(mantissaBuilder.isSet())
     {
-      mantissa = mantissa_t(it->getField()->toInt64());
+      mantissa = mantissaBuilder.value();
     }
-    NESTED_PROFILE_POINT(2, "decimal::UseValues");
-    NESTED_PROFILE_PAUSE(1);
+
     Decimal value(mantissa, exponent, false);
     Messages::FieldCPtr field(Messages::FieldDecimal::create(value));
     fieldSet.addField(identity_, field);

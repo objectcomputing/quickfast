@@ -1,3 +1,12 @@
+Wed Jun 17 18:22:55 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Messages/SingleValueBuilder.h:
+        Change Decimal and Sequence so that rather than creating a dummy field set
+        to read mantissa/exponent/length, they use the new SingleValueBuilder
+        which captures the value directy.
+
 Wed Jun 17 16:02:57 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Decoder.cpp:
