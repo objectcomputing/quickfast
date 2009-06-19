@@ -3,3 +3,5 @@ QuickFAST=1
 boost=1
 dotnet=1
 nunit=0
+// arca code not released yet, so don't try to build it
+arca=0

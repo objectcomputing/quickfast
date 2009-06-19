@@ -57,3 +57,17 @@ project(MulticastInterpreter) : boost_base, boost_filesystem, boost_system, boos
     MulticastInterpreter
   }
 }
+
+project(PerformanceTestArca) : boost_base, boost_filesystem, boost_thread, QuickFASTExample {
+  requires += arca
+  exename = PerformanceTestArca
+  libs += QuickFASTArca
+  after += QuickFASTArca
+  Source_Files {
+    PerformanceTestArca
+  }
+  Header_Files {
+    PerformanceTestArca
+  }
+}
+

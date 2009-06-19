@@ -1,3 +1,18 @@
+Fri Jun 19 15:33:43 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        Exponent is "32 bit" in template even if it's 8 bits in reality.
+
+        * src/Common/PCapReader.h:
+        * src/Common/PCapReader.cpp:
+        * src/Examples/PCapToMulticast/PCapToMulticast.cpp:
+        Rename isOK() to good() for consistency with I/O Streams
+
+        * QuickFAST.features:
+        * src/Examples/Examples.mpc:
+        Getting ready for Arca.
+
+
 Wed Jun 17 18:22:55 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionDecimal.cpp:

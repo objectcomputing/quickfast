@@ -231,7 +231,7 @@ PCapReader::rewind()
 }
 
 bool
-PCapReader::isOk()const
+PCapReader::good()const
 {
   return ok_;
 }

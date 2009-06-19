@@ -220,7 +220,7 @@ PcapToMulticast::sendBurst()
 
     for(size_t nBurstMsg = 0; nBurstMsg < burst_; ++nBurstMsg)
     {
-      if(!pcapReader_.isOk())
+      if(!pcapReader_.good())
       {
 
 

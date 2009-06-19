@@ -78,7 +78,7 @@ namespace QuickFAST
     bool open(const char * filename);
     void setVerbose(bool verbose);
     bool rewind();
-    bool isOk()const;
+    bool good()const;
     bool read(const unsigned char *& buffer, size_t & size);
     void seek(size_t address);
   private:

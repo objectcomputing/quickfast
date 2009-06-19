@@ -63,7 +63,7 @@ FieldInstructionDecimal::decodeNop(
 
   if(bool(exponentInstruction_))
   {
-    Messages::SingleValueBuilder<exponent_t> exponentBuilder;
+    Messages::SingleValueBuilder<int32> exponentBuilder;
     if(!exponentInstruction_->decode(source, pmap, decoder, exponentBuilder))
     {
       return false;
@@ -73,7 +73,7 @@ FieldInstructionDecimal::decodeNop(
       // null field
       return true;
     }
-    exponent_t exponent = exponentBuilder.value();
+    exponent_t exponent = static_cast<exponent_t>(exponentBuilder.value());
 
     Messages::SingleValueBuilder<mantissa_t> mantissaBuilder;
     mantissaInstruction_->decode(source, pmap, decoder, mantissaBuilder);
