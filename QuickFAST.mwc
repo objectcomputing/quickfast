@@ -12,8 +12,7 @@ workspace(*) {
       cmdline += -language csharp
       src/DotNetExamples/DotNetExampleCode/DotNetExampleCode.mpc
       src/DotNetTests/QuickFASTDotNetTests.mpc
-      src/DotNetTests/DecodingPerformance/DecodingPerformanceDotNet.mpc
-	  src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.mpc
+      src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.mpc
       src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.mpc
     }
   }

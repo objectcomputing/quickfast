@@ -1,13 +1,5 @@
 project(*): QuickFASTDotNetApplication {
-  requires += dotnet
   sharedname = DotNetExampleCode
-  libs += QuickFASTDotNet
-  after += QuickFASTDotNet
-
-  specific(vc8, vc9) {
-    Release::exeout = $(QUICKFAST_ROOT)/Output/Release
-    Debug::exeout = $(QUICKFAST_ROOT)/Output/Debug
-  }
 
   managed = 1
 

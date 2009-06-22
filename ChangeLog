@@ -1,3 +1,30 @@
+Mon Jun 22 14:46:36 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * QuickFAST.mwc:
+        * QuickFASTApplication.mpb:
+        * QuickFASTDotNetApplication.mpb:
+        * QuickFASTDotNetExample.mpb:
+        * QuickFASTExample.mpb:
+        * src/DotNetExamples/DotNetExampleCode/DotNetExampleCode.mpc:
+        Rework the mpb files to reduce (but, alas, not completely elimnate)
+        the build warnings related to assembly references vs library referencs.
+        Handling this completely cleanly may take a change to MPC.
+
+        * data/arca.dat:
+        * data/arca.fast:
+        * data/arca_files_notice:
+        Remove the Arca data files from their web site.  They were misleading at best.
+
+
+        * src/DotNetTests/DecodingPerformance:
+        * src/DotNetTests/DecodingPerformance/.svnignore:
+        * src/DotNetTests/DecodingPerformance/DecodingPerformance.cs:
+        * src/DotNetTests/DecodingPerformance/DecodingPerformanceDotNet.mpc:
+        * src/DotNetTests/DecodingPerformance/MessageProcessor.cs:
+        * src/DotNetTests/DecodingPerformance/Properties:
+        * src/DotNetTests/DecodingPerformance/Properties/AssemblyInfo.cs:
+         Remove this.  It never worked.
+
 Fri Jun 19 15:33:43 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionDecimal.cpp:
