@@ -123,7 +123,7 @@ namespace QuickFASTDotNet{
       {
         throw gcnew UsageError(error);
       }
-      messageCount_ = handler.getMesssageCount();
+      messageCount_ = unsigned int(handler.getMesssageCount());
     }
 
 

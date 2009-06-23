@@ -239,7 +239,7 @@ FieldInstructionBlob::decodeDelta(
     // don't chop more than is there
     if(static_cast<unsigned long>(deltaLength) > previousLength)
     {
-      deltaLength = previousLength;
+      deltaLength = QuickFAST::int32(previousLength);
     }
     Messages::FieldCPtr field = createField(
       deltaValue + previousValue.substr(deltaLength));
@@ -253,7 +253,7 @@ FieldInstructionBlob::decodeDelta(
     // don't chop more than is there
     if(static_cast<unsigned long>(deltaLength) > previousLength)
     {
-      deltaLength = previousLength;
+      deltaLength = QuickFAST::uint32(previousLength);
     }
     Messages::FieldCPtr field = createField(
       previousValue.substr(0, previousLength - deltaLength) + deltaValue);
@@ -345,7 +345,7 @@ FieldInstructionBlob::encodeNullableBlob(
   WorkingBuffer & buffer,
   const std::string & value) const
 {
-    uint32 length = value.length();
+    uint32 length = QuickFAST::uint32(value.length());
     length += 1;
     encodeUnsignedInteger(destination, buffer, length);
     encodeBlobData(destination, value);
@@ -357,7 +357,7 @@ FieldInstructionBlob::encodeBlob(
   WorkingBuffer & buffer,
   const std::string & value) const
 {
-    uint32 length = value.length();
+    uint32 length = QuickFAST::uint32(value.length());
     encodeUnsignedInteger(destination, buffer, length);
     encodeBlobData(destination, value);
 }
@@ -586,7 +586,7 @@ FieldInstructionBlob::encodeDelta(
     std::string value = field->toString();
     size_t prefix = longestMatchingPrefix(previousValue, value);
     size_t suffix = longestMatchingSuffix(previousValue, value);
-    int32 deltaCount = previousValue.length() - prefix;
+    int32 deltaCount = QuickFAST::uint32(previousValue.length() - prefix);
     std::string deltaValue = value.substr(prefix);
     if(prefix < suffix)
     {

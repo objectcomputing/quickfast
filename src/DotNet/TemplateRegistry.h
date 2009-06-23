@@ -29,7 +29,7 @@ namespace QuickFASTDotNet {
       /// Does not include "nested" fields -- unmerged groups and sequences count as one each.
       property unsigned int MaxFieldCount
       {
-        unsigned int get() { return templateRegistry_->maxFieldCount(); }
+        unsigned int get() { return unsigned int(templateRegistry_->maxFieldCount()); }
       }
 
     internal:

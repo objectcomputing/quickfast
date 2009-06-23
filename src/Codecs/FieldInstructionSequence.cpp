@@ -111,8 +111,7 @@ FieldInstructionSequence::encodeNop(
     Messages::SequenceCPtr sequence = field->toSequence();
     size_t length = sequence->size();
 
-    // todo: performance could be improved here
-    Messages::FieldCPtr lengthField(Messages::FieldUInt32::create(length));
+    Messages::FieldCPtr lengthField(Messages::FieldUInt32::create(QuickFAST::uint32(length)));
     Messages::FieldSet lengthSet(1);
 
     Codecs::FieldInstructionCPtr lengthInstruction;

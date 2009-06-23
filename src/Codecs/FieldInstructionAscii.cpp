@@ -249,7 +249,7 @@ FieldInstructionAscii::decodeDelta(
     if(static_cast<uint32>(deltaLength) > previousLength)
     {
       decoder.reportWarning("[ERR D7]", "String head delta length exceeds length of previous string.", *identity_);
-      deltaLength = previousLength;
+      deltaLength = QuickFAST::uint32(previousLength);
     }
     Messages::FieldCPtr field = Messages::FieldAscii::create(
       deltaValue + previousValue.substr(deltaLength));
@@ -267,7 +267,7 @@ FieldInstructionAscii::decodeDelta(
       std::cout << "decode ascii delta length: " << deltaLength << " previous: " << previousLength << std::endl;
 #endif
       decoder.reportError("[ERR D7]", "String tail delta length exceeds length of previous string.", *identity_);
-      deltaLength = previousLength;
+      deltaLength = QuickFAST::uint32(previousLength);
     }
     Messages::FieldCPtr field = Messages::FieldAscii::create(
       previousValue.substr(0, previousLength - deltaLength) + deltaValue);
@@ -574,7 +574,7 @@ FieldInstructionAscii::encodeDelta(
     std::string value = field->toAscii();
     size_t prefix = longestMatchingPrefix(previousValue, value);
     size_t suffix = longestMatchingSuffix(previousValue, value);
-    int32 deltaCount = previousValue.length() - prefix;
+    int32 deltaCount = QuickFAST::uint32(previousValue.length() - prefix);
     std::string deltaValue = value.substr(prefix);
     if(prefix < suffix)
     {

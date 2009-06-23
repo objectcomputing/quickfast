@@ -117,7 +117,7 @@ cli::array<unsigned char> ^
 Field::toByteVector::get()
 {
   std::string v = cppField_->toByteVector();
-  cli::array<unsigned char>^ result = gcnew cli::array<unsigned char>(v.length());
+  cli::array<unsigned char>^ result = gcnew cli::array<unsigned char>(int(v.length()));
   int count = static_cast<int>(v.length());
   for(int p = 0; p < count; ++p)
   {

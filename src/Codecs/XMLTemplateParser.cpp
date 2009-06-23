@@ -1006,7 +1006,7 @@ XMLTemplateParser::parse(
 //  reader->setFeature(xercesc::XMLUni::fgSAX2CoreValidation, true);
 
   xmlData.seekg(0, std::ios::end);
-  int length = xmlData.tellg();
+  int length = int(xmlData.tellg());
   xmlData.seekg(0, std::ios::beg);
 
   boost::scoped_array<char> data(new char[length]);

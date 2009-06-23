@@ -1,3 +1,25 @@
+Tue Jun 23 17:06:12 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/Common/Profiler.cpp:
+        * src/DotNet/DataDestination.h:
+        * src/DotNet/Field.cpp:
+        * src/DotNet/SynchronousDecoder.h:
+        * src/DotNet/SynchronousDecoder.cpp:
+        * src/DotNet/TemplateRegistry.h:
+        * src/Examples/FileToMulticast/FileToMulticast.cpp:
+        * src/Examples/PerformanceTestArca:
+        * src/Examples/PerformanceTestArca/MessageCounter.h:
+        * src/Examples/PerformanceTestArca/MessageCounter.cpp:
+        * src/Examples/PerformanceTestArca/PerformanceTestArca.h:
+        * src/Examples/PerformanceTestArca/PerformanceTestArca.cpp:
+        * src/Examples/PerformanceTestArca/main.cpp:
+        Suppress benign warnings from 64 bit builds.
+
 Mon Jun 22 14:46:36 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * QuickFAST.mwc:

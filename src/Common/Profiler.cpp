@@ -82,7 +82,7 @@ ProfileAccumulator::print(std::ostream & out)
         << '\t' << ac->recursions_;
       if(ac->recursions_ > 0)
       {
-        double count = ac->recursions_;
+        double count = double(ac->recursions_);
         double sum = ac->recursiveSum_;
         double sumsq = ac->recursiveSumOfSquares_;
         double mean = sum/ count;

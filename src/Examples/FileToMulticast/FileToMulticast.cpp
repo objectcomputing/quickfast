@@ -344,7 +344,7 @@ FileToMulticast::sendBurst()
       totalMessageCount_ += 1;
       size_t messageStart = position.first;
       size_t messageLength = position.second;
-      fseek(dataFile_,  messageStart, SEEK_SET);
+      fseek(dataFile_,  long(messageStart), SEEK_SET);
       assert(messageLength <= bufferSize_);
       size_t bytesRead = fread(buffer_.get(), 1, messageLength, dataFile_);
       assert (bytesRead == messageLength);

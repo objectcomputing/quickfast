@@ -100,7 +100,7 @@ namespace QuickFASTDotNet{
       ///
       property unsigned int MessageCount
       {
-        unsigned int get() { return messageCount_; }
+        unsigned int get() { return unsigned int(messageCount_); }
       }
 
       /// @brief The number of milliseconds elapsed in the decoding process
