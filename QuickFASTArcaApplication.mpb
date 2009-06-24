@@ -1,10 +1,5 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 //////////////////////////////////////////////////////
-// An add-in for Arca Support
-project {
-  requires += arca
-  libs += QuickFASTArca
-  after += QuickFASTArca
+project : QuickFASTApplication, QuickFASTArca {
 }
-

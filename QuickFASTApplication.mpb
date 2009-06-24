@@ -1,3 +1,8 @@
+// All rights reserved.
+// See the file license.txt for licensing information.
+//////////////////////////////////////////////////////
+// Use this mpb for applications that use QuickFAST
+// be sure to specify exeout. See also QuickFASTExeOut.mpb
 project {
   requires += QuickFAST
   includes += $(QUICKFAST_ROOT)/src

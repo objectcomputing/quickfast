@@ -1,3 +1,31 @@
+Wed Jun 24 16:47:40 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * QuickFAST.mwc:
+        * QuickFASTApplication.mpb:
+        * QuickFASTArca.mpb:
+        * QuickFASTArcaApplication.mpb:
+        * QuickFASTDotNetExample.mpb:
+        * QuickFASTExample.mpb:
+        * QuickFASTExeOut.mpb:
+        * src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.mpc:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.mpc:
+
+        More streamlining of the mpb files.
+
+        * src/Arca:
+        * src/Arca/ArcaMessageBuilder.h:
+        * src/Arca/ArcaMessageBuilder.cpp:
+        * src/Arca/ArcaMessageBuilder_fwd.h:
+        * src/Arca/ArcaMessageHandler.h:
+        * src/Arca/ArcaMessageStructure.h:
+        * src/Arca/QuickFASTArca.mpc:
+        * src/Arca/QuickFASTArca_Export.h:
+        * src/Arca/QuickFASTArca_pch.h:
+        * src/Arca/QuickFASTArca_pch.cpp:
+
+        Arca support
+
+
 Wed Jun 24 15:47:30 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * QuickFAST.mwc:
@@ -145,7 +173,7 @@ Tue Jun 16 14:16:37 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
 
         * setup.cmd:
-        Because I installed Zerces 3.01 on my system.
+        Because I installed Xerces 3.01 on my system.
 
 
 Mon Jun 15 14:05:53 UTC 2009  Dale Wilson  <wilsond@ociweb.com>

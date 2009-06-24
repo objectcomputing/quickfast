@@ -1,4 +1,4 @@
-project(PerformanceTestDotNet): QuickFASTDotNetApplication {
+project(PerformanceTestDotNet): QuickFASTDotNetExample {
   requires += dotnet
   after += DotNetExampleCode
   exename = PerformanceTestDotNet
