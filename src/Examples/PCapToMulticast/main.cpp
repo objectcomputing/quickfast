@@ -4,7 +4,7 @@
 //
 
 #include <Examples/ExamplesPch.h>
-#include <PcapToMulticast/PcapToMulticast.h>
+#include <Examples/PCapToMulticast/PCapToMulticast.h>
 
 using namespace QuickFAST;
 using namespace Examples;
@@ -12,7 +12,7 @@ using namespace Examples;
 int main(int argc, char* argv[])
 {
   int result = -1;
-  PcapToMulticast application;
+  PCapToMulticast application;
   if(application.init(argc, argv))
   {
     result = application.run();

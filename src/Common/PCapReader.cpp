@@ -4,7 +4,9 @@
 //
 #include <Common/QuickFASTPch.h>
 #include "PCapReader.h"
+#ifdef _WIN32
 #include <Winsock2.h>
+#endif
 using namespace QuickFAST;
 
 namespace

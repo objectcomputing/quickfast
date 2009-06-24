@@ -1,3 +1,14 @@
+Wed Jun 24 18:29:43 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * QuickFAST.features:
+        Enable build of Arca support
+
+        * src/Common/PCapReader.cpp:
+        * src/Examples/PCapToMulticast/PCapToMulticast.h:
+        * src/Examples/PCapToMulticast/PCapToMulticast.cpp:
+        * src/Examples/PCapToMulticast/main.cpp:
+        Fix capitalization issue that showed up in Linux build
+
 Wed Jun 24 16:47:40 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * QuickFAST.mwc:

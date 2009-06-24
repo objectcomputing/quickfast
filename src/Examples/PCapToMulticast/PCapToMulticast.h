@@ -24,11 +24,11 @@ namespace QuickFAST{
     ///
     /// This program is not really FAST-aware. It is just part of a testing
     /// framework for other programs.
-    class PcapToMulticast : public CommandArgHandler
+    class PCapToMulticast : public CommandArgHandler
     {
     public:
-      PcapToMulticast();
-      ~PcapToMulticast();
+      PCapToMulticast();
+      ~PCapToMulticast();
 
       /// @brief parse command line arguments, and initialize.
       /// @param argc from main

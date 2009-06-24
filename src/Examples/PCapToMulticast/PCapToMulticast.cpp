@@ -3,7 +3,7 @@
 // See the file license.txt for licensing information.
 //
 #include <Examples/ExamplesPch.h>
-#include "PcapToMulticast.h"
+#include "PCapToMulticast.h"
 #include <Examples/StopWatch.h>
 #include <Common/Types.h>
 using namespace QuickFAST;
@@ -21,7 +21,7 @@ namespace {
   }
 }
 
-PcapToMulticast::PcapToMulticast()
+PCapToMulticast::PCapToMulticast()
 : portNumber_(30001)
 , sendAddress_("239.255.0.1")
 , sendCount_(1)
@@ -39,20 +39,20 @@ PcapToMulticast::PcapToMulticast()
 {
 }
 
-PcapToMulticast::~PcapToMulticast()
+PCapToMulticast::~PCapToMulticast()
 {
 }
 
 
 bool
-PcapToMulticast::init(int argc, char * argv[])
+PCapToMulticast::init(int argc, char * argv[])
 {
   commandArgParser_.addHandler(this);
   return commandArgParser_.parse(argc, argv);
 }
 
 int
-PcapToMulticast::parseSingleArg(int argc, char * argv[])
+PCapToMulticast::parseSingleArg(int argc, char * argv[])
 {
   int consumed = 0;
   std::string opt(argv[0]);
@@ -122,7 +122,7 @@ PcapToMulticast::parseSingleArg(int argc, char * argv[])
 }
 
 void
-PcapToMulticast::usage(std::ostream & out) const
+PCapToMulticast::usage(std::ostream & out) const
 {
   out << "  -a dotted_ip  : Multicast send address (default is 239.255.0.1)" << std::endl;
   out << "  -p port       : Multicast port number (default 30001)" << std::endl;
@@ -138,7 +138,7 @@ PcapToMulticast::usage(std::ostream & out) const
 }
 
 bool
-PcapToMulticast::applyArgs()
+PCapToMulticast::applyArgs()
 {
   bool ok = true;
   try
@@ -164,7 +164,7 @@ PcapToMulticast::applyArgs()
 }
 
 int
-PcapToMulticast::run()
+PCapToMulticast::run()
 {
   try
   {
@@ -174,7 +174,7 @@ PcapToMulticast::run()
     }
 
     strand_.dispatch(
-        strand_.wrap(boost::bind(&PcapToMulticast::sendBurst, this)));
+        strand_.wrap(boost::bind(&PCapToMulticast::sendBurst, this)));
     StopWatch lapse;
     this->ioService_.run();
     unsigned long sendLapse = lapse.freeze();
@@ -205,7 +205,7 @@ PcapToMulticast::run()
 }
 
 void
-PcapToMulticast::sendBurst()
+PCapToMulticast::sendBurst()
 {
   try
   {
@@ -214,7 +214,7 @@ PcapToMulticast::sendBurst()
     {
       timer_.expires_from_now(boost::posix_time::microseconds(sendMicroseconds_));
       timer_.async_wait(
-        strand_.wrap(boost::bind(&PcapToMulticast::sendBurst, this))
+        strand_.wrap(boost::bind(&PCapToMulticast::sendBurst, this))
         );
     }
 
@@ -283,7 +283,7 @@ PcapToMulticast::sendBurst()
 
 
 void
-PcapToMulticast::fini()
+PCapToMulticast::fini()
 {
 }
 
