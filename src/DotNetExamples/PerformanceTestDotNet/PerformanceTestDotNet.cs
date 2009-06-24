@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime;
+using System.Diagnostics;
 
 namespace QuickFASTDotNet
 {
@@ -226,11 +227,13 @@ namespace QuickFASTDotNet
             {
                 try
                 {
-                    System.Console.WriteLine("Parsing templates");
-                    System.Console.Out.Flush();
-                    QuickFASTDotNet.Examples.StopWatch parseTimer = new QuickFASTDotNet.Examples.StopWatch();
+                    Console.WriteLine("Parsing templates");
+                    Console.Out.Flush();
+                    QuickFASTDotNet.Stopwatch parseTimer = new QuickFASTDotNet.Stopwatch();
                     templateRegistry = QuickFASTDotNet.Codecs.TemplateRegistry.Parse(templateFile_);
-                    long parseLapse = parseTimer.freeze();
+                    parseTimer.Stop();
+                    ulong parseLapse = parseTimer.ElapsedMilliseconds;
+
                     uint templateCount = templateRegistry.Size;
                     performanceFile_.Write("Parsed ");
                     performanceFile_.Write(templateCount);
@@ -272,13 +275,14 @@ namespace QuickFASTDotNet
 
                         GCSettings.LatencyMode = GCLatencyMode.LowLatency;
 
-                        StopWatch decodeTimer = new StopWatch();
+                        QuickFASTDotNet.Stopwatch decodeTimer = new QuickFASTDotNet.Stopwatch();
                         { //PROFILE_POINT("Main");
 
                             decoder.Decode(handlerDelegate);
 
                         }//PROFILE_POINT
-                        long decodeLapse = decodeTimer.freeze();
+                        decodeTimer.Stop();
+                        ulong decodeLapse = decodeTimer.ElapsedMilliseconds;
 
                         GCSettings.LatencyMode = GCLatencyMode.Interactive;
 

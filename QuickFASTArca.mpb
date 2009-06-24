@@ -1,0 +1,7 @@
+// An ADD-IN for Arca Support
+project {
+  requires += arca
+  libs += QuickFASTArca
+  after += QuickFASTArca
+}
+

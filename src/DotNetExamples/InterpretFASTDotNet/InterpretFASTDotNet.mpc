@@ -1,4 +1,4 @@
-project(*): QuickFASTDotNetExample {
+project(*): QuickFASTDotNetApplication {
   requires += dotnet
   exename = InterpretFASTDotNet
   managed = 1

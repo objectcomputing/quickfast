@@ -1,3 +1,23 @@
+Wed Jun 24 15:47:30 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * QuickFAST.mwc:
+        * QuickFASTArca.mpb:
+        * QuickFASTDotNetExample.mpb:
+        * src/DotNetExamples/DotNetExampleCode:
+        * src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.mpc:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.cs:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.mpc:
+
+        Eliminate DotNetExampleCode which only implemented one class, Stopwatch
+
+        * src/DotNet/Stopwatch.h:
+        * src/DotNet/Stopwatch.cpp:
+        Ugly little wrapper class around System.Diagnostis.Stopwatch
+        See comments about why it's needed.
+
+        * m.cmd:
+        Quote the path to handle embedded spaces.
+
 Tue Jun 23 17:06:12 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
 
