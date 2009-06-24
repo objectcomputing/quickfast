@@ -248,7 +248,8 @@ ArcaMessageBuilder::consumeBuffer(const unsigned char * buffer, size_t bufferSiz
     for(size_t nByte = 0; /*nByte < 10 && */ nByte < bufferSize; ++nByte)
     {
       if(nByte % 16 == 0) std::cout << std::endl;
-      std::cout << ' ' << std::hex << std::setw(2)<< std::setfill('0') << (unsigned short (buffer[nByte]) & 0xFF) << std::setfill(' ') << std::dec;
+      unsigned short shortByte = static_cast<unsigned short>(buffer[nByte]) & 0xFF;
+      std::cout << ' ' << std::hex << std::setw(2)<< std::setfill('0') << shortByte << std::setfill(' ') << std::dec;
     }
     std::cout << std::endl;
   }
