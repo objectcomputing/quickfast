@@ -22,8 +22,8 @@ namespace {
 }
 
 PCapToMulticast::PCapToMulticast()
-: portNumber_(30001)
-, sendAddress_("239.255.0.1")
+: portNumber_(13014)
+, sendAddress_("224.1.2.133")
 , sendCount_(1)
 , sendMicroseconds_(500)
 , burst_(1)
@@ -154,6 +154,7 @@ PCapToMulticast::applyArgs()
     multicastAddress_ = boost::asio::ip::address::from_string(sendAddress_);
     endpoint_ = boost::asio::ip::udp::endpoint(multicastAddress_, portNumber_);
     socket_.open(endpoint_.protocol());
+    std::cout << "Opening multicast group: " << endpoint_.address().to_string() << ':' << endpoint_.port() << std::endl;
   }
   catch (std::exception& e)
   {

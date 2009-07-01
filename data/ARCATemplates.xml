@@ -29,12 +29,12 @@
     <uInt16 name="AB_MSG_TYPE" id="0">
       <constant value="36"/>
     </uInt16>
-    <uInt16 name="AB_STOCK_IDX" id="10">
-      <copy pmap="1"/>
-    </uInt16>
     <uInt32 name="AB_SEQUENCE" id="20">
       <increment/>
     </uInt32>
+    <uInt16 name="AB_STOCK_IDX" id="10">
+      <copy pmap="1"/>
+    </uInt16>
     <uInt8 name="AB_SESSION_ID" id="120">
       <copy pmap="12"/>
     </uInt8>

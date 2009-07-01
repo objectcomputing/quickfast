@@ -46,6 +46,7 @@ namespace QuickFAST{
       : decoder_(templateRegistry)
       , stopping_(false)
       , error_(false)
+      , verbose_(false)
       , messageCount_(0)
       , messageLimit_(0)
       , bufferSize_(5000)
@@ -170,10 +171,15 @@ namespace QuickFAST{
         socket_.open(endpoint_.protocol());
         socket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
         socket_.bind(endpoint_);
-
+        if(verbose_)
+        {
+          std::cout << "Joining multicast group: " << multicastAddress_.to_string()
+            << " via interface " << endpoint_.address().to_string() << ':' << endpoint_.port() << std::endl;
+        }
         // Join the multicast group.
-        socket_.set_option(
-          boost::asio::ip::multicast::join_group(multicastAddress_));
+        boost::asio::ip::multicast::join_group joinRequest(multicastAddress_.to_v4(), listenAddress_.to_v4());
+        socket_.set_option(joinRequest);
+
         startReceive(&buffer1_, &buffer2_);
       }
 
@@ -290,6 +296,7 @@ namespace QuickFAST{
       Decoder decoder_;
       bool stopping_;
       bool error_;
+      bool verbose_;
       std::string errorMessage_;
       size_t messageCount_;
       size_t messageLimit_;

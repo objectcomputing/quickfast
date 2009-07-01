@@ -27,9 +27,9 @@ MulticastInterpreter::MulticastInterpreter()
 , verboseDecode_(false)
 , verboseExecution_(false)
 , strict_(true)
-, portNumber_(30001)
-, listenAddressName_("0.0.0.0")
-, multicastAddressName_("239.255.0.1")
+, portNumber_(13014)
+, listenAddressName_("10.10.9.56")
+, multicastAddressName_("224.1.2.133")
 , echoMessage_(true)
 , echoField_(false)
 , outputFile_(0)
@@ -179,7 +179,7 @@ MulticastInterpreter::applyArgs()
     }
     if(ok)
     {
-      templateFile_.open(templateFileName_.c_str());
+      templateFile_.open(templateFileName_.c_str(), std::ios::in | std::ios::binary);
       if(!templateFile_.good())
       {
         ok = false;

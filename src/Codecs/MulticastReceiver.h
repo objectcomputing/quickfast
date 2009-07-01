@@ -19,19 +19,21 @@ namespace QuickFAST{
       typedef boost::scoped_array<unsigned char> Buffer;
     public:
       /// @brief construct given multicast information and a consumer
-      /// @param multicastAddressName multicast address as a text string
-      /// @param listenAddressName listen address as a text string
+      /// @param multicastGroupIP multicast address as a text string
+      /// @param listenInterfaceIP listen address as a text string.
+      ///        This identifies the network interface to be used.
+      ///        0.0.0.0 means "let the system choose"
       /// @param portNumber port number
       MulticastReceiver(
-        const std::string & multicastAddressName,
-        const std::string & listenAddressName,
+        const std::string & multicastGroupIP,
+        const std::string & listenInterfaceIP,
         unsigned short portNumber
         )
       : stopping_(false)
       , packetCount_(0)
-      , listenAddress_(boost::asio::ip::address::from_string(listenAddressName))
-      , multicastAddress_(boost::asio::ip::address::from_string(multicastAddressName))
-      , endpoint_(listenAddress_, portNumber)
+      , listenInterface_(boost::asio::ip::address::from_string(listenInterfaceIP))
+      , multicastGroup_(boost::asio::ip::address::from_string(multicastGroupIP))
+      , endpoint_(listenInterface_, portNumber)
       , socket_(ioService_)
       , bufferSize_(0)
       {
@@ -40,23 +42,24 @@ namespace QuickFAST{
       /// @brief construct given shared io_service, multicast information, and a consumer
       /// @param templateRegistry the templates to use for decoding
       /// @param ioService an ioService to be shared with other objects
-      /// @param multicastAddressName multicast address as a text string
-      /// @param listenAddressName listen address as a text string
+      /// @param multicastGroupIP multicast address as a text string
+      /// @param listenInterfaceIP listen address as a text string
       /// @param portNumber port number
       MulticastReceiver(
         boost::asio::io_service & ioService,
-        const std::string & multicastAddressName,
-        const std::string & listenAddressName,
+        const std::string & multicastGroupIP,
+        const std::string & listenInterfaceIP,
         unsigned short portNumber
         )
       : AsioService(ioService)
       , stopping_(false)
       , packetCount_(0)
-      , listenAddress_(boost::asio::ip::address::from_string(listenAddressName))
-      , multicastAddress_(boost::asio::ip::address::from_string(multicastAddressName))
-      , endpoint_(listenAddress_, portNumber)
+      , listenInterface_(boost::asio::ip::address::from_string(listenInterfaceIP))
+      , multicastGroup_(boost::asio::ip::address::from_string(multicastGroupIP))
+      , endpoint_(listenInterface_, portNumber)
       , socket_(ioService_)
       , bufferSize_(0)
+      , verbose_(false)
       {
       }
 
@@ -69,6 +72,11 @@ namespace QuickFAST{
       size_t packetCount() const
       {
         return packetCount_;
+      }
+
+      void setVerbose()
+      {
+        verbose_ = true;
       }
 
       /// @brief Start accepting packets.  Returns immediately
@@ -85,16 +93,21 @@ namespace QuickFAST{
         // todo configure # buffers/ honor bufferCount
         buffer1_.reset(new unsigned char[bufferSize_]);
         buffer2_.reset(new unsigned char[bufferSize_]);
-
         socket_.open(endpoint_.protocol());
         socket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
         socket_.bind(endpoint_);
 
         consumer_->receiverStarted();
 
+        if(verbose_)
+        {
+          std::cout << "Joining multicast group: " << multicastGroup_.to_string()
+            << " via interface " << endpoint_.address().to_string() << ':' << endpoint_.port() << std::endl;
+        }
         // Join the multicast group.
-        socket_.set_option(
-          boost::asio::ip::multicast::join_group(multicastAddress_));
+        boost::asio::ip::multicast::join_group joinRequest(multicastGroup_.to_v4(), listenInterface_.to_v4());
+        socket_.set_option(joinRequest);
+
         startReceive(&buffer1_, &buffer2_);
       }
 
@@ -121,6 +134,10 @@ namespace QuickFAST{
         size_t bytesReceived,
         Buffer * altBuffer)
       {
+        if(verbose_)
+        {
+          std::cout << "Incoming packet containing " << bytesReceived << " bytes." << std::endl;
+        }
         if(stopping_)
         {
           return;
@@ -129,12 +146,16 @@ namespace QuickFAST{
         {
           // accept data into the other buffer while we process this buffer
           startReceive(altBuffer, buffer);
-          ++packetCount_;
-          if(!consumer_->consumeBuffer(buffer->get(), bytesReceived))
+          // during shutdown it's possible to receive empty packets.
+          if(bytesReceived > 0)
           {
-            stopping_ = true;
-            socket_.cancel();
-            return;
+            ++packetCount_;
+            if(!consumer_->consumeBuffer(buffer->get(), bytesReceived))
+            {
+              stopping_ = true;
+              socket_.cancel();
+              return;
+            }
           }
         }
         else
@@ -166,8 +187,8 @@ namespace QuickFAST{
     private:
       bool stopping_;
       size_t packetCount_;
-      boost::asio::ip::address listenAddress_;
-      boost::asio::ip::address multicastAddress_;
+      boost::asio::ip::address listenInterface_;
+      boost::asio::ip::address multicastGroup_;
       boost::asio::ip::udp::endpoint endpoint_;
       boost::asio::ip::udp::endpoint senderEndpoint_;
       boost::asio::ip::udp::socket socket_;
@@ -177,6 +198,8 @@ namespace QuickFAST{
         // todo configure # buffers
       Buffer buffer1_;
       Buffer buffer2_;
+
+      bool verbose_;
     };
   }
 }

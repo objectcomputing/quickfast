@@ -1,3 +1,17 @@
+Wed Jul  1 21:05:06 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * data/ARCATemplates.xml:
+        Reorder fields to match my current best reading of the spec.
+
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastReceiver.h:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+        Change group join to honor listen interface specification (possible boost::asio bug)
+
+        * src/Examples/PCapToMulticast/PCapToMulticast.cpp:
+        Use ARCA  IP & Port.
+        Echo IP's and port.
+
 Wed Jun 24 18:29:43 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * QuickFAST.features:
