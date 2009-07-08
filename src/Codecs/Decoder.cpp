@@ -70,14 +70,14 @@ Decoder::decodeSegment(
     }
     if(!decodeSegmentBody(source, pmap, templatePtr, fieldSet))
     {
-      throw EncodingError("Unexpected end of file in message body.");
+      reportError("[ERR U03]", "Unexpected end of file in message body.");
     }
   }
   else
   {
-    std::string message =  "[ERR D9] Unknown template ID:";
+    std::string message =  "Unknown template ID:";
     message += boost::lexical_cast<std::string>(getTemplateId());
-    throw EncodingError(message);
+    reportError("[ERR D9]", message);
   }
   return true;
 }

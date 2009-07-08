@@ -54,6 +54,12 @@ MulticastReceiverHandle::packetCount() const
   return pImpl_->ptr_->packetCount();
 }
 
+size_t
+MulticastReceiverHandle::bytesReadable() const
+{
+  return pImpl_->ptr_->bytesReadable();
+}
+
 void
 MulticastReceiverHandle::start(
   BufferConsumerPtr  bufferConsumer,

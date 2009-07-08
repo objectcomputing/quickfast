@@ -134,7 +134,7 @@ FieldInstructionBitMap::encodeNop(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     destination.putByte(nullBitMap);
 #endif

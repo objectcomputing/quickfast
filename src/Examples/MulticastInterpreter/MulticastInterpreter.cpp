@@ -21,14 +21,14 @@ using namespace QuickFAST;
 using namespace Examples;
 
 MulticastInterpreter::MulticastInterpreter()
-: bufferSize_(5000)
+: bufferSize_(1600)
 , echoType_(Codecs::DataSource::HEX)
 , messageLimit_(0)
 , verboseDecode_(false)
 , verboseExecution_(false)
 , strict_(true)
 , portNumber_(13014)
-, listenAddressName_("10.10.9.56")
+, listenAddressName_("0,0,0,0")
 , multicastAddressName_("224.1.2.133")
 , echoMessage_(true)
 , echoField_(false)
@@ -148,12 +148,12 @@ MulticastInterpreter::parseSingleArg(int argc, char * argv[])
 void
 MulticastInterpreter::usage(std::ostream & out) const
 {
-  out << "  -b size       : Size of largest expected message. (default 5000)" << std::endl;
+  out << "  -b size       : Size of largest expected message. (default " << bufferSize_ << ")" << std::endl;
   out << "  -t file       : Template file (required)" << std::endl;
   out << "  -o file       : Output file (defaults to standard out)" << std::endl;
-  out << "  -l dotted_ip  : Connection listen address (default is 0.0.0.0)" << std::endl;
-  out << "  -m dotted_ip  : Multicast address (default is 239.255.0.1)" << std::endl;
-  out << "  -p port       : Multicast port number (default 30001)" << std::endl;
+  out << "  -l dotted_ip  : Connection listen address (default is " << listenAddressName_ << ")" << std::endl;
+  out << "  -m dotted_ip  : Multicast address (default is " << multicastAddressName_ << ")" << std::endl;
+  out << "  -p port       : Multicast port number (default " << portNumber_ << ")" << std::endl;
   out << "  -c count      : Stop after receiving count messages (default 0 means no limit)" << std::endl;
   out << "  -s            : Apply strict decoding rules." << std::endl;
   out << "  -e file       : Echo input to file" << std::endl;

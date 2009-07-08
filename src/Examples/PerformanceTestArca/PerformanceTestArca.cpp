@@ -57,7 +57,10 @@ ArcaMessageCounter::reportCommunicationError(const std::string & message)
   return false;
 }
 bool
-ArcaMessageCounter::reportDecodingError(const std::string & message)
+ArcaMessageCounter::reportDecodingError(
+  const std::string & message,
+  const QuickFASTArca::ArcaFullHeader * header,
+  const QuickFASTArca::ArcaMessageStructure * body)
 {
   std::cerr << "Decoding failure " << message << std::endl;
   return false;

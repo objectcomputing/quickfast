@@ -36,13 +36,18 @@ namespace QuickFAST{
       /// @returns the number of messages that have been decoded.
       size_t packetCount() const;
 
+      /// @brief Approximately how many bytes are waiting to be read from the underlying socket.
+      ///
+      /// Not that packets which have already arrived, but have not been decoded will not be included.
+      size_t bytesReadable() const;
+
       /// @brief Start accepting packets.  Returns immediately
       /// @param bufferConsumer accepts and processes the filled buffers
       /// @param bufferSize determines the maximum size of an incoming packet
       /// @param bufferCount is how many input buffers to use
       void start(
         BufferConsumerPtr  bufferConsumer,
-        size_t bufferSize = 5000,
+        size_t bufferSize = 1600,
         size_t bufferCount = 2
         );
 

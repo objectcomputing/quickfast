@@ -560,11 +560,13 @@ namespace QuickFAST{
       /// @brief Basic decoding for ByteVectors and Utf8 strings
       ///
       /// Assumes byte vector of approriate length is present in input stream.
+      /// @param[in] decoder for which this decoding is being done
       /// @param[in] source supplies the data
       /// @param[out] buffer receives the result
       /// @param[in] length expected
       /// @throws EncodingError if not enough data is available
       static void decodeByteVector(
+        Codecs::Context & decoder,
         Codecs::DataSource & source,
         WorkingBuffer & buffer,
         size_t length);
@@ -608,7 +610,7 @@ namespace QuickFAST{
       uchar byte;
       if(!source.getByte(byte))
       {
-        context.reportFatal("", "Unexpected end of data decoding integer");
+        context.reportFatal("[ERR U03]", "Unexpected end of data decoding integer");
       }
 
       value = 0;
@@ -639,7 +641,7 @@ namespace QuickFAST{
         value |= byte;
         if(!source.getByte(byte))
         {
-          context.reportFatal("", "Integer Field overflow.");
+          context.reportFatal("[ERR D2]", "Integer Field overflow.");
         }
       }
       // include the last byte (the one with the stop bit)
@@ -671,7 +673,7 @@ namespace QuickFAST{
       uchar byte;
       if(!source.getByte(byte))
       {
-        context.reportFatal("", "Unexpected end of data decoding unsigned integer");
+        context.reportFatal("[ERR U03]", "Unexpected end of data decoding unsigned integer");
       }
 
       value = 0;
@@ -693,7 +695,7 @@ namespace QuickFAST{
         value |= byte;
         if(!source.getByte(byte))
         {
-          context.reportFatal("", "End of file without stop bit decoding unsigned integer.");
+          context.reportFatal("[ERR U03]", "End of file without stop bit decoding unsigned integer.");
         }
       }
       if((value & overflowMask) != overflowCheck)

@@ -248,7 +248,7 @@ FieldInstructionAscii::decodeDelta(
     // don't chop more than is there
     if(static_cast<uint32>(deltaLength) > previousLength)
     {
-      decoder.reportWarning("[ERR D7]", "String head delta length exceeds length of previous string.", *identity_);
+      decoder.reportError("[ERR D7]", "String head delta length exceeds length of previous string.", *identity_);
       deltaLength = QuickFAST::uint32(previousLength);
     }
     Messages::FieldCPtr field = Messages::FieldAscii::create(
@@ -379,7 +379,7 @@ FieldInstructionAscii::encodeNop(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     destination.putByte(nullAscii);
   }
@@ -412,7 +412,7 @@ FieldInstructionAscii::encodeConstant(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     pmap.setNextField(false);
   }
@@ -453,7 +453,7 @@ FieldInstructionAscii::encodeDefault(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     if(fieldOp_->hasValue())
     {
@@ -523,7 +523,7 @@ FieldInstructionAscii::encodeCopy(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     if((previousIsKnown && previousNotNull)
       || !previousIsKnown)
@@ -606,7 +606,7 @@ FieldInstructionAscii::encodeDelta(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     destination.putByte(nullAscii);
   }
@@ -673,7 +673,7 @@ FieldInstructionAscii::encodeTail(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     destination.putByte(nullAscii);
   }

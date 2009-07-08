@@ -67,6 +67,12 @@ namespace QuickFAST{
       {
       }
 
+      /// @brief enable writing diagnostic information to standard out.
+      void setVerbose(bool verbose = true)
+      {
+        verbose_ = verbose;
+      }
+
       /// @brief How many packetd have been decoded.
       /// @returns the number of messages that have been decoded.
       size_t packetCount() const
@@ -74,17 +80,20 @@ namespace QuickFAST{
         return packetCount_;
       }
 
-      void setVerbose()
+      size_t bytesReadable() const
       {
-        verbose_ = true;
+        boost::asio::ip::udp::socket::bytes_readable command;
+        const_cast<boost::asio::ip::udp::socket &>(socket_).io_control(command);
+        return command.get();
       }
+
 
       /// @brief Start accepting packets.  Returns immediately
       /// @param bufferConsumer accepts and processes the filled buffers
       /// @param bufferSize determines the maximum size of an incoming packet
       void start(
         BufferConsumerPtr  bufferConsumer,
-        size_t bufferSize = 5000,
+        size_t bufferSize = 1600,
         size_t bufferCount = 2)
       {
         consumer_ = bufferConsumer;
@@ -183,6 +192,7 @@ namespace QuickFAST{
               )
             );
       }
+
 
     private:
       bool stopping_;

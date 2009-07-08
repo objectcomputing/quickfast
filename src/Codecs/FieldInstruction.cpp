@@ -283,6 +283,7 @@ FieldInstruction::checkNullAscii(WorkingBuffer & workingBuffer)
 
 void
 FieldInstruction::decodeByteVector(
+  Codecs::Context & decoder,
   Codecs::DataSource & source,
   WorkingBuffer & buffer, size_t length)
 {
@@ -294,7 +295,7 @@ FieldInstruction::decodeByteVector(
     uchar byte = 0;
     if(!source.getByte(byte))
     {
-      throw EncodingError("End of file: Too few bytes in ByteVector.");
+      decoder.reportFatal("[ERR U03]", "End of file: Too few bytes in ByteVector.");
     }
     buffer.push(byte);
   }

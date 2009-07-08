@@ -393,7 +393,7 @@ FieldInstructionDecimal::encodeNop(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     if(exponentInstruction_)
     {
@@ -437,7 +437,7 @@ FieldInstructionDecimal::encodeConstant(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     pmap.setNextField(false);
   }
@@ -477,7 +477,7 @@ FieldInstructionDecimal::encodeDefault(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     if(fieldOp_->hasValue())
     {
@@ -545,7 +545,7 @@ FieldInstructionDecimal::encodeCopy(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     if((previousIsKnown && previousNotNull)
       || !previousIsKnown)
@@ -622,7 +622,7 @@ FieldInstructionDecimal::encodeDelta(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     destination.putByte(nullInteger);
   }

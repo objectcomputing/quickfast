@@ -574,7 +574,7 @@ namespace QuickFAST{
           {
             if(isMandatory())
             {
-              decoder.reportError("[ERRD5]", "Missing initial value for Increment operator", *identity_);
+              decoder.reportError("[ERR D5]", "Missing initial value for Increment operator", *identity_);
               value = 0;
             }
             else
@@ -629,7 +629,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR x0]", "Missing mandatory field.", *identity_);
+          encoder.reportError("[ERR U01]", "Missing mandatory field.", *identity_);
           if(SIGNED)
           {
             encodeSignedInteger(destination, encoder.getWorkingBuffer(), 0);
@@ -663,7 +663,7 @@ namespace QuickFAST{
         field->getValue(value);
         if(value != typedValue_)
         {
-          encoder.reportError("[ERR ?]", "Constant value does not match application data.", *identity_);
+          encoder.reportError("[ERR U02]", "Constant value does not match application data.", *identity_);
         }
 
         if(!isMandatory())
@@ -675,7 +675,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR ?]", "Missing mandatory field.", *identity_);
+          encoder.reportError("[ERR U01]", "Missing mandatory field.", *identity_);
         }
         pmap.setNextField(false);
       }
@@ -725,7 +725,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR ??]", "Missing mandatory field.", *identity_);
+          encoder.reportError("[ERR U01]", "Missing mandatory field.", *identity_);
         }
         if(fieldOp_->hasValue())
         {
@@ -807,7 +807,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR ??]", "Missing mandatory field.", *identity_);
+          encoder.reportError("[ERR U01]", "Missing mandatory field.", *identity_);
           if(SIGNED)
           {
             encodeSignedInteger(destination, encoder.getWorkingBuffer(), 0);
@@ -894,7 +894,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR ??]", "Missing mandatory field.", *identity_);
+          encoder.reportError("[ERR U01]", "Missing mandatory field.", *identity_);
           encodeSignedInteger(destination, encoder.getWorkingBuffer(), 0);
         }
         else
@@ -974,7 +974,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR ??]", "Missing mandatory field.", *identity_);
+          encoder.reportError("[ERR U01]", "Missing mandatory field.", *identity_);
           if(SIGNED)
           {
             encodeSignedInteger(destination, encoder.getWorkingBuffer(), 0);

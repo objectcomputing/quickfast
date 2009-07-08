@@ -48,7 +48,7 @@ FieldInstructionBlob::decodeFromSource(
       return true;
     }
   }
-  decodeByteVector(source, buffer, length);
+  decodeByteVector(context, source, buffer, length);
   field = createField(buffer.begin(), buffer.size());
   return true;
 }
@@ -387,7 +387,7 @@ FieldInstructionBlob::encodeNop(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     destination.putByte(nullBlob);
   }
@@ -420,7 +420,7 @@ FieldInstructionBlob::encodeConstant(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     pmap.setNextField(false);
   }
@@ -461,7 +461,7 @@ FieldInstructionBlob::encodeDefault(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     if(fieldOp_->hasValue())
     {
@@ -532,7 +532,7 @@ FieldInstructionBlob::encodeCopy(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     if((previousIsKnown && previousNotNull)
       || !previousIsKnown)
@@ -612,7 +612,7 @@ FieldInstructionBlob::encodeDelta(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     destination.putByte(nullBlob);
   }
@@ -679,7 +679,7 @@ FieldInstructionBlob::encodeTail(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     destination.putByte(nullBlob);
   }

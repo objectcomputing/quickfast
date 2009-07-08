@@ -114,7 +114,7 @@ namespace QuickFAST{
           }
           if(!decoder_.decodeMessage(source, message))
           {
-            decoder_.reportError("[ERR U11]","EOF during decode.");
+            decoder_.reportError("[ERR U03]","EOF during decode.");
           }
           more = consumer.consumeMessage(message);
           messageCount_ += 1;

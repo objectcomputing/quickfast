@@ -10,6 +10,42 @@
     </uInt32>
   </template>
 
+  <template name="BookRefresh" id="32" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+    <uInt16 name="AB_MSG_TYPE" id="0">
+      <constant value="32"/>
+    </uInt16>
+    <uInt32 name="AB_SEQUENCE" id="20">
+      <increment pmap="2"/>
+    </uInt32>
+    <uInt32 name="AB_TIME" id="30">
+      <copy pmap="3"/>
+    </uInt32>
+    <uInt32 name="AB_ORDER_ID" id="40">
+      <copy pmap="4"/>
+    </uInt32>
+    <uInt32 name="AB_VOLUME" id="50">
+      <copy pmap="5"/>
+    </uInt32>
+    <uInt32 name="AB_PRICE" id="60">
+      <copy pmap="6"/>
+    </uInt32>
+    <uInt8 name="AB_PRICE_SCALE" id="70">
+      <copy pmap="7"/>
+    </uInt8>
+    <uInt8 name="AB_BUY_SELL" id="80">
+      <copy pmap="8"/>
+    </uInt8>
+    <uInt8 name="AB_EXCH_ID" id="90">
+      <copy pmap="9"/>
+    </uInt8>
+    <uInt8 name="AB_SECURITY_TYPE" id="100">
+      <copy pmap="10"/>
+    </uInt8>
+    <uInt16 name="AB_FIRM_ID" id="110">
+      <copy pmap="11"/>
+    </uInt16>
+  </template>
+  
   <template name="SymbolIndexMapping" id="35" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
     <uInt16 name="AB_MSG_TYPE" id="0">
       <constant value="35"/>

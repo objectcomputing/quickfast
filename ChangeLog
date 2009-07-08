@@ -1,3 +1,34 @@
+Wed Jul  8 21:19:50 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * data/ARCATemplates.xml:
+        * src/Arca/ArcaMessageBuilder.cpp:
+        * src/Arca/ArcaMessageHandler.h:
+
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBitMap.cpp:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastReceiver.h:
+        * src/Codecs/MulticastReceiverHandle.h:
+        * src/Codecs/MulticastReceiverHandle.cpp:
+        * src/Codecs/SynchronousDecoder.h:
+        * src/Examples/InterpretFAST/main.cpp:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+        * src/Examples/PerformanceTestArca/PerformanceTestArca.h:
+        * src/Examples/PerformanceTestArca/PerformanceTestArca.cpp:
+        Normalize error messages.  They are now documented in the Googlecode Wiki.
+        Arca decode error reports now include the partially decoded message.
+        Default multicast receive buffer is now 1600 bytes
+        Add Book Refresh message to Arca templates
+
+
 Wed Jul  1 21:05:06 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * data/ARCATemplates.xml:

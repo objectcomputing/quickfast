@@ -255,11 +255,12 @@ ArcaMessageBuilder::consumeBuffer(const unsigned char * buffer, size_t bufferSiz
   }
   decoder_.reset();
   size_t pos = 0;
+  const ArcaFullHeader * header = 0;
   try
   {
     while(pos + sizeof(ArcaCommonHeader) < bufferSize)
     {
-      const ArcaFullHeader * header = reinterpret_cast<const ArcaFullHeader *>(buffer + pos);
+      header = reinterpret_cast<const ArcaFullHeader *>(buffer + pos);
       ArcaMsgType messageType = static_cast<ArcaMsgType>(header->MsgType);
       switch(messageType)
       {
@@ -554,7 +555,7 @@ ArcaMessageBuilder::consumeBuffer(const unsigned char * buffer, size_t bufferSiz
   }
   catch (const std::exception & ex)
   {
-    messageHandler_.reportDecodingError(ex.what());
+    messageHandler_.reportDecodingError(ex.what(), header, & body_);
     ++discarded_;
   }
   return ok;

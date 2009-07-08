@@ -19,7 +19,9 @@ namespace QuickFASTArca{
       const ArcaFullHeader * header,
       const ArcaMessageStructure * body) = 0;
     virtual bool reportCommunicationError(const std::string & message) = 0;
-    virtual bool reportDecodingError(const std::string & message) = 0;
+    virtual bool reportDecodingError(const std::string & message,
+      const ArcaFullHeader * header,
+      const ArcaMessageStructure * body) = 0;
     virtual void receiverStarted() = 0;
     virtual void receiverStopped() = 0;
   };

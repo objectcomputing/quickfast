@@ -39,7 +39,9 @@ namespace QuickFAST{
         const QuickFASTArca::ArcaFullHeader * header,
         const QuickFASTArca::ArcaMessageStructure * body);
       virtual bool reportCommunicationError(const std::string & message);
-      virtual bool reportDecodingError(const std::string & message);
+      virtual bool reportDecodingError(const std::string & message,
+        const QuickFASTArca::ArcaFullHeader * header,
+        const QuickFASTArca::ArcaMessageStructure * body);
       virtual void receiverStarted();
       virtual void receiverStopped();
     private:

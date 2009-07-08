@@ -105,7 +105,7 @@ FieldInstructionGroup::encodeNop(
       // possibility #2: option group not present.
       if(isMandatory())
       {
-        encoder.reportFatal("[ERR U09]", "Missing mandatory group.");
+        encoder.reportFatal("[ERR U01]", "Missing mandatory group.");
       }
       // let our counterparty know it's just not there.
       pmap.setNextField(false);
