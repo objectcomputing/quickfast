@@ -70,10 +70,17 @@ namespace QuickFAST
           return result;
         }
 
-        virtual QuickFAST::Messages::MessageBuilder * createdNestedFields(size_t size)const
+        virtual QuickFAST::Messages::MessageBuilderPtr createNestedBuilder(
+          const std::string & applicationType,
+          const std::string & applicationTypeNamespace,size_t size)const
         {
-          return 0;
+          throw QuickFAST::UsageError("Single Value", "Illegal Sequence or Group.");
         }
+        virtual const FieldSet & getFieldSet() const
+        {
+          throw QuickFAST::UsageError("Single Value", "Illegal Sequence or Group.");
+        }
+
       private:
         bool set_;
         DATATYPE value_;

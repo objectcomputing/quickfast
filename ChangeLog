@@ -1,3 +1,23 @@
+Thu Jul  9 20:49:49 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Arca/ArcaMessageBuilder.h:
+        * src/Arca/ArcaMessageBuilder.cpp:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Common/QuickFASTPch.h:
+        * src/DotNet/Stdafx.h:
+        * src/Examples/Examples/ExamplesPch.h:
+        * src/Examples/PerformanceTest/NullMessage.h:
+        * src/Examples/PerformanceTest/NullMessage.cpp:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/Sequence.h:
+        * src/Messages/SingleValueBuilder.h:
+        * src/Tests/testRoundTrip.cpp:
+        More support for switching from generic message structure
+        to application specific structures.  This can result in a
+        significant performance improvement.
+
 Wed Jul  8 21:19:50 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * data/ARCATemplates.xml:

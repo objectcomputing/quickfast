@@ -123,10 +123,15 @@ FieldSet::getIdentity(const std::string &name, FieldIdentityCPtr & identity) con
   return false;
 }
 
-MessageBuilder *
-FieldSet::createdNestedFields(size_t size)const
+MessageBuilderPtr
+FieldSet::createNestedBuilder(
+  const std::string & applicationType,
+  const std::string & applicationTypeNamespace,
+  size_t size)const
 {
-  return new FieldSet(size);
+  FieldSetPtr fsp(new FieldSet(size));
+  MessageBuilderPtr mbp(fsp);
+  return mbp;
 }
 
 void

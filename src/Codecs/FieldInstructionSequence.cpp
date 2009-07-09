@@ -80,8 +80,11 @@ FieldInstructionSequence::decodeNop(
       decoder.logMessage(msg.str());
     }
 
-    Messages::FieldSetPtr entrySet(new Messages::FieldSet(segment_->fieldCount()));
-    entrySet->setApplicationType(segment_->getApplicationType(), segment_->getApplicationTypeNamespace());
+    Messages::MessageBuilderPtr entrySet(
+      messageBuilder.createNestedBuilder(
+        segment_->getApplicationType(),
+        segment_->getApplicationTypeNamespace(),
+        segment_->fieldCount()));
     decoder.decodeGroup(source, segment_, *entrySet);
     sequence->addEntry(entrySet);
   }

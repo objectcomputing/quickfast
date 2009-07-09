@@ -232,11 +232,21 @@ ArcaMessageBuilder::getApplicationTypeNs()const
   return applicationTypeNamespace_;
 }
 
-Messages::MessageBuilder *
-ArcaMessageBuilder::createdNestedFields(size_t size)const
+Messages::MessageBuilderPtr
+ArcaMessageBuilder::createNestedBuilder(
+  const std::string & applicationType,
+  const std::string & applicationTypeNamespace,
+  size_t size)const
 {
   throw QuickFAST::TemplateDefinitionError("Groups and Structures not supported for Arca");
 }
+
+const QuickFAST::Messages::FieldSet &
+ArcaMessageBuilder::getFieldSet() const
+{
+  throw QuickFAST::TemplateDefinitionError("Arca does not use Field Sets");
+}
+
 
 bool
 ArcaMessageBuilder::consumeBuffer(const unsigned char * buffer, size_t bufferSize)

@@ -3,7 +3,7 @@
 // See the file license.txt for licensing information.
 #include <Examples/ExamplesPch.h>
 #include "NullMessage.h"
-//#include <Messages/Message.h>
+#include <Common/Exceptions.h>
 
 using namespace QuickFAST;
 using namespace Examples;
@@ -73,11 +73,21 @@ NullMessage::getApplicationTypeNs()const
   return applicationTypeNamespace_;
 }
 
-Messages::MessageBuilder *
-NullMessage::createdNestedFields(size_t size)const
+Messages::MessageBuilderPtr
+NullMessage::createNestedBuilder(
+    const std::string & applicationType,
+    const std::string & applicationTypeNamespace,
+    size_t size)const
 {
-  return new NullMessage(size);
+  throw QuickFAST::TemplateDefinitionError("NullMessage does not use Field Sets");
 }
+
+const QuickFAST::Messages::FieldSet &
+NullMessage::getFieldSet() const
+{
+  throw QuickFAST::TemplateDefinitionError("NullMessage does not use Field Sets");
+}
+
 
 ///////////////////////
 // Null MessageConsumer

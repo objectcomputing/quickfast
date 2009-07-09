@@ -11,11 +11,13 @@
 #include <Messages/MessageBuilder.h>
 #include <Messages/MessageField.h>
 #include <Messages/Field.h>
+
 namespace QuickFAST{
   namespace Messages{
     /// @brief Internal representation of a set of fields to be encoded or decoded.
     class QuickFAST_Export FieldSet
       : public MessageBuilder
+      , public boost::enable_shared_from_this<FieldSet>
     {
       FieldSet();
       FieldSet(const FieldSet&);
@@ -128,8 +130,15 @@ namespace QuickFAST{
       }
 
       /// @brief act as a factory to create new fields sets to be nested within this one
-      virtual MessageBuilder * createdNestedFields(size_t size)const;
+      virtual MessageBuilderPtr createNestedBuilder(
+        const std::string & applicationType,
+        const std::string & applicationTypeNamespace,
+        size_t size)const;
 
+      virtual const FieldSet & getFieldSet() const
+      {
+        return *this;
+      }
 
       /// @brief For DotNet: get everything in one call
       ///

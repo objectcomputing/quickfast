@@ -9,10 +9,12 @@
 #include "MessageBuilder_fwd.h"
 #include <Common/QuickFAST_Export.h>
 #include <Messages/MessageField.h>
+#include <Messages/FieldSet_fwd.h>
 namespace QuickFAST{
   namespace Messages{
-    /// @brief Internal representation of a set of fields to be encoded or decoded.
-    class MessageBuilder{
+    /// @brief Interface to support building a message during decoding.
+    class MessageBuilder
+    {
     public:
 
       /// @brief Virtual destructor
@@ -59,11 +61,15 @@ namespace QuickFAST{
       /// @brief get the namespace to qualify application type.
       virtual const std::string & getApplicationTypeNs()const = 0;
 
-      /// @brief create an empty version of this container for nexted fields./
+      /// @brief prepare to accept nested fields (a group or structure)
       /// @param size is the number of fields to expect in the new container
-      virtual MessageBuilder * createdNestedFields(size_t size)const  = 0;
+      virtual MessageBuilderPtr createNestedBuilder(
+        const std::string & applicationType,
+        const std::string & applicationTypeNamespace,
+        size_t size)const  = 0;
 
-    private:
+      /// @brief return the message that was built.
+      virtual const FieldSet & getFieldSet() const = 0;
     };
   }
 }

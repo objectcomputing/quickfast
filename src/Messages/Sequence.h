@@ -8,7 +8,9 @@
 #define SEQUENCE_H
 #include "Sequence_fwd.h"
 #include <Common/QuickFAST_Export.h>
-#include <Messages/FieldSet_fwd.h>
+#include <Messages/FieldSet.h>
+#include <Messages/MessageBuilder.h>
+
 namespace QuickFAST{
   namespace Messages{
     /// Container for a sequence of field groups
@@ -45,9 +47,15 @@ namespace QuickFAST{
       }
 
       /// @brief Add a new group to the sequence
-      void addEntry(Entry entry)
+      void addEntry(MessageBuilderPtr builder)
       {
-        entries_.push_back(entry);
+        entries_.push_back(builder->getFieldSet().shared_from_this());
+      }
+
+      /// @brief Add a new group to the sequence
+      void addEntry(FieldSetCPtr fieldSet)
+      {
+        entries_.push_back(fieldSet);
       }
 
       /// @brief How many entries are in the sequence.

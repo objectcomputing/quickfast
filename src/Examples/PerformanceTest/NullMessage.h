@@ -30,7 +30,11 @@ namespace QuickFAST{
       virtual void setApplicationType(const std::string & type, const std::string & ns);
       virtual const std::string & getApplicationType()const;
       virtual const std::string & getApplicationTypeNs()const;
-      virtual Messages::MessageBuilder * createdNestedFields(size_t size)const;
+      virtual Messages::MessageBuilderPtr createNestedBuilder(
+        const std::string & applicationType,
+        const std::string & applicationTypeNamespace,
+        size_t size)const;
+    virtual const QuickFAST::Messages::FieldSet & getFieldSet() const;
     private:
       int size_;
       std::string applicationType_;
