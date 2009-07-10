@@ -50,16 +50,14 @@ FieldInstructionGroup::decodeNop(
     }
     if(messageBuilder.getApplicationType() != segmentBody_->getApplicationType())
     {
-      Messages::MessageBuilderPtr group(
+      Messages::MessageBuilder & group(
         messageBuilder.startGroup(
           identity_,
           segmentBody_->getApplicationType(),
           segmentBody_->getApplicationTypeNamespace(),
           segmentBody_->fieldCount()));
 
-//      Messages::GroupPtr group(new Messages::Group(segmentBody_->fieldCount()));
-//      group->setApplicationType(segmentBody_->getApplicationType(), segmentBody_->getApplicationTypeNamespace());
-      decoder.decodeGroup(source, segmentBody_, *group);
+      decoder.decodeGroup(source, segmentBody_, group);
       messageBuilder.endGroup(
         identity_,
         group);

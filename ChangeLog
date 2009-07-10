@@ -1,3 +1,17 @@
+Fri Jul 10 18:17:38 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Arca/ArcaMessageBuilder.h:
+        * src/Arca/ArcaMessageBuilder.cpp:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Examples/PerformanceTest/NullMessage.h:
+        * src/Examples/PerformanceTest/NullMessage.cpp:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/SingleValueBuilder.h:
+        Pass message builder by reference rather than pointer
+
 Fri Jul 10 17:39:53 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Arca/ArcaMessageBuilder.h:

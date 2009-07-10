@@ -241,7 +241,7 @@ ArcaMessageBuilder::startSequence(
   throw QuickFAST::TemplateDefinitionError("Structures not supported for Arca");
 }
 
-Messages::MessageBuilderPtr
+Messages::MessageBuilder &
 ArcaMessageBuilder::startSequenceEntry(
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
@@ -251,7 +251,7 @@ ArcaMessageBuilder::startSequenceEntry(
 }
 
 void
-ArcaMessageBuilder::endSequenceEntry(QuickFAST::Messages::MessageBuilderPtr entry)
+ArcaMessageBuilder::endSequenceEntry(QuickFAST::Messages::MessageBuilder & entry)
 {
   throw QuickFAST::TemplateDefinitionError("Structures not supported for Arca");
 }
@@ -262,7 +262,7 @@ ArcaMessageBuilder::endSequence( Messages::FieldIdentityCPtr identity)
   throw QuickFAST::TemplateDefinitionError("Structures not supported for Arca");
 }
 
-Messages::MessageBuilderPtr
+Messages::MessageBuilder &
 ArcaMessageBuilder::startGroup(
   Messages::FieldIdentityCPtr identity,
   const std::string & applicationType,
@@ -275,7 +275,7 @@ ArcaMessageBuilder::startGroup(
 void
 ArcaMessageBuilder::endGroup(
   Messages::FieldIdentityCPtr identity,
-  QuickFAST::Messages::MessageBuilderPtr entry)
+  QuickFAST::Messages::MessageBuilder & entry)
 {
   throw QuickFAST::TemplateDefinitionError("Groupsnot supported for Arca");
 }

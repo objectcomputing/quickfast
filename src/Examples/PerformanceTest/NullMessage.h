@@ -35,20 +35,20 @@ namespace QuickFAST{
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
-      virtual Messages::MessageBuilderPtr startSequenceEntry(
+      virtual Messages::MessageBuilder & startSequenceEntry(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
-      virtual void endSequenceEntry(Messages::MessageBuilderPtr entry);
+      virtual void endSequenceEntry(Messages::MessageBuilder & entry);
       virtual void endSequence( Messages::FieldIdentityCPtr identity);
-      virtual Messages::MessageBuilderPtr startGroup(
+      virtual Messages::MessageBuilder & startGroup(
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
       virtual void endGroup(
         Messages::FieldIdentityCPtr identity,
-        Messages::MessageBuilderPtr entry);
+        Messages::MessageBuilder & entry);
 
       virtual const QuickFAST::Messages::FieldSet & getFieldSet() const;
     private:

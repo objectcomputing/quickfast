@@ -9,7 +9,7 @@
 #include "MessageBuilder_fwd.h"
 #include <Common/QuickFAST_Export.h>
 #include <Messages/MessageField.h>
-#include <Messages/FieldSet_fwd.h>
+//#include <Messages/FieldSet_fwd.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief Interface to support building a message during decoding.
@@ -61,30 +61,68 @@ namespace QuickFAST{
       /// @brief get the namespace to qualify application type.
       virtual const std::string & getApplicationTypeNs()const = 0;
 
-      /// @brief prepare to accept nested fields (a group or structure)
-      /// @param size is the number of fields to expect in the new container
+      /// @brief prepare to accept decoded sequence entries
+      ///
+      /// @param identity identifies the sequence
+      /// @param applicationType is the data type for a sequence entry
+      /// @param applicationTypeNamespace qualifies applicationTYpe
+      /// @param size is the maximum number of fields to expect in each entry
       virtual void startSequence(
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size) = 0;
-      virtual MessageBuilderPtr startSequenceEntry(
+
+      /// @brief prepare to accept a single decoded sequence entry
+      ///
+      /// Builders may assume this call is nested within a startSequence/endSequence pair.
+      ///
+      /// @param applicationType is the data type for the entry
+      /// @param applicationTypeNamespace qualifies applicationTYpe
+      /// @param size is the maximum number of fields to expect in the entry
+      /// @returns a MessageBuilder to accumulate fields for this entry.
+      virtual MessageBuilder & startSequenceEntry(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size)  = 0;
-      virtual void endSequenceEntry(MessageBuilderPtr entry) = 0;
+
+      /// @brief Complete the current sequence entry.
+      ///
+      /// This method is called on the <b>containing</b> MessageBuilder
+      ///
+      /// Builders may assume this call follows a startSequenceEntry call within
+      //  a startSequence/endSequence pair.
+      ///
+      /// @param the nested Message builder returned by startSequenceEntry.
+      virtual void endSequenceEntry(MessageBuilder & entry) = 0;
+
+      /// @brief Complete the entire sequence.
+      ///
+      /// Builders may assume that all Sequence Entries will be closed via endSequenceEntry
+      ///
+      /// @param identity identifies the sequence
       virtual void endSequence( Messages::FieldIdentityCPtr identity) = 0;
-      virtual MessageBuilderPtr startGroup(
+
+
+      /// @brief Prepare to accept a decoded Group
+      /// @param identity identifies the group
+      /// @param applicationType is the data type for the group
+      /// @param applicationTypeNamespace qualifies applicationTYpe
+      /// @param size is the maximum number of fields to expect in the group
+      /// @returns a MessageBuilder to accumulate fields for this group
+      virtual MessageBuilder & startGroup(
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size)  = 0;
+
+      /// @brief Complete the group
+      ///
+      /// @param identity identifies the group
       virtual void endGroup(
         Messages::FieldIdentityCPtr identity,
-        MessageBuilderPtr entry) = 0;
+        MessageBuilder & entry) = 0;
 
-      /// @brief return the message that was built.
-//    virtual const FieldSet & getFieldSet() const = 0;
     };
   }
 }

@@ -79,14 +79,14 @@ namespace QuickFAST
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
 
-        virtual QuickFAST::Messages::MessageBuilderPtr startSequenceEntry(
+        virtual QuickFAST::Messages::MessageBuilder & startSequenceEntry(
           const std::string & applicationType,
           const std::string & applicationTypeNamespace,size_t size)
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
 
-        virtual void endSequenceEntry(MessageBuilderPtr entry)
+        virtual void endSequenceEntry(MessageBuilder & entry)
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
@@ -95,7 +95,7 @@ namespace QuickFAST
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
 
-        virtual QuickFAST::Messages::MessageBuilderPtr startGroup(
+        virtual QuickFAST::Messages::MessageBuilder & startGroup(
           Messages::FieldIdentityCPtr identity,
           const std::string & applicationType,
           const std::string & applicationTypeNamespace,size_t size)
@@ -104,7 +104,7 @@ namespace QuickFAST
         }
         virtual void endGroup(
           Messages::FieldIdentityCPtr identity,
-          MessageBuilderPtr entry)
+          MessageBuilder & entry)
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Group.");
         }

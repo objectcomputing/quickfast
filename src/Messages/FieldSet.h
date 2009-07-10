@@ -134,22 +134,22 @@ namespace QuickFAST{
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
-      virtual MessageBuilderPtr startSequenceEntry(
+      virtual MessageBuilder & startSequenceEntry(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
-      virtual void endSequenceEntry(MessageBuilderPtr entry);
+      virtual void endSequenceEntry(MessageBuilder & entry);
       virtual void endSequence( Messages::FieldIdentityCPtr identity);
 
 
-      virtual MessageBuilderPtr startGroup(
+      virtual MessageBuilder & startGroup(
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
       virtual void endGroup(
         Messages::FieldIdentityCPtr identity,
-        MessageBuilderPtr entry);
+        MessageBuilder & entry);
 
       virtual const FieldSet & getFieldSet() const
       {

@@ -85,12 +85,12 @@ FieldInstructionSequence::decodeNop(
       decoder.logMessage(msg.str());
     }
 
-    Messages::MessageBuilderPtr entrySet(
+    Messages::MessageBuilder & entrySet(
       messageBuilder.startSequenceEntry(
         segment_->getApplicationType(),
         segment_->getApplicationTypeNamespace(),
         segment_->fieldCount()));
-    decoder.decodeGroup(source, segment_, *entrySet);
+    decoder.decodeGroup(source, segment_, entrySet);
     messageBuilder.endSequenceEntry(entrySet);
   }
   messageBuilder.endSequence(identity_);

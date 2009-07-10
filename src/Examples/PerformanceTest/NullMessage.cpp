@@ -83,7 +83,7 @@ NullMessage::startSequence(
   throw QuickFAST::TemplateDefinitionError("NullMessage does not use Sequences");
 }
 
-Messages::MessageBuilderPtr
+Messages::MessageBuilder &
 NullMessage::startSequenceEntry(
     const std::string & applicationType,
     const std::string & applicationTypeNamespace,
@@ -93,7 +93,7 @@ NullMessage::startSequenceEntry(
 }
 
 void
-NullMessage::endSequenceEntry(Messages::MessageBuilderPtr entry)
+NullMessage::endSequenceEntry(Messages::MessageBuilder & entry)
 {
   throw QuickFAST::TemplateDefinitionError("NullMessage does not use Sequences");
 }
@@ -106,7 +106,7 @@ NullMessage::endSequence( Messages::FieldIdentityCPtr identity)
 
 
 
-Messages::MessageBuilderPtr
+Messages::MessageBuilder &
 NullMessage::startGroup(
     Messages::FieldIdentityCPtr identity,
     const std::string & applicationType,
@@ -119,7 +119,7 @@ NullMessage::startGroup(
 void
 NullMessage::endGroup(
   Messages::FieldIdentityCPtr identity,
-  Messages::MessageBuilderPtr entry)
+  Messages::MessageBuilder & entry)
 {
   throw QuickFAST::TemplateDefinitionError("NullMessage does not use Group");
 }
