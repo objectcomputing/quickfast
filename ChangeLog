@@ -43,13 +43,12 @@ Fri Jul 10 20:58:43 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
         * src/Messages/FieldSet.h:
         * src/Messages/MessageAccessor.h:
         * src/Messages/SpecialAccessors.h:
-        Encoder is now based on the MessageAccessor interface rather than
-        interacting directly with a FieldSet -- another step toward generic/specific
-        message support.
-
         * src/Tests/FieldInstructionMock.h:
         * src/Tests/testFieldInstructions.cpp:
         * src/Tests/testFieldOperations.cpp:
+        Encoder is now based on the MessageAccessor interface rather than
+        interacting directly with a FieldSet -- another step toward generic/specific
+        message support.
 
 Fri Jul 10 18:17:38 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
