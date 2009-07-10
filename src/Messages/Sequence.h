@@ -9,7 +9,6 @@
 #include "Sequence_fwd.h"
 #include <Common/QuickFAST_Export.h>
 #include <Messages/FieldSet.h>
-#include <Messages/MessageBuilder.h>
 
 namespace QuickFAST{
   namespace Messages{
@@ -44,12 +43,6 @@ namespace QuickFAST{
       const std::string & getApplicationType()const
       {
         return applicationType_;
-      }
-
-      /// @brief Add a new group to the sequence
-      void addEntry(MessageBuilderPtr builder)
-      {
-        entries_.push_back(builder->getFieldSet().shared_from_this());
       }
 
       /// @brief Add a new group to the sequence

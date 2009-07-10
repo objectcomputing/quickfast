@@ -63,18 +63,28 @@ namespace QuickFAST{
 
       /// @brief prepare to accept nested fields (a group or structure)
       /// @param size is the number of fields to expect in the new container
+      virtual void startSequence(
+        Messages::FieldIdentityCPtr identity,
+        const std::string & applicationType,
+        const std::string & applicationTypeNamespace,
+        size_t size) = 0;
       virtual MessageBuilderPtr startSequenceEntry(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
-        size_t size)const  = 0;
-
+        size_t size)  = 0;
+      virtual void endSequenceEntry(MessageBuilderPtr entry) = 0;
+      virtual void endSequence( Messages::FieldIdentityCPtr identity) = 0;
       virtual MessageBuilderPtr startGroup(
+        Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
-        size_t size)const  = 0;
+        size_t size)  = 0;
+      virtual void endGroup(
+        Messages::FieldIdentityCPtr identity,
+        MessageBuilderPtr entry) = 0;
 
       /// @brief return the message that was built.
-      virtual const FieldSet & getFieldSet() const = 0;
+//    virtual const FieldSet & getFieldSet() const = 0;
     };
   }
 }

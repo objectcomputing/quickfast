@@ -70,7 +70,12 @@ FieldInstructionSequence::decodeNop(
   }
   length = lengthSet.value();
 
-  Messages::SequencePtr sequence(new Messages::Sequence);
+  messageBuilder.startSequence(
+    identity_,
+    segment_->getApplicationType(),
+    segment_->getApplicationTypeNamespace(),
+    segment_->fieldCount());
+
   for(size_t nEntry = 0; nEntry < length; ++nEntry)
   {
     if(decoder.getLogOut())
@@ -86,12 +91,10 @@ FieldInstructionSequence::decodeNop(
         segment_->getApplicationTypeNamespace(),
         segment_->fieldCount()));
     decoder.decodeGroup(source, segment_, *entrySet);
-    sequence->addEntry(entrySet);
+    messageBuilder.endSequenceEntry(entrySet);
   }
-  Messages::FieldCPtr field(Messages::FieldSequence::create(sequence));
-  messageBuilder.addField(
-    identity_,
-    field);
+  messageBuilder.endSequence(identity_);
+
   return true;
 }
 

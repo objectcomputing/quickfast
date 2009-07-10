@@ -50,14 +50,25 @@ namespace QuickFASTArca{
     virtual void setApplicationType(const std::string & type, const std::string & ns);
     virtual const std::string & getApplicationType()const;
     virtual const std::string & getApplicationTypeNs()const;
+    virtual void startSequence(
+      QuickFAST::Messages::FieldIdentityCPtr identity,
+      const std::string & applicationType,
+      const std::string & applicationTypeNamespace,
+      size_t size);
     virtual QuickFAST::Messages::MessageBuilderPtr startSequenceEntry(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
-        size_t size)const;
+        size_t size);
+    virtual void endSequenceEntry(QuickFAST::Messages::MessageBuilderPtr entry);
+    virtual void endSequence( QuickFAST::Messages::FieldIdentityCPtr identity);
     virtual QuickFAST::Messages::MessageBuilderPtr startGroup(
+        QuickFAST::Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
-        size_t size)const;
+        size_t size);
+    virtual void endGroup(
+      QuickFAST::Messages::FieldIdentityCPtr identity,
+      QuickFAST::Messages::MessageBuilderPtr entry);
     virtual const QuickFAST::Messages::FieldSet & getFieldSet() const;
 
   private:

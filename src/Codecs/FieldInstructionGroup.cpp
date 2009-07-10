@@ -52,6 +52,7 @@ FieldInstructionGroup::decodeNop(
     {
       Messages::MessageBuilderPtr group(
         messageBuilder.startGroup(
+          identity_,
           segmentBody_->getApplicationType(),
           segmentBody_->getApplicationTypeNamespace(),
           segmentBody_->fieldCount()));
@@ -59,10 +60,9 @@ FieldInstructionGroup::decodeNop(
 //      Messages::GroupPtr group(new Messages::Group(segmentBody_->fieldCount()));
 //      group->setApplicationType(segmentBody_->getApplicationType(), segmentBody_->getApplicationTypeNamespace());
       decoder.decodeGroup(source, segmentBody_, *group);
-      Messages::FieldCPtr field(Messages::FieldGroup::create(group));
-      messageBuilder.addField(
+      messageBuilder.endGroup(
         identity_,
-        field);
+        group);
     }
     else
     {

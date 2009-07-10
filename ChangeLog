@@ -1,3 +1,21 @@
+Fri Jul 10 17:39:53 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Arca/ArcaMessageBuilder.h:
+        * src/Arca/ArcaMessageBuilder.cpp:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Examples/PerformanceTest/NullMessage.h:
+        * src/Examples/PerformanceTest/NullMessage.cpp:
+        * src/Messages/FieldGroup.h:
+        * src/Messages/FieldGroup.cpp:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/Sequence.h:
+        * src/Messages/SingleValueBuilder.h:
+        Another step on the way to generic/specific message support.
+        Delegate sequence and group construction to message builder.
+
 Fri Jul 10 16:08:29 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Arca/ArcaMessageBuilder.h:

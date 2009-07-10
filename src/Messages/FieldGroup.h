@@ -24,11 +24,6 @@ namespace QuickFAST{
       /// @returns a constant pointer to the immutable field
       static FieldCPtr create(Messages::GroupCPtr group);
 
-      /// @brief Construct the field from a MessageBuilder
-      /// @param group the value to be stored in the field
-      /// @returns a constant pointer to the immutable field
-      static FieldCPtr create(Messages::MessageBuilderPtr & builder);
-
       /// @brief a typical virtual destructor.
       virtual ~FieldGroup();
 

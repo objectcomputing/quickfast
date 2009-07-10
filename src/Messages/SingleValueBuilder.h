@@ -70,19 +70,46 @@ namespace QuickFAST
           return result;
         }
 
+        virtual void startSequence(
+          Messages::FieldIdentityCPtr identity,
+          const std::string & applicationType,
+          const std::string & applicationTypeNamespace,
+          size_t size)
+        {
+          throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
+        }
+
         virtual QuickFAST::Messages::MessageBuilderPtr startSequenceEntry(
           const std::string & applicationType,
-          const std::string & applicationTypeNamespace,size_t size)const
+          const std::string & applicationTypeNamespace,size_t size)
         {
-          throw QuickFAST::UsageError("Single Value", "Illegal Sequence or Group.");
+          throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
+        }
+
+        virtual void endSequenceEntry(MessageBuilderPtr entry)
+        {
+          throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
+        }
+        virtual void endSequence( Messages::FieldIdentityCPtr identity)
+        {
+          throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
 
         virtual QuickFAST::Messages::MessageBuilderPtr startGroup(
+          Messages::FieldIdentityCPtr identity,
           const std::string & applicationType,
-          const std::string & applicationTypeNamespace,size_t size)const
+          const std::string & applicationTypeNamespace,size_t size)
         {
-          throw QuickFAST::UsageError("Single Value", "Illegal Sequence or Group.");
+          throw QuickFAST::UsageError("Single Value", "Illegal Group.");
         }
+        virtual void endGroup(
+          Messages::FieldIdentityCPtr identity,
+          MessageBuilderPtr entry)
+        {
+          throw QuickFAST::UsageError("Single Value", "Illegal Group.");
+        }
+
+
         virtual const FieldSet & getFieldSet() const
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence or Group.");

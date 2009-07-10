@@ -129,15 +129,27 @@ namespace QuickFAST{
         swap_i(used_, rhs.used_);
       }
 
+      virtual void startSequence(
+        Messages::FieldIdentityCPtr identity,
+        const std::string & applicationType,
+        const std::string & applicationTypeNamespace,
+        size_t size);
       virtual MessageBuilderPtr startSequenceEntry(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
-        size_t size)const;
+        size_t size);
+      virtual void endSequenceEntry(MessageBuilderPtr entry);
+      virtual void endSequence( Messages::FieldIdentityCPtr identity);
+
 
       virtual MessageBuilderPtr startGroup(
+        Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
-        size_t size)const;
+        size_t size);
+      virtual void endGroup(
+        Messages::FieldIdentityCPtr identity,
+        MessageBuilderPtr entry);
 
       virtual const FieldSet & getFieldSet() const
       {
@@ -170,6 +182,11 @@ namespace QuickFAST{
       MessageField * fields_;
       size_t capacity_;
       size_t used_;
+      // used during building
+      MessageBuilderPtr sequenceBuilder_;
+
+      Messages::SequencePtr sequence_;
+      FieldSetPtr nestedFieldSet_;
     };
   }
 }

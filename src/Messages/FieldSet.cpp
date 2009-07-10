@@ -3,8 +3,11 @@
 // See the file license.txt for licensing information.
 #include <Common/QuickFASTPch.h>
 #include "FieldSet.h"
+#include <Messages/Sequence.h>
+#include <Messages/FieldSequence.h>
+#include <Messages/Group.h>
+#include <Messages/FieldGroup.h>
 #include <Common/Exceptions.h>
-
 #include <Common/Profiler.h>
 
 using namespace ::QuickFAST;
@@ -123,26 +126,66 @@ FieldSet::getIdentity(const std::string &name, FieldIdentityCPtr & identity) con
   return false;
 }
 
+void
+FieldSet::startSequence(
+  Messages::FieldIdentityCPtr identity,
+  const std::string & applicationType,
+  const std::string & applicationTypeNamespace,
+  size_t size)
+{
+  sequence_.reset(new Messages::Sequence);
+}
+
 MessageBuilderPtr
 FieldSet::startSequenceEntry(
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
-  size_t size)const
+  size_t size)
 {
-  FieldSetPtr fsp(new FieldSet(size));
-  MessageBuilderPtr mbp(fsp);
+  nestedFieldSet_.reset(new FieldSet(size));
+  // "cast" the pointer
+  MessageBuilderPtr mbp(nestedFieldSet_);
   return mbp;
+}
+
+void
+FieldSet::endSequenceEntry(MessageBuilderPtr entry)
+{
+  sequence_->addEntry(nestedFieldSet_);
+  nestedFieldSet_.reset();
+}
+
+void
+FieldSet::endSequence(Messages::FieldIdentityCPtr identity)
+{
+  Messages::FieldCPtr field(FieldSequence::create(sequence_));
+  addField(
+    identity,
+    field);
 }
 
 MessageBuilderPtr
 FieldSet::startGroup(
+  Messages::FieldIdentityCPtr identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
-  size_t size)const
+  size_t size)
 {
-  FieldSetPtr fsp(new FieldSet(size));
-  MessageBuilderPtr mbp(fsp);
+  nestedFieldSet_.reset(new FieldSet(size));
+  // "cast" the pointer
+  MessageBuilderPtr mbp(nestedFieldSet_);
   return mbp;
+}
+
+void
+FieldSet::endGroup(
+  Messages::FieldIdentityCPtr identity,
+  MessageBuilderPtr entry)
+{
+  Messages::FieldCPtr field(Messages::FieldGroup::create(nestedFieldSet_));
+  addField(
+    identity,
+    field);
 }
 
 void
