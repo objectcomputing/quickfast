@@ -33,6 +33,7 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/DictionaryIndexer.h>
 #include <Codecs/TemplateRegistry.h>
+#include <Messages/FieldSet.h>
 #include <Tests/FieldInstructionMock.h>
 #include <Tests/DataDestinationMock.h>
 

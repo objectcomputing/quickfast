@@ -43,7 +43,7 @@ FieldOpIncrement::encode(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   return instruction.encodeIncrement(destination, pmap, encoder, fieldSet);
 }

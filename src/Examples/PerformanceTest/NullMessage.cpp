@@ -124,13 +124,6 @@ NullMessage::endGroup(
   throw QuickFAST::TemplateDefinitionError("NullMessage does not use Group");
 }
 
-const QuickFAST::Messages::FieldSet &
-NullMessage::getFieldSet() const
-{
-  throw QuickFAST::TemplateDefinitionError("NullMessage does not use Field Sets");
-}
-
-
 ///////////////////////
 // Null MessageConsumer
 

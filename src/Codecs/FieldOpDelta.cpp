@@ -37,7 +37,7 @@ FieldOpDelta::encode(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   return instruction.encodeDelta(destination, pmap, encoder, fieldSet);
 }

@@ -108,7 +108,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const
+        const Messages::MessageAccessor & fieldSet) const
       {
         ++calledEncodeNop_;
       }
@@ -117,7 +117,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const
+        const Messages::MessageAccessor & fieldSet) const
       {
         ++calledEncodeConstant_;
       }
@@ -126,7 +126,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const
+        const Messages::MessageAccessor & fieldSet) const
       {
         ++calledEncodeDefault_;
       }
@@ -135,7 +135,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const
+        const Messages::MessageAccessor & fieldSet) const
       {
         ++calledEncodeCopy_;
       }
@@ -144,7 +144,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const
+        const Messages::MessageAccessor & fieldSet) const
       {
         ++calledEncodeDelta_;
       }
@@ -153,7 +153,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const
+        const Messages::MessageAccessor & fieldSet) const
       {
         ++calledEncodeIncrement_;
       }
@@ -162,7 +162,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const
+        const Messages::MessageAccessor & fieldSet) const
       {
         ++calledEncodeTail_;
       }

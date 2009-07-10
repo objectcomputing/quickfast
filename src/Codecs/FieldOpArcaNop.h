@@ -44,7 +44,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const
+        const Messages::MessageAccessor & fieldSet) const
       {
         pmap.setNextField(true);
         return instruction.encodeNop(destination, pmap, encoder, fieldSet);

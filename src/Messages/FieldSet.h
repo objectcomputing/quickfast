@@ -9,6 +9,7 @@
 #include "FieldSet_fwd.h"
 #include <Common/QuickFAST_Export.h>
 #include <Messages/MessageBuilder.h>
+#include <Messages/MessageAccessor.h>
 #include <Messages/MessageField.h>
 #include <Messages/Field.h>
 
@@ -17,6 +18,7 @@ namespace QuickFAST{
     /// @brief Internal representation of a set of fields to be encoded or decoded.
     class QuickFAST_Export FieldSet
       : public MessageBuilder
+      , public MessageAccessor
       , public boost::enable_shared_from_this<FieldSet>
     {
       FieldSet();

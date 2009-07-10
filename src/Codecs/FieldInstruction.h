@@ -13,7 +13,6 @@
 #include <Common/Constants.h>
 #include <Common/WorkingBuffer.h>
 #include <Common/Exceptions.h>
-#include <Messages/FieldSet_fwd.h>
 #include <Messages/Message_fwd.h>
 #include <Messages/MessageBuilder_fwd.h>
 #include <Messages/FieldIdentity.h>
@@ -218,7 +217,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet)const
+        const Messages::MessageAccessor & fieldSet)const
       {
         return fieldOp_->encode(*this, destination, pmap, encoder, fieldSet);
       }
@@ -370,7 +369,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const = 0;
+        const Messages::MessageAccessor & fieldSet) const = 0;
 
       /// @brief Encode when &lt;constant> operation is specified.
       /// @see encode()
@@ -382,7 +381,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       /// @brief Encode when &lt;default> operation is specified.
       /// @see encode()
@@ -394,7 +393,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       /// @brief Encode when &lt;copy> operation is specified.
       /// @see encode()
@@ -406,7 +405,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       /// @brief Encode when &lt;delta> operation is specified.
       /// @see encode()
@@ -418,7 +417,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       /// @brief Encode when &lt;increment> operation is specified.
       /// @see encode()
@@ -431,7 +430,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       /// @brief Encode when &lt;tail> operation is specified.
       /// @see encode()
@@ -444,7 +443,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       /////////////////////////
       // Basic Decoding methods

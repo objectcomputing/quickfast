@@ -10,7 +10,7 @@
 #include <Common/QuickFAST_Export.h>
 
 #include <Messages/Field_fwd.h>
-#include <Messages/FieldSet_fwd.h>
+#include <Messages/MessageAccessor.h>
 #include <Messages/MessageBuilder_fwd.h>
 #include <Codecs/Context_fwd.h>
 #include <Codecs/FieldInstruction_fwd.h>
@@ -72,7 +72,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const = 0;
+        const Messages::MessageAccessor & fieldSet) const = 0;
 
       /// @brief Set the appropriate default value in the FieldInstruction
       /// @param instruction is the instruction that will ultimately process the value.

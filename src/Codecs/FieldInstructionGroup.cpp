@@ -84,7 +84,7 @@ FieldInstructionGroup::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & messageBuilder) const
+  const Messages::MessageAccessor & messageBuilder) const
 {
   // retrieve the field corresponding to this group
   Messages::FieldCPtr field;

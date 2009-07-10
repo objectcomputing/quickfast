@@ -1,3 +1,56 @@
+Fri Jul 10 20:58:43 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Arca/ArcaMessageBuilder.h:
+        * src/Arca/ArcaMessageBuilder.cpp:
+        * src/Codecs/Encoder.h:
+        * src/Codecs/Encoder.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.h:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBitMap.h:
+        * src/Codecs/FieldInstructionBitMap.cpp:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.h:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionFiller.h:
+        * src/Codecs/FieldInstructionFiller.cpp:
+        * src/Codecs/FieldInstructionGroup.h:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionSequence.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FieldOpArcaNop.h:
+        * src/Codecs/FieldOpConstant.h:
+        * src/Codecs/FieldOpConstant.cpp:
+        * src/Codecs/FieldOpCopy.h:
+        * src/Codecs/FieldOpCopy.cpp:
+        * src/Codecs/FieldOpDefault.h:
+        * src/Codecs/FieldOpDefault.cpp:
+        * src/Codecs/FieldOpDelta.h:
+        * src/Codecs/FieldOpDelta.cpp:
+        * src/Codecs/FieldOpIncrement.h:
+        * src/Codecs/FieldOpIncrement.cpp:
+        * src/Codecs/FieldOpNop.h:
+        * src/Codecs/FieldOpTail.h:
+        * src/Codecs/FieldOpTail.cpp:
+        * src/Examples/PerformanceTest/NullMessage.h:
+        * src/Examples/PerformanceTest/NullMessage.cpp:
+        * src/Messages/FieldSet.h:
+        * src/Messages/MessageAccessor.h:
+        * src/Messages/SpecialAccessors.h:
+        Encoder is now based on the MessageAccessor interface rather than
+        interacting directly with a FieldSet -- another step toward generic/specific
+        message support.
+
+        * src/Tests/FieldInstructionMock.h:
+        * src/Tests/testFieldInstructions.cpp:
+        * src/Tests/testFieldOperations.cpp:
+
 Fri Jul 10 18:17:38 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Arca/ArcaMessageBuilder.h:

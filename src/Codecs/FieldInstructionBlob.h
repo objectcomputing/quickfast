@@ -70,37 +70,37 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       virtual void encodeConstant(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       virtual void encodeDefault(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       virtual void encodeCopy(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       virtual void encodeDelta(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       virtual void encodeTail(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
     protected:
       /// @brief create a populated field of the appropriate type

@@ -11,7 +11,8 @@
 #include <Codecs/Encoder.h>
 #include <Codecs/DataSource.h>
 #include <Codecs/DataDestination.h>
-#include <Messages/Message.h>
+#include <Messages/MessageBuilder.h>
+#include <Messages/MessageAccessor.h>
 #include <Messages/Field.h>
 
 #include <Common/Profiler.h>
@@ -109,37 +110,37 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       virtual void encodeConstant(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       virtual void encodeDefault(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       virtual void encodeCopy(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       virtual void encodeDelta(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       virtual void encodeIncrement(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
     private:
       FieldInstructionInteger(const FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED> &);
@@ -600,7 +601,7 @@ namespace QuickFAST{
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & pmap,
       Codecs::Encoder & encoder,
-      const Messages::FieldSet & fieldSet) const
+      const Messages::MessageAccessor & fieldSet) const
     {
       // get the value from the application data
       Messages::FieldCPtr field;
@@ -653,7 +654,7 @@ namespace QuickFAST{
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & pmap,
       Codecs::Encoder & encoder,
-      const Messages::FieldSet & fieldSet) const
+      const Messages::MessageAccessor & fieldSet) const
     {
       // get the value from the application data
       Messages::FieldCPtr field;
@@ -688,7 +689,7 @@ namespace QuickFAST{
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & pmap,
       Codecs::Encoder & encoder,
-      const Messages::FieldSet & fieldSet) const
+      const Messages::MessageAccessor & fieldSet) const
     {
       // get the value from the application data
       Messages::FieldCPtr field;
@@ -746,7 +747,7 @@ namespace QuickFAST{
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & pmap,
       Codecs::Encoder & encoder,
-      const Messages::FieldSet & fieldSet) const
+      const Messages::MessageAccessor & fieldSet) const
     {
       // declare a couple of variables...
       bool previousIsKnown = false;
@@ -842,7 +843,7 @@ namespace QuickFAST{
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & pmap,
       Codecs::Encoder & encoder,
-      const Messages::FieldSet & fieldSet) const
+      const Messages::MessageAccessor & fieldSet) const
     {
       // declare a couple of variables...
       bool previousIsKnown = false;
@@ -911,7 +912,7 @@ namespace QuickFAST{
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & pmap,
       Codecs::Encoder & encoder,
-      const Messages::FieldSet & fieldSet) const
+      const Messages::MessageAccessor & fieldSet) const
     {
       // declare a couple of variables...
       bool previousIsKnown = false;

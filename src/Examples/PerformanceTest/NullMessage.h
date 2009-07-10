@@ -50,7 +50,6 @@ namespace QuickFAST{
         Messages::FieldIdentityCPtr identity,
         Messages::MessageBuilder & entry);
 
-      virtual const QuickFAST::Messages::FieldSet & getFieldSet() const;
     private:
       int size_;
       std::string applicationType_;

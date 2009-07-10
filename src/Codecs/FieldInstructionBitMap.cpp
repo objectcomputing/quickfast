@@ -113,7 +113,7 @@ FieldInstructionBitMap::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;

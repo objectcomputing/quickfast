@@ -50,7 +50,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
     private:
       void interpretValue(const std::string & value);

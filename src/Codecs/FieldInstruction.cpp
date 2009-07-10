@@ -171,7 +171,7 @@ FieldInstruction::encodeConstant(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   encoder.reportFatal("[ERR S2]", "Constant Field Operator not supported for this data type.");
 }
@@ -182,7 +182,7 @@ FieldInstruction::encodeDefault(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   encoder.reportFatal("[ERR S2]", "Default Field Operator not supported for this data type.");
 }
@@ -193,7 +193,7 @@ FieldInstruction::encodeCopy(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   encoder.reportFatal("[ERR S2]", "Copy Field Operator not supported for this data type.");
 }
@@ -203,7 +203,7 @@ FieldInstruction::encodeDelta(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   encoder.reportFatal("[ERR S2]", "Delta Field Operator not supported for this data type.");
 }
@@ -213,7 +213,7 @@ FieldInstruction::encodeIncrement(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   encoder.reportFatal("[ERR S2]", "Increment Field Operator not supported for this data type.");
 }
@@ -223,7 +223,7 @@ FieldInstruction::encodeTail(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   encoder.reportFatal("[ERR S2]", "Tail Field Operator not supported for this data type.");
 }

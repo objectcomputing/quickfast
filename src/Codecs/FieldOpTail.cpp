@@ -36,7 +36,7 @@ FieldOpTail::encode(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   return instruction.encodeTail(destination, pmap, encoder, fieldSet);
 }

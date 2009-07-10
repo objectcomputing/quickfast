@@ -7,7 +7,7 @@
 #include <Codecs/DataDestination.h>
 #include <Codecs/Decoder.h>
 #include <Codecs/Encoder.h>
-#include <Messages/Message.h>
+#include <Messages/MessageBuilder.h>
 #include <Messages/Field.h>
 
 using namespace ::QuickFAST;
@@ -367,7 +367,7 @@ FieldInstructionBlob::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
     // get the value from the application data
   Messages::FieldCPtr field;
@@ -398,7 +398,7 @@ FieldInstructionBlob::encodeConstant(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;
@@ -432,7 +432,7 @@ FieldInstructionBlob::encodeDefault(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;
@@ -481,7 +481,7 @@ FieldInstructionBlob::encodeCopy(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   // declare a couple of variables...
   bool previousIsKnown = false;
@@ -556,7 +556,7 @@ FieldInstructionBlob::encodeDelta(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
     // declare a couple of variables...
   bool previousIsKnown = false;
@@ -623,7 +623,7 @@ FieldInstructionBlob::encodeTail(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
     // declare a couple of variables...
   bool previousIsKnown = false;

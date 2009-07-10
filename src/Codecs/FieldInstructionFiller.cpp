@@ -42,7 +42,7 @@ FieldInstructionFiller::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   pmap.setNextField(false);
 }

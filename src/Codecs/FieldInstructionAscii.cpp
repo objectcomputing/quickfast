@@ -359,7 +359,7 @@ FieldInstructionAscii::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;
@@ -390,7 +390,7 @@ FieldInstructionAscii::encodeConstant(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;
@@ -424,7 +424,7 @@ FieldInstructionAscii::encodeDefault(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;
@@ -473,7 +473,7 @@ FieldInstructionAscii::encodeCopy(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   // declare a couple of variables...
   bool previousIsKnown = false;
@@ -544,7 +544,7 @@ FieldInstructionAscii::encodeDelta(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
     // declare a couple of variables...
   bool previousIsKnown = false;
@@ -617,7 +617,7 @@ FieldInstructionAscii::encodeTail(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
     // declare a couple of variables...
   bool previousIsKnown = false;

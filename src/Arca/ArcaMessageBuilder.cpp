@@ -280,13 +280,6 @@ ArcaMessageBuilder::endGroup(
   throw QuickFAST::TemplateDefinitionError("Groupsnot supported for Arca");
 }
 
-const QuickFAST::Messages::FieldSet &
-ArcaMessageBuilder::getFieldSet() const
-{
-  throw QuickFAST::TemplateDefinitionError("Arca does not use Field Sets");
-}
-
-
 bool
 ArcaMessageBuilder::consumeBuffer(const unsigned char * buffer, size_t bufferSize)
 {

@@ -33,6 +33,7 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/DictionaryIndexer.h>
+#include <Messages/FieldSet.h>
 
 using namespace QuickFAST;
 

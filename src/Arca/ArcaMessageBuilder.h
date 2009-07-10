@@ -69,7 +69,6 @@ namespace QuickFASTArca{
     virtual void endGroup(
       QuickFAST::Messages::FieldIdentityCPtr identity,
       QuickFAST::Messages::MessageBuilder & entry);
-    virtual const QuickFAST::Messages::FieldSet & getFieldSet() const;
 
   private:
     static ArcaMsgType getId(const QuickFAST::Messages::FieldIdentityCPtr & identity);

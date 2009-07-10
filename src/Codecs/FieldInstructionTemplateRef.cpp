@@ -6,7 +6,7 @@
 #include <Codecs/DataSource.h>
 #include <Codecs/Decoder.h>
 #include <Codecs/Encoder.h>
-#include <Messages/Message.h>
+//#include <Messages/Message.h>
 #include <Messages/Group.h>
 #include <Messages/FieldGroup.h>
 
@@ -98,7 +98,7 @@ FieldInstructionTemplateRef::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   if(templateName_.empty())
   {

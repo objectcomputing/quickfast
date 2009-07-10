@@ -7,11 +7,11 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/Encoder.h>
 #include <Codecs/FieldInstructionUInt32.h>
-#include <Messages/Message.h>
 #include <Messages/FieldSequence.h>
 #include <Messages/Sequence.h>
 #include <Messages/FieldUInt32.h>
 #include <Messages/SingleValueBuilder.h>
+#include <Messages/SpecialAccessors.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
@@ -103,7 +103,7 @@ FieldInstructionSequence::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & messageBuilder) const
+  const Messages::MessageAccessor & messageBuilder) const
 {
   if(!segment_)
   {
@@ -118,25 +118,24 @@ FieldInstructionSequence::encodeNop(
     size_t length = sequence->size();
 
     Messages::FieldCPtr lengthField(Messages::FieldUInt32::create(QuickFAST::uint32(length)));
-    Messages::FieldSet lengthSet(1);
 
     Codecs::FieldInstructionCPtr lengthInstruction;
     if(segment_->getLengthInstruction(lengthInstruction))
     {
-      lengthSet.addField(lengthInstruction->getIdentity(), lengthField);
-      lengthInstruction->encode(destination, pmap, encoder, lengthSet);
+      Messages::SingleFieldAccessor accessor(lengthInstruction->getIdentity(), lengthField);
+      lengthInstruction->encode(destination, pmap, encoder, accessor);
     }
     else
     {
-       FieldInstructionUInt32 lengthInstruction;
-       lengthInstruction.setPresence(isMandatory());
-       lengthInstruction.encode(destination, pmap, encoder, lengthSet);
+       FieldInstructionUInt32 defaultLengthInstruction;
+       defaultLengthInstruction.setPresence(isMandatory());
+       Messages::SingleFieldAccessor accessor(defaultLengthInstruction.getIdentity(), lengthField);
+       defaultLengthInstruction.encode(destination, pmap, encoder, accessor);
     }
 
     for(size_t pos = 0; pos < length; ++pos)
     {
-      const Messages::FieldSetCPtr & entry = (*sequence)[pos];
-      encoder.encodeGroup(destination, segment_, *entry);
+      encoder.encodeGroup(destination, segment_, *(*sequence)[pos]);
     }
   }
   else
