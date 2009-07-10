@@ -70,7 +70,14 @@ namespace QuickFAST
           return result;
         }
 
-        virtual QuickFAST::Messages::MessageBuilderPtr createNestedBuilder(
+        virtual QuickFAST::Messages::MessageBuilderPtr startSequenceEntry(
+          const std::string & applicationType,
+          const std::string & applicationTypeNamespace,size_t size)const
+        {
+          throw QuickFAST::UsageError("Single Value", "Illegal Sequence or Group.");
+        }
+
+        virtual QuickFAST::Messages::MessageBuilderPtr startGroup(
           const std::string & applicationType,
           const std::string & applicationTypeNamespace,size_t size)const
         {

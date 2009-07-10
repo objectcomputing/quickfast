@@ -124,7 +124,18 @@ FieldSet::getIdentity(const std::string &name, FieldIdentityCPtr & identity) con
 }
 
 MessageBuilderPtr
-FieldSet::createNestedBuilder(
+FieldSet::startSequenceEntry(
+  const std::string & applicationType,
+  const std::string & applicationTypeNamespace,
+  size_t size)const
+{
+  FieldSetPtr fsp(new FieldSet(size));
+  MessageBuilderPtr mbp(fsp);
+  return mbp;
+}
+
+MessageBuilderPtr
+FieldSet::startGroup(
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t size)const

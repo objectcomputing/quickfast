@@ -8,6 +8,7 @@
 #include <Codecs/Encoder.h>
 #include <Messages/Group.h>
 #include <Messages/FieldGroup.h>
+//#include <Messages/MessageBuilder.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
@@ -32,7 +33,7 @@ FieldInstructionGroup::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & fieldSet) const
+  Messages::MessageBuilder & messageBuilder) const
 {
   bool present = true;
 
@@ -47,13 +48,19 @@ FieldInstructionGroup::decodeNop(
     {
       decoder.reportFatal("[ERR U08}", "Segment not defined for Group instruction.");
     }
-    if(fieldSet.getApplicationType() != segmentBody_->getApplicationType())
+    if(messageBuilder.getApplicationType() != segmentBody_->getApplicationType())
     {
-      Messages::GroupPtr group(new Messages::Group(segmentBody_->fieldCount()));
-      group->setApplicationType(segmentBody_->getApplicationType(), segmentBody_->getApplicationTypeNamespace());
+      Messages::MessageBuilderPtr group(
+        messageBuilder.startGroup(
+          segmentBody_->getApplicationType(),
+          segmentBody_->getApplicationTypeNamespace(),
+          segmentBody_->fieldCount()));
+
+//      Messages::GroupPtr group(new Messages::Group(segmentBody_->fieldCount()));
+//      group->setApplicationType(segmentBody_->getApplicationType(), segmentBody_->getApplicationTypeNamespace());
       decoder.decodeGroup(source, segmentBody_, *group);
       Messages::FieldCPtr field(Messages::FieldGroup::create(group));
-      fieldSet.addField(
+      messageBuilder.addField(
         identity_,
         field);
     }
@@ -68,7 +75,7 @@ FieldInstructionGroup::decodeNop(
       // encoded.  In fact, the same message encoded with different
       // templates could be transmitted with different sets of fields
       // in groups.
-      decoder.decodeGroup(source, segmentBody_, fieldSet);
+      decoder.decodeGroup(source, segmentBody_, messageBuilder);
     }
   }
   return true;
@@ -79,11 +86,11 @@ FieldInstructionGroup::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::FieldSet & messageBuilder) const
 {
   // retrieve the field corresponding to this group
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_->name(), field))
+  if(messageBuilder.getField(identity_->name(), field))
   {
     Messages::GroupCPtr group = field->toGroup();
     encoder.encodeGroup(destination, segmentBody_, *group);
@@ -95,10 +102,10 @@ FieldInstructionGroup::encodeNop(
     //   1) this group (mandatory or optional) has the same application type
     //      as the enclosing segment, and has therefore been merged into that segment.
     //   2) this is an optional group that isn't present.
-    if(fieldSet.getApplicationType() == getApplicationType())
+    if(messageBuilder.getApplicationType() == getApplicationType())
     {
-      // possiblity #1: encode this group using the original fieldSet
-      encoder.encodeGroup(destination, segmentBody_, fieldSet);
+      // possiblity #1: encode this group using the original messageBuilder
+      encoder.encodeGroup(destination, segmentBody_, messageBuilder);
     }
     else
     {

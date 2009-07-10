@@ -12,20 +12,6 @@
 namespace QuickFAST{
   namespace Messages{
     /// @todo: consider typedef FieldSet Group
-#if 0
-    class Group : public FieldSet
-    {
-    public:
-      Group()
-      {
-      }
-
-      /// @brief a typical virtual destructor.
-      virtual ~Group()
-      {
-      }
-    };
-#endif
   }
 }
 

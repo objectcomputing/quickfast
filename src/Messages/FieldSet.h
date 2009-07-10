@@ -129,8 +129,12 @@ namespace QuickFAST{
         swap_i(used_, rhs.used_);
       }
 
-      /// @brief act as a factory to create new fields sets to be nested within this one
-      virtual MessageBuilderPtr createNestedBuilder(
+      virtual MessageBuilderPtr startSequenceEntry(
+        const std::string & applicationType,
+        const std::string & applicationTypeNamespace,
+        size_t size)const;
+
+      virtual MessageBuilderPtr startGroup(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size)const;

@@ -8,6 +8,8 @@
 #define FIELDGROUP_H
 #include <Messages/Field.h>
 #include <Messages/FieldSet_fwd.h>
+#include <Messages/MessageBuilder_fwd.h>
+
 namespace QuickFAST{
   namespace Messages{
     /// @brief A field containing a subgroup of fields
@@ -21,6 +23,11 @@ namespace QuickFAST{
       /// @param group the value to be stored in the field
       /// @returns a constant pointer to the immutable field
       static FieldCPtr create(Messages::GroupCPtr group);
+
+      /// @brief Construct the field from a MessageBuilder
+      /// @param group the value to be stored in the field
+      /// @returns a constant pointer to the immutable field
+      static FieldCPtr create(Messages::MessageBuilderPtr & builder);
 
       /// @brief a typical virtual destructor.
       virtual ~FieldGroup();

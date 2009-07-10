@@ -233,12 +233,21 @@ ArcaMessageBuilder::getApplicationTypeNs()const
 }
 
 Messages::MessageBuilderPtr
-ArcaMessageBuilder::createNestedBuilder(
+ArcaMessageBuilder::startSequenceEntry(
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t size)const
 {
-  throw QuickFAST::TemplateDefinitionError("Groups and Structures not supported for Arca");
+  throw QuickFAST::TemplateDefinitionError("Structures not supported for Arca");
+}
+
+Messages::MessageBuilderPtr
+ArcaMessageBuilder::startGroup(
+  const std::string & applicationType,
+  const std::string & applicationTypeNamespace,
+  size_t size)const
+{
+  throw QuickFAST::TemplateDefinitionError("Groupsnot supported for Arca");
 }
 
 const QuickFAST::Messages::FieldSet &

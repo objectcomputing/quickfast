@@ -63,7 +63,12 @@ namespace QuickFAST{
 
       /// @brief prepare to accept nested fields (a group or structure)
       /// @param size is the number of fields to expect in the new container
-      virtual MessageBuilderPtr createNestedBuilder(
+      virtual MessageBuilderPtr startSequenceEntry(
+        const std::string & applicationType,
+        const std::string & applicationTypeNamespace,
+        size_t size)const  = 0;
+
+      virtual MessageBuilderPtr startGroup(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size)const  = 0;

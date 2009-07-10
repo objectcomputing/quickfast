@@ -3,6 +3,8 @@
 // See the file license.txt for licensing information.
 #include <Common/QuickFASTPch.h>
 #include "FieldGroup.h"
+#include <Messages/MessageBuilder.h>
+#include <Messages/FieldSet.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
@@ -21,6 +23,12 @@ const Messages::GroupCPtr &
 FieldGroup::toGroup() const
 {
   return group_;
+}
+
+FieldCPtr
+FieldGroup::create(Messages::MessageBuilderPtr & builder)
+{
+  return new FieldGroup(builder->getFieldSet().shared_from_this());
 }
 
 FieldCPtr

@@ -81,7 +81,7 @@ FieldInstructionSequence::decodeNop(
     }
 
     Messages::MessageBuilderPtr entrySet(
-      messageBuilder.createNestedBuilder(
+      messageBuilder.startSequenceEntry(
         segment_->getApplicationType(),
         segment_->getApplicationTypeNamespace(),
         segment_->fieldCount()));

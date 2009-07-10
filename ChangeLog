@@ -1,3 +1,20 @@
+Fri Jul 10 16:08:29 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Arca/ArcaMessageBuilder.h:
+        * src/Arca/ArcaMessageBuilder.cpp:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Examples/PerformanceTest/NullMessage.h:
+        * src/Examples/PerformanceTest/NullMessage.cpp:
+        * src/Messages/FieldGroup.h:
+        * src/Messages/FieldGroup.cpp:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/Group.h:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/SingleValueBuilder.h:
+        Changes to FieldGroup to support switching to MessageBuilder.
+
 Thu Jul  9 20:49:49 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Arca/ArcaMessageBuilder.h:

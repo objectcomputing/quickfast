@@ -74,12 +74,21 @@ NullMessage::getApplicationTypeNs()const
 }
 
 Messages::MessageBuilderPtr
-NullMessage::createNestedBuilder(
+NullMessage::startSequenceEntry(
     const std::string & applicationType,
     const std::string & applicationTypeNamespace,
     size_t size)const
 {
-  throw QuickFAST::TemplateDefinitionError("NullMessage does not use Field Sets");
+  throw QuickFAST::TemplateDefinitionError("NullMessage does not use Sequences");
+}
+
+Messages::MessageBuilderPtr
+NullMessage::startGroup(
+    const std::string & applicationType,
+    const std::string & applicationTypeNamespace,
+    size_t size)const
+{
+  throw QuickFAST::TemplateDefinitionError("NullMessage does not use Group");
 }
 
 const QuickFAST::Messages::FieldSet &
