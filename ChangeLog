@@ -1,3 +1,8 @@
+Fri Jul 17 20:18:27 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionGroup.cpp:
+        Honor the presence="optional" attribute of the <group> element.
+
 Fri Jul 10 20:58:43 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Arca/ArcaMessageBuilder.h:

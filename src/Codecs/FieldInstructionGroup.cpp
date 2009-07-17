@@ -37,7 +37,7 @@ FieldInstructionGroup::decodeNop(
 {
   bool present = true;
 
-  if(segmentBody_->presenceMapBitCount() > 0)
+  if(! isMandatory())
   {
     present = pmap.checkNextField();
   }
