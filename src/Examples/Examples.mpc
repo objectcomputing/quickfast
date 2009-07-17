@@ -58,13 +58,3 @@ project(MulticastInterpreter) : boost_base, boost_filesystem, boost_system, boos
   }
 }
 
-project(PerformanceTestArca) : boost_base, boost_filesystem, boost_thread, QuickFASTExample, QuickFASTArca {
-  exename = PerformanceTestArca
-  Source_Files {
-    PerformanceTestArca
-  }
-  Header_Files {
-    PerformanceTestArca
-  }
-}
-
