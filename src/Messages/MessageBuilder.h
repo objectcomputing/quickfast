@@ -20,22 +20,19 @@ namespace QuickFAST{
       /// @brief Virtual destructor
       virtual ~MessageBuilder(){};
 
-      /// @brief clear current contents of the field set
-      ///
-      /// Optionally adjust the capacity.
-      /// @param capacity is expected number of fields (0 is no change)
-      virtual void clear(size_t capacity = 0)  = 0;
-
-      /// @brief insure the MessageBuilder can hold the expected number of fields
-      /// @param capacity is expected number of fields.
-      virtual void reserve(size_t capacity)  = 0;
-
       /// @brief Get the count of fields in the set
       ///
       /// Group fields are counted individually.
       /// A Sequence is counted as one field.
       /// @returns the field count.
-      virtual size_t size()const  = 0;
+//      virtual size_t size()const  = 0;
+
+      /// @brief get the application type associated with
+      /// this set of fields via typeref.
+      virtual const std::string & getApplicationType()const = 0;
+
+      /// @brief get the namespace for the application type
+      virtual const std::string & getApplicationTypeNs()const = 0;
 
       /// @brief Add a field to the set.
       ///
@@ -44,22 +41,21 @@ namespace QuickFAST{
       /// @param value is the value to be assigned.
       virtual void addField(const FieldIdentityCPtr & identity, const FieldCPtr & value) = 0;
 
-      /// @brief Get the identity information for the specified field
-      /// @param[in] name identifies the desired field
-      /// @param[out] identity is the information for the field that was found
-      /// @returns true if the field was found
-      virtual bool getIdentity(const std::string &name, FieldIdentityCPtr & identity) const = 0;
+      /// @brief prepare to accept an entire message
+      ///
+      /// @param applicationType is the data type for the message
+      /// @param applicationTypeNamespace qualifies applicationTYpe
+      /// @param size is the maximum number of fields to expect in the message
+      /// @param returns a message builder that will accept the fields in the message
+      ///        (which may be *this)
+      virtual MessageBuilder & startMessage(
+        const std::string & applicationType,
+        const std::string & applicationTypeNamespace,
+        size_t size) = 0;
 
-      /// @brief identify the application type associated with
-      /// this set of fields via typeref.
-      virtual void setApplicationType(const std::string & type, const std::string & ns) = 0;
-
-      /// @brief get the application type associated with
-      /// this set of fields via typeref.
-      virtual const std::string & getApplicationType()const = 0;
-
-      /// @brief get the namespace to qualify application type.
-      virtual const std::string & getApplicationTypeNs()const = 0;
+      /// @brief Finish a message.  Process the result.
+      /// @brief return true if decoding should continue
+      virtual bool endMessage(MessageBuilder & messageBuilder) = 0;
 
       /// @brief prepare to accept decoded sequence entries
       ///
@@ -67,11 +63,20 @@ namespace QuickFAST{
       /// @param applicationType is the data type for a sequence entry
       /// @param applicationTypeNamespace qualifies applicationTYpe
       /// @param size is the maximum number of fields to expect in each entry
-      virtual void startSequence(
+      virtual MessageBuilder & startSequence(
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size) = 0;
+
+      /// @brief Complete the entire sequence.
+      ///
+      /// Builders may assume that all Sequence Entries will be closed via endSequenceEntry
+      ///
+      /// @param identity identifies the sequence
+      virtual void endSequence(
+        Messages::FieldIdentityCPtr identity,
+        MessageBuilder & sequenceBuilder) = 0;
 
       /// @brief prepare to accept a single decoded sequence entry
       ///
@@ -80,7 +85,7 @@ namespace QuickFAST{
       /// @param applicationType is the data type for the entry
       /// @param applicationTypeNamespace qualifies applicationTYpe
       /// @param size is the maximum number of fields to expect in the entry
-      /// @returns a MessageBuilder to accumulate fields for this entry.
+      /// @returns a MessageBuilder to accumulate fields for this entry (*this is ok).
       virtual MessageBuilder & startSequenceEntry(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
@@ -96,20 +101,12 @@ namespace QuickFAST{
       /// @param the nested Message builder returned by startSequenceEntry.
       virtual void endSequenceEntry(MessageBuilder & entry) = 0;
 
-      /// @brief Complete the entire sequence.
-      ///
-      /// Builders may assume that all Sequence Entries will be closed via endSequenceEntry
-      ///
-      /// @param identity identifies the sequence
-      virtual void endSequence( Messages::FieldIdentityCPtr identity) = 0;
-
-
       /// @brief Prepare to accept a decoded Group
       /// @param identity identifies the group
       /// @param applicationType is the data type for the group
       /// @param applicationTypeNamespace qualifies applicationTYpe
       /// @param size is the maximum number of fields to expect in the group
-      /// @returns a MessageBuilder to accumulate fields for this group
+      /// @returns a MessageBuilder to accumulate fields for this group (*this is ok)
       virtual MessageBuilder & startGroup(
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,

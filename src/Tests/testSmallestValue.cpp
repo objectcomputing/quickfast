@@ -13,6 +13,8 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/DataDestinationString.h>
 #include <Codecs/DataSourceString.h>
+#include <Codecs/GenericMessageBuilder.h>
+#include <Codecs/SingleMessageConsumer.h>
 
 #include <Messages/Message.h>
 #include <Messages/FieldIdentity.h>
@@ -484,7 +486,7 @@ namespace{
     //  <uInt64 name="uint64_incre" id="44"><increment value="1"/>
     msg.addField(identity_uint64_incre, Messages::FieldUInt64::create(1));
     // The specs states that the optional presence tail can be NULL. If it's NULL,
-    // it is considered as absent. It seems implies the mandatory tail can not 
+    // it is considered as absent. It seems implies the mandatory tail can not
     // be NULL.
     //  <string name="asciistring_tail" presence="optional" charset="ascii" id="45"><tail/>
     msg.addField(identity_asciistring_tail, Messages::FieldAscii::create(""));
@@ -504,9 +506,11 @@ namespace{
     //decoder.setVerboseOutput (std::cout);
 
     Codecs::DataSourceString source(fastString);
-    Messages::Message msgOut(templateRegistry->maxFieldCount());
-    decoder.decodeMessage(source, msgOut);
+    Codecs::SingleMessageConsumer consumer;
+    Codecs::GenericMessageBuilder builder(consumer);
+    decoder.decodeMessage(source, builder);
 
+    Messages::Message & msgOut(consumer.message());
     validateMessage1(msgOut);
 
     // wanna see it again?

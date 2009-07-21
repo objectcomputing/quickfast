@@ -8,7 +8,6 @@
 #define FIELDSET_H
 #include "FieldSet_fwd.h"
 #include <Common/QuickFAST_Export.h>
-#include <Messages/MessageBuilder.h>
 #include <Messages/MessageAccessor.h>
 #include <Messages/MessageField.h>
 #include <Messages/Field.h>
@@ -17,9 +16,7 @@ namespace QuickFAST{
   namespace Messages{
     /// @brief Internal representation of a set of fields to be encoded or decoded.
     class QuickFAST_Export FieldSet
-      : public MessageBuilder
-      , public MessageAccessor
-      , public boost::enable_shared_from_this<FieldSet>
+      : public MessageAccessor
     {
       FieldSet();
       FieldSet(const FieldSet&);
@@ -123,35 +120,11 @@ namespace QuickFAST{
       void swap(FieldSet & rhs)
       {
         applicationType_.swap(rhs.applicationType_);
-        size_t count = (used_ > rhs.used_)? used_: rhs.used_;
-        for(size_t nField = 0; nField < count; ++nField)
-        {
-          swap_i(fields_[nField], rhs.fields_[nField]);
-        }
+        applicationTypeNs_.swap(rhs.applicationTypeNs_);
+        swap_i(fields_, rhs.fields_);
+        swap_i(capacity_, rhs.capacity_);
         swap_i(used_, rhs.used_);
       }
-
-      virtual void startSequence(
-        Messages::FieldIdentityCPtr identity,
-        const std::string & applicationType,
-        const std::string & applicationTypeNamespace,
-        size_t size);
-      virtual MessageBuilder & startSequenceEntry(
-        const std::string & applicationType,
-        const std::string & applicationTypeNamespace,
-        size_t size);
-      virtual void endSequenceEntry(MessageBuilder & entry);
-      virtual void endSequence( Messages::FieldIdentityCPtr identity);
-
-
-      virtual MessageBuilder & startGroup(
-        Messages::FieldIdentityCPtr identity,
-        const std::string & applicationType,
-        const std::string & applicationTypeNamespace,
-        size_t size);
-      virtual void endGroup(
-        Messages::FieldIdentityCPtr identity,
-        MessageBuilder & entry);
 
       virtual const FieldSet & getFieldSet() const
       {
@@ -184,11 +157,6 @@ namespace QuickFAST{
       MessageField * fields_;
       size_t capacity_;
       size_t used_;
-      // used during building
-      MessageBuilderPtr sequenceBuilder_;
-
-      Messages::SequencePtr sequence_;
-      FieldSetPtr nestedFieldSet_;
     };
   }
 }

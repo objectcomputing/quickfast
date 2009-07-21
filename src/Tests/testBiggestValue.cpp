@@ -13,6 +13,8 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/DataDestinationString.h>
 #include <Codecs/DataSourceString.h>
+#include <Codecs/SingleMessageConsumer.h>
+#include <Codecs/GenericMessageBuilder.h>
 
 #include <Messages/Message.h>
 #include <Messages/FieldIdentity.h>
@@ -514,8 +516,10 @@ namespace{
     //decoder.setVerboseOutput (std::cout);
 
     Codecs::DataSourceString source(fastString);
-    Messages::Message msgOut(templateRegistry->maxFieldCount());
-    decoder.decodeMessage(source, msgOut);
+    Codecs::SingleMessageConsumer consumer;
+    Codecs::GenericMessageBuilder builder(consumer);
+    decoder.decodeMessage(source, builder);
+    Messages::Message & msgOut = consumer.message();
 
     validateMessage1(msgOut, buffer);
 
@@ -561,7 +565,7 @@ BOOST_AUTO_TEST_CASE(TestBiggestValue)
 
   std::string str;
   string_generate (str, 1000);
-  
+
   biggest_value_test (xml, str);
 }
 

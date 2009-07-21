@@ -6,7 +6,7 @@
 #include <Codecs/DataSource.h>
 #include <Codecs/Decoder.h>
 #include <Codecs/Encoder.h>
-//#include <Messages/Message.h>
+#include <Messages/MessageBuilder.h>
 #include <Messages/Group.h>
 #include <Messages/FieldGroup.h>
 
@@ -32,12 +32,12 @@ FieldInstructionTemplateRef::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & fieldSet) const
+  Messages::MessageBuilder & messageBuilder) const
 {
   if(templateName_.empty())
   {
     // dynamic
-    decoder.decodeSegment(source, fieldSet);
+    decoder.decodeNestedTemplate(source, messageBuilder, this->getIdentity());
   }
   else
   {
@@ -58,19 +58,20 @@ FieldInstructionTemplateRef::decodeNop(
 
       if(present)
       {
-        if(fieldSet.getApplicationType() != target->getApplicationType())
+        if(messageBuilder.getApplicationType() != target->getApplicationType())
         {
-          // application types do not match.  Decode this into a FieldGroup
-          size_t fieldCount = target->fieldCount();
-          Messages::GroupPtr group(new Messages::Group(fieldCount));
-          group->setApplicationType(target->getApplicationType(), target->getApplicationTypeNamespace());
-          decoder.decodeGroup(
-            source,
-            target,
-            *group);
-          fieldSet.addField(
+          Messages::MessageBuilder & groupBuilder(
+            messageBuilder.startGroup(
+              identity_,
+              target->getApplicationType(),
+              target->getApplicationTypeNamespace(),
+              target->fieldCount()));
+
+          decoder.decodeGroup(source, target, groupBuilder);
+          messageBuilder.endGroup(
             identity_,
-            Messages::FieldGroup::create(group));
+            groupBuilder);
+
         }
         else
         {
@@ -85,7 +86,7 @@ FieldInstructionTemplateRef::decodeNop(
           decoder.decodeGroup(
             source,
             target,
-            fieldSet);
+            messageBuilder);
         }
       }
     }

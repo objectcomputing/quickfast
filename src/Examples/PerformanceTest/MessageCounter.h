@@ -7,6 +7,7 @@
 #ifndef MESSAGECOUNTER_H
 #define MESSAGECOUNTER_H
 #include <Codecs/MessageConsumer.h>
+#include <Messages/MessageBuilder.h>
 #include <Messages/Field_fwd.h>
 #include <Messages/FieldIdentity.h>
 namespace QuickFAST{

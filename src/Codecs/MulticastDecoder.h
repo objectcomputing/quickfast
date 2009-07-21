@@ -233,9 +233,10 @@ namespace QuickFAST{
             decoder_.reset();
             while(source.bytesAvailable() > 0 && !stopping_)
             {
-              MessageType message(decoder_.getTemplateRegistry()->maxFieldCount());
+              MessageType message(*consumer_);
               decoder_.decodeMessage(source, message);
 
+#if 0
               if(!consumer_->consumeMessage(message))
               {
                 if(consumer_->wantLog(MessageConsumer::LOG_INFO))
@@ -246,6 +247,7 @@ namespace QuickFAST{
                 socket_.cancel();
                 return;
               }
+#endif
             }
           }
           catch (const std::exception &ex)
@@ -316,8 +318,8 @@ namespace QuickFAST{
 
     ///@brief Instantiate the template for the most common case
     /// This provides the same functionality as the previous, nontemplatized, version of MulticastDecoder
-    typedef MulticastDecoderT<
-      Messages::Message, Codecs::MessageConsumer> MulticastDecoder;
+    //typedef MulticastDecoderT<
+    //  Messages::Message, Codecs::MessageConsumer> MulticastDecoder;
   }
 }
 #endif // MULTICASTDECODER_H

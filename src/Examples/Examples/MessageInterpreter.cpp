@@ -63,7 +63,7 @@ MessageInterpreter::decodingStopped()
 
 
 bool
-MessageInterpreter::consumeMessage(Messages::MessageBuilder & message)
+MessageInterpreter::consumeMessage(Messages::Message & message)
 {
   recordCount_ += 1;
   out_ << "Record #" << recordCount_ << ' ' << std::flush;

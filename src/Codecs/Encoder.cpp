@@ -5,7 +5,8 @@
 
 #include "Encoder.h"
 #include <Codecs/DataDestination.h>
-#include <Messages/Message.h>
+//#include <Messages/Message.h>
+#include <Messages/MessageAccessor.h>
 #include <Codecs/PresenceMap.h>
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/FieldInstruction.h>

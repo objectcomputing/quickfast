@@ -9,7 +9,7 @@
 #include <Codecs/DataSourceBufferedStream.h>
 #include <Codecs/SynchronousDecoder.h>
 #include <Codecs/TemplateRegistry.h>
-#include <Messages/Message.h>
+#include <Codecs/GenericMessageBuilder.h>
 
 #include <Examples/MessagePerformance.h>
 #include <PerformanceTest/NullMessage.h>
@@ -236,7 +236,7 @@ PerformanceTest::run()
       fastFile_.seekg(0, std::ios::beg);
       Codecs::DataSourceBufferedStream source(fastFile_);
       MessagePerformance handler(head_, interpret_);
-      Codecs::SynchronousDecoder<Messages::Message, Codecs::MessageConsumer> decoder(templateRegistry);
+      Codecs::SynchronousDecoder<Codecs::GenericMessageBuilder, Codecs::MessageConsumer> decoder(templateRegistry);
       decoder.setResetOnMessage(resetOnMessage_);
       decoder.setStrict(strict_);
       StopWatch decodeTimer;

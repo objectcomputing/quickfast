@@ -73,7 +73,7 @@ NullMessage::getApplicationTypeNs()const
   return applicationTypeNamespace_;
 }
 
-void
+Messages::MessageBuilder &
 NullMessage::startSequence(
   Messages::FieldIdentityCPtr identity,
   const std::string & applicationType,
@@ -99,7 +99,7 @@ NullMessage::endSequenceEntry(Messages::MessageBuilder & entry)
 }
 
 void
-NullMessage::endSequence( Messages::FieldIdentityCPtr identity)
+NullMessage::endSequence( Messages::FieldIdentityCPtr identity, Messages::MessageBuilder & )
 {
   throw QuickFAST::TemplateDefinitionError("NullMessage does not use Sequences");
 }

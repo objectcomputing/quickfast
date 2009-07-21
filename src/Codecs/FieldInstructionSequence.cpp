@@ -70,7 +70,7 @@ FieldInstructionSequence::decodeNop(
   }
   length = lengthSet.value();
 
-  messageBuilder.startSequence(
+  Messages::MessageBuilder & sequenceBuilder = messageBuilder.startSequence(
     identity_,
     segment_->getApplicationType(),
     segment_->getApplicationTypeNamespace(),
@@ -86,14 +86,14 @@ FieldInstructionSequence::decodeNop(
     }
 
     Messages::MessageBuilder & entrySet(
-      messageBuilder.startSequenceEntry(
+      sequenceBuilder.startSequenceEntry(
         segment_->getApplicationType(),
         segment_->getApplicationTypeNamespace(),
         segment_->fieldCount()));
     decoder.decodeGroup(source, segment_, entrySet);
-    messageBuilder.endSequenceEntry(entrySet);
+    sequenceBuilder.endSequenceEntry(entrySet);
   }
-  messageBuilder.endSequence(identity_);
+  messageBuilder.endSequence(identity_, sequenceBuilder);
 
   return true;
 }

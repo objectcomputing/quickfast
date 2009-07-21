@@ -107,16 +107,12 @@ namespace QuickFAST{
         bool more = true;
         while(source.messageAvailable() > 0 && messageCount_ < messageCountLimit_)
         {
-          MessageType message(maxFieldCount_);
+          MessageType message(consumer);
           if(resetOnMessage_)
           {
             decoder_.reset();
           }
-          if(!decoder_.decodeMessage(source, message))
-          {
-            decoder_.reportError("[ERR U03]","EOF during decode.");
-          }
-          more = consumer.consumeMessage(message);
+          decoder_.decodeMessage(source, message);
           messageCount_ += 1;
         }
       }

@@ -30,9 +30,13 @@
 #include <Codecs/DataSourceString.h>
 #include <Codecs/DataSourceStream.h>
 #include <Codecs/DataDestinationString.h>
+#include <Codecs/SingleMessageConsumer.h>
+#include <Codecs/GenericMessageBuilder.h>
 #include <Codecs/Decoder.h>
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/DictionaryIndexer.h>
+
+
 #include <Messages/FieldSet.h>
 
 using namespace QuickFAST;
@@ -176,7 +180,6 @@ BOOST_AUTO_TEST_CASE(testFieldInstructionSequence)
   testFieldInstructionBaseClass(instruction, 1, false);
 }
 
-
 BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_1)
 {
   // <int32 id="1" presence="optional" name="Value"/>
@@ -206,15 +209,18 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_1)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
+  Messages::Message & fieldSet = consumer.message();
   // should generate 1 field
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
@@ -263,16 +269,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_2)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  builder.startMessage("UNIT_TEST", "", 10);
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -321,16 +330,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_3)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -378,16 +390,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_4)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -437,15 +452,18 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_5)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
-
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -496,16 +514,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_6)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -525,7 +546,6 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_6)
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
-
 
 BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1a)
 {
@@ -557,16 +577,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1a)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate nothing (Missing optional field)
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 0);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -614,15 +637,18 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1b)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
-
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -673,16 +699,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1c)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -734,15 +763,18 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1d)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
-
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -793,16 +825,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2a)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -854,15 +889,18 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2b)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
-
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -913,16 +951,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2c)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -973,16 +1014,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1a)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 0);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -1030,15 +1074,18 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1b)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
-
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -1090,16 +1137,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1c)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -1152,15 +1202,18 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_2a)
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
-
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -1211,16 +1264,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_2b)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -1271,16 +1327,18 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1a)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
-
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate no fields
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 0);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -1296,6 +1354,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1a)
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
+
 
 BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1b)
 {
@@ -1327,16 +1386,21 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1b)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
+
+  Messages::Message & fieldSet(consumer.message());
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -1387,16 +1451,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1c)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -1447,16 +1514,20 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_2a)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
+  Messages::Message & fieldSet = consumer.message();
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -1474,8 +1545,6 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_2a)
   const std::string & result = destination.getValue();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
-
-
 }
 
 BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_2b)
@@ -1508,10 +1577,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_2b)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
+  Messages::Message & fieldSet = consumer.message();
 
   // Was all input consumed?
   uchar byte;
@@ -1566,16 +1638,20 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_1)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
+  Messages::Message & fieldSet = consumer.message();
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -1625,16 +1701,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_2)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -1684,16 +1763,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_3)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -1743,16 +1825,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_4)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -1802,10 +1887,12 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_5)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
-
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
+  Messages::Message & fieldSet = consumer.message();
 
   // Was all input consumed?
   uchar byte;
@@ -1864,16 +1951,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_6)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -1931,16 +2021,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_7)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
@@ -1985,16 +2078,19 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_8)
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
-  // Capture results in a field set
-  Messages::FieldSet fieldSet(10);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, fieldSet));
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());

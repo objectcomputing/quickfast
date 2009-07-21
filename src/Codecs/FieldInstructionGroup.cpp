@@ -8,7 +8,7 @@
 #include <Codecs/Encoder.h>
 #include <Messages/Group.h>
 #include <Messages/FieldGroup.h>
-//#include <Messages/MessageBuilder.h>
+#include <Messages/MessageBuilder.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
@@ -50,17 +50,17 @@ FieldInstructionGroup::decodeNop(
     }
     if(messageBuilder.getApplicationType() != segmentBody_->getApplicationType())
     {
-      Messages::MessageBuilder & group(
+      Messages::MessageBuilder & groupBuilder(
         messageBuilder.startGroup(
           identity_,
           segmentBody_->getApplicationType(),
           segmentBody_->getApplicationTypeNamespace(),
           segmentBody_->fieldCount()));
 
-      decoder.decodeGroup(source, segmentBody_, group);
+      decoder.decodeGroup(source, segmentBody_, groupBuilder);
       messageBuilder.endGroup(
         identity_,
-        group);
+        groupBuilder);
     }
     else
     {

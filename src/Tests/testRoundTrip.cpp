@@ -12,6 +12,8 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/DataDestinationString.h>
 #include <Codecs/DataSourceString.h>
+#include <Codecs/SingleMessageConsumer.h>
+#include <Codecs/GenericMessageBuilder.h>
 
 #include <Messages/Message.h>
 #include <Messages/FieldIdentity.h>
@@ -289,13 +291,16 @@ BOOST_AUTO_TEST_CASE(testRoundTripSequenceNoPMAP)
 
   Codecs::Decoder decoder(templateRegistry);
   Codecs::DataSourceString source(fastString);
-  Messages::MessagePtr msgOut(new Messages::Message(templateRegistry->maxFieldCount()));
-  decoder.decodeMessage(source, *msgOut);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  decoder.decodeMessage(source, builder);
 
-  validateMessage1(*msgOut);
+  Messages::Message & msgOut(consumer.message());
+
+  validateMessage1(msgOut);
 
   // wanna see it again?
-  encoder.encodeMessage(destination, templId, *msgOut);
+  encoder.encodeMessage(destination, templId, msgOut);
   const std::string reencoded = destination.getValue();
 
   BOOST_CHECK(fastString == reencoded);

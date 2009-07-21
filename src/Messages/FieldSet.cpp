@@ -127,69 +127,6 @@ FieldSet::getIdentity(const std::string &name, FieldIdentityCPtr & identity) con
 }
 
 void
-FieldSet::startSequence(
-  Messages::FieldIdentityCPtr identity,
-  const std::string & applicationType,
-  const std::string & applicationTypeNamespace,
-  size_t size)
-{
-  sequence_.reset(new Messages::Sequence);
-}
-
-MessageBuilder &
-FieldSet::startSequenceEntry(
-  const std::string & applicationType,
-  const std::string & applicationTypeNamespace,
-  size_t size)
-{
-  nestedFieldSet_.reset(new FieldSet(size));
-  // "cast" the pointer
-  MessageBuilderPtr mbp(nestedFieldSet_);
-  return *mbp;
-}
-
-void
-FieldSet::endSequenceEntry(MessageBuilder & entry)
-{
-  sequence_->addEntry(nestedFieldSet_);
-  nestedFieldSet_.reset();
-}
-
-void
-FieldSet::endSequence(Messages::FieldIdentityCPtr identity)
-{
-  Messages::FieldCPtr field(FieldSequence::create(sequence_));
-  addField(
-    identity,
-    field);
-}
-
-MessageBuilder &
-FieldSet::startGroup(
-  Messages::FieldIdentityCPtr identity,
-  const std::string & applicationType,
-  const std::string & applicationTypeNamespace,
-  size_t size)
-{
-  nestedFieldSet_.reset(new FieldSet(size));
-  // "cast" the pointer
-  MessageBuilderPtr mbp(nestedFieldSet_);
-  return *mbp;
-}
-
-void
-FieldSet::endGroup(
-  Messages::FieldIdentityCPtr identity,
-  MessageBuilder & entry)
-{
-  Messages::FieldCPtr field(Messages::FieldGroup::create(nestedFieldSet_));
-  nestedFieldSet_.reset();
-  addField(
-    identity,
-    field);
-}
-
-void
 FieldSet::getFieldInfo(size_t index, std::string & name, Field::FieldType & type, FieldCPtr & fieldPtr)const
 {
   name = fields_[index].name();

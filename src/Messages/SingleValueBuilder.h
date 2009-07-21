@@ -22,6 +22,23 @@ namespace QuickFAST
         {
         }
 
+        virtual ~SingleValueBuilder()
+        {
+        }
+
+        MessageBuilder & startMessage(
+          const std::string & applicationType,
+          const std::string & applicationTypeNamespace,
+          size_t size)
+        {
+          return *this;
+        }
+
+        bool endMessage(MessageBuilder &)
+        {
+          return true;
+        }
+
         virtual void addField(
           const Messages::FieldIdentityCPtr & identity,
           const Messages::FieldCPtr & value)
@@ -70,7 +87,7 @@ namespace QuickFAST
           return result;
         }
 
-        virtual void startSequence(
+        virtual MessageBuilder & startSequence(
           Messages::FieldIdentityCPtr identity,
           const std::string & applicationType,
           const std::string & applicationTypeNamespace,
@@ -90,7 +107,7 @@ namespace QuickFAST
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
-        virtual void endSequence( Messages::FieldIdentityCPtr identity)
+        virtual void endSequence( Messages::FieldIdentityCPtr identity, MessageBuilder & )
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
@@ -108,7 +125,6 @@ namespace QuickFAST
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Group.");
         }
-
 
         virtual const FieldSet & getFieldSet() const
         {

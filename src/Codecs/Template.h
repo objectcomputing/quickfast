@@ -64,7 +64,7 @@ namespace QuickFAST{
         namespace_ = templateNamespace;
       }
 
-      /// @brief Set the reset-dictionaries-before-xcoding" flat
+      /// @brief Set the reset-dictionaries-before-xcoding" flag
       /// @param reset true means reset, false means don't
       void setReset(bool reset)
       {

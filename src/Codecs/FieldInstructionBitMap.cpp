@@ -7,8 +7,8 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/DataDestination.h>
 #include <Codecs/Encoder.h>
-#include <Messages/Message.h>
 #include <Messages/FieldBitMap.h>
+#include <Messages/MessageBuilder.h>
 
 #include <Common/Profiler.h>
 

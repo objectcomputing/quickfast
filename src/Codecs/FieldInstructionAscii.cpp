@@ -7,7 +7,8 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/DataDestination.h>
 #include <Codecs/Encoder.h>
-#include <Messages/Message.h>
+#include <Messages/MessageBuilder.h>
+#include <Messages/MessageAccessor.h>
 #include <Messages/FieldAscii.h>
 
 #include <Common/Profiler.h>

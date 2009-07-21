@@ -7,6 +7,7 @@
 #ifndef MESSAGEINTERPRETER_H
 #define MESSAGEINTERPRETER_H
 #include <Codecs/MessageConsumer.h>
+#include <Messages/Message.h>
 #include <Messages/Field_fwd.h>
 #include <Messages/FieldIdentity.h>
 #include <Messages/Message_fwd.h>
@@ -25,7 +26,7 @@ namespace QuickFAST{
 
       ////////////////////////////
       // Implement MessageConsumer
-      virtual bool consumeMessage(Messages::MessageBuilder & message);
+      virtual bool consumeMessage(Messages::Message & message);
       virtual bool wantLog(unsigned short level);
       virtual bool logMessage(unsigned short level, const std::string & logMessage);
       virtual bool reportDecodingError(const std::string & errorMessage);
