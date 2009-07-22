@@ -23,6 +23,8 @@ namespace QuickFAST{
     class QuickFAST_Export GenericSequenceBuilder : public Messages::MessageBuilder
     {
     public:
+      /// @brief Construct with reference to a parent
+      explicit GenericSequenceBuilder(MessageBuilder & parent);
 
       /// @brief Virtual destructor
       virtual ~GenericSequenceBuilder();
@@ -78,10 +80,18 @@ namespace QuickFAST{
         Messages::FieldIdentityCPtr identity,
         Messages::MessageBuilder & entry);
 
+      ///////////////////
+      // Implement Logger
+      virtual bool wantLog(unsigned short level);
+      virtual bool logMessage(unsigned short level, const std::string & logMessage);
+      virtual bool reportDecodingError(const std::string & errorMessage);
+      virtual bool reportCommunicationError(const std::string & errorMessage);
+
     private:
       const Messages::FieldSetPtr & fieldSet()const;
 
     private:
+      Messages::MessageBuilder & parent_;
       Messages::FieldSetPtr fieldSet_;
       Messages::SequencePtr sequence_;
       boost::scoped_ptr<GenericSequenceBuilder> sequenceBuilder_;
@@ -92,6 +102,9 @@ namespace QuickFAST{
     class QuickFAST_Export GenericGroupBuilder : public Messages::MessageBuilder
     {
     public:
+      /// @brief Construct with reference to a parent
+      GenericGroupBuilder(MessageBuilder & parent);
+
       /// @brief Virtual destructor
       virtual ~GenericGroupBuilder();
 
@@ -142,9 +155,17 @@ namespace QuickFAST{
         Messages::FieldIdentityCPtr identity,
         Messages::MessageBuilder & entry);
 
+      ///////////////////
+      // Implement Logger
+      virtual bool wantLog(unsigned short level);
+      virtual bool logMessage(unsigned short level, const std::string & logMessage);
+      virtual bool reportDecodingError(const std::string & errorMessage);
+      virtual bool reportCommunicationError(const std::string & errorMessage);
+
     private:
       const Messages::FieldSetPtr & fieldSet()const;
     private:
+      Messages::MessageBuilder & parent_;
       Messages::FieldSetPtr fieldSet_;
       Messages::GroupPtr group_;
 
@@ -200,6 +221,14 @@ namespace QuickFAST{
       virtual void endGroup(
         Messages::FieldIdentityCPtr identity,
         Messages::MessageBuilder & entry);
+
+      ///////////////////
+      // Implement Logger
+      virtual bool wantLog(unsigned short level);
+      virtual bool logMessage(unsigned short level, const std::string & logMessage);
+      virtual bool reportDecodingError(const std::string & errorMessage);
+      virtual bool reportCommunicationError(const std::string & errorMessage);
+
     private:
       const Messages::MessagePtr & message()const;
     private:

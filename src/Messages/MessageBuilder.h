@@ -9,23 +9,16 @@
 #include "MessageBuilder_fwd.h"
 #include <Common/QuickFAST_Export.h>
 #include <Messages/MessageField.h>
-//#include <Messages/FieldSet_fwd.h>
+#include <Messages/Logger.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief Interface to support building a message during decoding.
-    class MessageBuilder
+    class MessageBuilder : public Logger
     {
     public:
 
       /// @brief Virtual destructor
       virtual ~MessageBuilder(){};
-
-      /// @brief Get the count of fields in the set
-      ///
-      /// Group fields are counted individually.
-      /// A Sequence is counted as one field.
-      /// @returns the field count.
-//      virtual size_t size()const  = 0;
 
       /// @brief get the application type associated with
       /// this set of fields via typeref.

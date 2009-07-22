@@ -11,6 +11,11 @@
 #include <Messages/Message.h>
 #include <Examples/StopWatch.h>
 #include <Examples/MessageInterpreter.h>
+#if 1
+#include <Codecs/MulticastReceiver.h>
+#include <Codecs/MessageConsumer.h>
+#include <Codecs/BufferDecoder.h>
+#endif
 
 
 //////////////
@@ -28,7 +33,7 @@ MulticastInterpreter::MulticastInterpreter()
 , verboseExecution_(false)
 , strict_(true)
 , portNumber_(13014)
-, listenAddressName_("0,0,0,0")
+, listenAddressName_("0.0.0.0")
 , multicastAddressName_("224.1.2.133")
 , echoMessage_(true)
 , echoField_(false)
@@ -253,23 +258,14 @@ MulticastInterpreter::applyArgs()
   return ok;
 }
 
-#if 1
-#include <Codecs/MulticastReceiver.h>
-#include <Codecs/MessageConsumer.h>
-#include <Codecs/BufferDecoder.h>
-#endif
-typedef Codecs::BufferDecoder<
-  Messages::Message,
-  Codecs::MessageConsumer,
-  Codecs::DataSourceBuffer> DecoderType;
-
 int
 MulticastInterpreter::run()
 {
   int result = 0;
 
-  Codecs::MessageConsumerPtr consumer(new MessageInterpreter(*outputFile_));
-  decoder_->start(consumer);
+  MessageInterpreter consumer(*outputFile_);
+  Codecs::GenericMessageBuilder builder(consumer);
+  decoder_->start(builder);
 
   try
   {

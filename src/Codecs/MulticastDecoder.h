@@ -4,41 +4,34 @@
 //
 #ifndef MULTICASTDECODER_H
 #define MULTICASTDECODER_H
-//#include <Common/QuickFAST_Export.h>
+#include <Common/QuickFAST_Export.h>
 #include "MulticastDecoder_fwd.h"
+#include <Common/AsioService.h>
+
 #include <Codecs/DataSource.h>
 #include <Codecs/Decoder.h>
 #include <Codecs/TemplateRegistry_fwd.h>
-#include <Codecs/MessageConsumer_fwd.h>
-#include <Common/AsioService.h>
-
 #include <Codecs/XMLTemplateParser.h>
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/Decoder.h>
 #include <Codecs/DataSourceBuffer.h>
-#include <Codecs/MessageConsumer.h>
-#include <Messages/Message.h>
+
+#include <Messages/MessageBuilder.h>
 
 namespace QuickFAST{
   namespace Codecs {
 
     /// @brief Support decoding of FAST messages received via multicast.
-    template<
-      typename MessageType,
-      typename MessageConsumerType,
-      typename DataSourceType>
-    class /*QuickFAST_Export*/ MulticastDecoderT : public AsioService
+    class /*QuickFAST_Export*/ MulticastDecoder : public AsioService
     {
       typedef boost::scoped_array<unsigned char> Buffer;
     public:
-      ///@brief declare a pointer to the [templated] consumer.
-      typedef boost::shared_ptr<MessageConsumerType> ConsumerPtr;
       /// @brief construct given templates and multicast information
       /// @param templateRegistry the templates to use for decoding
       /// @param multicastAddressName multicast address as a text string
       /// @param listenAddressName listen address as a text string
       /// @param portNumber port number
-      MulticastDecoderT(
+      MulticastDecoder(
         TemplateRegistryPtr templateRegistry,
         const std::string & multicastAddressName,
         const std::string & listenAddressName,
@@ -65,7 +58,7 @@ namespace QuickFAST{
       /// @param multicastAddressName multicast address as a text string
       /// @param listenAddressName listen address as a text string
       /// @param portNumber port number
-      MulticastDecoderT(
+      MulticastDecoder(
         TemplateRegistryPtr templateRegistry,
         boost::asio::io_service & ioService,
         const std::string & multicastAddressName,
@@ -85,7 +78,7 @@ namespace QuickFAST{
       {
       }
 
-      ~MulticastDecoderT()
+      ~MulticastDecoder()
       {
       }
 
@@ -161,10 +154,9 @@ namespace QuickFAST{
       }
 
       /// @brief Start the decoding process.  Returns immediately
-      void start(ConsumerPtr consumer)
+      void start(Messages::MessageBuilder & builder)
       {
-        consumer_ = consumer;
-
+        builder_ = & builder;
         buffer1_.reset(new unsigned char[bufferSize_]);
         buffer2_.reset(new unsigned char[bufferSize_]);
 
@@ -188,10 +180,10 @@ namespace QuickFAST{
       ///
       /// Returns immediately, however decoding may continue until
       /// the decoder reaches a clean stopping point.  In particular
-      /// the MessageConsumer may receive additional messages after
+      /// the MessageBuilder may receive additional messages after
       /// stop is called.
       ///
-      /// MessageConsumer::decodingStopped() will be called when
+      /// MessageBuilder::decodingStopped() will be called when
       /// the stop request is complete.
       void stop()
       {
@@ -221,41 +213,27 @@ namespace QuickFAST{
           // accept data into the other buffer while we process this buffer
           startReceive(altBuffer, buffer);
           ++messageCount_;
-          if(consumer_->wantLog(MessageConsumer::LOG_VERBOSE))
+          if(builder_->wantLog(MessageConsumer::LOG_VERBOSE))
           {
             std::stringstream message;
             message << "Received[" << messageCount_ << "]: " << bytesReceived << " bytes";
-            consumer_->logMessage(MessageConsumer::LOG_VERBOSE, message.str());
+            builder_->logMessage(MessageConsumer::LOG_VERBOSE, message.str());
           }
           try
           {
-            DataSourceType source(buffer->get(), bytesReceived);
+            DataSourceBuffer source(buffer->get(), bytesReceived);
             decoder_.reset();
             while(source.bytesAvailable() > 0 && !stopping_)
             {
-              MessageType message(*consumer_);
-              decoder_.decodeMessage(source, message);
-
-#if 0
-              if(!consumer_->consumeMessage(message))
-              {
-                if(consumer_->wantLog(MessageConsumer::LOG_INFO))
-                {
-                  consumer_->logMessage(MessageConsumer::LOG_INFO, "Consumer requested early termination.");
-                }
-                stopping_ = true;
-                socket_.cancel();
-                return;
-              }
-#endif
+              decoder_.decodeMessage(source, *builder_);
             }
           }
           catch (const std::exception &ex)
           {
-            if(!consumer_->reportDecodingError(ex.what()))
+            if(!builder_->reportDecodingError(ex.what()))
             {
               error_ = true;
-              errorMessage_ =
+              errorMessage_ = ex.what();
               stopping_ = true;
               socket_.cancel();
             }
@@ -268,7 +246,7 @@ namespace QuickFAST{
         }
         else
         {
-          if(!consumer_->reportCommunicationError(error.message()))
+          if(!builder_->reportCommunicationError(error.message()))
           {
             error_ = true;
             errorMessage_ = error.message();
@@ -284,7 +262,7 @@ namespace QuickFAST{
           boost::asio::buffer(buffer->get(), bufferSize_),
           senderEndpoint_,
           strand_.wrap(
-            boost::bind(&MulticastDecoderT::handleReceive,
+            boost::bind(&MulticastDecoder::handleReceive,
               this,
               boost::asio::placeholders::error,
               buffer,
@@ -296,6 +274,7 @@ namespace QuickFAST{
 
     private:
       Decoder decoder_;
+      Messages::MessageBuilder * builder_;
       bool stopping_;
       bool error_;
       bool verbose_;
@@ -313,13 +292,7 @@ namespace QuickFAST{
 
       Buffer buffer1_;
       Buffer buffer2_;
-      ConsumerPtr consumer_;
     };
-
-    ///@brief Instantiate the template for the most common case
-    /// This provides the same functionality as the previous, nontemplatized, version of MulticastDecoder
-    //typedef MulticastDecoderT<
-    //  Messages::Message, Codecs::MessageConsumer> MulticastDecoder;
   }
 }
 #endif // MULTICASTDECODER_H

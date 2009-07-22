@@ -16,6 +16,11 @@ using namespace Codecs;
 //////////////////////////
 // GenericSequenceBuilder
 
+GenericSequenceBuilder::GenericSequenceBuilder(MessageBuilder & parent)
+: parent_(parent)
+{
+}
+
 GenericSequenceBuilder::~GenericSequenceBuilder()
 {
 }
@@ -94,7 +99,7 @@ GenericSequenceBuilder::startSequence(
   // To see the start of THIS sequence, see initialize
   if(!sequenceBuilder_)
   {
-    sequenceBuilder_.reset(new GenericSequenceBuilder);
+    sequenceBuilder_.reset(new GenericSequenceBuilder(*this));
   }
   sequenceBuilder_->initialize(
     identity,
@@ -157,7 +162,7 @@ GenericSequenceBuilder::startGroup(
   // NOTE THIS WILL BE CALLED TO START A NESTED GROUP
   if(!groupBuilder_)
   {
-    groupBuilder_.reset(new GenericGroupBuilder);
+    groupBuilder_.reset(new GenericGroupBuilder(*this));
   }
   groupBuilder_->initialize(
     identity,
@@ -192,9 +197,38 @@ GenericSequenceBuilder::reset()
   sequence_.reset();
 }
 
+bool
+GenericSequenceBuilder::wantLog(unsigned short level)
+{
+  return parent_.wantLog(level);
+}
+
+bool
+GenericSequenceBuilder::logMessage(unsigned short level, const std::string & logMessage)
+{
+  return parent_.logMessage(level, logMessage);
+}
+
+bool
+GenericSequenceBuilder::reportDecodingError(const std::string & errorMessage)
+{
+  return parent_.reportDecodingError(errorMessage);
+}
+
+bool
+GenericSequenceBuilder::reportCommunicationError(const std::string & errorMessage)
+{
+  return parent_.reportCommunicationError(errorMessage);
+}
+
 //////////////////////////
 // GenericGroupBuilder
 
+
+GenericGroupBuilder::GenericGroupBuilder(MessageBuilder & parent)
+: parent_(parent)
+{
+}
 
 GenericGroupBuilder::~GenericGroupBuilder()
 {
@@ -274,7 +308,7 @@ GenericGroupBuilder::startSequence(
   // This is called to start a nested sequence
   if(!sequenceBuilder_)
   {
-    sequenceBuilder_.reset(new GenericSequenceBuilder);
+    sequenceBuilder_.reset(new GenericSequenceBuilder(*this));
   }
   sequenceBuilder_->initialize(
     identity,
@@ -330,7 +364,7 @@ GenericGroupBuilder::startGroup(
   // NOTE THIS WILL BE CALLED TO START A NESTED GROUP
   if(!groupBuilder_)
   {
-    groupBuilder_.reset(new GenericGroupBuilder);
+    groupBuilder_.reset(new GenericGroupBuilder(*this));
   }
   groupBuilder_->initialize(
     identity,
@@ -365,14 +399,48 @@ GenericGroupBuilder::reset()
   group_.reset();
 }
 
+bool
+GenericGroupBuilder::wantLog(unsigned short level)
+{
+  return parent_.wantLog(level);
+}
+
+bool
+GenericGroupBuilder::logMessage(unsigned short level, const std::string & logMessage)
+{
+  return parent_.logMessage(level, logMessage);
+}
+
+bool
+GenericGroupBuilder::reportDecodingError(const std::string & errorMessage)
+{
+  return parent_.reportDecodingError(errorMessage);
+}
+
+bool
+GenericGroupBuilder::reportCommunicationError(const std::string & errorMessage)
+{
+  return parent_.reportCommunicationError(errorMessage);
+}
 
 //////////////////////////
 // GenericMessageBuilder
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4355) // C4355: 'this' : used in base member initializer list
+#endif
 
 GenericMessageBuilder::GenericMessageBuilder(MessageConsumer & consumer)
 : consumer_(consumer)
+, sequenceBuilder_(*this)
+, groupBuilder_(*this)
 {
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
 
 GenericMessageBuilder::~GenericMessageBuilder()
 {
@@ -501,3 +569,28 @@ GenericMessageBuilder::message()const
   }
   return message_;
 }
+
+bool
+GenericMessageBuilder::wantLog(unsigned short level)
+{
+  return consumer_.wantLog(level);
+}
+
+bool
+GenericMessageBuilder::logMessage(unsigned short level, const std::string & logMessage)
+{
+  return consumer_.logMessage(level, logMessage);
+}
+
+bool
+GenericMessageBuilder::reportDecodingError(const std::string & errorMessage)
+{
+  return consumer_.reportDecodingError(errorMessage);
+}
+
+bool
+GenericMessageBuilder::reportCommunicationError(const std::string & errorMessage)
+{
+  return consumer_.reportCommunicationError(errorMessage);
+}
+

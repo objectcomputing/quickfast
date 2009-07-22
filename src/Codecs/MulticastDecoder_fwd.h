@@ -11,11 +11,7 @@
 
 namespace QuickFAST{
   namespace Codecs{
-    template<typename MessageType, typename MessageConsumerType, typename DataSourceType = DataSourceBuffer>
-    class MulticastDecoderT;
-
-    typedef MulticastDecoderT<
-      Codecs::GenericMessageBuilder, Codecs::MessageConsumer> MulticastDecoder;
+    class MulticastDecoder;
   }
 }
 #endif // MULTICASTDECODER_FWD_H

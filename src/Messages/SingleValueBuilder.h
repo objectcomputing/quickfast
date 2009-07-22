@@ -56,6 +56,7 @@ namespace QuickFAST
           return value_;
         }
 
+
       private:
         /////////////////////////////////////////////////
         // Dummy implementations of other virtual methods
@@ -129,6 +130,26 @@ namespace QuickFAST
         virtual const FieldSet & getFieldSet() const
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence or Group.");
+        }
+
+        virtual bool wantLog(unsigned short level)
+        {
+          return false;
+        }
+
+        virtual bool logMessage(unsigned short level, const std::string & logMessage)
+        {
+          return true;
+        }
+
+        virtual bool reportDecodingError(const std::string & errorMessage)
+        {
+          return true;
+        }
+
+        virtual bool reportCommunicationError(const std::string & errorMessage)
+        {
+          return true;
         }
 
       private:
