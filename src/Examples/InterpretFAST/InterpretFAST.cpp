@@ -164,7 +164,11 @@ InterpretFAST::applyArgs()
     }
     if(ok)
     {
-      templateFile_.open(templateFileName_.c_str());
+      templateFile_.open(templateFileName_.c_str()
+#ifdef _WIN32
+        , std::ios::in | std::ios::binary
+#endif
+        );
       if(!templateFile_.good())
       {
         ok = false;

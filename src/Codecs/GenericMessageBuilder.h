@@ -24,7 +24,7 @@ namespace QuickFAST{
     {
     public:
       /// @brief Construct with reference to a parent
-      explicit GenericSequenceBuilder(MessageBuilder & parent);
+      explicit GenericSequenceBuilder(MessageBuilder * parent);
 
       /// @brief Virtual destructor
       virtual ~GenericSequenceBuilder();
@@ -91,7 +91,7 @@ namespace QuickFAST{
       const Messages::FieldSetPtr & fieldSet()const;
 
     private:
-      Messages::MessageBuilder & parent_;
+      Messages::MessageBuilder * parent_;
       Messages::FieldSetPtr fieldSet_;
       Messages::SequencePtr sequence_;
       boost::scoped_ptr<GenericSequenceBuilder> sequenceBuilder_;
@@ -101,9 +101,12 @@ namespace QuickFAST{
     /// @brief Build a Group during decoding
     class QuickFAST_Export GenericGroupBuilder : public Messages::MessageBuilder
     {
+      GenericGroupBuilder();
+      GenericGroupBuilder(const GenericGroupBuilder &);
+      GenericGroupBuilder & operator = (const GenericGroupBuilder &);
     public:
       /// @brief Construct with reference to a parent
-      GenericGroupBuilder(MessageBuilder & parent);
+      explicit GenericGroupBuilder(MessageBuilder * parent);
 
       /// @brief Virtual destructor
       virtual ~GenericGroupBuilder();
@@ -163,10 +166,10 @@ namespace QuickFAST{
       virtual bool reportCommunicationError(const std::string & errorMessage);
 
     private:
-      const Messages::FieldSetPtr & fieldSet()const;
+      const Messages::GroupPtr & groupPtr()const;
     private:
-      Messages::MessageBuilder & parent_;
-      Messages::FieldSetPtr fieldSet_;
+      Messages::MessageBuilder * parent_;
+      Messages::FieldSetPtr fieldSetx_;
       Messages::GroupPtr group_;
 
       boost::scoped_ptr<GenericSequenceBuilder> sequenceBuilder_;

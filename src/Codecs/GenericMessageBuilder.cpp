@@ -16,7 +16,7 @@ using namespace Codecs;
 //////////////////////////
 // GenericSequenceBuilder
 
-GenericSequenceBuilder::GenericSequenceBuilder(MessageBuilder & parent)
+GenericSequenceBuilder::GenericSequenceBuilder(MessageBuilder * parent)
 : parent_(parent)
 {
 }
@@ -99,7 +99,7 @@ GenericSequenceBuilder::startSequence(
   // To see the start of THIS sequence, see initialize
   if(!sequenceBuilder_)
   {
-    sequenceBuilder_.reset(new GenericSequenceBuilder(*this));
+    sequenceBuilder_.reset(new GenericSequenceBuilder(this));
   }
   sequenceBuilder_->initialize(
     identity,
@@ -162,7 +162,7 @@ GenericSequenceBuilder::startGroup(
   // NOTE THIS WILL BE CALLED TO START A NESTED GROUP
   if(!groupBuilder_)
   {
-    groupBuilder_.reset(new GenericGroupBuilder(*this));
+    groupBuilder_.reset(new GenericGroupBuilder(this));
   }
   groupBuilder_->initialize(
     identity,
@@ -200,32 +200,32 @@ GenericSequenceBuilder::reset()
 bool
 GenericSequenceBuilder::wantLog(unsigned short level)
 {
-  return parent_.wantLog(level);
+  return parent_->wantLog(level);
 }
 
 bool
 GenericSequenceBuilder::logMessage(unsigned short level, const std::string & logMessage)
 {
-  return parent_.logMessage(level, logMessage);
+  return parent_->logMessage(level, logMessage);
 }
 
 bool
 GenericSequenceBuilder::reportDecodingError(const std::string & errorMessage)
 {
-  return parent_.reportDecodingError(errorMessage);
+  return parent_->reportDecodingError(errorMessage);
 }
 
 bool
 GenericSequenceBuilder::reportCommunicationError(const std::string & errorMessage)
 {
-  return parent_.reportCommunicationError(errorMessage);
+  return parent_->reportCommunicationError(errorMessage);
 }
 
 //////////////////////////
 // GenericGroupBuilder
 
 
-GenericGroupBuilder::GenericGroupBuilder(MessageBuilder & parent)
+GenericGroupBuilder::GenericGroupBuilder(MessageBuilder * parent)
 : parent_(parent)
 {
 }
@@ -234,14 +234,14 @@ GenericGroupBuilder::~GenericGroupBuilder()
 {
 }
 
-const Messages::FieldSetPtr &
-GenericGroupBuilder::fieldSet()const
+const Messages::GroupPtr &
+GenericGroupBuilder::groupPtr()const
 {
-  if(!fieldSet_)
+  if(!group_)
   {
     throw QuickFAST::UsageError("Illegal sequence of calls", "Generic Group Builder.");
   }
-  return fieldSet_;
+  return group_;
 }
 
 void
@@ -251,26 +251,26 @@ GenericGroupBuilder::initialize(
   const std::string & applicationTypeNamespace,
   size_t size)
 {
-  fieldSet_.reset(new Messages::FieldSet(size));
-  fieldSet_->setApplicationType(applicationType, applicationTypeNamespace);
+  group_.reset(new Messages::FieldSet(size));
+  group_->setApplicationType(applicationType, applicationTypeNamespace);
 }
 
 size_t
 GenericGroupBuilder::size()const
 {
-  return fieldSet()->size();
+  return groupPtr()->size();
 }
 
 const std::string &
 GenericGroupBuilder::getApplicationType()const
 {
-  return fieldSet()->getApplicationType();
+  return groupPtr()->getApplicationType();
 }
 
 const std::string &
 GenericGroupBuilder::getApplicationTypeNs()const
 {
-  return fieldSet()->getApplicationTypeNs();
+  return groupPtr()->getApplicationTypeNs();
 }
 
 void
@@ -278,7 +278,7 @@ GenericGroupBuilder::addField(
   const Messages::FieldIdentityCPtr & identity,
   const Messages::FieldCPtr & value)
 {
-  fieldSet()->addField(identity, value);
+  groupPtr()->addField(identity, value);
 }
 
 Messages::MessageBuilder &
@@ -308,7 +308,7 @@ GenericGroupBuilder::startSequence(
   // This is called to start a nested sequence
   if(!sequenceBuilder_)
   {
-    sequenceBuilder_.reset(new GenericSequenceBuilder(*this));
+    sequenceBuilder_.reset(new GenericSequenceBuilder(this));
   }
   sequenceBuilder_->initialize(
     identity,
@@ -326,7 +326,7 @@ GenericGroupBuilder::endSequence(
   // Note this will be called to end a nested sequence
   if(sequenceBuilder_)
   {
-    fieldSet()->addField(
+    groupPtr()->addField(
       identity,
       QuickFAST::Messages::FieldSequence::create(sequenceBuilder_->getSequence())
       );
@@ -364,7 +364,13 @@ GenericGroupBuilder::startGroup(
   // NOTE THIS WILL BE CALLED TO START A NESTED GROUP
   if(!groupBuilder_)
   {
-    groupBuilder_.reset(new GenericGroupBuilder(*this));
+    std::cout << "Allocating Group builder" << std::endl;
+    groupBuilder_.reset(new GenericGroupBuilder(this));
+    std::cout << "Group builder Allocated:" << (void*)groupBuilder_.get() << std::endl;
+  }
+  else
+  {
+    std::cout << "Group builder already exists:" << (void*)groupBuilder_.get() << std::endl;
   }
   groupBuilder_->initialize(
     identity,
@@ -380,7 +386,7 @@ GenericGroupBuilder::endGroup(
   Messages::MessageBuilder & entry)
 {
   /// Note this will be called to end a nested group
-  fieldSet()->addField(
+  groupPtr()->addField(
     identity,
     QuickFAST::Messages::FieldGroup::create(groupBuilder_->getGroup())
     );
@@ -402,25 +408,25 @@ GenericGroupBuilder::reset()
 bool
 GenericGroupBuilder::wantLog(unsigned short level)
 {
-  return parent_.wantLog(level);
+  return parent_->wantLog(level);
 }
 
 bool
 GenericGroupBuilder::logMessage(unsigned short level, const std::string & logMessage)
 {
-  return parent_.logMessage(level, logMessage);
+  return parent_->logMessage(level, logMessage);
 }
 
 bool
 GenericGroupBuilder::reportDecodingError(const std::string & errorMessage)
 {
-  return parent_.reportDecodingError(errorMessage);
+  return parent_->reportDecodingError(errorMessage);
 }
 
 bool
 GenericGroupBuilder::reportCommunicationError(const std::string & errorMessage)
 {
-  return parent_.reportCommunicationError(errorMessage);
+  return parent_->reportCommunicationError(errorMessage);
 }
 
 //////////////////////////
@@ -432,8 +438,8 @@ GenericGroupBuilder::reportCommunicationError(const std::string & errorMessage)
 
 GenericMessageBuilder::GenericMessageBuilder(MessageConsumer & consumer)
 : consumer_(consumer)
-, sequenceBuilder_(*this)
-, groupBuilder_(*this)
+, sequenceBuilder_(this)
+, groupBuilder_(this)
 {
 }
 
@@ -540,7 +546,7 @@ GenericMessageBuilder::startGroup(
   const std::string & applicationTypeNamespace,
   size_t size)
 {
-  groupBuilder_.startGroup(
+  groupBuilder_.initialize(
     identity,
     applicationType,
     applicationTypeNamespace,
