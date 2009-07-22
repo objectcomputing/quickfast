@@ -1,3 +1,9 @@
+Wed Jul 22 21:23:13 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Messages/Logger.h:
+        * src/Messages/Logger_fwd.h:
+        Missing from previous checkin.
+
 Wed Jul 22 21:03:02 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/GenericMessageBuilder.h:
