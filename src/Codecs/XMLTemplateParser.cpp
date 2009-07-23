@@ -247,13 +247,13 @@ namespace
       std::string tag(tagRaw.get());
       // don't finalize here for templates.  Because it's optional
       // it will be forcibly finalized at end of document
-      if(schemaElements_.top().first == tag)
+      if(tag != "templates")
       {
-        if(tag != "templates")
+        if(schemaElements_.top().first == tag)
         {
           schemaElements_.top().second->finalize();
+          schemaElements_.pop();
         }
-        schemaElements_.pop();
       }
       if(out_)
       {
@@ -458,7 +458,7 @@ TemplateBuilder::parseTemplateRegistry(const std::string & tag, const AttributeM
   {
     registry_->setDictionaryName(dictionary);
   }
-  schemaElements_.push(StackEntry(tag, registry_));
+//  schemaElements_.push(StackEntry(tag, registry_));
 }
 
 void
@@ -498,8 +498,8 @@ TemplateBuilder::parseTemplate(const std::string & tag, const AttributeMap& attr
 
   bool ignore = getOptionalBooleanAttribute(attributes, "ignore", false);
   target->setIgnore(ignore);
-
-  schemaElements_.top().second->addTemplate(target);
+  registry_->addTemplate(target);
+//  schemaElements_.top().second->addTemplate(target);
   schemaElements_.push(StackEntry(tag, target));
 }
 

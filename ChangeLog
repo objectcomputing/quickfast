@@ -1,3 +1,12 @@
+Thu Jul 23 18:53:09 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/XMLTemplateParser.cpp:
+        Resolves issue 19: Template files without the root <templates> tag cause
+        the parser to fail.
+
+        * src/Tests/testXMLTemplateParser.cpp:
+        Add a unit test for issue 19.
+
 Thu Jul 23 17:44:58 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Decoder.cpp:
