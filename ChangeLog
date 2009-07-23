@@ -1,3 +1,9 @@
+Thu Jul 23 13:39:47 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Messages/FieldSet.cpp:
+        Heap corruption due to incorrect calculation of buffer size.
+        Symptoms were a hang in release mode/ a heap corruption detection in debug mode.
+
 Thu Jul 23 00:04:19 UTC 2009  Yan Dai  <dai_y@ociweb.com>
 
         * src/Messages/FieldIdentity_fwd.h:
