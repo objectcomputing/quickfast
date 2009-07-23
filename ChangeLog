@@ -1,9 +1,8 @@
 Thu Jul 23 00:04:19 UTC 2009  Yan Dai  <dai_y@ociweb.com>
 
-        * setup.cmd:
-
         * src/Messages/FieldIdentity_fwd.h:
 
+          Added an include that fixed compilation errors on linux.
 Wed Jul 22 21:23:13 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Messages/Logger.h:
