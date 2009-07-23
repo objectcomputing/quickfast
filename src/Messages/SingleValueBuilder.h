@@ -39,6 +39,11 @@ namespace QuickFAST
           return true;
         }
 
+        bool ignoreMessage(MessageBuilder & messageBuilder)
+        {
+          return true;
+        }
+
         virtual void addField(
           const Messages::FieldIdentityCPtr & identity,
           const Messages::FieldCPtr & value)

@@ -335,6 +335,13 @@ namespace
     const std::string& name,
     std::string & result);
 
+    bool getOptionalBooleanAttribute(
+      const AttributeMap& attributes,
+      const std::string& name,
+      bool defaultResult
+      );
+
+
     void parseTemplateRegistry(const std::string & tag, const AttributeMap& attributes);
     void parseTemplate(const std::string & tag, const AttributeMap& attributes);
     void parseTypeRef(const std::string & tag, const AttributeMap& attributes);
@@ -408,6 +415,29 @@ TemplateBuilder::getOptionalAttribute(
   return true;
 }
 
+bool
+TemplateBuilder::getOptionalBooleanAttribute(
+  const AttributeMap& attributes,
+  const std::string& name,
+  bool defaultResult)
+{
+  bool result = defaultResult;
+  AttributeMap::const_iterator it = attributes.find(name);
+  if(it != attributes.end())
+  {
+    char yn = it->second[0];
+    yn = toupper(yn);
+    if(yn != 'Y' && yn != 'N' && yn != 'T' && yn != 'F')
+    {
+      std::stringstream msg;
+      msg << "Invalid boolean \"" << name << "=\"" << it->second;
+      throw TemplateDefinitionError(msg.str());
+    }
+    result = (yn == 'Y' || yn == 'T');
+  }
+  return result;
+}
+
 void
 TemplateBuilder::parseTemplateRegistry(const std::string & tag, const AttributeMap& attributes)
 {
@@ -463,17 +493,11 @@ TemplateBuilder::parseTemplate(const std::string & tag, const AttributeMap& attr
     target->setDictionaryName(dictionary);
   }
 
-  std::string reset;
-  if (getOptionalAttribute(attributes, "reset", reset))
-  {
-    char yn = reset[0];
-    yn = toupper(yn);
-    if(yn != 'Y' && yn != 'N' && yn != 'T' && yn != 'F')
-    {
-      throw TemplateDefinitionError("Invalid \"reset=\" option.");
-    }
-    target->setReset(yn == 'Y' || yn == 'T');
-  }
+  bool reset = getOptionalBooleanAttribute(attributes, "reset", false);
+  target->setReset(reset);
+
+  bool ignore = getOptionalBooleanAttribute(attributes, "ignore", false);
+  target->setIgnore(ignore);
 
   schemaElements_.top().second->addTemplate(target);
   schemaElements_.push(StackEntry(tag, target));
@@ -854,11 +878,18 @@ TemplateBuilder::parseLength(const std::string & tag, const AttributeMap& attrib
 void
 TemplateBuilder::parseTemplateRef(const std::string & tag, const AttributeMap& attributes)
 {
+  FieldInstructionPtr field;
   std::string name;
-  getOptionalAttribute(attributes, "name", name);
-  std::string ns;
-  getOptionalAttribute(attributes, "ns", ns);
-  FieldInstructionPtr field(new FieldInstructionTemplateRef(name, ns));
+  if(getOptionalAttribute(attributes, "name", name))
+  {
+    std::string ns;
+    getOptionalAttribute(attributes, "ns", ns);
+    field.reset(new FieldInstructionStaticTemplateRef(name, ns));
+  }
+  else
+  {
+    field.reset(new FieldInstructionDynamicTemplateRef);
+  }
   schemaElements_.top().second->addInstruction(field);
   // Is this push necessary?
   schemaElements_.push(StackEntry(tag, field));

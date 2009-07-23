@@ -53,6 +53,7 @@ namespace QuickFAST{
         const std::string & applicationTypeNamespace,
         size_t size);
       virtual bool endMessage(Messages::MessageBuilder & messageBuilder);
+      virtual bool ignoreMessage(MessageBuilder & messageBuilder);
 
       virtual Messages::MessageBuilder & startSequence(
         Messages::FieldIdentityCPtr identity,
@@ -134,6 +135,7 @@ namespace QuickFAST{
         const std::string & applicationTypeNamespace,
         size_t size);
       virtual bool endMessage(Messages::MessageBuilder & messageBuilder);
+      virtual bool ignoreMessage(MessageBuilder & messageBuilder);
 
       virtual Messages::MessageBuilder & startSequence(
         Messages::FieldIdentityCPtr identity,
@@ -200,6 +202,7 @@ namespace QuickFAST{
         const std::string & applicationTypeNamespace,
         size_t size);
       virtual bool endMessage(Messages::MessageBuilder & messageBuilder);
+      virtual bool ignoreMessage(MessageBuilder & messageBuilder);
 
       virtual Messages::MessageBuilder & startSequence(
         Messages::FieldIdentityCPtr identity,

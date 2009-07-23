@@ -68,7 +68,14 @@ Decoder::decodeMessage(
         templatePtr->fieldCount()));
 
     decodeSegmentBody(source, pmap, templatePtr, messageBuilder);
-    messageBuilder.endMessage(messageBuilder);
+    if(templatePtr->getIgnore())
+    {
+      messageBuilder.ignoreMessage(messageBuilder);
+    }
+    else
+    {
+      messageBuilder.endMessage(messageBuilder);
+    }
   }
   else
   {
@@ -85,7 +92,6 @@ Decoder::decodeNestedTemplate(
    Messages::MessageBuilder & messageBuilder,
    Messages::FieldIdentityCPtr identity)
 {
-
   Codecs::PresenceMap pmap(getTemplateRegistry()->presenceMapBits());
   if(this->verboseOut_)
   {

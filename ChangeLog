@@ -1,3 +1,21 @@
+Thu Jul 23 17:44:58 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/GenericMessageBuilder.h:
+        * src/Codecs/GenericMessageBuilder.cpp:
+        * src/Codecs/Template.h:
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/SingleValueBuilder.h:
+        * src/Tests/testFieldInstructions.cpp:
+        Fix problem in static templateRef handling.
+        Add ignore="Y" option to <template> element to cause
+        the results of decoding with this template to be ignored.
+        Couple this with the reset="Y" option to duplicate the
+        reset template (120) from SCP.
+
 Thu Jul 23 13:39:47 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Messages/FieldSet.cpp:

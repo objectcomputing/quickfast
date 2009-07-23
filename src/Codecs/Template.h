@@ -25,6 +25,7 @@ namespace QuickFAST{
         : SegmentBody(1) // init pmap bit count to one for the templateID
         , templateId_(0)
         , reset_(false)
+        , ignore_(false)
       {
       }
 
@@ -64,11 +65,18 @@ namespace QuickFAST{
         namespace_ = templateNamespace;
       }
 
-      /// @brief Set the reset-dictionaries-before-xcoding" flag
+      /// @brief Set the "reset-dictionaries-before-xcoding" flag
       /// @param reset true means reset, false means don't
       void setReset(bool reset)
       {
         reset_ = reset;
+      }
+
+      /// @brief Set the "ignore-this-message-after-decoding" flag
+      /// @param reset true means ignore, false means don't
+      void setIgnore(bool ignore)
+      {
+        ignore_ = ignore;
       }
 
       /// @brief Retrieve the template id
@@ -104,12 +112,20 @@ namespace QuickFAST{
         return reset_;
       }
 
+      /// @brief should the messages decoded by this template be ignored?
+      /// @returns true if they should be ignored.
+      bool getIgnore()const
+      {
+        return ignore_;
+      }
+
     private:
       uint32 templateId_;
       std::string templateName_;
       std::string templateNamespace_;
       std::string namespace_;
       bool reset_; // if true reset dictionaries before Xcoding this template
+      bool ignore_; // if true ignore the results of decoding this message.
     };
   }
 }

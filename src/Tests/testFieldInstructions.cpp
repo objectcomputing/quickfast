@@ -55,7 +55,8 @@ namespace
   void testFieldInstructionBaseClass(
     FieldInstruction & instruction,
     size_t expectPresenceMapBits,
-    bool acceptsOperator = true)
+    bool acceptsOperator = true,
+    bool hasName = true)
   {
     BOOST_CHECK(instruction.isMandatory());
     instruction.setPresence(false);
@@ -67,7 +68,10 @@ namespace
     Messages::FieldIdentityCPtr identity = instruction.getIdentity();
     BOOST_CHECK(!identity->mandatory());
     BOOST_CHECK_EQUAL(identity->id(),"id");
-    BOOST_CHECK_EQUAL(identity->name(), "NS::Name");
+    if(hasName)
+    {
+      BOOST_CHECK_EQUAL(identity->name(), "NS::Name");
+    }
 
     BOOST_CHECK_EQUAL(instruction.presenceMapBitsRequired(), 0);
 
@@ -164,8 +168,11 @@ BOOST_AUTO_TEST_CASE(testFieldInstructionDecimal)
 
 BOOST_AUTO_TEST_CASE(testFieldInstructionTemplateRef)
 {
-  Codecs::FieldInstructionTemplateRef instruction("Name", "NS");
+  Codecs::FieldInstructionStaticTemplateRef instruction("Name", "NS");
   testFieldInstructionBaseClass(instruction, 0, false);
+
+  Codecs::FieldInstructionDynamicTemplateRef staticInstruction;
+  testFieldInstructionBaseClass(staticInstruction, 0, false, false);
 }
 
 BOOST_AUTO_TEST_CASE(testFieldInstructionGroup)

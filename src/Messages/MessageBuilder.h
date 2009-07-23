@@ -50,6 +50,10 @@ namespace QuickFAST{
       /// @brief return true if decoding should continue
       virtual bool endMessage(MessageBuilder & messageBuilder) = 0;
 
+      /// @brief Finish a message.  Ignore the result.
+      /// @brief return true if decoding should continue
+      virtual bool ignoreMessage(MessageBuilder & messageBuilder) = 0;
+
       /// @brief prepare to accept decoded sequence entries
       ///
       /// @param identity identifies the sequence

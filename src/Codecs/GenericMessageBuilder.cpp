@@ -87,6 +87,12 @@ GenericSequenceBuilder::endMessage(Messages::MessageBuilder & messageBuilder)
   throw QuickFAST::UsageError("Attempt to build message.", "GenericSequenceBuilder");
 }
 
+bool
+GenericSequenceBuilder::ignoreMessage(MessageBuilder & messageBuilder)
+{
+  throw QuickFAST::UsageError("Attempt to build message.", "GenericSequenceBuilder");
+}
+
 
 Messages::MessageBuilder &
 GenericSequenceBuilder::startSequence(
@@ -297,6 +303,12 @@ GenericGroupBuilder::endMessage(
   throw QuickFAST::UsageError("Attempt to build message.", "GenericGroupBuilder");
 }
 
+bool
+GenericGroupBuilder::ignoreMessage(Messages::MessageBuilder & messageBuilder)
+{
+  throw QuickFAST::UsageError("Attempt to build message.", "GenericGroupBuilder");
+}
+
 
 Messages::MessageBuilder &
 GenericGroupBuilder::startSequence(
@@ -495,6 +507,12 @@ GenericMessageBuilder::endMessage(Messages::MessageBuilder &)
   bool more = consumer_.consumeMessage(*message());
   message_.reset();
   return more;
+}
+
+bool
+GenericMessageBuilder::ignoreMessage(Messages::MessageBuilder & messageBuilder)
+{
+  return true;
 }
 
 Messages::MessageBuilder &
