@@ -46,8 +46,6 @@ namespace QuickFAST{
       std::string echoFileName_;
       Codecs::DataSource::EchoType echoType_;
       size_t messageLimit_;
-      bool verboseDecode_;
-      bool verboseExecution_;
       bool strict_;
       unsigned short portNumber_;
       std::string listenAddressName_;

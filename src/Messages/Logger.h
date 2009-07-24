@@ -14,7 +14,7 @@ namespace QuickFAST{
     {
     public:
       /// The importance of being a log message.
-      enum LogLevels
+      enum LogLevel
       {
         LOG_FATAL = 0,
         LOG_SERIOUS = 1,

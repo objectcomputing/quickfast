@@ -6,175 +6,95 @@
 #define MULTICASTDECODER_H
 #include <Common/QuickFAST_Export.h>
 #include "MulticastDecoder_fwd.h"
-#include <Common/AsioService.h>
-
-#include <Codecs/DataSource.h>
+#include <Codecs/MulticastReceiver.h>
 #include <Codecs/Decoder.h>
+
 #include <Codecs/TemplateRegistry_fwd.h>
-#include <Codecs/XMLTemplateParser.h>
-#include <Codecs/TemplateRegistry.h>
-#include <Codecs/Decoder.h>
-#include <Codecs/DataSourceBuffer.h>
-
-#include <Messages/MessageBuilder.h>
+#include <Messages/MessageBuilder_fwd.h>
 
 namespace QuickFAST{
   namespace Codecs {
-
     /// @brief Support decoding of FAST messages received via multicast.
-    class /*QuickFAST_Export*/ MulticastDecoder : public AsioService
+    ///
+    /// This class assumes that incoming FAST messages are packed
+    /// one or more per packet with no additional information (no headers, etc.)
+    /// in the packet.
+    ///
+    /// If this is not the case, see MulticastReceiver.
+    class QuickFAST_Export MulticastDecoder
     {
-      typedef boost::scoped_array<unsigned char> Buffer;
     public:
       /// @brief construct given templates and multicast information
+      ///
       /// @param templateRegistry the templates to use for decoding
-      /// @param multicastAddressName multicast address as a text string
+      /// @param multicastGroupIP multicast address as a text string
       /// @param listenAddressName listen address as a text string
       /// @param portNumber port number
       MulticastDecoder(
         TemplateRegistryPtr templateRegistry,
-        const std::string & multicastAddressName,
-        const std::string & listenAddressName,
-        unsigned short portNumber)
-      : decoder_(templateRegistry)
-      , stopping_(false)
-      , error_(false)
-      , verbose_(false)
-      , messageCount_(0)
-      , messageLimit_(0)
-      , bufferSize_(1600)
-      , verboseDecode_(false)
-      , verboseExecution_(false)
-      , listenAddress_(boost::asio::ip::address::from_string(listenAddressName))
-      , multicastAddress_(boost::asio::ip::address::from_string(multicastAddressName))
-      , endpoint_(listenAddress_, portNumber)
-      , socket_(ioService_)
-      {
-      }
+        const std::string & multicastGroupIP,
+        const std::string & listenAddressIP,
+        unsigned short portNumber);
 
       /// @brief construct given templates, shared io_service, and multicast information
+      ///
       /// @param templateRegistry the templates to use for decoding
       /// @param ioService an ioService to be shared with other objects
-      /// @param multicastAddressName multicast address as a text string
+      /// @param multicastGroupIP multicast address as a text string
       /// @param listenAddressName listen address as a text string
       /// @param portNumber port number
       MulticastDecoder(
         TemplateRegistryPtr templateRegistry,
         boost::asio::io_service & ioService,
-        const std::string & multicastAddressName,
-        const std::string & listenAddressName,
-        unsigned short portNumber)
-      : AsioService(ioService)
-      , decoder_(templateRegistry)
-      , messageCount_(0)
-      , messageLimit_(0)
-      , bufferSize_(1600)
-      , verboseDecode_(false)
-      , verboseExecution_(false)
-      , listenAddress_(boost::asio::ip::address::from_string(listenAddressName))
-      , multicastAddress_(boost::asio::ip::address::from_string(multicastAddressName))
-      , endpoint_(listenAddress_, portNumber)
-      , socket_(ioService_)
-      {
-      }
+        const std::string & multicastGroupIP,
+        const std::string & listenAddressIP,
+        unsigned short portNumber);
 
-      ~MulticastDecoder()
-      {
-      }
+      ~MulticastDecoder();
 
       /// @brief Enable some debugging/diagnostic information to be written to an ostream
+      ///
       /// @param out the ostream to receive the data
-      void setVerboseOutput(std::ostream & out)
-      {
-        decoder_.setVerboseOutput(out);
-      }
-
+      /// todo: use the Logger interface to eliminate the need for explicitly setting verbose.
+      void setVerboseOutput(std::ostream & out);
 
       /// @brief Clear the verbose output that was enabled by setVerboseOutput()
-      void disableVerboseOutput()
-      {
-        decoder_.disableVerboseOutput();
-      }
-
+      ///
+      /// todo: use the Logger interface to eliminate the need for explicitly setting verbose.
+      void disableVerboseOutput();
 
       /// @brief Enable/disable strict checking of conformance to the FAST standard
       ///
       /// If strict is false some conditions such as integer overflow or inefficient encoding
       /// will be ignored.  The default is true -- strict checking is enabled.
       /// @param strict true to enable; false to disable strict checking
-      void setStrict(bool strict)
-      {
-        decoder_.setStrict(strict);
-      }
+      void setStrict(bool strict);
 
       /// @brief get the current status of the strict property.
+      ///
       /// @returns true if strict checking is enabled.
-      bool getStrict()const
-      {
-        return decoder_.getStrict();
-      }
-
+      bool getStrict()const;
 
       /// @brief set an upper limit on the # of messages to be decoded
+      ///
       /// @param messageLimit how many messages to decode (0 means "forever")
-      void setLimit(size_t messageLimit)
-      {
-        messageLimit_ = messageLimit;
-      }
-
-      /// @brief the largest expected multicast packet
-      void setBufferSize(size_t bufferSize)
-      {
-        bufferSize_ = bufferSize;
-      }
-
-      /// @brief enables noisy decoding at the message level
-      void setVerboseDecode(bool verbose)
-      {
-        verboseDecode_ = verbose;
-      }
-
-      /// @brief enables noisy decoding at the execution progress level
-      void setVerboseExecution(bool verbose)
-      {
-        verboseExecution_ = verbose;
-      }
+      void setLimit(size_t messageLimit);
 
       /// @brief How many messages have been decoded.
+      ///
       /// @returns the number of messages that have been decoded.
-      size_t messageCount() const
-      {
-        return messageCount_;
-      }
+      size_t messageCount() const;
 
       /// @brief immediate reset
-      void reset()
-      {
-        decoder_.reset();
-      }
+      void reset();
 
       /// @brief Start the decoding process.  Returns immediately
-      void start(Messages::MessageBuilder & builder)
-      {
-        builder_ = & builder;
-        buffer1_.reset(new unsigned char[bufferSize_]);
-        buffer2_.reset(new unsigned char[bufferSize_]);
+      void start(Messages::MessageBuilder & builder, size_t bufferSize=1600, size_t bufferCount=2);
 
-        socket_.open(endpoint_.protocol());
-        socket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
-        socket_.bind(endpoint_);
-        if(verbose_)
-        {
-          std::cout << "Joining multicast group: " << multicastAddress_.to_string()
-            << " via interface " << endpoint_.address().to_string() << ':' << endpoint_.port() << std::endl;
-        }
-        // Join the multicast group.
-        boost::asio::ip::multicast::join_group joinRequest(multicastAddress_.to_v4(), listenAddress_.to_v4());
-        socket_.set_option(joinRequest);
-
-        startReceive(&buffer1_, &buffer2_);
-      }
-
+      /// @brief Run the event loop to accept incoming messages
+      ///
+      /// Todo: provide access to other variations of run
+      void run();
 
       /// @brief Stop the decoding process.
       ///
@@ -185,113 +105,17 @@ namespace QuickFAST{
       ///
       /// MessageBuilder::decodingStopped() will be called when
       /// the stop request is complete.
-      void stop()
-      {
-        stopping_ = true;
-        // attempt to cancel any requests in progress.
-        socket_.cancel();
-      }
-
-      /// @brief did an error occur during decoding?
-      /// @param message receives an error message if this function returns true.
-      /// @returns true if the decoding ended due to an error.
-      bool hadError(std::string & message);
+      void stop();
 
     private:
-      void handleReceive(
-        const boost::system::error_code& error,
-        Buffer * buffer,
-        size_t bytesReceived,
-        Buffer * altBuffer)
-      {
-        if(stopping_)
-        {
-          return;
-        }
-        if (!error)
-        {
-          // accept data into the other buffer while we process this buffer
-          startReceive(altBuffer, buffer);
-          ++messageCount_;
-          if(builder_->wantLog(MessageConsumer::LOG_VERBOSE))
-          {
-            std::stringstream message;
-            message << "Received[" << messageCount_ << "]: " << bytesReceived << " bytes";
-            builder_->logMessage(MessageConsumer::LOG_VERBOSE, message.str());
-          }
-          try
-          {
-            DataSourceBuffer source(buffer->get(), bytesReceived);
-            decoder_.reset();
-            while(source.bytesAvailable() > 0 && !stopping_)
-            {
-              decoder_.decodeMessage(source, *builder_);
-            }
-          }
-          catch (const std::exception &ex)
-          {
-            if(!builder_->reportDecodingError(ex.what()))
-            {
-              error_ = true;
-              errorMessage_ = ex.what();
-              stopping_ = true;
-              socket_.cancel();
-            }
-          }
-          if(messageCount_ > messageLimit_ && messageLimit_ != 0)
-          {
-            stopping_ = true;
-            socket_.cancel();
-          }
-        }
-        else
-        {
-          if(!builder_->reportCommunicationError(error.message()))
-          {
-            error_ = true;
-            errorMessage_ = error.message();
-            stopping_ = true;
-            socket_.cancel();
-          }
-        }
-      }
+      MulticastReceiver receiver_;
 
-      void startReceive(Buffer * buffer, Buffer * altBuffer)
-      {
-        socket_.async_receive_from(
-          boost::asio::buffer(buffer->get(), bufferSize_),
-          senderEndpoint_,
-          strand_.wrap(
-            boost::bind(&MulticastDecoder::handleReceive,
-              this,
-              boost::asio::placeholders::error,
-              buffer,
-              boost::asio::placeholders::bytes_transferred,
-              altBuffer)
-              )
-            );
-      }
-
-    private:
+      BufferConsumerPtr bufferConsumer_;
       Decoder decoder_;
       Messages::MessageBuilder * builder_;
-      bool stopping_;
-      bool error_;
-      bool verbose_;
-      std::string errorMessage_;
-      size_t messageCount_;
+//      bool verbose_;
       size_t messageLimit_;
-      size_t bufferSize_;
-      bool verboseDecode_;
-      bool verboseExecution_;
-      boost::asio::ip::address listenAddress_;
-      boost::asio::ip::address multicastAddress_;
-      boost::asio::ip::udp::endpoint endpoint_;
-      boost::asio::ip::udp::endpoint senderEndpoint_;
-      boost::asio::ip::udp::socket socket_;
-
-      Buffer buffer1_;
-      Buffer buffer2_;
+      size_t messageCount_;
     };
   }
 }

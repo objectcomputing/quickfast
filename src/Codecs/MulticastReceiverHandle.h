@@ -12,7 +12,7 @@ namespace QuickFAST{
 
     class MulticastReceiverHandle_i;
 
-    /// @brief Expose the interface to a MulticastReceiver without exposing the interface
+    /// @brief Expose the interface to a MulticastReceiver without exposing the implementation
     ///
     /// This insulates higher level code from knowing any of the implementation details
     /// of the multicast Receiver.  In particular including boost::asio
@@ -46,7 +46,7 @@ namespace QuickFAST{
       /// @param bufferSize determines the maximum size of an incoming packet
       /// @param bufferCount is how many input buffers to use
       void start(
-        BufferConsumerPtr  bufferConsumer,
+        BufferConsumer & bufferConsumer,
         size_t bufferSize = 1600,
         size_t bufferCount = 2
         );

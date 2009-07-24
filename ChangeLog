@@ -1,3 +1,19 @@
+Fri Jul 24 19:29:05 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/MulticastReceiver.h:
+        * src/Codecs/MulticastReceiverHandle.h:
+        * src/Codecs/MulticastReceiverHandle.cpp:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.h:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+        * src/Messages/Logger.h:
+        Multicast Decoder now depends on MulticastReceiver (DRY)
+        Consolidating the logging support using the
+        Logger interface.  (more to do here)
+
 Thu Jul 23 18:53:09 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/XMLTemplateParser.cpp:

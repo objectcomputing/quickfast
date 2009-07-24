@@ -24,6 +24,8 @@ namespace QuickFAST{
       MessageInterpreter(std::ostream & out);
       virtual ~MessageInterpreter();
 
+      void setLogLevel(Messages::Logger::LogLevel level);
+
       ////////////////////////////
       // Implement MessageConsumer
       virtual bool consumeMessage(Messages::Message & message);
@@ -48,6 +50,7 @@ namespace QuickFAST{
       std::ostream & out_;
       size_t indent_;
       size_t recordCount_;
+      Messages::Logger::LogLevel logLevel_;
     };
   }
 }

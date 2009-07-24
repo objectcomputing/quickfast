@@ -29,8 +29,6 @@ MulticastInterpreter::MulticastInterpreter()
 : bufferSize_(1600)
 , echoType_(Codecs::DataSource::HEX)
 , messageLimit_(0)
-, verboseDecode_(false)
-, verboseExecution_(false)
 , strict_(true)
 , portNumber_(13014)
 , listenAddressName_("0.0.0.0")
@@ -131,16 +129,6 @@ MulticastInterpreter::parseSingleArg(int argc, char * argv[])
       echoField_ = !echoField_;
       consumed = 1;
     }
-    else if(opt == "-vd")
-    {
-      verboseDecode_ = !verboseDecode_;
-      consumed = 1;
-    }
-    else if(opt == "-vx")
-    {
-      verboseExecution_ = !verboseExecution_;
-      consumed = 1;
-    }
   }
   catch (std::exception & ex)
   {
@@ -167,8 +155,6 @@ MulticastInterpreter::usage(std::ostream & out) const
   out << "    -enone        : Do not echo data (boundaries only)." << std::endl;
   out << "    -em           : Toggle 'echo message boundaries'(default true)" << std::endl;
   out << "    -ef           : Toggle 'echo field boundaries'(default false)" << std::endl;
-  out << "  -vd           : Noise to the console decoding" << std::endl;
-  out << "  -vx           : Noise to the console about execution status" << std::endl;
 }
 
 bool
@@ -204,9 +190,6 @@ MulticastInterpreter::applyArgs()
         portNumber_);
       decoder_->setStrict(strict_);
       decoder_->setLimit(messageLimit_);
-      decoder_->setBufferSize(bufferSize_);
-      decoder_->setVerboseDecode(verboseDecode_);
-      decoder_->setVerboseExecution(verboseExecution_);
     }
 
     if(outputFileName_.empty())
@@ -265,7 +248,7 @@ MulticastInterpreter::run()
 
   MessageInterpreter consumer(*outputFile_);
   Codecs::GenericMessageBuilder builder(consumer);
-  decoder_->start(builder);
+  decoder_->start(builder, bufferSize_);
 
   try
   {

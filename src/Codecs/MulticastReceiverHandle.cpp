@@ -62,7 +62,7 @@ MulticastReceiverHandle::bytesReadable() const
 
 void
 MulticastReceiverHandle::start(
-  BufferConsumerPtr  bufferConsumer,
+  BufferConsumer &  bufferConsumer,
   size_t bufferSize,
   size_t bufferCount)
 {

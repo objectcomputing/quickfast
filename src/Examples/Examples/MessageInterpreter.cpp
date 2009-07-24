@@ -17,6 +17,7 @@ MessageInterpreter::MessageInterpreter(std::ostream & out)
   : out_(out)
   , indent_(0)
   , recordCount_(0)
+  , logLevel_(Messages::Logger::LOG_INFO)
 {
 }
 
@@ -27,14 +28,16 @@ MessageInterpreter::~MessageInterpreter()
 bool
 MessageInterpreter::wantLog(unsigned short level)
 {
-  return level < LOG_INFO;
+  return level <= logLevel_;
 }
 
 bool
 MessageInterpreter::logMessage(unsigned short level, const std::string & logMessage)
 {
-  //out_
-  std::cerr << logMessage << std::endl;
+  if(level <= logLevel_)
+  {
+    std::cerr << logMessage << std::endl;
+  }
   return true;
 }
 
@@ -42,7 +45,6 @@ MessageInterpreter::logMessage(unsigned short level, const std::string & logMess
 bool
 MessageInterpreter::reportDecodingError(const std::string & errorMessage)
 {
-  //out_
   std::cerr << "Decoding error: " << errorMessage << std::endl;
   return false;
 }

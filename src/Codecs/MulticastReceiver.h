@@ -59,18 +59,11 @@ namespace QuickFAST{
       , endpoint_(listenInterface_, portNumber)
       , socket_(ioService_)
       , bufferSize_(0)
-      , verbose_(false)
       {
       }
 
       ~MulticastReceiver()
       {
-      }
-
-      /// @brief enable writing diagnostic information to standard out.
-      void setVerbose(bool verbose = true)
-      {
-        verbose_ = verbose;
       }
 
       /// @brief How many packetd have been decoded.
@@ -92,11 +85,11 @@ namespace QuickFAST{
       /// @param bufferConsumer accepts and processes the filled buffers
       /// @param bufferSize determines the maximum size of an incoming packet
       void start(
-        BufferConsumerPtr  bufferConsumer,
+        BufferConsumer & bufferConsumer,
         size_t bufferSize = 1600,
         size_t bufferCount = 2)
       {
-        consumer_ = bufferConsumer;
+        consumer_ = & bufferConsumer;
         bufferSize_ = bufferSize;
 
         // todo configure # buffers/ honor bufferCount
@@ -107,11 +100,12 @@ namespace QuickFAST{
         socket_.bind(endpoint_);
 
         consumer_->receiverStarted();
-
-        if(verbose_)
+        if(consumer_->wantLog(BufferConsumer::LOG_INFO))
         {
-          std::cout << "Joining multicast group: " << multicastGroup_.to_string()
-            << " via interface " << endpoint_.address().to_string() << ':' << endpoint_.port() << std::endl;
+          std::stringstream msg;
+          msg << "Joining multicast group: " << multicastGroup_.to_string()
+            << " via interface " << endpoint_.address().to_string() << ':' << endpoint_.port();
+          consumer_->logMessage(BufferConsumer::LOG_INFO, msg.str());
         }
         // Join the multicast group.
         boost::asio::ip::multicast::join_group joinRequest(multicastGroup_.to_v4(), listenInterface_.to_v4());
@@ -143,9 +137,11 @@ namespace QuickFAST{
         size_t bytesReceived,
         Buffer * altBuffer)
       {
-        if(verbose_)
+        if(consumer_->wantLog(BufferConsumer::LOG_INFO))
         {
-          std::cout << "Incoming packet containing " << bytesReceived << " bytes." << std::endl;
+          std::stringstream msg;
+          msg << "Incoming packet containing " << bytesReceived << " bytes." << std::endl;
+          consumer_->logMessage(BufferConsumer::LOG_INFO, msg.str());
         }
         if(stopping_)
         {
@@ -193,7 +189,6 @@ namespace QuickFAST{
             );
       }
 
-
     private:
       bool stopping_;
       size_t packetCount_;
@@ -202,14 +197,12 @@ namespace QuickFAST{
       boost::asio::ip::udp::endpoint endpoint_;
       boost::asio::ip::udp::endpoint senderEndpoint_;
       boost::asio::ip::udp::socket socket_;
-      BufferConsumerPtr consumer_;
+      BufferConsumer * consumer_;
 
       size_t bufferSize_;
         // todo configure # buffers
       Buffer buffer1_;
       Buffer buffer2_;
-
-      bool verbose_;
     };
   }
 }
