@@ -34,9 +34,7 @@ namespace QuickFAST{
 
       /// @brief construct given templates and multicast information
       /// @param templateRegistry the templates to use for decoding
-      /// @param multicastAddressName multicast address as a text string
-      /// @param listenAddressName listen address as a text string
-      /// @param portNumber port number
+      /// @param consumer the MessageConsumer to receive the decoded messages
       BufferDecoder(
         TemplateRegistryPtr templateRegistry,
         MessageConsumerPtr consumer)
@@ -175,10 +173,11 @@ namespace QuickFAST{
         return !stopping_;
       }
 
-      virtual bool reportCommunicationError(const std::string & errorBuffer)
+      virtual bool reportCommunicationError(const std::string & errorMessage)
       {
-        return consumer_->reportCommunicationError(errorBuffer);
+        return consumer_->reportCommunicationError(errorMessage);
       }
+
       virtual void receiverStarted()
       {
         // ok

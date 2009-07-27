@@ -126,10 +126,13 @@ namespace QuickFAST{
         swap_i(used_, rhs.used_);
       }
 
-      virtual const FieldSet & getFieldSet() const
-      {
-        return *this;
-      }
+      ///// @brief access the field set
+      /////
+      ///// @returns this field set
+      //virtual const FieldSet & getFieldSet() const
+      //{
+      //  return *this;
+      //}
 
       /// @brief For DotNet: get everything in one call
       ///

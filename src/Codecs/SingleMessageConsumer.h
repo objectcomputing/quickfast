@@ -17,6 +17,8 @@ namespace QuickFAST{
     public:
       SingleMessageConsumer();
       virtual ~SingleMessageConsumer();
+      /// @brief access the decoded message
+      /// @returns the decoded message
       Messages::Message & message();
 
       ////////////////////////////

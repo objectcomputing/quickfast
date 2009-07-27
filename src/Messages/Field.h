@@ -294,6 +294,7 @@ namespace QuickFAST{
       virtual const Messages::SequenceCPtr & toSequence() const;
 
     protected:
+      /// What type of data does this field contain?
       FieldType type_;
       /// false means this is a NULL value
       bool valid_;

@@ -8,6 +8,7 @@
 namespace QuickFAST{
   namespace Codecs{
     class BufferConsumer;
+    /// @brief smart pointer to a BufferConsumer
     typedef boost::shared_ptr<BufferConsumer> BufferConsumerPtr;
   }
 }

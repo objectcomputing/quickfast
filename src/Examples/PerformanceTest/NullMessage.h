@@ -22,14 +22,7 @@ namespace QuickFAST{
       /// @brief Copy construct NullMessage
       NullMessage(const NullMessage & rhs);
 
-      virtual void clear(size_t capacity = 0);
-      virtual void reserve(size_t capacity);
-      virtual size_t size()const;
       virtual void addField(const Messages::FieldIdentityCPtr & identity, const Messages::FieldCPtr & value);
-      virtual bool getIdentity(const std::string &name, Messages::FieldIdentityCPtr & identity) const;
-      virtual void setApplicationType(const std::string & type, const std::string & ns);
-      virtual const std::string & getApplicationType()const;
-      virtual const std::string & getApplicationTypeNs()const;
 
       virtual Messages::MessageBuilder & startSequence(
         Messages::FieldIdentityCPtr identity,
@@ -38,7 +31,7 @@ namespace QuickFAST{
         size_t size);
       virtual void endSequence(
         Messages::FieldIdentityCPtr identity,
-        Messages::MessageBuilder & );
+        Messages::MessageBuilder & sequenceBuilder );
 
       virtual Messages::MessageBuilder & startSequenceEntry(
         const std::string & applicationType,
@@ -56,7 +49,7 @@ namespace QuickFAST{
         size_t size);
       virtual void endGroup(
         Messages::FieldIdentityCPtr identity,
-        Messages::MessageBuilder & entry);
+        Messages::MessageBuilder & groupBuilder);
 
     private:
       int size_;
@@ -77,8 +70,7 @@ namespace QuickFAST{
       virtual ~NullMessageConsumer();
       //////////////////////////////////////
       // Implement MessageConsumer Interface
-      virtual bool consumeMessage(Examples::NullMessage & message);
-      virtual bool consumeMessage(Messages::MessageBuilder & message);
+      virtual bool consumeMessage(Messages::Message  & message);
       virtual bool wantLog(unsigned short level);
       virtual bool logMessage(unsigned short level, const std::string & logMessage);
       virtual bool reportDecodingError(const std::string & errorMessage);

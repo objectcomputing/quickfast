@@ -12,6 +12,9 @@ namespace QuickFAST
 {
   namespace Messages
   {
+    /// @brief A MessageAccessor for an empty record
+    ///
+    /// Used during debugging and testing. Not used in normal application code.
     class EmptyAccessor : public Messages::MessageAccessor
     {
       /////////////
@@ -60,9 +63,11 @@ namespace QuickFAST
 
     };
 
+    ///@brief A MessageAccessor for a "record" containing a single field
     class SingleFieldAccessor : public Messages::MessageAccessor
     {
     public:
+      /// @brief construct with the identity and value of the field to be contained in the "record"
       SingleFieldAccessor(
           const Messages::FieldIdentityCPtr & identity,
           const Messages::FieldCPtr & field)

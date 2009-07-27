@@ -66,6 +66,7 @@ namespace QuickFAST{
       }
 
       /// @brief Set the "reset-dictionaries-before-xcoding" flag
+      ///
       /// @param reset true means reset, false means don't
       void setReset(bool reset)
       {
@@ -73,7 +74,7 @@ namespace QuickFAST{
       }
 
       /// @brief Set the "ignore-this-message-after-decoding" flag
-      /// @param reset true means ignore, false means don't
+      /// @param ignore true means ignore, false means don't
       void setIgnore(bool ignore)
       {
         ignore_ = ignore;

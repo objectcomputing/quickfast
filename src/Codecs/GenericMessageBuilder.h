@@ -29,19 +29,29 @@ namespace QuickFAST{
       /// @brief Virtual destructor
       virtual ~GenericSequenceBuilder();
 
+      /// @brief prepare this sequence to receive fields.
+      ///
+      /// Not to be confused with startSequence which prepares a *nested* sequence
+      /// within this one.
+      /// @param identity identifies the sequence
+      /// @param applicationType is the data type for a sequence entry
+      /// @param applicationTypeNamespace qualifies applicationTYpe
+      /// @param size is the maximum number of fields to expect in each entry
       void initialize(
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
 
+      /// @brief access the results of building the sequence
       const Messages::SequencePtr & getSequence()const;
 
+      /// @brief start over on a new sequence
       void reset();
 
       //////////////////////////
       // Implement MessageBuilder
-      virtual size_t size()const;
+
       virtual const std::string & getApplicationType()const;
       virtual const std::string & getApplicationTypeNs()const;
       virtual void addField(
@@ -53,7 +63,7 @@ namespace QuickFAST{
         const std::string & applicationTypeNamespace,
         size_t size);
       virtual bool endMessage(Messages::MessageBuilder & messageBuilder);
-      virtual bool ignoreMessage(MessageBuilder & messageBuilder);
+      virtual bool ignoreMessage(Messages::MessageBuilder & messageBuilder);
 
       virtual Messages::MessageBuilder & startSequence(
         Messages::FieldIdentityCPtr identity,
@@ -63,12 +73,13 @@ namespace QuickFAST{
 
       virtual void endSequence(
         Messages::FieldIdentityCPtr identity,
-        MessageBuilder & sequenceBuilder);
+        Messages::MessageBuilder & sequenceBuilder);
 
       virtual Messages::MessageBuilder & startSequenceEntry(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
+
       virtual void endSequenceEntry(
         Messages::MessageBuilder & entry);
 
@@ -79,10 +90,11 @@ namespace QuickFAST{
         size_t size) ;
       virtual void endGroup(
         Messages::FieldIdentityCPtr identity,
-        Messages::MessageBuilder & entry);
+        Messages::MessageBuilder & groupBuilder);
 
       ///////////////////
       // Implement Logger
+
       virtual bool wantLog(unsigned short level);
       virtual bool logMessage(unsigned short level, const std::string & logMessage);
       virtual bool reportDecodingError(const std::string & errorMessage);
@@ -112,19 +124,30 @@ namespace QuickFAST{
       /// @brief Virtual destructor
       virtual ~GenericGroupBuilder();
 
+      /// @brief Initialize this group.
+      ///
+      /// Not to be confused with startGroup which initializes
+      /// group nested within this one.
+      /// @param identity identifies the sequence
+      /// @param applicationType is the data type for a sequence entry
+      /// @param applicationTypeNamespace qualifies applicationTYpe
+      /// @param size is the maximum number of fields to expect in each entry
       void initialize(
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
 
+      /// @brief Return the group that was built
+      /// @returns the newly built group.
       const Messages::GroupPtr & getGroup()const;
+
+      /// @brief prepare to start over with a new group
       void reset();
 
       //////////////////////////
       // Implement MessageBuilder
 
-      virtual size_t size()const;
       virtual const std::string & getApplicationType()const;
       virtual const std::string & getApplicationTypeNs()const;
       virtual void addField(
@@ -135,7 +158,7 @@ namespace QuickFAST{
         const std::string & applicationTypeNamespace,
         size_t size);
       virtual bool endMessage(Messages::MessageBuilder & messageBuilder);
-      virtual bool ignoreMessage(MessageBuilder & messageBuilder);
+      virtual bool ignoreMessage(Messages::MessageBuilder & messageBuilder);
 
       virtual Messages::MessageBuilder & startSequence(
         Messages::FieldIdentityCPtr identity,
@@ -158,10 +181,11 @@ namespace QuickFAST{
         size_t size) ;
       virtual void endGroup(
         Messages::FieldIdentityCPtr identity,
-        Messages::MessageBuilder & entry);
+        Messages::MessageBuilder & groupBuilder);
 
       ///////////////////
       // Implement Logger
+
       virtual bool wantLog(unsigned short level);
       virtual bool logMessage(unsigned short level, const std::string & logMessage);
       virtual bool reportDecodingError(const std::string & errorMessage);
@@ -182,6 +206,9 @@ namespace QuickFAST{
     class QuickFAST_Export GenericMessageBuilder : public Messages::MessageBuilder
     {
     public:
+      /// @brief Construct given the consumer to receive the built messages.
+      ///
+      /// @param consumer will receive the messages after they are built.
       GenericMessageBuilder(MessageConsumer & consumer);
 
       /// @brief Virtual destructor
@@ -189,8 +216,6 @@ namespace QuickFAST{
 
       //////////////////////////
       // Implement MessageBuilder
-
-      virtual size_t size()const;
       virtual const std::string & getApplicationType()const;
       virtual const std::string & getApplicationTypeNs()const;
       virtual void addField(
@@ -202,7 +227,7 @@ namespace QuickFAST{
         const std::string & applicationTypeNamespace,
         size_t size);
       virtual bool endMessage(Messages::MessageBuilder & messageBuilder);
-      virtual bool ignoreMessage(MessageBuilder & messageBuilder);
+      virtual bool ignoreMessage(Messages::MessageBuilder & messageBuilder);
 
       virtual Messages::MessageBuilder & startSequence(
         Messages::FieldIdentityCPtr identity,
@@ -226,10 +251,11 @@ namespace QuickFAST{
         size_t size) ;
       virtual void endGroup(
         Messages::FieldIdentityCPtr identity,
-        Messages::MessageBuilder & entry);
+        Messages::MessageBuilder & groupBuilder);
 
       ///////////////////
       // Implement Logger
+
       virtual bool wantLog(unsigned short level);
       virtual bool logMessage(unsigned short level, const std::string & logMessage);
       virtual bool reportDecodingError(const std::string & errorMessage);

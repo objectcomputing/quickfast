@@ -8,6 +8,7 @@
 namespace QuickFAST{
   namespace Codecs{
     class MulticastReceiver;
+    /// @brief smart pointer to a MulticastReceiver
     typedef boost::shared_ptr<MulticastReceiver> MulticastReceiverPtr;
   }
 }

@@ -12,6 +12,9 @@ namespace QuickFAST
 {
   namespace Messages
   {
+    ///@brief a MessageBuilder that creates a "record" containing a single value
+    ///
+    /// Or more accurately, captures a single value produced by the decoder.
     template<typename DATATYPE>
     class SingleValueBuilder : public Messages::MessageBuilder
     {
@@ -26,6 +29,8 @@ namespace QuickFAST
         {
         }
 
+        ///////////////////////////
+        // Implement MessageBuilder
         MessageBuilder & startMessage(
           const std::string & applicationType,
           const std::string & applicationTypeNamespace,
@@ -34,7 +39,7 @@ namespace QuickFAST
           return *this;
         }
 
-        bool endMessage(MessageBuilder &)
+        bool endMessage(MessageBuilder &messageBuilder)
         {
           return true;
         }
@@ -52,10 +57,18 @@ namespace QuickFAST
           set_ = true;
         }
 
+        /// @brief check to see if a value was set
+        ///
+        /// @returns true if a value was set
         bool isSet()const
         {
           return set_;
         }
+
+        /// @brief retrieve the captured value
+        ///
+        /// probably a good idea to check isSet() first
+        /// @returns the value
         DATATYPE value()const
         {
           return value_;

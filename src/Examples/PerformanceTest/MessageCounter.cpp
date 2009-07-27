@@ -23,7 +23,7 @@ MessageCounter::~MessageCounter()
 }
 
 bool
-MessageCounter::consumeMessage(Messages::MessageBuilder & message)
+MessageCounter::consumeMessage(Messages::Message & message)
 {
   messageCount_ += 1;
   return true;

@@ -101,6 +101,10 @@ namespace QuickFAST{
         valueIsDefined_ = true;
       }
 
+      /// @brief Set the pmap bit to be used for this field
+      ///
+      /// This is not a part of the FAST spec. It is here to support
+      /// exchanges that do not conform to the spec (ArcaBook for one)
       void setPMapBit(size_t pmapBit)
       {
         pmapBit_ = pmapBit;
@@ -177,7 +181,9 @@ namespace QuickFAST{
       /// true if dictionaryIndex_ is valid;
       bool dictionaryIndexValid_;
 
+      /// For non-conforming implmentations that assign specific pmap bits....
       size_t pmapBit_;
+      /// Indicate that pmapBit_ is to be used
       bool pmapBitValid_;
 
     };

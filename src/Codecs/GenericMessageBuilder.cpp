@@ -45,12 +45,6 @@ GenericSequenceBuilder::initialize(
   this->sequence_.reset(new Messages::Sequence);
 }
 
-size_t
-GenericSequenceBuilder::size()const
-{
-  return fieldSet()->size();
-}
-
 const std::string &
 GenericSequenceBuilder::getApplicationType()const
 {
@@ -261,12 +255,6 @@ GenericGroupBuilder::initialize(
   group_->setApplicationType(applicationType, applicationTypeNamespace);
 }
 
-size_t
-GenericGroupBuilder::size()const
-{
-  return groupPtr()->size();
-}
-
 const std::string &
 GenericGroupBuilder::getApplicationType()const
 {
@@ -462,12 +450,6 @@ GenericMessageBuilder::GenericMessageBuilder(MessageConsumer & consumer)
 
 GenericMessageBuilder::~GenericMessageBuilder()
 {
-}
-
-size_t
-GenericMessageBuilder::size()const
-{
-  return message()->size();
 }
 
 const std::string &

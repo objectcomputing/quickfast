@@ -18,6 +18,10 @@ namespace QuickFAST{
     {
     }
 
+    /// @brief Special construtor to provide explicit type information about the failed conversion.
+    ///
+    /// @param actualType is the type of actually found
+    /// @param desiredType is the type that was requested
     UnsupportedConversion(const std::string & actualType, const std::string & desiredType)
       : std::domain_error((actualType + " cannot be converted to " + desiredType).c_str())
     {

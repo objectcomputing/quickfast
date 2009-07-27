@@ -40,7 +40,6 @@ namespace QuickFAST{
       }
 
       /// @brief construct given shared io_service, multicast information, and a consumer
-      /// @param templateRegistry the templates to use for decoding
       /// @param ioService an ioService to be shared with other objects
       /// @param multicastGroupIP multicast address as a text string
       /// @param listenInterfaceIP listen address as a text string
@@ -73,6 +72,8 @@ namespace QuickFAST{
         return packetCount_;
       }
 
+      /// @brief estimate how many bytes are waiting to be processed
+      /// @returns a very rough estimate!
       size_t bytesReadable() const
       {
         boost::asio::ip::udp::socket::bytes_readable command;
@@ -84,6 +85,7 @@ namespace QuickFAST{
       /// @brief Start accepting packets.  Returns immediately
       /// @param bufferConsumer accepts and processes the filled buffers
       /// @param bufferSize determines the maximum size of an incoming packet
+      /// @param bufferCount is the number of buffers to allocate to receive packets
       void start(
         BufferConsumer & bufferConsumer,
         size_t bufferSize = 1600,

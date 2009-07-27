@@ -39,7 +39,7 @@ namespace QuickFAST{
       /// @param applicationType is the data type for the message
       /// @param applicationTypeNamespace qualifies applicationTYpe
       /// @param size is the maximum number of fields to expect in the message
-      /// @param returns a message builder that will accept the fields in the message
+      /// @returns a message builder that will accept the fields in the message
       ///        (which may be *this)
       virtual MessageBuilder & startMessage(
         const std::string & applicationType,
@@ -47,11 +47,15 @@ namespace QuickFAST{
         size_t size) = 0;
 
       /// @brief Finish a message.  Process the result.
-      /// @brief return true if decoding should continue
+      ///
+      /// @param messageBuilder is the builder provided by startMessage()
+      /// @returns true if decoding should continue
       virtual bool endMessage(MessageBuilder & messageBuilder) = 0;
 
       /// @brief Finish a message.  Ignore the result.
-      /// @brief return true if decoding should continue
+      ///
+      /// @param messageBuilder is the builder provided by startMessage()
+      /// @returns true if decoding should continue
       virtual bool ignoreMessage(MessageBuilder & messageBuilder) = 0;
 
       /// @brief prepare to accept decoded sequence entries
@@ -71,6 +75,7 @@ namespace QuickFAST{
       /// Builders may assume that all Sequence Entries will be closed via endSequenceEntry
       ///
       /// @param identity identifies the sequence
+      /// @param sequenceBuilder is the builder provided by startSequence
       virtual void endSequence(
         Messages::FieldIdentityCPtr identity,
         MessageBuilder & sequenceBuilder) = 0;
@@ -95,7 +100,7 @@ namespace QuickFAST{
       /// Builders may assume this call follows a startSequenceEntry call within
       //  a startSequence/endSequence pair.
       ///
-      /// @param the nested Message builder returned by startSequenceEntry.
+      /// @param entry the nested Message builder returned by startSequenceEntry.
       virtual void endSequenceEntry(MessageBuilder & entry) = 0;
 
       /// @brief Prepare to accept a decoded Group
@@ -113,9 +118,10 @@ namespace QuickFAST{
       /// @brief Complete the group
       ///
       /// @param identity identifies the group
+      /// @param groupBuilder is the message builder returned by startGroup
       virtual void endGroup(
         Messages::FieldIdentityCPtr identity,
-        MessageBuilder & entry) = 0;
+        MessageBuilder & groupBuilder) = 0;
 
     };
   }

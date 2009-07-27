@@ -28,7 +28,7 @@ namespace QuickFAST{
       ///
       /// @param templateRegistry the templates to use for decoding
       /// @param multicastGroupIP multicast address as a text string
-      /// @param listenAddressName listen address as a text string
+      /// @param listenAddressIP listen address as a text string
       /// @param portNumber port number
       MulticastDecoder(
         TemplateRegistryPtr templateRegistry,
@@ -41,7 +41,7 @@ namespace QuickFAST{
       /// @param templateRegistry the templates to use for decoding
       /// @param ioService an ioService to be shared with other objects
       /// @param multicastGroupIP multicast address as a text string
-      /// @param listenAddressName listen address as a text string
+      /// @param listenAddressIP listen address as a text string
       /// @param portNumber port number
       MulticastDecoder(
         TemplateRegistryPtr templateRegistry,

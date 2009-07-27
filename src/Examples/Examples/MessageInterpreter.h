@@ -24,6 +24,8 @@ namespace QuickFAST{
       MessageInterpreter(std::ostream & out);
       virtual ~MessageInterpreter();
 
+      /// @brief set the level of log messages that we are interested in.
+      /// @param level is the first level that will *NOT* be displayed.
       void setLogLevel(Messages::Logger::LogLevel level);
 
       ////////////////////////////

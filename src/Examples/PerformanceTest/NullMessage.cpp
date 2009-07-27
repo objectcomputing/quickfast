@@ -26,51 +26,9 @@ NullMessage::NullMessage(const NullMessage & rhs)
 }
 
 void
-NullMessage::clear(size_t capacity)
-{
-}
-
-void
-NullMessage::reserve(size_t capacity)
-{
-}
-
-size_t
-NullMessage::size()const
-{
-  return size_;
-}
-
-void
 NullMessage::addField(const Messages::FieldIdentityCPtr & identity, const Messages::FieldCPtr & value)
 {
   ++ size_;
-}
-
-bool
-NullMessage::getIdentity(const std::string &name, Messages::FieldIdentityCPtr & identity) const
-{
-  return false;
-}
-
-void
-NullMessage::setApplicationType(const std::string & type, const std::string & ns)
-{
-  applicationType_ = type;
-  applicationTypeNamespace_ = ns;
-
-}
-
-const std::string &
-NullMessage::getApplicationType()const
-{
-  return applicationType_;
-}
-
-const std::string &
-NullMessage::getApplicationTypeNs()const
-{
-  return applicationTypeNamespace_;
 }
 
 Messages::MessageBuilder &
@@ -137,16 +95,8 @@ NullMessageConsumer::~NullMessageConsumer()
 }
 
 bool
-NullMessageConsumer::consumeMessage(Examples::NullMessage & message)
+NullMessageConsumer::consumeMessage(Messages::Message  & message)
 {
-  messageCount_ += 1;
-  return true;
-}
-
-bool
-NullMessageConsumer::consumeMessage(Messages::MessageBuilder & message)
-{
-  // shouldn't happen.
   messageCount_ += 1;
   return true;
 }

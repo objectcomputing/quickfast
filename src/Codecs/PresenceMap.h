@@ -71,7 +71,7 @@ namespace QuickFAST{
       /// @brief Special support for Arca FAST-like (ish) encoding
       ///
       /// Check a specific bit. Do not change PMAP position
-      /// @param Checks a specific bit in the presence map
+      /// @param bit is the bit to be checked.
       /// @returns true if the bit is set
       bool checkSpecificField(size_t bit);
 

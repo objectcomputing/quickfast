@@ -1,3 +1,34 @@
+Mon Jul 27 15:42:30 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/BufferConsumer_fwd.h:
+        * src/Codecs/BufferDecoder.h:
+        * src/Codecs/Decoder.h:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/GenericMessageBuilder.h:
+        * src/Codecs/GenericMessageBuilder.cpp:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastReceiver.h:
+        * src/Codecs/MulticastReceiver_fwd.h:
+        * src/Codecs/PresenceMap.h:
+        * src/Codecs/SingleMessageConsumer.h:
+        * src/Codecs/Template.h:
+        * src/Common/Exceptions.h:
+        * src/Common/PCapReader.h:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessagePerformance.h:
+        * src/Examples/PerformanceTest/MessageCounter.h:
+        * src/Examples/PerformanceTest/MessageCounter.cpp:
+        * src/Examples/PerformanceTest/NullMessage.h:
+        * src/Examples/PerformanceTest/NullMessage.cpp:
+        * src/Messages/Field.h:
+        * src/Messages/FieldSet.h:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/SingleValueBuilder.h:
+        * src/Messages/SpecialAccessors.h:
+        Updating doxygen comments.
+        Removing unused methods from interfaces.
+
+
 Fri Jul 24 19:29:05 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MulticastDecoder.h:

@@ -75,6 +75,7 @@ namespace QuickFAST{
       ///
       /// @param[in] source supplies the FAST encoded data.
       /// @param[in] messageBuilder to which the decoded fields will be added
+      /// @param[in] identity names the template.
       void decodeNestedTemplate(
         DataSource & source,
         Messages::MessageBuilder & messageBuilder,

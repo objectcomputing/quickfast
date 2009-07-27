@@ -30,6 +30,9 @@ namespace QuickFAST{
       virtual bool reportCommunicationError(const std::string & errorMessage);
       virtual void decodingStopped();
 
+      /// @brief How many messages did we process.
+      ///
+      /// @returns the number of messaeges handled
       size_t getMessageCount() const
       {
         return recordCount_;
