@@ -227,13 +227,13 @@
       <copy pmap="5"/>
     </uInt32>
 
-    <uInt32 name="AB_IMBALANCE" id="41">
+    <Int32 name="AB_IMBALANCE" id="41">
       <copy pmap="4"/>
-    </uInt32>
+    </Int32>
 
-    <uInt32 name="AB_MKT_IMBALANCE" id="130">
+    <Int32 name="AB_MKT_IMBALANCE" id="130">
       <nop/>
-    </uInt32>
+    </Int32>
 
     <uInt32 name="AB_PRICE" id="60">
       <copy pmap="6"/>
