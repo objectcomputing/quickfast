@@ -16,7 +16,9 @@ namespace QuickFAST{
     /// @brief Receive Multicast Packets and pass them to a packet handler
     class /*QuickFAST_Export*/ MulticastReceiver : public AsioService
     {
-      typedef boost::scoped_array<unsigned char> Buffer;
+      typedef boost::shared_array<unsigned char> Buffer;
+      typedef std::vector<Buffer> BufferPool;
+
     public:
       /// @brief construct given multicast information and a consumer
       /// @param multicastGroupIP multicast address as a text string
@@ -94,9 +96,6 @@ namespace QuickFAST{
         consumer_ = & bufferConsumer;
         bufferSize_ = bufferSize;
 
-        // todo configure # buffers/ honor bufferCount
-        buffer1_.reset(new unsigned char[bufferSize_]);
-        buffer2_.reset(new unsigned char[bufferSize_]);
         socket_.open(endpoint_.protocol());
         socket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
         socket_.bind(endpoint_);
@@ -113,7 +112,13 @@ namespace QuickFAST{
         boost::asio::ip::multicast::join_group joinRequest(multicastGroup_.to_v4(), listenInterface_.to_v4());
         socket_.set_option(joinRequest);
 
-        startReceive(&buffer1_, &buffer2_);
+// temporarily single buffer        for(size_t nBuffer = 0; nBuffer < bufferCount; ++nBuffer)
+        {
+          Buffer buffer(new unsigned char[bufferSize_]);
+          /// buffers_ is used only to clean up on object destruction
+          buffers_.push_back(buffer);
+          startReceive(buffer.get());
+        }
       }
 
       /// @brief Stop accepting packets
@@ -135,9 +140,8 @@ namespace QuickFAST{
     private:
       void handleReceive(
         const boost::system::error_code& error,
-        Buffer * buffer,
-        size_t bytesReceived,
-        Buffer * altBuffer)
+        unsigned char * buffer,
+        size_t bytesReceived)
       {
         if(consumer_->wantLog(BufferConsumer::LOG_INFO))
         {
@@ -151,17 +155,14 @@ namespace QuickFAST{
         }
         if (!error)
         {
-          // accept data into the other buffer while we process this buffer
-          startReceive(altBuffer, buffer);
           // during shutdown it's possible to receive empty packets.
           if(bytesReceived > 0)
           {
+            boost::mutex::scoped_lock lock(handlerMutex_);
             ++packetCount_;
-            if(!consumer_->consumeBuffer(buffer->get(), bytesReceived))
+            if(!consumer_->consumeBuffer(buffer, bytesReceived))
             {
-              stopping_ = true;
-              socket_.cancel();
-              return;
+              stop();
             }
           }
         }
@@ -169,25 +170,25 @@ namespace QuickFAST{
         {
           if(!consumer_->reportCommunicationError(error.message()))
           {
-            stopping_ = true;
-            socket_.cancel();
+            stop();
           }
+        }
+        if(!stopping_)
+        {
+          startReceive(buffer);
         }
       }
 
-      void startReceive(Buffer * buffer, Buffer * altBuffer)
+      void startReceive(unsigned char * buffer)
       {
         socket_.async_receive_from(
-          boost::asio::buffer(buffer->get(), bufferSize_),
+          boost::asio::buffer(buffer, bufferSize_),
           senderEndpoint_,
-          strand_.wrap(
             boost::bind(&MulticastReceiver::handleReceive,
               this,
               boost::asio::placeholders::error,
               buffer,
-              boost::asio::placeholders::bytes_transferred,
-              altBuffer)
-              )
+            boost::asio::placeholders::bytes_transferred)
             );
       }
 
@@ -202,9 +203,8 @@ namespace QuickFAST{
       BufferConsumer * consumer_;
 
       size_t bufferSize_;
-        // todo configure # buffers
-      Buffer buffer1_;
-      Buffer buffer2_;
+      BufferPool buffers_;
+      boost::mutex handlerMutex_;
     };
   }
 }

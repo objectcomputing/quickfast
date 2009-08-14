@@ -1,3 +1,8 @@
+Fri Aug 14 15:36:58 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MulticastReceiver.h:
+        change buffering management to avoid race condition
+
 Mon Aug 10 20:35:18 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * data/ARCATemplates.xml:
