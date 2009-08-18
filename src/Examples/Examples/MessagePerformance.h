@@ -28,6 +28,7 @@ namespace QuickFAST{
       virtual bool logMessage(unsigned short level, const std::string & logMessage);
       virtual bool reportDecodingError(const std::string & errorMessage);
       virtual bool reportCommunicationError(const std::string & errorMessage);
+      virtual void decodingStarted();
       virtual void decodingStopped();
 
       /// @brief How many messages did we process.

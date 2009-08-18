@@ -1,3 +1,30 @@
+Tue Aug 18 22:08:44 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MulticastReceiver.h:
+        * src/Codecs/MulticastReceiverHandle.h:
+        * src/Codecs/MulticastReceiverHandle.cpp:
+
+        * src/Common/AtomicCounter.h:
+        * src/Common/AtomicOps.h:
+        * src/Common/AtomicPointer.h:
+        * src/Common/LinkedBuffer.h:
+        * src/Common/QuickFASTPch.h:
+
+        * src/Examples/Examples/ExamplesPch.h:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/Examples/MessagePerformance.h:
+        * src/Examples/Examples/MessagePerformance.cpp:
+
+        * src/Examples/FileToMulticast/FileToMulticast.cpp:
+
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.h:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+
+        Change buffering scheme in MulticastReceiver.
+        Uses Common/LinkedBuffer.
+
+
 Fri Aug 14 15:36:58 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MulticastReceiver.h:

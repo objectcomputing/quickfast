@@ -17,8 +17,8 @@ namespace {
 }
 
 FileToMulticast::FileToMulticast()
-: portNumber_(30001)
-, sendAddress_("239.255.0.1")
+: portNumber_(13014)
+, sendAddress_("224.1.2.133")
 , sendCount_(1)
 , sendMicroseconds_(500)
 , burst_(1)
@@ -126,8 +126,8 @@ FileToMulticast::parseSingleArg(int argc, char * argv[])
 void
 FileToMulticast::usage(std::ostream & out) const
 {
-  out << "  -a dotted_ip  : Multicast send address (default is 239.255.0.1)" << std::endl;
-  out << "  -p port       : Multicast port number (default 30001)" << std::endl;
+  out << "  -a dotted_ip  : Multicast send address (default is " << sendAddress_ << ")" << std::endl;
+  out << "  -p port       : Multicast port number (default " << portNumber_ << ")" << std::endl;
   out << "  -f datafile   : File containing FAST encoded messages. (required)" << std::endl;
   out << "  -n indexfile  : File produced as an echo file with message boundaries" << std::endl;
   out << "                  by the InterpretFAST program." << std::endl;

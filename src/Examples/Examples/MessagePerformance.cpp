@@ -39,6 +39,11 @@ MessagePerformance::reportCommunicationError(const std::string & errorMessage)
 }
 
 void
+MessagePerformance::decodingStarted()
+{
+}
+
+void
 MessagePerformance::decodingStopped()
 {
 }

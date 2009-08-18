@@ -27,9 +27,11 @@ using namespace Examples;
 
 MulticastInterpreter::MulticastInterpreter()
 : bufferSize_(1600)
+, bufferCount_(4)
 , echoType_(Codecs::DataSource::HEX)
 , messageLimit_(0)
 , strict_(true)
+, silent_(false)
 , portNumber_(13014)
 , listenAddressName_("0.0.0.0")
 , multicastAddressName_("224.1.2.133")
@@ -64,6 +66,11 @@ MulticastInterpreter::parseSingleArg(int argc, char * argv[])
       bufferSize_ = boost::lexical_cast<size_t>(argv[1]);
       consumed = 2;
     }
+    if(opt == "-#" && argc > 1)
+    {
+      bufferCount_ = boost::lexical_cast<size_t>(argv[1]);
+      consumed = 2;
+    }
     if(opt == "-c" && argc > 1)
     {
       messageLimit_ = boost::lexical_cast<size_t>(argv[1]);
@@ -87,6 +94,11 @@ MulticastInterpreter::parseSingleArg(int argc, char * argv[])
     else if(opt == "-s")
     {
       strict_ = !strict_;
+      consumed = 1;
+    }
+    else if(opt == "-q")
+    {
+      silent_ = !silent_;
       consumed = 1;
     }
     else if(opt == "-t" && argc > 1)
@@ -142,6 +154,7 @@ void
 MulticastInterpreter::usage(std::ostream & out) const
 {
   out << "  -b size       : Size of largest expected message. (default " << bufferSize_ << ")" << std::endl;
+  out << "  -# count      : Number of buffers. (default " << bufferCount_ << ")" << std::endl;
   out << "  -t file       : Template file (required)" << std::endl;
   out << "  -o file       : Output file (defaults to standard out)" << std::endl;
   out << "  -l dotted_ip  : Connection listen address (default is " << listenAddressName_ << ")" << std::endl;
@@ -149,6 +162,7 @@ MulticastInterpreter::usage(std::ostream & out) const
   out << "  -p port       : Multicast port number (default " << portNumber_ << ")" << std::endl;
   out << "  -c count      : Stop after receiving count messages (default 0 means no limit)" << std::endl;
   out << "  -s            : Apply strict decoding rules." << std::endl;
+  out << "  -q            : Quiet." << std::endl;
   out << "  -e file       : Echo input to file" << std::endl;
   out << "    -ehex         : Echo as hexadecimal (default)." << std::endl;
   out << "    -eraw         : Echo as raw binary data" << std::endl;
@@ -246,9 +260,9 @@ MulticastInterpreter::run()
 {
   int result = 0;
 
-  MessageInterpreter consumer(*outputFile_);
+  MessageInterpreter consumer(*outputFile_, silent_);
   Codecs::GenericMessageBuilder builder(consumer);
-  decoder_->start(builder, bufferSize_);
+  decoder_->start(builder, bufferSize_, bufferCount_);
 
   try
   {
@@ -256,14 +270,14 @@ MulticastInterpreter::run()
     decoder_->run();
     unsigned long receiveLapse = lapse.freeze();
     size_t messageCount = decoder_->messageCount();
-    if(messageCount > 0)
-    {
       std::cout << "Received "
         << messageCount
         << " messages in "
         << std::fixed << std::setprecision(3)
         << receiveLapse
         << " milliseonds. [";
+    if(messageCount > 0)
+    {
       std::cout << std::fixed << std::setprecision(3)
         << double(receiveLapse)/double(messageCount) << " msec/message. = "
         << std::fixed << std::setprecision(0)

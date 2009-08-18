@@ -12,12 +12,12 @@ namespace QuickFAST{
     {
     public:
       MulticastReceiverHandle_i(
-        const std::string & multicastAddressName,
-        const std::string & listenAddressName,
+        const std::string & multicastGroupIP,
+        const std::string & listenInterfaceIP,
         unsigned short portNumber)
         :ptr_(new MulticastReceiver(
-                  multicastAddressName,
-                  listenAddressName,
+                  multicastGroupIP,
+                  listenInterfaceIP,
                   portNumber))
       {
       }
@@ -32,12 +32,12 @@ using namespace QuickFAST;
 using namespace Codecs;
 
 MulticastReceiverHandle::MulticastReceiverHandle(
-    const std::string & multicastAddressName,
-    const std::string & listenAddressName,
+    const std::string & multicastGroupIP,
+    const std::string & listenInterfaceIP,
     unsigned short portNumber)
   : pImpl_(new MulticastReceiverHandle_i(
-            multicastAddressName,
-            listenAddressName,
+            multicastGroupIP,
+            listenInterfaceIP,
             portNumber))
 {
 }
@@ -47,17 +47,52 @@ MulticastReceiverHandle::~MulticastReceiverHandle()
   delete pImpl_;
 }
 
-
-size_t
-MulticastReceiverHandle::packetCount() const
-{
-  return pImpl_->ptr_->packetCount();
-}
-
 size_t
 MulticastReceiverHandle::bytesReadable() const
 {
-  return pImpl_->ptr_->bytesReadable();
+  return pImpl_->ptr_->packetsProcessed();
+}
+
+size_t
+MulticastReceiverHandle::noBufferAvailable() const
+{
+  return pImpl_->ptr_->packetsProcessed();
+}
+
+size_t
+MulticastReceiverHandle::packetsReceived() const
+{
+  return pImpl_->ptr_->packetsProcessed();
+}
+
+size_t
+MulticastReceiverHandle::packetsProcessed() const
+{
+  return pImpl_->ptr_->packetsProcessed();
+}
+
+size_t
+MulticastReceiverHandle::packetsWithErrors() const
+{
+  return pImpl_->ptr_->packetsProcessed();
+}
+
+size_t
+MulticastReceiverHandle::emptyPackets() const
+{
+  return pImpl_->ptr_->packetsProcessed();
+}
+
+size_t
+MulticastReceiverHandle::bytesReceived() const
+{
+  return pImpl_->ptr_->packetsProcessed();
+}
+
+size_t
+MulticastReceiverHandle::bytesProcessed() const
+{
+  return pImpl_->ptr_->packetsProcessed();
 }
 
 void

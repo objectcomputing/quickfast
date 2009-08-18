@@ -13,11 +13,12 @@
 using namespace QuickFAST;
 using namespace Examples;
 
-MessageInterpreter::MessageInterpreter(std::ostream & out)
+MessageInterpreter::MessageInterpreter(std::ostream & out, bool silent)
   : out_(out)
   , indent_(0)
   , recordCount_(0)
-  , logLevel_(Messages::Logger::LOG_INFO)
+  , logLevel_(Messages::Logger::LOG_WARNING)
+  , silent_(silent)
 {
 }
 
@@ -58,6 +59,12 @@ MessageInterpreter::reportCommunicationError(const std::string & errorMessage)
 }
 
 void
+MessageInterpreter::decodingStarted()
+{
+  // ignore this.
+}
+
+void
 MessageInterpreter::decodingStopped()
 {
   out_ << "End of data" << std::endl;
@@ -77,6 +84,8 @@ MessageInterpreter::consumeMessage(Messages::Message & message)
 void
 MessageInterpreter::formatMessage(const Messages::Message & message)
 {
+  if(!silent_)
+  {
   for( Messages::Message::const_iterator it = message.begin();
     it != message.end();
     ++it)
@@ -96,6 +105,7 @@ MessageInterpreter::formatMessage(const Messages::Message & message)
     {
       out_ << ' ' << identity->name() << '[' << identity->id() << "]=";
       displayFieldValue(field);
+      }
     }
   }
 }

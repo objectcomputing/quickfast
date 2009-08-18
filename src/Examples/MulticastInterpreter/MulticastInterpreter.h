@@ -41,12 +41,14 @@ namespace QuickFAST{
     private:
       // set from command line options
       size_t bufferSize_;
+      size_t bufferCount_;
       std::string templateFileName_;
       std::string outputFileName_;
       std::string echoFileName_;
       Codecs::DataSource::EchoType echoType_;
       size_t messageLimit_;
       bool strict_;
+      bool silent_;
       unsigned short portNumber_;
       std::string listenAddressName_;
       std::string multicastAddressName_;

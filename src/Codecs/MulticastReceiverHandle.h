@@ -21,25 +21,47 @@ namespace QuickFAST{
     {
     public:
       /// @brief construct a multicast receiver given multicast information and a consumer
-      /// @param multicastAddressName multicast address as a text string
-      /// @param listenAddressName listen address as a text string
+      /// @param multicastGroupIP multicast address as a text string
+      /// @param listenInterfaceIP listen address as a text string
       /// @param portNumber port number
       MulticastReceiverHandle(
-        const std::string & multicastAddressName,
-        const std::string & listenAddressName,
+        const std::string & multicastGroupIP,
+        const std::string & listenInterfaceIP,
         unsigned short portNumber);
       ~MulticastReceiverHandle();
       ///////////////////////////////////////
       // expose the MulticastReceiver methods
 
-      /// @brief How many packetd have been decoded.
-      /// @returns the number of messages that have been decoded.
-      size_t packetCount() const;
-
-      /// @brief Approximately how many bytes are waiting to be read from the underlying socket.
-      ///
-      /// Not that packets which have already arrived, but have not been decoded will not be included.
+      /// @brief Approximately how many bytes are waiting to be decoded
       size_t bytesReadable() const;
+
+      /// @brief how many times were all buffers busy?
+      /// @returns the number of times no buffers were available to receive packets.
+      size_t noBufferAvailable() const;
+
+      /// @brief How many packets have been received
+      /// @returns the number of packets that have been received
+      size_t packetsReceived() const;
+
+      /// @brief How many packets have been processed
+      /// @returns the number of packets that have been processed.
+      size_t packetsProcessed() const;
+
+      /// @brief How many received packets had errors
+      /// @returns the number of packets that have encountered communication errors
+      size_t packetsWithErrors() const;
+
+      /// @brief How many received packets were empty
+      /// @returns the number of packets that were empty
+      size_t emptyPackets() const;
+
+      /// @brief How many bytes have been received
+      /// @returns the number of bytes that have been received
+      size_t bytesReceived() const;
+
+      /// @brief How many bytes have been processed
+      /// @returns the number of bytes that have been processed
+      size_t bytesProcessed() const;
 
       /// @brief Start accepting packets.  Returns immediately
       /// @param bufferConsumer accepts and processes the filled buffers

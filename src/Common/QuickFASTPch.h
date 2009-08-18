@@ -6,9 +6,11 @@
 # pragma warning(disable:4251) // Disable VC warning about dll linkage required (for private members?)
 # pragma warning(disable:4275) // disable warning about non dll-interface base class.
 # pragma warning(disable:4996) // Disable VC warning that std library may be unsafe
+# pragma warning(disable:4290) // C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
 # pragma warning(disable:4396) // Disable 'boost::operator !=' : the inline specifier cannot be used when a friend declaration refers to a specialization of a function template
                                // boost::unordered_set triggers this.  I think it's a bug somewhere, but it doesn't
                                // cause any problems because the code never compares boost::unordered sets
+
 #endif
 #ifndef QuickFAST_H
 #define QuickFAST_H
@@ -26,9 +28,11 @@
 #include <stack>
 #include <stdexcept>
 #include <math.h>
+#include <iostream>
 #include <iomanip>
+
 #include <boost/shared_ptr.hpp>
-//#include <boost/enable_shared_from_this.hpp>
+#include <boost/shared_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/scoped_array.hpp>
@@ -38,9 +42,8 @@
 #include <boost/thread/mutex.hpp>
 
 
-#include <iostream>
-
-
+////////////////////////
+// Doxygen documentation
 
 /// @mainpage
 /// This project is an implementation of the FAST Protcol.

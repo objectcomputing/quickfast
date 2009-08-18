@@ -21,7 +21,7 @@ namespace QuickFAST{
     {
     public:
       /// @brief Construct given a ostream to which to write the interpreted results.
-      MessageInterpreter(std::ostream & out);
+      MessageInterpreter(std::ostream & out, bool silent = false);
       virtual ~MessageInterpreter();
 
       /// @brief set the level of log messages that we are interested in.
@@ -35,6 +35,7 @@ namespace QuickFAST{
       virtual bool logMessage(unsigned short level, const std::string & logMessage);
       virtual bool reportDecodingError(const std::string & errorMessage);
       virtual bool reportCommunicationError(const std::string & errorMessage);
+      virtual void decodingStarted();
       virtual void decodingStopped();
 
     private:
@@ -53,6 +54,7 @@ namespace QuickFAST{
       size_t indent_;
       size_t recordCount_;
       Messages::Logger::LogLevel logLevel_;
+      bool silent_;
     };
   }
 }
