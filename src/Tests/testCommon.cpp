@@ -76,20 +76,20 @@ BOOST_AUTO_TEST_CASE(TestSimpleBufferCollection)
   // notice we don't care what order we get them back
   // but we do want to see all of them exactly once each.
   LinkedBuffer * p = collection.pop();
-  BOOST_CHECK(p->get()[1] == 1);
-  p->get()[1] = 2;
+  BOOST_CHECK((*p)[1] == 1);
+  (*p)[1] = 2;
 
   p = collection.pop();
-  BOOST_CHECK(p->get()[1] == 1);
-  p->get()[1] = 2;
+  BOOST_CHECK((*p)[1] == 1);
+  (*p)[1] = 2;
 
   p = collection.pop();
-  BOOST_CHECK(p->get()[1] == 1);
-  p->get()[1] = 2;
+  BOOST_CHECK((*p)[1] == 1);
+  (*p)[1] = 2;
 
   p = collection.pop();
-  BOOST_CHECK(p->get()[1] == 1);
-  p->get()[1] = 2;
+  BOOST_CHECK((*p)[1] == 1);
+  (*p)[1] = 2;
 
   p = collection.pop();
   BOOST_CHECK(p == 0);
@@ -108,20 +108,20 @@ BOOST_AUTO_TEST_CASE(TestSimpleBufferCollection)
   BOOST_CHECK(collection2.pop() == 0);
 
   p = collection.pop();
-  BOOST_CHECK(p->get()[1] == 2);
-  p->get()[1] = 3;
+  BOOST_CHECK((*p)[1] == 2);
+  (*p)[1] = 3;
 
   p = collection.pop();
-  BOOST_CHECK(p->get()[1] == 2);
-  p->get()[1] = 3;
+  BOOST_CHECK((*p)[1] == 2);
+  (*p)[1] = 3;
 
   p = collection.pop();
-  BOOST_CHECK(p->get()[1] == 2);
-  p->get()[1] = 3;
+  BOOST_CHECK((*p)[1] == 2);
+  (*p)[1] = 3;
 
   p = collection.pop();
-  BOOST_CHECK(p->get()[1] == 2);
-  p->get()[1] = 3;
+  BOOST_CHECK((*p)[1] == 2);
+  (*p)[1] = 3;
 
   p = collection.pop();
   BOOST_CHECK(p == 0);
@@ -142,20 +142,20 @@ BOOST_AUTO_TEST_CASE(TestSimpleBufferCollection)
   BOOST_CHECK(collection2.pop() == 0);
 
   p = collection.pop();
-  BOOST_CHECK(p->get()[1] == 3);
-  p->get()[1] = 4;
+  BOOST_CHECK((*p)[1] == 3);
+  (*p)[1] = 4;
 
   p = collection.pop();
-  BOOST_CHECK(p->get()[1] == 3);
-  p->get()[1] = 4;
+  BOOST_CHECK((*p)[1] == 3);
+  (*p)[1] = 4;
 
   p = collection.pop();
-  BOOST_CHECK(p->get()[1] == 3);
-  p->get()[1] = 4;
+  BOOST_CHECK((*p)[1] == 3);
+  (*p)[1] = 4;
 
   p = collection.pop();
-  BOOST_CHECK(p->get()[1] == 3);
-  p->get()[1] = 4;
+  BOOST_CHECK((*p)[1] == 3);
+  (*p)[1] = 4;
 
   p = collection.pop();
   BOOST_CHECK(p == 0);
