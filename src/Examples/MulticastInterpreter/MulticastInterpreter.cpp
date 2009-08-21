@@ -26,7 +26,7 @@ using namespace QuickFAST;
 using namespace Examples;
 
 MulticastInterpreter::MulticastInterpreter()
-: bufferSize_(1600)
+: bufferSize_(1400)
 , bufferCount_(4)
 , echoType_(Codecs::DataSource::HEX)
 , messageLimit_(0)

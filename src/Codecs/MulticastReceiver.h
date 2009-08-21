@@ -41,7 +41,6 @@ namespace QuickFAST
         , multicastGroup_(boost::asio::ip::address::from_string(multicastGroupIP))
         , endpoint_(listenInterface_, portNumber)
         , socket_(ioService_)
-        , bufferSize_(0)
         , readInProgress_(false)
         , noBufferAvailable_(0)
         , packetsReceived_(0)
@@ -73,7 +72,6 @@ namespace QuickFAST
         , multicastGroup_(boost::asio::ip::address::from_string(multicastGroupIP))
         , endpoint_(listenInterface_, portNumber)
         , socket_(ioService_)
-        , bufferSize_(0)
         , readInProgress_(false)
         , noBufferAvailable_(0)
         , packetsReceived_(0)
@@ -179,11 +177,10 @@ namespace QuickFAST
       /// @param bufferCount is the number of buffers to allocate to receive packets
       void start(
         BufferConsumer & bufferConsumer,
-        size_t bufferSize = 1600,
+        size_t bufferSize = 1400,
         size_t bufferCount = 2)
       {
         consumer_ = & bufferConsumer;
-        bufferSize_ = bufferSize;
 
         socket_.open(endpoint_.protocol());
         socket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
@@ -208,12 +205,30 @@ namespace QuickFAST
 
         for(size_t nBuffer = 0; nBuffer < bufferCount; ++nBuffer)
         {
-          BufferLifetime buffer(new LinkedBuffer(bufferSize_));
+          BufferLifetime buffer(new LinkedBuffer(bufferSize));
           /// buffers_ is used only to clean up on object destruction
           buffers_.push_back(buffer);
           idleBufferPool_.push(buffer.get());
         }
         startReceive(lock);
+      }
+
+      /// @brief add additional buffers on-the-fly
+      /// @param bufferSize is how many bytes in each buffer (should match the number used in start)
+      /// @param bufferCount is how many buffers to add
+      void addBuffers(
+        size_t bufferSize = 1400,
+        size_t bufferCount = 1)
+      {
+        boost::mutex::scoped_lock lock(bufferMutex_);
+
+        for(size_t nBuffer = 0; nBuffer < bufferCount; ++nBuffer)
+        {
+          BufferLifetime buffer(new LinkedBuffer(bufferSize));
+          /// buffers_ is used only to clean up on object destruction
+          buffers_.push_back(buffer);
+          idleBufferPool_.push(buffer.get());
+        }
       }
 
       /// @brief Stop accepting packets
@@ -236,7 +251,7 @@ namespace QuickFAST
 
       void startReceive(boost::mutex::scoped_lock&)
       {
-        if(! readInProgress_ && !stopping_)
+        if( !readInProgress_ && !stopping_)
         {
           LinkedBuffer *buffer = idleBufferPool_.pop();
           if(buffer != 0)
@@ -360,7 +375,6 @@ namespace QuickFAST
       boost::asio::ip::udp::socket socket_;
       BufferConsumer * consumer_;
 
-      size_t bufferSize_;
       BufferLifetimeManager buffers_;
 
       boost::mutex bufferMutex_;

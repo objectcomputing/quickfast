@@ -195,7 +195,8 @@ BOOST_AUTO_TEST_CASE(TestSingleServerBufferQueue)
 
   // keep the first test simple
   // four buffers in, four buffers out
-  for(size_t loop = 0; loop < 1; ++loop)
+  // and make sure it works at least twice
+  for(size_t loop = 0; loop < 2; ++loop)
   {
     BOOST_CHECK( queue.push(&buffer1, lock));
     BOOST_CHECK( queue.push(&buffer2, lock));
@@ -206,20 +207,25 @@ BOOST_AUTO_TEST_CASE(TestSingleServerBufferQueue)
     BOOST_CHECK(!queue.endService(true, lock));
   }
 
-  // Next test gets more elaborate
-  for(size_t loop = 0; loop < 1; ++loop)
+  // Next test gets more elaborate to simulate
+  // buffers arriving while the queue is being serviced
+  for(size_t loop = 0; loop < 2; ++loop)
   {
     BOOST_CHECK( queue.push(&buffer1, lock));
     BOOST_CHECK( queue.push(&buffer2, lock));
     BOOST_CHECK( queue.startService(lock));
+    // be sure only one service at a time
     BOOST_CHECK(!queue.startService(lock));
+    // push and return "service not necessary"
     BOOST_CHECK(!queue.push(&buffer3, lock));
     BOOST_CHECK( queue.serviceNext() == &buffer1);
     BOOST_CHECK(!queue.startService(lock));
     BOOST_CHECK(!queue.push(&buffer4, lock));
     BOOST_CHECK( queue.serviceNext() == &buffer2);
     BOOST_CHECK(!queue.push(&buffer1, lock));
+    // batch should be complete even though new messages are queued
     BOOST_CHECK( queue.serviceNext() == 0);
+    // so when we endService it should return true->there's more to do
     BOOST_CHECK( queue.endService(true, lock));
     BOOST_CHECK( queue.serviceNext() == &buffer3);
     BOOST_CHECK( queue.serviceNext() == &buffer4);

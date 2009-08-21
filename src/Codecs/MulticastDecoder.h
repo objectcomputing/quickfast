@@ -89,7 +89,7 @@ namespace QuickFAST{
       void reset();
 
       /// @brief Start the decoding process.  Returns immediately
-      void start(Messages::MessageBuilder & builder, size_t bufferSize=1600, size_t bufferCount=2);
+      void start(Messages::MessageBuilder & builder, size_t bufferSize=1400, size_t bufferCount=2);
 
       /// @brief Run the event loop to accept incoming messages
       ///

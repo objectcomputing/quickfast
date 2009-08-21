@@ -201,7 +201,7 @@ MulticastDecoder::reset()
 }
 
 void
-MulticastDecoder::start(Messages::MessageBuilder & builder, size_t bufferSize /*=1600*/, size_t bufferCount /*=2*/)
+MulticastDecoder::start(Messages::MessageBuilder & builder, size_t bufferSize /*=1400*/, size_t bufferCount /*=2*/)
 {
   builder_ = &builder;
   bufferConsumer_.reset(new GenericMessageBufferConsumer(

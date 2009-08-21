@@ -1,3 +1,19 @@
+Fri Aug 21 15:13:37 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/MulticastReceiver.h:
+
+        * src/Common/LinkedBuffer.h:
+
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+
+        * src/Tests/testCommon.cpp:
+        Change default multicast receiver buffer size to 1400 bytes.
+        Add the ability to allocate additional buffers on-the-fly
+        for use by multicast receiver.
+        Improve doxygen comments.
+
 Fri Aug 21 14:19:40 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Common/LinkedBuffer.h:
