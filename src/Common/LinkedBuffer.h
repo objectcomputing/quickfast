@@ -40,6 +40,27 @@ namespace QuickFAST
       return buffer_.get();
     }
 
+    /// @brief Support index operator
+    unsigned char & operator[](size_t index)
+    {
+      if(index >= capacity_)
+      {
+        throw std::range_error("LinkedBuffer: Index out of bounds.");
+      }
+      return buffer_.get()[index];
+    }
+
+    /// @brief Support index operator constant
+    const unsigned char & operator[](size_t index) const
+    {
+      if(index >= capacity_)
+      {
+        throw std::range_error("LinkedBuffer: Index out of bounds.");
+      }
+      return buffer_.get()[index];
+    }
+
+
     /// @brief Constant access to the raw buffer
     /// @returns a const pointer to the raw buffer
     const unsigned char * get() const

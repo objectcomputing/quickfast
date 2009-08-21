@@ -1,3 +1,9 @@
+Fri Aug 21 14:19:40 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Common/LinkedBuffer.h:
+        * src/Tests/testCommon.cpp:
+        Unit tests for buffers and containers used in multicast receiver.
+
 Fri Aug 21 14:05:06 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Context.h:
