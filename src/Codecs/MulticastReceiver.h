@@ -36,23 +36,23 @@ namespace QuickFAST
         const std::string & listenInterfaceIP,
         unsigned short portNumber
         )
-      : stopping_(false)
-      , listenInterface_(boost::asio::ip::address::from_string(listenInterfaceIP))
-      , multicastGroup_(boost::asio::ip::address::from_string(multicastGroupIP))
-      , endpoint_(listenInterface_, portNumber)
-      , socket_(ioService_)
-      , bufferSize_(0)
-      , readInProgress_(false)
-      , noBufferAvailable_(0)
-      , packetsReceived_(0)
-      , errorPackets_(0)
-      , emptyPackets_(0)
-      , packetsQueued_(0)
-      , processingBatches_(0)
-      , packetsProcessed_(0)
-      , bytesReceived_(0)
-      , bytesProcessed_(0)
-      , largestPacket_(0)
+        : stopping_(false)
+        , listenInterface_(boost::asio::ip::address::from_string(listenInterfaceIP))
+        , multicastGroup_(boost::asio::ip::address::from_string(multicastGroupIP))
+        , endpoint_(listenInterface_, portNumber)
+        , socket_(ioService_)
+        , bufferSize_(0)
+        , readInProgress_(false)
+        , noBufferAvailable_(0)
+        , packetsReceived_(0)
+        , errorPackets_(0)
+        , emptyPackets_(0)
+        , packetsQueued_(0)
+        , batchesProcessed_(0)
+        , packetsProcessed_(0)
+        , bytesReceived_(0)
+        , bytesProcessed_(0)
+        , largestPacket_(0)
       {
       }
 
@@ -67,24 +67,24 @@ namespace QuickFAST
         const std::string & listenInterfaceIP,
         unsigned short portNumber
         )
-      : AsioService(ioService)
-      , stopping_(false)
-      , listenInterface_(boost::asio::ip::address::from_string(listenInterfaceIP))
-      , multicastGroup_(boost::asio::ip::address::from_string(multicastGroupIP))
-      , endpoint_(listenInterface_, portNumber)
-      , socket_(ioService_)
-      , bufferSize_(0)
-      , readInProgress_(false)
-      , noBufferAvailable_(0)
-      , packetsReceived_(0)
-      , errorPackets_(0)
-      , emptyPackets_(0)
-      , packetsQueued_(0)
-      , processingBatches_(0)
-      , packetsProcessed_(0)
-      , bytesReceived_(0)
-      , bytesProcessed_(0)
-      , largestPacket_(0)
+        : AsioService(ioService)
+        , stopping_(false)
+        , listenInterface_(boost::asio::ip::address::from_string(listenInterfaceIP))
+        , multicastGroup_(boost::asio::ip::address::from_string(multicastGroupIP))
+        , endpoint_(listenInterface_, portNumber)
+        , socket_(ioService_)
+        , bufferSize_(0)
+        , readInProgress_(false)
+        , noBufferAvailable_(0)
+        , packetsReceived_(0)
+        , errorPackets_(0)
+        , emptyPackets_(0)
+        , packetsQueued_(0)
+        , batchesProcessed_(0)
+        , packetsProcessed_(0)
+        , bytesReceived_(0)
+        , bytesProcessed_(0)
+        , largestPacket_(0)
       {
       }
 
@@ -105,6 +105,21 @@ namespace QuickFAST
       {
         return packetsReceived_;
       }
+
+      /// @brief How many packets have been queued for processing
+      /// @returns the number of packets that have been received
+      size_t packetsQueued() const
+      {
+        return packetsQueued_;
+      }
+
+      /// @brief How many batches of packets from the queue have been processed
+      /// @returns the number of batches
+      size_t batchesProcessed() const
+      {
+        return batchesProcessed_;
+      }
+
 
       /// @brief How many packets have been processed
       /// @returns the number of packets that have been processed.
@@ -147,8 +162,6 @@ namespace QuickFAST
       {
         return largestPacket_;
       }
-
-      // not presently exposing packetsQueued and processingBatches
 
       /// @brief Approximately how many bytes are waiting to be decoded
       size_t bytesReadable() const
@@ -233,16 +246,16 @@ namespace QuickFAST
               boost::asio::buffer(buffer->get(), buffer->capacity()),
               senderEndpoint_,
               boost::bind(&MulticastReceiver::handleReceive,
-                this,
-                boost::asio::placeholders::error,
-                buffer,
-                boost::asio::placeholders::bytes_transferred)
-             );
-        }
+              this,
+              boost::asio::placeholders::error,
+              buffer,
+              boost::asio::placeholders::bytes_transferred)
+              );
+          }
           else
-        {
+          {
             ++noBufferAvailable_;
-        }
+          }
         }
       }
 
@@ -257,18 +270,18 @@ namespace QuickFAST
           boost::mutex::scoped_lock lock(bufferMutex_);
           readInProgress_ = false;
           ++packetsReceived_;
-        if (!error)
-        {
+          if (!error)
+          {
 
             // it's possible to receive empty packets.
-          if(bytesReceived > 0)
-          {
+            if(bytesReceived > 0)
+            {
               ++packetsQueued_;
               bytesReceived_ += bytesReceived;
               largestPacket_ = std::max(largestPacket_, bytesReceived);
               buffer->setUsed(bytesReceived);
               if(queue_.push(buffer, lock))
-            {
+              {
                 service = queue_.startService(lock);
               }
             }
@@ -277,19 +290,19 @@ namespace QuickFAST
               // empty buffer? just use it again
               ++emptyPackets_;
               idleBufferPool_.push(buffer);
+            }
           }
-        }
-        else
-        {
+          else
+          {
             ++errorPackets_;
             // after an error, recover the buffer
             idleBufferPool_.push(buffer);
             // and let the consumer decide what to do
-          if(!consumer_->reportCommunicationError(error.message()))
-          {
-            stop();
+            if(!consumer_->reportCommunicationError(error.message()))
+            {
+              stop();
+            }
           }
-        }
           // if possible fill another buffer while we process this one
           startReceive(lock);
           // end of scope for lock
@@ -297,7 +310,7 @@ namespace QuickFAST
 
         while(service)
         {
-          ++processingBatches_;
+          ++batchesProcessed_;
           // accumulate idle buffers while we process the queue
           // but don't add them back to idle pool until we're done
           // this avoids extra locking, and applies some backpressure to the
@@ -307,21 +320,21 @@ namespace QuickFAST
           LinkedBuffer * buffer = queue_.serviceNext();
           while(buffer != 0)
           {
-        if(!stopping_)
-        {
+            ++packetsProcessed_;
+            if(!stopping_)
+            {
               try
               {
-                ++packetsProcessed_;
                 bytesProcessed_ += buffer->used();
                 if(!consumer_->consumeBuffer(buffer->get(), buffer->used()))
                 {
                   stop();
-        }
-      }
+                }
+              }
               catch(const std::exception &ex)
               {
                 if(!consumer_->reportDecodingError(ex.what()))
-      {
+                {
                   stop();
                 }
               }
@@ -362,7 +375,7 @@ namespace QuickFAST
       size_t errorPackets_;
       size_t emptyPackets_;
       size_t packetsQueued_;
-      size_t processingBatches_;
+      size_t batchesProcessed_;
       size_t packetsProcessed_;
       size_t bytesReceived_;
       size_t bytesProcessed_;

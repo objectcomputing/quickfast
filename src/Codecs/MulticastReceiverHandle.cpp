@@ -50,19 +50,31 @@ MulticastReceiverHandle::~MulticastReceiverHandle()
 size_t
 MulticastReceiverHandle::bytesReadable() const
 {
-  return pImpl_->ptr_->packetsProcessed();
+  return pImpl_->ptr_->bytesReadable();
 }
 
 size_t
 MulticastReceiverHandle::noBufferAvailable() const
 {
-  return pImpl_->ptr_->packetsProcessed();
+  return pImpl_->ptr_->noBufferAvailable();
 }
 
 size_t
 MulticastReceiverHandle::packetsReceived() const
 {
-  return pImpl_->ptr_->packetsProcessed();
+  return pImpl_->ptr_->packetsReceived();
+}
+
+size_t
+MulticastReceiverHandle::packetsQueued() const
+{
+  return pImpl_->ptr_->packetsQueued();
+}
+
+size_t
+MulticastReceiverHandle::batchesProcessed() const
+{
+  return pImpl_->ptr_->batchesProcessed();
 }
 
 size_t
@@ -74,26 +86,35 @@ MulticastReceiverHandle::packetsProcessed() const
 size_t
 MulticastReceiverHandle::packetsWithErrors() const
 {
-  return pImpl_->ptr_->packetsProcessed();
+  return pImpl_->ptr_->packetsWithErrors();
 }
 
 size_t
 MulticastReceiverHandle::emptyPackets() const
 {
-  return pImpl_->ptr_->packetsProcessed();
+  return pImpl_->ptr_->emptyPackets();
 }
 
 size_t
 MulticastReceiverHandle::bytesReceived() const
 {
-  return pImpl_->ptr_->packetsProcessed();
+  return pImpl_->ptr_->bytesReceived();
 }
 
 size_t
 MulticastReceiverHandle::bytesProcessed() const
 {
-  return pImpl_->ptr_->packetsProcessed();
+  return pImpl_->ptr_->bytesProcessed();
 }
+
+size_t
+MulticastReceiverHandle::largestPacket() const
+{
+  return pImpl_->ptr_->largestPacket();
+}
+
+
+
 
 void
 MulticastReceiverHandle::start(

@@ -31,22 +31,6 @@ namespace QuickFAST{
       /// @param registry A registry containing all templates to be used to decode messages.
       explicit Decoder(TemplateRegistryPtr registry);
 
-      /// @brief Enable/disable strict checking of conformance to the FAST standard
-      ///
-      /// If strict is false some conditions such as integer overflow or inefficient encoding
-      /// will be ignored.  The default is true -- strict checking is enabled.
-      /// @param strict true to enable; false to disable strict checking
-      void setStrict(bool strict)
-      {
-        strict_ = strict;
-      }
-
-      /// @brief get the current status of the strict property.
-      /// @returns true if strict checking is enabled.
-      bool getStrict()const
-      {
-        return strict_;
-      }
       /// @brief Decode the next message.
       /// @param[in] source where to read the incoming message(s).
       /// @param[out] message an empty message into which the decoded fields will be stored.
@@ -93,10 +77,6 @@ namespace QuickFAST{
         PresenceMap & pmap,
         SegmentBodyCPtr segment,
         Messages::MessageBuilder & messageBuilder);
-
-    private:
-      /// false makes the decoder more forgiving
-      bool strict_;
     };
   }
 }

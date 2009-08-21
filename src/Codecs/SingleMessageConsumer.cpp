@@ -49,6 +49,11 @@ SingleMessageConsumer::reportCommunicationError(const std::string & errorMessage
 }
 
 void
+SingleMessageConsumer::decodingStarted()
+{
+}
+
+void
 SingleMessageConsumer::decodingStopped()
 {
 

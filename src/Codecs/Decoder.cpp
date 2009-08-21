@@ -16,7 +16,6 @@ using namespace ::QuickFAST::Codecs;
 
 Decoder::Decoder(Codecs::TemplateRegistryPtr registry)
 : Context(registry)
-, strict_(true)
 {
 }
 

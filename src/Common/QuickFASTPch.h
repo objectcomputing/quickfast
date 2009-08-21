@@ -30,6 +30,9 @@
 #include <math.h>
 #include <iostream>
 #include <iomanip>
+#include <fstream>
+#include <cstdlib>
+
 
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>

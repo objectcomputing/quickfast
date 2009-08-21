@@ -23,8 +23,14 @@ namespace QuickFAST{
       /// @returns true if decoding should continue; false to stop decoding
       virtual bool consumeMessage(Messages::Message & message) = 0;
 
-      /// @brief notify consumer that decoding is stopped.
-      /// No calls to consumeMessage will be generated after this call.
+      /// @brief Notify consumer when decoding starts.
+      ///
+      /// This will be called before any call to consumeMessage().
+      virtual void decodingStarted() = 0;
+
+      /// @brief notify consumer that decoding has stopped.
+      ///
+      /// No calls to consumeMessage() will be generated after this call.
       virtual void decodingStopped() = 0;
     };
   }

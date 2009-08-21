@@ -31,8 +31,6 @@
 #include <Messages/Sequence.h>
 
 #include <Common/Exceptions.h>
-#include <fstream>
-#include <cstdlib>
 
 using namespace QuickFAST;
 

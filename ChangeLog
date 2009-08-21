@@ -1,3 +1,25 @@
+Fri Aug 21 14:05:06 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Context.cpp:
+        * src/Codecs/Decoder.h:
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/MessageConsumer.h:
+        * src/Codecs/MulticastReceiver.h:
+        * src/Codecs/MulticastReceiverHandle.h:
+        * src/Codecs/MulticastReceiverHandle.cpp:
+        * src/Codecs/SingleMessageConsumer.h:
+        * src/Codecs/SingleMessageConsumer.cpp:
+
+        * src/Common/QuickFASTPch.h:
+
+        * src/Examples/Examples/ExamplesPch.h:
+
+        * src/Tests/testBiggestValue.cpp:
+        Add additional statistics support to multicast receiver.
+        Fix some formatting issues.
+        Notify MessageConsumer when decoding starts.
+
 Tue Aug 18 22:08:44 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MulticastReceiver.h:
