@@ -40,7 +40,8 @@ namespace QuickFAST{
         BYTEVECTOR,
         BITMAP,   // not FAST Standard
         SEQUENCE,
-        GROUP
+        GROUP,
+        UNDEFINED
       };
 
       /// @brief translate a FieldType to a string

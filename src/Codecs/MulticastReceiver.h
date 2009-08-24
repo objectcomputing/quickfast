@@ -206,8 +206,8 @@ namespace QuickFAST
         for(size_t nBuffer = 0; nBuffer < bufferCount; ++nBuffer)
         {
           BufferLifetime buffer(new LinkedBuffer(bufferSize));
-          /// buffers_ is used only to clean up on object destruction
-          buffers_.push_back(buffer);
+          /// bufferLifetimes_ is used only to clean up on object destruction
+          bufferLifetimes_.push_back(buffer);
           idleBufferPool_.push(buffer.get());
         }
         startReceive(lock);
@@ -225,8 +225,8 @@ namespace QuickFAST
         for(size_t nBuffer = 0; nBuffer < bufferCount; ++nBuffer)
         {
           BufferLifetime buffer(new LinkedBuffer(bufferSize));
-          /// buffers_ is used only to clean up on object destruction
-          buffers_.push_back(buffer);
+          /// bufferLifetimes_ is used only to clean up on object destruction
+          bufferLifetimes_.push_back(buffer);
           idleBufferPool_.push(buffer.get());
         }
       }
@@ -287,7 +287,6 @@ namespace QuickFAST
           ++packetsReceived_;
           if (!error)
           {
-
             // it's possible to receive empty packets.
             if(bytesReceived > 0)
             {
@@ -375,7 +374,7 @@ namespace QuickFAST
       boost::asio::ip::udp::socket socket_;
       BufferConsumer * consumer_;
 
-      BufferLifetimeManager buffers_;
+      BufferLifetimeManager bufferLifetimes_;
 
       boost::mutex bufferMutex_;
       SingleServerBufferQueue queue_;
