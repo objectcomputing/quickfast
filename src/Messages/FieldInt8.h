@@ -7,12 +7,16 @@
 #ifndef FIELDINT8_H
 #define FIELDINT8_H
 #include <Messages/Field.h>
-namespace QuickFAST{
-  namespace Messages{
+namespace QuickFAST
+{
+  namespace Messages
+  {
     /// @brief A field containing a signed 8 bit integer
     ///
     /// In the XML template file this field is described as &lt;int8>
-    class QuickFAST_Export FieldInt8 : public Field{
+    class QuickFAST_Export FieldInt8
+      : public Field
+    {
 
       /// @brief Construct the field from an initial value
       /// @param value the value to be stored in the field
@@ -34,7 +38,7 @@ namespace QuickFAST{
       // implement selected virtual methods from Field
       virtual int8 toInt8() const;
     private:
-      int8 value_;
+
     };
   }
 }

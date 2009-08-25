@@ -14,7 +14,6 @@
 #if 1
 #include <Codecs/MulticastReceiver.h>
 #include <Codecs/MessageConsumer.h>
-#include <Codecs/BufferDecoder.h>
 #endif
 
 

@@ -34,7 +34,6 @@ namespace QuickFAST{
       // implement selected virtual methods from Field
       virtual int16 toInt16() const;
     private:
-      int16 value_;
     };
   }
 }

@@ -43,11 +43,12 @@ namespace QuickFAST{
       virtual ~FieldUtf8();
 
       // implement selected virtual methods from Field
-      virtual const std::string & toUtf8() const;
+      virtual const StringBuffer & toUtf8() const;
       virtual bool isString() const;
-      virtual const std::string & toString() const;
+      virtual const StringBuffer & toString() const;
     private:
-      std::string value_;
+      // temporary during transition to new field implementation
+      std::string cachedValue_;
     };
   }
 }

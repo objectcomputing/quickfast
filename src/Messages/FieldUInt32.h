@@ -35,7 +35,6 @@ namespace QuickFAST{
     private:
       virtual void freeField()const;
     private:
-      uint32 value_;
       static FieldCPtr nullField_;
     };
   }

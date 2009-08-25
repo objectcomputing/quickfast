@@ -11,7 +11,7 @@
 #include <Messages/Logger.h>
 namespace QuickFAST{
   namespace Codecs{
-    /// @brief interface to be implemented by a consumer of decoded messages.
+    /// @brief interface to be implemented by a consumer of incoming raw data buffers.
     class BufferConsumer : public Messages::Logger
     {
     public:

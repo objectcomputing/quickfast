@@ -21,13 +21,12 @@ FieldCPtr FieldUInt8::nullField_ = new FieldUInt8;
 
 FieldUInt8::FieldUInt8(uchar value)
   : Field(Field::UINT8, true)
-  , value_(value)
 {
+  unsignedInteger_ = value;
 }
 
 FieldUInt8::FieldUInt8()
   : Field(Field::UINT8, false)
-  , value_(0)
 {
 }
 
@@ -42,7 +41,7 @@ FieldUInt8::toUInt8() const
   {
     FieldNotPresent ex("Field not present");
   }
-  return value_;
+  return static_cast<uchar>(unsignedInteger_);
 }
 
 FieldCPtr

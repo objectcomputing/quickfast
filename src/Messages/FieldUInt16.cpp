@@ -21,13 +21,12 @@ FieldCPtr FieldUInt16::nullField_ = new FieldUInt16;
 
 FieldUInt16::FieldUInt16(uint16 value)
   : Field(Field::UINT16, true)
-  , value_(value)
 {
+  unsignedInteger_ = value;
 }
 
 FieldUInt16::FieldUInt16()
   : Field(Field::UINT16, false)
-  , value_(0)
 {
 }
 
@@ -42,7 +41,7 @@ FieldUInt16::toUInt16() const
   {
     FieldNotPresent ex("Field not present");
   }
-  return value_;
+  return static_cast<uint16>(unsignedInteger_);
 }
 
 FieldCPtr

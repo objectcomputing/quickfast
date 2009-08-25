@@ -1,3 +1,42 @@
+Tue Aug 25 22:16:08 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/BufferConsumer.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/GenericMessageBuilder.cpp:
+        * src/Common/StringBuffer.h:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+        * src/Messages/Field.h:
+        * src/Messages/Field.cpp:
+        * src/Messages/FieldAscii.h:
+        * src/Messages/FieldAscii.cpp:
+        * src/Messages/FieldByteVector.h:
+        * src/Messages/FieldByteVector.cpp:
+        * src/Messages/FieldDecimal.h:
+        * src/Messages/FieldDecimal.cpp:
+        * src/Messages/FieldInt16.h:
+        * src/Messages/FieldInt16.cpp:
+        * src/Messages/FieldInt32.h:
+        * src/Messages/FieldInt32.cpp:
+        * src/Messages/FieldInt64.h:
+        * src/Messages/FieldInt64.cpp:
+        * src/Messages/FieldInt8.h:
+        * src/Messages/FieldInt8.cpp:
+        * src/Messages/FieldUInt16.h:
+        * src/Messages/FieldUInt16.cpp:
+        * src/Messages/FieldUInt32.h:
+        * src/Messages/FieldUInt32.cpp:
+        * src/Messages/FieldUInt64.h:
+        * src/Messages/FieldUInt64.cpp:
+        * src/Messages/FieldUInt8.h:
+        * src/Messages/FieldUInt8.cpp:
+        * src/Messages/FieldUtf8.h:
+        * src/Messages/FieldUtf8.cpp:
+        * src/Codecs/BufferDecoder.h:
+        Continue to work on reorganizing the message handling so that
+        the DotNet code can be reenabled.  The goal is to significantly
+        improve the dot net performance and provide a foundation for
+        Exchange-specific application data types.
+
 Mon Aug 24 17:59:36 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MulticastReceiver.h:

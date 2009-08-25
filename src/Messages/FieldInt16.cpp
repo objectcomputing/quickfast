@@ -10,13 +10,12 @@ using namespace ::QuickFAST::Messages;
 
 FieldInt16::FieldInt16(int16 value)
   : Field(Field::INT16, true)
-  , value_(value)
 {
+  signedInteger_ = value;
 }
 
 FieldInt16::FieldInt16()
   : Field(Field::INT16, false)
-  , value_(0)
 {
 }
 
@@ -31,7 +30,7 @@ FieldInt16::toInt16() const
   {
     FieldNotPresent ex("Field not present");
   }
-  return value_;
+  return static_cast<int16>(signedInteger_);
 }
 
 FieldCPtr

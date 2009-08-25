@@ -165,21 +165,21 @@ Field::toInt64() const
   throw ex;
 }
 
-const std::string &
+const StringBuffer &
 Field::toAscii() const
 {
   UnsupportedConversion ex(typeName(getType()), "Ascii");
   throw ex;
 }
 
-const std::string &
+const StringBuffer &
 Field::toUtf8() const
 {
   UnsupportedConversion ex(typeName(getType()), "UTF8");
   throw ex;
 }
 
-const std::string &
+const StringBuffer &
 Field::toByteVector()const
 {
   UnsupportedConversion ex(typeName(getType()), "ByteVector");
@@ -194,21 +194,20 @@ Field::toBitMap() const
 }
 
 
-
 bool
 Field::isString()const
 {
   return false;
 }
 
-const std::string &
+const StringBuffer &
 Field::toString()const
 {
   UnsupportedConversion ex(typeName(getType()), "String");
   throw ex;
 }
 
-const Decimal &
+const Decimal
 Field::toDecimal() const
 {
   UnsupportedConversion ex(typeName(getType()), "Decimal");

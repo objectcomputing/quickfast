@@ -10,19 +10,18 @@ using namespace ::QuickFAST::Messages;
 
 FieldAscii::FieldAscii(const std::string & value)
   : Field(Field::ASCII, true)
-  , value_(value)
 {
+  string_ = value;
 }
 
 FieldAscii::FieldAscii(const uchar * value, size_t length)
   : Field(Field::ASCII, true)
-  , value_(reinterpret_cast<const char *>(value), length)
 {
+  string_.assign(value, length);
 }
 
 FieldAscii::FieldAscii()
   : Field(Field::ASCII, false)
-  , value_()
 {
 }
 
@@ -36,20 +35,20 @@ FieldAscii::isString() const
   return true;
 }
 
-const std::string &
+const StringBuffer &
 FieldAscii::toString() const
-{
-  return toAscii();
-}
-
-const std::string &
-FieldAscii::toAscii() const
 {
   if(!valid_)
   {
     throw FieldNotPresent("Field not present");
   }
-  return value_;
+  return string_;
+}
+
+const StringBuffer &
+FieldAscii::toAscii() const
+{
+  return toString();
 }
 
 FieldCPtr

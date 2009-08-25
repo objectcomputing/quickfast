@@ -218,7 +218,7 @@ FieldInstructionBlob::decodeDelta(
   {
     return false;
   }
-  const std::string & deltaValue = deltaField->toString();
+  const std::string deltaValue = deltaField->toString();
   Messages::FieldCPtr previousField;
   if(!fieldOp_->findDictionaryField(decoder, previousField))
   {

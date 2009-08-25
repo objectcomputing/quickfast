@@ -15,28 +15,42 @@ FieldDecimal::FieldDecimal()
 
 FieldDecimal::FieldDecimal(const Decimal & value)
   : Field(Field::DECIMAL, true)
-  , value_(value)
 {
+  signedInteger_ = value.getMantissa();
+  exponent_ = value.getExponent();
+}
+
+FieldDecimal::FieldDecimal(mantissa_t mantissa, exponent_t exponent)
+  : Field(Field::DECIMAL, true)
+{
+  signedInteger_ = mantissa;
+  exponent_ = exponent;
 }
 
 FieldDecimal::~FieldDecimal()
 {
 }
 
-const Decimal &
+const Decimal
 FieldDecimal::toDecimal() const
 {
   if(!valid_)
   {
     FieldNotPresent ex("Field not present");
   }
-  return value_;
+  return Decimal(signedInteger_, exponent_);
 }
 
 FieldCPtr
 FieldDecimal::create(const Decimal & value)
 {
   return new FieldDecimal(value);
+}
+
+FieldCPtr
+FieldDecimal::create(mantissa_t mantissa, exponent_t exponent)
+{
+  return new FieldDecimal(mantissa, exponent);
 }
 
 FieldCPtr

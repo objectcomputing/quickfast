@@ -432,8 +432,8 @@ GenericGroupBuilder::reportCommunicationError(const std::string & errorMessage)
 //////////////////////////
 // GenericMessageBuilder
 #ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable:4355) // C4355: 'this' : used in base member initializer list
+# pragma warning(push)
+# pragma warning(disable:4355) // C4355: 'this' : used in base member initializer list
 #endif
 
 GenericMessageBuilder::GenericMessageBuilder(MessageConsumer & consumer)
@@ -444,7 +444,7 @@ GenericMessageBuilder::GenericMessageBuilder(MessageConsumer & consumer)
 }
 
 #ifdef _MSC_VER
-#pragma warning(pop)
+# pragma warning(pop)
 #endif
 
 
@@ -486,7 +486,12 @@ GenericMessageBuilder::startMessage(
 bool
 GenericMessageBuilder::endMessage(Messages::MessageBuilder &)
 {
+  ///////////////////////////////
+  // This is where the message is
+  // bassed to the MessageConsumer
   bool more = consumer_.consumeMessage(*message());
+
+  // Once it's consumed, the message is no longer needed.
   message_.reset();
   return more;
 }
