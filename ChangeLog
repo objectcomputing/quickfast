@@ -1,3 +1,17 @@
+Wed Aug 26 18:18:27 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Common/AtomicCounter.h:
+        * src/Common/AtomicOps.h:
+        * src/Common/AtomicPointer.h:
+        * src/Common/LinkedBuffer.h:
+        * src/Common/QuickFASTPch.h:
+        * src/Tests/testCommon.cpp:
+        Improve Doxygen documentation
+
+        * src/Common/StringBuffer.h:
+        Linux build error: std::bad_alloc doesn't take an argument on linux/gcc.
+
+
 Tue Aug 25 22:16:08 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/BufferConsumer.h:

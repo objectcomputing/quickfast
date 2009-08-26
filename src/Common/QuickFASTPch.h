@@ -78,12 +78,13 @@
 /// <li>Use a QuickFAST::Codecs::XMLTemplateParser to read a template file and produce
 /// a QuickFAST::Codecs::TemplateRegistry.</li>
 /// <li>Create a QuickFAST::Codecs::Decoder and supply it with the template registry to use.</li>
-/// <li>Create an object that implements the QuickFAST::Codecs::DataSource interface to accept the
-/// incoming stream of data and supply it to the decoder.</li>
+/// <li>Create an object that implements the QuickFAST::Codecs::DataSource interface to supply the
+/// incoming stream of data to the decoder.</li>
+/// <li>Create an object that implements the QuickFAST::Messages::MessageBuilder interface to
+/// accept the decoded fields and store them in a message object.</li>
 /// <li>Each time the data source has a complete message available<ul>
-///  <li>Create an empty QuickFAST::Messages::Message</li>
 ///  <li>Pass the data source and the message to the decoder's decodeMessage() method.</li>
-///  <li>Process the message which has now been filled by the decoder.</li></ul>
+///  <li>When the decoder calls the MessageBuilder::endMessage method, process the decoded message</li></ul>
 /// </li></ul>
 ///
 /// The application should catch exceptions thrown by the decoder.  The data source should have
@@ -108,7 +109,9 @@
 /// decoder out of an event loop run by a boost::io_service object.  Multiple input channels
 /// can be supported--each with it's own independent decoder.  Multiple threads can be used.
 /// be used, to allow parallel processing, although each decoder will only be executing in one
-/// thread at a time.  See the boost::asio documentation for details.
+/// thread at a time.  The documentation for MulticastDecoder provides more details on how it
+/// should be used.
+/// You might also want to read the boost::asio documentation for details.
 ///
 /// <h3>Using QuickFAST in an application that sends FAST data.</h3>
 /// To send FAST encoded data, a typical application would:<ul>

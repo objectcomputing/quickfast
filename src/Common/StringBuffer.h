@@ -9,16 +9,27 @@
 
 namespace QuickFAST
 {
+
+  ///@brief A buffer to hold a string
+  ///
+  /// std::string would work -- this class actually replaces std::string.
+  /// However in order to optimize performance, we want to control
+  /// how large the string can be without requiring a heap allocation
+  /// the INTERNAL_CAPACITY parameter does that.
+  /// We also want to know how many heap allocations were required.
+  /// The growCount() method provides that information.
   template<size_t INTERNAL_CAPACITY = 48>
   class StringBufferT
   {
   public:
+    /// @brief define a not-a-valid-position constant
     static const size_t npos = size_t(-1);
     /// @brief Construct an empty StringBufferT
     StringBufferT()
       : heapBuffer_(0)
       , size_(0)
       , capacity_(INTERNAL_CAPACITY)
+      , growCount_(0)
     {
       internalBuffer_[0] = 0;
     }
@@ -28,19 +39,26 @@ namespace QuickFAST
       : heapBuffer_(0)
       , size_(0)
       , capacity_(INTERNAL_CAPACITY)
+      , growCount_(0)
     {
       assign(rhs.getBuffer(), rhs.size());
     }
 
+    /// @brief compy construct from a standard string
     StringBufferT(const std::string & rhs)
       : heapBuffer_(0)
       , size_(0)
       , capacity_(INTERNAL_CAPACITY)
+      , growCount_(0)
     {
       assign(reinterpret_cast<const unsigned char *>(rhs.data()), rhs.size());
     }
 
     /// @brief Construct from a substring
+    ///
+    /// @param rhs the string from which to extract a substring
+    /// @param pos is the starting position of the substring
+    /// @param length is how long the substring is.  npos means to end-of-string.
     StringBufferT(
       const StringBufferT& rhs,
       size_t pos,
@@ -49,6 +67,7 @@ namespace QuickFAST
       : heapBuffer_(0)
       , size_(0)
       , capacity_(INTERNAL_CAPACITY)
+      , growCount_(0)
     {
       if(pos > rhs.size())
       {
@@ -62,13 +81,26 @@ namespace QuickFAST
       assign(rhsBuffer + pos, length);
     }
 
-    /// @brief Construct from a C style null terminated string
-    explicit StringBufferT(const unsigned char* rhs)
+    /// @brief Construct from an unsigned C style null terminated string
+    StringBufferT(const unsigned char* rhs)
       : heapBuffer_(0)
       , size_(0)
       , capacity_(INTERNAL_CAPACITY)
+      , growCount_(0)
     {
-      assign(rhs, std::strlen(rhs));
+      assign(rhs, std::strlen(reinterpret_cast<char *>(rhs)));
+    }
+
+    /// @brief Construct from a C style null terminated string
+    StringBufferT(const char* rhs)
+      : heapBuffer_(0)
+      , size_(0)
+      , capacity_(INTERNAL_CAPACITY)
+      , growCount_(0)
+    {
+      assign(
+        reinterpret_cast<const unsigned char *>(rhs),
+        std::strlen(reinterpret_cast<const char *>(rhs)));
     }
 
     /// @brief construct from a character buffer
@@ -78,6 +110,7 @@ namespace QuickFAST
       : heapBuffer_(0)
       , size_(0)
       , capacity_(INTERNAL_CAPACITY)
+      , growCount_(0)
     {
       assign(rhs, length);
     }
@@ -87,6 +120,7 @@ namespace QuickFAST
       : heapBuffer_(0)
       , size_(0)
       , capacity_(INTERNAL_CAPACITY)
+      , growCount_(0)
     {
       reserve(length);
       unsigned char * buffer = getBuffer();
@@ -151,6 +185,7 @@ namespace QuickFAST
       return !(*this == rhs);
     }
 
+    /// @brief compare to a C-style (unsigned) string.
     bool operator==(const unsigned char * pattern)const
     {
       return std::strcmp(
@@ -158,6 +193,7 @@ namespace QuickFAST
         reinterpret_cast<const char *>(data())) == 0;
     }
 
+    /// @brief compare to a C-style string.
     bool operator==(const char * pattern)const
     {
       return std::strcmp(
@@ -192,16 +228,30 @@ namespace QuickFAST
       return append(rhs);
     }
 
-    /// @brief append a C-style null terminated string
+    /// @brief append an unsigned C-style null terminated string
     StringBufferT& operator +=(
-      const unsigned char* rhs
+      const unsigned char * rhs
       )
     {
       return append(rhs);
     }
 
-    /// @brief append a single character
+    /// @brief append a C-style null terminated string
+    StringBufferT& operator +=(
+      const char * rhs
+      )
+    {
+      return append(rhs);
+    }
+
+    /// @brief append a single unsigned character
     StringBufferT& operator +=(unsigned char rhs)
+    {
+      return append(&rhs, 1);
+    }
+
+    /// @brief append a single character
+    StringBufferT& operator +=(char rhs)
     {
       return append(&rhs, 1);
     }
@@ -225,14 +275,24 @@ namespace QuickFAST
       return append(rhs.getBuffer() + pos, length);
     }
 
-
-
     /// @brief append a C-style string
     StringBufferT& append(
       const unsigned char* rhs
       )
     {
-      return append(rhs, std::strlen(rhs));
+      return append(
+        rhs,
+        std::strlen(reinterpret_cast<const char *>(rhs)));
+    }
+
+    /// @brief append a C-style string
+    StringBufferT& append(
+      const char* rhs
+      )
+    {
+      return append(
+        rhs,
+        std::strlen(rhs));
     }
 
     /// @brief append from a character buffer.
@@ -252,10 +312,46 @@ namespace QuickFAST
       return *this;
     }
 
+    /// @brief append from a character buffer.
+    StringBufferT& append(
+      const char* rhs,
+      size_t length
+      )
+    {
+      if (length > 0)
+      {
+        reserve(size() + length);
+        unsigned char* buf = getBuffer() + size();
+        std::memcpy(buf, rhs, length);
+        buf[length] = 0;
+        size_ += length;
+      }
+      return *this;
+    }
+
     /// @brief extend and fill the StringBufferT with the given character
     StringBufferT& append(
       size_t length,
       unsigned char c
+      )
+    {
+      if (length > 0)
+      {
+        reserve(size() + length);
+        unsigned char *buf = getBuffer() + size();
+        memset(buf, c, length);
+        buf[length] = 0;
+        size_ += length;
+      }
+      return *this;
+    }
+
+
+
+    /// @brief extend and fill the StringBufferT with the given character
+    StringBufferT& append(
+      size_t length,
+      char c
       )
     {
       if (length > 0)
@@ -305,6 +401,7 @@ namespace QuickFAST
         swap(heapBuffer_, rhs.heapBuffer_);
         swap(size_, rhs.size_);
         swap(capacity_, rhs.capacity_);
+        swap(growCount_, rhs.growCount_);
       }
     }
 
@@ -342,38 +439,31 @@ namespace QuickFAST
     /// @brief be sure the StringBufferT can hold at least "needed" bytes.
     void reserve(size_t needed)
     {
+      if (capacity() < needed)
       {
-        if (capacity() >= needed)
+        // Note: the following line determines the growth factor for the external buffer
+        // it can be adjusted to be more or less agressive based on experience.
+        size_t newCapacity = capacity() * 2;
+        if (needed < newCapacity)
         {
-          return;
+          needed = newCapacity;
         }
-        else if (useHeap(needed))
+        if(needed < size())
         {
-          // Note: the following line determines the growth factor for the external buffer
-          // it can be adjusted to be more or less agressive based on experience.
-          size_t newCapacity = capacity() * 2;
-          if (needed < newCapacity)
-          {
-            needed = newCapacity;
-          }
-          if(needed < size())
-          {
-            throw std::logic_error("StringBufferT growth calculation incorrect");
-          }
-          unsigned char * newBuffer(new unsigned char[needed + 1]);
-          if(newBuffer == 0)
-          {
-            throw std::bad_alloc("StringBufferT growth failed");
-          }
-          const unsigned char * oldBuffer = getBuffer();
-          std::memcpy(newBuffer, oldBuffer, size_);
-          newBuffer[size_] = 0;
-          capacity_ = needed;
-          delete [] heapBuffer_;
-          heapBuffer_ = newBuffer;
+          throw std::logic_error("StringBufferT growth calculation incorrect");
         }
-        // else the internal buffer can hold the string
-        // so there's nothing to do.
+        unsigned char * newBuffer(new unsigned char[needed + 1]);
+        if(newBuffer == 0)
+        {
+          throw std::bad_alloc();
+        }
+        const unsigned char * oldBuffer = getBuffer();
+        std::memcpy(newBuffer, oldBuffer, size_);
+        newBuffer[size_] = 0;
+        capacity_ = needed;
+        delete [] heapBuffer_;
+        heapBuffer_ = newBuffer;
+        growCount_ += 1;
       }
     }
 
@@ -390,9 +480,18 @@ namespace QuickFAST
       size_ = length;
     }
 
+    /// @brief cast to a standard string.
     operator std::string() const
     {
       return std::string(reinterpret_cast<const char *>(getBuffer()), size());
+    }
+
+    /// @brief How many times did the string grow?
+    ///
+    /// for testing and performance tuning.
+    size_t growCount()const
+    {
+      return growCount_;
     }
 
   private:
@@ -401,7 +500,7 @@ namespace QuickFAST
     {
       if (heapBuffer_ == 0)
       {
-        return internalBuffer_;
+        return internalBuffer_;//////////////////
       }
       return heapBuffer_;
     }
@@ -415,12 +514,6 @@ namespace QuickFAST
         return internalBuffer_;
       }
       return heapBuffer_;
-    }
-
-    /// @brief should we use the heap?  Make sure the test is always consistent.
-    bool useHeap(size_t capacity) const
-    {
-      return capacity > INTERNAL_CAPACITY;
     }
 
     void swap(size_t & left, size_t & right)
@@ -441,10 +534,13 @@ namespace QuickFAST
     unsigned char * heapBuffer_;
     size_t size_;
     size_t capacity_;
+    size_t growCount_;
   };
 
+  ///@brief typedef the most common use of StringBufferT
   typedef StringBufferT<48> StringBuffer;
 
+  ///@brief support writing a string buffer to an ostream.
   inline
   std::ostream & operator << (std::ostream & out, const StringBuffer &str)
   {

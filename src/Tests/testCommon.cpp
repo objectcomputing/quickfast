@@ -8,6 +8,7 @@
 #include <boost/filesystem.hpp>
 
 #include <Common/LinkedBuffer.h>
+#include <Common/StringBuffer.h>
 #include <Common/Exceptions.h>
 
 using namespace QuickFAST;
@@ -233,4 +234,45 @@ BOOST_AUTO_TEST_CASE(TestSingleServerBufferQueue)
     BOOST_CHECK( queue.serviceNext() == 0);
     BOOST_CHECK(!queue.endService(true, lock));
   }
+}
+
+BOOST_AUTO_TEST_CASE(TestStringBuffer)
+{
+  typedef StringBufferT<10> String10;
+  const char * st1("12345");
+  const char * st2("6789");
+
+  const unsigned char * ut1(reinterpret_cast<const unsigned char *>("Hello"));
+  const unsigned char * ut2(reinterpret_cast<const unsigned char *>("World"));
+
+  String10 s1(st1);
+  s1 += st2;
+  BOOST_CHECK(s1 == "123456789");
+  BOOST_CHECK(s1.growCount() == 0);
+  s1 += 'A';
+  BOOST_CHECK(s1 == "123456789A");
+  BOOST_CHECK(s1.growCount() == 0);
+  unsigned char b('B');
+  s1 += b;
+  BOOST_CHECK(s1 == "123456789AB");
+  BOOST_CHECK(s1.growCount() == 1);
+
+  String10 s2(s1);
+  BOOST_CHECK(s2 == "123456789AB");
+  BOOST_CHECK(s2.growCount() == 1);
+
+  std::string stds2(s2);
+  BOOST_CHECK(stds2 == "123456789AB");
+  size_t capacity = s2.capacity();
+  size_t size = s2.size();
+  BOOST_CHECK(size <= capacity);
+  size_t delta = capacity - size;
+  String10 s3(delta, '!');
+  BOOST_CHECK(s3.size() == delta);
+  s2 += s3;
+  BOOST_CHECK(s2.size() == capacity);
+  BOOST_CHECK(s2.growCount() == 1);
+  s2 += "?";
+  BOOST_CHECK(s2.capacity() > capacity);
+  BOOST_CHECK(s2.growCount() == 2);
 }

@@ -124,15 +124,15 @@ namespace QuickFAST
   ///
   /// @param target points to the long to be updated
   inline
-  void atomic_increment_long(volatile long * target)
+  long atomic_increment_long(volatile long * target)
   {
 #if defined(_WIN32)
     // this is intrinsic thanks to the pragma above
-    (void)_InterlockedIncrement(target);
+    return _InterlockedIncrement(target);
 #elif defined(__GNUC__)
-    (void)__sync_add_and_fetch(target, long(1));
+    return __sync_add_and_fetch(target, long(1));
 #else
-    atomic_inc_long(target)
+    return atomic_inc_long(target)
 #endif
   }
 
@@ -140,15 +140,15 @@ namespace QuickFAST
   ///
   /// @param target points to the long to be updated
   inline
-  void atomic_decrement_long(volatile long * target)
+  long atomic_decrement_long(volatile long * target)
   {
 #if defined(_WIN32)
     // this is intrinsic thanks to the pragma above
-    (void)InterlockedDecrement(target);
+    return InterlockedDecrement(target);
 #elif defined(__GNUC__)
-    (void)__sync_sub_and_fetch(target, long(1));
+    return __sync_sub_and_fetch(target, long(1));
 #else
-    atomic_dec_long(target)
+    return atomic_dec_long(target)
 #endif
   }
 

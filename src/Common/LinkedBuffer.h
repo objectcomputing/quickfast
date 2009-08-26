@@ -282,6 +282,7 @@ namespace QuickFAST
     ///
     /// @param recheck should normally be true indicating that this thread is
     ///        willing to continue servicing the queue.
+    /// @param lock unused parameter to be sure the mutex is locked.
     /// @returns true if there are more entries to be serviced.
     bool endService(bool recheck, boost::mutex::scoped_lock & lock)
     {
