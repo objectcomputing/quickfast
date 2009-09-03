@@ -60,20 +60,20 @@ Decoder::decodeMessage(
     {
       reset(false);
     }
-    Messages::MessageBuilder & messageBuilder(
+    Messages::MessageBuilder & bodyBuilder(
       messageBuilder.startMessage(
         templatePtr->getApplicationType(),
         templatePtr->getApplicationTypeNamespace(),
         templatePtr->fieldCount()));
 
-    decodeSegmentBody(source, pmap, templatePtr, messageBuilder);
+    decodeSegmentBody(source, pmap, templatePtr, bodyBuilder);
     if(templatePtr->getIgnore())
     {
-      messageBuilder.ignoreMessage(messageBuilder);
+      messageBuilder.ignoreMessage(bodyBuilder);
     }
     else
     {
-      messageBuilder.endMessage(messageBuilder);
+      messageBuilder.endMessage(bodyBuilder);
     }
   }
   else
@@ -124,15 +124,15 @@ Decoder::decodeNestedTemplate(
     {
       reset(false);
     }
-    Messages::MessageBuilder & messageBuilder(
+    Messages::MessageBuilder & groupBuilder(
       messageBuilder.startGroup(
         identity,
         templatePtr->getApplicationType(),
         templatePtr->getApplicationTypeNamespace(),
         templatePtr->fieldCount()));
 
-    decodeSegmentBody(source, pmap, templatePtr, messageBuilder);
-    messageBuilder.endGroup(identity, messageBuilder);
+    decodeSegmentBody(source, pmap, templatePtr, groupBuilder);
+    messageBuilder.endGroup(identity, groupBuilder);
   }
   else
   {
