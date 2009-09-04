@@ -28,7 +28,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const
+        Messages::MessageBuilder & fieldSet) const
       {
         return instruction.decodeNop(source, pmap, decoder, fieldSet);
       }
@@ -38,7 +38,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const
+        const Messages::MessageAccessor & fieldSet) const
       {
         return instruction.encodeNop(destination, pmap, encoder, fieldSet);
       }

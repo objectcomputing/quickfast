@@ -5,7 +5,8 @@
 
 #include "Encoder.h"
 #include <Codecs/DataDestination.h>
-#include <Messages/Message.h>
+//#include <Messages/Message.h>
+#include <Messages/MessageAccessor.h>
 #include <Codecs/PresenceMap.h>
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/FieldInstruction.h>
@@ -22,7 +23,7 @@ void
 Encoder::encodeMessage(
   DataDestination & destination,
   template_id_t templateId,
-  const Messages::FieldSet & message)
+  const Messages::MessageAccessor & message)
 {
   encodeSegment(destination, templateId, message);
   destination.endMessage();
@@ -32,14 +33,14 @@ void
 Encoder::encodeSegment(
   DataDestination & destination,
   template_id_t templateId,
-  const Messages::FieldSet & fieldSet)
+  const Messages::MessageAccessor & fieldSet)
 {
   Codecs::TemplateCPtr templatePtr;
   if(getTemplateRegistry()->getTemplate(templateId, templatePtr))
   {
     if(templatePtr->getReset())
     {
-      reset();
+      reset(true);
     }
 
     Codecs::PresenceMap pmap(templatePtr->presenceMapBitCount());
@@ -77,7 +78,7 @@ void
 Encoder::encodeGroup(
   DataDestination & destination,
   Codecs::SegmentBodyCPtr group,
-  const Messages::FieldSet & fieldSet)
+  const Messages::MessageAccessor & fieldSet)
 {
   size_t presenceMapBits = group->presenceMapBitCount();
   Codecs::PresenceMap pmap(presenceMapBits);
@@ -110,7 +111,7 @@ Encoder::encodeStaticTemplateRef(
   Codecs::PresenceMap & pmap,
   const std::string & templateName,
   const std::string & templateNamespace,
-  const Messages::FieldSet & fieldSet)
+  const Messages::MessageAccessor & fieldSet)
 {
   Codecs::TemplateCPtr templatePtr;
   if(!templateRegistry_->findNamedTemplate(
@@ -134,7 +135,7 @@ Encoder::encodeSegmentBody(
   DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::SegmentBodyCPtr segment,
-  const Messages::FieldSet & fieldSet)
+  const Messages::MessageAccessor & fieldSet)
 {
   size_t instructionCount = segment->size();
   for( size_t nField = 0; nField < instructionCount; ++nField)

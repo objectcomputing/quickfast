@@ -4,15 +4,15 @@
 #ifdef _MSC_VER
 # pragma once
 #endif
-#ifndef DECODEDFIELDS_FWD_H
-#define DECODEDFIELDS_FWD_H
+#ifndef MESSAGEBUILDER_FWD_H
+#define MESSAGEBUILDER_FWD_H
 namespace QuickFAST{
   namespace Messages{
-    class DecodedFields;
+    class MessageBuilder;
     /// @brief Smart pointer to a FieldSet.
-    typedef boost::shared_ptr<DecodedFields> DecodedFieldsPtr;
+    typedef boost::shared_ptr<MessageBuilder> MessageBuilderPtr;
     /// @brief Smart pointer to a const FieldSet.
-    typedef boost::shared_ptr<const DecodedFields> DecodedFieldsCPtr;
+    typedef boost::shared_ptr<const MessageBuilder> MessageBuilderCPtr;
   }
 }
-#endif // DECODEDFIELDS_FWD_H
+#endif // MESSAGEBUILDER_FWD_H

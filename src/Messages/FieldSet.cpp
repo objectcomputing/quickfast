@@ -3,9 +3,11 @@
 // See the file license.txt for licensing information.
 #include <Common/QuickFASTPch.h>
 #include "FieldSet.h"
-#include <Messages/Field.h>
+#include <Messages/Sequence.h>
+#include <Messages/FieldSequence.h>
+#include <Messages/Group.h>
+#include <Messages/FieldGroup.h>
 #include <Common/Exceptions.h>
-
 #include <Common/Profiler.h>
 
 using namespace ::QuickFAST;
@@ -16,7 +18,7 @@ FieldSet::FieldSet(size_t res)
 , capacity_(res)
 , used_(0)
 {
-  memset(fields_, 0, sizeof(sizeof(MessageField) * capacity_));
+  memset(fields_, 0, sizeof(MessageField) * capacity_);
 }
 
 FieldSet::~FieldSet()
@@ -31,7 +33,7 @@ FieldSet::reserve(size_t capacity)
   if(capacity > capacity_)
   {
     MessageField * buffer = reinterpret_cast<MessageField *>(new unsigned char[sizeof(MessageField) * capacity]);
-    memset(buffer, 0, sizeof(sizeof(MessageField) * capacity_));
+    memset(buffer, 0, sizeof(MessageField) * capacity_);
     for(size_t nField = 0; nField < used_; ++nField)
     {
       new(&buffer[nField]) MessageField(fields_[nField]);
@@ -55,9 +57,18 @@ FieldSet::clear(size_t capacity)
   {
     reserve(capacity);
   }
-  memset(fields_, 0, sizeof(sizeof(MessageField) * capacity_));
+  memset(fields_, 0, sizeof(MessageField) * capacity_);
 }
 
+const MessageField &
+FieldSet::operator[](size_t index)const
+{
+  if(index >= used_)
+  {
+    throw UsageError("Accessing FieldSet entry", "index out of range.");
+  }
+  return fields_[index];
+}
 
 bool
 FieldSet::isPresent(const std::string & name) const
@@ -115,8 +126,10 @@ FieldSet::getIdentity(const std::string &name, FieldIdentityCPtr & identity) con
   return false;
 }
 
-DecodedFields *
-FieldSet::createdNestedFields(size_t size)const
+void
+FieldSet::getFieldInfo(size_t index, std::string & name, Field::FieldType & type, FieldCPtr & fieldPtr)const
 {
-  return new FieldSet(size);
+  name = fields_[index].name();
+  type = fields_[index].getField()->getType();
+  fieldPtr = fields_[index].getField();
 }

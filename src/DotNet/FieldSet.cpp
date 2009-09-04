@@ -9,102 +9,119 @@
 
 using namespace System;
 
-namespace QuickFASTDotNet{
-  namespace Messages {
+using namespace QuickFASTDotNet;
+using namespace Messages;
 
-    FieldSet::FieldSet(const QuickFAST::Messages::FieldSetCPtr& fieldSet)
-      :spFieldSet_(fieldSet)
+FieldSet::FieldSet(const QuickFAST::Messages::FieldSetCPtr& fieldSet)
+  :spFieldSet_(fieldSet)
+{
+  // Because of the way the derived class constructor for MutableFieldSet works,
+  // this class may *not* depend on spFieldSet_ being non-NULL here.
+}
+
+System::String ^
+FieldSet::GetNameIndexed(int index)
+{
+  return gcnew System::String(spFieldSet_.GetRef()[index].name().c_str());
+}
+
+Field ^
+FieldSet::GetFieldIndexed(int index)
+{
+  /*
+  QuickFAST::Messages::FieldCPtr cppField;
+  QuickFAST::Messages::Field::FieldType type;
+  std::string name;
+  spFieldSet_->getFieldInfo(index, name, type, cppField);
+  return gcnew Field(name, type, cppField);
+*/
+  return gcnew Field(spFieldSet_.GetRef()[index].getField());
+}
+
+
+FieldSet::TKeyValuePair FieldSet::default::get(String^ fieldName)
+{
+    std::string stdFieldName = StlDotNet::string_cast<std::string>(fieldName);
+
+    QuickFAST::Messages::FieldCPtr fieldPtr;
+    spFieldSet_->getField(stdFieldName, fieldPtr);
+
+    QuickFAST::Messages::FieldIdentityCPtr fieldIdentity;
+    if(!spFieldSet_->getIdentity(stdFieldName, fieldIdentity))
     {
-      // Because of the way the derived class constructor for MutableFieldSet works,
-      // this class may *not* depend on spFieldSet_ being non-NULL here.
+      throw gcnew System::Collections::Generic::KeyNotFoundException(System::String::Format("Field name '{0}' not found.", fieldName));
     }
 
-    FieldSet::TKeyValuePair FieldSet::default::get(String^ fieldName)
-    {
-        std::string stdFieldName = StlDotNet::string_cast<std::string>(fieldName);
+    return TKeyValuePair(gcnew FieldIdentity(fieldIdentity), gcnew Field(fieldPtr));
+}
 
-        QuickFAST::Messages::FieldCPtr fieldPtr;
-        spFieldSet_->getField(stdFieldName, fieldPtr);
+String^ FieldSet::ApplicationType::get()
+{
+  return StlDotNet::string_cast(spFieldSet_->getApplicationType());
+}
 
-        QuickFAST::Messages::FieldIdentityCPtr fieldIdentity;
-        if(!spFieldSet_->getIdentity(stdFieldName, fieldIdentity))
-        {
-          throw gcnew System::Collections::Generic::KeyNotFoundException(System::String::Format("Field name '{0}' not found.", fieldName));
-        }
+bool FieldSet::IsPresent(System::String^ name)
+{
+  std::string stdNameStr;
+  StlDotNet::MarshalString(name, stdNameStr);
 
-        return TKeyValuePair(gcnew FieldIdentity(fieldIdentity), cast_field(fieldPtr));
-    }
+  return spFieldSet_->isPresent(stdNameStr);
+}
 
-    String^ FieldSet::ApplicationType::get()
-    {
-      return StlDotNet::string_cast(spFieldSet_->getApplicationType());
-    }
+Field^ FieldSet::GetField(System::String^ name)
+{
+  QuickFAST::Messages::FieldCPtr field;
+  spFieldSet_->getField(StlDotNet::string_cast<std::string>(name), field);
+  return gcnew Field(field);
+}
 
-    bool FieldSet::IsPresent(System::String^ name)
-    {
-      std::string stdNameStr;
-      StlDotNet::MarshalString(name, stdNameStr);
+FieldIdentity^ FieldSet::GetIdentity(System::String^ name)
+{
+  QuickFAST::Messages::FieldIdentityCPtr spFieldIdentity;
+  spFieldSet_->getIdentity(StlDotNet::string_cast<std::string>(name), spFieldIdentity);
+  return gcnew FieldIdentity(spFieldIdentity);
+}
 
-      return spFieldSet_->isPresent(stdNameStr);
-    }
+void FieldSet::Add(TKeyValuePair item)
+{
+  throw gcnew System::NotImplementedException();
+}
 
-    Field^ FieldSet::GetField(System::String^ name)
-    {
-      QuickFAST::Messages::FieldCPtr field;
-      spFieldSet_->getField(StlDotNet::string_cast<std::string>(name), field);
-      return cast_field(field);
-    }
+void FieldSet::Clear()
+{
+  throw gcnew System::NotImplementedException();
+}
 
-    FieldIdentity^ FieldSet::GetIdentity(System::String^ name)
-    {
-      QuickFAST::Messages::FieldIdentityCPtr spFieldIdentity;
-      spFieldSet_->getIdentity(StlDotNet::string_cast<std::string>(name), spFieldIdentity);
-      return gcnew FieldIdentity(spFieldIdentity);
-    }
+bool FieldSet::Contains(TKeyValuePair item)
+{
+  throw gcnew System::NotImplementedException();
+}
 
-    void FieldSet::Add(TKeyValuePair item)
-    {
-      throw gcnew System::NotImplementedException();
-    }
+void FieldSet::CopyTo(array<TKeyValuePair>^ array, 	int arrayIndex)
+{
+  throw gcnew System::NotImplementedException();
+}
 
-    void FieldSet::Clear()
-    {
-      throw gcnew System::NotImplementedException();
-    }
+bool FieldSet::Remove(TKeyValuePair item)
+{
+  throw gcnew System::NotImplementedException();
+}
+FieldSet::TKeyValuePair FieldSet::FieldEnumerator::GenericCurrent::get()
+{
+  return TKeyValuePair(gcnew FieldIdentity(itHolder_->it->getIdentity()), gcnew Field(itHolder_->it->getField()));
+}
 
-    bool FieldSet::Contains(TKeyValuePair item)
-    {
-      throw gcnew System::NotImplementedException();
-    }
+Object^ FieldSet::FieldEnumerator::Current::get()
+{
+  return GenericCurrent::get();
+}
 
-    void FieldSet::CopyTo(array<TKeyValuePair>^ array, 	int arrayIndex)
-    {
-      throw gcnew System::NotImplementedException();
-    }
+bool FieldSet::FieldEnumerator::MoveNext()
+{
+  return (++itHolder_->it != itHolder_->end);
+}
 
-    bool FieldSet::Remove(TKeyValuePair item)
-    {
-      throw gcnew System::NotImplementedException();
-    }
-
-    FieldSet::TKeyValuePair FieldSet::FieldEnumerator::GenericCurrent::get()
-    {
-      return TKeyValuePair(gcnew FieldIdentity(itHolder_->it->getIdentity()), cast_field(itHolder_->it->getField()));
-    }
-
-    Object^ FieldSet::FieldEnumerator::Current::get()
-    {
-      return GenericCurrent::get();
-    }
-
-    bool FieldSet::FieldEnumerator::MoveNext()
-    {
-      return (++itHolder_->it != itHolder_->end);
-    }
-
-    void FieldSet::FieldEnumerator::Reset()
-    {
-      throw gcnew System::NotSupportedException();
-    }
-  }
+void FieldSet::FieldEnumerator::Reset()
+{
+  throw gcnew System::NotSupportedException();
 }

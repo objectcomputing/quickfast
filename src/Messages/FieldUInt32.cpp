@@ -10,35 +10,21 @@
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
-#ifdef EXPERIMENT_WITH_CACHE
-namespace
-{
-  MemoryCache<FieldUInt32> cache(500);
-}
-#endif //EXPERIMENT_WITH_CACHE
-
 FieldCPtr FieldUInt32::nullField_ = new FieldUInt32;
 
 FieldUInt32::FieldUInt32(uint32 value)
-  : Field(true)
-  , value_(value)
+  : Field(Field::UINT32, true)
 {
+  unsignedInteger_ = value;
 }
 
 FieldUInt32::FieldUInt32()
-  : Field(false)
-  , value_(0)
+  : Field(Field::UINT32, false)
 {
 }
 
 FieldUInt32::~FieldUInt32()
 {
-}
-
-Field::FieldType
-FieldUInt32::getType()const
-{
-  return Field::UINT32;
 }
 
 uint32
@@ -48,7 +34,7 @@ FieldUInt32::toUInt32() const
   {
     FieldNotPresent ex("Field not present");
   }
-  return value_;
+  return static_cast<uint32>(unsignedInteger_);
 }
 
 FieldCPtr

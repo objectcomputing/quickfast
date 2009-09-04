@@ -1,5 +1,5 @@
-#include <OrderBookPch.h>
-#include <Book.h>
+#include <OrderBook/OrderBookPch.h>
+#include <OrderBook/Book.h>
 #include <Codecs/XMLTemplateParser.h>
 #include <Codecs/MessageConsumer.h>
 #include <Codecs/DataSourceStream.h>
@@ -7,10 +7,9 @@
 #include <Messages/Message.h>
 #include <Messages/Field.h>
 #include <Messages/Sequence.h>
-#include <fstream>
-#include <OrderBookMessageConsumer.h>
-#include <OrderBookContainer.h>
-#include <TestOrderBookListener.h>
+#include <OrderBook/OrderBookMessageConsumer.h>
+#include <OrderBook/OrderBookContainer.h>
+#include <OrderBook/Tests/TestOrderBookListener.h>
 
 using namespace QuickFAST;
 using namespace QuickFAST::Codecs;

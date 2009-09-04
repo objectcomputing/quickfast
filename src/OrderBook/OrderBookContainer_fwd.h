@@ -6,11 +6,10 @@
 #endif
 #ifndef ORDERBOOKCONTAINER_FWD_H
 #define ORDERBOOKCONTAINER_FWD_H
-#include <OrderBook_Export.h>
 
 namespace QuickFAST{
   namespace OrderBook{
-    class ORDERBOOK_Export OrderBookContainer;
+    class OrderBookContainer;
   }
 }
 

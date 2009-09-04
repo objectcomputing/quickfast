@@ -31,10 +31,8 @@ namespace QuickFAST{
       virtual ~FieldUInt64();
 
       // implement selected virtual methods from Field
-      virtual Field::FieldType getType()const;
       virtual uint64 toUInt64() const;
     private:
-      uint64 value_;
     };
   }
 }

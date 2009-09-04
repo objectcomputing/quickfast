@@ -1,4 +1,4 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// C+opyright (c) 2009, Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 #include <Common/QuickFASTPch.h>
@@ -7,13 +7,15 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/Encoder.h>
 #include <Codecs/FieldInstructionUInt32.h>
-#include <Messages/Message.h>
 #include <Messages/FieldSequence.h>
 #include <Messages/Sequence.h>
 #include <Messages/FieldUInt32.h>
+#include <Messages/SingleValueBuilder.h>
+#include <Messages/SpecialAccessors.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
+
 
 FieldInstructionSequence::FieldInstructionSequence(
   const std::string & name,
@@ -35,7 +37,7 @@ FieldInstructionSequence::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & messageBuilder) const
 {
   if(!segment_)
   {
@@ -43,7 +45,7 @@ FieldInstructionSequence::decodeNop(
   }
   size_t length = 0;
   Codecs::FieldInstructionCPtr lengthInstruction;
-  Messages::FieldSet lengthSet(1);
+  Messages::SingleValueBuilder<uint32> lengthSet;
   if(segment_->getLengthInstruction(lengthInstruction))
   {
     source.beginField(lengthInstruction->getIdentity()->name());
@@ -61,16 +63,19 @@ FieldInstructionSequence::decodeNop(
       return false;
     }
   }
-
-  Messages::FieldSet::const_iterator fld = lengthSet.begin();
-  if(fld == lengthSet.end())
+  if(!lengthSet.isSet())
   {
     // this optional sequence is not present
     return true;
   }
-  length = fld->getField()->toUInt32();
+  length = lengthSet.value();
 
-  Messages::SequencePtr sequence(new Messages::Sequence);
+  Messages::MessageBuilder & sequenceBuilder = messageBuilder.startSequence(
+    identity_,
+    segment_->getApplicationType(),
+    segment_->getApplicationTypeNamespace(),
+    segment_->fieldCount());
+
   for(size_t nEntry = 0; nEntry < length; ++nEntry)
   {
     if(decoder.getLogOut())
@@ -80,15 +85,16 @@ FieldInstructionSequence::decodeNop(
       decoder.logMessage(msg.str());
     }
 
-    Messages::FieldSetPtr entrySet(new Messages::FieldSet(segment_->fieldCount()));
-    entrySet->setApplicationType(segment_->getApplicationType(), segment_->getApplicationTypeNamespace());
-    decoder.decodeGroup(source, segment_, *entrySet);
-    sequence->addEntry(entrySet);
+    Messages::MessageBuilder & entrySet(
+      sequenceBuilder.startSequenceEntry(
+        segment_->getApplicationType(),
+        segment_->getApplicationTypeNamespace(),
+        segment_->fieldCount()));
+    decoder.decodeGroup(source, segment_, entrySet);
+    sequenceBuilder.endSequenceEntry(entrySet);
   }
-  Messages::FieldCPtr field(Messages::FieldSequence::create(sequence));
-  fieldSet.addField(
-    identity_,
-    field);
+  messageBuilder.endSequence(identity_, sequenceBuilder);
+
   return true;
 }
 
@@ -97,7 +103,7 @@ FieldInstructionSequence::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & messageBuilder) const
 {
   if(!segment_)
   {
@@ -106,32 +112,30 @@ FieldInstructionSequence::encodeNop(
 
   // retrieve the field corresponding to this sequence
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_->name(), field))
+  if(messageBuilder.getField(identity_->name(), field))
   {
     Messages::SequenceCPtr sequence = field->toSequence();
     size_t length = sequence->size();
 
-    // todo: performance could be improved here
-    Messages::FieldCPtr lengthField(Messages::FieldUInt32::create(length));
-    Messages::FieldSet lengthSet(1);
+    Messages::FieldCPtr lengthField(Messages::FieldUInt32::create(QuickFAST::uint32(length)));
 
     Codecs::FieldInstructionCPtr lengthInstruction;
     if(segment_->getLengthInstruction(lengthInstruction))
     {
-      lengthSet.addField(lengthInstruction->getIdentity(), lengthField);
-      lengthInstruction->encode(destination, pmap, encoder, lengthSet);
+      Messages::SingleFieldAccessor accessor(lengthInstruction->getIdentity(), lengthField);
+      lengthInstruction->encode(destination, pmap, encoder, accessor);
     }
     else
     {
-       FieldInstructionUInt32 lengthInstruction;
-       lengthInstruction.setPresence(isMandatory());
-       lengthInstruction.encode(destination, pmap, encoder, lengthSet);
+       FieldInstructionUInt32 defaultLengthInstruction;
+       defaultLengthInstruction.setPresence(isMandatory());
+       Messages::SingleFieldAccessor accessor(defaultLengthInstruction.getIdentity(), lengthField);
+       defaultLengthInstruction.encode(destination, pmap, encoder, accessor);
     }
 
     for(size_t pos = 0; pos < length; ++pos)
     {
-      const Messages::FieldSetCPtr & entry = (*sequence)[pos];
-      encoder.encodeGroup(destination, segment_, *entry);
+      encoder.encodeGroup(destination, segment_, *(*sequence)[pos]);
     }
   }
   else
@@ -139,7 +143,7 @@ FieldInstructionSequence::encodeNop(
     // possibility #2: option group not present.
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory group.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory group.");
     }
     // let our counterparty know it's just not there.
     pmap.setNextField(false);

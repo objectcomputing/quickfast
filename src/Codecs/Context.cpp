@@ -18,6 +18,7 @@ Context::Context(Codecs::TemplateRegistryCPtr registry)
 , logOut_(0)
 , templateRegistry_(registry)
 , templateId_(~0)
+, strict_(true)
 , indexedDictionarySize_(registry->dictionarySize())
 , indexedDictionary_(new Messages::FieldCPtr[indexedDictionarySize_])
 {
@@ -28,13 +29,16 @@ Context::~Context()
 }
 
 void
-Context::reset()
+Context::reset(bool resetTemplateId /*= true*/)
 {
   for(size_t nDict = 0; nDict < indexedDictionarySize_; ++nDict)
   {
     indexedDictionary_[nDict].reset();
   }
-  templateId_ = ~0;
+  if(resetTemplateId)
+  {
+    templateId_ = ~0;
+  }
 }
 
 
@@ -102,6 +106,13 @@ Context::reportWarning(
 void
 Context::reportError(const std::string & errorCode, const std::string & message)
 {
+  if(!strict_)
+  {
+    if(errorCode == "[ERR D2]")
+    {
+      return;
+    }
+  }
   throw EncodingError(errorCode + ' ' + message);
 }
 

@@ -4,13 +4,14 @@
 #pragma once
 
 #include <DotNet/UnmanagedPtr.h>
+#include <DotNet/BoostPtr.h>
 #include <DotNet/StlDotNet.h>
 #include <Messages/FieldSet.h>
 
 namespace QuickFASTDotNet{
   namespace Messages {
 
-    interface class Field;
+    ref class Field;
     ref class FieldIdentity;
 
     /// @brief Internal representation of a set of fields to be encoded or decoded.
@@ -43,10 +44,13 @@ namespace QuickFASTDotNet{
         System::String^ get();
       }
 
+      System::String ^ GetNameIndexed(int index);
+      Field ^ GetFieldIndexed(int index);
+
       /// @brief number of fields in this field set.
       property int Count
       {
-        virtual int get() { return spFieldSet_->size(); }
+        virtual int get() { return int(spFieldSet_->size()); }
       }
 
       virtual TEnumerator^ GetEnumerator() = System::Collections::IEnumerable::GetEnumerator

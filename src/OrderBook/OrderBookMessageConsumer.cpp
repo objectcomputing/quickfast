@@ -1,10 +1,10 @@
 // Copyright (c) 2009, Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
-#include <OrderBookPch.h>
+#include <OrderBook/OrderBookPch.h>
 #include "OrderBookMessageConsumer.h"
 
-#include <Book.h>
+#include <OrderBook/Book.h>
 #include <OrderBookContainer.h>
 #include <OrderBookListener.h>
 #include <Messages/Field.h>
@@ -26,6 +26,16 @@ OrderBookMessageConsumer::consumeMessage(Messages::Message & message)
   }
 
   return true;
+}
+
+void
+OrderBookMessageConsumer::decodingStarted()
+{
+}
+
+void
+OrderBookMessageConsumer::decodingStopped()
+{
 }
 
 void
@@ -54,11 +64,6 @@ bool
 OrderBookMessageConsumer::reportCommunicationError(const std::string & errorMessage)
 {
   return true;
-}
-
-void
-OrderBookMessageConsumer::decodingStopped()
-{
 }
 
 void
@@ -141,7 +146,7 @@ OrderBookMessageConsumer::getBookKind(const Messages::FieldSetCPtr& mdEntry) {
     return MULTIPLE_DEPTH;
   }
 }
-const std::string&
+const StringBuffer&
 OrderBookMessageConsumer::getMessageType(const Messages::Message& message) {
   Messages::FieldCPtr field;
   message.getField("MessageType", field);
@@ -155,7 +160,7 @@ OrderBookMessageConsumer::getMDUpdateAction(const Messages::FieldSetCPtr& mdEntr
   return field->toUInt32();
 }
 
-const std::string&
+const StringBuffer&
 OrderBookMessageConsumer::getMDEntryType(const Messages::FieldSetCPtr& mdEntry) {
   Messages::FieldCPtr field;
   mdEntry->getField("MDEntryType", field);
@@ -281,3 +286,4 @@ OrderBookMessageConsumer::notifyOrderBookListeners() {
   }
   updatedSecurities_.clear();
 }
+

@@ -3,7 +3,7 @@
 // See the file license.txt for licensing information.
 #pragma once
 
-#include <DotNet/UnmanagedPtr.h>
+#include <DotNet/BoostPtr.h>
 #include <Codecs/TemplateRegistry.h>
 
 namespace QuickFASTDotNet {
@@ -21,7 +21,7 @@ namespace QuickFASTDotNet {
       /// @brief The number of templates in the registry.
       property unsigned int Size
       {
-        unsigned int get() { return templateRegistry_->size(); }
+        unsigned int get() { return unsigned int(templateRegistry_->size()); }
       }
 
       /// @brief Returns the maximum number of fields that will be produced by any template in the registry.
@@ -29,7 +29,7 @@ namespace QuickFASTDotNet {
       /// Does not include "nested" fields -- unmerged groups and sequences count as one each.
       property unsigned int MaxFieldCount
       {
-        unsigned int get() { return templateRegistry_->maxFieldCount(); }
+        unsigned int get() { return unsigned int(templateRegistry_->maxFieldCount()); }
       }
 
     internal:

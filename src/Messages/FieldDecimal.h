@@ -15,14 +15,28 @@ namespace QuickFAST{
     class QuickFAST_Export FieldDecimal : public Field{
       /// @brief Construct a NULL field
       FieldDecimal();
+
       /// @brief Construct given a decimal value
       /// @param value is the initial value for the field.
       FieldDecimal(const Decimal & value);
+
+      /// @brief Construct given a mantissa and exponent
+      /// @param mantissa is the initial value for the mantissa
+      /// @param exponent is the initial value for the exponent
+      FieldDecimal(mantissa_t mantissa, exponent_t exponent);
+
     public:
       /// @brief Construct the field from a Decimal value
       /// @param value the value to be stored in the field
       /// @returns a constant pointer to the immutable field
       static FieldCPtr create(const Decimal & value);
+
+      /// @brief Construct the field from a Decimal value
+      /// @param mantissa is the initial value for the mantissa
+      /// @param exponent is the initial value for the exponent
+      /// @returns a constant pointer to the immutable field
+      static FieldCPtr create(mantissa_t mantissa, exponent_t exponent);
+
       /// @brief Construct a NULL field
       /// @returns a constant pointer to the immutable field
       static FieldCPtr createNull();
@@ -31,10 +45,8 @@ namespace QuickFAST{
       virtual ~FieldDecimal();
 
       // implement selected virtual methods from Field
-      virtual Field::FieldType getType()const;
-      virtual const Decimal & toDecimal() const;
+      virtual const Decimal toDecimal() const;
     private:
-      Decimal value_;
     };
   }
 }

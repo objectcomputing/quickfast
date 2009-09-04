@@ -1,4 +1,266 @@
-Mon May 18 19:51:34 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+Fri Sep  4 14:19:51 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * .:
+        * ChangeLog:
+        * QuickFAST.features:
+        * QuickFAST.mwc:
+        * QuickFASTApplication.mpb:
+        * QuickFASTDotNetApplication.mpb:
+        * QuickFASTDotNetExample.mpb:
+        * QuickFASTExample.mpb:
+        * QuickFASTExeOut.mpb:
+        * m.cmd:
+        * setup.cmd:
+
+        * src/Codecs/BufferConsumer.h:
+        * src/Codecs/BufferConsumer_fwd.h:
+        * src/Codecs/Context.h:
+        * src/Codecs/Context.cpp:
+        * src/Codecs/Decoder.h:
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/Encoder.h:
+        * src/Codecs/Encoder.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.h:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBitMap.h:
+        * src/Codecs/FieldInstructionBitMap.cpp:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.h:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionGroup.h:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionSequence.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FieldOp.cpp:
+        * src/Codecs/FieldOpConstant.h:
+        * src/Codecs/FieldOpConstant.cpp:
+        * src/Codecs/FieldOpCopy.h:
+        * src/Codecs/FieldOpCopy.cpp:
+        * src/Codecs/FieldOpDefault.h:
+        * src/Codecs/FieldOpDefault.cpp:
+        * src/Codecs/FieldOpDelta.h:
+        * src/Codecs/FieldOpDelta.cpp:
+        * src/Codecs/FieldOpIncrement.h:
+        * src/Codecs/FieldOpIncrement.cpp:
+        * src/Codecs/FieldOpNop.h:
+        * src/Codecs/FieldOpTail.h:
+        * src/Codecs/FieldOpTail.cpp:
+        * src/Codecs/GenericMessageBuilder.h:
+        * src/Codecs/GenericMessageBuilder.cpp:
+        * src/Codecs/MessageConsumer.h:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/MulticastDecoder_fwd.h:
+        * src/Codecs/MulticastReceiver.h:
+        * src/Codecs/MulticastReceiverHandle.h:
+        * src/Codecs/MulticastReceiverHandle.cpp:
+        * src/Codecs/MulticastReceiver_fwd.h:
+        * src/Codecs/PresenceMap.h:
+        * src/Codecs/PresenceMap.cpp:
+        * src/Codecs/SingleMessageConsumer.h:
+        * src/Codecs/SingleMessageConsumer.cpp:
+        * src/Codecs/SynchronousDecoder.h:
+        * src/Codecs/Template.h:
+        * src/Codecs/XMLTemplateParser.cpp:
+
+        * src/Common/AsioService.h:
+        * src/Common/AsioService.cpp:
+        * src/Common/AtomicCounter.h:
+        * src/Common/AtomicOps.h:
+        * src/Common/AtomicPointer.h:
+        * src/Common/Exceptions.h:
+        * src/Common/LinkedBuffer.h:
+        * src/Common/PCapReader.h:
+        * src/Common/PCapReader.cpp:
+        * src/Common/Profiler.cpp:
+        * src/Common/QuickFASTPch.h:
+        * src/Common/StringBuffer.h:
+
+        * src/DotNet/BoostPtr.h:
+        * src/DotNet/DataDestination.h:
+        * src/DotNet/Decoder.h:
+        * src/DotNet/Field.h:
+        * src/DotNet/Field.cpp:
+        * src/DotNet/FieldIdentity.h:
+        * src/DotNet/FieldIdentity.cpp:
+        * src/DotNet/FieldSet.h:
+        * src/DotNet/FieldSet.cpp:
+        * src/DotNet/MutableFieldSet.h:
+        * src/DotNet/MutableFieldSet.cpp:
+        * src/DotNet/MutableSequence.h:
+        * src/DotNet/QuickFASTDotNet.mpc:
+        * src/DotNet/Sequence.h:
+        * src/DotNet/Sequence.cpp:
+        * src/DotNet/Stdafx.h:
+        * src/DotNet/Stopwatch.h:
+        * src/DotNet/Stopwatch.cpp:
+        * src/DotNet/SynchronousDecoder.h:
+        * src/DotNet/SynchronousDecoder.cpp:
+        * src/DotNet/TemplateRegistry.h:
+        * src/DotNet/UnmanagedPtr.h:
+        * src/DotNet/UnmanagedPtr.cpp:
+
+        * src/DotNetExamples/InterpretFASTDotNet:
+
+        * src/DotNetExamples/InterpretFASTDotNet/.svnignore:
+        * src/DotNetExamples/InterpretFASTDotNet/MessageInterpreter.cs:
+
+        * src/DotNetExamples/PerformanceTestDotNet/MessageInterpreter.cs:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.cs:
+
+        * src/DotNetTests:
+
+        * src/DotNetTests/.svnignore:
+
+        * src/Examples/Examples.mpc:
+
+        * src/Examples/Examples/ExamplesPch.h:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/Examples/MessagePerformance.h:
+        * src/Examples/Examples/MessagePerformance.cpp:
+
+        * src/Examples/FileToMulticast/FileToMulticast.cpp:
+
+        * src/Examples/InterpretFAST/InterpretFAST.cpp:
+
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.h:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+
+        * src/Examples/PCapToMulticast:
+
+        * src/Examples/PCapToMulticast/PCapToMulticast.h:
+        * src/Examples/PCapToMulticast/PCapToMulticast.cpp:
+        * src/Examples/PCapToMulticast/main.cpp:
+
+        * src/Examples/PerformanceTest/MessageCounter.h:
+        * src/Examples/PerformanceTest/NullMessage.h:
+        * src/Examples/PerformanceTest/NullMessage.cpp:
+        * src/Examples/PerformanceTest/PerformanceTest.h:
+        * src/Examples/PerformanceTest/PerformanceTest.cpp:
+
+        * src/Messages/Field.h:
+        * src/Messages/Field.cpp:
+        * src/Messages/FieldAscii.h:
+        * src/Messages/FieldAscii.cpp:
+        * src/Messages/FieldBitMap.h:
+        * src/Messages/FieldBitmap.cpp:
+        * src/Messages/FieldByteVector.h:
+        * src/Messages/FieldByteVector.cpp:
+        * src/Messages/FieldDecimal.h:
+        * src/Messages/FieldDecimal.cpp:
+        * src/Messages/FieldGroup.h:
+        * src/Messages/FieldGroup.cpp:
+        * src/Messages/FieldIdentity_fwd.h:
+        * src/Messages/FieldInt16.h:
+        * src/Messages/FieldInt16.cpp:
+        * src/Messages/FieldInt32.h:
+        * src/Messages/FieldInt32.cpp:
+        * src/Messages/FieldInt64.h:
+        * src/Messages/FieldInt64.cpp:
+        * src/Messages/FieldInt8.h:
+        * src/Messages/FieldInt8.cpp:
+        * src/Messages/FieldSequence.h:
+        * src/Messages/FieldSequence.cpp:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/FieldUInt16.h:
+        * src/Messages/FieldUInt16.cpp:
+        * src/Messages/FieldUInt32.h:
+        * src/Messages/FieldUInt32.cpp:
+        * src/Messages/FieldUInt64.h:
+        * src/Messages/FieldUInt64.cpp:
+        * src/Messages/FieldUInt8.h:
+        * src/Messages/FieldUInt8.cpp:
+        * src/Messages/FieldUtf8.h:
+        * src/Messages/FieldUtf8.cpp:
+        * src/Messages/Group.h:
+        * src/Messages/Logger.h:
+        * src/Messages/Logger_fwd.h:
+        * src/Messages/MessageAccessor.h:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/MessageBuilder_fwd.h:
+        * src/Messages/Sequence.h:
+        * src/Messages/SingleValueBuilder.h:
+        * src/Messages/SpecialAccessors.h:
+
+        * src/OrderBook/Book.h:
+        * src/OrderBook/Book.cpp:
+        * src/OrderBook/Order.h:
+        * src/OrderBook/Order.cpp:
+        * src/OrderBook/OrderBook.mpc:
+        * src/OrderBook/OrderBookContainer.h:
+        * src/OrderBook/OrderBookContainer.cpp:
+        * src/OrderBook/OrderBookContainer_fwd.h:
+        * src/OrderBook/OrderBookListener.h:
+        * src/OrderBook/OrderBookListener.cpp:
+        * src/OrderBook/OrderBookMessageConsumer.h:
+        * src/OrderBook/OrderBookMessageConsumer.cpp:
+        * src/OrderBook/OrderBookPch.h:
+        * src/OrderBook/OrderBookPch.cpp:
+        * src/OrderBook/SecurityID.cpp:
+
+        * src/OrderBook/Tests/OrderBookTest.cpp:
+        * src/OrderBook/Tests/TestOrderBookListener.cpp:
+
+        * src/QuickFAST.mpc:
+
+        * src/Tests/FieldInstructionMock.h:
+        * src/Tests/testBiggestValue.cpp:
+        * src/Tests/testCommon.cpp:
+        * src/Tests/testFieldInstructions.cpp:
+        * src/Tests/testFieldOperations.cpp:
+        * src/Tests/testRoundTrip.cpp:
+        * src/Tests/testRoundTrip1.cpp:
+        * src/Tests/testSmallestValue.cpp:
+        * src/Tests/testXMLTemplateParser.cpp:
+
+        * data/ARCATemplates.xml:
+        * data/arca.dat:
+        * data/arca.fast:
+        * data/arca_files_notice:
+
+        * src/Codecs/DecodedFields.h:
+        * src/Codecs/DecodedFields_fwd.h:
+        * src/Codecs/FieldInstructionFiller.h:
+        * src/Codecs/FieldInstructionFiller.cpp:
+        * src/Codecs/FieldOpArcaNop.h:
+
+        * src/DotNet/ReadMe.txt:
+
+        * src/DotNetExamples/DotNetExampleCode:
+
+        * src/DotNetExamples/DotNetExampleCode/.svnignore:
+        * src/DotNetExamples/DotNetExampleCode/DotNetExampleCode.mpc:
+        * src/DotNetExamples/DotNetExampleCode/Properties:
+
+        * src/DotNetExamples/DotNetExampleCode/Properties/AssemblyInfo.cs:
+
+        * src/DotNetExamples/DotNetExampleCode/StopWatch.cs:
+
+        * src/DotNetExamples/PerformanceTestDotNet/MessageCounter.cs:
+
+        * src/DotNetTests/DecodingPerformance:
+
+        * src/DotNetTests/DecodingPerformance/.svnignore:
+        * src/DotNetTests/DecodingPerformance/DecodingPerformance.cs:
+        * src/DotNetTests/DecodingPerformance/DecodingPerformanceDotNet.mpc:
+        * src/DotNetTests/DecodingPerformance/MessageProcessor.cs:
+        * src/DotNetTests/DecodingPerformance/Properties:
+
+        * src/DotNetTests/DecodingPerformance/Properties/AssemblyInfo.cs:
+
+        * src/Messages/DecodedFields.h:
+        * src/Messages/DecodedFields_fwd.h:
+
+        Merge from trunkMon May 18 19:51:34 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/SynchronousDecoder.h:
         * src/DotNet/SynchronousDecoder.h:

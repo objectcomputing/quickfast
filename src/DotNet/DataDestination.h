@@ -71,9 +71,9 @@ namespace QuickFASTDotNet{
           DestinationBufferImpl * dbs = static_cast<DestinationBufferImpl *>((*it).get());
 
           size_t size = dbs->getSize();
-          array<unsigned char>^ managedArray = gcnew array<unsigned char>(size);
+          array<unsigned char>^ managedArray = gcnew array<unsigned char>(int(size));
           QuickFAST::uchar* pMem = dbs->begin()._Myptr;
-          System::Runtime::InteropServices::Marshal::Copy(System::IntPtr(pMem), managedArray, 0, size);
+          System::Runtime::InteropServices::Marshal::Copy(System::IntPtr(pMem), managedArray, 0, int(size));
 
           // Needs to catch exceptions.
           //outStream_->Write(managedArray, 0, managedArray->Length);

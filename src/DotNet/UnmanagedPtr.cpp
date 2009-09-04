@@ -2,5 +2,5 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 #include "StdAfx.h"
-#include <DotNet/UnmanagedPtr.h>
+//#include <DotNet/UnmanagedPtr.h>
 

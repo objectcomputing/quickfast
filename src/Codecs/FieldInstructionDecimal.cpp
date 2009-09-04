@@ -7,15 +7,16 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/FieldInstructionMantissa.h>
 #include <Codecs/FieldInstructionExponent.h>
-#include <Messages/Message.h>
-#include <Messages/FieldSet.h>
+#include <Messages/SpecialAccessors.h>
 #include <Messages/FieldDecimal.h>
 #include <Common/Decimal.h>
+#include <Messages/SingleValueBuilder.h>
 
 #include <Common/Profiler.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
+
 
 FieldInstructionDecimal::FieldInstructionDecimal(
       const std::string & name,
@@ -56,50 +57,35 @@ FieldInstructionDecimal::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & accessor) const
 {
   PROFILE_POINT("decimal::decodeNop");
-  NESTED_PROFILE_POINT(d,"decimal::AllocateFieldSet");
 
   if(bool(exponentInstruction_))
   {
-
-    ///@todo: this is an expensive way to get the exponent and mantissa values
-    /// we need to refactor FieldInstructionInteger to provide a separate method
-    /// to retrieve the values (or lack thereof) without creating fields.
-    /// However -- this works for now.
-    Messages::FieldSet mxSet(2);
-    NESTED_PROFILE_POINT(a, "decimal::DecodeExponent");
-    NESTED_PROFILE_PAUSE(d);
-    if(!exponentInstruction_->decode(source, pmap, decoder, mxSet))
+    Messages::SingleValueBuilder<int32> exponentBuilder;
+    if(!exponentInstruction_->decode(source, pmap, decoder, exponentBuilder))
     {
       return false;
     }
-
-    if(mxSet.size() == 0)
+    if(!exponentBuilder.isSet())
     {
       // null field
       return true;
     }
+    exponent_t exponent = static_cast<exponent_t>(exponentBuilder.value());
 
-    NESTED_PROFILE_POINT(b, "decimal::DecodeMantissa");
-    NESTED_PROFILE_PAUSE(a);
-    mantissaInstruction_->decode(source, pmap, decoder, mxSet);
-    NESTED_PROFILE_POINT(1, "decimal::RetrieveValues");
-    NESTED_PROFILE_PAUSE(b);
-    Messages::FieldSet::const_iterator it = mxSet.begin();
-    exponent_t exponent = exponent_t(it->getField()->toInt32());
-    mantissa_t mantissa = typedMantissa_;
-    ++it;
-    if(it != mxSet.end())
+    Messages::SingleValueBuilder<mantissa_t> mantissaBuilder;
+    mantissaInstruction_->decode(source, pmap, decoder, mantissaBuilder);
+    mantissa_t mantissa = 0;
+    if(mantissaBuilder.isSet())
     {
-      mantissa = mantissa_t(it->getField()->toInt64());
+      mantissa = mantissaBuilder.value();
     }
-    NESTED_PROFILE_POINT(2, "decimal::UseValues");
-    NESTED_PROFILE_PAUSE(1);
+
     Decimal value(mantissa, exponent, false);
     Messages::FieldCPtr field(Messages::FieldDecimal::create(value));
-    fieldSet.addField(identity_, field);
+    accessor.addField(identity_, field);
   }
   else
   {
@@ -116,7 +102,7 @@ FieldInstructionDecimal::decodeNop(
     decodeSignedInteger(source, decoder, mantissa);
     Decimal value(mantissa, exponent);
     Messages::FieldCPtr newField(Messages::FieldDecimal::create(value));
-    fieldSet.addField(
+    accessor.addField(
       identity_,
       newField);
   }
@@ -128,13 +114,13 @@ FieldInstructionDecimal::decodeConstant(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & accessor) const
 {
   PROFILE_POINT("decimal::decodeConstant");
   if(isMandatory() || pmap.checkNextField())
   {
     Messages::FieldCPtr newField(Messages::FieldDecimal::create(typedValue_));
-    fieldSet.addField(
+    accessor.addField(
       identity_,
       newField);
   }
@@ -146,7 +132,7 @@ FieldInstructionDecimal::decodeDefault(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & accessor) const
 {
   PROFILE_POINT("decimal::decodeDefault");
   if(pmap.checkNextField())
@@ -164,7 +150,7 @@ FieldInstructionDecimal::decodeDefault(
     decodeSignedInteger(source, decoder, mantissa);
     Decimal value(mantissa, exponent);
     Messages::FieldCPtr newField(Messages::FieldDecimal::create(value));
-    fieldSet.addField(
+    accessor.addField(
       identity_,
       newField);
   }
@@ -173,7 +159,7 @@ FieldInstructionDecimal::decodeDefault(
     if(typedValueIsDefined_)
     {
       Messages::FieldCPtr newField(Messages::FieldDecimal::create(typedValue_));
-      fieldSet.addField(
+      accessor.addField(
         identity_,
         newField);
     }
@@ -190,7 +176,7 @@ FieldInstructionDecimal::decodeCopy(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & accessor) const
 {
   PROFILE_POINT("decimal::decodeCopy");
   exponent_t exponent = 0;
@@ -203,7 +189,7 @@ FieldInstructionDecimal::decodeCopy(
       decodeSignedInteger(source, decoder, mantissa);
       Decimal value(mantissa, exponent, false);
       Messages::FieldCPtr newField(Messages::FieldDecimal::create(value));
-      fieldSet.addField(
+      accessor.addField(
         identity_,
         newField);
       fieldOp_->setDictionaryValue(decoder, newField);
@@ -221,7 +207,7 @@ FieldInstructionDecimal::decodeCopy(
         decodeSignedInteger(source, decoder, mantissa);
         Decimal value(mantissa, exponent, false);
         Messages::FieldCPtr newField(Messages::FieldDecimal::create(value));
-        fieldSet.addField(
+        accessor.addField(
           identity_,
           newField);
         fieldOp_->setDictionaryValue(decoder, newField);
@@ -239,7 +225,7 @@ FieldInstructionDecimal::decodeCopy(
       {
         if(previousField->isType(Messages::Field::DECIMAL))
         {
-          fieldSet.addField(
+          accessor.addField(
             identity_,
             previousField);
         }
@@ -263,7 +249,7 @@ FieldInstructionDecimal::decodeCopy(
       if(fieldOp_->hasValue())
       {
         Messages::FieldCPtr newField(Messages::FieldDecimal::create(typedValue_));
-        fieldSet.addField(
+        accessor.addField(
           identity_,
           newField);
         fieldOp_->setDictionaryValue(decoder, newField);
@@ -285,7 +271,7 @@ FieldInstructionDecimal::decodeDelta(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & accessor) const
 {
   PROFILE_POINT("decimal::decodeDelta");
   int64 exponentDelta;
@@ -317,7 +303,7 @@ FieldInstructionDecimal::decodeDelta(
   value.setExponent(exponent_t(value.getExponent() + exponentDelta));
   value.setMantissa(mantissa_t(value.getMantissa() + mantissaDelta));
   Messages::FieldCPtr newField(Messages::FieldDecimal::create(value));
-  fieldSet.addField(
+  accessor.addField(
     identity_,
     newField);
   fieldOp_->setDictionaryValue(decoder, newField);
@@ -353,11 +339,11 @@ FieldInstructionDecimal::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & accessor) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_->name(), field))
+  if(accessor.getField(identity_->name(), field))
   {
     Decimal value = field->toDecimal();
     exponent_t exponent = value.getExponent();
@@ -365,23 +351,24 @@ FieldInstructionDecimal::encodeNop(
 
     if(bool(exponentInstruction_))
     {
-      Messages::FieldSet fieldSet(2);
       Messages::FieldCPtr exponentField(Messages::FieldInt32::create(exponent));
-      fieldSet.addField(exponentInstruction_->getIdentity(), exponentField);
-
-      Messages::FieldCPtr mantissaField(Messages::FieldInt64::create(mantissa));
-      fieldSet.addField(mantissaInstruction_->getIdentity(), mantissaField);
+      Messages::SingleFieldAccessor exponentAccessor(exponentInstruction_->getIdentity(), exponentField);
 
       exponentInstruction_->encode(
         destination,
         pmap,
         encoder,
-        fieldSet);
+        exponentAccessor);
+
+      Messages::FieldCPtr mantissaField(Messages::FieldInt64::create(mantissa));
+      Messages::SingleFieldAccessor mantissaAccessor(mantissaInstruction_->getIdentity(), mantissaField);
+
       mantissaInstruction_->encode(
         destination,
         pmap,
         encoder,
-        fieldSet);
+        mantissaAccessor);
+
     }
     else
     {
@@ -407,16 +394,16 @@ FieldInstructionDecimal::encodeNop(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     if(exponentInstruction_)
     {
-      Messages::FieldSet fieldSet(2);
+      Messages::EmptyAccessor empty;
       exponentInstruction_->encode(
         destination,
         pmap,
         encoder,
-        fieldSet);
+        empty);
     }
     else
     {
@@ -430,11 +417,11 @@ FieldInstructionDecimal::encodeConstant(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & accessor) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_->name(), field))
+  if(accessor.getField(identity_->name(), field))
   {
     Decimal value = field->toDecimal();
     if(value != typedValue_)
@@ -451,7 +438,7 @@ FieldInstructionDecimal::encodeConstant(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     pmap.setNextField(false);
   }
@@ -462,11 +449,11 @@ FieldInstructionDecimal::encodeDefault(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & accessor) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_->name(), field))
+  if(accessor.getField(identity_->name(), field))
   {
     Decimal value = field->toDecimal();
     if(value == typedValue_)
@@ -491,7 +478,7 @@ FieldInstructionDecimal::encodeDefault(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     if(fieldOp_->hasValue())
     {
@@ -511,7 +498,7 @@ FieldInstructionDecimal::encodeCopy(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & accessor) const
 {
   // declare a couple of variables...
   bool previousIsKnown = typedValueIsDefined_;
@@ -536,7 +523,7 @@ FieldInstructionDecimal::encodeCopy(
 
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_->name(), field))
+  if(accessor.getField(identity_->name(), field))
   {
     Decimal value = field->toDecimal();
 
@@ -559,7 +546,7 @@ FieldInstructionDecimal::encodeCopy(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     if((previousIsKnown && previousNotNull)
       || !previousIsKnown)
@@ -582,7 +569,7 @@ FieldInstructionDecimal::encodeDelta(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & accessor) const
 {
 
   // declare a couple of variables...
@@ -608,7 +595,7 @@ FieldInstructionDecimal::encodeDelta(
 
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_->name(), field))
+  if(accessor.getField(identity_->name(), field))
   {
     Decimal value = field->toDecimal();
 
@@ -636,7 +623,7 @@ FieldInstructionDecimal::encodeDelta(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     destination.putByte(nullInteger);
   }

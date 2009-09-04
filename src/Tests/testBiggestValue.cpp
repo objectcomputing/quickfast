@@ -13,6 +13,8 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/DataDestinationString.h>
 #include <Codecs/DataSourceString.h>
+#include <Codecs/SingleMessageConsumer.h>
+#include <Codecs/GenericMessageBuilder.h>
 
 #include <Messages/Message.h>
 #include <Messages/FieldIdentity.h>
@@ -29,8 +31,6 @@
 #include <Messages/Sequence.h>
 
 #include <Common/Exceptions.h>
-#include <fstream>
-#include <cstdlib>
 
 using namespace QuickFAST;
 
@@ -298,10 +298,13 @@ namespace{
   void biggest_value_test (const std::string& xml, const std::string& buffer)
   {
     std::ifstream templateStream(xml.c_str(), std::ifstream::binary);
+    BOOST_REQUIRE(templateStream.good());
 
     Codecs::XMLTemplateParser parser;
     Codecs::TemplateRegistryPtr templateRegistry =
       parser.parse(templateStream);
+
+    BOOST_REQUIRE(templateRegistry);
 
     Messages::Message msg(templateRegistry->maxFieldCount());
 
@@ -514,8 +517,10 @@ namespace{
     //decoder.setVerboseOutput (std::cout);
 
     Codecs::DataSourceString source(fastString);
-    Messages::Message msgOut(templateRegistry->maxFieldCount());
-    decoder.decodeMessage(source, msgOut);
+    Codecs::SingleMessageConsumer consumer;
+    Codecs::GenericMessageBuilder builder(consumer);
+    decoder.decodeMessage(source, builder);
+    Messages::Message & msgOut = consumer.message();
 
     validateMessage1(msgOut, buffer);
 
@@ -561,7 +566,7 @@ BOOST_AUTO_TEST_CASE(TestBiggestValue)
 
   std::string str;
   string_generate (str, 1000);
-  
+
   biggest_value_test (xml, str);
 }
 

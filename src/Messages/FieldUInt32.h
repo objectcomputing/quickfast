@@ -31,12 +31,10 @@ namespace QuickFAST{
       virtual ~FieldUInt32();
 
       // implement selected virtual methods from Field
-      virtual Field::FieldType getType()const;
       virtual uint32 toUInt32() const;
     private:
       virtual void freeField()const;
     private:
-      uint32 value_;
       static FieldCPtr nullField_;
     };
   }

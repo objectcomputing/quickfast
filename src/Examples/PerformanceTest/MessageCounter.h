@@ -7,6 +7,7 @@
 #ifndef MESSAGECOUNTER_H
 #define MESSAGECOUNTER_H
 #include <Codecs/MessageConsumer.h>
+#include <Messages/MessageBuilder.h>
 #include <Messages/Field_fwd.h>
 #include <Messages/FieldIdentity.h>
 namespace QuickFAST{
@@ -22,12 +23,17 @@ namespace QuickFAST{
 
       ////////////////////////////
       // Implement MessageConsumer
+
       virtual bool consumeMessage(Messages::Message & message);
+      virtual void decodingStopped();
+
+      ///////////////////
+      // Implement Logger
+
       virtual bool wantLog(unsigned short level);
       virtual bool logMessage(unsigned short level, const std::string & logMessage);
       virtual bool reportDecodingError(const std::string & errorMessage);
       virtual bool reportCommunicationError(const std::string & errorMessage);
-      virtual void decodingStopped();
 
       /// @brief get the count
       /// @returns the number of calls to consumeMessage()

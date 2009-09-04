@@ -3,7 +3,7 @@ project(*) : boost_base, boost_thread {
   dynamicflags += ORDERBOOK_BUILD_DLL
   includes += $(QUICKFAST_ROOT)/src
   includes += $(QUICKFAST_ROOT)/src/OrderBook
-  pch_header = OrderBookPch.h
+  pch_header = OrderBook/OrderBookPch.h
   pch_source = OrderBookPch.cpp
   Source_Files {
     *.cpp
@@ -51,7 +51,7 @@ project(*tests) : boost_unit_test_framework, boost_system, boost_thread {
   libs += QuickFAST OrderBook
   after += OrderBook
   macros += BOOST_TEST_DYN_LINK
-  pch_header = OrderBookPch.h
+  pch_header = OrderBook/OrderBookPch.h
   pch_source = OrderBookPch.cpp
   Source_Files {
     Tests

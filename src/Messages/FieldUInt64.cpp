@@ -9,25 +9,18 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldUInt64::FieldUInt64(uint64 value)
-  : Field(true)
-  , value_(value)
+  : Field(Field::UINT64, true)
 {
+  unsignedInteger_ = value;
 }
 
 FieldUInt64::FieldUInt64()
-  : Field(false)
-  , value_(0)
+  : Field(Field::UINT64, false)
 {
 }
 
 FieldUInt64::~FieldUInt64()
 {
-}
-
-Field::FieldType
-FieldUInt64::getType() const
-{
-  return Field::UINT64;
 }
 
 uint64
@@ -37,7 +30,7 @@ FieldUInt64::toUInt64() const
   {
     FieldNotPresent ex("Field not present");
   }
-  return value_;
+  return unsignedInteger_;
 }
 
 FieldCPtr

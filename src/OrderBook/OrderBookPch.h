@@ -29,7 +29,9 @@
 #include <stdexcept>
 #include <math.h>
 #include <iomanip>
+#include <fstream>
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/lexical_cast.hpp>

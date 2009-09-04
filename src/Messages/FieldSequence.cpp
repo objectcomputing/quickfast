@@ -9,7 +9,7 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldSequence::FieldSequence(Messages::SequenceCPtr sequence)
-  : Field(true)
+  : Field(Field::SEQUENCE, true)
   , sequence_(sequence)
 {
 }
@@ -18,26 +18,13 @@ FieldSequence::~FieldSequence()
 {
 }
 
-Field::FieldType
-FieldSequence::getType()const
-{
-  return Field::SEQUENCE;
-}
-
 uint32
 FieldSequence::toUInt32()const
 {
-  return sequence_->size();
+  return static_cast<uint32>(sequence_->size());
 }
 
-#if 0
-void
-FieldSequence::setSequence(Messages::SequenceCPtr sequence)
-{
-  sequence_ = sequence;
-  valid_ = true;
-}
-#endif
+
 
 const Messages::SequenceCPtr &
 FieldSequence::toSequence() const

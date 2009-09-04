@@ -9,31 +9,25 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldByteVector::FieldByteVector(const std::string & value)
-  : Field(true)
-  , value_(value)
+  : Field(Field::BYTEVECTOR, true)
 {
+  string_ = value;
 }
 
+
 FieldByteVector::FieldByteVector(const uchar * buffer, size_t length)
-  : Field(true)
-  , value_(std::string(reinterpret_cast<const char *>(buffer), length))
+  : Field(Field::BYTEVECTOR, true)
 {
+  string_.assign(buffer, length);
 }
 
 FieldByteVector::FieldByteVector()
-  : Field(false)
-  , value_()
+  : Field(Field::BYTEVECTOR, false)
 {
 }
 
 FieldByteVector::~FieldByteVector()
 {
-}
-
-Field::FieldType
-FieldByteVector::getType() const
-{
-  return Field::BYTEVECTOR;
 }
 
 bool
@@ -42,25 +36,25 @@ FieldByteVector::isString() const
   return true;
 }
 
-const std::string &
+const StringBuffer &
 FieldByteVector::toByteVector() const
 {
   if(!valid_)
   {
     FieldNotPresent ex("Field not present");
   }
-  return value_;
+  return string_;
 }
 
 
-const std::string &
+const StringBuffer &
 FieldByteVector::toString() const
 {
   if(!valid_)
   {
     FieldNotPresent ex("Field not present");
   }
-  return value_;
+  return string_;
 }
 
 FieldCPtr

@@ -6,7 +6,7 @@
 #endif
 #ifndef SIDE_H
 #define SIDE_H
-#include <OrderBook_Export.h>
+#include <OrderBook/OrderBook_Export.h>
 #include <Common/Types.h>
 #include <Common/Decimal.h>
 

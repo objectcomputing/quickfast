@@ -8,14 +8,15 @@
 #define FIELDSET_H
 #include "FieldSet_fwd.h"
 #include <Common/QuickFAST_Export.h>
-#include <Messages/DecodedFields.h>
+#include <Messages/MessageAccessor.h>
 #include <Messages/MessageField.h>
-#include <Messages/Field_fwd.h>
+#include <Messages/Field.h>
+
 namespace QuickFAST{
   namespace Messages{
     /// @brief Internal representation of a set of fields to be encoded or decoded.
     class QuickFAST_Export FieldSet
-      : public DecodedFields
+      : public MessageAccessor
     {
       FieldSet();
       FieldSet(const FieldSet&);
@@ -49,6 +50,10 @@ namespace QuickFAST{
       {
         return used_;
       }
+
+      /// @brief support indexing the set
+      /// @param index 0 <= index < size()
+      const MessageField & operator[](size_t index)const;
 
       /// @brief Is the specified field present in this set?
       /// @param name Identifies the field.
@@ -115,16 +120,27 @@ namespace QuickFAST{
       void swap(FieldSet & rhs)
       {
         applicationType_.swap(rhs.applicationType_);
-        size_t count = (used_ > rhs.used_)? used_: rhs.used_;
-        for(size_t nField = 0; nField < count; ++nField)
-        {
-          swap_i(fields_[nField], rhs.fields_[nField]);
-        }
+        applicationTypeNs_.swap(rhs.applicationTypeNs_);
+        swap_i(fields_, rhs.fields_);
+        swap_i(capacity_, rhs.capacity_);
         swap_i(used_, rhs.used_);
       }
 
-      /// @brief act as a factory to create new fields sets to be nested within this one
-      virtual DecodedFields * createdNestedFields(size_t size)const;
+      ///// @brief access the field set
+      /////
+      ///// @returns this field set
+      //virtual const FieldSet & getFieldSet() const
+      //{
+      //  return *this;
+      //}
+
+      /// @brief For DotNet: get everything in one call
+      ///
+      void getFieldInfo(
+        size_t index,
+        std::string & name,
+        Field::FieldType & type,
+        FieldCPtr & fieldPtr)const;
 
     private:
       template<typename T>

@@ -1,28 +1,28 @@
 // Copyright (c) 2009, Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
-#include <OrderBookPch.h>
+#include <OrderBook/OrderBookPch.h>
 #include "OrderBookContainer.h"
 
 using namespace QuickFAST;
 using namespace QuickFAST::OrderBook;
 
+#pragma warning(push)
+#pragma warning(disable:4355) // disable "this" used in initializer
 OrderBookContainer::OrderBookContainer(Codecs::DataSource& dataSource, Codecs::TemplateRegistryPtr& templates)
   : dataSource_(dataSource)
   , templates_(templates)
   , handler_(OrderBookMessageConsumer(*this))
   , decoder_(templates_)
-
 {
-  //Codecs::SynchronousDecoder<Messages::Message, Codecs::MessageConsumer> decoder(templates_);
-
-	decoder_.setStrict(false);
-	decoder_.setResetOnMessage(false);
+  decoder_.setStrict(false);
+  decoder_.setResetOnMessage(false);
 }
+#pragma warning(pop)
 
 void
 OrderBookContainer::start() {
-	decoder_.decode(dataSource_, handler_);
+  decoder_.decode(dataSource_, handler_);
 }
 
 BookPtr

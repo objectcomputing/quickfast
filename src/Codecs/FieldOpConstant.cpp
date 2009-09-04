@@ -25,7 +25,7 @@ FieldOpConstant::decode(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   return instruction.decodeConstant(source, pmap, decoder, fieldSet);
 }
@@ -36,7 +36,7 @@ FieldOpConstant::encode(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   return instruction.encodeConstant(destination, pmap, encoder, fieldSet);
 }

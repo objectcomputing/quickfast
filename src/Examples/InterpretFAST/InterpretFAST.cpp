@@ -7,7 +7,7 @@
 #include <Codecs/DataSourceStream.h>
 #include <Codecs/SynchronousDecoder.h>
 #include <Codecs/TemplateRegistry.h>
-#include <Messages/Message.h>
+#include <Codecs/GenericMessageBuilder.h>
 
 #include <Examples/MessageInterpreter.h>
 
@@ -164,7 +164,11 @@ InterpretFAST::applyArgs()
     }
     if(ok)
     {
-      templateFile_.open(templateFileName_.c_str());
+      templateFile_.open(templateFileName_.c_str()
+#ifdef _WIN32
+        , std::ios::in | std::ios::binary
+#endif
+        );
       if(!templateFile_.good())
       {
         ok = false;
@@ -267,8 +271,7 @@ InterpretFAST::run()
     MessageInterpreter handler(* outputFile_);
     Codecs::DataSourceStream source(fastFile_);
 
-    Codecs::SynchronousDecoder<Messages::Message, Codecs::MessageConsumer> decoder(templateRegistry);
-//    Codecs::SynchronousDecoder decoder(templateRegistry);
+    Codecs::SynchronousDecoder<Codecs::GenericMessageBuilder, Codecs::MessageConsumer> decoder(templateRegistry);
     decoder.setStrict(strict_);
     decoder.setResetOnMessage(resetOnMessage_);
 

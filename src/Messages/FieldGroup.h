@@ -8,6 +8,8 @@
 #define FIELDGROUP_H
 #include <Messages/Field.h>
 #include <Messages/FieldSet_fwd.h>
+#include <Messages/MessageBuilder_fwd.h>
+
 namespace QuickFAST{
   namespace Messages{
     /// @brief A field containing a subgroup of fields
@@ -26,7 +28,6 @@ namespace QuickFAST{
       virtual ~FieldGroup();
 
       // implement selected virtual methods from Field
-      virtual Field::FieldType getType()const;
       virtual const Messages::GroupCPtr & toGroup() const;
     private:
       Messages::GroupCPtr group_;

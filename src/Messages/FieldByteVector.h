@@ -42,12 +42,11 @@ namespace QuickFAST{
       virtual ~FieldByteVector();
 
       // implement selected virtual methods from Field
-      virtual Field::FieldType getType()const;
-      virtual const std::string & toByteVector() const;
+      virtual const StringBuffer & toByteVector() const;
       virtual bool isString() const;
-      virtual const std::string & toString() const;
+      virtual const StringBuffer & toString() const;
     private:
-      std::string value_;
+//      std::string value_;
     };
   }
 }

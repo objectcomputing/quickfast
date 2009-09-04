@@ -1,0 +1,321 @@
+// Copyright (c) 2009, Object Computing, Inc.
+// All rights reserved.
+// See the file license.txt for licensing information.
+//
+#ifndef LINKEDBUFFER_H
+#define LINKEDBUFFER_H
+// All inline, do not export.
+//#include <Common/QuickFAST_Export.h>
+
+namespace QuickFAST
+{
+  ///@brief A buffer of unsigned chars to be stored in a linked list.
+  class LinkedBuffer
+  {
+  public:
+    /// @brief Construct with a given size
+    /// @param capacity is how many bytes to allocate
+    LinkedBuffer(size_t capacity)
+      : link_(0)
+      , buffer_(new unsigned char [capacity])
+      , capacity_(capacity)
+      , used_(0)
+    {
+    }
+
+    /// @brief Special constructor used to construct a list root
+    /// This buffer will not actually be used, it's allows pointers
+    /// to head-of-list to be type safe.
+    LinkedBuffer()
+      : link_(0)
+      , capacity_(0)
+      , used_(0)
+    {
+    }
+
+    /// @brief Access the raw buffer
+    /// @returns a pointer to the raw buffer
+    unsigned char * get()
+    {
+      return buffer_.get();
+    }
+
+    /// @brief Constant access to the raw buffer
+    /// @returns a const pointer to the raw buffer
+    const unsigned char * get() const
+    {
+      return buffer_.get();
+    }
+
+    /// @brief Support indexing
+    unsigned char & operator[](size_t index)
+    {
+      if(index >= capacity_)
+      {
+        throw std::range_error("LinkedBuffer: Index out of bounds.");
+      }
+      return buffer_.get()[index];
+    }
+
+    /// @brief Support indexing constant
+    const unsigned char & operator[](size_t index) const
+    {
+      if(index >= capacity_)
+      {
+        throw std::range_error("LinkedBuffer (const): Index out of bounds.");
+      }
+      return buffer_.get()[index];
+    }
+
+    /// @brief Access the allocated size.
+    /// @returns the buffer's capacity
+    size_t capacity() const
+    {
+      return capacity_;
+    }
+
+    /// @brief Set the number of bytes used in this buffer
+    /// @param used byte count
+    void setUsed(size_t used)
+    {
+      used_ = used;
+    }
+
+    /// @brief Access the number of bytes used in this buffer
+    /// @returns used byte count
+    size_t used()const
+    {
+      return used_;
+    }
+
+    /// @brief Linked List support: Set the link
+    /// @param link pointer to buffer to be linked <b>after</b> this one.
+    void link(LinkedBuffer * link)
+    {
+      link_ = link;
+    }
+
+    /// @brief Linked List support: access the link.
+    /// @returns the buffer <b>after</b> this one.  Zero if none
+    LinkedBuffer * link() const
+    {
+      return link_;
+    }
+
+  private:
+    LinkedBuffer * link_;
+    boost::scoped_array<unsigned char> buffer_;
+    size_t capacity_;
+    size_t used_;
+  };
+
+  /// @brief A collection of buffers with no ordering constraints.
+  ///
+  /// Empty when:   head_.next_ = 0
+  ///               tail_ -> head_;
+  ///
+  /// No internal synchronization.
+  /// This object does not manage buffer lifetimes.  It assumes
+  /// that buffers outlive the collection.
+  class SimpleBufferCollection
+  {
+  public:
+    /// @brief Construct an empty list
+    SimpleBufferCollection()
+      : tail_(&head_)
+    {
+    }
+
+    /// @brief Add one buffer to the collection
+    ///
+    /// @param buffer to be added.
+    void push(LinkedBuffer * buffer)
+    {
+//      std::cout << "Simple @ " << this << " push " << buffer << std::endl;
+      buffer->link(0);
+      tail_->link(buffer);
+      tail_ = buffer;
+//      std::cout << "       head: " << head_.link() << "  tail: " << tail_ << std::endl;
+    }
+
+    /// @brief Combine two collections into one.
+    ///
+    /// This collection ends up with all entries.
+    /// The other collection ends up empty.
+    /// @param collection to be combined into this one.
+    void push(SimpleBufferCollection & collection)
+    {
+//      std::cout << "Simple @ " << this << " push collection " << &collection << std::endl;
+      tail_->link(collection.head_.link());
+      tail_ = collection.tail_;
+      collection.head_.link(0);
+      collection.tail_ = &collection.head_;
+//      std::cout << "       head: " << head_.link() << "  tail: " << tail_ << std::endl;
+    }
+
+    /// @brief retrieve a buffer from the collection
+    /// @returns the pointer to the buffer, or zero if the collection is empty.
+    LinkedBuffer * pop()
+    {
+      LinkedBuffer * buffer = head_.link();
+      if(buffer != 0)
+      {
+        LinkedBuffer *next = buffer->link();
+        head_.link(next);
+        if(next == 0)
+        {
+          tail_ = &head_;
+        }
+        buffer->link(0);
+      }
+//      std::cout << "Simple @ " << this << " pop " << buffer << std::endl;
+//      std::cout << "       head: " << head_.link() << "  tail: " << tail_ << std::endl;
+      return buffer;
+    }
+  private:
+    LinkedBuffer head_;
+    LinkedBuffer * tail_;
+  };
+
+  ///@brief Keep a queue of buffers waiting to be serviced by one server thread.
+  ///
+  /// Buffers may be generated by multiple threads, but must be serviced by a single
+  /// thread (at any one time.)
+  ///
+  /// A thread with a buffer that needs to be process locks a mutex and calls push()
+  /// If push returns true that thread is now responsible for servicing the queue.
+  /// To service the queue,
+  ///    release the mutex (only one thread services at a time
+  ///                        so no synchronization is needed)
+  ///    for(bool more = startService();
+  ///        more;
+  ///        {lock} more = endservice(){unlock})
+  ///    {
+  ///       for buffer returned by serviceNext()
+  ///         process buffer
+  ///    }
+  ///
+  /// Synchronization is by an external mutex, to allow other data items to be synchronized by the
+  /// same mutex.  Placeholder lock arguments help enforce the synchronization rules.  These
+  /// locks are not actually used here.
+  ///
+  /// Note that the queue can be serviced without synchronization since only one thread will be
+  /// doing the work.
+  ///
+  /// This object does not manage buffer lifetimes.  It assumes
+  /// that buffers outlive the collection.
+  class SingleServerBufferQueue
+  {
+  public:
+    /// @brief Construct an empty queue.
+    SingleServerBufferQueue()
+      : head_()
+      , tail_(&head_)
+      , outgoing_(0)
+      , busy_(false)
+    {
+    }
+
+    /// @brief Push a buffer onto the queue.
+    ///
+    /// The unused scoped lock parameter indicates this method should be protected.
+    /// @param buffer is the buffer to be added to the queue
+    /// @returns true if if the queue needs to be serviced
+    bool push(LinkedBuffer * buffer, boost::mutex::scoped_lock &)
+    {
+      buffer->link(0);
+      tail_->link(buffer);
+      tail_ = buffer;
+      return !busy_;
+    }
+
+    /// @brief Prepare to service this queue
+    ///
+    /// All buffers collected so far will be set aside to be serviced
+    /// by this thread.  Any buffers arriving after this call will be
+    /// held for later.
+    ///
+    /// If this method returns true, the calling thread MUST completely
+    /// service the queue.
+    ///
+    /// The unused scoped lock parameter indicates this method should be protected.
+    ///
+    /// @returns true if if the queue is now ready to be serviced
+    bool startService(boost::mutex::scoped_lock &)
+    {
+      if(busy_)
+      {
+        return false;
+      }
+      assert(outgoing_ == 0);
+      outgoing_ = head_.link();
+      head_.link(0);
+      tail_ = &head_;
+      busy_ = (outgoing_ != 0);
+      return busy_;
+    }
+
+    /// @brief Service the next entry
+    ///
+    /// No locking is required because the queue should be serviced
+    /// by a single thread.
+    /// @returns the entry to be processed or zero if this batch of entries is finished.
+    LinkedBuffer * serviceNext()
+    {
+      assert(busy_);
+      LinkedBuffer * next = outgoing_;
+      if(next != 0)
+      {
+        outgoing_ = next->link();
+      }
+      return next;
+    }
+
+    /// @brief Relinquish responsibility for servicing the queue
+    ///
+    /// The unused scoped lock parameter indicates this method should be protected.
+    ///
+    /// Unless recheck is false, this call will prepare a new batch of buffers
+    /// to be processed assuming any arrived while the previous batch was being
+    /// serviced.  When there are more buffers, this thread must continue to
+    /// process them.
+    ///
+    /// @param recheck should normally be true indicating that this thread is
+    ///        willing to continue servicing the queue.
+    /// @param lock unused parameter to be sure the mutex is locked.
+    /// @returns true if there are more entries to be serviced.
+    bool endService(bool recheck, boost::mutex::scoped_lock & lock)
+    {
+      assert(outgoing_ == 0);
+      assert(busy_);
+      busy_ = false;
+      if(recheck)
+      {
+        return startService(lock);
+      }
+      return false;
+    }
+
+    /// @brief Apply a function to every buffer in the queue
+    ///
+    /// The unused scoped lock parameter indicates this method should be protected.
+    ///
+    /// @param f is the function to apply
+    void apply(boost::function<void (LinkedBuffer *)> f, boost::mutex::scoped_lock &)
+    {
+      LinkedBuffer * buffer = head_.link();
+      while(buffer != 0)
+      {
+        f(buffer);
+        buffer = buffer->link();
+      }
+    }
+  private:
+    LinkedBuffer head_;
+    LinkedBuffer * tail_;
+    LinkedBuffer * outgoing_;
+    bool busy_;
+    // todo: statistics would be interesting
+  };
+}
+#endif // LINKEDBUFFER_H

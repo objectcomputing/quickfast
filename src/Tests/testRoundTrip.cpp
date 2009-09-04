@@ -12,6 +12,8 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/DataDestinationString.h>
 #include <Codecs/DataSourceString.h>
+#include <Codecs/SingleMessageConsumer.h>
+#include <Codecs/GenericMessageBuilder.h>
 
 #include <Messages/Message.h>
 #include <Messages/FieldIdentity.h>
@@ -218,30 +220,30 @@ BOOST_AUTO_TEST_CASE(testRoundTripSequenceNoPMAP)
   Messages::FieldIdentityCPtr identity_mktDepth = new Messages::FieldIdentity("mktDepth");
   Messages::FieldIdentityCPtr identity_mdBookType = new Messages::FieldIdentity("mdBookType");
 
-  Messages::Message msg(templateRegistry->maxFieldCount());
+  Messages::MessagePtr msg(new Messages::Message(templateRegistry->maxFieldCount()));
 
 //   <uInt32 name=\"timestamp\" id=\"52\"><delta/></uInt32>"
-  msg.addField(identity_timestamp, Messages::FieldUInt32::create(1));
+  msg->addField(identity_timestamp, Messages::FieldUInt32::create(1));
 //   <uInt32 name=\"srcId\" id=\"50\"><copy/></uInt32>"
-  msg.addField(identity_srcId, Messages::FieldUInt32::create(2));
+  msg->addField(identity_srcId, Messages::FieldUInt32::create(2));
 //   <uInt32 name=\"seqNum\" id=\"34\"><increment value=\"1\"/></uInt32>"
-  msg.addField(identity_seqNum, Messages::FieldUInt32::create(3));
+  msg->addField(identity_seqNum, Messages::FieldUInt32::create(3));
 //   <uInt32 name=\"isix\" id=\"48\"><delta/></uInt32>"
-  msg.addField(identity_isix, Messages::FieldUInt32::create(4));
+  msg->addField(identity_isix, Messages::FieldUInt32::create(4));
 //   <string name=\"isin\" id=\"455\"><delta/></string>"
-  msg.addField(identity_isin, Messages::FieldAscii::create("isin"));
+  msg->addField(identity_isin, Messages::FieldAscii::create("isin"));
 //   <string name=\"exchId\" id=\"207\"><copy/></string>"
-  msg.addField(identity_exchId, Messages::FieldAscii::create("exchId"));
+  msg->addField(identity_exchId, Messages::FieldAscii::create("exchId"));
 //   <string name=\"instGrp\" id=\"1151\"><copy/></string>"
-  msg.addField(identity_instGrp, Messages::FieldAscii::create("instGrp"));
+  msg->addField(identity_instGrp, Messages::FieldAscii::create("instGrp"));
 //   <string name=\"instTypCod\" id=\"461\"><copy/></string>"
-  msg.addField(identity_instTypCod, Messages::FieldAscii::create("instTypCod"));
+  msg->addField(identity_instTypCod, Messages::FieldAscii::create("instTypCod"));
 //   <string name=\"currCode\" id=\"15\"><copy/></string>"
-  msg.addField(identity_currCode, Messages::FieldAscii::create("currCode"));
+  msg->addField(identity_currCode, Messages::FieldAscii::create("currCode"));
 //   <decimal name=\"ticSiz\" id=\"969\"><delta/></decimal>"
-  msg.addField(identity_ticSiz, Messages::FieldDecimal::create(Decimal(123, -1)));
+  msg->addField(identity_ticSiz, Messages::FieldDecimal::create(Decimal(123, -1)));
 //   <uInt32 name=\"setId\" id=\"TBD\"><copy/></uInt32>"
-  msg.addField(identity_setId, Messages::FieldUInt32::create(5));
+  msg->addField(identity_setId, Messages::FieldUInt32::create(5));
 
 //   <sequence name=\"MDFeedTypes\">"
 //     <length name=\"noOfStreams\" id=\"1141\"/>"
@@ -261,7 +263,7 @@ BOOST_AUTO_TEST_CASE(testRoundTripSequenceNoPMAP)
 //     <uInt32 name=\"mdBookType\" id=\"1021\" presence=\"optional\"/>"
 // optional field omitted
 
-  sequence_MDFeedTypes->addEntry(entry);
+  sequence_MDFeedTypes->addEntry(Messages::FieldSetCPtr(entry));
 
   entry.reset(new Messages::FieldSet(6));
 //     <string name=\"streamType\" id=\"1022\"/>"
@@ -277,20 +279,23 @@ BOOST_AUTO_TEST_CASE(testRoundTripSequenceNoPMAP)
 //     <uInt32 name=\"mdBookType\" id=\"1021\" presence=\"optional\"/>"
   entry->addField(identity_mdBookType, Messages::FieldUInt32::create(3));
 
-  sequence_MDFeedTypes->addEntry(entry);
+  sequence_MDFeedTypes->addEntry(Messages::FieldSetCPtr(entry));
 
-  msg.addField(identity_MDFeedTypes, Messages::FieldSequence::create(sequence_MDFeedTypes));
+  msg->addField(identity_MDFeedTypes, Messages::FieldSequence::create(sequence_MDFeedTypes));
 
   Codecs::Encoder encoder(templateRegistry);
   Codecs::DataDestinationString destination;
   template_id_t templId = 3; // from the XML above
-  encoder.encodeMessage(destination, templId, msg);
+  encoder.encodeMessage(destination, templId, *msg);
   const std::string & fastString = destination.getValue();
 
   Codecs::Decoder decoder(templateRegistry);
   Codecs::DataSourceString source(fastString);
-  Messages::Message msgOut(templateRegistry->maxFieldCount());
-  decoder.decodeMessage(source, msgOut);
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  decoder.decodeMessage(source, builder);
+
+  Messages::Message & msgOut(consumer.message());
 
   validateMessage1(msgOut);
 

@@ -9,32 +9,27 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldUtf8::FieldUtf8(const std::string & value)
-  : Field(true)
-  , value_(value)
+  : Field(Field::UTF8, true)
 {
+  string_ = value;
+  cachedValue_ = string_;
 }
 
 FieldUtf8::FieldUtf8(const uchar * buffer, size_t length)
-  : Field(true)
-  , value_(std::string(reinterpret_cast<const char *>(buffer), length))
+  : Field(Field::UTF8, true)
 {
+  string_.assign(buffer, length);
+  cachedValue_ = string_;
 }
 
 
 FieldUtf8::FieldUtf8()
-  : Field(false)
-  , value_()
+  : Field(Field::UTF8, false)
 {
 }
 
 FieldUtf8::~FieldUtf8()
 {
-}
-
-Field::FieldType
-FieldUtf8::getType()const
-{
-  return Field::UTF8;
 }
 
 bool
@@ -43,24 +38,20 @@ FieldUtf8::isString() const
   return true;
 }
 
-const std::string &
+const StringBuffer &
 FieldUtf8::toString() const
 {
   if(!valid_)
   {
     FieldNotPresent ex("Field not present");
   }
-  return value_;
+  return string_;
 }
 
-const std::string &
+const StringBuffer &
 FieldUtf8::toUtf8() const
 {
-  if(!valid_)
-  {
-    FieldNotPresent ex("Field not present");
-  }
-  return value_;
+  return toString();
 }
 
 FieldCPtr

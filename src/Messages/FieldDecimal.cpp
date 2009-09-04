@@ -9,40 +9,48 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldDecimal::FieldDecimal()
-  : Field(false)
+  : Field(Field::DECIMAL, false)
 {
 }
 
 FieldDecimal::FieldDecimal(const Decimal & value)
-  : Field(true)
-  , value_(value)
+  : Field(Field::DECIMAL, true)
 {
+  signedInteger_ = value.getMantissa();
+  exponent_ = value.getExponent();
+}
+
+FieldDecimal::FieldDecimal(mantissa_t mantissa, exponent_t exponent)
+  : Field(Field::DECIMAL, true)
+{
+  signedInteger_ = mantissa;
+  exponent_ = exponent;
 }
 
 FieldDecimal::~FieldDecimal()
 {
 }
 
-Field::FieldType
-FieldDecimal::getType() const
-{
-  return Field::DECIMAL;
-}
-
-const Decimal &
+const Decimal
 FieldDecimal::toDecimal() const
 {
   if(!valid_)
   {
     FieldNotPresent ex("Field not present");
   }
-  return value_;
+  return Decimal(signedInteger_, exponent_);
 }
 
 FieldCPtr
 FieldDecimal::create(const Decimal & value)
 {
   return new FieldDecimal(value);
+}
+
+FieldCPtr
+FieldDecimal::create(mantissa_t mantissa, exponent_t exponent)
+{
+  return new FieldDecimal(mantissa, exponent);
 }
 
 FieldCPtr

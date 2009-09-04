@@ -1,5 +1,5 @@
 // This file defines MPC features used to enable and disable portions of the build
 QuickFAST=1
 boost=1
-dotnet=1
-nunit=1
+dotnet=0
+nunit=0

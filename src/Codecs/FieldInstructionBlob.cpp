@@ -7,7 +7,7 @@
 #include <Codecs/DataDestination.h>
 #include <Codecs/Decoder.h>
 #include <Codecs/Encoder.h>
-#include <Messages/Message.h>
+#include <Messages/MessageBuilder.h>
 #include <Messages/Field.h>
 
 using namespace ::QuickFAST;
@@ -48,7 +48,7 @@ FieldInstructionBlob::decodeFromSource(
       return true;
     }
   }
-  decodeByteVector(source, buffer, length);
+  decodeByteVector(context, source, buffer, length);
   field = createField(buffer.begin(), buffer.size());
   return true;
 }
@@ -58,7 +58,7 @@ FieldInstructionBlob::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("blob::decodeNop");
   // note NOP never uses pmap.  It uses a null value instead for optional fields
@@ -80,7 +80,7 @@ FieldInstructionBlob::decodeConstant(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("blob::decodeConstant");
   if(isMandatory())
@@ -110,7 +110,7 @@ FieldInstructionBlob::decodeDefault(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("blob::decodeDefault");
   if(pmap.checkNextField())
@@ -150,7 +150,7 @@ FieldInstructionBlob::decodeCopy(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("blob::decodeCopy");
   if(pmap.checkNextField())
@@ -199,7 +199,7 @@ FieldInstructionBlob::decodeDelta(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("blob::decodeDelta");
   int32 deltaLength;
@@ -218,7 +218,7 @@ FieldInstructionBlob::decodeDelta(
   {
     return false;
   }
-  const std::string & deltaValue = deltaField->toString();
+  const std::string deltaValue = deltaField->toString();
   Messages::FieldCPtr previousField;
   if(!fieldOp_->findDictionaryField(decoder, previousField))
   {
@@ -239,7 +239,7 @@ FieldInstructionBlob::decodeDelta(
     // don't chop more than is there
     if(static_cast<unsigned long>(deltaLength) > previousLength)
     {
-      deltaLength = previousLength;
+      deltaLength = QuickFAST::int32(previousLength);
     }
     Messages::FieldCPtr field = createField(
       deltaValue + previousValue.substr(deltaLength));
@@ -253,7 +253,7 @@ FieldInstructionBlob::decodeDelta(
     // don't chop more than is there
     if(static_cast<unsigned long>(deltaLength) > previousLength)
     {
-      deltaLength = previousLength;
+      deltaLength = QuickFAST::uint32(previousLength);
     }
     Messages::FieldCPtr field = createField(
       previousValue.substr(0, previousLength - deltaLength) + deltaValue);
@@ -270,7 +270,7 @@ FieldInstructionBlob::decodeTail(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("blob::decodeTail");
   if(pmap.checkNextField())
@@ -345,7 +345,7 @@ FieldInstructionBlob::encodeNullableBlob(
   WorkingBuffer & buffer,
   const std::string & value) const
 {
-    uint32 length = value.length();
+    uint32 length = QuickFAST::uint32(value.length());
     length += 1;
     encodeUnsignedInteger(destination, buffer, length);
     encodeBlobData(destination, value);
@@ -357,7 +357,7 @@ FieldInstructionBlob::encodeBlob(
   WorkingBuffer & buffer,
   const std::string & value) const
 {
-    uint32 length = value.length();
+    uint32 length = QuickFAST::uint32(value.length());
     encodeUnsignedInteger(destination, buffer, length);
     encodeBlobData(destination, value);
 }
@@ -367,7 +367,7 @@ FieldInstructionBlob::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
     // get the value from the application data
   Messages::FieldCPtr field;
@@ -387,7 +387,7 @@ FieldInstructionBlob::encodeNop(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     destination.putByte(nullBlob);
   }
@@ -398,7 +398,7 @@ FieldInstructionBlob::encodeConstant(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;
@@ -420,7 +420,7 @@ FieldInstructionBlob::encodeConstant(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     pmap.setNextField(false);
   }
@@ -432,7 +432,7 @@ FieldInstructionBlob::encodeDefault(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;
@@ -461,7 +461,7 @@ FieldInstructionBlob::encodeDefault(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     if(fieldOp_->hasValue())
     {
@@ -481,7 +481,7 @@ FieldInstructionBlob::encodeCopy(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   // declare a couple of variables...
   bool previousIsKnown = false;
@@ -532,7 +532,7 @@ FieldInstructionBlob::encodeCopy(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     if((previousIsKnown && previousNotNull)
       || !previousIsKnown)
@@ -556,7 +556,7 @@ FieldInstructionBlob::encodeDelta(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
     // declare a couple of variables...
   bool previousIsKnown = false;
@@ -586,7 +586,7 @@ FieldInstructionBlob::encodeDelta(
     std::string value = field->toString();
     size_t prefix = longestMatchingPrefix(previousValue, value);
     size_t suffix = longestMatchingSuffix(previousValue, value);
-    int32 deltaCount = previousValue.length() - prefix;
+    int32 deltaCount = QuickFAST::uint32(previousValue.length() - prefix);
     std::string deltaValue = value.substr(prefix);
     if(prefix < suffix)
     {
@@ -612,7 +612,7 @@ FieldInstructionBlob::encodeDelta(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     destination.putByte(nullBlob);
   }
@@ -623,7 +623,7 @@ FieldInstructionBlob::encodeTail(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
     // declare a couple of variables...
   bool previousIsKnown = false;
@@ -679,7 +679,7 @@ FieldInstructionBlob::encodeTail(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U09]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     destination.putByte(nullBlob);
   }

@@ -27,7 +27,7 @@ namespace QuickFAST{
     ~AsioService();
 
     /// @brief Run the event loop with this threads and threadCount additional threads.
-    void runThreads(size_t threadCount = 1);
+    void runThreads(size_t threadCount = 0, bool useThisThread = true);
 
     /// @brief run the event loop in this thread
     ///
@@ -35,7 +35,10 @@ namespace QuickFAST{
     void run();
 
     /// @brief run the event loop until one event is handled.
-    void run_one();
+    void run_one()
+    {
+      ioService_.run_one();
+    }
 
     /// @brief execute any ready event handlers than return.
     size_t poll()
@@ -55,7 +58,10 @@ namespace QuickFAST{
       return ioService_;
     }
     /// @brief create additional threads to run the event loop
-    void startThreads(size_t threadCount);
+    void startThreads(size_t threadCount)
+    {
+      runThreads(threadCount, false);
+    }
 
     /// @brief join all additional threads after calling stopService()
     ///

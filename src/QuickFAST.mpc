@@ -55,7 +55,7 @@ project(*tests) : boost_unit_test_framework, boost_filesystem, boost_system, boo
   libpaths += $(XERCES_LIBPATH)
   libs += QuickFAST
   libs += $(XERCES_LIBNAME)
-  after += QuickFAST QuickFASTUtil
+  after += QuickFAST
   macros += BOOST_TEST_DYN_LINK
   pch_header = Common/QuickFASTPch.h
   pch_source = Common/QuickFASTPch.cpp

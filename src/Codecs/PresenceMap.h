@@ -68,6 +68,13 @@ namespace QuickFAST{
       /// @returns true if the field is present.
       bool checkNextField();
 
+      /// @brief Special support for Arca FAST-like (ish) encoding
+      ///
+      /// Check a specific bit. Do not change PMAP position
+      /// @param bit is the bit to be checked.
+      /// @returns true if the bit is set
+      bool checkSpecificField(size_t bit);
+
       /// @brief Reinitialize the presence map to be empty with room for bitCount fields.
       /// @param bitCount how many fields can be represented in the presence map.
       void reset(size_t bitCount = 0);

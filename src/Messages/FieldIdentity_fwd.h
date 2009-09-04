@@ -7,6 +7,7 @@
 #ifndef FIELDIDENTITY_FWD_H
 #define FIELDIDENTITY_FWD_H
 #include <Common/QuickFAST_Export.h>
+#include <boost/intrusive_ptr.hpp>
 
 namespace QuickFAST{
   namespace Messages{

@@ -7,8 +7,8 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/DataDestination.h>
 #include <Codecs/Encoder.h>
-#include <Messages/Message.h>
 #include <Messages/FieldBitMap.h>
+#include <Messages/MessageBuilder.h>
 
 #include <Common/Profiler.h>
 
@@ -90,7 +90,7 @@ FieldInstructionBitMap::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   // note NOP never uses pmap.  It uses a null value instead for optional fields
   // so it's always safe to do the basic decode.
@@ -113,7 +113,7 @@ FieldInstructionBitMap::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;
@@ -134,7 +134,7 @@ FieldInstructionBitMap::encodeNop(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     destination.putByte(nullBitMap);
 #endif

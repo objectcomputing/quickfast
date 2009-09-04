@@ -11,20 +11,29 @@
 #include <Messages/Message.h>
 #include <Examples/StopWatch.h>
 #include <Examples/MessageInterpreter.h>
+#if 1
+#include <Codecs/MulticastReceiver.h>
+#include <Codecs/MessageConsumer.h>
+#endif
+
+
+//////////////
+// temp debugging
+#include <Codecs/MulticastReceiver.h>
 
 using namespace QuickFAST;
 using namespace Examples;
 
 MulticastInterpreter::MulticastInterpreter()
-: bufferSize_(5000)
+: bufferSize_(1400)
+, bufferCount_(4)
 , echoType_(Codecs::DataSource::HEX)
 , messageLimit_(0)
-, verboseDecode_(false)
-, verboseExecution_(false)
 , strict_(true)
-, portNumber_(30001)
+, silent_(false)
+, portNumber_(13014)
 , listenAddressName_("0.0.0.0")
-, multicastAddressName_("239.255.0.1")
+, multicastAddressName_("224.1.2.133")
 , echoMessage_(true)
 , echoField_(false)
 , outputFile_(0)
@@ -56,6 +65,11 @@ MulticastInterpreter::parseSingleArg(int argc, char * argv[])
       bufferSize_ = boost::lexical_cast<size_t>(argv[1]);
       consumed = 2;
     }
+    if(opt == "-#" && argc > 1)
+    {
+      bufferCount_ = boost::lexical_cast<size_t>(argv[1]);
+      consumed = 2;
+    }
     if(opt == "-c" && argc > 1)
     {
       messageLimit_ = boost::lexical_cast<size_t>(argv[1]);
@@ -79,6 +93,11 @@ MulticastInterpreter::parseSingleArg(int argc, char * argv[])
     else if(opt == "-s")
     {
       strict_ = !strict_;
+      consumed = 1;
+    }
+    else if(opt == "-q")
+    {
+      silent_ = !silent_;
       consumed = 1;
     }
     else if(opt == "-t" && argc > 1)
@@ -121,16 +140,6 @@ MulticastInterpreter::parseSingleArg(int argc, char * argv[])
       echoField_ = !echoField_;
       consumed = 1;
     }
-    else if(opt == "-vd")
-    {
-      verboseDecode_ = !verboseDecode_;
-      consumed = 1;
-    }
-    else if(opt == "-vx")
-    {
-      verboseExecution_ = !verboseExecution_;
-      consumed = 1;
-    }
   }
   catch (std::exception & ex)
   {
@@ -143,22 +152,22 @@ MulticastInterpreter::parseSingleArg(int argc, char * argv[])
 void
 MulticastInterpreter::usage(std::ostream & out) const
 {
-  out << "  -b size       : Size of largest expected message. (default 5000)" << std::endl;
+  out << "  -b size       : Size of largest expected message. (default " << bufferSize_ << ")" << std::endl;
+  out << "  -# count      : Number of buffers. (default " << bufferCount_ << ")" << std::endl;
   out << "  -t file       : Template file (required)" << std::endl;
   out << "  -o file       : Output file (defaults to standard out)" << std::endl;
-  out << "  -l dotted_ip  : Connection listen address (default is 0.0.0.0)" << std::endl;
-  out << "  -m dotted_ip  : Multicast address (default is 239.255.0.1)" << std::endl;
-  out << "  -p port       : Multicast port number (default 30001)" << std::endl;
+  out << "  -l dotted_ip  : Connection listen address (default is " << listenAddressName_ << ")" << std::endl;
+  out << "  -m dotted_ip  : Multicast address (default is " << multicastAddressName_ << ")" << std::endl;
+  out << "  -p port       : Multicast port number (default " << portNumber_ << ")" << std::endl;
   out << "  -c count      : Stop after receiving count messages (default 0 means no limit)" << std::endl;
   out << "  -s            : Apply strict decoding rules." << std::endl;
+  out << "  -q            : Quiet." << std::endl;
   out << "  -e file       : Echo input to file" << std::endl;
   out << "    -ehex         : Echo as hexadecimal (default)." << std::endl;
   out << "    -eraw         : Echo as raw binary data" << std::endl;
   out << "    -enone        : Do not echo data (boundaries only)." << std::endl;
   out << "    -em           : Toggle 'echo message boundaries'(default true)" << std::endl;
   out << "    -ef           : Toggle 'echo field boundaries'(default false)" << std::endl;
-  out << "  -vd           : Noise to the console decoding" << std::endl;
-  out << "  -vx           : Noise to the console about execution status" << std::endl;
 }
 
 bool
@@ -174,7 +183,7 @@ MulticastInterpreter::applyArgs()
     }
     if(ok)
     {
-      templateFile_.open(templateFileName_.c_str());
+      templateFile_.open(templateFileName_.c_str(), std::ios::in | std::ios::binary);
       if(!templateFile_.good())
       {
         ok = false;
@@ -186,16 +195,14 @@ MulticastInterpreter::applyArgs()
     if(ok)
     {
       Codecs::XMLTemplateParser parser;
+      templateRegistry_ = parser.parse(templateFile_);
       decoder_ = new Codecs::MulticastDecoder(
-        parser.parse(templateFile_),
+        templateRegistry_,
         multicastAddressName_,
         listenAddressName_,
         portNumber_);
       decoder_->setStrict(strict_);
       decoder_->setLimit(messageLimit_);
-      decoder_->setBufferSize(bufferSize_);
-      decoder_->setVerboseDecode(verboseDecode_);
-      decoder_->setVerboseExecution(verboseExecution_);
     }
 
     if(outputFileName_.empty())
@@ -251,8 +258,10 @@ int
 MulticastInterpreter::run()
 {
   int result = 0;
-  Codecs::MessageConsumerPtr consumer(new MessageInterpreter(*outputFile_));
-  decoder_->start(consumer);
+
+  MessageInterpreter consumer(*outputFile_, silent_);
+  Codecs::GenericMessageBuilder builder(consumer);
+  decoder_->start(builder, bufferSize_, bufferCount_);
 
   try
   {
@@ -260,14 +269,14 @@ MulticastInterpreter::run()
     decoder_->run();
     unsigned long receiveLapse = lapse.freeze();
     size_t messageCount = decoder_->messageCount();
-    if(messageCount > 0)
-    {
       std::cout << "Received "
         << messageCount
         << " messages in "
         << std::fixed << std::setprecision(3)
         << receiveLapse
         << " milliseonds. [";
+    if(messageCount > 0)
+    {
       std::cout << std::fixed << std::setprecision(3)
         << double(receiveLapse)/double(messageCount) << " msec/message. = "
         << std::fixed << std::setprecision(0)

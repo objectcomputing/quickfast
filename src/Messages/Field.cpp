@@ -8,8 +8,9 @@
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
-Field::Field(bool valid)
-: valid_(valid)
+Field::Field(FieldType type, bool valid)
+: type_(type)
+, valid_(valid)
 , refcount_(0)
 {
 }
@@ -111,87 +112,86 @@ Field::isDefined() const
 uchar
 Field::toUInt8() const
 {
-  UnsupportedConversion ex("Field cannot be converted to UInt8");
+  UnsupportedConversion ex(typeName(getType()),"UInt8");
   throw ex;
 }
 
 int8
 Field::toInt8() const
 {
-  UnsupportedConversion ex("Field cannot be converted to Int8");
+  UnsupportedConversion ex(typeName(getType()), "Int8");
   throw ex;
 }
 
 uint16
 Field::toUInt16() const
 {
-  UnsupportedConversion ex("Field cannot be converted to UInt16");
+  UnsupportedConversion ex(typeName(getType()), "UInt16");
   throw ex;
 }
 
 int16
 Field::toInt16() const
 {
-  UnsupportedConversion ex("Field cannot be converted to Int16");
+  UnsupportedConversion ex(typeName(getType()), "Int16");
   throw ex;
 }
 
 uint32
 Field::toUInt32() const
 {
-  UnsupportedConversion ex("Field cannot be converted to UInt32");
+  UnsupportedConversion ex(typeName(getType()), "UInt32");
   throw ex;
 }
 
 int32
 Field::toInt32() const
 {
-  UnsupportedConversion ex("Field cannot be converted to Int32");
+  UnsupportedConversion ex(typeName(getType()), "Int32");
   throw ex;
 }
 
 uint64
 Field::toUInt64() const
 {
-  UnsupportedConversion ex("Field cannot be converted to UInt64");
+  UnsupportedConversion ex(typeName(getType()), "UInt64");
   throw ex;
 }
 
 int64
 Field::toInt64() const
 {
-  UnsupportedConversion ex("Field cannot be converted to Int64");
+  UnsupportedConversion ex(typeName(getType()), "Int64");
   throw ex;
 }
 
-const std::string &
+const StringBuffer &
 Field::toAscii() const
 {
-  UnsupportedConversion ex("Field cannot be converted to Ascii");
+  UnsupportedConversion ex(typeName(getType()), "Ascii");
   throw ex;
 }
 
-const std::string &
+const StringBuffer &
 Field::toUtf8() const
 {
-  UnsupportedConversion ex("Field cannot be converted to UTF8");
+  UnsupportedConversion ex(typeName(getType()), "UTF8");
   throw ex;
 }
 
-const std::string &
+const StringBuffer &
 Field::toByteVector()const
 {
-  UnsupportedConversion ex("Field cannot be converted to ByteVector");
+  UnsupportedConversion ex(typeName(getType()), "ByteVector");
   throw ex;
 }
 
 const BitMap &
 Field::toBitMap() const
 {
-  UnsupportedConversion ex("Field cannot be converted to BitMap");
+  UnsupportedConversion ex(typeName(getType()), "BitMap");
   throw ex;
 }
-
 
 
 bool
@@ -200,17 +200,17 @@ Field::isString()const
   return false;
 }
 
-const std::string &
+const StringBuffer &
 Field::toString()const
 {
-  UnsupportedConversion ex("Field cannot be converted to String");
+  UnsupportedConversion ex(typeName(getType()), "String");
   throw ex;
 }
 
-const Decimal &
+const Decimal
 Field::toDecimal() const
 {
-  UnsupportedConversion ex("Field cannot be converted to Decimal");
+  UnsupportedConversion ex(typeName(getType()), "Decimal");
   throw ex;
 }
 
@@ -218,7 +218,7 @@ Field::toDecimal() const
 const Messages::GroupCPtr &
 Field::toGroup() const
 {
-  UnsupportedConversion ex("Field cannot be converted to Group");
+  UnsupportedConversion ex(typeName(getType()), "Group");
   throw ex;
 }
 
@@ -227,7 +227,7 @@ Field::toGroup() const
 const Messages::SequenceCPtr &
 Field::toSequence() const
 {
-  UnsupportedConversion ex("Field cannot be converted to Sequence");
+  UnsupportedConversion ex(typeName(getType()), "Sequence");
   throw ex;
 }
 

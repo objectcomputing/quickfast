@@ -13,10 +13,12 @@
 using namespace QuickFAST;
 using namespace Examples;
 
-MessageInterpreter::MessageInterpreter(std::ostream & out)
+MessageInterpreter::MessageInterpreter(std::ostream & out, bool silent)
   : out_(out)
   , indent_(0)
   , recordCount_(0)
+  , logLevel_(Messages::Logger::LOG_WARNING)
+  , silent_(silent)
 {
 }
 
@@ -27,14 +29,16 @@ MessageInterpreter::~MessageInterpreter()
 bool
 MessageInterpreter::wantLog(unsigned short level)
 {
-  return level < LOG_INFO;
+  return level <= logLevel_;
 }
 
 bool
 MessageInterpreter::logMessage(unsigned short level, const std::string & logMessage)
 {
-  //out_
-  std::cerr << logMessage << std::endl;
+  if(level <= logLevel_)
+  {
+    std::cerr << logMessage << std::endl;
+  }
   return true;
 }
 
@@ -42,7 +46,6 @@ MessageInterpreter::logMessage(unsigned short level, const std::string & logMess
 bool
 MessageInterpreter::reportDecodingError(const std::string & errorMessage)
 {
-  //out_
   std::cerr << "Decoding error: " << errorMessage << std::endl;
   return false;
 }
@@ -53,6 +56,12 @@ MessageInterpreter::reportCommunicationError(const std::string & errorMessage)
   //out_
   std::cerr << "Communication error: " << errorMessage << std::endl;
   return false;
+}
+
+void
+MessageInterpreter::decodingStarted()
+{
+  // ignore this.
 }
 
 void
@@ -67,7 +76,7 @@ MessageInterpreter::consumeMessage(Messages::Message & message)
 {
   recordCount_ += 1;
   out_ << "Record #" << recordCount_ << ' ' << std::flush;
-  formatMessage(message);
+  formatMessage(dynamic_cast<Messages::Message &>(message));
   out_ << std::endl;
   return true;
 }
@@ -75,6 +84,8 @@ MessageInterpreter::consumeMessage(Messages::Message & message)
 void
 MessageInterpreter::formatMessage(const Messages::Message & message)
 {
+  if(!silent_)
+  {
   for( Messages::Message::const_iterator it = message.begin();
     it != message.end();
     ++it)
@@ -94,6 +105,7 @@ MessageInterpreter::formatMessage(const Messages::Message & message)
     {
       out_ << ' ' << identity->name() << '[' << identity->id() << "]=";
       displayFieldValue(field);
+      }
     }
   }
 }
@@ -154,6 +166,30 @@ MessageInterpreter::formatSequence(
 void
 MessageInterpreter::formatGroup(const Messages::FieldCPtr & field)
 {
+  Messages::GroupCPtr group = field->toGroup();
+  for(Messages::FieldSet::const_iterator fsit = group->begin();
+    fsit != group->end();
+    ++fsit)
+  {
+    // todo: refactor with message decoding
+    const Messages::FieldIdentityCPtr & identity = fsit->getIdentity();
+    const Messages::FieldCPtr & field = fsit->getField();
+    Messages::Field::FieldType type = field->getType();
+    if(type == Messages::Field::SEQUENCE)
+    {
+      formatSequence(identity, field);
+    }
+    else if(type == Messages::Field::GROUP)
+    {
+      formatGroup(field);
+    }
+    else
+    {
+      out_ << ' ' << identity->name() << '[' << identity->id() << "]=";
+      displayFieldValue(field);
+    }
+  }
+
 }
 
 

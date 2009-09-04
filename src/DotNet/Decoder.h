@@ -4,6 +4,7 @@
 #pragma once
 
 #include <DotNet/UnmanagedPtr.h>
+#include <DotNet/BoostPtr.h>
 #include <DotNet/DataSource.h>
 #include <Codecs/Decoder.h>
 
@@ -63,6 +64,19 @@ namespace QuickFASTDotNet{
       property System::IO::Stream^ Stream
       {
         System::IO::Stream^ get() { return stream_; }
+      }
+
+      ~Decoder()
+      {
+        this->!Decoder();
+      }
+      !Decoder()
+      {
+        //System::IO::Stream^
+        stream_ = nullptr;
+        templateRegistry_ = nullptr;
+        dataSource_.Release();
+        decoder_.Release();
       }
 
       /// @brief Indicates whether on not the end of the stream has been reached.

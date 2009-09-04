@@ -13,8 +13,7 @@
 #include <Codecs/PresenceMap_fwd.h>
 #include <Codecs/Template.h>
 #include <Codecs/SegmentBody_fwd.h>
-#include <Messages/Message_fwd.h>
-#include <Messages/FieldSet_fwd.h>
+#include <Messages/MessageAccessor.h>
 
 #include <Common/Exceptions.h>
 
@@ -39,7 +38,7 @@ namespace QuickFAST{
       void encodeMessage(
         DataDestination & destination,
         template_id_t templateId,
-        const Messages::FieldSet & message);
+        const Messages::MessageAccessor & message);
 
       /// @brief Encode a group field.
       ///
@@ -50,7 +49,7 @@ namespace QuickFAST{
       encodeGroup(
         DataDestination & destination,
         Codecs::SegmentBodyCPtr group,
-        const Messages::FieldSet & fieldSet);
+        const Messages::MessageAccessor & fieldSet);
 
       /// @brief Encode a segment into a fieldSet.
       ///
@@ -60,7 +59,7 @@ namespace QuickFAST{
       void encodeSegment(
         DataDestination & source,
         template_id_t templateId,
-        const Messages::FieldSet & fieldSet);
+        const Messages::MessageAccessor & fieldSet);
 
       /// @brief Encode the body of a segment into a fieldSet.
       ///
@@ -73,7 +72,7 @@ namespace QuickFAST{
         DataDestination & destination,
         Codecs::PresenceMap & presenceMap,
         Codecs::SegmentBodyCPtr segment,
-        const Messages::FieldSet & fieldSet);
+        const Messages::MessageAccessor & fieldSet);
     private:
     };
   }

@@ -55,14 +55,14 @@ namespace QuickFASTDotNet
 
                 foreach (System.Collections.Generic.KeyValuePair<FieldIdentity, Field> pair in fieldset)
                 {
-                    FieldType type = pair.Value.FieldType;
-                    if (type == FieldType.Sequence)
+                    FieldType type = pair.Value.Type;
+                    if (type == FieldType.SEQUENCE)
                     {
                         formatSequence(pair.Key, pair.Value);
                     }
-                    else if (type == FieldType.Group)
+                    else if (type == FieldType.GROUP)
                     {
-                        formatGroup(pair.Value);
+                        formatGroup(pair.Key, pair.Value);
                     }
                     else
                     {
@@ -86,8 +86,7 @@ namespace QuickFASTDotNet
             void formatSequence(FieldIdentity identity, Field field)
             {
 
-                SequenceField sf = (SequenceField) field;
-                Sequence seq = sf.Value;
+                Sequence seq = field.toSequence;
                 int count = seq.Count;
 
                 newline();
@@ -102,74 +101,72 @@ namespace QuickFASTDotNet
                     formatFieldSet(fieldset);
                 }
                 --indent_;
-                newline();            
+                newline();
             }
 
 
-            void formatGroup(Field field)
+            void formatGroup(FieldIdentity identity, Field field)
             {
+                FieldSet group = field.toGroup;
+                newline();
+                out_.Write("{0}[{1}] = Group", identity.Name, identity.Id);
+                ++indent_;
+                formatFieldSet(group);
+                --indent_;
             }
 
 
             void displayFieldValue(Field field)
             {
-                switch(field.FieldType)
+                switch(field.Type)
                 {
-                    case Messages.FieldType.Int32:
+                    case Messages.FieldType.INT32:
                         {
-                            Int32Field val = (Int32Field)field;
-                            out_.Write(val.Value);
+                            out_.Write(field.toInt32);
                             break;
                         }
-                    case Messages.FieldType.UInt32:
+                    case Messages.FieldType.UINT32:
                         {
-                            UInt32Field val = (UInt32Field)field;
-                            out_.Write(val.Value);
+                            out_.Write(field.toUInt32);
                             break;
                         }
-                    case Messages.FieldType.Int64:
+                    case Messages.FieldType.INT64:
                         {
-                            Int64Field val = (Int64Field)field;
-                            out_.Write(val.Value);
+                            out_.Write(field.toInt64);
                             break;
                         }
-                    case Messages.FieldType.UInt64:
+                    case Messages.FieldType.UINT64:
                         {
-                            UInt64Field val = (UInt64Field)field;
-                            out_.Write(val.Value);
+                            out_.Write(field.toUInt64);
                             break;
                         }
-                    case Messages.FieldType.Decimal:
+                    case Messages.FieldType.DECIMAL:
                         {
-                            DecimalField val = (DecimalField)field;
-                            out_.Write(val.Value.ToDouble());
+                            out_.Write(field.toDecimal.ToDouble());
                             break;
                         }
-                    case Messages.FieldType.AsciString:
+                    case Messages.FieldType.ASCII:
                         {
-                            AsciStringField val = (AsciStringField)field;
-                            out_.Write(val.Value);
+                            out_.Write(field.toAscii);
                             break;
                         }
-                    case Messages.FieldType.UnicodeString:
+                    case Messages.FieldType.UTF8:
                         {
-                            UnicodeStringField val = (UnicodeStringField)field;
-                            out_.Write(val.Value);
+                            out_.Write(field.toUtf8);
                             break;
                         }
-                    case Messages.FieldType.ByteVector:
+                    case Messages.FieldType.BYTEVECTOR:
                         {
                             // todo: we probably should hex dump this
-                            ByteVectorField val = (ByteVectorField)field;
-                            out_.Write(System.Convert.ToString(val.Value));
+                            out_.Write(System.Convert.ToString(field.toByteVector));
                             break;
                         }
-                    case Messages.FieldType.Sequence:
+                    case Messages.FieldType.SEQUENCE:
                         {
                             out_.Write("sequence");
                             break;
                         }
-                    case Messages.FieldType.Group:
+                    case Messages.FieldType.GROUP:
                         {
                             out_.Write("group");
                             break;
@@ -183,7 +180,7 @@ namespace QuickFASTDotNet
 
             }
 
-        
+
 
         }
     }

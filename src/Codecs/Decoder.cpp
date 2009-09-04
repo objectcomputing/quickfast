@@ -8,8 +8,7 @@
 #include <Codecs/PresenceMap.h>
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/FieldInstruction.h>
-#include <Messages/DecodedFields.h>
-//#include <Messages/Message.h>
+#include <Messages/MessageBuilder.h>
 #include <Common/Profiler.h>
 
 using namespace ::QuickFAST;
@@ -17,25 +16,17 @@ using namespace ::QuickFAST::Codecs;
 
 Decoder::Decoder(Codecs::TemplateRegistryPtr registry)
 : Context(registry)
-, strict_(true)
 {
 }
 
-bool
+void
 Decoder::decodeMessage(
    DataSource & source,
-   Messages::DecodedFields & message)
+   Messages::MessageBuilder & messageBuilder)
 {
   PROFILE_POINT("decode");
   source.beginMessage();
-  return decodeSegment(source, message);
-}
 
-bool
-Decoder::decodeSegment(
-   DataSource & source,
-   Messages::DecodedFields & fieldSet)
-{
   Codecs::PresenceMap pmap(getTemplateRegistry()->presenceMapBits());
   if(this->verboseOut_)
   {
@@ -46,13 +37,14 @@ Decoder::decodeSegment(
   source.beginField(pmp);
   if(!pmap.decode(source))
   {
-    return false;
+    reportError("[ERR U03]", "Unexpected end of data in presence map.");
+    return;
   }
 
+  static const std::string tid("templateID");
+  source.beginField(tid);
   if(pmap.checkNextField())
   {
-    static const std::string tid("templateID");
-    source.beginField(tid);
     template_id_t id;
     FieldInstruction::decodeUnsignedInteger(source, *this, id);
     setTemplateId(id);
@@ -66,27 +58,96 @@ Decoder::decodeSegment(
   {
     if(templatePtr->getReset())
     {
-      reset();
+      reset(false);
     }
-    if(!decodeSegmentBody(source, pmap, templatePtr, fieldSet))
+    Messages::MessageBuilder & bodyBuilder(
+      messageBuilder.startMessage(
+        templatePtr->getApplicationType(),
+        templatePtr->getApplicationTypeNamespace(),
+        templatePtr->fieldCount()));
+
+    decodeSegmentBody(source, pmap, templatePtr, bodyBuilder);
+    if(templatePtr->getIgnore())
     {
-      throw EncodingError("Unexpected end of file in message body.");
+      messageBuilder.ignoreMessage(bodyBuilder);
+    }
+    else
+    {
+      messageBuilder.endMessage(bodyBuilder);
     }
   }
   else
   {
-    std::string message =  "[ERR D9] Unknown template ID:";
-    message += boost::lexical_cast<std::string>(getTemplateId());
-    throw EncodingError(message);
+    std::string error =  "Unknown template ID:";
+    error += boost::lexical_cast<std::string>(getTemplateId());
+    reportError("[ERR D9]", error);
   }
-  return true;
+  return;
+}
+
+void
+Decoder::decodeNestedTemplate(
+   DataSource & source,
+   Messages::MessageBuilder & messageBuilder,
+   Messages::FieldIdentityCPtr identity)
+{
+  Codecs::PresenceMap pmap(getTemplateRegistry()->presenceMapBits());
+  if(this->verboseOut_)
+  {
+    pmap.setVerbose(verboseOut_);
+  }
+
+  static const std::string pmp("PMAP");
+  source.beginField(pmp);
+  if(!pmap.decode(source))
+  {
+    reportError("[ERR U03]", "Unexpected end of data in presence map.");
+    return;
+  }
+
+  static const std::string tid("templateID");
+  source.beginField(tid);
+  if(pmap.checkNextField())
+  {
+    template_id_t id;
+    FieldInstruction::decodeUnsignedInteger(source, *this, id);
+    setTemplateId(id);
+  }
+  if(verboseOut_)
+  {
+    (*verboseOut_) << "Template ID: " << getTemplateId() << std::endl;
+  }
+  Codecs::TemplateCPtr templatePtr;
+  if(getTemplateRegistry()->getTemplate(getTemplateId(), templatePtr))
+  {
+    if(templatePtr->getReset())
+    {
+      reset(false);
+    }
+    Messages::MessageBuilder & groupBuilder(
+      messageBuilder.startGroup(
+        identity,
+        templatePtr->getApplicationType(),
+        templatePtr->getApplicationTypeNamespace(),
+        templatePtr->fieldCount()));
+
+    decodeSegmentBody(source, pmap, templatePtr, groupBuilder);
+    messageBuilder.endGroup(identity, groupBuilder);
+  }
+  else
+  {
+    std::string error =  "Unknown template ID:";
+    error += boost::lexical_cast<std::string>(getTemplateId());
+    reportError("[ERR D9]", error);
+  }
+  return;
 }
 
 void
 Decoder::decodeGroup(
   DataSource & source,
   Codecs::SegmentBodyCPtr group,
-  Messages::DecodedFields & fieldSet)
+  Messages::MessageBuilder & messageBuilder)
 {
   size_t presenceMapBits = group->presenceMapBitCount();
   Codecs::PresenceMap pmap(presenceMapBits);
@@ -105,22 +166,16 @@ Decoder::decodeGroup(
     }
   }
 // for debugging:  pmap.setVerbose(source.getEcho());
-  if(!decodeSegmentBody(source, pmap, group, fieldSet))
-  {
-    throw EncodingError("Unexpected end of file in message body.");
-  }
+  decodeSegmentBody(source, pmap, group, messageBuilder);
 }
 
-bool
+void
 Decoder::decodeSegmentBody(
   DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::SegmentBodyCPtr segment, //todo: reference to avoid copy?
-  Messages::DecodedFields & fieldSet)
+  Messages::MessageBuilder & messageBuilder)
 {
-  fieldSet.setApplicationType(
-    segment->getApplicationType(),
-    segment->getApplicationTypeNamespace());
   size_t instructionCount = segment->size();
   for( size_t nField = 0; nField < instructionCount; ++nField)
   {
@@ -133,11 +188,10 @@ Decoder::decodeSegmentBody(
         (*verboseOut_) << "Decode instruction[" <<nField << "]: " << instruction->getIdentity()->name() << std::endl;
       }
       source.beginField(instruction->getIdentity()->name());
-      if(!instruction->decode(source, pmap, *this, fieldSet))
+      if(!instruction->decode(source, pmap, *this, messageBuilder))
       {
-        return false;
+        reportError("[ERR U03]", "Unexpected end of file in message body.");
       }
     }
   }
-  return true;
 }

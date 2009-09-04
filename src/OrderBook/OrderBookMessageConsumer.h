@@ -6,16 +6,17 @@
 #endif
 #ifndef ORDERBOOKMESSAGECONSUMER_H
 #define ORDERBOOKMESSAGECONSUMER_H
-#include <OrderBook_Export.h>
-#include <OrderBookContainer_fwd.h>
-#include <SecurityID.h>
-#include <Book.h>
+#include <OrderBook/OrderBook_Export.h>
+#include <OrderBook/OrderBookContainer_fwd.h>
+#include <OrderBook/SecurityID.h>
+#include <OrderBook/Book.h>
 #include <Codecs/MessageConsumer.h>
 #include <Messages/Message.h>
 
 namespace QuickFAST{
   namespace OrderBook{
-    class ORDERBOOK_Export OrderBookMessageConsumer : public QuickFAST::Codecs::MessageConsumer
+    class ORDERBOOK_Export OrderBookMessageConsumer
+      : public QuickFAST::Codecs::MessageConsumer
     {
     public:
       OrderBookMessageConsumer(OrderBookContainer& orderBookContainer)
@@ -25,12 +26,21 @@ namespace QuickFAST{
 
       ////////////////////////////
       // Implement MessageConsumer
-      virtual bool consumeMessage(QuickFAST::Messages::Message & message);
-      virtual bool wantLog(unsigned short level);
-      virtual bool logMessage(unsigned short level, const std::string & logMessage);
-      virtual bool reportDecodingError(const std::string & errorMessage);
-      virtual bool reportCommunicationError(const std::string & errorMessage);
+      virtual bool consumeMessage(
+        QuickFAST::Messages::Message & message);
+      virtual void decodingStarted();
       virtual void decodingStopped();
+      ///////////////////////
+      /// Implement Logger
+      virtual bool wantLog(
+        unsigned short level);
+      virtual bool logMessage(
+        unsigned short level,
+        const std::string & logMessage);
+      virtual bool reportDecodingError(
+        const std::string & errorMessage);
+      virtual bool reportCommunicationError(
+        const std::string & errorMessage);
 
     private:
       void handleIncrementalRefresh(const Messages::Message& message);
@@ -38,9 +48,9 @@ namespace QuickFAST{
       void handleMDEntry(const Messages::FieldSetCPtr& mdEntry);
       const SecurityID getSecurityID(const Messages::FieldSetCPtr& mdEntry);
       const BookKind getBookKind(const Messages::FieldSetCPtr& mdEntry);
-      const std::string& getMessageType(const Messages::Message& message);
+      const StringBuffer& getMessageType(const Messages::Message& message);
       const uint32 getMDUpdateAction(const Messages::FieldSetCPtr& mdEntry);
-      const std::string& getMDEntryType(const Messages::FieldSetCPtr& mdEntry);
+      const StringBuffer& getMDEntryType(const Messages::FieldSetCPtr& mdEntry);
       const uint32 getMDPriceLevel(const Messages::FieldSetCPtr& mdEntry);
       const int32 getMDEntrySize(const Messages::FieldSetCPtr& mdEntry);
       const Decimal getMDEntryPx(const Messages::FieldSetCPtr& mdEntry);

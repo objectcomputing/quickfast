@@ -10,19 +10,19 @@
 namespace QuickFASTDotNet{
   namespace Messages{
 
-    
+
     MutableFieldSet::MutableFieldSet()
       : FieldSet(QuickFAST::Messages::FieldSetCPtr())
       , mutableFieldSetPtr_(QuickFAST::Messages::FieldSetPtr(new TFieldSet(20))) // @TODO get an accurate field count
     {
-      spFieldSet_.GetBoostPtr() = mutableFieldSetPtr_.GetBoostPtr();
+        spFieldSet_.Assign(mutableFieldSetPtr_.GetBoostPtr());
     }
 
     MutableFieldSet::MutableFieldSet(unsigned int expectedNumberOfFields)
       : FieldSet(QuickFAST::Messages::FieldSetCPtr())
       , mutableFieldSetPtr_(QuickFAST::Messages::FieldSetPtr(new TFieldSet(expectedNumberOfFields)))
     {
-      spFieldSet_.GetBoostPtr() = mutableFieldSetPtr_.GetBoostPtr();
+      spFieldSet_.Assign(mutableFieldSetPtr_.GetBoostPtr());
     }
 
     void MutableFieldSet::SetApplicationType(System::String^ applicationType, System::String^ nameSpace)
@@ -33,7 +33,9 @@ namespace QuickFASTDotNet{
 
     void MutableFieldSet::AddField(FieldIdentity^ identity, Field^ newField)
     {
+#if 0 // not implemented yet.  Get the decoder working
       mutableFieldSetPtr_->addField(identity->SmartPtr, cast_field(newField));
+#endif
     }
   }
 }

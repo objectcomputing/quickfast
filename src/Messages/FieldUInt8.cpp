@@ -20,25 +20,18 @@ namespace
 FieldCPtr FieldUInt8::nullField_ = new FieldUInt8;
 
 FieldUInt8::FieldUInt8(uchar value)
-  : Field(true)
-  , value_(value)
+  : Field(Field::UINT8, true)
 {
+  unsignedInteger_ = value;
 }
 
 FieldUInt8::FieldUInt8()
-  : Field(false)
-  , value_(0)
+  : Field(Field::UINT8, false)
 {
 }
 
 FieldUInt8::~FieldUInt8()
 {
-}
-
-Field::FieldType
-FieldUInt8::getType()const
-{
-  return Field::UINT8;
 }
 
 uchar
@@ -48,7 +41,7 @@ FieldUInt8::toUInt8() const
   {
     FieldNotPresent ex("Field not present");
   }
-  return value_;
+  return static_cast<uchar>(unsignedInteger_);
 }
 
 FieldCPtr

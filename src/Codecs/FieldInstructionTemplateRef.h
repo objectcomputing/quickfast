@@ -9,34 +9,22 @@
 #include <Codecs/FieldInstruction.h>
 namespace QuickFAST{
   namespace Codecs{
-    /// @brief Implement &lt;templateRef> field instruction.
-    class QuickFAST_Export FieldInstructionTemplateRef : public FieldInstruction
+    /// @brief Implement static &lt;templateRef> field instruction.
+    class QuickFAST_Export FieldInstructionStaticTemplateRef : public FieldInstruction
     {
     public:
       /// @brief construct with a name and a namespace
       /// @param name is the local name
       /// @param fieldNamespace is the namespace to qualify this name
-      FieldInstructionTemplateRef(
+      FieldInstructionStaticTemplateRef(
         const std::string & name,
         const std::string & fieldNamespace);
 
       /// @brief construct anonomous field instruction
-      FieldInstructionTemplateRef();
+      FieldInstructionStaticTemplateRef();
 
       /// @brief a typical virtual destructor.
-      virtual ~FieldInstructionTemplateRef();
-
-      /// @brief set name
-      void setTemplateName(const std::string & templateName)
-      {
-        templateName_ = templateName;
-      }
-
-      /// @brief set namespace
-      void setTemplateNamespace(const std::string & templateNamespace)
-      {
-        templateNamespace_ = templateNamespace;
-      }
+      virtual ~FieldInstructionStaticTemplateRef();
 
       virtual size_t fieldCount(const SegmentBody & parent)const;
 
@@ -44,13 +32,13 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const;
+        Messages::MessageBuilder & fieldSet) const;
 
       virtual void encodeNop(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
     private:
       void interpretValue(const std::string & value);
@@ -59,6 +47,38 @@ namespace QuickFAST{
       std::string templateName_;
       std::string templateNamespace_;
     };
+
+    /// @brief Implement dynamic &lt;templateRef> field instruction.
+    class QuickFAST_Export FieldInstructionDynamicTemplateRef : public FieldInstruction
+    {
+    public:
+      /// @brief construct anonomous field instruction
+      FieldInstructionDynamicTemplateRef();
+
+      /// @brief a typical virtual destructor.
+      virtual ~FieldInstructionDynamicTemplateRef();
+
+      virtual size_t fieldCount(const SegmentBody & parent)const;
+
+      virtual bool decodeNop(
+        Codecs::DataSource & source,
+        Codecs::PresenceMap & pmap,
+        Codecs::Decoder & decoder,
+        Messages::MessageBuilder & fieldSet) const;
+
+      virtual void encodeNop(
+        Codecs::DataDestination & destination,
+        Codecs::PresenceMap & pmap,
+        Codecs::Encoder & encoder,
+        const Messages::MessageAccessor & fieldSet) const;
+
+
+    private:
+      void interpretValue(const std::string & value);
+
+    private:
+    };
+
   }
 }
 #endif // FIELDINSTRUCTIONTEMPLATEREF_H

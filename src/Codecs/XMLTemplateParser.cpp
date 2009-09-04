@@ -23,15 +23,14 @@
 #include <Codecs/FieldInstructionGroup.h>
 #include <Codecs/FieldInstructionSequence.h>
 #include <Codecs/FieldInstructionTemplateRef.h>
-#include <Codecs/FieldInstructionFiller.h>
 
+#include <Codecs/FieldOpNop.h>
 #include <Codecs/FieldOpConstant.h>
 #include <Codecs/FieldOpDefault.h>
 #include <Codecs/FieldOpCopy.h>
 #include <Codecs/FieldOpDelta.h>
 #include <Codecs/FieldOpIncrement.h>
 #include <Codecs/FieldOpTail.h>
-#include <Codecs/FieldOpArcaNop.h>
 
 #include <Common/Exceptions.h>
 
@@ -186,9 +185,9 @@ namespace
       {
         parseSequence(tag, attributeMap);
       }
-      else if (tag == "filler")
+      else if (tag == "nop")
       {
-        parseFiller(tag, attributeMap);
+        parseNop(tag, attributeMap);
       }
       else if (tag == "constant")
       {
@@ -230,10 +229,6 @@ namespace
       {
         parseTemplateRef(tag, attributeMap);
       }
-      else if (tag == "arca_nop")
-      {
-        parseARCANop(tag, attributeMap);
-      }
       else
       {
         std::string errMsg("unknown XML tag: ");
@@ -252,13 +247,13 @@ namespace
       std::string tag(tagRaw.get());
       // don't finalize here for templates.  Because it's optional
       // it will be forcibly finalized at end of document
-      if(schemaElements_.top().first == tag)
+      if(tag != "templates")
       {
-        if(tag != "templates")
+        if(schemaElements_.top().first == tag)
         {
           schemaElements_.top().second->finalize();
+          schemaElements_.pop();
         }
-        schemaElements_.pop();
       }
       if(out_)
       {
@@ -296,24 +291,36 @@ namespace
       const SAXParseException& exc
       )
     {
+      std::stringstream msg;
       boost::scoped_array<char> msgRaw(XMLString::transcode(exc.getMessage()));
-      throw TemplateDefinitionError(msgRaw.get());
+      msg << "Template file warning at line " << exc.getLineNumber()
+          << " column " << exc.getColumnNumber()
+          << ": " << msgRaw.get();
+      throw TemplateDefinitionError(msg.str());
     }
 
     virtual void error(
       const SAXParseException& exc
       )
     {
+      std::stringstream msg;
       boost::scoped_array<char> msgRaw(XMLString::transcode(exc.getMessage()));
-      throw TemplateDefinitionError(msgRaw.get());
+      msg << "Template file error at line " << exc.getLineNumber()
+          << " column " << exc.getColumnNumber()
+          << ": " << msgRaw.get();
+      throw TemplateDefinitionError(msg.str());
     }
 
     virtual void fatalError(
       const SAXParseException& exc
       )
     {
+      std::stringstream msg;
       boost::scoped_array<char> msgRaw(XMLString::transcode(exc.getMessage()));
-      throw TemplateDefinitionError(msgRaw.get());
+      msg << "Template file fatal error at line " << exc.getLineNumber()
+          << " column " << exc.getColumnNumber()
+          << ": " << msgRaw.get();
+      throw TemplateDefinitionError(msg.str());
     }
 
   private:
@@ -327,6 +334,13 @@ namespace
     const AttributeMap& attributes,
     const std::string& name,
     std::string & result);
+
+    bool getOptionalBooleanAttribute(
+      const AttributeMap& attributes,
+      const std::string& name,
+      bool defaultResult
+      );
+
 
     void parseTemplateRegistry(const std::string & tag, const AttributeMap& attributes);
     void parseTemplate(const std::string & tag, const AttributeMap& attributes);
@@ -348,6 +362,7 @@ namespace
     void parseGroup(const std::string & tag, const AttributeMap& attributes);
     void parseSequence(const std::string & tag, const AttributeMap& attributes);
     void parseLength(const std::string & tag, const AttributeMap& attributes);
+    void parseNop(const std::string & tag, const AttributeMap& attributes);
     void parseConstant(const std::string & tag, const AttributeMap& attributes);
     void parseDefault(const std::string & tag, const AttributeMap& attributes);
     void parseCopy(const std::string & tag, const AttributeMap& attributes);
@@ -355,11 +370,6 @@ namespace
     void parseIncrement(const std::string & tag, const AttributeMap& attributes);
     void parseTail(const std::string & tag, const AttributeMap& attributes);
     void parseTemplateRef(const std::string & tag, const AttributeMap& attributes);
-
-    ///////////////
-    // ARCA Support
-    void parseARCANop(const std::string & tag, const AttributeMap& attributes);
-    void parseFiller(const std::string & tag, const AttributeMap& attributes);
 
     void parseInitialValue(const std::string & tag, const AttributeMap& attributes, FieldOpPtr op);
     void parseOp(const std::string & tag, const AttributeMap& attributes, FieldOpPtr op);
@@ -405,6 +415,29 @@ TemplateBuilder::getOptionalAttribute(
   return true;
 }
 
+bool
+TemplateBuilder::getOptionalBooleanAttribute(
+  const AttributeMap& attributes,
+  const std::string& name,
+  bool defaultResult)
+{
+  bool result = defaultResult;
+  AttributeMap::const_iterator it = attributes.find(name);
+  if(it != attributes.end())
+  {
+    char yn = it->second[0];
+    yn = toupper(yn);
+    if(yn != 'Y' && yn != 'N' && yn != 'T' && yn != 'F')
+    {
+      std::stringstream msg;
+      msg << "Invalid boolean \"" << name << "=\"" << it->second;
+      throw TemplateDefinitionError(msg.str());
+    }
+    result = (yn == 'Y' || yn == 'T');
+  }
+  return result;
+}
+
 void
 TemplateBuilder::parseTemplateRegistry(const std::string & tag, const AttributeMap& attributes)
 {
@@ -425,7 +458,7 @@ TemplateBuilder::parseTemplateRegistry(const std::string & tag, const AttributeM
   {
     registry_->setDictionaryName(dictionary);
   }
-  schemaElements_.push(StackEntry(tag, registry_));
+//  schemaElements_.push(StackEntry(tag, registry_));
 }
 
 void
@@ -460,19 +493,13 @@ TemplateBuilder::parseTemplate(const std::string & tag, const AttributeMap& attr
     target->setDictionaryName(dictionary);
   }
 
-  std::string reset;
-  if (getOptionalAttribute(attributes, "reset", reset))
-  {
-    char yn = reset[0];
-    yn = toupper(yn);
-    if(yn != 'Y' && yn != 'N' && yn != 'T' && yn != 'F')
-    {
-      throw TemplateDefinitionError("Invalid \"reset=\" option.");
-    }
-    target->setReset(yn == 'Y' || yn == 'T');
-  }
+  bool reset = getOptionalBooleanAttribute(attributes, "reset", false);
+  target->setReset(reset);
 
-  schemaElements_.top().second->addTemplate(target);
+  bool ignore = getOptionalBooleanAttribute(attributes, "ignore", false);
+  target->setIgnore(ignore);
+  registry_->addTemplate(target);
+//  schemaElements_.top().second->addTemplate(target);
   schemaElements_.push(StackEntry(tag, target));
 }
 
@@ -851,27 +878,29 @@ TemplateBuilder::parseLength(const std::string & tag, const AttributeMap& attrib
 void
 TemplateBuilder::parseTemplateRef(const std::string & tag, const AttributeMap& attributes)
 {
+  FieldInstructionPtr field;
   std::string name;
-  getOptionalAttribute(attributes, "name", name);
-  std::string ns;
-  getOptionalAttribute(attributes, "ns", ns);
-  FieldInstructionPtr field(new FieldInstructionTemplateRef(name, ns));
+  if(getOptionalAttribute(attributes, "name", name))
+  {
+    std::string ns;
+    getOptionalAttribute(attributes, "ns", ns);
+    field.reset(new FieldInstructionStaticTemplateRef(name, ns));
+  }
+  else
+  {
+    field.reset(new FieldInstructionDynamicTemplateRef);
+  }
   schemaElements_.top().second->addInstruction(field);
   // Is this push necessary?
   schemaElements_.push(StackEntry(tag, field));
 }
 
 void
-TemplateBuilder::parseFiller(const std::string & tag, const AttributeMap& attributes)
+TemplateBuilder::parseNop(const std::string & tag, const AttributeMap& attributes)
 {
-  std::string name;
-  getOptionalAttribute(attributes, "name", name);
-  std::string ns;
-  getOptionalAttribute(attributes, "ns", ns);
-  FieldInstructionPtr field(new FieldInstructionFiller(name, ns));
-  schemaElements_.top().second->addInstruction(field);
-  // Is this push necessary?
-  schemaElements_.push(StackEntry(tag, field));
+  FieldOpPtr op(new FieldOpNop);
+  parseOp(tag, attributes, op);
+
 }
 
 void
@@ -918,12 +947,6 @@ TemplateBuilder::parseTail(const std::string & tag, const AttributeMap& attribut
 }
 
 void
-TemplateBuilder::parseARCANop(const std::string & tag, const AttributeMap& attributes)
-{
-  FieldOpPtr op(new FieldOpArcaNop);
-}
-
-void
 TemplateBuilder::parseInitialValue(const std::string & tag, const AttributeMap& attributes, FieldOpPtr op)
 {
   std::string value;
@@ -958,6 +981,13 @@ TemplateBuilder::parseOp(const std::string & tag, const AttributeMap& attributes
   if(getOptionalAttribute(attributes, "value", value))
   {
     op->setValue(value);
+  }
+
+  std::string pmapBitStr;
+  if(getOptionalAttribute(attributes, "pmap", pmapBitStr))
+  {
+    size_t pmapBit = atoi(pmapBitStr.c_str());
+    op->setPMapBit(pmapBit);
   }
   schemaElements_.top().second->setFieldOp(op);
   // is this push necessary?
@@ -1007,7 +1037,7 @@ XMLTemplateParser::parse(
 //  reader->setFeature(xercesc::XMLUni::fgSAX2CoreValidation, true);
 
   xmlData.seekg(0, std::ios::end);
-  int length = xmlData.tellg();
+  int length = int(xmlData.tellg());
   xmlData.seekg(0, std::ios::beg);
 
   boost::scoped_array<char> data(new char[length]);

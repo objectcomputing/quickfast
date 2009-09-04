@@ -10,8 +10,8 @@
 #include <Common/QuickFAST_Export.h>
 
 #include <Messages/Field_fwd.h>
-#include <Messages/FieldSet_fwd.h>
-#include <Messages/DecodedFields_fwd.h>
+#include <Messages/MessageAccessor.h>
+#include <Messages/MessageBuilder_fwd.h>
 #include <Codecs/Context_fwd.h>
 #include <Codecs/FieldInstruction_fwd.h>
 #include <Codecs/SchemaElement.h>
@@ -58,7 +58,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const = 0;
+        Messages::MessageBuilder & fieldSet) const = 0;
 
       /// @brief Encode a field to a data destination.
       ///
@@ -72,7 +72,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const = 0;
+        const Messages::MessageAccessor & fieldSet) const = 0;
 
       /// @brief Set the appropriate default value in the FieldInstruction
       /// @param instruction is the instruction that will ultimately process the value.
@@ -99,6 +99,16 @@ namespace QuickFAST{
       {
         value_ = value;
         valueIsDefined_ = true;
+      }
+
+      /// @brief Set the pmap bit to be used for this field
+      ///
+      /// This is not a part of the FAST spec. It is here to support
+      /// exchanges that do not conform to the spec (ArcaBook for one)
+      void setPMapBit(size_t pmapBit)
+      {
+        pmapBit_ = pmapBit;
+        pmapBitValid_ = true;
       }
 
       /// @brief Implement the key= attribute
@@ -170,6 +180,12 @@ namespace QuickFAST{
       size_t dictionaryIndex_;
       /// true if dictionaryIndex_ is valid;
       bool dictionaryIndexValid_;
+
+      /// For non-conforming implmentations that assign specific pmap bits....
+      size_t pmapBit_;
+      /// Indicate that pmapBit_ is to be used
+      bool pmapBitValid_;
+
     };
   }
 }

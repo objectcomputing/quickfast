@@ -38,7 +38,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & message) const
+        Messages::MessageBuilder & message) const
       {
         ++calledDecodeNop_;
         return true;
@@ -48,7 +48,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & message) const
+        Messages::MessageBuilder & message) const
       {
         ++calledDecodeConstant_;
         return true;
@@ -58,7 +58,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & message) const
+        Messages::MessageBuilder & message) const
       {
         ++calledDecodeDefault_;
         return true;
@@ -68,7 +68,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & message) const
+        Messages::MessageBuilder & message) const
       {
         ++calledDecodeCopy_;
         return true;
@@ -78,7 +78,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & message) const
+        Messages::MessageBuilder & message) const
       {
         ++calledDecodeDelta_;
         return true;
@@ -88,7 +88,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & message) const
+        Messages::MessageBuilder & message) const
       {
         ++calledDecodeIncrement_;
         return true;
@@ -98,7 +98,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & message) const
+        Messages::MessageBuilder & message) const
       {
         ++calledDecodeTail_;
         return true;
@@ -108,7 +108,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const
+        const Messages::MessageAccessor & fieldSet) const
       {
         ++calledEncodeNop_;
       }
@@ -117,7 +117,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const
+        const Messages::MessageAccessor & fieldSet) const
       {
         ++calledEncodeConstant_;
       }
@@ -126,7 +126,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const
+        const Messages::MessageAccessor & fieldSet) const
       {
         ++calledEncodeDefault_;
       }
@@ -135,7 +135,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const
+        const Messages::MessageAccessor & fieldSet) const
       {
         ++calledEncodeCopy_;
       }
@@ -144,7 +144,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const
+        const Messages::MessageAccessor & fieldSet) const
       {
         ++calledEncodeDelta_;
       }
@@ -153,7 +153,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const
+        const Messages::MessageAccessor & fieldSet) const
       {
         ++calledEncodeIncrement_;
       }
@@ -162,7 +162,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const
+        const Messages::MessageAccessor & fieldSet) const
       {
         ++calledEncodeTail_;
       }

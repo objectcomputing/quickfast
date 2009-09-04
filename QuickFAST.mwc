@@ -3,6 +3,7 @@ workspace(*) {
   src/QuickFAST.mpc
   src/Examples/Examples.mpc
   src/OrderBook/OrderBook.mpc
+  src/MarketData/MarketData.mpc
   
   exclude(!vc8, !vc9) {
     //C++/Cli Visual Studio Projects
@@ -11,10 +12,8 @@ workspace(*) {
     //C# Visual Studio Projects
     specific {
       cmdline += -language csharp
-      src/DotNetExamples/DotNetExampleCode/DotNetExampleCode.mpc
       src/DotNetTests/QuickFASTDotNetTests.mpc
-      src/DotNetTests/DecodingPerformance/DecodingPerformanceDotNet.mpc
-	  src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.mpc
+      src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.mpc
       src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.mpc
     }
   }

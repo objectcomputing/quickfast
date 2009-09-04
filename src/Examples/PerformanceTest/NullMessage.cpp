@@ -3,6 +3,8 @@
 // See the file license.txt for licensing information.
 #include <Examples/ExamplesPch.h>
 #include "NullMessage.h"
+#include <Common/Exceptions.h>
+
 using namespace QuickFAST;
 using namespace Examples;
 
@@ -24,57 +26,60 @@ NullMessage::NullMessage(const NullMessage & rhs)
 }
 
 void
-NullMessage::clear(size_t capacity)
-{
-}
-
-void
-NullMessage::reserve(size_t capacity)
-{
-}
-
-size_t
-NullMessage::size()const
-{
-  return size_;
-}
-
-void
 NullMessage::addField(const Messages::FieldIdentityCPtr & identity, const Messages::FieldCPtr & value)
 {
   ++ size_;
 }
 
-bool
-NullMessage::getIdentity(const std::string &name, Messages::FieldIdentityCPtr & identity) const
+Messages::MessageBuilder &
+NullMessage::startSequence(
+  Messages::FieldIdentityCPtr identity,
+  const std::string & applicationType,
+  const std::string & applicationTypeNamespace,
+  size_t size)
 {
-  return false;
+  throw QuickFAST::TemplateDefinitionError("NullMessage does not use Sequences");
+}
+
+Messages::MessageBuilder &
+NullMessage::startSequenceEntry(
+    const std::string & applicationType,
+    const std::string & applicationTypeNamespace,
+    size_t size)
+{
+  throw QuickFAST::TemplateDefinitionError("NullMessage does not use Sequences");
 }
 
 void
-NullMessage::setApplicationType(const std::string & type, const std::string & ns)
+NullMessage::endSequenceEntry(Messages::MessageBuilder & entry)
 {
-  applicationType_ = type;
-  applicationTypeNamespace_ = ns;
-
+  throw QuickFAST::TemplateDefinitionError("NullMessage does not use Sequences");
 }
 
-const std::string &
-NullMessage::getApplicationType()const
+void
+NullMessage::endSequence( Messages::FieldIdentityCPtr identity, Messages::MessageBuilder & )
 {
-  return applicationType_;
+  throw QuickFAST::TemplateDefinitionError("NullMessage does not use Sequences");
 }
 
-const std::string &
-NullMessage::getApplicationTypeNs()const
+
+
+Messages::MessageBuilder &
+NullMessage::startGroup(
+    Messages::FieldIdentityCPtr identity,
+    const std::string & applicationType,
+    const std::string & applicationTypeNamespace,
+    size_t size)
 {
-  return applicationTypeNamespace_;
+  throw QuickFAST::TemplateDefinitionError("NullMessage does not use Group");
 }
 
-Messages::DecodedFields *
-NullMessage::createdNestedFields(size_t size)const
+void
+NullMessage::endGroup(
+  Messages::FieldIdentityCPtr identity,
+  Messages::MessageBuilder & entry)
 {
-  return new NullMessage(size);
+  throw QuickFAST::TemplateDefinitionError("NullMessage does not use Group");
 }
 
 ///////////////////////
@@ -90,16 +95,8 @@ NullMessageConsumer::~NullMessageConsumer()
 }
 
 bool
-NullMessageConsumer::consumeMessage(Examples::NullMessage & message)
+NullMessageConsumer::consumeMessage(Messages::Message  & message)
 {
-  messageCount_ += 1;
-  return true;
-}
-
-bool
-NullMessageConsumer::consumeMessage(Messages::Message & message)
-{
-  // shouldn't happen.
   messageCount_ += 1;
   return true;
 }

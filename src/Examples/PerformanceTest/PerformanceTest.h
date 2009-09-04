@@ -51,6 +51,7 @@ namespace QuickFAST{
       std::ostream * profileFile_;
       size_t head_;
       size_t count_;
+      size_t interpret_;
 
       Codecs::XMLTemplateParser parser_;
       CommandArgParser commandArgParser_;

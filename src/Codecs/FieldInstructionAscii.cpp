@@ -7,7 +7,8 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/DataDestination.h>
 #include <Codecs/Encoder.h>
-#include <Messages/Message.h>
+#include <Messages/MessageBuilder.h>
+#include <Messages/MessageAccessor.h>
 #include <Messages/FieldAscii.h>
 
 #include <Common/Profiler.h>
@@ -66,7 +67,7 @@ FieldInstructionAscii::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeNop");
   // note NOP never uses pmap.  It uses a null value instead for optional fields
@@ -88,7 +89,7 @@ FieldInstructionAscii::decodeConstant(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeConstant");
   if(isMandatory())
@@ -118,7 +119,7 @@ FieldInstructionAscii::decodeDefault(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeDefault");
   if(pmap.checkNextField())
@@ -157,7 +158,7 @@ FieldInstructionAscii::decodeCopy(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeCopy");
 
@@ -207,7 +208,7 @@ FieldInstructionAscii::decodeDelta(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeDelta");
   int32 deltaLength;
@@ -248,8 +249,8 @@ FieldInstructionAscii::decodeDelta(
     // don't chop more than is there
     if(static_cast<uint32>(deltaLength) > previousLength)
     {
-      decoder.reportWarning("[ERR D7]", "String head delta length exceeds length of previous string.", *identity_);
-      deltaLength = previousLength;
+      decoder.reportError("[ERR D7]", "String head delta length exceeds length of previous string.", *identity_);
+      deltaLength = QuickFAST::uint32(previousLength);
     }
     Messages::FieldCPtr field = Messages::FieldAscii::create(
       deltaValue + previousValue.substr(deltaLength));
@@ -267,7 +268,7 @@ FieldInstructionAscii::decodeDelta(
       std::cout << "decode ascii delta length: " << deltaLength << " previous: " << previousLength << std::endl;
 #endif
       decoder.reportError("[ERR D7]", "String tail delta length exceeds length of previous string.", *identity_);
-      deltaLength = previousLength;
+      deltaLength = QuickFAST::uint32(previousLength);
     }
     Messages::FieldCPtr field = Messages::FieldAscii::create(
       previousValue.substr(0, previousLength - deltaLength) + deltaValue);
@@ -284,7 +285,7 @@ FieldInstructionAscii::decodeTail(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeTail");
   if(pmap.checkNextField())
@@ -359,7 +360,7 @@ FieldInstructionAscii::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;
@@ -379,7 +380,7 @@ FieldInstructionAscii::encodeNop(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     destination.putByte(nullAscii);
   }
@@ -390,7 +391,7 @@ FieldInstructionAscii::encodeConstant(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;
@@ -412,7 +413,7 @@ FieldInstructionAscii::encodeConstant(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     pmap.setNextField(false);
   }
@@ -424,7 +425,7 @@ FieldInstructionAscii::encodeDefault(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;
@@ -453,7 +454,7 @@ FieldInstructionAscii::encodeDefault(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     if(fieldOp_->hasValue())
     {
@@ -473,7 +474,7 @@ FieldInstructionAscii::encodeCopy(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   // declare a couple of variables...
   bool previousIsKnown = false;
@@ -523,7 +524,7 @@ FieldInstructionAscii::encodeCopy(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     if((previousIsKnown && previousNotNull)
       || !previousIsKnown)
@@ -544,7 +545,7 @@ FieldInstructionAscii::encodeDelta(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
     // declare a couple of variables...
   bool previousIsKnown = false;
@@ -574,7 +575,7 @@ FieldInstructionAscii::encodeDelta(
     std::string value = field->toAscii();
     size_t prefix = longestMatchingPrefix(previousValue, value);
     size_t suffix = longestMatchingSuffix(previousValue, value);
-    int32 deltaCount = previousValue.length() - prefix;
+    int32 deltaCount = QuickFAST::uint32(previousValue.length() - prefix);
     std::string deltaValue = value.substr(prefix);
     if(prefix < suffix)
     {
@@ -606,7 +607,7 @@ FieldInstructionAscii::encodeDelta(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     destination.putByte(nullAscii);
   }
@@ -617,7 +618,7 @@ FieldInstructionAscii::encodeTail(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
     // declare a couple of variables...
   bool previousIsKnown = false;
@@ -673,7 +674,7 @@ FieldInstructionAscii::encodeTail(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U9]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
     destination.putByte(nullAscii);
   }

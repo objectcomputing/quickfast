@@ -27,8 +27,27 @@ namespace QuickFAST{
       /// @brief a typical virtual destructor.
       virtual ~Context();
 
+      /// @brief Enable/disable strict checking of conformance to the FAST standard
+      ///
+      /// If strict is false some conditions such as integer overflow or inefficient encoding
+      /// will be ignored.  The default is true -- strict checking is enabled.
+      /// @param strict true to enable; false to disable strict checking
+      void setStrict(bool strict)
+      {
+        strict_ = strict;
+      }
+
+      /// @brief get the current status of the strict property.
+      /// @returns true if strict checking is enabled.
+      bool getStrict()const
+      {
+        return strict_;
+      }
+
       /// @brief Reset decoding state to initial conditions
-      void reset();
+      /// @param resetTemplateId Normally you want to reset the template ID
+      ///        however there are cases when you don't.
+      void reset(bool resetTemplateId = true);
 
       /// @brief Remember the id of the template driving the Xcoding.
       void setTemplateId(const template_id_t & templateId)
@@ -171,6 +190,9 @@ namespace QuickFAST{
       Codecs::TemplateRegistryCPtr templateRegistry_;
       /// The ID of the currently active template
       template_id_t templateId_;
+
+      /// false makes the Xcoder more forgiving
+      bool strict_;
     private:
       size_t indexedDictionarySize_;
       typedef boost::scoped_array<Messages::FieldCPtr> IndexedDictionary;

@@ -39,7 +39,18 @@ AsioService::stopService()
 }
 
 void
-AsioService::startThreads(size_t threadCount)
+AsioService::joinThreads()
+{
+  while(threadCount_ > 0)
+  {
+     --threadCount_;
+    threads_[threadCount_]->join();
+    threads_[threadCount_].reset();
+  }
+}
+
+void
+AsioService::runThreads(size_t threadCount /*= 0*/, bool useThisThread /* = true*/)
 {
   if(threadCount > threadCapacity_)
   {
@@ -57,30 +68,16 @@ AsioService::startThreads(size_t threadCount)
       new boost::thread(boost::bind(&AsioService::run, this)));
     ++threadCount_;
   }
-}
-
-void
-AsioService::joinThreads()
-{
-  while(threadCount_ > 0)
+  if(useThisThread)
   {
-     --threadCount_;
-    threads_[threadCount_]->join();
-    threads_[threadCount_].reset();
+    run();
+    joinThreads();
   }
 }
 
 void
-AsioService::runThreads(size_t extraThreadCount /*= 0*/)
-{
-  startThreads(extraThreadCount);
-  run();
-  joinThreads();
-}
-
-void
 AsioService::run()
-{
+  {
   while(! stopping_)
   {
     try
@@ -94,7 +91,7 @@ AsioService::run()
     catch (const std::exception & ex)
     {
       // todo: logging?
-      std::cerr << ex.what();
+      std::cerr << ex.what() << std::endl;
     }
   }
 }

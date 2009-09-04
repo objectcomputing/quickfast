@@ -14,7 +14,8 @@ FieldOp::FieldOp()
 : valueIsDefined_(false)
 , dictionaryIndex_(0)
 , dictionaryIndexValid_(false)
-
+, pmapBit_(0)
+, pmapBitValid_(false)
 {
 }
 

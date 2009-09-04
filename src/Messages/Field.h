@@ -10,6 +10,7 @@
 #include <Common/Types.h>
 #include <Common/Decimal.h>
 #include <Common/BitMap.h>
+#include <Common/StringBuffer.h>
 #include <Messages/Group_fwd.h>
 #include <Messages/Sequence_fwd.h>
 namespace QuickFAST{
@@ -38,9 +39,10 @@ namespace QuickFAST{
         ASCII,
         UTF8,
         BYTEVECTOR,
-        BITMAP,   // not FAST Standard
+        BITMAP,   // not FAST Standard (and not properly supported, yet)
         SEQUENCE,
-        GROUP
+        GROUP,
+        UNDEFINED
       };
 
       /// @brief translate a FieldType to a string
@@ -48,7 +50,7 @@ namespace QuickFAST{
 
     protected:
       /// Protected constructor reinforces pure virtual
-      Field(bool valid = false);
+      Field(FieldType type, bool valid = false);
     public:
       /// @brief a typical virtual destructor.
       virtual ~Field() = 0;
@@ -65,7 +67,11 @@ namespace QuickFAST{
 
       /// @brief Get the field type
       /// @returns the enumerated field type
-      virtual FieldType getType()const = 0;
+//      virtual FieldType getType()const = 0;
+      FieldType getType() const
+      {
+        return type_;
+      }
 
       ////////
       // UINT8
@@ -256,19 +262,19 @@ namespace QuickFAST{
 
       /// @brief Retrieve the field value as a Decimal
       /// @returns the value
-      virtual const Decimal & toDecimal() const;
+      virtual const Decimal toDecimal() const;
 
       /// @brief Retrieve the field value as Ascii
       /// @returns the value
-      virtual const std::string & toAscii() const;
+      virtual const StringBuffer & toAscii() const;
 
       /// @brief Retrieve the field value as a utf8
       /// @returns the value
-      virtual const std::string & toUtf8() const;
+      virtual const StringBuffer & toUtf8() const;
 
       /// @brief Retrieve the field value as a byte vector
       /// @returns the value
-      virtual const std::string & toByteVector() const;
+      virtual const StringBuffer & toByteVector() const;
 
       /// @brief Retrieve the field value as a byte vector
       /// @returns the value
@@ -279,7 +285,7 @@ namespace QuickFAST{
 
       /// @brief Retrieve the field value as a string
       /// @returns the value
-      virtual const std::string & toString()const;
+      virtual const StringBuffer & toString()const;
 
       /// @brief Retrieve the field value as a group
       /// @returns the value
@@ -290,8 +296,27 @@ namespace QuickFAST{
       virtual const Messages::SequenceCPtr & toSequence() const;
 
     protected:
+      /// What type of data does this field contain?
+      FieldType type_;
       /// false means this is a NULL value
       bool valid_;
+
+      ///////////////////////////////////////////////////
+      // Field contents, except for groups and sequences,
+      // is stored in the base class.
+      // This simplifies the .NET code and somewhat avoids
+      // extra memory allocations.
+
+      ///@brief Data for any of the unsigned integral types.
+      unsigned long long unsignedInteger_;
+      ///@brief Data for any of the signed integral types. Also Decimal mantissa.
+      signed long long signedInteger_;
+      ///@brief Exponent for Decimal types (mantissa is in signedInteger_)
+      QuickFAST::exponent_t exponent_;
+      ///@brief Length of locally allocated string_ buffer
+      size_t stringLength_;
+      ///@brief Buffer containin string value. Owned by this object
+      StringBuffer string_;
 
     private:
       friend void QuickFAST_Export intrusive_ptr_add_ref(const Field * ptr);

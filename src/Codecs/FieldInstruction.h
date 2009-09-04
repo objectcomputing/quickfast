@@ -13,9 +13,8 @@
 #include <Common/Constants.h>
 #include <Common/WorkingBuffer.h>
 #include <Common/Exceptions.h>
-#include <Messages/FieldSet_fwd.h>
 #include <Messages/Message_fwd.h>
-#include <Messages/DecodedFields_fwd.h>
+#include <Messages/MessageBuilder_fwd.h>
 #include <Messages/FieldIdentity.h>
 #include <Codecs/SchemaElement.h>
 #include <Codecs/DataSource.h>
@@ -203,7 +202,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet)const
+        Messages::MessageBuilder & fieldSet)const
       {
         return fieldOp_->decode(*this, source, pmap, decoder, fieldSet);
       }
@@ -218,7 +217,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet)const
+        const Messages::MessageAccessor & fieldSet)const
       {
         return fieldOp_->encode(*this, destination, pmap, encoder, fieldSet);
       }
@@ -251,7 +250,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const = 0;
+        Messages::MessageBuilder & fieldSet) const = 0;
 
       /// @brief Decode when &lt;constant> operation is specified.
       /// @see decode()
@@ -263,7 +262,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const;
+        Messages::MessageBuilder & fieldSet) const;
 
       /// @brief Decode when &lt;default> operation is specified.
       /// @see decode()
@@ -275,7 +274,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const;
+        Messages::MessageBuilder & fieldSet) const;
 
       /// @brief Decode when &lt;copy> operation is specified.
       /// @see decode()
@@ -287,7 +286,21 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const;
+        Messages::MessageBuilder & fieldSet) const;
+
+      /// @brief Decode when &lt;copy> operation is specified using specific pmap bit.
+      ///
+      /// Speical support for Arca's FAST-like-ish encoding scheme.
+      /// @see decode()
+      /// @param[in] source for the FAST data
+      /// @param[in] pmapValue prefetched to  indicate field presence
+      /// @param[in] decoder driving this process
+      /// @param[out] fieldSet
+      virtual bool decodeCopy(
+        Codecs::DataSource & source,
+        bool pmapValue,
+        Codecs::Decoder & decoder,
+        Messages::MessageBuilder & fieldSet) const;
 
       /// @brief Decode when &lt;delta> operation is specified.
       /// @see decode()
@@ -299,7 +312,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const;
+        Messages::MessageBuilder & fieldSet) const;
 
       /// @brief Decode when &lt;increment> operation is specified.
       /// @see decode()
@@ -313,7 +326,21 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const;
+        Messages::MessageBuilder & fieldSet) const;
+
+      /// @brief Decode when &lt;increment> operation is specified.
+      /// @see decode()
+      /// Not pure because not all types support increment operator.
+      /// Default implementation throws bad operation
+      /// @param[in] source for the FAST data
+      /// @param[in] pmapValue prefetched to  indicate field presence
+      /// @param[in] decoder driving this process
+      /// @param[out] fieldSet
+      virtual bool decodeIncrement(
+        Codecs::DataSource & source,
+        bool pmapValue,
+        Codecs::Decoder & decoder,
+        Messages::MessageBuilder & fieldSet) const;
 
       /// @brief Decode when &lt;tail> operation is specified.
       /// @see decode()
@@ -327,7 +354,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const;
+        Messages::MessageBuilder & fieldSet) const;
 
       ///////////////////
       // Encoding support
@@ -342,7 +369,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const = 0;
+        const Messages::MessageAccessor & fieldSet) const = 0;
 
       /// @brief Encode when &lt;constant> operation is specified.
       /// @see encode()
@@ -354,7 +381,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       /// @brief Encode when &lt;default> operation is specified.
       /// @see encode()
@@ -366,7 +393,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       /// @brief Encode when &lt;copy> operation is specified.
       /// @see encode()
@@ -378,7 +405,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       /// @brief Encode when &lt;delta> operation is specified.
       /// @see encode()
@@ -390,7 +417,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       /// @brief Encode when &lt;increment> operation is specified.
       /// @see encode()
@@ -403,7 +430,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       /// @brief Encode when &lt;tail> operation is specified.
       /// @see encode()
@@ -416,7 +443,7 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       /////////////////////////
       // Basic Decoding methods
@@ -532,11 +559,13 @@ namespace QuickFAST{
       /// @brief Basic decoding for ByteVectors and Utf8 strings
       ///
       /// Assumes byte vector of approriate length is present in input stream.
+      /// @param[in] decoder for which this decoding is being done
       /// @param[in] source supplies the data
       /// @param[out] buffer receives the result
       /// @param[in] length expected
       /// @throws EncodingError if not enough data is available
       static void decodeByteVector(
+        Codecs::Context & decoder,
         Codecs::DataSource & source,
         WorkingBuffer & buffer,
         size_t length);
@@ -580,7 +609,7 @@ namespace QuickFAST{
       uchar byte;
       if(!source.getByte(byte))
       {
-        context.reportFatal("", "Unexpected end of data decoding integer");
+        context.reportFatal("[ERR U03]", "Unexpected end of data decoding integer");
       }
 
       value = 0;
@@ -611,7 +640,7 @@ namespace QuickFAST{
         value |= byte;
         if(!source.getByte(byte))
         {
-          context.reportFatal("", "Integer Field overflow.");
+          context.reportFatal("[ERR D2]", "Integer Field overflow.");
         }
       }
       // include the last byte (the one with the stop bit)
@@ -643,7 +672,7 @@ namespace QuickFAST{
       uchar byte;
       if(!source.getByte(byte))
       {
-        context.reportFatal("", "Unexpected end of data decoding unsigned integer");
+        context.reportFatal("[ERR U03]", "Unexpected end of data decoding unsigned integer");
       }
 
       value = 0;
@@ -665,7 +694,7 @@ namespace QuickFAST{
         value |= byte;
         if(!source.getByte(byte))
         {
-          context.reportFatal("", "End of file without stop bit decoding unsigned integer.");
+          context.reportFatal("[ERR U03]", "End of file without stop bit decoding unsigned integer.");
         }
       }
       if((value & overflowMask) != overflowCheck)

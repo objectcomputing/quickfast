@@ -9,25 +9,18 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldInt8::FieldInt8(int8 value)
-  : Field(true)
-  , value_(value)
+  : Field(Field::INT8, true)
 {
+  signedInteger_ = value;
 }
 
 FieldInt8::FieldInt8()
-  : Field(false)
-  , value_(0)
+  : Field(Field::INT8, false)
 {
 }
 
 FieldInt8::~FieldInt8()
 {
-}
-
-Field::FieldType
-FieldInt8::getType() const
-{
-  return Field::INT8;
 }
 
 int8
@@ -37,7 +30,7 @@ FieldInt8::toInt8() const
   {
     FieldNotPresent ex("Field not present");
   }
-  return value_;
+  return static_cast<int8>(signedInteger_);
 }
 
 FieldCPtr

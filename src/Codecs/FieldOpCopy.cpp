@@ -25,9 +25,16 @@ FieldOpCopy::decode(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::DecodedFields & fieldSet) const
+  Messages::MessageBuilder & fieldSet) const
 {
-  return instruction.decodeCopy(source, pmap, decoder, fieldSet);
+  if(pmapBitValid_)
+  {
+    return instruction.decodeCopy(source, pmap.checkSpecificField(pmapBit_), decoder, fieldSet);
+  }
+  else
+  {
+    return instruction.decodeCopy(source, pmap, decoder, fieldSet);
+  }
 }
 
 void
@@ -36,7 +43,7 @@ FieldOpCopy::encode(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::FieldSet & fieldSet) const
+  const Messages::MessageAccessor & fieldSet) const
 {
   return instruction.encodeCopy(destination, pmap, encoder, fieldSet);
 }

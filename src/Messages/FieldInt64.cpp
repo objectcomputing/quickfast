@@ -9,25 +9,18 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldInt64::FieldInt64(int64 value)
-  : Field(true)
-  , value_(value)
+  : Field(Field::INT64, true)
 {
+  signedInteger_ = value;
 }
 
 FieldInt64::FieldInt64()
-  : Field(false)
-  , value_(0)
+  : Field(Field::INT64, false)
 {
 }
 
 FieldInt64::~FieldInt64()
 {
-}
-
-Field::FieldType
-FieldInt64::getType() const
-{
-  return Field::INT64;
 }
 
 int64
@@ -37,7 +30,7 @@ FieldInt64::toInt64() const
   {
     FieldNotPresent ex("Field not present");
   }
-  return value_;
+  return static_cast<int64>(signedInteger_);
 }
 
 FieldCPtr

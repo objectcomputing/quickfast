@@ -18,7 +18,7 @@ namespace QuickFAST{
     /// via the setSegmentBody() method.
     ///
     /// Sequences guide decoding by implementing decodeNop.  It uses
-    /// the segment to decode fields into the currently active FieldSet.
+    /// the segment to decode fields into the currently active MessageBuilder.
     ///
     /// An attempt to use any other instruction with a Sequence
     /// will lead to a TemplateDefinitionError exception being thrown.
@@ -50,13 +50,13 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::DecodedFields & fieldSet) const;
+        Messages::MessageBuilder & fieldSet) const;
 
       virtual void encodeNop(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::FieldSet & fieldSet) const;
+        const Messages::MessageAccessor & fieldSet) const;
 
       virtual void indexDictionaries(
         DictionaryIndexer & indexer,
