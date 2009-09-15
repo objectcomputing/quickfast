@@ -1,5 +1,6 @@
 project : QuickFASTApplication{
   requires += dotnet
+  requires += dotnetapp
   after += QuickFASTDotNet
   specific {
   // so assemblies can be added as references to .NET projects

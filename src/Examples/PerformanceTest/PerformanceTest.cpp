@@ -236,12 +236,14 @@ PerformanceTest::run()
       fastFile_.seekg(0, std::ios::beg);
       Codecs::DataSourceBufferedStream source(fastFile_);
       MessagePerformance handler(head_, interpret_);
-      Codecs::SynchronousDecoder<Codecs::GenericMessageBuilder, Codecs::MessageConsumer> decoder(templateRegistry);
+      Codecs::GenericMessageBuilder builder(handler);
+      Codecs::SynchronousDecoder decoder(templateRegistry);
       decoder.setResetOnMessage(resetOnMessage_);
       decoder.setStrict(strict_);
       StopWatch decodeTimer;
-      { PROFILE_POINT("Main");
-      decoder.decode(source, handler);
+      {
+        PROFILE_POINT("Main");
+        decoder.decode(source, builder);
       }//PROFILE_POINT
       unsigned long decodeLapse = decodeTimer.freeze();
       size_t messageCount = handler.getMessageCount();

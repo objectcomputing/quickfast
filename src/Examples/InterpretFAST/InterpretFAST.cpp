@@ -269,9 +269,10 @@ InterpretFAST::run()
     }
 
     MessageInterpreter handler(* outputFile_);
+    Codecs::GenericMessageBuilder builder(handler);
     Codecs::DataSourceStream source(fastFile_);
 
-    Codecs::SynchronousDecoder<Codecs::GenericMessageBuilder, Codecs::MessageConsumer> decoder(templateRegistry);
+    Codecs::SynchronousDecoder decoder(templateRegistry);
     decoder.setStrict(strict_);
     decoder.setResetOnMessage(resetOnMessage_);
 
@@ -286,7 +287,7 @@ InterpretFAST::run()
     {
       decoder.setVerboseOutput(std::cout);
     }
-    decoder.decode(source, handler);
+    decoder.decode(source, builder);
 
     if(verboseExecution_)
     {

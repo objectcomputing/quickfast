@@ -10,12 +10,12 @@
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/Decoder.h>
 #include <Codecs/DataSource.h>
-#include <Codecs/MessageConsumer_fwd.h>
+//#include <Codecs/MessageConsumer_fwd.h>
+#include <Messages/MessageBuilder.h>
 
 namespace QuickFAST{
   namespace Codecs{
     /// @brief Support Synchronous (blocking) decoding of a FAST data stream
-    template<typename MessageType, typename MessageConsumerType>
     class SynchronousDecoder
     {
     public:
@@ -102,17 +102,16 @@ namespace QuickFAST{
       /// or messageCount() messages have been decoded.
       void decode(
         DataSource & source,
-        MessageConsumerType & consumer)
+        Messages::MessageBuilder & builder)
       {
         bool more = true;
         while(source.messageAvailable() > 0 && messageCount_ < messageCountLimit_)
         {
-          MessageType message(consumer);
           if(resetOnMessage_)
           {
             decoder_.reset();
           }
-          decoder_.decodeMessage(source, message);
+          decoder_.decodeMessage(source, builder);
           messageCount_ += 1;
         }
       }

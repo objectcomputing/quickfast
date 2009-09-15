@@ -297,11 +297,12 @@ namespace{
   void test (const std::string& xml)
   {
     std::ifstream templateStream(xml.c_str(), std::ifstream::binary);
+    BOOST_CHECK(templateStream.good());
 
     Codecs::XMLTemplateParser parser;
     Codecs::TemplateRegistryPtr templateRegistry =
       parser.parse(templateStream);
-
+    BOOST_CHECK(templateRegistry);
     Messages::Message msg(templateRegistry->maxFieldCount());
 
     //<int32 name="int32_nop" id="1">

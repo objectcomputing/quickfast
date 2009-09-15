@@ -23,7 +23,8 @@ namespace QuickFAST{
       /// @param name the localname for the field
       /// @param fieldNamespace the namespace in which the localname is defined
       explicit FieldIdentity(
-        const std::string & name, const std::string & fieldNamespace = "")
+        const std::string & name,
+        const std::string & fieldNamespace = "")
         : localName_(name)
         , fieldNamespace_(fieldNamespace)
         , mandatory_(true)

@@ -5,6 +5,7 @@ boost=1
 // once the refactoring is complete the .NET support should be completely
 // reconsidered and reworked.
 dotnet=0
+dotnetapp=0
 nunit=0
 arca=1
 arcadotnet=1

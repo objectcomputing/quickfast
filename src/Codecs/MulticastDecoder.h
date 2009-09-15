@@ -113,7 +113,6 @@ namespace QuickFAST{
       BufferConsumerPtr bufferConsumer_;
       Decoder decoder_;
       Messages::MessageBuilder * builder_;
-//      bool verbose_;
       size_t messageLimit_;
       size_t messageCount_;
     };
