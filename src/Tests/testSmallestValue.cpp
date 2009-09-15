@@ -33,6 +33,10 @@
 #include <Common/Exceptions.h>
 #include <fstream>
 #include <cstdlib>
+namespace
+{
+  const long long LARGEST_INT64 = 0x8000000000000000LL; //-9223372036854775808LL
+}
 
 using namespace QuickFAST;
 
@@ -70,7 +74,7 @@ namespace{
     //<int64 name="int64_nop" id="3">
     //msg.addField(identity_int64_nop, Messages::FieldInt64::create(-9223372036854775808));
     BOOST_CHECK(message.getField("int64_nop", value));
-    BOOST_CHECK_EQUAL(value->toInt64(), -9223372036854775808LL);
+    BOOST_CHECK_EQUAL(value->toInt64(), LARGEST_INT64);
 
     //<uInt64 name="uint64_nop" id="4">
     //msg.addField(identity_uint64_nop, Messages::FieldUInt64::create(0));
@@ -80,7 +84,7 @@ namespace{
     //<decimal name="decimal_nop" id="5">
     //msg.addField(identity_decimal_nop, Messages::FieldDecimal::create(Decimal(-9223372036854775808, 63)));
     BOOST_CHECK(message.getField("decimal_nop", value));
-    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal (-9223372036854775808LL, 63));
+    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal (LARGEST_INT64, 63));
 
     //<string name="asciistring_nop" charset="ascii" id="6">
     //msg.addField(identity_asciistring_nop, Messages::FieldAscii::create(""));
@@ -110,7 +114,7 @@ namespace{
     //  <int64 name="int64_const" id="11"><constant value="-9223372036854775808"/>
     //msg.addField(identity_int64_const, Messages::FieldInt64::create(-9223372036854775808));
     BOOST_CHECK(message.getField("int64_const", value));
-    BOOST_CHECK_EQUAL(value->toInt64(), -9223372036854775808LL);
+    BOOST_CHECK_EQUAL(value->toInt64(), LARGEST_INT64);
 
     //  <uInt64 name="uint64_const" id="12"><constant value="0"/>
     //msg.addField(identity_uint64_const, Messages::FieldUInt64::create(0));
@@ -120,7 +124,7 @@ namespace{
     //  <decimal name="decimal_const" id="13"><constant value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
     //msg.addField(identity_decimal_const, Messages::FieldDecimal::create(Decimal(-9223372036854775808, 63)));
     BOOST_CHECK(message.getField("decimal_const", value));
-    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(-9223372036854775808LL, 63));
+    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(LARGEST_INT64, 63));
 
     //  <string name="asciistring_const" charset="ascii" id="14"><constant value=""/>
     //msg.addField(identity_asciistring_const, Messages::FieldAscii::create(""));
@@ -150,7 +154,7 @@ namespace{
     //  <int64 name="int64_default" id="19"><default value="-9223372036854775808"/>
     //msg.addField(identity_int64_default, Messages::FieldInt64::create(-9223372036854775808));
     BOOST_CHECK(message.getField("int64_default", value));
-    BOOST_CHECK_EQUAL(value->toInt64(), -9223372036854775808LL);
+    BOOST_CHECK_EQUAL(value->toInt64(), LARGEST_INT64);
 
     //  <uInt64 name="uint64_default" id="20"><default value="0"/>
     //msg.addField(identity_uint64_default, Messages::FieldUInt64::create(0));
@@ -160,7 +164,7 @@ namespace{
     //  <decimal name="decimal_default" id="21"><default value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
     //msg.addField(identity_decimal_default, Messages::FieldDecimal::create(Decimal(-9223372036854775808, 63)));
     BOOST_CHECK(message.getField("decimal_default", value));
-    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(-9223372036854775808LL, 63));
+    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(LARGEST_INT64, 63));
 
     //  <string name="asciistring_default" charset="ascii" id="22"><default value=""/>
     //msg.addField(identity_asciistring_default, Messages::FieldAscii::create(""));
@@ -190,7 +194,7 @@ namespace{
     //  <int64 name="int64_copy" id="27"><copy/>
     //msg.addField(identity_int64_copy, Messages::FieldInt64::create(-9223372036854775808));
     BOOST_CHECK(message.getField("int64_copy", value));
-    BOOST_CHECK_EQUAL(value->toInt64(), -9223372036854775808LL);
+    BOOST_CHECK_EQUAL(value->toInt64(), LARGEST_INT64);
 
     //  <uInt64 name="uint64_copy" id="28"><copy/>
     // msg.addField(identity_uint64_copy, Messages::FieldUInt64::create(0));
@@ -200,7 +204,7 @@ namespace{
     //  <decimal name="decimal_copy" id="29"><copy value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
     //msg.addField(identity_decimal_copy, Messages::FieldDecimal::create(Decimal(-9223372036854775808, 63)));
     BOOST_CHECK(message.getField("decimal_copy", value));
-    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(-9223372036854775808LL, 63));
+    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(LARGEST_INT64, 63));
 
     //  <string name="asciistring_copy" charset="ascii" id="30"><copy/>
     //msg.addField(identity_asciistring_copy, Messages::FieldAscii::create(""));
@@ -230,7 +234,7 @@ namespace{
     //  <int64 name="int64_delta" id="35"><delta/>
     //msg.addField(identity_int64_delta, Messages::FieldInt64::create(-9223372036854775808));
     BOOST_CHECK(message.getField("int64_delta", value));
-    BOOST_CHECK_EQUAL(value->toInt64(), -9223372036854775808LL);
+    BOOST_CHECK_EQUAL(value->toInt64(), LARGEST_INT64);
 
     //  <uInt64 name="uint64_delta" id="36"><delta/>
     //msg.addField(identity_uint64_delta, Messages::FieldUInt64::create(0));
@@ -240,7 +244,7 @@ namespace{
     //  <decimal name="decimal_delta" id="37"><delta/>
     //msg.addField(identity_decimal_delta, Messages::FieldDecimal::create(Decimal(-9223372036854775808, 63)));
     BOOST_CHECK(message.getField("decimal_delta", value));
-    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(-9223372036854775808LL, 63));
+    BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(LARGEST_INT64, 63));
 
     //  <string name="asciistring_delta" charset="ascii" id="38"><delta/>
     //msg.addField(identity_asciistring_delta, Messages::FieldAscii::create(""));
@@ -402,11 +406,11 @@ namespace{
     //<uInt32 name="uint32_nop" id="2">
     msg.addField(identity_uint32_nop, Messages::FieldUInt32::create(0));
     //<int64 name="int64_nop" id="3">
-    msg.addField(identity_int64_nop, Messages::FieldInt64::create(-9223372036854775808LL));
+    msg.addField(identity_int64_nop, Messages::FieldInt64::create(LARGEST_INT64));
     //<uInt64 name="uint64_nop" id="4">
     msg.addField(identity_uint64_nop, Messages::FieldUInt64::create(0));
     //<decimal name="decimal_nop" id="5">
-    msg.addField(identity_decimal_nop, Messages::FieldDecimal::create(Decimal(-9223372036854775808LL, 63)));
+    msg.addField(identity_decimal_nop, Messages::FieldDecimal::create(Decimal(LARGEST_INT64, 63)));
     //<string name="asciistring_nop" charset="ascii" id="6">
     msg.addField(identity_asciistring_nop, Messages::FieldAscii::create(""));
     //<string name="utf8string_nop" charset="unicode" id="7">
@@ -418,11 +422,11 @@ namespace{
     //  <uInt32 name="uint32_const" id="10"><constant value="0"/>
     msg.addField(identity_uint32_const, Messages::FieldUInt32::create(0));
     //  <int64 name="int64_const" id="11"><constant value="-9223372036854775808"/>
-    msg.addField(identity_int64_const, Messages::FieldInt64::create(-9223372036854775808LL));
+    msg.addField(identity_int64_const, Messages::FieldInt64::create(LARGEST_INT64));
     //  <uInt64 name="uint64_const" id="12"><constant value="9223372036854775808"/>
     msg.addField(identity_uint64_const, Messages::FieldUInt64::create(0));
     //  <decimal name="decimal_const" id="13"><constant value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
-    msg.addField(identity_decimal_const, Messages::FieldDecimal::create(Decimal(-9223372036854775808LL, 63)));
+    msg.addField(identity_decimal_const, Messages::FieldDecimal::create(Decimal(LARGEST_INT64, 63)));
     //  <string name="asciistring_const" charset="ascii" id="14"><constant value=""/>
     msg.addField(identity_asciistring_const, Messages::FieldAscii::create(""));
     //  <string name="utf8string_const" charset="unicode" id="15"><constant value=""/>
@@ -434,11 +438,11 @@ namespace{
     //  <uInt32 name="uint32_default" id="18"><default value="0"/>
     msg.addField(identity_uint32_default, Messages::FieldUInt32::create(0));
     //  <int64 name="int64_default" id="19"><default value="-9223372036854775808"/>
-    msg.addField(identity_int64_default, Messages::FieldInt64::create(-9223372036854775808LL));
+    msg.addField(identity_int64_default, Messages::FieldInt64::create(LARGEST_INT64));
     //  <uInt64 name="uint64_default" id="20"><default value="0"/>
     msg.addField(identity_uint64_default, Messages::FieldUInt64::create(0));
     //  <decimal name="decimal_default" id="21"><default value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
-    msg.addField(identity_decimal_default, Messages::FieldDecimal::create(Decimal(-9223372036854775808LL, 63)));
+    msg.addField(identity_decimal_default, Messages::FieldDecimal::create(Decimal(LARGEST_INT64, 63)));
     //  <string name="asciistring_default" charset="ascii" id="22"><default value=""/>
     msg.addField(identity_asciistring_default, Messages::FieldAscii::create(""));
     //  <string name="utf8string_default" charset="unicode" id="23"><default value=""/>
@@ -450,11 +454,11 @@ namespace{
     //  <uInt32 name="uint32_copy" id="26"><copy/>
     msg.addField(identity_uint32_copy, Messages::FieldUInt32::create(0));
     //  <int64 name="int64_copy" id="27"><copy/>
-    msg.addField(identity_int64_copy, Messages::FieldInt64::create(-9223372036854775808LL));
+    msg.addField(identity_int64_copy, Messages::FieldInt64::create(LARGEST_INT64));
     //  <uInt64 name="uint64_copy" id="28"><copy/>
     msg.addField(identity_uint64_copy, Messages::FieldUInt64::create(0));
     //  <decimal name="decimal_copy" id="29"><copy value="-9223372036854775808000000000000000000000000000000000000000000000000000000000000000"/>
-    msg.addField(identity_decimal_copy, Messages::FieldDecimal::create(Decimal(-9223372036854775808LL, 63)));
+    msg.addField(identity_decimal_copy, Messages::FieldDecimal::create(Decimal(LARGEST_INT64, 63)));
     //  <string name="asciistring_copy" charset="ascii" id="30"><copy/>
     msg.addField(identity_asciistring_copy, Messages::FieldAscii::create(""));
     //  <string name="utf8string_copy" charset="unicode" id="31"><copy/>
@@ -466,11 +470,11 @@ namespace{
     //  <uInt32 name="uint32_delta" id="34"><delta/>
     msg.addField(identity_uint32_delta, Messages::FieldUInt32::create(0));
     //  <int64 name="int64_delta" id="35"><delta/>
-    msg.addField(identity_int64_delta, Messages::FieldInt64::create(-9223372036854775808LL));
+    msg.addField(identity_int64_delta, Messages::FieldInt64::create(LARGEST_INT64));
     //  <uInt64 name="uint64_delta" id="36"><delta/>
     msg.addField(identity_uint64_delta, Messages::FieldUInt64::create(0));
     //  <decimal name="decimal_delta" id="37"><delta/>
-    msg.addField(identity_decimal_delta, Messages::FieldDecimal::create(Decimal(-9223372036854775808LL, 63)));
+    msg.addField(identity_decimal_delta, Messages::FieldDecimal::create(Decimal(LARGEST_INT64, 63)));
     //  <string name="asciistring_delta" charset="ascii" id="38"><delta/>
     msg.addField(identity_asciistring_delta, Messages::FieldAscii::create(""));
     //  <string name="utf8string_delta" charset="unicode" id="39"><delta/>
