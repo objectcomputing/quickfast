@@ -39,6 +39,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/scoped_array.hpp>
+#include <boost/function.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/operators.hpp>
 #include <boost/thread.hpp>

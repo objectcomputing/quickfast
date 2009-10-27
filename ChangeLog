@@ -1,3 +1,7 @@
+Tue Oct 27 17:58:37 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+        * src/Common/QuickFASTPch.h:
+        Hei Chan reports build problem: missing boost function.
+
 Tue Sep 15 18:41:30 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
         * src/Tests/testSmallestValue.cpp:
         Eliminate gcc warnings about largest negative 64 bit integer
