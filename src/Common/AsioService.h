@@ -57,6 +57,7 @@ namespace QuickFAST{
     {
       return ioService_;
     }
+
     /// @brief create additional threads to run the event loop
     void startThreads(size_t threadCount)
     {

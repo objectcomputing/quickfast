@@ -612,7 +612,8 @@ namespace QuickFAST{
         if(!isMandatory())
         {
           // gcc produces bogus warning on the following line see GCC Bugzilla Bug 11856
-          if(!SIGNED || value >= 0)
+          // if(!SIGNED || value >= 0)
+          if(!SIGNED || value > 0 || value == 0)
           {
             ++value;
           }
@@ -707,7 +708,8 @@ namespace QuickFAST{
           if(!isMandatory())
           {
             // gcc produces bogus warning on the following line see GCC Bugzilla Bug 11856
-            if(!SIGNED || value >= 0)
+            // if(!SIGNED || value >= 0)
+            if(!SIGNED || value > 0 || value == 0)
             {
               ++value;
             }
@@ -786,7 +788,8 @@ namespace QuickFAST{
           if(!isMandatory())
           {
             // gcc produces bogus warning on the following line see GCC Bugzilla Bug 11856
-            if(!SIGNED || value >= 0)
+            // if(!SIGNED || value >= 0)
+            if(!SIGNED || value > 0 || value == 0)
             {
               ++value;
             }
@@ -953,7 +956,8 @@ namespace QuickFAST{
           if(!isMandatory())
           {
             // gcc produces bogus warning on the following line see GCC Bugzilla Bug 11856
-            if(!SIGNED || value >= 0)
+            // if(!SIGNED || value >= 0)
+            if(!SIGNED || value > 0 || value == 0)
             {
               ++value;
             }

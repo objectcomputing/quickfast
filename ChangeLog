@@ -1,3 +1,15 @@
+Wed Nov  4 21:48:42 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionInteger.h:
+        Avoid warning message on gcc: templates signed vs unsigned
+
+        * src/Common/Version.h:
+        add version # support
+
+        * src/Common/AsioService.h:
+        * src/Common/WorkingBuffer.cpp:
+        Minor/cosmetic: code formatting changes
+
 Tue Oct 27 17:58:37 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
         * src/Common/QuickFASTPch.h:
         Hei Chan reports build problem: missing boost function.

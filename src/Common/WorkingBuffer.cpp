@@ -50,7 +50,6 @@ WorkingBuffer::pop_front()
   }
 }
 
-
 void
 WorkingBuffer::push(uchar byte)
 {
@@ -73,17 +72,6 @@ WorkingBuffer::push(uchar byte)
     buffer_[endPos_++] = byte;
   }
 }
-#if 0
-void
-WorkingBuffer::storeByte(size_t pos, uchar byte)
-{
-  if(pos >= this->capacity_)
-  {
-    grow(pos);
-  }
-  buffer_[pos] = byte;
-}
-#endif
 
 void
 WorkingBuffer::grow()
@@ -105,5 +93,4 @@ WorkingBuffer::grow()
   startPos_ += delta;
   endPos_ += delta;
   capacity_ = newCapacity;
-
 }
