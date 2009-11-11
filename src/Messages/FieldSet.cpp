@@ -38,10 +38,18 @@ FieldSet::reserve(size_t capacity)
     {
       new(&buffer[nField]) MessageField(fields_[nField]);
     }
-    unsigned char * oldBuffer = reinterpret_cast<unsigned char *>(fields_);
+
+    MessageField * oldBuffer = fields_;
+    size_t oldUsed = used_;
     fields_ = buffer;
     capacity_ = capacity;
-    delete[] oldBuffer;
+
+    while (oldUsed > 0)
+    {
+      --oldUsed;
+      oldBuffer[oldUsed].~MessageField();
+    }
+    delete[] reinterpret_cast<unsigned char *>(oldBuffer);
   }
 }
 

@@ -149,12 +149,14 @@ namespace QuickFAST{
     intrusive_ptr_add_ref(const Messages::FieldIdentity * ptr)
     {
       ++ptr->refcount_;
+//      std::cout << "Identity @" << std::hex << ptr << std::dec << "++[" << ptr->refcount_ << " ]: " << ptr->localName_ << ' ' << ptr->id_ << std::endl;
     }
 
     inline
     void QuickFAST_Export
     intrusive_ptr_release(const Messages::FieldIdentity * ptr)
     {
+//      std::cout << "Identity @" << std::hex << ptr << std::dec << "--[" << ptr->refcount_ << " ]: " << ptr->localName_ << ' ' << ptr->id_ << std::endl;
       if(--ptr->refcount_ == 0)
       {
         ptr->freeFieldIdentity();
@@ -166,12 +168,14 @@ namespace QuickFAST{
     intrusive_ptr_add_ref(Messages::FieldIdentity * ptr)
     {
       ++ptr->refcount_;
+//      std::cout << "Identity @" << std::hex << ptr << std::dec << "++[" << ptr->refcount_ << " ]: " << ptr->localName_ << ' ' << ptr->id_ << std::endl;
     }
 
     inline
     void QuickFAST_Export
     intrusive_ptr_release(Messages::FieldIdentity * ptr)
     {
+//      std::cout << "Identity @" << std::hex << ptr << std::dec << "--[" << ptr->refcount_ << " ]: " << ptr->localName_ << ' ' << ptr->id_ << std::endl;
       if(--ptr->refcount_ == 0)
       {
         ptr->freeFieldIdentity();

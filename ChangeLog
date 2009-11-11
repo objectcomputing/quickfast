@@ -1,3 +1,11 @@
+Wed Nov 11 16:11:34 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Messages/FieldIdentity.h:
+        * src/Messages/FieldSet.cpp:
+        Fix memory leak when more than the expected number of fields
+        are found. (This can happen when the templateRef field instruction
+        is used.)
+
 Thu Nov  5 14:55:46 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
         Labeled as V1.0
 
