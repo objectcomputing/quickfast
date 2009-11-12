@@ -192,7 +192,7 @@ Decimal::operator==(const Decimal & rhs) const
 
 Decimal::operator double()const
 {
-    return double(mantissa_) * pow(10.0L, exponent_);
+    return double(double(mantissa_) * pow(10.0L, exponent_));
 }
 
 Decimal &

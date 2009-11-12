@@ -111,9 +111,9 @@ FieldInstructionDecimal::decodeNop(
 
 bool
 FieldInstructionDecimal::decodeConstant(
-  Codecs::DataSource & source,
+  Codecs::DataSource & /*source*/,
   Codecs::PresenceMap & pmap,
-  Codecs::Decoder & decoder,
+  Codecs::Decoder & /*decoder*/,
   Messages::MessageBuilder & accessor) const
 {
   PROFILE_POINT("decimal::decodeConstant");
@@ -269,7 +269,7 @@ FieldInstructionDecimal::decodeCopy(
 bool
 FieldInstructionDecimal::decodeDelta(
   Codecs::DataSource & source,
-  Codecs::PresenceMap & pmap,
+  Codecs::PresenceMap & /*pmap*/,
   Codecs::Decoder & decoder,
   Messages::MessageBuilder & accessor) const
 {
@@ -407,14 +407,14 @@ FieldInstructionDecimal::encodeNop(
     }
     else
     {
-      destination.putByte('\x80');
+      destination.putByte(nullInteger);
     }
   }
 }
 
 void
 FieldInstructionDecimal::encodeConstant(
-  Codecs::DataDestination & destination,
+  Codecs::DataDestination & /*destination*/,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & accessor) const
@@ -567,7 +567,7 @@ FieldInstructionDecimal::encodeCopy(
 void
 FieldInstructionDecimal::encodeDelta(
   Codecs::DataDestination & destination,
-  Codecs::PresenceMap & pmap,
+  Codecs::PresenceMap & /*pmap*/,
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & accessor) const
 {
@@ -659,6 +659,4 @@ FieldInstructionDecimal::indexDictionaries(
     mantissaInstruction_->indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
   }
 }
-
-
 

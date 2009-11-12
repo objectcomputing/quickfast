@@ -214,7 +214,7 @@ namespace QuickFAST{
     FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
     decodeNop(
       Codecs::DataSource & source,
-      Codecs::PresenceMap & pmap,
+      Codecs::PresenceMap & /*pmap*/,
       Codecs::Decoder & decoder,
       Messages::MessageBuilder & fieldSet) const
     {
@@ -257,9 +257,9 @@ namespace QuickFAST{
     bool
     FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
     decodeConstant(
-      Codecs::DataSource & source,
+      Codecs::DataSource & /*source*/,
       Codecs::PresenceMap & pmap,
-      Codecs::Decoder & decoder,
+      Codecs::Decoder & /*decoder*/,
       Messages::MessageBuilder & fieldSet) const
     {
       PROFILE_POINT("int::decodeConstant");
@@ -458,7 +458,7 @@ namespace QuickFAST{
     FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
     decodeDelta(
       Codecs::DataSource & source,
-      Codecs::PresenceMap & pmap,
+      Codecs::PresenceMap & /*pmap*/,
       Codecs::Decoder & decoder,
       Messages::MessageBuilder & fieldSet) const
     {
@@ -616,7 +616,7 @@ namespace QuickFAST{
     FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
     encodeNop(
       Codecs::DataDestination & destination,
-      Codecs::PresenceMap & pmap,
+      Codecs::PresenceMap & /*pmap*/,
       Codecs::Encoder & encoder,
       const Messages::MessageAccessor & fieldSet) const
     {
@@ -669,7 +669,7 @@ namespace QuickFAST{
     void
     FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
     encodeConstant(
-      Codecs::DataDestination & destination,
+      Codecs::DataDestination & /*destination*/,
       Codecs::PresenceMap & pmap,
       Codecs::Encoder & encoder,
       const Messages::MessageAccessor & fieldSet) const
@@ -862,7 +862,7 @@ namespace QuickFAST{
     FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
     encodeDelta(
       Codecs::DataDestination & destination,
-      Codecs::PresenceMap & pmap,
+      Codecs::PresenceMap & /*pmap*/,
       Codecs::Encoder & encoder,
       const Messages::MessageAccessor & fieldSet) const
     {

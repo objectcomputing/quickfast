@@ -9,20 +9,20 @@
 #include <Common/Types.h>
 
 namespace QuickFAST{
-  static const uchar stopBit = '\x80';
-  static const uchar dataBits = '\x7F';
-  static const uchar signBit = '\x40';
-  static const unsigned int dataShift = 7;
-  static const unsigned int byteSize = 8;
+  static const uchar stopBit = uchar('\x80');
+  static const uchar dataBits = uchar('\x7F');
+  static const uchar signBit = uchar('\x40');
+  static const unsigned int dataShift(7u);
+  static const unsigned int byteSize(8u);
 
-  static const uchar nullInteger = '\x80';
-  static const uchar nullAscii = '\x80';
-  static const uchar nullBlob = '\x80';
-  static const uchar nullDecimal = '\x80';
+  static const uchar nullInteger = uchar('\x80');
+  static const uchar nullAscii = uchar('\x80');
+  static const uchar nullBlob = uchar('\x80');
+  static const uchar nullDecimal = uchar('\x80');
 
-  static const uchar nullableStringPreamble = '\0';
-  static const uchar emptyString = '\x80';
-  static const uchar leadingZeroBytePreamble = '\0';
+  static const uchar nullableStringPreamble = uchar('\0');
+  static const uchar emptyString = uchar('\x80');
+  static const uchar leadingZeroBytePreamble = uchar('\0');
 
 }
 #endif // CONSTANTS_H

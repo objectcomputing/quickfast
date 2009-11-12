@@ -130,7 +130,7 @@ FieldInstructionGroup::presenceMapBitsRequired() const
 
 
 void
-FieldInstructionGroup::interpretValue(const std::string & value)
+FieldInstructionGroup::interpretValue(const std::string & /*value*/)
 {
   throw TemplateDefinitionError("[ERR U11] Value not needed by Group instruction.");
 }

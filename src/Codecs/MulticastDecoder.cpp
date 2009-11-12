@@ -34,6 +34,11 @@ namespace
     virtual bool reportCommunicationError(const std::string & errorMessage);
 
   private:
+    GenericMessageBufferConsumer & operator = (const GenericMessageBufferConsumer &);
+    GenericMessageBufferConsumer(const GenericMessageBufferConsumer &);
+    GenericMessageBufferConsumer();
+
+  private:
     Messages::MessageBuilder & builder_;
     Decoder & decoder_;
     size_t & messageLimit_;

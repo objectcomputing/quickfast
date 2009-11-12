@@ -37,10 +37,10 @@ GenericSequenceBuilder::fieldSet()const
 
 void
 GenericSequenceBuilder::initialize(
-  Messages::FieldIdentityCPtr identity,
-  const std::string & applicationType,
-  const std::string & applicationTypeNamespace,
-  size_t size)
+  Messages::FieldIdentityCPtr /*identity*/,
+  const std::string & /*applicationType*/,
+  const std::string & /*applicationTypeNamespace*/,
+  size_t /*size*/)
 {
   this->sequence_.reset(new Messages::Sequence);
 }
@@ -67,22 +67,22 @@ GenericSequenceBuilder::addField(
 
 Messages::MessageBuilder &
 GenericSequenceBuilder::startMessage(
-  const std::string & applicationType,
-  const std::string & applicationTypeNamespace,
-  size_t size)
+  const std::string & /*applicationType*/,
+  const std::string & /*applicationTypeNamespace*/,
+  size_t /*size*/)
 {
   throw QuickFAST::UsageError("Attempt to build message.", "GenericSequenceBuilder");
 }
 
 
 bool
-GenericSequenceBuilder::endMessage(Messages::MessageBuilder & messageBuilder)
+GenericSequenceBuilder::endMessage(Messages::MessageBuilder & /*messageBuilder*/)
 {
   throw QuickFAST::UsageError("Attempt to build message.", "GenericSequenceBuilder");
 }
 
 bool
-GenericSequenceBuilder::ignoreMessage(MessageBuilder & messageBuilder)
+GenericSequenceBuilder::ignoreMessage(MessageBuilder & /*messageBuilder*/)
 {
   throw QuickFAST::UsageError("Attempt to build message.", "GenericSequenceBuilder");
 }
@@ -112,7 +112,7 @@ GenericSequenceBuilder::startSequence(
 void
 GenericSequenceBuilder::endSequence(
   Messages::FieldIdentityCPtr identity,
-  Messages::MessageBuilder & sequenceBuilder)
+  Messages::MessageBuilder & /*sequenceBuilder*/)
 {
   // Note this will be called to end a nested sequence
   if(sequenceBuilder_)
@@ -145,7 +145,7 @@ GenericSequenceBuilder::startSequenceEntry(
 
 void
 GenericSequenceBuilder::endSequenceEntry(
-  Messages::MessageBuilder & entry)
+  Messages::MessageBuilder & /*entry*/)
 {
   sequence_->addEntry(fieldSet_);
   fieldSet_.reset();
@@ -175,7 +175,7 @@ GenericSequenceBuilder::startGroup(
 void
 GenericSequenceBuilder::endGroup(
   Messages::FieldIdentityCPtr identity,
-  Messages::MessageBuilder & entry)
+  Messages::MessageBuilder & /*entry*/)
 {
   /// Note this will be called to end a nested group
   fieldSet()->addField(
@@ -277,22 +277,22 @@ GenericGroupBuilder::addField(
 
 Messages::MessageBuilder &
 GenericGroupBuilder::startMessage(
-  const std::string & applicationType,
-  const std::string & applicationTypeNamespace,
-  size_t size)
+  const std::string & /*applicationType*/,
+  const std::string & /*applicationTypeNamespace*/,
+  size_t /*size*/)
 {
   throw QuickFAST::UsageError("Attempt to build message.", "GenericGroupBuilder");
 }
 
 bool
 GenericGroupBuilder::endMessage(
-  Messages::MessageBuilder & messageBuilder)
+  Messages::MessageBuilder & /*messageBuilder*/)
 {
   throw QuickFAST::UsageError("Attempt to build message.", "GenericGroupBuilder");
 }
 
 bool
-GenericGroupBuilder::ignoreMessage(Messages::MessageBuilder & messageBuilder)
+GenericGroupBuilder::ignoreMessage(Messages::MessageBuilder & /*messageBuilder*/)
 {
   throw QuickFAST::UsageError("Attempt to build message.", "GenericGroupBuilder");
 }
@@ -321,7 +321,7 @@ GenericGroupBuilder::startSequence(
 void
 GenericGroupBuilder::endSequence(
    Messages::FieldIdentityCPtr identity,
-  Messages::MessageBuilder & sequenceBuilder)
+  Messages::MessageBuilder & /*sequenceBuilder*/)
 {
   // Note this will be called to end a nested sequence
   if(sequenceBuilder_)
@@ -340,15 +340,15 @@ GenericGroupBuilder::endSequence(
 
 Messages::MessageBuilder &
 GenericGroupBuilder::startSequenceEntry(
-  const std::string & applicationType,
-  const std::string & applicationTypeNamespace,
-  size_t size)
+  const std::string & /*applicationType*/,
+  const std::string & /*applicationTypeNamespace*/,
+  size_t /*size*/)
 {
   throw QuickFAST::UsageError("Sequence operation applied to group.", "GenericGroupBuilder");
 }
 
 void
-GenericGroupBuilder::endSequenceEntry(Messages::MessageBuilder & entry)
+GenericGroupBuilder::endSequenceEntry(Messages::MessageBuilder & /*entry*/)
 {
   throw QuickFAST::UsageError("Sequence operation applied to group.", "GenericGroupBuilder");
 }
@@ -383,7 +383,7 @@ GenericGroupBuilder::startGroup(
 void
 GenericGroupBuilder::endGroup(
   Messages::FieldIdentityCPtr identity,
-  Messages::MessageBuilder & entry)
+  Messages::MessageBuilder & /*entry*/)
 {
   /// Note this will be called to end a nested group
   groupPtr()->addField(
@@ -497,7 +497,7 @@ GenericMessageBuilder::endMessage(Messages::MessageBuilder &)
 }
 
 bool
-GenericMessageBuilder::ignoreMessage(Messages::MessageBuilder & messageBuilder)
+GenericMessageBuilder::ignoreMessage(Messages::MessageBuilder & /*messageBuilder*/)
 {
   return true;
 }
@@ -531,15 +531,15 @@ GenericMessageBuilder::endSequence(
 
 Messages::MessageBuilder &
 GenericMessageBuilder::startSequenceEntry(
-  const std::string & applicationType,
-  const std::string & applicationTypeNamespace,
-  size_t size)
+  const std::string & /*applicationType*/,
+  const std::string & /*applicationTypeNamespace*/,
+  size_t /*size*/)
 {
   throw QuickFAST::UsageError("Attempt to add sequence entry to message", "Generic Message Builder");
 }
 
 void
-GenericMessageBuilder::endSequenceEntry(Messages::MessageBuilder & entry)
+GenericMessageBuilder::endSequenceEntry(Messages::MessageBuilder & /*entry*/)
 {
   throw QuickFAST::UsageError("Attempt to add sequence entry to message", "Generic Message Builder");
 }
@@ -562,7 +562,7 @@ GenericMessageBuilder::startGroup(
 void
 GenericMessageBuilder::endGroup(
   Messages::FieldIdentityCPtr identity,
-  Messages::MessageBuilder & groupBuilder)
+  Messages::MessageBuilder & /*groupBuilder*/)
 {
   message()->addField(
     identity,

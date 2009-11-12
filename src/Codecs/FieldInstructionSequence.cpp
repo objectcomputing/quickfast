@@ -151,7 +151,7 @@ FieldInstructionSequence::encodeNop(
 }
 
 void
-FieldInstructionSequence::interpretValue(const std::string & value)
+FieldInstructionSequence::interpretValue(const std::string & /*value*/)
 {
   throw TemplateDefinitionError("Value not needed by Sequence instruction.");
 }

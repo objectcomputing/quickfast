@@ -13,7 +13,7 @@ namespace QuickFAST{
     class QuickFAST_Export FieldOpNop : public FieldOp
     {
     public:
-      virtual bool usesPresenceMap(bool mandatory)const
+      virtual bool usesPresenceMap(bool /*mandatory*/)const
       {
         return false;
       }
@@ -44,7 +44,7 @@ namespace QuickFAST{
       }
 
       virtual void setDefaultValue(
-        Codecs::FieldInstruction & instruction) const
+        Codecs::FieldInstruction & /*instruction*/) const
       {
       }
     };

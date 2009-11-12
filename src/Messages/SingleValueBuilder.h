@@ -32,25 +32,25 @@ namespace QuickFAST
         ///////////////////////////
         // Implement MessageBuilder
         MessageBuilder & startMessage(
-          const std::string & applicationType,
-          const std::string & applicationTypeNamespace,
-          size_t size)
+          const std::string & /*applicationType*/,
+          const std::string & /*applicationTypeNamespace*/,
+          size_t /*size*/)
         {
           return *this;
         }
 
-        bool endMessage(MessageBuilder &messageBuilder)
+        bool endMessage(MessageBuilder &/*messageBuilder*/)
         {
           return true;
         }
 
-        bool ignoreMessage(MessageBuilder & messageBuilder)
+        bool ignoreMessage(MessageBuilder & /*messageBuilder*/)
         {
           return true;
         }
 
         virtual void addField(
-          const Messages::FieldIdentityCPtr & identity,
+          const Messages::FieldIdentityCPtr & /*identity*/,
           const Messages::FieldCPtr & value)
         {
           value->getValue(value_);
@@ -78,19 +78,19 @@ namespace QuickFAST
       private:
         /////////////////////////////////////////////////
         // Dummy implementations of other virtual methods
-        virtual void clear(size_t capacity){}
-        virtual void reserve(size_t capacity){}
+        virtual void clear(size_t /*capacity*/){}
+        virtual void reserve(size_t /*capacity*/){}
         virtual size_t size() const
         {
           return 1;
         }
 
-        virtual bool getIdentity(const std::string &name, Messages::FieldIdentityCPtr & identity) const
+        virtual bool getIdentity(const std::string &/*name*/, Messages::FieldIdentityCPtr & /*identity*/) const
         {
           return false;
         }
 
-        virtual void setApplicationType(const std::string & type, const std::string & ns)
+        virtual void setApplicationType(const std::string & /*type*/, const std::string & /*ns*/)
         {
         }
 
@@ -107,40 +107,43 @@ namespace QuickFAST
         }
 
         virtual MessageBuilder & startSequence(
-          Messages::FieldIdentityCPtr identity,
-          const std::string & applicationType,
-          const std::string & applicationTypeNamespace,
-          size_t size)
+          Messages::FieldIdentityCPtr /*identity*/,
+          const std::string & /*applicationType*/,
+          const std::string & /*applicationTypeNamespace*/,
+          size_t /*size*/)
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
 
         virtual QuickFAST::Messages::MessageBuilder & startSequenceEntry(
-          const std::string & applicationType,
-          const std::string & applicationTypeNamespace,size_t size)
+          const std::string & /*applicationType*/,
+          const std::string & /*applicationTypeNamespace*/,
+          size_t /*size*/)
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
 
-        virtual void endSequenceEntry(MessageBuilder & entry)
+        virtual void endSequenceEntry(MessageBuilder & /*entry*/)
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
-        virtual void endSequence( Messages::FieldIdentityCPtr identity, MessageBuilder & )
+        virtual void endSequence( Messages::FieldIdentityCPtr /*identity*/, MessageBuilder & )
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
 
         virtual QuickFAST::Messages::MessageBuilder & startGroup(
-          Messages::FieldIdentityCPtr identity,
-          const std::string & applicationType,
-          const std::string & applicationTypeNamespace,size_t size)
+          Messages::FieldIdentityCPtr /*identity*/,
+          const std::string & /*applicationType*/,
+          const std::string & /*applicationTypeNamespace*/,
+          size_t /*size*/)
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Group.");
         }
+
         virtual void endGroup(
-          Messages::FieldIdentityCPtr identity,
-          MessageBuilder & entry)
+          Messages::FieldIdentityCPtr /*identity*/,
+          MessageBuilder & /*entry*/)
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Group.");
         }
@@ -150,22 +153,22 @@ namespace QuickFAST
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence or Group.");
         }
 
-        virtual bool wantLog(unsigned short level)
+        virtual bool wantLog(unsigned short /*level*/)
         {
           return false;
         }
 
-        virtual bool logMessage(unsigned short level, const std::string & logMessage)
+        virtual bool logMessage(unsigned short /*level*/, const std::string & /*logMessage*/)
         {
           return true;
         }
 
-        virtual bool reportDecodingError(const std::string & errorMessage)
+        virtual bool reportDecodingError(const std::string & /*errorMessage*/)
         {
           return true;
         }
 
-        virtual bool reportCommunicationError(const std::string & errorMessage)
+        virtual bool reportCommunicationError(const std::string & /*errorMessage*/)
         {
           return true;
         }

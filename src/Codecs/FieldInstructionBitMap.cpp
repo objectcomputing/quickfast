@@ -55,7 +55,7 @@ namespace
 bool
 FieldInstructionBitMap::decodeFromSource(
   Codecs::DataSource & source,
-  bool mandatory,
+  bool /*mandatory*/,
   WorkingBuffer & buffer,
   Messages::FieldCPtr & field) const
 {
@@ -88,7 +88,7 @@ FieldInstructionBitMap::decodeFromSource(
 bool
 FieldInstructionBitMap::decodeNop(
   Codecs::DataSource & source,
-  Codecs::PresenceMap & pmap,
+  Codecs::PresenceMap & /*pmap*/,
   Codecs::Decoder & decoder,
   Messages::MessageBuilder & fieldSet) const
 {
@@ -110,9 +110,9 @@ FieldInstructionBitMap::decodeNop(
 
 void
 FieldInstructionBitMap::encodeNop(
-  Codecs::DataDestination & destination,
-  Codecs::PresenceMap & pmap,
-  Codecs::Encoder & encoder,
+  Codecs::DataDestination & /*destination*/,
+  Codecs::PresenceMap & /*pmap*/,
+  Codecs::Encoder & /*encoder*/,
   const Messages::MessageAccessor & fieldSet) const
 {
   // get the value from the application data
@@ -143,7 +143,7 @@ FieldInstructionBitMap::encodeNop(
 
 
 void
-FieldInstructionBitMap::interpretValue(const std::string & value)
+FieldInstructionBitMap::interpretValue(const std::string & /*value*/)
 {
   /// initialization not supported yet.
   return;

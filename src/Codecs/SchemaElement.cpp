@@ -21,7 +21,7 @@ SchemaElement::addTemplate(TemplatePtr value)
 }
 
 void
-SchemaElement::setApplicationType(const std::string & type, const std::string & ns)
+SchemaElement::setApplicationType(const std::string & /*type*/, const std::string & /*ns*/)
 {
   throw TemplateDefinitionError("<typeRef> not allowed in this context.");
 }
@@ -31,14 +31,14 @@ SchemaElement::setFieldOp(FieldOpPtr fieldOp)
   throw TemplateDefinitionError("Field operation not allowed in this context.");
 }
 void
-SchemaElement::addLengthInstruction(FieldInstructionPtr & field)
+SchemaElement::addLengthInstruction(FieldInstructionPtr & /*field*/)
 {
   throw TemplateDefinitionError("<length> not allowed in this context.");
 }
 
 
 void
-SchemaElement::addInstruction(FieldInstructionPtr & field)
+SchemaElement::addInstruction(FieldInstructionPtr & /*field*/)
 {
   throw TemplateDefinitionError("Field instruction not allowed in this context.");
 }
@@ -49,10 +49,9 @@ SchemaElement::setMantissaInstruction(FieldInstructionPtr mantissa)
 }
 
 bool
-SchemaElement::getMantissaInstruction(FieldInstructionCPtr & mantissa) const
+SchemaElement::getMantissaInstruction(FieldInstructionCPtr & /*mantissa*/) const
 {
   throw TemplateDefinitionError("Mantissa applies only to Decimal Field instruction.");
-  return false;
 }
 
 void
@@ -62,8 +61,7 @@ SchemaElement::setExponentInstruction(FieldInstructionPtr exponent)
 }
 
 bool
-SchemaElement::getExponentInstruction(FieldInstructionCPtr & exponent) const
+SchemaElement::getExponentInstruction(FieldInstructionCPtr & /*exponent*/) const
 {
   throw TemplateDefinitionError("Exponent applies only to Decimal Field instruction.");
-  return false;
 }

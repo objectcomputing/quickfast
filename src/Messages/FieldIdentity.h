@@ -140,7 +140,7 @@ namespace QuickFAST{
       friend void QuickFAST_Export intrusive_ptr_release(const FieldIdentity * ptr);
       friend void QuickFAST_Export intrusive_ptr_add_ref(FieldIdentity * ptr);
       friend void QuickFAST_Export intrusive_ptr_release(FieldIdentity * ptr);
-      virtual void freeFieldIdentity()const;
+      void freeFieldIdentity()const;
       mutable unsigned long refcount_;
     };
 

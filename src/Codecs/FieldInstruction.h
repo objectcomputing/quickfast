@@ -73,21 +73,21 @@ namespace QuickFAST{
       /// @param id is the id for this field.
       void setId(const field_id_t & id)
       {
-        identity_->setId(id);
+        mutableIdentity_->setId(id);
       }
 
       /// @brief set the name of this field instruction after construction
       /// @param name is the localname for this field
       void setName(const std::string & name)
       {
-        identity_->setName(name);
+        mutableIdentity_->setName(name);
       }
 
       /// @brief set the namespace of this field instruction after construction
       /// @param fieldNamespace qualifies localname
       void setNamespace(const std::string & fieldNamespace)
       {
-        identity_->setNamespace(fieldNamespace);
+        mutableIdentity_->setNamespace(fieldNamespace);
       }
 
       /// @brief Indicate that the field is mandatory in the application record.
@@ -585,9 +585,10 @@ namespace QuickFAST{
       FieldInstruction(const FieldInstruction &);
       FieldInstruction & operator = (const FieldInstruction &);
 
+      Messages::FieldIdentityPtr mutableIdentity_;
     protected:
       /// Identify information for the fields to be Xcoded by this instruction
-      Messages::FieldIdentityPtr identity_;
+      Messages::FieldIdentityCPtr identity_;
       /// Application type associated with this instruction
       std::string applicationType_;
       /// Namespace in which the application type is defined.

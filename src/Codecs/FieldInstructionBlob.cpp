@@ -56,7 +56,7 @@ FieldInstructionBlob::decodeFromSource(
 bool
 FieldInstructionBlob::decodeNop(
   Codecs::DataSource & source,
-  Codecs::PresenceMap & pmap,
+  Codecs::PresenceMap & /*pmap*/,
   Codecs::Decoder & decoder,
   Messages::MessageBuilder & fieldSet) const
 {
@@ -77,9 +77,9 @@ FieldInstructionBlob::decodeNop(
 
 bool
 FieldInstructionBlob::decodeConstant(
-  Codecs::DataSource & source,
+  Codecs::DataSource & /*source*/,
   Codecs::PresenceMap & pmap,
-  Codecs::Decoder & decoder,
+  Codecs::Decoder & /*decoder*/,
   Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("blob::decodeConstant");
@@ -197,7 +197,7 @@ FieldInstructionBlob::decodeCopy(
 bool
 FieldInstructionBlob::decodeDelta(
   Codecs::DataSource & source,
-  Codecs::PresenceMap & pmap,
+  Codecs::PresenceMap & /*pmap*/,
   Codecs::Decoder & decoder,
   Messages::MessageBuilder & fieldSet) const
 {
@@ -341,7 +341,7 @@ FieldInstructionBlob::decodeTail(
 void
 FieldInstructionBlob::encodeNullableBlob(
   Codecs::DataDestination & destination,
-  Codecs::Context & context,
+  Codecs::Context & /*context*/,
   WorkingBuffer & buffer,
   const std::string & value) const
 {
@@ -365,7 +365,7 @@ FieldInstructionBlob::encodeBlob(
 void
 FieldInstructionBlob::encodeNop(
   Codecs::DataDestination & destination,
-  Codecs::PresenceMap & pmap,
+  Codecs::PresenceMap & /*pmap*/,
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & fieldSet) const
 {
@@ -395,7 +395,7 @@ FieldInstructionBlob::encodeNop(
 
 void
 FieldInstructionBlob::encodeConstant(
-  Codecs::DataDestination & destination,
+  Codecs::DataDestination & /*destination*/,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & fieldSet) const
@@ -550,11 +550,10 @@ FieldInstructionBlob::encodeCopy(
   }
 }
 
-
 void
 FieldInstructionBlob::encodeDelta(
   Codecs::DataDestination & destination,
-  Codecs::PresenceMap & pmap,
+  Codecs::PresenceMap & /*pmap*/,
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & fieldSet) const
 {

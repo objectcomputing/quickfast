@@ -19,22 +19,22 @@ namespace QuickFAST
     {
       /////////////
       // Implement MessageAccessor
-      virtual const Messages::MessageField & operator[](size_t index)const
+      virtual const Messages::MessageField & operator[](size_t /*index*/)const
       {
         throw EncodingError("Indexing empty message.");
       }
 
-      virtual bool isPresent(const std::string & name)const
+      virtual bool isPresent(const std::string & /*name*/)const
       {
         return false;
       }
 
-      virtual bool getField(const std::string &name, Messages::FieldCPtr & value) const
+      virtual bool getField(const std::string &/*name*/, Messages::FieldCPtr & /*value*/) const
       {
         return false;
       }
 
-      virtual bool getIdentity(const std::string &name, Messages::FieldIdentityCPtr & identity) const
+      virtual bool getIdentity(const std::string &/*name*/, Messages::FieldIdentityCPtr & /*identity*/) const
       {
         return false;
       }
@@ -77,25 +77,25 @@ namespace QuickFAST
 
       /////////////
       // Implement MessageAccessor
-      virtual const Messages::MessageField & operator[](size_t index)const
+      virtual const Messages::MessageField & operator[](size_t /*index*/)const
       {
         assert(index == 0);
         return messageField_;
       }
 
-      virtual bool isPresent(const std::string & name)const
+      virtual bool isPresent(const std::string & /*name*/)const
       {
         // we could check
         return true;
       }
 
-      virtual bool getField(const std::string &name, Messages::FieldCPtr & value) const
+      virtual bool getField(const std::string &/*name*/, Messages::FieldCPtr & value) const
       {
         value = messageField_.getField();
         return true;
       }
 
-      virtual bool getIdentity(const std::string &name, Messages::FieldIdentityCPtr & identity) const
+      virtual bool getIdentity(const std::string &/*name*/, Messages::FieldIdentityCPtr & identity) const
       {
         identity = messageField_.getIdentity();
         return true;

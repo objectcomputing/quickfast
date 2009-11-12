@@ -105,7 +105,7 @@ namespace QuickFAST{
       /// @brief An alternative way to check data type.
       ///
       /// This is convenenient for template-based code.
-      bool isType(uchar type)const
+      bool isType(uchar /*type*/)const
       {
         return isType(Field::UINT8);
       }
@@ -129,7 +129,7 @@ namespace QuickFAST{
       /// @brief An alternative way to check the type
       ///
       /// This is convenenient for template-based code.
-      bool isType(int8 type)const
+      bool isType(int8 /*type*/)const
       {
         return isType(INT8);
       }
@@ -152,7 +152,7 @@ namespace QuickFAST{
       /// @brief An alternative way to check data type.
       ///
       /// This is convenenient for template-based code.
-      bool isType(uint16 type)const
+      bool isType(uint16 /*type*/)const
       {
         return isType(Field::UINT16);
       }
@@ -175,7 +175,7 @@ namespace QuickFAST{
       /// @brief An alternative way to check the type
       ///
       /// This is convenenient for template-based code.
-      bool isType(int16 type)const
+      bool isType(int16 /*type*/)const
       {
         return isType(INT16);
       }
@@ -198,7 +198,7 @@ namespace QuickFAST{
       /// @brief An alternative way to check data type.
       ///
       /// This is convenenient for template-based code.
-      bool isType(uint32 type)const
+      bool isType(uint32 /*type*/)const
       {
         return isType(Field::UINT32);
       }
@@ -222,7 +222,7 @@ namespace QuickFAST{
       /// @brief An alternative way to check the type
       ///
       /// This is convenenient for template-based code.
-      bool isType(int32 type)const
+      bool isType(int32 /*type*/)const
       {
         return isType(INT32);
       }
@@ -245,7 +245,7 @@ namespace QuickFAST{
       /// @brief An alternative way to check the type
       ///
       /// This is convenenient for template-based code.
-      bool isType(uint64 type)const
+      bool isType(uint64 /*type*/)const
       {
         return isType(UINT64);
       }
@@ -268,7 +268,7 @@ namespace QuickFAST{
       /// @brief An alternative way to check the type
       ///
       /// This is convenenient for template-based code.
-      bool isType(int64 type)const
+      bool isType(int64 /*type*/)const
       {
         return isType(Field::INT64);
       }

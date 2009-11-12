@@ -8,7 +8,7 @@
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
 bool
-FieldOpTail::usesPresenceMap(bool mandatory)const
+FieldOpTail::usesPresenceMap(bool /*mandatory*/)const
 {
   return true;
 }

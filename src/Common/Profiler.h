@@ -140,6 +140,10 @@ namespace QuickFAST{
         running_ = false;
       }
     }
+  private:
+    ProfileInstance & operator =(const ProfileInstance &);
+    ProfileInstance();
+    ProfileInstance(const ProfileInstance &);
 
   private:
     ProfileAccumulator & accumulator_;

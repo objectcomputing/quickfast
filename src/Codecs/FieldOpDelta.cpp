@@ -8,7 +8,7 @@
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
 bool
-FieldOpDelta::usesPresenceMap(bool mandatory)const
+FieldOpDelta::usesPresenceMap(bool /*mandatory*/)const
 {
   // the Delta value is always present in the stream.
   return false;

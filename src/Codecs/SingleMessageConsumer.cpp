@@ -22,13 +22,13 @@ SingleMessageConsumer::consumeMessage(Messages::Message & message)
 }
 
 bool
-SingleMessageConsumer::wantLog(unsigned short level)
+SingleMessageConsumer::wantLog(unsigned short /*level*/)
 {
   return true;
 }
 
 bool
-SingleMessageConsumer::logMessage(unsigned short level, const std::string & logMessage)
+SingleMessageConsumer::logMessage(unsigned short /*level*/, const std::string & logMessage)
 {
   std::cout << logMessage << std::endl;
   return true;

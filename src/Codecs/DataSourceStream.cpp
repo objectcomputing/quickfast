@@ -20,7 +20,7 @@ DataSourceStream::readByte(uchar & byte)
 {
   if(stream_.good() && !stream_.eof())
   {
-    byte = stream_.get();
+    byte = uchar(stream_.get());
   }
   return stream_.good() && !stream_.eof();
 }

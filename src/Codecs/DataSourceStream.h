@@ -29,6 +29,10 @@ namespace QuickFAST{
       virtual bool readByte(uchar & byte);
 
     private:
+      DataSourceStream();
+      DataSourceStream(const DataSourceStream & );
+      DataSourceStream & operator =(const DataSourceStream & );
+    private:
       std::istream & stream_;
     };
   }

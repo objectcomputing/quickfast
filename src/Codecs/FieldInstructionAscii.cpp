@@ -65,7 +65,7 @@ FieldInstructionAscii::decodeFromSource(
 bool
 FieldInstructionAscii::decodeNop(
   Codecs::DataSource & source,
-  Codecs::PresenceMap & pmap,
+  Codecs::PresenceMap & /*pmap*/,
   Codecs::Decoder & decoder,
   Messages::MessageBuilder & fieldSet) const
 {
@@ -86,9 +86,9 @@ FieldInstructionAscii::decodeNop(
 
 bool
 FieldInstructionAscii::decodeConstant(
-  Codecs::DataSource & source,
+  Codecs::DataSource & /*source*/,
   Codecs::PresenceMap & pmap,
-  Codecs::Decoder & decoder,
+  Codecs::Decoder & /*decoder*/,
   Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeConstant");
@@ -206,7 +206,7 @@ FieldInstructionAscii::decodeCopy(
 bool
 FieldInstructionAscii::decodeDelta(
   Codecs::DataSource & source,
-  Codecs::PresenceMap & pmap,
+  Codecs::PresenceMap & /*pmap*/,
   Codecs::Decoder & decoder,
   Messages::MessageBuilder & fieldSet) const
 {
@@ -358,7 +358,7 @@ FieldInstructionAscii::decodeTail(
 void
 FieldInstructionAscii::encodeNop(
   Codecs::DataDestination & destination,
-  Codecs::PresenceMap & pmap,
+  Codecs::PresenceMap & /*pmap*/,
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & fieldSet) const
 {
@@ -388,7 +388,7 @@ FieldInstructionAscii::encodeNop(
 
 void
 FieldInstructionAscii::encodeConstant(
-  Codecs::DataDestination & destination,
+  Codecs::DataDestination & /*destination*/,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & fieldSet) const
@@ -543,7 +543,7 @@ FieldInstructionAscii::encodeCopy(
 void
 FieldInstructionAscii::encodeDelta(
   Codecs::DataDestination & destination,
-  Codecs::PresenceMap & pmap,
+  Codecs::PresenceMap & /*pmap*/,
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & fieldSet) const
 {

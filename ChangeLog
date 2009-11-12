@@ -1,3 +1,37 @@
+Thu Nov 12 22:45:39 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/DataSourceStream.h:
+        * src/Codecs/DataSourceStream.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBitMap.cpp:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldOpCopy.cpp:
+        * src/Codecs/FieldOpDefault.cpp:
+        * src/Codecs/FieldOpDelta.cpp:
+        * src/Codecs/FieldOpIncrement.cpp:
+        * src/Codecs/FieldOpNop.h:
+        * src/Codecs/FieldOpTail.cpp:
+        * src/Codecs/GenericMessageBuilder.cpp:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/SchemaElement.cpp:
+        * src/Codecs/SingleMessageConsumer.cpp:
+        * src/Common/Constants.h:
+        * src/Common/Decimal.cpp:
+        * src/Common/Profiler.h:
+        * src/Common/QuickFASTPch.h:
+        * src/Common/dllmain.cpp:
+        * src/Messages/Field.h:
+        * src/Messages/FieldIdentity.h:
+        * src/Messages/SingleValueBuilder.h:
+        * src/Messages/SpecialAccessors.h:
+        Eliminate warning messages at VC -W4
+
 Thu Nov 12 21:03:54 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionInteger.h:
