@@ -231,7 +231,7 @@ namespace
       }
       else
       {
-        std::string errMsg("unknown XML tag: ");
+        std::string errMsg("[ERR S1] Unknown XML tag: ");
         errMsg += tag;
         throw TemplateDefinitionError(errMsg);
       }
@@ -293,7 +293,7 @@ namespace
     {
       std::stringstream msg;
       boost::scoped_array<char> msgRaw(XMLString::transcode(exc.getMessage()));
-      msg << "Template file warning at line " << exc.getLineNumber()
+      msg << "[ERR S1] Template file warning at line " << exc.getLineNumber()
           << " column " << exc.getColumnNumber()
           << ": " << msgRaw.get();
       throw TemplateDefinitionError(msg.str());
@@ -305,7 +305,7 @@ namespace
     {
       std::stringstream msg;
       boost::scoped_array<char> msgRaw(XMLString::transcode(exc.getMessage()));
-      msg << "Template file error at line " << exc.getLineNumber()
+      msg << "[ERR S1] Template file error at line " << exc.getLineNumber()
           << " column " << exc.getColumnNumber()
           << ": " << msgRaw.get();
       throw TemplateDefinitionError(msg.str());
@@ -317,7 +317,7 @@ namespace
     {
       std::stringstream msg;
       boost::scoped_array<char> msgRaw(XMLString::transcode(exc.getMessage()));
-      msg << "Template file fatal error at line " << exc.getLineNumber()
+      msg << "[ERR S1] Template file fatal error at line " << exc.getLineNumber()
           << " column " << exc.getColumnNumber()
           << ": " << msgRaw.get();
       throw TemplateDefinitionError(msg.str());
@@ -393,7 +393,7 @@ TemplateBuilder::getRequiredAttribute(
   {
     std::string errMsg;
     errMsg +=
-      "Missing required attribute \"" + name + "\"";
+      "[ERR S1] Missing required attribute \"" + name + "\"";
     throw TemplateDefinitionError(errMsg);
   }
   return it->second;
@@ -430,7 +430,7 @@ TemplateBuilder::getOptionalBooleanAttribute(
     if(yn != 'Y' && yn != 'N' && yn != 'T' && yn != 'F')
     {
       std::stringstream msg;
-      msg << "Invalid boolean \"" << name << "=\"" << it->second;
+      msg << "[ERR S1] Invalid boolean \"" << name << "=\"" << it->second;
       throw TemplateDefinitionError(msg.str());
     }
     result = (yn == 'Y' || yn == 'T');
@@ -1017,7 +1017,7 @@ XMLTemplateParser::parse(
 {
   if(!xmlData.good())
   {
-    throw TemplateDefinitionError("Can't read XML templates.");
+    throw TemplateDefinitionError("[ERR S1] Can't read XML templates.");
   }
 
   TemplateRegistryPtr templateRegistry(

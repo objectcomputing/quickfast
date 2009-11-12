@@ -1,3 +1,13 @@
+Thu Nov 12 21:03:54 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionInteger.h:
+        Fix Issue #22. Problem parsing uInt8 values in XML Template
+        * src/Codecs/XMLTemplateParser.cpp:
+        Add [ERR S1] to XML parsing messages.  ERR S1 is defined in the FAST specification.
+
+        * src/Tests/testXMLTemplateParser.cpp:
+        Add test for Issue #22.
+
 Thu Nov 12 20:14:12 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionInteger.h:

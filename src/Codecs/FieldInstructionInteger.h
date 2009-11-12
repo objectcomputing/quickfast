@@ -187,7 +187,24 @@ namespace QuickFAST{
       }
       else
       {
-        typedValue_ = boost::lexical_cast<INTEGER_TYPE>(value);
+        if(SIGNED)
+        {
+          int64 v = boost::lexical_cast<int64>(value);
+          typedValue_ = INTEGER_TYPE(v);
+          if(v != typedValue_)
+          {
+            throw QuickFAST::TemplateDefinitionError("[ERR D1] Initial value oveflow");
+          }
+        }
+        else
+        {
+          uint64 v = boost::lexical_cast<uint64>(value);
+          typedValue_ = INTEGER_TYPE(v);
+          if(v != typedValue_)
+          {
+            throw QuickFAST::TemplateDefinitionError("[ERR D1] Initial value oveflow");
+          }
+        }
       }
       initialField_ = FIELD_CLASS::create(typedValue_);
     }

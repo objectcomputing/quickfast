@@ -14,6 +14,7 @@
 using namespace QuickFAST;
 BOOST_AUTO_TEST_CASE(testXMLTemplateParser)
 {
+  BOOST_CHECKPOINT("Start testXMLTemplateParser");
   Codecs::XMLTemplateParser parser;
   std::stringstream myDocument;
 
@@ -32,6 +33,9 @@ BOOST_AUTO_TEST_CASE(testXMLTemplateParser)
   myDocument << "        <delta />" << std::endl;
   myDocument << "      </mantissa>" << std::endl;
   myDocument << "    </decimal>" << std::endl;
+  myDocument << "    <uInt8 name=\"Issue22\" id=\"Issue22\">" << std::endl;
+  myDocument << "      <default value=\"20\"/>" << std::endl;
+  myDocument << "    </uInt8>" << std::endl;
   myDocument << "  </template>" << std::endl;
   myDocument << "</templates>" << std::endl;
 
