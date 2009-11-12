@@ -12,7 +12,8 @@ namespace QuickFAST{
     /// @brief A field containing an unsigned 64 bit integer
     ///
     /// In the XML template file this field is described as &lt;uint64>
-    class QuickFAST_Export FieldUInt64 : public Field{
+    class QuickFAST_Export FieldUInt64 : public Field
+    {
       /// @brief Construct the field from an initial value
       /// @param value the value to be stored in the field
       explicit FieldUInt64(uint64 value);
@@ -32,6 +33,7 @@ namespace QuickFAST{
 
       // implement selected virtual methods from Field
       virtual uint64 toUInt64() const;
+      virtual void valueToStringBuffer();
     private:
     };
   }

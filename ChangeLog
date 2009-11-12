@@ -1,3 +1,40 @@
+Thu Nov 12 20:14:12 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionInteger.h:
+        Fix Issue # 21 Encode Copy doesn't seem work properly with optional fields
+
+        * src/Messages/Field.h:
+        * src/Messages/Field.cpp:
+        * src/Messages/FieldDecimal.h:
+        * src/Messages/FieldDecimal.cpp:
+        * src/Messages/FieldGroup.h:
+        * src/Messages/FieldGroup.cpp:
+        * src/Messages/FieldInt16.h:
+        * src/Messages/FieldInt16.cpp:
+        * src/Messages/FieldInt32.h:
+        * src/Messages/FieldInt32.cpp:
+        * src/Messages/FieldInt64.h:
+        * src/Messages/FieldInt64.cpp:
+        * src/Messages/FieldInt8.h:
+        * src/Messages/FieldInt8.cpp:
+        * src/Messages/FieldSequence.h:
+        * src/Messages/FieldSequence.cpp:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/FieldUInt16.h:
+        * src/Messages/FieldUInt16.cpp:
+        * src/Messages/FieldUInt32.h:
+        * src/Messages/FieldUInt32.cpp:
+        * src/Messages/FieldUInt64.h:
+        * src/Messages/FieldUInt64.cpp:
+        * src/Messages/FieldUInt8.h:
+        * src/Messages/FieldUInt8.cpp:
+        Add operator == and displayString() methods to fields to allow
+        unit test to compare messages for equality.
+
+        * src/Tests/testRoundTripFieldOps.cpp:
+        Duplicate the problem in Issue#21.
+
 Wed Nov 11 16:11:34 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Messages/FieldIdentity.h:

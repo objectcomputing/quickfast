@@ -4,18 +4,8 @@
 #include <Common/QuickFASTPch.h>
 #include "FieldUInt16.h"
 #include <Common/Exceptions.h>
-#ifdef EXPERIMENT_WITH_CACHE
-#include <Common/MemoryCache.h>
-#endif //EXPERIMENT_WITH_CACHE
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
-
-#ifdef EXPERIMENT_WITH_CACHE
-namespace
-{
-  MemoryCache<FieldUInt16> cache(500);
-}
-#endif //EXPERIMENT_WITH_CACHE
 
 FieldCPtr FieldUInt16::nullField_ = new FieldUInt16;
 
@@ -48,21 +38,13 @@ FieldCPtr
 FieldUInt16::create(uint16 value)
 {
   return new
-#ifdef EXPERIMENT_WITH_CACHE
-    (cache.allocateUnconstructed())
-#endif // EXPERIMENT_WITH_CACHE
     FieldUInt16(value);
 }
 
 void
 FieldUInt16::freeField()const
 {
-#ifdef EXPERIMENT_WITH_CACHE
-  this->~FieldUInt16();
-  cache.freeDestroyed(const_cast<FieldUInt16 *>(this));
-#else
   delete this;
-#endif // EXPERIMENT_WITH_CACHE
 }
 
 
@@ -70,4 +52,12 @@ FieldCPtr
 FieldUInt16::createNull()
 {
   return nullField_;
+}
+
+void
+FieldUInt16::valueToStringBuffer()
+{
+  std::stringstream buffer;
+  buffer << unsignedInteger_;
+  string_.assign(reinterpret_cast<const unsigned char *>(buffer.str().data()), buffer.str().size());
 }

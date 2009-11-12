@@ -54,6 +54,28 @@ namespace QuickFAST{
     public:
       /// @brief a typical virtual destructor.
       virtual ~Field() = 0;
+
+      /// @brief compare to field for type and value
+      ///
+      /// The default implementation handles all string, integer, and decimal types.
+      /// Override this for other types.
+      virtual bool operator == (const Field & rhs) const;
+
+      bool operator != (const Field & rhs)const
+      {
+        return ! (*this == rhs);
+      }
+
+      /// @brief display the value as a string.  Low performance
+      virtual const StringBuffer & displayString() const
+      {
+        if(valid_ && !isString() && string_.empty())
+        {
+          const_cast<Field *>(this)->valueToStringBuffer();
+        }
+        return string_;
+      }
+
       /// @brief Does this field have a value?
       /// @return true if the field has a value.
       virtual bool isDefined() const;
@@ -119,7 +141,6 @@ namespace QuickFAST{
       {
         value = toInt8();
       }
-
 
       /////////
       // UINT16
@@ -296,6 +317,11 @@ namespace QuickFAST{
       virtual const Messages::SequenceCPtr & toSequence() const;
 
     protected:
+      /// @brief Data types that do NOT store their value in string_ should
+      /// override this and put a value in string_ for display purposes only.
+      virtual void valueToStringBuffer();
+
+    protected:
       /// What type of data does this field contain?
       FieldType type_;
       /// false means this is a NULL value
@@ -315,7 +341,7 @@ namespace QuickFAST{
       QuickFAST::exponent_t exponent_;
       ///@brief Length of locally allocated string_ buffer
       size_t stringLength_;
-      ///@brief Buffer containin string value. Owned by this object
+      ///@brief Buffer containing string value. Owned by this object
       StringBuffer string_;
 
     private:

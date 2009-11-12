@@ -30,3 +30,22 @@ FieldGroup::create(Messages::GroupCPtr group)
   return new FieldGroup(group);
 }
 
+bool
+FieldGroup::operator == (const Field & rhs) const
+{
+  if(getType() != rhs.getType())
+  {
+    return false;
+  }
+///@TODO  int todo_improve_comparison;
+  return true;
+}
+
+
+void
+FieldGroup::valueToStringBuffer()
+{
+  static const unsigned char msg[] = "Group: ";
+  string_.assign(msg, sizeof(msg)-1);
+}
+

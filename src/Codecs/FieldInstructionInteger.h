@@ -785,23 +785,24 @@ namespace QuickFAST{
         }
         else
         {
+          INTEGER_TYPE nullableValue = value;
           if(!isMandatory())
           {
             // gcc produces bogus warning on the following line see GCC Bugzilla Bug 11856
-            // if(!SIGNED || value >= 0)
-            if(!SIGNED || value > 0 || value == 0)
+            // if(!SIGNED || nullableValue >= 0)
+            if(!SIGNED || nullableValue > 0 || nullableValue == 0)
             {
-              ++value;
+              ++nullableValue;
             }
           }
           pmap.setNextField(true);// value in stream
           if(SIGNED)
           {
-            encodeSignedInteger(destination, encoder.getWorkingBuffer(), value);
+            encodeSignedInteger(destination, encoder.getWorkingBuffer(), nullableValue);
           }
           else
           {
-            encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), value);
+            encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), nullableValue);
           }
           field = FIELD_CLASS::create(value);
           fieldOp_->setDictionaryValue(encoder, field);
@@ -947,6 +948,7 @@ namespace QuickFAST{
       {
         INTEGER_TYPE value;
         field->getValue(value);
+        INTEGER_TYPE nullableValue = value;
         if(previousValue + 1 == value)
         {
           pmap.setNextField(false);
@@ -957,19 +959,19 @@ namespace QuickFAST{
           {
             // gcc produces bogus warning on the following line see GCC Bugzilla Bug 11856
             // if(!SIGNED || value >= 0)
-            if(!SIGNED || value > 0 || value == 0)
+            if(!SIGNED || nullableValue > 0 || nullableValue == 0)
             {
-              ++value;
+              ++nullableValue;
             }
           }
           pmap.setNextField(true);
           if(SIGNED)
           {
-            encodeSignedInteger(destination, encoder.getWorkingBuffer(), value);
+            encodeSignedInteger(destination, encoder.getWorkingBuffer(), nullableValue);
           }
           else
           {
-            encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), value);
+            encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), nullableValue);
           }
         }
         field = FIELD_CLASS::create(value);

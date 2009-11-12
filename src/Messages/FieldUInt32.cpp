@@ -64,3 +64,11 @@ FieldUInt32::createNull()
 {
   return nullField_;
 }
+
+void
+FieldUInt32::valueToStringBuffer()
+{
+  std::stringstream buffer;
+  buffer << unsignedInteger_;
+  string_.assign(reinterpret_cast<const unsigned char *>(buffer.str().data()), buffer.str().size());
+}

@@ -141,3 +141,40 @@ FieldSet::getFieldInfo(size_t index, std::string & name, Field::FieldType & type
   type = fields_[index].getField()->getType();
   fieldPtr = fields_[index].getField();
 }
+
+bool
+FieldSet::equals (const FieldSet & rhs, std::ostream & reason) const
+{
+  if(used_ != rhs.used_)
+  {
+    reason << "Field counts: " << used_ << " != " << rhs.used_;
+    return false;
+  }
+  if(!applicationType_.empty() && !rhs.applicationType_.empty() && applicationType_ != rhs.applicationType_)
+  {
+    reason << "Application types: " << applicationType_ << " != " << rhs.applicationType_;
+    return false;
+  }
+  if(!applicationTypeNs_.empty() && !rhs.applicationTypeNs_.empty() && applicationTypeNs_ != rhs.applicationTypeNs_)
+  {
+    reason << "Application type namespaces: " << applicationTypeNs_ << " != " << rhs.applicationTypeNs_;
+    return false;
+  }
+  for(size_t nField = 0; nField < used_; ++nField)
+  {
+    if (fields_[nField].name() != rhs.fields_[nField].name())
+    {
+      reason << "Field[" << nField << "] names: " << fields_[nField].name() << " != " << rhs.fields_[nField].name();
+      return false;
+    }
+    Messages::FieldCPtr f1 = fields_[nField].getField();
+    Messages::FieldCPtr f2 = fields_[nField].getField();
+    if(*f1 != *f2)
+    {
+      reason << "Field[" << nField << "] "<< fields_[nField].name() << "values: " << f1->displayString() << " != " << f2->displayString();
+      return false;
+    }
+  }
+  return true;
+}
+

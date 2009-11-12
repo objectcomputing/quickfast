@@ -38,3 +38,22 @@ FieldSequence::create(Messages::SequenceCPtr sequence)
   return new FieldSequence(sequence);
 }
 
+bool
+FieldSequence::operator == (const Field & rhs) const
+{
+  if(getType() != rhs.getType())
+  {
+    return false;
+  }
+///@TODO  int todo_improve_comparison;
+  return true;
+}
+
+void
+FieldSequence::valueToStringBuffer()
+{
+  static const unsigned char msg[] = "Sequence: ";
+  string_.assign(msg, sizeof(msg)-1);
+}
+
+

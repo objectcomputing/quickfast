@@ -29,6 +29,8 @@ namespace QuickFAST{
 
       // implement selected virtual methods from Field
       virtual const Messages::GroupCPtr & toGroup() const;
+      virtual bool operator == (const Field & rhs)const;
+      virtual void valueToStringBuffer();
     private:
       Messages::GroupCPtr group_;
     };

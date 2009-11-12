@@ -46,6 +46,7 @@ namespace QuickFAST{
 
       // implement selected virtual methods from Field
       virtual const Decimal toDecimal() const;
+      virtual void valueToStringBuffer();
     private:
     };
   }

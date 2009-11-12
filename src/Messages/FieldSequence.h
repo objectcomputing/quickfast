@@ -33,6 +33,8 @@ namespace QuickFAST{
       // implement selected virtual methods from Field
       virtual uint32 toUInt32()const;
       virtual const Messages::SequenceCPtr & toSequence() const;
+      virtual bool operator == (const Field & rhs)const;
+      virtual void valueToStringBuffer();
     private:
       Messages::SequenceCPtr sequence_;
     };

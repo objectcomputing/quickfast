@@ -58,3 +58,11 @@ FieldDecimal::createNull()
 {
   return new FieldDecimal;
 }
+
+void
+FieldDecimal::valueToStringBuffer()
+{
+  std::stringstream buffer;
+  buffer << signedInteger_ << "E" << exponent_;
+  string_.assign(reinterpret_cast<const unsigned char *>(buffer.str().data()), buffer.str().size());
+}

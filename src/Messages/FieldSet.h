@@ -142,6 +142,8 @@ namespace QuickFAST{
         Field::FieldType & type,
         FieldCPtr & fieldPtr)const;
 
+      bool equals(const FieldSet & rhs, std::ostream & reason) const;
+
     private:
       template<typename T>
       void swap_i(T & l, T & r)

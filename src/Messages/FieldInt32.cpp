@@ -44,3 +44,11 @@ FieldInt32::createNull()
 {
   return new FieldInt32;
 }
+
+void
+FieldInt32::valueToStringBuffer()
+{
+  std::stringstream buffer;
+  buffer << signedInteger_;
+  string_.assign(reinterpret_cast<const unsigned char *>(buffer.str().data()), buffer.str().size());
+}

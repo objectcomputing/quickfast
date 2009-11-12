@@ -222,8 +222,6 @@ Field::toGroup() const
   throw ex;
 }
 
-
-
 const Messages::SequenceCPtr &
 Field::toSequence() const
 {
@@ -236,20 +234,33 @@ Field::freeField()const
 {
   delete this;
 }
-#if 0
-void
-Messages::intrusive_ptr_add_ref(const Messages::Field * ptr)
-{
-  ++ptr->refcount_;
-}
 
 void
-Messages::intrusive_ptr_release(const Messages::Field * ptr)
+Field::valueToStringBuffer()
 {
-  if(--ptr->refcount_ == 0)
+  /// should never be called for stringable types
+  /// should be overridden for non-stringable types
+  UnsupportedConversion ex(typeName(getType()), "string");
+  throw ex;
+}
+bool
+Field::operator == (const Field & rhs)const
+{
+  if(this->getType() != rhs.getType())
   {
-    ptr->freeField();
+    return false;
+  }
+  if(isString())
+  {
+    return string_ == rhs.string_;
+  }
+  else
+  {
+    // compare integral or decimal values.  Unused fields
+    // will compare equal.
+    return unsignedInteger_ == rhs.unsignedInteger_
+        && signedInteger_ == rhs.signedInteger_
+        && exponent_ == rhs.exponent_;
   }
 }
 
-#endif
