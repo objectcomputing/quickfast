@@ -496,6 +496,12 @@ FieldInstructionAscii::encodeCopy(
       previousValue = previousField->toAscii();
     }
   }
+  if(!previousIsKnown && fieldOp_->hasValue())
+  {
+    previousIsKnown = true;
+    previousValue = initialValue_->toAscii();
+  }
+
 
   // get the value from the application data
   Messages::FieldCPtr field;
@@ -566,6 +572,11 @@ FieldInstructionAscii::encodeDelta(
     {
       previousValue = previousField->toAscii();
     }
+  }
+  if(!previousIsKnown && fieldOp_->hasValue())
+  {
+    previousIsKnown = true;
+    previousValue = initialValue_->toAscii();
   }
 
   // get the value from the application data
@@ -639,6 +650,11 @@ FieldInstructionAscii::encodeTail(
     {
       previousValue = previousField->toAscii();
     }
+  }
+  if(!previousIsKnown && fieldOp_->hasValue())
+  {
+    previousIsKnown = true;
+    previousValue = initialValue_->toAscii();
   }
 
   // get the value from the application data

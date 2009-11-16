@@ -120,6 +120,16 @@ namespace QuickFAST{
         return ignore_;
       }
 
+      void qualifyName(std::string &out)const
+      {
+        qualifyName(out, templateName_, templateNamespace_);
+      }
+
+      static void qualifyName(
+        std::string & out,
+        const std::string templateName,
+        const std::string &templateNamespace);
+
     private:
       uint32 templateId_;
       std::string templateName_;

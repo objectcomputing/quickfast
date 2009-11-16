@@ -69,8 +69,19 @@ void
 TemplateRegistry::addTemplate(TemplatePtr value)
 {
   template_id_t id = value->getId();
-  templates_[id] = value;
+  if(id != 0)
+  {
+    templates_[id] = value;
+  }
+  std::string name;
+  value->qualifyName(name);
+  if(!name.empty())
+  {
+    namedTemplates_[name] = value;
+  }
   mutableTemplates_.push_back(value);
+  // TODO: resolve templateRefs before calculating presence map bits.
+  //       but that must be deferred to "finalize"
   size_t bits = value->presenceMapBitCount();
   if(bits > presenceMapBits_)
   {
@@ -98,21 +109,17 @@ TemplateRegistry::getTemplate(template_id_t templateId, TemplateCPtr & valueFoun
 
 bool
 TemplateRegistry::findNamedTemplate(
-  const std::string & name,
+  const std::string & templateName,
   const std::string & templateNamespace,
   TemplateCPtr & valueFound)const
 {
-  for(TemplateIdMap::const_iterator it = templates_.begin();
-    it != templates_.end();
-    ++it)
+  std::string name;
+  Template::qualifyName(name, templateName, templateNamespace);
+  TemplateNameMap::const_iterator it = namedTemplates_.find(name);
+  if(it == namedTemplates_.end())
   {
-    if(it->second->getTemplateName() == name
-     &&(templateNamespace.empty()
-        || templateNamespace == it->second->getNamespace()))
-    {
-      valueFound = it->second;
-      return true;
-    }
+    return false;
   }
-  return false;
+  valueFound = it->second;
+  return bool(valueFound);
 }

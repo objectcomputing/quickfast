@@ -503,6 +503,11 @@ FieldInstructionBlob::encodeCopy(
       previousValue = previousField->toString();
     }
   }
+  if(!previousIsKnown && fieldOp_->hasValue())
+  {
+    previousIsKnown = true;
+    previousValue = initialValue_->toString();
+  }
 
   // get the value from the application data
   Messages::FieldCPtr field;
@@ -577,6 +582,11 @@ FieldInstructionBlob::encodeDelta(
       previousValue = previousField->toString();
     }
   }
+  if(!previousIsKnown && fieldOp_->hasValue())
+  {
+    previousIsKnown = true;
+    previousValue = initialValue_->toString();
+  }
 
   // get the value from the application data
   Messages::FieldCPtr field;
@@ -643,6 +653,11 @@ FieldInstructionBlob::encodeTail(
     {
       previousValue = previousField->toString();
     }
+  }
+  if(!previousIsKnown && fieldOp_->hasValue())
+  {
+    previousIsKnown = true;
+    previousValue = initialValue_->toString();
   }
 
   // get the value from the application data

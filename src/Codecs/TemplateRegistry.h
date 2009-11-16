@@ -30,12 +30,14 @@ namespace QuickFAST{
     public:
       /// @brief A map from template id to the template definition
       typedef std::map<template_id_t, TemplateCPtr> TemplateIdMap;
+      /// @brief A map from template name to the template definition
+      typedef std::map<std::string, TemplateCPtr> TemplateNameMap;
       /// @brief Iterator for a TemplateIdMap
       typedef TemplateIdMap::iterator iterator;
       /// @brief Iterator for a TemplateIdMap
       typedef TemplateIdMap::const_iterator const_iterator;
 
-      /// @brief Construct and empty registry.
+      /// @brief Construct an empty registry.
       TemplateRegistry();
 
       /// @brief special constructor for test/debug.
@@ -180,6 +182,9 @@ namespace QuickFAST{
 
     private:
       TemplateIdMap templates_;
+
+      TemplateNameMap namedTemplates_;
+
       typedef std::vector<TemplatePtr> MutableTemplates;
       MutableTemplates mutableTemplates_;
       size_t presenceMapBits_;

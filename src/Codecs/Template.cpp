@@ -5,5 +5,23 @@
 #include "Template.h"
 #include <Codecs/FieldInstruction.h>
 #include <Common/Exceptions.h>
-using namespace ::QuickFAST;
-using namespace ::QuickFAST::Codecs;
+using namespace QuickFAST;
+using namespace Codecs;
+
+void
+Template::qualifyName(
+  std::string & out,
+  const std::string templateName,
+  const std::string &templateNamespace)
+{
+  if(templateNamespace.empty())
+  {
+    out = templateName;
+  }
+  else
+  {
+    out  = templateName + "\t" + templateNamespace;
+  }
+}
+
+

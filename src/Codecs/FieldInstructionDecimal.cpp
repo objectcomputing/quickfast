@@ -520,6 +520,11 @@ FieldInstructionDecimal::encodeCopy(
       previousValue = previousField->toDecimal();
     }
   }
+  if(!previousIsKnown && fieldOp_->hasValue())
+  {
+    previousIsKnown = true;
+    previousValue = typedValue_;
+  }
 
   // get the value from the application data
   Messages::FieldCPtr field;
@@ -591,6 +596,11 @@ FieldInstructionDecimal::encodeDelta(
     {
       previousValue = previousField->toDecimal();
     }
+  }
+  if(!previousIsKnown && fieldOp_->hasValue())
+  {
+    previousIsKnown = true;
+    previousValue = typedValue_;
   }
 
   // get the value from the application data

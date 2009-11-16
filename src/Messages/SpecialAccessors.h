@@ -79,7 +79,6 @@ namespace QuickFAST
       // Implement MessageAccessor
       virtual const Messages::MessageField & operator[](size_t /*index*/)const
       {
-        assert(index == 0);
         return messageField_;
       }
 

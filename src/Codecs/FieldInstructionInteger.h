@@ -472,23 +472,10 @@ namespace QuickFAST{
           return true; // nothing in Message; no change to saved value
         }
       }
-      NESTED_PROFILE_POINT(0, "int::decDelta::nonNull");
-
       INTEGER_TYPE value = typedValue_;
       Messages::FieldCPtr previousField;
-#ifndef NO_PROFILING
-      bool found;
-      {PROFILE_POINT("int::decDelta::find");
-      found = fieldOp_->findDictionaryField(decoder, previousField);
-
-      }
-      if(found)
-#else // NO_PROFILING
       if(fieldOp_->findDictionaryField(decoder, previousField))
-
-#endif // NO_PROFILING
       {
-        PROFILE_POINT("int::decDelta::fromDictionary");
         if(!previousField->isType(value))
         {
           decoder.reportError("[ERR D4]", " Previous value type mismatch.", *identity_);
@@ -496,17 +483,18 @@ namespace QuickFAST{
         }
         previousField->getValue(value);
       }
+      else if(fieldOp_->hasValue()) // initial value in field op?
+      {
+        value = typedValue_;
+      }
+      // Apply delta
       value = INTEGER_TYPE(value + delta);
       Messages::FieldCPtr newField(FIELD_CLASS::create(value));
 
-      {PROFILE_POINT("int::decDelta::add2Msg");
       fieldSet.addField(
         identity_,
         newField);
-      } //PROFILE
-      {PROFILE_POINT("int::decDelta::add2Dic");
       fieldOp_->setDictionaryValue(decoder, newField);
-      } //PROFILE
       return true;
     }
 
@@ -788,6 +776,11 @@ namespace QuickFAST{
           previousField->getValue(previousValue);
         }
       }
+      if(!previousIsKnown && fieldOp_->hasValue())
+      {
+        previousIsKnown = true;
+        previousValue = typedValue_;
+      }
 
       // get the value from the application data
       Messages::FieldCPtr field;
@@ -889,6 +882,11 @@ namespace QuickFAST{
           }
         }
       }
+      if(!previousIsKnown && fieldOp_->hasValue())
+      {
+        previousIsKnown = true;
+        previousValue = typedValue_;
+      }
 
       // get the value from the application data
       Messages::FieldCPtr field;
@@ -957,6 +955,13 @@ namespace QuickFAST{
             previousField->getValue(previousValue);
           }
         }
+      }
+      if(!previousIsKnown && fieldOp_->hasValue())
+      {
+        previousIsKnown = true;
+        // pretend the previous value was the value attribute - 1 so that
+        // the increment will produce cause the initial value to be sent.
+        previousValue = typedValue_ - 1;
       }
 
       // get the value from the application data

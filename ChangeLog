@@ -1,3 +1,26 @@
+Mon Nov 16 21:10:57 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+          Handle initial values during encoding correctly.
+          Issue #23.
+
+        * src/Codecs/Template.h:
+        * src/Codecs/Template.cpp:
+        * src/Codecs/TemplateRegistry.h:
+        * src/Codecs/TemplateRegistry.cpp:
+          Handle templates without ID's properly to support
+          TemplateRef by name. Issue #24
+
+        * src/Messages/SpecialAccessors.h:
+          Remove assert on otherwise unused parameter.  Otherwise suppressing
+          gcc warnings gets messy.
+
+        * src/Tests/testTemplateRef.cpp:
+          New test: TemplateRef problem: Issue # 24
+
 Thu Nov 12 22:45:39 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/DataSourceStream.h:
