@@ -87,21 +87,23 @@ Encoder::encodeGroup(
     pmap.setVerbose(verboseOut_);
   }
 
-  DestinationBufferPtr previousBuffer = destination.getBuffer();
-  DestinationBufferPtr header;
+  // The presence map for the group will go into the current buffer
+  // that will be the last thing to appear in that buffer
+  DestinationBufferPtr pmapBuffer = destination.getBuffer();
+  DestinationBufferPtr bodyBuffer = pmapBuffer;
   if(presenceMapBits > 0)
   {
-   header = destination.startBuffer();
-    // start a buffer for the body of the group
-    destination.startBuffer();
+    bodyBuffer = destination.startBuffer();
   }
   encodeSegmentBody(destination, pmap, group, fieldSet);
   if(presenceMapBits > 0)
   {
-    destination.selectBuffer(header);
+    destination.selectBuffer(pmapBuffer);
     pmap.encode(destination);
   }
-  destination.selectBuffer(previousBuffer);
+  // and just continue working in the buffer where we built the group body
+  destination.selectBuffer(bodyBuffer);
+
 }
 
 #if 0

@@ -14,7 +14,6 @@ namespace QuickFAST
   {
     /// @brief A MessageAccessor for an empty record
     ///
-    /// Used during debugging and testing. Not used in normal application code.
     class EmptyAccessor : public Messages::MessageAccessor
     {
       /////////////

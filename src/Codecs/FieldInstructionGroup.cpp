@@ -84,12 +84,16 @@ FieldInstructionGroup::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::MessageAccessor & messageBuilder) const
+  const Messages::MessageAccessor & messageAccessor) const
 {
   // retrieve the field corresponding to this group
   Messages::FieldCPtr field;
-  if(messageBuilder.getField(identity_->name(), field))
+  if(messageAccessor.getField(identity_->name(), field))
   {
+    if(! isMandatory())
+    {
+      pmap.setNextField(true);
+    }
     Messages::GroupCPtr group = field->toGroup();
     encoder.encodeGroup(destination, segmentBody_, *group);
   }
@@ -100,10 +104,10 @@ FieldInstructionGroup::encodeNop(
     //   1) this group (mandatory or optional) has the same application type
     //      as the enclosing segment, and has therefore been merged into that segment.
     //   2) this is an optional group that isn't present.
-    if(messageBuilder.getApplicationType() == getApplicationType())
+    if(messageAccessor.getApplicationType() == getApplicationType())
     {
-      // possiblity #1: encode this group using the original messageBuilder
-      encoder.encodeGroup(destination, segmentBody_, messageBuilder);
+      // possiblity #1: encode this group using the original messageAccessor
+      encoder.encodeGroup(destination, segmentBody_, messageAccessor);
     }
     else
     {

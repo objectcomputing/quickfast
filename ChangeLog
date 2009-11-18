@@ -1,3 +1,12 @@
+Wed Nov 18 23:10:35 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Encoder.cpp:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Messages/SpecialAccessors.h:
+        Improve the implementation of group and sequence encoding.
+        See Issue #26.
+
 Wed Nov 18 20:33:42 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionDecimal.cpp:

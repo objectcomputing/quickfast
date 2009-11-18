@@ -140,13 +140,29 @@ FieldInstructionSequence::encodeNop(
   }
   else
   {
-    // possibility #2: option group not present.
-    if(isMandatory())
+    Codecs::FieldInstructionCPtr lengthInstruction;
+    if(segment_->getLengthInstruction(lengthInstruction))
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory group.");
+      // The sequence is not present in the application record
+      if(isMandatory())
+      {
+        encoder.reportFatal("[ERR U01]", "Missing mandatory sequence.");
+        // if reportFail returns, we're being lax about encoding rules
+        // Send a sequence with no entries.
+        destination.putByte(zeroIntegerNonnullable);
+      }
+      else
+      {
+        // implicit length instruction: nullable uint32 with no field operator
+        destination.putByte(nullInteger);
+      }
     }
-    // let our counterparty know it's just not there.
-    pmap.setNextField(false);
+    else
+    {
+      // let the length instruction encode the fact that it's missing
+      Messages::EmptyAccessor accessor;
+      lengthInstruction->encode(destination, pmap, encoder, accessor);
+    }
   }
 }
 
