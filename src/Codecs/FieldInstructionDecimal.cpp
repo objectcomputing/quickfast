@@ -561,8 +561,7 @@ FieldInstructionDecimal::encodeCopy(
     }
     else
     {
-      if((previousIsKnown && previousNotNull)
-        || !previousIsKnown)
+      if(previousIsKnown && previousNotNull)
       {
         pmap.setNextField(true);// value in stream
         destination.putByte(nullDecimal);

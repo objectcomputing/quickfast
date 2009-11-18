@@ -1,3 +1,8 @@
+Wed Nov 18 20:33:42 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        Missed a spot on the previous fix to Issue #23.
+
 Wed Nov 18 17:37:33 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/FieldInstructionAscii.cpp:
         * src/Codecs/FieldInstructionBlob.cpp:
