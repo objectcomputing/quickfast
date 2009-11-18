@@ -823,19 +823,15 @@ namespace QuickFAST{
         if(isMandatory())
         {
           encoder.reportError("[ERR U01]", "Missing mandatory field.", *identity_);
-          if(SIGNED)
-          {
-            encodeSignedInteger(destination, encoder.getWorkingBuffer(), 0);
-          }
-          else
-          {
-            encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), 0);
-          }
+          // if reportEror returns we're being lax about the rules.
+          // Let the copy happen
+          pmap.setNextField(false);
         }
         else
         {
-          if((previousIsKnown && previousNotNull)
-            || !previousIsKnown)
+          // Missing optional field.  If we have a previous, non-null value
+          // we need to explicitly null it out.  Otherwise just don't send it.
+          if(previousIsKnown && previousNotNull)
           {
             pmap.setNextField(true);// value in stream
             destination.putByte(nullInteger);
@@ -1004,21 +1000,26 @@ namespace QuickFAST{
         if(isMandatory())
         {
           encoder.reportError("[ERR U01]", "Missing mandatory field.", *identity_);
-          if(SIGNED)
+          // if reportError returns we're being lax about the encoding rules.
+          // just let it increment
+          pmap.setNextField(false);
+        }
+        else
+        {
+          // Missing optional field.  If we have a previous, non-null value
+          // we need to explicitly null it out.  Otherwise just don't send it.
+          if (previousIsKnown && previousNotNull)
           {
-            encodeSignedInteger(destination, encoder.getWorkingBuffer(), 0);
+            pmap.setNextField(true);// value in stream
+            destination.putByte(nullInteger);
+            field = FIELD_CLASS::createNull();
+            fieldOp_->setDictionaryValue(encoder, field);
           }
           else
           {
-            encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), 0);
+            pmap.setNextField(false);
           }
-          field = FIELD_CLASS::create(0);
-          fieldOp_->setDictionaryValue(encoder, field);
         }
-        pmap.setNextField(true);// value in stream
-        destination.putByte(nullInteger);
-        field = FIELD_CLASS::createNull();
-        fieldOp_->setDictionaryValue(encoder, field);
       }
     }
   }

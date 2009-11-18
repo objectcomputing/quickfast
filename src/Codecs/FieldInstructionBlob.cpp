@@ -538,9 +538,11 @@ FieldInstructionBlob::encodeCopy(
     if(isMandatory())
     {
       encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      // if reportFatal returns we're being lax about the rules
+      // let the copy happen.
+      pmap.setNextField(false);
     }
-    if((previousIsKnown && previousNotNull)
-      || !previousIsKnown)
+    if(previousIsKnown && previousNotNull)
     {
       // we have to null the previous value to avoid copy
       pmap.setNextField(true);// value in stream

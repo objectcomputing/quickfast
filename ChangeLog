@@ -1,3 +1,26 @@
+Wed Nov 18 17:37:33 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Common/Constants.h:
+        Issue #23 points out a mismatch between the specification and
+        the examples in Appendix 3 on which testFieldOperations is based.
+        This change makes the encoder conform to the specification, not
+        the example.
+
+        * src/Tests/testFieldOperations.cpp:
+        Revise the test to match the new behavior.
+        I added the following comment to the tests:
+          // This is an error in the specification.
+          //
+          // 6.3.5 of FAST 1.x.1 says:
+          // When the value is not present in the input stream [...]
+          //  If the field has optional presence and no initial value, the
+          //  field is considered absent and the state of the previous value
+          //  is changed to empty.
+          // [the revised test case appears here]
+
 Mon Nov 16 21:10:57 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionAscii.cpp:

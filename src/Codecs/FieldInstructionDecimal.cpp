@@ -552,18 +552,27 @@ FieldInstructionDecimal::encodeCopy(
     if(isMandatory())
     {
       encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
-    }
-    if((previousIsKnown && previousNotNull)
-      || !previousIsKnown)
-    {
-      pmap.setNextField(true);// value in stream
-      destination.putByte(nullDecimal);
-      field = Messages::FieldDecimal::createNull();
+      // if reportFatal returns we're being lax about encoding rules
+      // send a dummy value
+      destination.putByte(zeroIntegerNonnullable);//exponent
+      destination.putByte(zeroIntegerNonnullable);//mantissa
+      field = Messages::FieldDecimal::create(0,0);
       fieldOp_->setDictionaryValue(encoder, field);
     }
     else
     {
-      pmap.setNextField(false);
+      if((previousIsKnown && previousNotNull)
+        || !previousIsKnown)
+      {
+        pmap.setNextField(true);// value in stream
+        destination.putByte(nullDecimal);
+        field = Messages::FieldDecimal::createNull();
+        fieldOp_->setDictionaryValue(encoder, field);
+      }
+      else
+      {
+        pmap.setNextField(false);
+      }
     }
   }
 }

@@ -532,8 +532,7 @@ FieldInstructionAscii::encodeCopy(
     {
       encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
     }
-    if((previousIsKnown && previousNotNull)
-      || !previousIsKnown)
+    if(previousIsKnown && previousNotNull)
     {
       // we have to null the previous value to avoid copy
       pmap.setNextField(true);// value in stream

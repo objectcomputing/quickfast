@@ -15,6 +15,9 @@ namespace QuickFAST{
   static const unsigned int dataShift(7u);
   static const unsigned int byteSize(8u);
 
+  static const uchar zeroIntegerNonnullable = uchar('\x80');
+  static const uchar zeroIntegerNullable = uchar('\x81');
+
   static const uchar nullInteger = uchar('\x80');
   static const uchar nullAscii = uchar('\x80');
   static const uchar nullBlob = uchar('\x80');

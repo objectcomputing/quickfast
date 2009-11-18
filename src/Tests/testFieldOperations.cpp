@@ -531,8 +531,26 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_3_2)
   // None   None  Null    1     0x80 / 10000000
   // None   Null  None    0     None
   // CME    Null  CME     1     0x43 0x4d 0xc5 / 01000011 01001101 11000101
+  //
+  // This is an error in the specification.
+  //
+  // 6.3.5 of FAST 1.x.1 says:
+  // When the value is not present in the input stream [...]
+  //  If the field has optional presence and no initial value, the
+  //  field is considered absent and the state of the previous value
+  //  is changed to empty.
+  //
+  // The revised example:
+  // Copy Operator Example for NULL – Optional String
+  // <string id="1" presence="optional" name="Flag"> <copy/> </string>
+  // Input  Prior Encoded PMap  FAST Hex/Binary
+  // None   None  Null    0     None
+  // None   Null  None    0     None
+  // CME    Null  CME     1     0x43 0x4d 0xc5 / 01000011 01001101 11000101
 
-  const char testData[] = "\x80\x43\x4d\xc5";
+
+// original, incorrect (see above)  const char testData[] = "\x80\x43\x4d\xc5";
+  const char testData[] = "\x43\x4d\xc5";
   std::string testString(testData, sizeof(testData)-1);
   Codecs::DataSourceString source(testString);
 
@@ -540,7 +558,8 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_3_2)
   DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(3);
-  pmap.setNextField(true);
+// original, incorrect (see above)  pmap.setNextField(true);
+  pmap.setNextField(false);
   pmap.setNextField(false);
   pmap.setNextField(true);
   pmap.rewind();
@@ -1403,8 +1422,27 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Copy_optional)
   // None   None  Null    1     80 / 10000000
   // None   Null  None    0     None
   // CME    Null  3:CME   1     84 43 4d 45 / 10000100 01000011 01001101 01000101
+  //
+  // This is an error in the specification.
+  //
+  // 6.3.5 of FAST 1.x.1 says:
+  // When the value is not present in the input stream [...]
+  //  If the field has optional presence and no initial value, the
+  //  field is considered absent and the state of the previous value
+  //  is changed to empty.
+  //
+  // The revised example:
+  // Copy Operator Example for NULL – Optional Unicode String
+  // <string id="1" charset="unicode" presence="optional" name="Flag"> <copy/> </string>
+  // Input  Prior Encoded PMap  FAST Hex/Binary
+  // None   None  Null    0     None
+  // None   Null  None    0     None
+  // CME    Null  3:CME   1     84 43 4d 45 / 10000100 01000011 01001101 01000101
+  //
 
-  const char testData[] = "\x80\x84\x43\x4d\x45";
+
+// Original, incorrect (see above)  const char testData[] = "\x80\x84\x43\x4d\x45";
+  const char testData[] = "\x84\x43\x4d\x45";
   std::string testString(testData, sizeof(testData)-1);
   Codecs::DataSourceString source(testString);
 
@@ -1412,7 +1450,8 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Copy_optional)
   DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(3);
-  pmap.setNextField(true);
+// Original, incorrect (see above)  pmap.setNextField(true);
+  pmap.setNextField(false);
   pmap.setNextField(false);
   pmap.setNextField(true);
   pmap.rewind();
