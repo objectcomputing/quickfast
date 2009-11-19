@@ -140,28 +140,37 @@ FieldInstructionSequence::encodeNop(
   }
   else
   {
-    Codecs::FieldInstructionCPtr lengthInstruction;
-    if(segment_->getLengthInstruction(lengthInstruction))
+    // The sequence is not present in the application record
+    if(isMandatory())
     {
-      // The sequence is not present in the application record
-      if(isMandatory())
+      encoder.reportFatal("[ERR U01]", "Missing mandatory sequence.");
+      // if reportFail returns, we're being lax about encoding rules
+      // Send a sequence with no entries.
+      Codecs::FieldInstructionCPtr lengthInstruction;
+      if(segment_->getLengthInstruction(lengthInstruction))
       {
-        encoder.reportFatal("[ERR U01]", "Missing mandatory sequence.");
-        // if reportFail returns, we're being lax about encoding rules
-        // Send a sequence with no entries.
+         Messages::SingleFieldAccessor accessor(lengthInstruction->getIdentity(), 0);
+        lengthInstruction->encode(destination, pmap, encoder, accessor);
+      }
+      else
+      {
         destination.putByte(zeroIntegerNonnullable);
+      }
+    }
+    else
+    {
+      Codecs::FieldInstructionCPtr lengthInstruction;
+      if(segment_->getLengthInstruction(lengthInstruction))
+      {
+        // let the length instruction encode the fact that it's missing
+        Messages::EmptyAccessor accessor;
+        lengthInstruction->encode(destination, pmap, encoder, accessor);
       }
       else
       {
         // implicit length instruction: nullable uint32 with no field operator
         destination.putByte(nullInteger);
       }
-    }
-    else
-    {
-      // let the length instruction encode the fact that it's missing
-      Messages::EmptyAccessor accessor;
-      lengthInstruction->encode(destination, pmap, encoder, accessor);
     }
   }
 }

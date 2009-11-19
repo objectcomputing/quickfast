@@ -1,3 +1,8 @@
+Thu Nov 19 17:16:06 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionSequence.cpp:
+        Revise encoding of length instruction for missing sequence.
+
 Wed Nov 18 23:10:35 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Encoder.cpp:
