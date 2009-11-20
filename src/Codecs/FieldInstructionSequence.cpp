@@ -13,8 +13,8 @@
 #include <Messages/SingleValueBuilder.h>
 #include <Messages/SpecialAccessors.h>
 
-using namespace ::QuickFAST;
-using namespace ::QuickFAST::Codecs;
+using namespace QuickFAST;
+using namespace QuickFAST::Codecs;
 
 
 FieldInstructionSequence::FieldInstructionSequence(

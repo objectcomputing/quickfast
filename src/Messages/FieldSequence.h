@@ -34,7 +34,7 @@ namespace QuickFAST{
       virtual uint32 toUInt32()const;
       virtual const Messages::SequenceCPtr & toSequence() const;
       virtual bool operator == (const Field & rhs)const;
-      virtual void valueToStringBuffer();
+      virtual void valueToStringBuffer()const;
     private:
       Messages::SequenceCPtr sequence_;
     };

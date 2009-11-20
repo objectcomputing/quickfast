@@ -71,7 +71,7 @@ namespace QuickFAST{
       {
         if(valid_ && !isString() && string_.empty())
         {
-          const_cast<Field *>(this)->valueToStringBuffer();
+          valueToStringBuffer();
         }
         return string_;
       }
@@ -319,7 +319,7 @@ namespace QuickFAST{
     protected:
       /// @brief Data types that do NOT store their value in string_ should
       /// override this and put a value in string_ for display purposes only.
-      virtual void valueToStringBuffer();
+      virtual void valueToStringBuffer()const;
 
     protected:
       /// What type of data does this field contain?
@@ -342,7 +342,7 @@ namespace QuickFAST{
       ///@brief Length of locally allocated string_ buffer
       size_t stringLength_;
       ///@brief Buffer containing string value. Owned by this object
-      StringBuffer string_;
+      mutable StringBuffer string_;
 
     private:
       friend void QuickFAST_Export intrusive_ptr_add_ref(const Field * ptr);

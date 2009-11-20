@@ -36,10 +36,8 @@ namespace QuickFAST
     ///@returns true if the pointer was updated.
     bool CAS(Target * expected, Target * value)
     {
-      // The cast-from-hell to convince c++ to convert from Target * volatile
-      // to void * volatile without losing the volatile.
       return CASPtr(
-        const_cast<void * volatile * >(reinterpret_cast<void **>(const_cast<Target **>(&pointer_))),
+        static_cast<void * volatile * >(&pointer_),
         expected,
         value);
     }

@@ -46,7 +46,7 @@ FieldInt8::createNull()
 }
 
 void
-FieldInt8::valueToStringBuffer()
+FieldInt8::valueToStringBuffer() const
 {
   std::stringstream buffer;
   buffer << signedInteger_;

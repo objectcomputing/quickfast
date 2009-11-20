@@ -69,9 +69,8 @@ MessagePerformance::consumeMessage(Messages::Message & message)
 }
 
 void
-MessagePerformance::retrieveMessage(const Messages::Message & decodedFields)
+MessagePerformance::retrieveMessage(const Messages::Message & message)
 {
-  const Messages::Message & message = dynamic_cast<const Messages::Message &>(decodedFields);
   for( Messages::Message::const_iterator it = message.begin();
     it != message.end();
     ++it)

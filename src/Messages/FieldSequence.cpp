@@ -50,7 +50,7 @@ FieldSequence::operator == (const Field & rhs) const
 }
 
 void
-FieldSequence::valueToStringBuffer()
+FieldSequence::valueToStringBuffer() const
 {
   static const unsigned char msg[] = "Sequence: ";
   string_.assign(msg, sizeof(msg)-1);

@@ -43,7 +43,7 @@ FieldGroup::operator == (const Field & rhs) const
 
 
 void
-FieldGroup::valueToStringBuffer()
+FieldGroup::valueToStringBuffer() const
 {
   static const unsigned char msg[] = "Group: ";
   string_.assign(msg, sizeof(msg)-1);

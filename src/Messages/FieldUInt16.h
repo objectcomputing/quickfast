@@ -32,7 +32,7 @@ namespace QuickFAST{
 
       // implement selected virtual methods from Field
       virtual uint16 toUInt16() const;
-      virtual void valueToStringBuffer();
+      virtual void valueToStringBuffer()const;
     private:
       virtual void freeField()const;
     private:

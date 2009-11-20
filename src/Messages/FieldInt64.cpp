@@ -46,7 +46,7 @@ FieldInt64::createNull()
 }
 
 void
-FieldInt64::valueToStringBuffer()
+FieldInt64::valueToStringBuffer() const
 {
   std::stringstream buffer;
   buffer << signedInteger_;

@@ -55,7 +55,7 @@ FieldUInt16::createNull()
 }
 
 void
-FieldUInt16::valueToStringBuffer()
+FieldUInt16::valueToStringBuffer() const
 {
   std::stringstream buffer;
   buffer << unsignedInteger_;

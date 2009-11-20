@@ -76,7 +76,7 @@ MessageInterpreter::consumeMessage(Messages::Message & message)
 {
   recordCount_ += 1;
   out_ << "Record #" << recordCount_ << ' ' << std::flush;
-  formatMessage(dynamic_cast<Messages::Message &>(message));
+  formatMessage(message);
   out_ << std::endl;
   return true;
 }

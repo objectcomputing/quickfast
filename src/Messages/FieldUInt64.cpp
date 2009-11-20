@@ -46,7 +46,7 @@ FieldUInt64::createNull()
 }
 
 void
-FieldUInt64::valueToStringBuffer()
+FieldUInt64::valueToStringBuffer() const
 {
   std::stringstream buffer;
   buffer << unsignedInteger_;

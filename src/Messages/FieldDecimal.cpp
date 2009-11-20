@@ -60,7 +60,7 @@ FieldDecimal::createNull()
 }
 
 void
-FieldDecimal::valueToStringBuffer()
+FieldDecimal::valueToStringBuffer() const
 {
   std::stringstream buffer;
   buffer << signedInteger_ << "E" << exponent_;

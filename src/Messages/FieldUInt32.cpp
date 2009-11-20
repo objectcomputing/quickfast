@@ -4,9 +4,6 @@
 #include <Common/QuickFASTPch.h>
 #include "FieldUInt32.h"
 #include <Common/Exceptions.h>
-#ifdef EXPERIMENT_WITH_CACHE
-#include <Common/MemoryCache.h>
-#endif //EXPERIMENT_WITH_CACHE
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
@@ -41,21 +38,13 @@ FieldCPtr
 FieldUInt32::create(uint32 value)
 {
   return new
-#ifdef EXPERIMENT_WITH_CACHE
-    (cache.allocateUnconstructed())
-#endif // EXPERIMENT_WITH_CACHE
     FieldUInt32(value);
 }
 
 void
 FieldUInt32::freeField()const
 {
-#ifdef EXPERIMENT_WITH_CACHE
-  this->~FieldUInt32();
-  cache.freeDestroyed(const_cast<FieldUInt32 *>(this));
-#else
   delete this;
-#endif // EXPERIMENT_WITH_CACHE
 }
 
 
@@ -66,7 +55,7 @@ FieldUInt32::createNull()
 }
 
 void
-FieldUInt32::valueToStringBuffer()
+FieldUInt32::valueToStringBuffer() const
 {
   std::stringstream buffer;
   buffer << unsignedInteger_;

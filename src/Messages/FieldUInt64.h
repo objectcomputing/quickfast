@@ -33,7 +33,7 @@ namespace QuickFAST{
 
       // implement selected virtual methods from Field
       virtual uint64 toUInt64() const;
-      virtual void valueToStringBuffer();
+      virtual void valueToStringBuffer()const;
     private:
     };
   }

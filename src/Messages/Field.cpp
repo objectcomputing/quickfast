@@ -236,7 +236,7 @@ Field::freeField()const
 }
 
 void
-Field::valueToStringBuffer()
+Field::valueToStringBuffer() const
 {
   /// should never be called for stringable types
   /// should be overridden for non-stringable types
