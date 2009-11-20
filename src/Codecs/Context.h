@@ -129,6 +129,18 @@ namespace QuickFAST{
       /// @throws EncodingError "always"
       virtual void reportFatal(const std::string & errorCode, const std::string & message);
 
+      /// @brief Report a fatal error (always throws)
+      /// @param errorCode as defined in the FIX standard (or invented for QuickFAST)
+      ///                  i.e [R123]
+      /// @param message a text description of the problem.
+      /// @param identity identifies the field being Xcoded
+      /// @throws EncodingError "always"
+      virtual void reportFatal(
+        const std::string & errorCode,
+        const std::string & message,
+        const Messages::FieldIdentity & identity
+        );
+
       /// @brief get a working buffer for use during Xcoding.
       WorkingBuffer & getWorkingBuffer()
       {

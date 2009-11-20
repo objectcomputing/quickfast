@@ -150,15 +150,19 @@ FieldSet::equals (const FieldSet & rhs, std::ostream & reason) const
     reason << "Field counts: " << used_ << " != " << rhs.used_;
     return false;
   }
-  if(!applicationType_.empty() && !rhs.applicationType_.empty() && applicationType_ != rhs.applicationType_)
+  // application type "any" matches anything.
+  if(applicationType_ != "any" && rhs.applicationType_ != "any")
   {
-    reason << "Application types: " << applicationType_ << " != " << rhs.applicationType_;
-    return false;
-  }
-  if(!applicationTypeNs_.empty() && !rhs.applicationTypeNs_.empty() && applicationTypeNs_ != rhs.applicationTypeNs_)
-  {
-    reason << "Application type namespaces: " << applicationTypeNs_ << " != " << rhs.applicationTypeNs_;
-    return false;
+    if(applicationType_ != rhs.applicationType_)
+    {
+      reason << "Application types: " << applicationType_ << " != " << rhs.applicationType_;
+      return false;
+    }
+    if(!applicationTypeNs_.empty() && !rhs.applicationTypeNs_.empty() && applicationTypeNs_ != rhs.applicationTypeNs_)
+    {
+      reason << "Application type namespaces: " << applicationTypeNs_ << " != " << rhs.applicationTypeNs_;
+      return false;
+    }
   }
   for(size_t nField = 0; nField < used_; ++nField)
   {

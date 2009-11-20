@@ -165,7 +165,7 @@ FieldInstructionDecimal::decodeDefault(
     }
     else if(isMandatory())
     {
-      decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.");
+      decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.", *identity_);
     }
   }
   return true;
@@ -231,14 +231,14 @@ FieldInstructionDecimal::decodeCopy(
         }
         else
         {
-          decoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
+          decoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
         }
       }
       else // field present but not defined
       {
         if(isMandatory())
         {
-          decoder.reportFatal("[ERR D6]", "Mandatory field is missing.");
+          decoder.reportFatal("[ERR D6]", "Mandatory field is missing.", *identity_);
         }
       }
     }
@@ -258,7 +258,7 @@ FieldInstructionDecimal::decodeCopy(
       {
         if(isMandatory())
         {
-          decoder.reportFatal("[ERR D5]", "Copy operator missing mandatory Decimal field/no initial value");
+          decoder.reportFatal("[ERR D5]", "Copy operator missing mandatory Decimal field/no initial value", *identity_);
         }
       }
     }
@@ -297,7 +297,7 @@ FieldInstructionDecimal::decodeDelta(
     }
     else
     {
-      decoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
+      decoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
     }
   }
   value.setExponent(exponent_t(value.getExponent() + exponentDelta));
@@ -394,7 +394,7 @@ FieldInstructionDecimal::encodeNop(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
     if(exponentInstruction_)
     {
@@ -426,7 +426,7 @@ FieldInstructionDecimal::encodeConstant(
     Decimal value = field->toDecimal();
     if(value != typedValue_)
     {
-      encoder.reportFatal("[ERR U10]", "Constant value does not match application data.");
+      encoder.reportFatal("[ERR U10]", "Constant value does not match application data.", *identity_);
     }
 
     if(!isMandatory())
@@ -438,7 +438,7 @@ FieldInstructionDecimal::encodeConstant(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
     pmap.setNextField(false);
   }
@@ -464,13 +464,13 @@ FieldInstructionDecimal::encodeDefault(
     {
       pmap.setNextField(true); // != default.  Send value
 
-      if(!isMandatory())
+      if(isMandatory())
       {
-        encodeNullableDecimal(destination, encoder.getWorkingBuffer(), value.getExponent(), value.getMantissa());
+        encodeDecimal(destination, encoder.getWorkingBuffer(), value.getExponent(), value.getMantissa());
       }
       else
       {
-        encodeDecimal(destination, encoder.getWorkingBuffer(), value.getExponent(), value.getMantissa());
+        encodeNullableDecimal(destination, encoder.getWorkingBuffer(), value.getExponent(), value.getMantissa());
       }
     }
   }
@@ -478,8 +478,10 @@ FieldInstructionDecimal::encodeDefault(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
+    // if there is a default value
+    // you have to cancel this by sending a null.
     if(fieldOp_->hasValue())
     {
       pmap.setNextField(true);
@@ -511,7 +513,7 @@ FieldInstructionDecimal::encodeCopy(
   {
     if(!previousField->isType(Messages::Field::DECIMAL))
     {
-      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
+      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
     }
     previousIsKnown = true;
     previousNotNull = previousField->isDefined();
@@ -538,20 +540,24 @@ FieldInstructionDecimal::encodeCopy(
     }
     else
     {
-      if(!isMandatory())
+      pmap.setNextField(true);// value in stream
+      if(isMandatory())
       {
-        pmap.setNextField(true);// value in stream
-        encodeNullableDecimal(destination, encoder.getWorkingBuffer(), value.getExponent(), value.getMantissa());
-        field = Messages::FieldDecimal::create(value);
-        fieldOp_->setDictionaryValue(encoder, field);
+        encodeDecimal(destination, encoder.getWorkingBuffer(), value.getExponent(), value.getMantissa());
       }
+      else
+      {
+        encodeNullableDecimal(destination, encoder.getWorkingBuffer(), value.getExponent(), value.getMantissa());
+      }
+      field = Messages::FieldDecimal::create(value);
+      fieldOp_->setDictionaryValue(encoder, field);
     }
   }
   else // not defined in fieldset
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
       // if reportFatal returns we're being lax about encoding rules
       // send a dummy value
       destination.putByte(zeroIntegerNonnullable);//exponent
@@ -596,7 +602,7 @@ FieldInstructionDecimal::encodeDelta(
   {
     if(!previousField->isType(Messages::Field::DECIMAL))
     {
-      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
+      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
     }
     previousIsKnown = true;
     previousNotNull = previousField->isDefined();
@@ -617,7 +623,7 @@ FieldInstructionDecimal::encodeDelta(
   {
     Decimal value = field->toDecimal();
 
-    int64 exponentDelta = int64(value.getExponent()) - int64(previousValue.getExponent());
+    int32 exponentDelta = static_cast<int32>(value.getExponent()) - int64(previousValue.getExponent());
     if(!isMandatory())
     {
       if(exponentDelta >= 0)
@@ -641,7 +647,7 @@ FieldInstructionDecimal::encodeDelta(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
     destination.putByte(nullInteger);
   }

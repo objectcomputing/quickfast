@@ -1,3 +1,21 @@
+Fri Nov 20 21:44:02 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Context.cpp:
+        Include field identity in fatal exceptions
+
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        Encoding w/ copy operator problems.
+        Issue # 27
+
+
+        * src/Messages/FieldSet.cpp:
+        for the purposes of comparing Messages "any" application data type matches anything
+
+        * src/Tests/testRoundTripFieldOps.cpp:
+        Add roundtrip tests for decimal + field operators
+        Reveals problem from Issue # 27
+
 Fri Nov 20 18:06:53 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionSequence.cpp:

@@ -34,24 +34,10 @@
 using namespace QuickFAST;
 
 namespace{
-  bool compareMessages(Messages::Message & lhs, Messages::Message & rhs)
-  {
-    std::stringstream reason;
-    if(!lhs.equals(rhs, reason))
-    {
-      std::cerr << "Reason: " << reason.str() << std::endl;
-      return false;
-    }
-    return true;
-  }
-}
-
-BOOST_AUTO_TEST_CASE(testRoundTripFieldOperators)
-{
-  std::string theTemplate =
+  const std::string theTemplates =
     "<templates>"
-    "  <template name=\"template_1\" id=\"3\">"
-//    "    <typeRef name=\"data_1\"/>"
+    "  <template name=\"template_1\" id=\"1\">"
+    "    <typeRef name=\"data_1\"/>"
     "    <uInt32 name=\"field_1\">"                           // integer required delta
     "      <delta/>"
     "    </uInt32>"
@@ -82,16 +68,42 @@ BOOST_AUTO_TEST_CASE(testRoundTripFieldOperators)
     "    <string name=\"field_10\" presence=\"optional\">"     // string optional copy
     "      <copy/>"
     "    </string>"
+    "    <decimal name=\"field_11\">"                          // decimal required delta
+    "      <delta/>"
+    "    </decimal>"
+    "    <decimal name=\"field_12\">"                          // decimal required copy
+    "      <copy/>"
+    "    </decimal>"
+    "    <decimal name=\"field_13\" presence=\"optional\">"    // decimal optional delta
+    "      <delta/>"
+    "    </decimal>"
+    "    <decimal name=\"field_14\" presence=\"optional\">"    // decimal optional copy
+    "      <copy/>"
+    "    </decimal>"
     "  </template>"
     "</templates>";
 
+  bool compareMessages(Messages::Message & lhs, Messages::Message & rhs)
+  {
+    std::stringstream reason;
+    if(!lhs.equals(rhs, reason))
+    {
+      std::cerr << "Reason: " << reason.str() << std::endl;
+      return false;
+    }
+    return true;
+  }
+}
+
+BOOST_AUTO_TEST_CASE(testRoundTripFieldOperators)
+{
   Codecs::XMLTemplateParser parser;
-  std::stringstream templateStream(theTemplate);
+  std::stringstream templateStream(theTemplates);
   Codecs::TemplateRegistryPtr templateRegistry =
     parser.parse(templateStream);
 
   BOOST_CHECK(templateRegistry);
-  BOOST_CHECK_EQUAL(templateRegistry->maxFieldCount(), 10);
+  BOOST_CHECK_EQUAL(templateRegistry->maxFieldCount(), 14);
 
   Messages::FieldIdentityCPtr identity_1 = new Messages::FieldIdentity("field_1");
   Messages::FieldIdentityCPtr identity_2 = new Messages::FieldIdentity("field_2");
@@ -103,6 +115,10 @@ BOOST_AUTO_TEST_CASE(testRoundTripFieldOperators)
   Messages::FieldIdentityCPtr identity_8 = new Messages::FieldIdentity("field_8");
   Messages::FieldIdentityCPtr identity_9 = new Messages::FieldIdentity("field_9");
   Messages::FieldIdentityCPtr identity_10 = new Messages::FieldIdentity("field_10");
+  Messages::FieldIdentityCPtr identity_11 = new Messages::FieldIdentity("field_11");
+  Messages::FieldIdentityCPtr identity_12 = new Messages::FieldIdentity("field_12");
+  Messages::FieldIdentityCPtr identity_13 = new Messages::FieldIdentity("field_13");
+  Messages::FieldIdentityCPtr identity_14 = new Messages::FieldIdentity("field_14");
 
   Messages::MessagePtr msg1(new Messages::Message(templateRegistry->maxFieldCount()));
   msg1->addField(identity_1, Messages::FieldUInt32::create(1));
@@ -115,6 +131,11 @@ BOOST_AUTO_TEST_CASE(testRoundTripFieldOperators)
   msg1->addField(identity_8, Messages::FieldAscii::create("field_8"));
   msg1->addField(identity_9, Messages::FieldAscii::create("field_9"));
   msg1->addField(identity_10, Messages::FieldAscii::create("field_10"));
+  msg1->addField(identity_11, Messages::FieldDecimal::create(123456, 1));
+  msg1->addField(identity_12, Messages::FieldDecimal::create(123456, 2));
+  msg1->addField(identity_13, Messages::FieldDecimal::create(123456, 3));
+  msg1->addField(identity_14, Messages::FieldDecimal::create(123456, 4));
+
 
   Messages::MessagePtr msg2(new Messages::Message(templateRegistry->maxFieldCount()));
   msg2->addField(identity_1, Messages::FieldUInt32::create(2));
@@ -127,6 +148,10 @@ BOOST_AUTO_TEST_CASE(testRoundTripFieldOperators)
   msg2->addField(identity_8, Messages::FieldAscii::create("field_8x"));
   msg2->addField(identity_9, Messages::FieldAscii::create("field_9x"));
   msg2->addField(identity_10, Messages::FieldAscii::create("field_10x"));
+  msg2->addField(identity_11, Messages::FieldDecimal::create(123450, 2));
+  msg2->addField(identity_12, Messages::FieldDecimal::create(123450, 3));
+  msg2->addField(identity_13, Messages::FieldDecimal::create(123450, 2));
+  msg2->addField(identity_14, Messages::FieldDecimal::create(123450, 1));
 
   Messages::MessagePtr msg3(new Messages::Message(templateRegistry->maxFieldCount()));
   msg3->addField(identity_1, Messages::FieldUInt32::create(2));
@@ -135,9 +160,11 @@ BOOST_AUTO_TEST_CASE(testRoundTripFieldOperators)
   msg3->addField(identity_6, Messages::FieldUInt32::create(7));
   msg3->addField(identity_7, Messages::FieldAscii::create("field_7x"));
   msg3->addField(identity_8, Messages::FieldAscii::create("field_8x"));
+  msg3->addField(identity_11, Messages::FieldDecimal::create(123450, 2));
+  msg3->addField(identity_12, Messages::FieldDecimal::create(123450, 3));
 
   Codecs::Encoder encoder(templateRegistry);
-  template_id_t templId = 3; // from the XML above
+  template_id_t templId = 1; // from the XML above
 
   BOOST_CHECKPOINT("encode msg1A");
   Codecs::DataDestinationString destination1A;

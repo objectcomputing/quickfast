@@ -130,3 +130,13 @@ Context::reportFatal(const std::string & errorCode, const std::string & message)
 {
   throw EncodingError(errorCode + ' ' +  message);
 }
+
+void
+Context::reportFatal(
+  const std::string & errorCode,
+  const std::string & message,
+  const Messages::FieldIdentity & identity)
+{
+  throw EncodingError(errorCode + ' ' + message + " Field: " + identity.name());
+}
+
