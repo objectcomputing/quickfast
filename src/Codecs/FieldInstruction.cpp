@@ -86,7 +86,7 @@ FieldInstruction::decodeConstant(
   Codecs::Decoder & decoder,
   Messages::MessageBuilder & /*fieldSet*/) const
 {
-  decoder.reportFatal("[ERR S2]", "Const Field Operator not supported for this data type.");
+  decoder.reportFatal("[ERR S2]", "Const Field Operator not supported for this data type.", *identity_);
   return false;
 }
 
@@ -97,7 +97,7 @@ FieldInstruction::decodeDefault(
   Codecs::Decoder & decoder,
   Messages::MessageBuilder & /*fieldSet*/) const
 {
-  decoder.reportFatal("[ERR S2]", "Default Field Operator not supported for this data type.");
+  decoder.reportFatal("[ERR S2]", "Default Field Operator not supported for this data type.", *identity_);
   return false;
 }
 
@@ -108,7 +108,7 @@ FieldInstruction::decodeCopy(
     Codecs::Decoder & decoder,
     Messages::MessageBuilder & /*fieldSet*/) const
 {
-  decoder.reportFatal("[ERR S2]", "Copy Field Operator not supported for this data type.");
+  decoder.reportFatal("[ERR S2]", "Copy Field Operator not supported for this data type.", *identity_);
   return false;
 }
 
@@ -119,7 +119,7 @@ FieldInstruction::decodeCopy(
   Codecs::Decoder & decoder,
   Messages::MessageBuilder & /*fieldSet*/) const
 {
-  decoder.reportFatal("[ERR U93]", "Copy with specific presence map bit not supported for this data type.");
+  decoder.reportFatal("[ERR U93]", "Copy with specific presence map bit not supported for this data type.", *identity_);
   return false;
 }
 
@@ -131,7 +131,7 @@ FieldInstruction::decodeDelta(
   Codecs::Decoder & decoder,
   Messages::MessageBuilder & /*fieldSet*/) const
 {
-  decoder.reportFatal("[ERR S2]", "Delta Field Operator not supported for this data type.");
+  decoder.reportFatal("[ERR S2]", "Delta Field Operator not supported for this data type.", *identity_);
   return false;
 }
 
@@ -142,7 +142,7 @@ FieldInstruction::decodeIncrement(
   Codecs::Decoder & decoder,
   Messages::MessageBuilder & /*fieldSet*/) const
 {
-  decoder.reportFatal("[ERR S2]", "Increment Field Operator not supported for this data type.");
+  decoder.reportFatal("[ERR S2]", "Increment Field Operator not supported for this data type.", *identity_);
   return false;
 }
 
@@ -153,7 +153,7 @@ FieldInstruction::decodeIncrement(
   Codecs::Decoder & decoder,
   Messages::MessageBuilder & /*fieldSet*/) const
 {
-  decoder.reportFatal("[ERR U93]", "Increment with specific presence map bit not supported for this data type.");
+  decoder.reportFatal("[ERR U93]", "Increment with specific presence map bit not supported for this data type.", *identity_);
   return false;
 }
 
@@ -164,7 +164,7 @@ FieldInstruction::decodeTail(
   Codecs::Decoder & decoder,
   Messages::MessageBuilder & /*fieldSet*/) const
 {
-  decoder.reportFatal("[ERR S2]", "Tail Field Operator not supported for this data type.");
+  decoder.reportFatal("[ERR S2]", "Tail Field Operator not supported for this data type.", *identity_);
   return false;
 }
 
@@ -175,7 +175,7 @@ FieldInstruction::encodeConstant(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & /*fieldSet*/) const
 {
-  encoder.reportFatal("[ERR S2]", "Constant Field Operator not supported for this data type.");
+  encoder.reportFatal("[ERR S2]", "Constant Field Operator not supported for this data type.", *identity_);
 }
 
 
@@ -186,7 +186,7 @@ FieldInstruction::encodeDefault(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & /*fieldSet*/) const
 {
-  encoder.reportFatal("[ERR S2]", "Default Field Operator not supported for this data type.");
+  encoder.reportFatal("[ERR S2]", "Default Field Operator not supported for this data type.", *identity_);
 }
 
 
@@ -197,7 +197,7 @@ FieldInstruction::encodeCopy(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & /*fieldSet*/) const
 {
-  encoder.reportFatal("[ERR S2]", "Copy Field Operator not supported for this data type.");
+  encoder.reportFatal("[ERR S2]", "Copy Field Operator not supported for this data type.", *identity_);
 }
 
 void
@@ -207,7 +207,7 @@ FieldInstruction::encodeDelta(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & /*fieldSet*/) const
 {
-  encoder.reportFatal("[ERR S2]", "Delta Field Operator not supported for this data type.");
+  encoder.reportFatal("[ERR S2]", "Delta Field Operator not supported for this data type.", *identity_);
 }
 
 void
@@ -217,7 +217,7 @@ FieldInstruction::encodeIncrement(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & /*fieldSet*/) const
 {
-  encoder.reportFatal("[ERR S2]", "Increment Field Operator not supported for this data type.");
+  encoder.reportFatal("[ERR S2]", "Increment Field Operator not supported for this data type.", *identity_);
 }
 
 void
@@ -227,7 +227,7 @@ FieldInstruction::encodeTail(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & /*fieldSet*/) const
 {
-  encoder.reportFatal("[ERR S2]", "Tail Field Operator not supported for this data type.");
+  encoder.reportFatal("[ERR S2]", "Tail Field Operator not supported for this data type.", *identity_);
 }
 
 bool
@@ -287,7 +287,9 @@ void
 FieldInstruction::decodeByteVector(
   Codecs::Context & decoder,
   Codecs::DataSource & source,
-  WorkingBuffer & buffer, size_t length)
+  const std::string & name,
+  WorkingBuffer & buffer,
+  size_t length)
 {
   buffer.clear(false, length);
   for(size_t pos = 0;
@@ -297,7 +299,7 @@ FieldInstruction::decodeByteVector(
     uchar byte = 0;
     if(!source.getByte(byte))
     {
-      decoder.reportFatal("[ERR U03]", "End of file: Too few bytes in ByteVector.");
+      decoder.reportFatal("[ERR U03]", "End of file: Too few bytes in ByteVector.", name);
     }
     buffer.push(byte);
   }

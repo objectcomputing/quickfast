@@ -225,11 +225,11 @@ namespace QuickFAST{
       INTEGER_TYPE value = 0;
       if(SIGNED) // expect compile-time optimization here
       {
-        decodeSignedInteger(source, decoder, value);
+        decodeSignedInteger(source, decoder, value, identity_->name());
       }
       else
       {
-        decodeUnsignedInteger(source, decoder, value);
+        decodeUnsignedInteger(source, decoder, value, identity_->name());
       }
       if(isMandatory())
       {
@@ -304,11 +304,11 @@ namespace QuickFAST{
         // present in stream
         if(SIGNED) // expect compile-time optimization here
         {
-          decodeSignedInteger(source, decoder, value);
+          decodeSignedInteger(source, decoder, value, identity_->name());
         }
         else
         {
-          decodeUnsignedInteger(source, decoder, value);
+          decodeUnsignedInteger(source, decoder, value, identity_->name());
         }
 
         if(isMandatory())
@@ -415,7 +415,7 @@ namespace QuickFAST{
       {
         PROFILE_POINT("int::decodeDefault:present");
         INTEGER_TYPE value = 0;
-        decodeSignedInteger(source, decoder, value);
+        decodeSignedInteger(source, decoder, value, identity_->name());
         if(isMandatory())
         {
           Messages::FieldCPtr newField(FIELD_CLASS::create(value));
@@ -464,7 +464,7 @@ namespace QuickFAST{
     {
       PROFILE_POINT("int::decodeDelta");
       int64 delta;
-      decodeSignedInteger(source, decoder, delta, true);
+      decodeSignedInteger(source, decoder, delta, identity_->name(), true);
       if(!isMandatory())
       {
         if(checkNullInteger(delta))
@@ -527,11 +527,11 @@ namespace QuickFAST{
         INTEGER_TYPE value = 0;
         if(SIGNED) // expect compile-time optimization here
         {
-          decodeSignedInteger(source, decoder, value);
+          decodeSignedInteger(source, decoder, value, identity_->name());
         }
         else
         {
-          decodeUnsignedInteger(source, decoder, value);
+          decodeUnsignedInteger(source, decoder, value, identity_->name());
         }
         if(isMandatory())
         {

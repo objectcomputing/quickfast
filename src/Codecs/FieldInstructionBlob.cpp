@@ -39,7 +39,7 @@ FieldInstructionBlob::decodeFromSource(
   PROFILE_POINT("blob::decodeFromSource");
 
   uint32 length;
-  decodeUnsignedInteger(source, context, length);
+  decodeUnsignedInteger(source, context, length, identity_->name());
   if(!mandatory)
   {
     if(checkNullInteger(length))
@@ -48,7 +48,7 @@ FieldInstructionBlob::decodeFromSource(
       return true;
     }
   }
-  decodeByteVector(context, source, buffer, length);
+  decodeByteVector(context, source, identity_->name(), buffer, length);
   field = createField(buffer.begin(), buffer.size());
   return true;
 }
@@ -138,7 +138,7 @@ FieldInstructionBlob::decodeDefault(
     }
     else if(isMandatory())
     {
-      decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.");
+      decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.", *identity_);
     }
 
   }
@@ -187,7 +187,7 @@ FieldInstructionBlob::decodeCopy(
     {
       if(isMandatory())
       {
-        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.");
+        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.", *identity_);
       }
     }
   }
@@ -203,7 +203,7 @@ FieldInstructionBlob::decodeDelta(
 {
   PROFILE_POINT("blob::decodeDelta");
   int32 deltaLength;
-  decodeSignedInteger(source, decoder, deltaLength);
+  decodeSignedInteger(source, decoder, deltaLength, identity_->name());
   if(!isMandatory())
   {
     if(checkNullInteger(deltaLength))
@@ -331,7 +331,7 @@ FieldInstructionBlob::decodeTail(
     {
       if(isMandatory())
       {
-        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.");
+        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.", *identity_);
       }
     }
   }
@@ -387,7 +387,7 @@ FieldInstructionBlob::encodeNop(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
     destination.putByte(nullBlob);
   }
@@ -408,7 +408,7 @@ FieldInstructionBlob::encodeConstant(
     const std::string & constant = initialValue_->toString();
     if(value != constant)
     {
-      encoder.reportFatal("[ERR U10]", "Constant value does not match application data.");
+      encoder.reportFatal("[ERR U10]", "Constant value does not match application data.", *identity_);
     }
 
     if(!isMandatory())
@@ -420,7 +420,7 @@ FieldInstructionBlob::encodeConstant(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
     pmap.setNextField(false);
   }
@@ -461,7 +461,7 @@ FieldInstructionBlob::encodeDefault(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
     if(fieldOp_->hasValue())
     {
@@ -494,7 +494,7 @@ FieldInstructionBlob::encodeCopy(
   {
     if(!previousField->isString())
     {
-      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
+      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
     }
     previousIsKnown = true;
     previousNotNull = previousField->isDefined();
@@ -537,7 +537,7 @@ FieldInstructionBlob::encodeCopy(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
       // if reportFatal returns we're being lax about the rules
       // let the copy happen.
       pmap.setNextField(false);
@@ -575,7 +575,7 @@ FieldInstructionBlob::encodeDelta(
   {
     if(!previousField->isString())
     {
-      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
+      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
     }
     previousIsKnown = true;
     previousNotNull = previousField->isDefined();
@@ -623,7 +623,7 @@ FieldInstructionBlob::encodeDelta(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
     destination.putByte(nullBlob);
   }
@@ -647,7 +647,7 @@ FieldInstructionBlob::encodeTail(
   {
     if(!previousField->isString())
     {
-      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
+      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
     }
     previousIsKnown = true;
     previousNotNull = previousField->isDefined();
@@ -695,7 +695,7 @@ FieldInstructionBlob::encodeTail(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
     destination.putByte(nullBlob);
   }

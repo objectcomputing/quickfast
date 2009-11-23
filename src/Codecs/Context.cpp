@@ -99,7 +99,19 @@ Context::reportWarning(
 {
   if(logOut_)
   {
-    (*logOut_) << errorCode << ' ' << message  << " Field: " << identity.name()<< std::endl;
+    (*logOut_) << errorCode << ' ' << message  << " Field: " << identity.name() << std::endl;
+  }
+}
+
+void
+Context::reportWarning(
+  const std::string & errorCode,
+  const std::string & message,
+  const std::string & name)
+{
+  if(logOut_)
+  {
+    (*logOut_) << errorCode << ' ' << message  << " Field: " << name << std::endl;
   }
 }
 
@@ -126,6 +138,15 @@ Context::reportError(
 }
 
 void
+Context::reportError(
+  const std::string & errorCode,
+  const std::string & message,
+  const std::string & name)
+{
+  throw EncodingError(errorCode + ' ' + message + " Field: " + name);
+}
+
+void
 Context::reportFatal(const std::string & errorCode, const std::string & message)
 {
   throw EncodingError(errorCode + ' ' +  message);
@@ -138,5 +159,14 @@ Context::reportFatal(
   const Messages::FieldIdentity & identity)
 {
   throw EncodingError(errorCode + ' ' + message + " Field: " + identity.name());
+}
+
+void
+Context::reportFatal(
+  const std::string & errorCode,
+  const std::string & message,
+  const std::string & name)
+{
+  throw EncodingError(errorCode + ' ' + message + " Field: " + name);
 }
 

@@ -1,3 +1,17 @@
+Mon Nov 23 17:43:00 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Context.cpp:
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        Add field identity to several encoding/decoding error messages.
+
 Fri Nov 20 21:44:02 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Context.h:

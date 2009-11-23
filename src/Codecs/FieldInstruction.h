@@ -496,7 +496,12 @@ namespace QuickFAST{
       /// @returns true if successful; false if EOF
       /// @throws OverflowError if the decoded value doesn't fit the supplied type
       template<typename IntType>
-      static void decodeSignedInteger(Codecs::DataSource & source, Codecs::Context & context, IntType & value, bool allowOversize = false);
+      static void decodeSignedInteger(
+        Codecs::DataSource & source,
+        Codecs::Context & context,
+        IntType & value,
+        const std::string & name,
+        bool allowOversize = false);
 
       /// @brief basic decoding for signed integer types.
       ///
@@ -510,7 +515,11 @@ namespace QuickFAST{
       /// @returns true if successful; false if EOF
       /// @throws OverflowError if the decoded value doesn't fit the supplied type
       template<typename UnsignedIntType>
-      static void decodeUnsignedInteger(Codecs::DataSource & source, Codecs::Context & context, UnsignedIntType & value);
+      static void decodeUnsignedInteger(
+        Codecs::DataSource & source,
+        Codecs::Context & context,
+        UnsignedIntType & value,
+        const std::string & name);
 
       /// @brief Check nullable signed or unsigned integer field for null value
       ///
@@ -567,6 +576,7 @@ namespace QuickFAST{
       static void decodeByteVector(
         Codecs::Context & decoder,
         Codecs::DataSource & source,
+        const std::string & name,
         WorkingBuffer & buffer,
         size_t length);
 
@@ -604,13 +614,18 @@ namespace QuickFAST{
 
     template<typename IntType>
     void
-    FieldInstruction::decodeSignedInteger(Codecs::DataSource & source, Codecs::Context & context, IntType & value, bool oversize)
+    FieldInstruction::decodeSignedInteger(
+      Codecs::DataSource & source,
+      Codecs::Context & context,
+      IntType & value,
+      const std::string & name,
+      bool oversize)
     {
       PROFILE_POINT("decodeSignedInteger");
       uchar byte;
       if(!source.getByte(byte))
       {
-        context.reportFatal("[ERR U03]", "Unexpected end of data decoding integer");
+        context.reportFatal("[ERR U03]", "Unexpected end of data decoding integer", name);
       }
 
       value = 0;
@@ -635,19 +650,19 @@ namespace QuickFAST{
       while((byte & stopBit) == 0)
       {
         if((value & overflowMask) != overflowCheck){
-          context.reportError("[ERR D2]", "Integer Field overflow.");
+          context.reportError("[ERR D2]", "Integer Field overflow.", name);
         }
         value <<= dataShift;
         value |= byte;
         if(!source.getByte(byte))
         {
-          context.reportFatal("[ERR D2]", "Integer Field overflow.");
+          context.reportFatal("[ERR D2]", "Integer Field overflow.", name);
         }
       }
       // include the last byte (the one with the stop bit)
       if((value & overflowMask) != overflowCheck)
       {
-        context.reportError("[ERR D2]", "Integer Field overflow.");
+        context.reportError("[ERR D2]", "Integer Field overflow.", name);
       }
       value <<= dataShift;
       value |= (byte & dataBits);
@@ -667,13 +682,17 @@ namespace QuickFAST{
 
     template<typename UnsignedIntType>
     void
-    FieldInstruction::decodeUnsignedInteger(Codecs::DataSource & source, Codecs::Context & context, UnsignedIntType & value)
+    FieldInstruction::decodeUnsignedInteger(
+      Codecs::DataSource & source,
+      Codecs::Context & context,
+      UnsignedIntType & value,
+      const std::string & name)
     {
       PROFILE_POINT("decodeUnsignedInteger");
       uchar byte;
       if(!source.getByte(byte))
       {
-        context.reportFatal("[ERR U03]", "Unexpected end of data decoding unsigned integer");
+        context.reportFatal("[ERR U03]", "Unexpected end of data decoding unsigned integer", name);
       }
 
       value = 0;
@@ -695,7 +714,7 @@ namespace QuickFAST{
         value |= byte;
         if(!source.getByte(byte))
         {
-          context.reportFatal("[ERR U03]", "End of file without stop bit decoding unsigned integer.");
+          context.reportFatal("[ERR U03]", "End of file without stop bit decoding unsigned integer.", name);
         }
       }
       if((value & overflowMask) != overflowCheck)

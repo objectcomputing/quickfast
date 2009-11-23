@@ -93,6 +93,7 @@ namespace QuickFAST{
       ///                  i.e [R123]
       /// @param message a text description of the problem.
       virtual void reportWarning(const std::string & errorCode, const std::string & message);
+
       /// @brief Report a warning
       /// @param errorCode as defined in the FIX standard (or invented for QuickFAST)
       ///                  i.e [R123]
@@ -102,6 +103,16 @@ namespace QuickFAST{
         const std::string & errorCode,
         const std::string & message,
         const Messages::FieldIdentity & identity);
+
+      /// @brief Report a warning
+      /// @param errorCode as defined in the FIX standard (or invented for QuickFAST)
+      ///                  i.e [R123]
+      /// @param message a text description of the problem.
+      /// @param name identifies the field being Xcoded
+      virtual void reportWarning(
+        const std::string & errorCode,
+        const std::string & message,
+        const std::string & name);
 
       /// @brief Report a recoverable error
       /// @param errorCode as defined in the FIX standard (or invented for QuickFAST)
@@ -122,6 +133,18 @@ namespace QuickFAST{
         const Messages::FieldIdentity & identity
         );
 
+      /// @brief Report a recoverable error
+      /// @param errorCode as defined in the FIX standard (or invented for QuickFAST)
+      ///                  i.e [R123]
+      /// @param message a text description of the problem.
+      /// @param name identifies the field being Xcoded
+      /// @throws EncodingError unless overridden.
+      virtual void reportError(
+        const std::string & errorCode,
+        const std::string & message,
+        const std::string & name
+        );
+
       /// @brief Report a fatal error (always throws)
       /// @param errorCode as defined in the FIX standard (or invented for QuickFAST)
       ///                  i.e [R123]
@@ -139,6 +162,18 @@ namespace QuickFAST{
         const std::string & errorCode,
         const std::string & message,
         const Messages::FieldIdentity & identity
+        );
+
+      /// @brief Report a fatal error (always throws)
+      /// @param errorCode as defined in the FIX standard (or invented for QuickFAST)
+      ///                  i.e [R123]
+      /// @param message a text description of the problem.
+      /// @param name identifies the field being Xcoded
+      /// @throws EncodingError "always"
+      virtual void reportFatal(
+        const std::string & errorCode,
+        const std::string & message,
+        const std::string & name
         );
 
       /// @brief get a working buffer for use during Xcoding.

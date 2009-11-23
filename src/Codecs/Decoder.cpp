@@ -46,7 +46,7 @@ Decoder::decodeMessage(
   if(pmap.checkNextField())
   {
     template_id_t id;
-    FieldInstruction::decodeUnsignedInteger(source, *this, id);
+    FieldInstruction::decodeUnsignedInteger(source, *this, id, tid);
     setTemplateId(id);
   }
   if(verboseOut_)
@@ -101,7 +101,7 @@ Decoder::decodeNestedTemplate(
   source.beginField(pmp);
   if(!pmap.decode(source))
   {
-    reportError("[ERR U03]", "Unexpected end of data in presence map.");
+    reportError("[ERR U03]", "Unexpected end of data in nested template presence map.");
     return;
   }
 
@@ -110,12 +110,12 @@ Decoder::decodeNestedTemplate(
   if(pmap.checkNextField())
   {
     template_id_t id;
-    FieldInstruction::decodeUnsignedInteger(source, *this, id);
+    FieldInstruction::decodeUnsignedInteger(source, *this, id, tid);
     setTemplateId(id);
   }
   if(verboseOut_)
   {
-    (*verboseOut_) << "Template ID: " << getTemplateId() << std::endl;
+    (*verboseOut_) << "Nested Template ID: " << getTemplateId() << std::endl;
   }
   Codecs::TemplateCPtr templatePtr;
   if(getTemplateRegistry()->getTemplate(getTemplateId(), templatePtr))

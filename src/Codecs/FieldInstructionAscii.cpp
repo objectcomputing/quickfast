@@ -147,7 +147,7 @@ FieldInstructionAscii::decodeDefault(
     }
     else if(isMandatory())
     {
-      decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.");
+      decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.", *identity_);
     }
   }
   return true;
@@ -196,7 +196,7 @@ FieldInstructionAscii::decodeCopy(
     {
       if(isMandatory())
       {
-        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.");
+        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.", *identity_);
       }
     }
   }
@@ -212,7 +212,7 @@ FieldInstructionAscii::decodeDelta(
 {
   PROFILE_POINT("ascii::decodeDelta");
   int32 deltaLength;
-  decodeSignedInteger(source, decoder, deltaLength);
+  decodeSignedInteger(source, decoder, deltaLength, identity_->name());
   if(!isMandatory())
   {
     if(checkNullInteger(deltaLength))
@@ -348,7 +348,7 @@ FieldInstructionAscii::decodeTail(
     {
       if(isMandatory())
       {
-        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.");
+        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.", *identity_);
       }
     }
   }
@@ -380,7 +380,7 @@ FieldInstructionAscii::encodeNop(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
     destination.putByte(nullAscii);
   }
@@ -401,7 +401,7 @@ FieldInstructionAscii::encodeConstant(
     const std::string & constant = initialValue_->toAscii();
     if(value != constant)
     {
-      encoder.reportFatal("[ERR U10}", "Constant value does not match application data.");
+      encoder.reportFatal("[ERR U10}", "Constant value does not match application data.", *identity_);
     }
 
     if(!isMandatory())
@@ -413,7 +413,7 @@ FieldInstructionAscii::encodeConstant(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
     pmap.setNextField(false);
   }
@@ -454,7 +454,7 @@ FieldInstructionAscii::encodeDefault(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
     if(fieldOp_->hasValue())
     {
@@ -487,7 +487,7 @@ FieldInstructionAscii::encodeCopy(
   {
     if(!previousField->isType(Messages::Field::ASCII))
     {
-      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
+      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
     }
     previousIsKnown = true;
     previousNotNull = previousField->isDefined();
@@ -530,7 +530,7 @@ FieldInstructionAscii::encodeCopy(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
     if(previousIsKnown && previousNotNull)
     {
@@ -563,7 +563,7 @@ FieldInstructionAscii::encodeDelta(
   {
     if(!previousField->isType(Messages::Field::ASCII))
     {
-      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
+      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
     }
     previousIsKnown = true;
     previousNotNull = previousField->isDefined();
@@ -617,7 +617,7 @@ FieldInstructionAscii::encodeDelta(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
     destination.putByte(nullAscii);
   }
@@ -641,7 +641,7 @@ FieldInstructionAscii::encodeTail(
   {
     if(!previousField->isType(Messages::Field::ASCII))
     {
-      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.");
+      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
     }
     previousIsKnown = true;
     previousNotNull = previousField->isDefined();
@@ -689,7 +689,7 @@ FieldInstructionAscii::encodeTail(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.");
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
     destination.putByte(nullAscii);
   }

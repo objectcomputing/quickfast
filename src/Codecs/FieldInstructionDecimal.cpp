@@ -90,7 +90,7 @@ FieldInstructionDecimal::decodeNop(
   else
   {
     exponent_t exponent = 0;
-    decodeSignedInteger(source, decoder, exponent);
+    decodeSignedInteger(source, decoder, exponent, identity_->name());
     if(!isMandatory())
     {
       if(checkNullInteger(exponent))
@@ -99,7 +99,7 @@ FieldInstructionDecimal::decodeNop(
       }
     }
     mantissa_t mantissa;
-    decodeSignedInteger(source, decoder, mantissa);
+    decodeSignedInteger(source, decoder, mantissa, identity_->name());
     Decimal value(mantissa, exponent);
     Messages::FieldCPtr newField(Messages::FieldDecimal::create(value));
     accessor.addField(
@@ -138,7 +138,7 @@ FieldInstructionDecimal::decodeDefault(
   if(pmap.checkNextField())
   {
     exponent_t exponent = 0;
-    decodeSignedInteger(source, decoder, exponent);
+    decodeSignedInteger(source, decoder, exponent, identity_->name());
     if(!isMandatory())
     {
       if(checkNullInteger(exponent))
@@ -147,7 +147,7 @@ FieldInstructionDecimal::decodeDefault(
       }
     }
     mantissa_t mantissa;
-    decodeSignedInteger(source, decoder, mantissa);
+    decodeSignedInteger(source, decoder, mantissa, identity_->name());
     Decimal value(mantissa, exponent);
     Messages::FieldCPtr newField(Messages::FieldDecimal::create(value));
     accessor.addField(
@@ -183,10 +183,10 @@ FieldInstructionDecimal::decodeCopy(
   mantissa_t mantissa = 0;
   if(pmap.checkNextField())
   {
-    decodeSignedInteger(source, decoder, exponent);
+    decodeSignedInteger(source, decoder, exponent, identity_->name());
     if(isMandatory())
     {
-      decodeSignedInteger(source, decoder, mantissa);
+      decodeSignedInteger(source, decoder, mantissa, identity_->name());
       Decimal value(mantissa, exponent, false);
       Messages::FieldCPtr newField(Messages::FieldDecimal::create(value));
       accessor.addField(
@@ -204,7 +204,7 @@ FieldInstructionDecimal::decodeCopy(
       }
       else
       {
-        decodeSignedInteger(source, decoder, mantissa);
+        decodeSignedInteger(source, decoder, mantissa, identity_->name());
         Decimal value(mantissa, exponent, false);
         Messages::FieldCPtr newField(Messages::FieldDecimal::create(value));
         accessor.addField(
@@ -275,7 +275,7 @@ FieldInstructionDecimal::decodeDelta(
 {
   PROFILE_POINT("decimal::decodeDelta");
   int64 exponentDelta;
-  decodeSignedInteger(source, decoder, exponentDelta, true);
+  decodeSignedInteger(source, decoder, exponentDelta, identity_->name(), true);
   if(!isMandatory())
   {
     if(checkNullInteger(exponentDelta))
@@ -285,7 +285,7 @@ FieldInstructionDecimal::decodeDelta(
     }
   }
   int64 mantissaDelta;
-  decodeSignedInteger(source, decoder, mantissaDelta, true);
+  decodeSignedInteger(source, decoder, mantissaDelta, identity_->name(), true);
 
   Decimal value(typedValue_);
   Messages::FieldCPtr previousField;

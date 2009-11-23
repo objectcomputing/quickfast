@@ -39,7 +39,7 @@ FieldInstructionStaticTemplateRef::decodeNop(
   TemplateCPtr target;
   if(!decoder.findTemplate(templateName_, templateNamespace_, target))
   {
-    decoder.reportFatal("[ERR D9]", "Unknown template name for static templateref.");
+    decoder.reportFatal("[ERR D9]", "Unknown template name for static templateref.", *identity_);
   }
 
   if(messageBuilder.getApplicationType() != target->getApplicationType())
@@ -84,7 +84,7 @@ FieldInstructionStaticTemplateRef::encodeNop(
   TemplateCPtr target;
   if(!encoder.findTemplate(templateName_, templateNamespace_, target))
   {
-    encoder.reportFatal("[ERR D9]", "Unknown template name for static templateref.");
+    encoder.reportFatal("[ERR D9]", "Unknown template name for static templateref.", *identity_);
   }
 
   // retrieve the field corresponding to this templateRef
