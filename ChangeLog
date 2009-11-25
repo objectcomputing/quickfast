@@ -1,3 +1,9 @@
+Wed Nov 25 14:41:09 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+        * src/Common/QuickFASTPch.h:
+        * src/Common/Types.h:
+        Use boost/cstdint.hpp to define integral types.
+        This improves portability.
+
 Mon Nov 23 17:43:00 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Context.h:
