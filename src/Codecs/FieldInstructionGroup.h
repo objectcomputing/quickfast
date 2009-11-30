@@ -44,6 +44,7 @@ namespace QuickFAST{
       }
 
       virtual size_t presenceMapBitsRequired()const;
+
       virtual size_t fieldCount(const SegmentBody & parent)const;
 
       virtual bool decodeNop(
@@ -63,6 +64,8 @@ namespace QuickFAST{
         const std::string & dictionaryName,
         const std::string & typeName,
         const std::string & typeNamespace);
+
+      void virtual finalize(TemplateRegistry & templateRegistry);
 
     private:
       void interpretValue(const std::string & value);

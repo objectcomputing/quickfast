@@ -88,7 +88,6 @@ namespace
 
     virtual void endDocument()
     {
-      // todo: registry reconcile to let it do any final cleanup?
       registry_->finalize();
     }
 
@@ -245,13 +244,12 @@ namespace
     {
       boost::scoped_array<char> tagRaw(XMLString::transcode(localname));
       std::string tag(tagRaw.get());
-      // don't finalize here for templates.  Because it's optional
-      // it will be forcibly finalized at end of document
+
+      // Don't pop <templates>.  It's optional and has been forcibly pushed
       if(tag != "templates")
       {
         if(schemaElements_.top().first == tag)
         {
-          schemaElements_.top().second->finalize();
           schemaElements_.pop();
         }
       }

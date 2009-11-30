@@ -364,13 +364,7 @@ GenericGroupBuilder::startGroup(
   // NOTE THIS WILL BE CALLED TO START A NESTED GROUP
   if(!groupBuilder_)
   {
-    std::cout << "Allocating Group builder" << std::endl;
     groupBuilder_.reset(new GenericGroupBuilder(this));
-    std::cout << "Group builder Allocated:" << (void*)groupBuilder_.get() << std::endl;
-  }
-  else
-  {
-    std::cout << "Group builder already exists:" << (void*)groupBuilder_.get() << std::endl;
   }
   groupBuilder_->initialize(
     identity,

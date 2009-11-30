@@ -42,7 +42,7 @@ namespace QuickFAST{
       virtual void addLengthInstruction(FieldInstructionPtr & field);
       virtual void addInstruction(FieldInstructionPtr & field);
 
-      virtual void finalize();
+      virtual void finalize(TemplateRegistry & templateRegistry);
 
       /// @brief Retrieve the typeref information
       /// @returns the typeref for this segment.
@@ -58,7 +58,7 @@ namespace QuickFAST{
         return applicationNamespace_;
       }
 
-      /// @brief Enable the addLengthInstruction() method.
+      /// @brief Enable the addLengt+hInstruction() method.
       void allowLengthField()
       {
         allowLengthField_ = true;
@@ -142,6 +142,12 @@ namespace QuickFAST{
       std::string applicationNamespace_;
       /// @brief the default dictionary to be used for this set of fields
       std::string dictionaryName_;
+
+      /// @brief avoid catastrophe when template references are recursive.
+      bool isFinalizing_;
+
+      /// @brief is finalization complete?
+      bool isFinalized_;
 
       /// @brief the maximum number of presence map bits needed to encode these fields
       size_t presenceMapBits_;

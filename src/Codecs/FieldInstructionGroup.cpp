@@ -28,6 +28,12 @@ FieldInstructionGroup::~FieldInstructionGroup()
 {
 }
 
+void
+FieldInstructionGroup::finalize(TemplateRegistry & templateRegistry)
+{
+  segmentBody_->finalize(templateRegistry);
+}
+
 bool
 FieldInstructionGroup::decodeNop(
   Codecs::DataSource & source,

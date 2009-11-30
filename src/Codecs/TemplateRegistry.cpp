@@ -31,6 +31,14 @@ TemplateRegistry::TemplateRegistry(
 void
 TemplateRegistry::finalize()
 {
+  // Give every tmplate a chance to finalize itself.
+  for(MutableTemplates::iterator mit = mutableTemplates_.begin();
+    mit != mutableTemplates_.end();
+    ++mit)
+  {
+    (*mit)->finalize(*this);
+  }
+
   DictionaryIndexer indexer;
   for(MutableTemplates::iterator mit = mutableTemplates_.begin();
     mit != mutableTemplates_.end();
@@ -122,4 +130,24 @@ TemplateRegistry::findNamedTemplate(
   }
   valueFound = it->second;
   return bool(valueFound);
+}
+
+bool
+TemplateRegistry::findNamedTemplate(
+  const std::string & templateName,
+  const std::string & templateNamespace,
+  TemplatePtr & valueFound)
+{
+  bool found = false;
+  for(MutableTemplates::iterator mit = mutableTemplates_.begin();
+    !found && mit != mutableTemplates_.end();
+    ++mit)
+  {
+    if(templateName == (*mit)->getTemplateName() && templateNamespace == (*mit)->getTemplateNamespace())
+    {
+      valueFound = *mit;
+      found = true;
+    }
+  }
+  return found;
 }

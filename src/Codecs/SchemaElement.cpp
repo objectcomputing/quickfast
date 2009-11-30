@@ -4,12 +4,11 @@
 #include <Common/QuickFASTPch.h>
 #include "SchemaElement.h"
 #include <Common/Exceptions.h>
-using namespace ::QuickFAST;
-using namespace ::QuickFAST::Codecs;
-
+using namespace QuickFAST;
+using namespace QuickFAST::Codecs;
 
 void
-SchemaElement::finalize()
+SchemaElement::finalize(TemplateRegistry & templateRegistry)
 {
   // nothing to do by default
 }

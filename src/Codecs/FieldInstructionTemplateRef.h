@@ -26,6 +26,7 @@ namespace QuickFAST{
       /// @brief a typical virtual destructor.
       virtual ~FieldInstructionStaticTemplateRef();
 
+      virtual void finalize(TemplateRegistry & templateRegistry);
       virtual size_t fieldCount(const SegmentBody & parent)const;
 
       virtual bool decodeNop(
@@ -40,12 +41,15 @@ namespace QuickFAST{
         Codecs::Encoder & encoder,
         const Messages::MessageAccessor & fieldSet) const;
 
+      virtual size_t presenceMapBitsRequired() const;
+
     private:
       void interpretValue(const std::string & value);
 
     private:
       std::string templateName_;
       std::string templateNamespace_;
+      size_t presenceMapBitsRequired_;
     };
 
     /// @brief Implement dynamic &lt;templateRef> field instruction.

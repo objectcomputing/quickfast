@@ -11,6 +11,7 @@
 
 #include <Common/QuickFAST_Export.h>
 #include <Codecs/Template_fwd.h>
+#include <Codecs/TemplateRegistry_fwd.h>
 #include <Codecs/FieldInstruction_fwd.h>
 #include <Codecs/FieldOp_fwd.h>
 #include <Codecs/SegmentBody_fwd.h>
@@ -38,7 +39,7 @@ namespace QuickFAST
       }
 
       /// @brief After all contained elements have been added, do any necessary housekeeping.
-      virtual void finalize();
+      virtual void finalize(TemplateRegistry & templateRegistry);
 
       /// @brief Add a template to a container
       /// @param value smart pointer to the template to be added

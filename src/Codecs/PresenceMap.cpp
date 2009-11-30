@@ -163,7 +163,7 @@ PresenceMap::checkNextField()
 {
   if(bytePosition_ >= byteLength_)
   {
-    if(vout_)(*vout_) << "pmap:eof" << std::endl;
+    if(vout_)(*vout_) << "pmap:at end [" << bytePosition_ << "]" << std::endl;
     return false;
   }
   bool result = (bits_[bytePosition_] & bitMask_) != 0;

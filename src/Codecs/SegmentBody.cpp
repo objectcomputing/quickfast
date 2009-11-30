@@ -9,7 +9,9 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
 
 SegmentBody::SegmentBody(size_t pmapBits)
-: presenceMapBits_(pmapBits)
+: isFinalizing_(false)
+, isFinalized_(false)
+, presenceMapBits_(pmapBits)
 , initialPresenceMapBits_(pmapBits)
 , allowLengthField_(false)
 , mandatoryLength_(true)
@@ -44,8 +46,24 @@ SegmentBody::setDictionaryName(const std::string & name)
 }
 
 void
-SegmentBody::finalize()
+SegmentBody::finalize(TemplateRegistry & templateRegistry)
 {
+  if(isFinalizing_ || isFinalized_)
+  {
+    return;
+  }
+  isFinalizing_ = true;
+
+  if(bool(lengthInstruction_))
+  {
+    lengthInstruction_->finalize(templateRegistry);
+  }
+  for (size_t pos = 0; pos < instructions_.size(); ++pos)
+  {
+    FieldInstructionPtr pf = instructions_[pos];
+    pf->finalize(templateRegistry);
+  }
+
   presenceMapBits_ = initialPresenceMapBits_;
   if(bool(lengthInstruction_))
   {
@@ -55,7 +73,8 @@ SegmentBody::finalize()
   {
     presenceMapBits_ += instructions_[pos]->presenceMapBitsRequired();
   }
-  // todo: consider dictionary and typename inheritence
+  isFinalizing_ = false;
+  isFinalized_ = true;
 }
 
 void

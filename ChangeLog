@@ -1,3 +1,26 @@
+Mon Nov 30 17:21:41 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionGroup.h:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionSequence.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/PresenceMap.cpp:
+        * src/Codecs/SchemaElement.h:
+        * src/Codecs/SchemaElement.cpp:
+        * src/Codecs/SegmentBody.h:
+        * src/Codecs/SegmentBody.cpp:
+        * src/Codecs/TemplateRegistry.h:
+        * src/Codecs/TemplateRegistry.cpp:
+        * src/Codecs/XMLTemplateParser.cpp:
+        Modify template finalization to account for pmap bits resulting
+        from static template references.
+        Issue # 25
+
+        * src/Codecs/GenericMessageBuilder.cpp:
+        Remove unnecessary log messages left over from debugging.
+
 Mon Nov 30 17:15:51 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Examples/Examples/ExamplesPch.h:

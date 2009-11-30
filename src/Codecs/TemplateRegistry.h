@@ -104,6 +104,16 @@ namespace QuickFAST{
         const std::string & templateNamespace,
         TemplateCPtr & valueFound)const;
 
+      /// @brief Find a template by name (mutable version)
+      /// @param[in] name the desired template
+      /// @param[in] templateNamespace in which name is defined.
+      /// @param[out] valueFound is the result of the search if return is true
+      /// @returns true if the template was found.
+      bool findNamedTemplate(
+        const std::string & name,
+        const std::string & templateNamespace,
+        TemplatePtr & valueFound);
+
       /// @brief Support constant iteration over known templates.
       /// @returns a pointer to the first template in the set
       const_iterator begin()const

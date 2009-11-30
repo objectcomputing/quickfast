@@ -6,6 +6,7 @@
 #include <Codecs/DataSource.h>
 #include <Codecs/Decoder.h>
 #include <Codecs/Encoder.h>
+#include <Codecs/TemplateRegistry.h>
 #include <Messages/MessageBuilder.h>
 #include <Messages/Group.h>
 #include <Messages/FieldGroup.h>
@@ -18,6 +19,7 @@ FieldInstructionStaticTemplateRef::FieldInstructionStaticTemplateRef(
   : FieldInstruction(name, fieldNamespace)
   , templateName_(name)
   , templateNamespace_(fieldNamespace)
+  , presenceMapBitsRequired_(0)
 {
 }
 
@@ -27,6 +29,26 @@ FieldInstructionStaticTemplateRef::FieldInstructionStaticTemplateRef()
 
 FieldInstructionStaticTemplateRef::~FieldInstructionStaticTemplateRef()
 {
+}
+
+void
+FieldInstructionStaticTemplateRef::finalize(TemplateRegistry & templateRegistry)
+{
+  TemplatePtr target;
+  if(!templateRegistry.findNamedTemplate(templateName_, templateNamespace_, target))
+  {
+    std::stringstream exception;
+    exception << "[ERR D9] Unknown template name for static templateref." << identity_->name();
+    throw QuickFAST::TemplateDefinitionError(exception.str());
+  }
+  target->finalize(templateRegistry);
+  presenceMapBitsRequired_ = target->presenceMapBitCount();
+}
+
+size_t
+FieldInstructionStaticTemplateRef::presenceMapBitsRequired() const
+{
+  return presenceMapBitsRequired_;
 }
 
 bool
@@ -168,11 +190,3 @@ FieldInstructionDynamicTemplateRef::fieldCount(const SegmentBody & parent)const
   // not doable right now.
   return 1;
 }
-
-
-
-
-
-
-
-

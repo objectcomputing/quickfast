@@ -31,6 +31,11 @@ FieldInstructionSequence::FieldInstructionSequence()
 FieldInstructionSequence::~FieldInstructionSequence()
 {
 }
+void
+FieldInstructionSequence::finalize(TemplateRegistry & templateRegistry)
+{
+  segment_->finalize(templateRegistry);
+}
 
 bool
 FieldInstructionSequence::decodeNop(
