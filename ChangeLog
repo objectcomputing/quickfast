@@ -1,3 +1,9 @@
+Mon Nov 30 17:15:51 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Examples/Examples/ExamplesPch.h:
+          Use boost/cstdint.hpp in examples, too.
+
+
 Wed Nov 25 14:41:09 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
         * src/Common/QuickFASTPch.h:
         * src/Common/Types.h:

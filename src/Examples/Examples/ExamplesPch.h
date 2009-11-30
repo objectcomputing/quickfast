@@ -39,6 +39,7 @@
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 #include <boost/thread/mutex.hpp>
+#include <boost/cstdint.hpp>
 
 // asio causes problems when precompiled on linux/gcc
 //#include <boost/asio.hpp>
