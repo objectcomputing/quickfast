@@ -868,6 +868,11 @@ TemplateBuilder::parseLength(const std::string & tag, const AttributeMap& attrib
   std::string ns;
   getOptionalAttribute(attributes, "ns", ns);
   FieldInstructionPtr field(new FieldInstructionUInt32(name, ns));
+  std::string id;
+  if(getOptionalAttribute(attributes, "id", id))
+  {
+    field->setId(id);
+  }
   schemaElements_.top().second->addLengthInstruction(field);
   // Is this push necessary?
   schemaElements_.push(StackEntry(tag, field));

@@ -456,7 +456,8 @@ FieldInstructionDecimal::encodeDefault(
   if(accessor.getField(identity_->name(), field))
   {
     Decimal value = field->toDecimal();
-    if(value == typedValue_)
+    if(typedValueIsDefined_ &&
+      value == typedValue_)
     {
       pmap.setNextField(false); // not in stream. use default
     }

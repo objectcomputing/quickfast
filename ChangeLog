@@ -1,3 +1,42 @@
+Tue Dec  1 23:27:49 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/DataSourceBlockedStream.h:
+        * src/Codecs/DataSourceBlockedStream.cpp:
+        A new data source:  Expects a FAST encoded block length to proceed each block of messages.
+        [think TCP/IP captured to a binary file]
+
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        Handle default operator with no initial value for optional fields.
+
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/GenericMessageBuilder.h:
+        * src/Codecs/GenericMessageBuilder.cpp:
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/Messages/FieldIdentity_fwd.h:
+        * src/Messages/FieldSequence.cpp:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/Sequence.h:
+        * src/Messages/SingleValueBuilder.h:
+        * src/Tests/testRoundTrip.cpp:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/PerformanceTest/NullMessage.h:
+        * src/Examples/PerformanceTest/NullMessage.cpp:
+        Make sequence length identity (name and ID) available.
+
+        * src/Examples/InterpretFAST/InterpretFAST.cpp:
+        Change command line option handling:
+          -em -ef -r -s -vp -vd -vx
+            Always set the corresponding option.
+            Adding a trailing '-' to any of them clears the option.
+            [toggling the option was confusing]
+        -e cout sends echo output to standard output
+
+        * src/Examples/PerformanceTest/PerformanceTest.cpp:
+        Fix a bug -- open the template file as a binary file on windows.
+
 Mon Nov 30 17:21:41 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionGroup.h:

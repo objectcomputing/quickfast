@@ -49,12 +49,14 @@ namespace QuickFAST{
       void setInitialValue(INTEGER_TYPE initialValue)
       {
         typedValue_ = initialValue;
+        typedValueIsDefined_ = true;
         initialField_.reset(new FIELD_CLASS(typedValue_));
       }
 
       virtual void setDefaultValueIncrement()
       {
         typedValue_ = INTEGER_TYPE(1);
+        typedValueIsDefined_ = true;
         initialField_ = FIELD_CLASS::create(typedValue_);
       }
 
@@ -148,6 +150,7 @@ namespace QuickFAST{
 
     private:
       INTEGER_TYPE typedValue_;
+      bool typedValueIsDefined_;
       Messages::FieldCPtr initialField_;
     };
 
@@ -158,6 +161,7 @@ namespace QuickFAST{
           const std::string & fieldNamespace)
       : FieldInstruction(name, fieldNamespace)
       , typedValue_(INTEGER_TYPE(0))
+      , typedValueIsDefined_(false)
       , initialField_(FIELD_CLASS::create(0))
     {
     }
@@ -166,6 +170,7 @@ namespace QuickFAST{
     FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
     FieldInstructionInteger()
       : typedValue_(INTEGER_TYPE(0))
+      , typedValueIsDefined_(false)
       , initialField_(FIELD_CLASS::create(0))
     {
     }
@@ -184,6 +189,7 @@ namespace QuickFAST{
       if(value.empty())
       {
         typedValue_ = INTEGER_TYPE(0);
+        typedValueIsDefined_ = false;
       }
       else
       {
@@ -195,6 +201,7 @@ namespace QuickFAST{
           {
             throw QuickFAST::TemplateDefinitionError("[ERR D1] Initial value oveflow");
           }
+          typedValueIsDefined_ = true;
         }
         else
         {
@@ -204,6 +211,7 @@ namespace QuickFAST{
           {
             throw QuickFAST::TemplateDefinitionError("[ERR D1] Initial value oveflow");
           }
+          typedValueIsDefined_ = true;
         }
       }
       initialField_ = FIELD_CLASS::create(typedValue_);
@@ -703,7 +711,7 @@ namespace QuickFAST{
       {
         INTEGER_TYPE value;
         field->getValue(value);
-        if(value == typedValue_)
+        if(typedValueIsDefined_ && value == typedValue_)
         {
           pmap.setNextField(false); // not in stream. use default
         }

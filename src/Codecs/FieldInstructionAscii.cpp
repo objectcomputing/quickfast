@@ -432,8 +432,8 @@ FieldInstructionAscii::encodeDefault(
   if(fieldSet.getField(identity_->name(), field))
   {
     std::string value = field->toAscii();
-    const std::string & defaultValue = initialValue_->toAscii();
-    if(value != defaultValue)
+    if(initialValue_->isDefined() &&
+      initialValue_->toAscii() == value)
     {
       pmap.setNextField(false); // not in stream. use default
     }

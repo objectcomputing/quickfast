@@ -24,8 +24,6 @@ FieldSequence::toUInt32()const
   return static_cast<uint32>(sequence_->size());
 }
 
-
-
 const Messages::SequenceCPtr &
 FieldSequence::toSequence() const
 {

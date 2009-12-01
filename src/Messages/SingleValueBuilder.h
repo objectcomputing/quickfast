@@ -46,13 +46,15 @@ namespace QuickFAST
 
         bool ignoreMessage(MessageBuilder & /*messageBuilder*/)
         {
+          set_ = false;
           return true;
         }
 
         virtual void addField(
-          const Messages::FieldIdentityCPtr & /*identity*/,
+          const Messages::FieldIdentityCPtr & identity,
           const Messages::FieldCPtr & value)
         {
+          identity_ = identity;
           value->getValue(value_);
           set_ = true;
         }
@@ -74,6 +76,10 @@ namespace QuickFAST
           return value_;
         }
 
+        const FieldIdentityCPtr & identity()const
+        {
+          return identity_;
+        }
 
       private:
         /////////////////////////////////////////////////
@@ -85,9 +91,10 @@ namespace QuickFAST
           return 1;
         }
 
-        virtual bool getIdentity(const std::string &/*name*/, Messages::FieldIdentityCPtr & /*identity*/) const
+        virtual bool getIdentity(const std::string &/*name*/, Messages::FieldIdentityCPtr & identity) const
         {
-          return false;
+          identity = identity_;
+          return bool(identity);
         }
 
         virtual void setApplicationType(const std::string & /*type*/, const std::string & /*ns*/)
@@ -107,10 +114,12 @@ namespace QuickFAST
         }
 
         virtual MessageBuilder & startSequence(
-          Messages::FieldIdentityCPtr /*identity*/,
-          const std::string & /*applicationType*/,
-          const std::string & /*applicationTypeNamespace*/,
-          size_t /*size*/)
+          FieldIdentityCPtr identity,
+          const std::string & applicationType,
+          const std::string & applicationTypeNamespace,
+          size_t fieldCount,
+          FieldIdentityCPtr lengthIdentity,
+          size_t length)
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
@@ -176,6 +185,7 @@ namespace QuickFAST
       private:
         bool set_;
         DATATYPE value_;
+        FieldIdentityCPtr identity_;
     };
   }
 }

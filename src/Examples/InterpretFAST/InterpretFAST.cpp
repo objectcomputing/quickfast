@@ -49,27 +49,52 @@ InterpretFAST::parseSingleArg(int argc, char * argv[])
   {
     if(opt == "-vp")
     {
-      verboseParse_ = !verboseParse_;
+      verboseParse_ = true;
       consumed = 1;
     }
     else if(opt == "-vd")
     {
-      verboseDecode_ = !verboseDecode_;
+      verboseDecode_ = true;
       consumed = 1;
     }
     else if(opt == "-vx")
     {
-      verboseExecution_ = !verboseExecution_;
+      verboseExecution_ = true;
       consumed = 1;
     }
     else if(opt == "-r")
     {
-      resetOnMessage_ = !resetOnMessage_;
+      resetOnMessage_ = true;
       consumed = 1;
     }
     else if(opt == "-s")
     {
-      strict_ = !strict_;
+      strict_ = true;
+      consumed = 1;
+    }
+    if(opt == "-vp-")
+    {
+      verboseParse_ = false;
+      consumed = 1;
+    }
+    else if(opt == "-vd-")
+    {
+      verboseDecode_ = false;
+      consumed = 1;
+    }
+    else if(opt == "-vx-")
+    {
+      verboseExecution_ = false;
+      consumed = 1;
+    }
+    else if(opt == "-r-")
+    {
+      resetOnMessage_ = false;
+      consumed = 1;
+    }
+    else if(opt == "-s-")
+    {
+      strict_ = false;
       consumed = 1;
     }
     else if(opt == "-t" && argc > 1)
@@ -114,12 +139,22 @@ InterpretFAST::parseSingleArg(int argc, char * argv[])
     }
     else if(opt == "-em")
     {
-      echoMessage_ = !echoMessage_;
+      echoMessage_ = true;
       consumed = 1;
     }
     else if(opt == "-ef")
     {
-      echoField_ = !echoField_;
+      echoField_ = true;
+      consumed = 1;
+    }
+    else if(opt == "-em-")
+    {
+      echoMessage_ = false;
+      consumed = 1;
+    }
+    else if(opt == "-ef-")
+    {
+      echoField_ = false;
       consumed = 1;
     }
   }
@@ -141,14 +176,14 @@ InterpretFAST::usage(std::ostream & out) const
   out << "    -ehex       : Echo as hexadecimal (default)." << std::endl;
   out << "    -eraw       : Echo as raw binary data" << std::endl;
   out << "    -enone      : Do not echo data (boundaries only)." << std::endl;
-  out << "    -em         : Toggle 'echo message boundaries'(default true)" << std::endl;
-  out << "    -ef         : Toggle 'echo field boundaries'(default false)" << std::endl;
+  out << "    -em or -em- : Set or reset 'echo message boundaries'(default true)" << std::endl;
+  out << "    -ef         : Set or reset 'echo field boundaries'(default false)" << std::endl;
   out << "  -head n     : process only the first 'n' messages" << std::endl;
-  out << "  -r          : Toggle 'reset decoder on every message' (default false)." << std::endl;
-  out << "  -s          : Toggle 'strict decoding rules' (default true)." << std::endl;
-  out << "  -vp         : Toggle 'noisy template parsing' (default false)." << std::endl;
-  out << "  -vd         : Toggle 'noisy decoding' (default false)." << std::endl;
-  out << "  -vx         : Toggle 'noisy execution progress' (default false)." << std::endl;
+  out << "  -r or -r-   : Set or reset 'reset decoder on every message' (default false)." << std::endl;
+  out << "  -s or -s-   : Set or reset 'strict decoding rules' (default true)." << std::endl;
+  out << "  -vp or -vp- : Set or reset 'noisy template parsing' (default false)." << std::endl;
+  out << "  -vd or -vd- : Set or reset 'noisy decoding' (default false)." << std::endl;
+  out << "  -vx or -vx- : Set or reset 'noisy execution progress' (default false)." << std::endl;
 }
 
 bool
@@ -215,15 +250,25 @@ InterpretFAST::applyArgs()
 
     if(! echoFileName_.empty())
     {
-
-      std::ios::openmode mode = std::ios::out | std::ios::trunc;
-#ifdef _WIN32
-      if(echoType_ == Codecs::DataSource::RAW)
+      if(echoFileName_ == "cout")
       {
-        mode |= std::ios::binary;
+        echoFile_ = &std::cout;
       }
+      else if (echoFileName_ == "cerr")
+      {
+        echoFile_ = &std::cerr;
+      }
+      else
+      {
+        std::ios::openmode mode = std::ios::out | std::ios::trunc;
+#ifdef _WIN32
+        if(echoType_ == Codecs::DataSource::RAW)
+        {
+          mode |= std::ios::binary;
+        }
 #endif
-      echoFile_ = new std::ofstream(echoFileName_.c_str(), mode);
+        echoFile_ = new std::ofstream(echoFileName_.c_str(), mode);
+      }
       if(!echoFile_->good())
       {
         ok = false;

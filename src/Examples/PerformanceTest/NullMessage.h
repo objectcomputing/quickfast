@@ -28,7 +28,10 @@ namespace QuickFAST{
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
-        size_t size);
+        size_t fieldCount,
+        Messages::FieldIdentityCPtr lengthIdentity,
+        size_t length);
+
       virtual void endSequence(
         Messages::FieldIdentityCPtr identity,
         Messages::MessageBuilder & sequenceBuilder );

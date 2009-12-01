@@ -36,12 +36,15 @@ namespace QuickFAST{
       /// @param identity identifies the sequence
       /// @param applicationType is the data type for a sequence entry
       /// @param applicationTypeNamespace qualifies applicationTYpe
-      /// @param size is the maximum number of fields to expect in each entry
+      /// @param fieldCount is the maximum number of fields to expect in each entry
       void initialize(
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
-        size_t size);
+        size_t fieldCount,
+        Messages::FieldIdentityCPtr lengthIdentity,
+        size_t length
+        );
 
       /// @brief access the results of building the sequence
       const Messages::SequencePtr & getSequence()const;
@@ -69,7 +72,9 @@ namespace QuickFAST{
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
-        size_t size);
+        size_t fieldCount,
+        Messages::FieldIdentityCPtr lengthIdentity,
+        size_t length);
 
       virtual void endSequence(
         Messages::FieldIdentityCPtr identity,
@@ -164,7 +169,9 @@ namespace QuickFAST{
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
-        size_t size);
+        size_t fieldCount,
+        Messages::FieldIdentityCPtr lengthIdentity,
+        size_t length);
       virtual void endSequence( Messages::FieldIdentityCPtr identity,
         Messages::MessageBuilder & sequenceBuilder);
 
@@ -233,7 +240,9 @@ namespace QuickFAST{
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
-        size_t size);
+        size_t fieldCount,
+        Messages::FieldIdentityCPtr lengthIdentity,
+        size_t length);
       virtual void endSequence(
         Messages::FieldIdentityCPtr identity,
         Messages::MessageBuilder & sequenceBuilder);

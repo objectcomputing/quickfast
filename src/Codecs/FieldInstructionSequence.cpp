@@ -79,7 +79,9 @@ FieldInstructionSequence::decodeNop(
     identity_,
     segment_->getApplicationType(),
     segment_->getApplicationTypeNamespace(),
-    segment_->fieldCount());
+    segment_->fieldCount(),
+    lengthSet.identity(),
+    length);
 
   for(size_t nEntry = 0; nEntry < length; ++nEntry)
   {

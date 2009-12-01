@@ -136,7 +136,12 @@ PerformanceTest::applyArgs()
     }
     if(ok)
     {
-      templateFile_.open(templateFileName_.c_str());
+      templateFile_.open(templateFileName_.c_str(), std::ios::in
+#ifdef _WIN32
+        | std::ios::binary
+#endif
+        );
+
       if(!templateFile_.good())
       {
         ok = false;

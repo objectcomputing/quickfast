@@ -40,9 +40,12 @@ GenericSequenceBuilder::initialize(
   Messages::FieldIdentityCPtr /*identity*/,
   const std::string & /*applicationType*/,
   const std::string & /*applicationTypeNamespace*/,
-  size_t /*size*/)
+  size_t, /*size*/
+  Messages::FieldIdentityCPtr lengthIdentity,
+  size_t length
+  )
 {
-  this->sequence_.reset(new Messages::Sequence);
+  this->sequence_.reset(new Messages::Sequence(lengthIdentity, length));
 }
 
 const std::string &
@@ -93,7 +96,9 @@ GenericSequenceBuilder::startSequence(
   Messages::FieldIdentityCPtr identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
-  size_t size)
+  size_t fieldCount,
+  Messages::FieldIdentityCPtr lengthIdentity,
+  size_t length)
 {
   // This is called to start a nested sequence
   // To see the start of THIS sequence, see initialize
@@ -105,7 +110,9 @@ GenericSequenceBuilder::startSequence(
     identity,
     applicationType,
     applicationTypeNamespace,
-    size);
+    fieldCount,
+    lengthIdentity,
+    length);
   return *sequenceBuilder_;
 }
 
@@ -303,7 +310,9 @@ GenericGroupBuilder::startSequence(
   Messages::FieldIdentityCPtr identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
-  size_t size)
+  size_t fieldCount,
+  Messages::FieldIdentityCPtr lengthIdentity,
+  size_t length)
 {
   // This is called to start a nested sequence
   if(!sequenceBuilder_)
@@ -314,7 +323,9 @@ GenericGroupBuilder::startSequence(
     identity,
     applicationType,
     applicationTypeNamespace,
-    size);
+    fieldCount,
+    lengthIdentity,
+    length);
   return *sequenceBuilder_;
 }
 
@@ -342,7 +353,8 @@ Messages::MessageBuilder &
 GenericGroupBuilder::startSequenceEntry(
   const std::string & /*applicationType*/,
   const std::string & /*applicationTypeNamespace*/,
-  size_t /*size*/)
+  size_t /*fieldCount*/)
+
 {
   throw QuickFAST::UsageError("Sequence operation applied to group.", "GenericGroupBuilder");
 }
@@ -501,13 +513,17 @@ GenericMessageBuilder::startSequence(
   Messages::FieldIdentityCPtr identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
-  size_t size)
+  size_t fieldCount,
+  Messages::FieldIdentityCPtr lengthIdentity,
+  size_t length)
 {
   sequenceBuilder_.initialize(
     identity,
     applicationType,
     applicationTypeNamespace,
-    size);
+    fieldCount,
+    lengthIdentity,
+    length);
   return sequenceBuilder_;
 }
 

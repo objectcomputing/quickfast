@@ -439,8 +439,8 @@ FieldInstructionBlob::encodeDefault(
   if(fieldSet.getField(identity_->name(), field))
   {
     std::string value = field->toString();
-    const std::string & defaultValue = initialValue_->toString();
-    if(value != defaultValue)
+    if(initialValue_->isDefined() &&
+      initialValue_->toString() == value)
     {
       pmap.setNextField(false); // not in stream. use default
     }

@@ -125,7 +125,10 @@ MessageInterpreter::formatSequence(
   newline();
   out_ << ' ' << identity->name() << '[' << identity->id() << "]=";
 
-  out_ << "Sequence[" << count << ']';
+  Messages::FieldIdentityCPtr lengthIdentity = sequence->getLengthIdentity();
+
+  out_ << "Sequence: " << lengthIdentity->name() << '[' << lengthIdentity->id() << ']' << " = " << count;
+
   size_t entryCount = 0;
   ++indent_;
   for(Messages::Sequence::const_iterator it = sequence->begin();

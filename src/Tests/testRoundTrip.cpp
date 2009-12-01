@@ -247,7 +247,9 @@ BOOST_AUTO_TEST_CASE(testRoundTripSequenceNoPMAP)
 
 //   <sequence name=\"MDFeedTypes\">"
 //     <length name=\"noOfStreams\" id=\"1141\"/>"
-  Messages::SequencePtr sequence_MDFeedTypes(new Messages::Sequence);
+  Messages::FieldIdentityPtr lengthIdentity(new Messages::FieldIdentity("noOfStreams",""));
+  lengthIdentity->setId("1141");
+  Messages::SequencePtr sequence_MDFeedTypes(new Messages::Sequence(lengthIdentity, 2));
   Messages::FieldSetPtr entry(new Messages::FieldSet(6)); // todo Hardcoded 6?
 
 //     <string name=\"streamType\" id=\"1022\"/>"

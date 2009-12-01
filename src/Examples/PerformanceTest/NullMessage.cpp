@@ -33,10 +33,12 @@ NullMessage::addField(const Messages::FieldIdentityCPtr & identity, const Messag
 
 Messages::MessageBuilder &
 NullMessage::startSequence(
-  Messages::FieldIdentityCPtr identity,
-  const std::string & applicationType,
-  const std::string & applicationTypeNamespace,
-  size_t size)
+  Messages::FieldIdentityCPtr /*identity*/,
+  const std::string & /*applicationType*/,
+  const std::string & /*applicationTypeNamespace*/,
+  size_t /*fieldCount*/,
+  Messages::FieldIdentityCPtr /*lengthIdentity*/,
+  size_t /*length*/)
 {
   throw QuickFAST::TemplateDefinitionError("NullMessage does not use Sequences");
 }

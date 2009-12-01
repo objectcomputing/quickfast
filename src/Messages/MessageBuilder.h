@@ -63,12 +63,16 @@ namespace QuickFAST{
       /// @param identity identifies the sequence
       /// @param applicationType is the data type for a sequence entry
       /// @param applicationTypeNamespace qualifies applicationTYpe
-      /// @param size is the maximum number of fields to expect in each entry
+      /// @param fieldCount is the maximum number of fields to expect in each entry
+      /// @param lengthIdentity is the identity of the length field
+      /// @param length is a count of how many entries will be in the sequence
       virtual MessageBuilder & startSequence(
-        Messages::FieldIdentityCPtr identity,
+        FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
-        size_t size) = 0;
+        size_t fieldCount,
+        FieldIdentityCPtr lengthIdentity,
+        size_t length) = 0;
 
       /// @brief Complete the entire sequence.
       ///

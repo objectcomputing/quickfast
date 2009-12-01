@@ -25,12 +25,22 @@ namespace QuickFAST{
 
     public:
       /// @brief construct an empty sequence
-      Sequence()
+      Sequence(
+        Messages::FieldIdentityCPtr lengthFieldIdentity,
+        size_t sequenceLength)
+        : lengthIdentity_(lengthFieldIdentity)
       {
+        this->entries_.reserve(sequenceLength);
       }
 
       ~Sequence()
       {
+      }
+
+      /// @brief get the identity of the sequence's length field
+      Messages::FieldIdentityCPtr getLengthIdentity() const
+      {
+        return lengthIdentity_;
       }
 
       /// @brief Set the application data type associated with this sequence.
@@ -82,11 +92,13 @@ namespace QuickFAST{
       }
 
     private:
-      std::string applicationType_;
-      Entries entries_;
-
+      Sequence();
       Sequence(const Sequence&);
       Sequence& operator=(const Sequence&);
+    private:
+      std::string applicationType_;
+      Messages::FieldIdentityCPtr lengthIdentity_;
+      Entries entries_;
     };
   }
 }
