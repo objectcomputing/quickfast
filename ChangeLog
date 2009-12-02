@@ -1,3 +1,8 @@
+Wed Dec  2 22:07:07 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/DataSourceBlockedStream.cpp:
+        Remove debug message to cout (particularly since it broke the gcc build)
+        Issue #29
+
 Wed Dec  2 15:22:09 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MulticastDecoder.h:

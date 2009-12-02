@@ -32,12 +32,10 @@ DataSourceBlockedStream::readByte(uchar & byte)
     while((b & stopBit) == 0 && stream_.good() && !stream_.eof())
     {
       // todo: overflow check
-      std::cout << std::hex << std::setw(2) << std::setfill('0') << unsigned short(b) << std::dec << ' ' << std::endl;
       blockSize <<= dataShift;
       blockSize += b;
       b = uchar(stream_.get());
     }
-    std::cout << std::hex << std::setw(2) << std::setfill('0') << unsigned short(b) << std::dec << std::setfill(' ') << std::endl;
 
     blockSize <<= dataShift;
     blockSize += (b & dataBits);
@@ -46,14 +44,12 @@ DataSourceBlockedStream::readByte(uchar & byte)
     {
       buffer_.reset(new unsigned char[blockSize]);
       bufferCapacity_ = blockSize;
-      std::cout << std::endl <<  "DataSourceBlockedStream: Grow buffer to " << bufferCapacity_ << " bytes." << std::endl;
     }
     if(stream_.good() && !stream_.eof())
     {
       stream_.read(reinterpret_cast<char *>(buffer_.get()), blockSize);
       bufferUsed_ = stream_.gcount();
       bufferPosition_ = 0;
-      std::cout << std::endl <<  "DataSourceBlockedStream: Block contains " << bufferUsed_ << " bytes." << std::endl;
     }
   }
   if(bufferPosition_ < bufferUsed_)
