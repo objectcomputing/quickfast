@@ -223,6 +223,11 @@ MulticastDecoder::run()
   receiver_.run();
 }
 
+void
+MulticastDecoder::run(size_t threadCount, bool useThisThread)
+{
+  receiver_.runThreads(threadCount,useThisThread);
+}
 
 void
 MulticastDecoder::stop()
@@ -230,3 +235,8 @@ MulticastDecoder::stop()
   receiver_.stop();
 }
 
+void
+MulticastDecoder::joinThreads()
+{
+  receiver_.joinThreads();
+}

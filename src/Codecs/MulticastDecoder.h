@@ -93,8 +93,10 @@ namespace QuickFAST{
 
       /// @brief Run the event loop to accept incoming messages
       ///
-      /// Todo: provide access to other variations of run
       void run();
+
+      /// @brief Run the event loop to accept incoming messages in multiple threads
+      void run(size_t threadCount, bool useThisThread);
 
       /// @brief Stop the decoding process.
       ///
@@ -106,6 +108,13 @@ namespace QuickFAST{
       /// MessageBuilder::decodingStopped() will be called when
       /// the stop request is complete.
       void stop();
+
+      void joinThreads();
+
+      const MulticastReceiver & receiver()const
+      {
+        return receiver_;
+      }
 
     private:
       MulticastReceiver receiver_;
