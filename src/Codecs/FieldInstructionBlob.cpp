@@ -514,7 +514,7 @@ FieldInstructionBlob::encodeCopy(
   if(fieldSet.getField(identity_->name(), field))
   {
     std::string value = field->toString();
-    if(previousIsKnown && previousValue == value)
+    if(previousNotNull && previousValue == value)
     {
       pmap.setNextField(false); // not in stream, use copy
     }

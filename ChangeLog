@@ -1,3 +1,17 @@
+Thu Dec  3 16:55:11 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Tests/testFieldOperations.cpp:
+        Issue 30: Copy operation, zero following NULL was being "copied"
+        rather than sent.
+        New unit test for this issue:  test_issue_30.
+
+
+        * src/Examples/InterpretFAST/InterpretFAST.cpp:
+        cosmetic: changed usage message
+
 Wed Dec  2 22:07:07 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/DataSourceBlockedStream.cpp:
         Remove debug message to cout (particularly since it broke the gcc build)

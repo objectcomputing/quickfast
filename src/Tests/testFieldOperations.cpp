@@ -1712,3 +1712,102 @@ BOOST_AUTO_TEST_CASE(testUtf8_Tail_Mandatory)
   BOOST_CHECK_EQUAL(result, testData);
   BOOST_CHECK(pmap == pmapResult);
 }
+
+BOOST_AUTO_TEST_CASE(test_issue_30)
+{
+  /*
+  <uInt32 name="NAME" presence="optional"><copy/></uInt32>
+
+            Input    Prior Encoded PMAP   FAST
+    NAME      1      NULL  2       true   0x82
+    NAME     None    1     NULL    true   0x80
+    NAME      0      NULL  1       true   0x81
+
+*/
+  const char testData[] = "\x82\x80\x81";
+  Codecs::DataSourceString source(testData);
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
+  Codecs::PresenceMap pmap(3);
+  pmap.setNextField(true);
+  pmap.setNextField(true);
+  pmap.setNextField(true);
+  pmap.rewind();
+
+  Codecs::FieldInstructionUInt32 field("NAME","");
+  field.setPresence(false);
+
+  FieldOpPtr fieldOp(new Codecs::FieldOpCopy);
+
+  // We neeed the helper routines in the decoder
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,1,indexer.size()));
+  Codecs::Decoder decoder(registry);
+
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+
+  // test a: decode the 1
+  builder.startMessage("UNIT_TEST", "", 1);
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
+
+  Messages::Message fieldSet1(1);
+  fieldSet1.swap(consumer.message());
+  Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
+  BOOST_CHECK(pFieldEntry != fieldSet1.end());
+  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  // the value should be the one
+  BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 1);
+  ++pFieldEntry;
+  BOOST_CHECK(pFieldEntry == fieldSet1.end());
+
+  // test b: decode the NULL
+  builder.startMessage("UNIT_TEST", "", 1);
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
+  Messages::Message fieldSet2(1);
+  fieldSet2.swap(consumer.message());
+  pFieldEntry = fieldSet2.begin();
+  BOOST_CHECK(pFieldEntry == fieldSet2.end());
+
+  // test c: decode the 0
+  builder.startMessage("UNIT_TEST", "", 1);
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
+
+  Messages::Message fieldSet3(1);
+  fieldSet3.swap(consumer.message());
+  pFieldEntry = fieldSet3.begin();
+  BOOST_CHECK(pFieldEntry != fieldSet3.end());
+  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  // the value should be the zero
+  BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 0);
+  ++pFieldEntry;
+  BOOST_CHECK(pFieldEntry == fieldSet3.end());
+
+  // Was all input consumed?
+  uchar byte;
+  BOOST_CHECK(!source.getByte(byte));
+
+  // Now reencode the data
+  Codecs::PresenceMap pmapResult(3);
+  Codecs::DataDestinationString destination;
+  destination.startBuffer();
+  Codecs::Encoder encoder(registry);
+  field.encode(destination, pmapResult, encoder, fieldSet1);
+  field.encode(destination, pmapResult, encoder, fieldSet2);
+  field.encode(destination, pmapResult, encoder, fieldSet3);
+  destination.endMessage();
+  const std::string & result = destination.getValue();
+  BOOST_CHECK_EQUAL(result, testData);
+  BOOST_CHECK(pmap == pmapResult);
+
+
+
+
+
+
+
+
+
+}

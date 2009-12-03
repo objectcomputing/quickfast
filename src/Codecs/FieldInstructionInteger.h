@@ -797,7 +797,7 @@ namespace QuickFAST{
         INTEGER_TYPE value;
         field->getValue(value);
 
-        if(previousIsKnown && previousValue == value)
+        if(previousNotNull && previousValue == value)
         {
           pmap.setNextField(false); // not in stream, use copy
         }

@@ -176,14 +176,14 @@ InterpretFAST::usage(std::ostream & out) const
   out << "    -ehex       : Echo as hexadecimal (default)." << std::endl;
   out << "    -eraw       : Echo as raw binary data" << std::endl;
   out << "    -enone      : Do not echo data (boundaries only)." << std::endl;
-  out << "    -em or -em- : Set or reset 'echo message boundaries'(default true)" << std::endl;
-  out << "    -ef         : Set or reset 'echo field boundaries'(default false)" << std::endl;
+  out << "    -em/-em-  : Set/Reset 'echo message boundaries'(default true)" << std::endl;
+  out << "    -ef/-ef-  : Set/Reset 'echo field boundaries'(default false)" << std::endl;
   out << "  -head n     : process only the first 'n' messages" << std::endl;
-  out << "  -r or -r-   : Set or reset 'reset decoder on every message' (default false)." << std::endl;
-  out << "  -s or -s-   : Set or reset 'strict decoding rules' (default true)." << std::endl;
-  out << "  -vp or -vp- : Set or reset 'noisy template parsing' (default false)." << std::endl;
-  out << "  -vd or -vd- : Set or reset 'noisy decoding' (default false)." << std::endl;
-  out << "  -vx or -vx- : Set or reset 'noisy execution progress' (default false)." << std::endl;
+  out << "  -r/-r-      : Set/Reset 'reset decoder on every message' (default false)." << std::endl;
+  out << "  -s/-s-      : Set/Reset 'strict decoding rules' (default true)." << std::endl;
+  out << "  -vp/-vp-    : Set/Reset 'noisy template parsing' (default false)." << std::endl;
+  out << "  -vd/-vd-    : Set/Reset 'noisy decoding' (default false)." << std::endl;
+  out << "  -vx/-vx-    : Set/Reset 'noisy execution progress' (default false)." << std::endl;
 }
 
 bool
