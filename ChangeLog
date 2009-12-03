@@ -1,3 +1,13 @@
+Thu Dec  3 20:50:21 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/FieldInstructionGroup.cpp:
+        Encoding an optional group that has been merged into the
+        enclosing application message did set the presence map
+        bit for the group correctly.
+        Reported as Issue #31
+
+        * src/Tests/testFieldInstructions.cpp:
+        Add unit test for this problem: test_issue_31
+
 Thu Dec  3 16:55:11 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/FieldInstructionAscii.cpp:
         * src/Codecs/FieldInstructionBlob.cpp:

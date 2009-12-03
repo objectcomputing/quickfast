@@ -113,6 +113,10 @@ FieldInstructionGroup::encodeNop(
     if(messageAccessor.getApplicationType() == getApplicationType())
     {
       // possiblity #1: encode this group using the original messageAccessor
+      if(!isMandatory())
+      {
+        pmap.setNextField(true);
+      }
       encoder.encodeGroup(destination, segmentBody_, messageAccessor);
     }
     else

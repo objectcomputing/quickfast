@@ -2118,3 +2118,84 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_8)
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
+
+BOOST_AUTO_TEST_CASE(test_issue_31)
+{
+  //Decimal Example – Decimal with individual field operators
+  // Contained in optional group
+  // this is the same as test_Spec_1x1_Appendix3_1_5_7 except for the group
+  // <group name="Group" presence="optional">
+  //   <decimal id="1" name="Value">
+  //     <exponent> <copy/> </exponent>
+  //     <mantissa> <delta/> </mantissa>
+  //   </decimal>
+  // </group>
+  // Input   Exp:Man   Pmap  FAST Exp:Man Hex/Binary
+  //  [group]          1
+  // 9427.55 -2:942755 .1    FE:39 45 A3 / 11111110 00111001 01000101 10100011
+  const char testData[] = "\xC0\xFE\x39\x45\xA3";
+  std::string testString(testData, sizeof(testData)-1);
+  Codecs::DataSourceString source(testString);
+
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
+  // create a presence map.
+  Codecs::PresenceMap pmap(1);
+  pmap.setNextField(true);
+  pmap.rewind();
+
+  Codecs::FieldInstructionDecimal * decField = new Codecs::FieldInstructionDecimal("Value", "");
+
+  Codecs::FieldInstructionExponentPtr exponent(new FieldInstructionExponent("value|exponent", ""));
+  exponent->setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpCopy));
+  decField->setExponentInstruction(exponent);
+
+  Codecs::FieldInstructionMantissaPtr mantissa(new FieldInstructionMantissa("value|mantissa", ""));
+  mantissa->setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpDelta));
+  decField->setMantissaInstruction(mantissa);
+
+  Codecs::SegmentBodyPtr segmentBody(new Codecs::SegmentBody(1));
+  segmentBody->addInstruction(Codecs::FieldInstructionPtr(decField));
+
+  Codecs::FieldInstructionGroup field("Group", "");
+  field.setSegmentBody(segmentBody);
+  field.setPresence(false);
+  field.indexDictionaries(indexer, "global", "", "");
+
+  // We neeed the helper routines in the decoder
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+  Codecs::Decoder decoder(registry);
+
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("", "", 10);
+
+  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  BOOST_REQUIRE(builder.endMessage(builder));
+
+  // Was all input consumed?
+  uchar byte;
+  BOOST_CHECK(!source.getByte(byte));
+
+  // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
+  BOOST_CHECK_EQUAL(fieldSet.size(), 1);
+  Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
+  BOOST_CHECK(pFieldEntry != fieldSet.end());
+  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  Decimal expected(942755, -2);
+  BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expected);
+  ++pFieldEntry;
+  BOOST_CHECK(pFieldEntry == fieldSet.end());
+
+  // Now reencode the data
+  Codecs::PresenceMap pmapResult(1);
+  Codecs::DataDestinationString destination;
+  destination.startBuffer();
+  Codecs::Encoder encoder(registry);
+  field.encode(destination, pmapResult, encoder, fieldSet);
+  destination.endMessage();
+  const std::string & result = destination.getValue();
+  BOOST_CHECK_EQUAL(result, testString);
+  BOOST_CHECK(pmap == pmapResult);
+}
