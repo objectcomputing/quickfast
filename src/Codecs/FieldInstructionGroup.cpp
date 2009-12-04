@@ -92,6 +92,10 @@ FieldInstructionGroup::encodeNop(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & messageAccessor) const
 {
+  if(!segmentBody_)
+  {
+    encoder.reportFatal("[ERR U08}", "Segment not defined for Group instruction.");
+  }
   // retrieve the field corresponding to this group
   Messages::FieldCPtr field;
   if(messageAccessor.getField(identity_->name(), field))

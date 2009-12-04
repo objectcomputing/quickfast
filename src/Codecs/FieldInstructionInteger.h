@@ -365,7 +365,7 @@ namespace QuickFAST{
               previousField);
           }
           else // field present but not defined
-         {
+          {
             if(isMandatory())
             {
               // this will probably throw a template definition error

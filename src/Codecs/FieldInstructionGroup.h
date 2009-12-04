@@ -65,7 +65,7 @@ namespace QuickFAST{
         const std::string & typeName,
         const std::string & typeNamespace);
 
-      void virtual finalize(TemplateRegistry & templateRegistry);
+      virtual void finalize(TemplateRegistry & templateRegistry);
 
     private:
       void interpretValue(const std::string & value);
