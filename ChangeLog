@@ -1,3 +1,29 @@
+Mon Dec  7 16:31:41 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.h:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/SegmentBody.cpp:
+        * src/Codecs/XMLTemplateParser.cpp:
+        Change the way presence map bits are calculated.
+        # of bits needed will now be calculated when the
+        template is finalized.
+        This addresses Issue 31 which was not completely
+        resolved by the previous checkin.
+
+        Also update the dictionary when the initial value is used.
+        This addresses Issue #28
+
+        * src/Tests/testFieldInstructions.cpp:
+        * src/Tests/testFieldOperations.cpp:
+        Tests for the new finalize and revised test for issue #31
+
 Fri Dec  4 19:30:48 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/FieldInstructionGroup.h:
         * src/Codecs/FieldInstructionGroup.cpp:

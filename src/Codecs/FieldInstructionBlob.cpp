@@ -506,7 +506,9 @@ FieldInstructionBlob::encodeCopy(
   if(!previousIsKnown && fieldOp_->hasValue())
   {
     previousIsKnown = true;
+    previousNotNull = true;
     previousValue = initialValue_->toString();
+    fieldOp_->setDictionaryValue(encoder, initialValue_);
   }
 
   // get the value from the application data
@@ -587,7 +589,9 @@ FieldInstructionBlob::encodeDelta(
   if(!previousIsKnown && fieldOp_->hasValue())
   {
     previousIsKnown = true;
+    previousNotNull = true;
     previousValue = initialValue_->toString();
+    fieldOp_->setDictionaryValue(encoder, initialValue_);
   }
 
   // get the value from the application data
@@ -659,7 +663,9 @@ FieldInstructionBlob::encodeTail(
   if(!previousIsKnown && fieldOp_->hasValue())
   {
     previousIsKnown = true;
+    previousNotNull = true;
     previousValue = initialValue_->toString();
+    fieldOp_->setDictionaryValue(encoder, initialValue_);
   }
 
   // get the value from the application data

@@ -173,6 +173,9 @@ FieldInstructionGroup::indexDictionaries(
   const std::string & typeName,
   const std::string & typeNamespace)
 {
-  segmentBody_->indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
+  if(segmentBody_)
+  {
+    segmentBody_->indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
+  }
 }
 

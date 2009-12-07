@@ -17,6 +17,7 @@ FieldInstruction::FieldInstruction(
   : mutableIdentity_(new Messages::FieldIdentity(name, fieldNamespace))
   , identity_(mutableIdentity_)
   , fieldOp_(new FieldOpNop)
+  , presenceMapBitsUsed_(0)
 {
 }
 
@@ -24,11 +25,22 @@ FieldInstruction::FieldInstruction()
   : mutableIdentity_(new Messages::FieldIdentity)
   , identity_(mutableIdentity_)
   , fieldOp_(new FieldOpNop)
+  , presenceMapBitsUsed_(0)
 {
 }
 
 FieldInstruction::~FieldInstruction()
 {
+}
+
+void
+FieldInstruction::finalize(Codecs::TemplateRegistry & /*registry*/)
+{
+  presenceMapBitsUsed_ = 0;
+  if(fieldOp_->usesPresenceMap(isMandatory()))
+  {
+    presenceMapBitsUsed_ = 1;
+  }
 }
 
 void
@@ -57,27 +69,6 @@ FieldInstruction::getFieldOp(FieldOpCPtr & fieldOp) const
   }
   return false;
 }
-
-size_t
-FieldInstruction::presenceMapBitsRequired()const
-{
-  if(fieldOp_->usesPresenceMap(identity_->mandatory()))
-  {
-    return maxPresenceMapBits();
-  }
-  else
-  {
-    return 0;
-  }
-}
-
-size_t
-FieldInstruction::maxPresenceMapBits()const
-{
-  // only Decimal uses more than one, so default to 1
-  return 1;
-}
-
 
 bool
 FieldInstruction::decodeConstant(

@@ -169,12 +169,6 @@ namespace QuickFAST{
       /// @param segment is a set of field instructions that define the element
       virtual void setSegmentBody(Codecs::SegmentBodyPtr segment);
 
-      /// @brief How many presence map bits does this field instruction use.
-      ///
-      /// Note: a call to setOp() or setPresence() invalidates the results of this method.
-      /// @returns the maximum number of presence map bits this field might use (0, 1, or 2)
-      virtual size_t presenceMapBitsRequired() const;
-
       /// @brief How many fields will this field instruction produce
       ///
       /// Includes merged groups and templateRefs. If not merged, then the answer is 1
@@ -580,16 +574,18 @@ namespace QuickFAST{
         WorkingBuffer & buffer,
         size_t length);
 
+      void finalize(Codecs::TemplateRegistry & registry);
+
+      size_t getPresenceMapBitsUsed() const
+      {
+        return presenceMapBitsUsed_;
+      }
+
     private:
       /// @brief Interpret initial or default value attribute.
       /// @param value for this instruction as specified in XML
       virtual void interpretValue(const std::string & value) = 0;
 
-      /// @brief Determine how many presence map bits might be needed.
-      ///
-      /// Note the actual count is dynamic for Decimal fields so we need a max.
-      /// @returns 1 or 2 depending on the field type.
-      virtual size_t maxPresenceMapBits() const;
 
     private:
       FieldInstruction(const FieldInstruction &);
@@ -601,12 +597,16 @@ namespace QuickFAST{
       Messages::FieldIdentityCPtr identity_;
       /// Application type associated with this instruction
       std::string applicationType_;
-      /// Namespace in which the application type is defined.
+/// Namespace in which the application type is defined.
       std::string applicationTypeNamespace_;
       /// Cached applicationTypeNamespace.applicationType
       std::string qualifiedApplicationType_;
       /// Pointer to field operator dispatcher.
       FieldOpPtr fieldOp_;
+
+      /// Presence map bits used by this instruction/opererator combination
+      /// only valid after finalize has been called
+      size_t presenceMapBitsUsed_;
     };
 
     ///////////////////////////////

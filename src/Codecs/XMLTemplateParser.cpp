@@ -19,7 +19,7 @@
 #include <Codecs/FieldInstructionAscii.h>
 #include <Codecs/FieldInstructionUtf8.h>
 #include <Codecs/FieldInstructionByteVector.h>
-#include <Codecs/FieldInstructionBitMap.h>
+//#include <Codecs/FieldInstructionBitMap.h>
 #include <Codecs/FieldInstructionGroup.h>
 #include <Codecs/FieldInstructionSequence.h>
 #include <Codecs/FieldInstructionTemplateRef.h>
@@ -172,10 +172,12 @@ namespace
       {
         parseByteVector(tag, attributeMap);
       }
+#if 0
       else if (tag == "bitmap")
       {
         parseBitMap(tag, attributeMap);
       }
+#endif
       else if (tag == "group")
       {
         parseGroup(tag, attributeMap);
@@ -356,7 +358,7 @@ namespace
     void parseMantissa(const std::string & tag, const AttributeMap& attributes);
     void parseString(const std::string & tag, const AttributeMap& attributes);
     void parseByteVector(const std::string & tag, const AttributeMap& attributes);
-    void parseBitMap(const std::string & tag, const AttributeMap& attributes);
+//    void parseBitMap(const std::string & tag, const AttributeMap& attributes);
     void parseGroup(const std::string & tag, const AttributeMap& attributes);
     void parseSequence(const std::string & tag, const AttributeMap& attributes);
     void parseLength(const std::string & tag, const AttributeMap& attributes);
@@ -777,6 +779,7 @@ TemplateBuilder::parseByteVector(const std::string & tag, const AttributeMap& at
   schemaElements_.push(StackEntry(tag, field));
 }
 
+#if 0
 void
 TemplateBuilder::parseBitMap(const std::string & tag, const AttributeMap& attributes)
 {
@@ -797,7 +800,7 @@ TemplateBuilder::parseBitMap(const std::string & tag, const AttributeMap& attrib
   schemaElements_.top().second->addInstruction(field);
   schemaElements_.push(StackEntry(tag, field));
 }
-
+#endif
 
 void
 TemplateBuilder::parseGroup(const std::string & tag, const AttributeMap& attributes)

@@ -56,11 +56,13 @@ BOOST_AUTO_TEST_CASE(testFieldOperationDispatch)
   field.setPresence(false);
   // NOP operator is the default
   field.indexDictionaries(indexer, "global", "", "");
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 0);
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 0);
 
   // create enough infrastructure to call decode
   Codecs::DataSourceString source("");
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
   Messages::FieldSet fieldSet1(10);
   Codecs::SingleMessageConsumer consumer;
@@ -165,6 +167,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_1_1)
   Codecs::DataSourceString source(testData);
   // create a dictionary indexer
   DictionaryIndexer indexer;
+
   Codecs::PresenceMap pmap(1);
   Codecs::FieldInstructionUInt32 field("Flag", "");
   field.setPresence(true);
@@ -172,12 +175,13 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_1_1)
   fieldOp->setValue("0");
   field.setFieldOp(fieldOp);
   field.indexDictionaries(indexer, "global", "", "");
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
 
   // verify no presence map needed
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 0);
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 0);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Codecs::SingleMessageConsumer consumer;
@@ -245,11 +249,13 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_1_2)
   fieldOp->setValue("0");
   field.setFieldOp(fieldOp);
   field.indexDictionaries(indexer, "global", "", "");
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+
   // verify 1 presence map bit needed
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 1);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   // Capture results in a field set
@@ -320,11 +326,13 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_2_1)
   fieldOp->setValue("0");
   field.setFieldOp(fieldOp);
   field.indexDictionaries(indexer, "global", "", "");
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+
   // verify 1 presence map bit needed
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 1);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   // test a: pmap = 0
@@ -396,11 +404,12 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_2_2)
   field.setPresence(false);
   field.setFieldOp(FieldOpPtr(new Codecs::FieldOpDefault));
   field.indexDictionaries(indexer, "global", "", "");
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   // verify 1 presence map bit needed
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 1);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Codecs::SingleMessageConsumer consumer;
@@ -457,10 +466,12 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_3_1)
   field.setPresence(true);
   field.setFieldOp(FieldOpPtr(new Codecs::FieldOpCopy));
   field.indexDictionaries(indexer, "global", "", "");
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 1);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Codecs::SingleMessageConsumer consumer;
@@ -568,10 +579,11 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_3_2)
   field.setPresence(false);
   field.setFieldOp(FieldOpPtr(new Codecs::FieldOpCopy));
   field.indexDictionaries(indexer, "global", "", "");
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 1);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Codecs::SingleMessageConsumer consumer;
@@ -655,10 +667,11 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_4_1)
   fieldOp->setValue("1");
   field.setFieldOp(fieldOp);
   field.indexDictionaries(indexer, "global", "", "");
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 1);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Codecs::SingleMessageConsumer consumer;
@@ -755,10 +768,11 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_1)
   field.setPresence(true);
   field.setFieldOp(FieldOpPtr(new Codecs::FieldOpDelta));
   field.indexDictionaries(indexer, "global", "", "");
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 0);
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 0);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Codecs::SingleMessageConsumer consumer;
@@ -856,10 +870,11 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_2)
   field.setPresence(true);
   field.setFieldOp(FieldOpPtr(new Codecs::FieldOpDelta));
   field.indexDictionaries(indexer, "global", "", "");
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 0);
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 0);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Codecs::SingleMessageConsumer consumer;
@@ -949,10 +964,11 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_3)
   fieldOp->setValue("12000");
   field.setFieldOp(fieldOp);
   field.indexDictionaries(indexer, "global", "", "");
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 0);
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 0);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Codecs::SingleMessageConsumer consumer;
@@ -1042,10 +1058,11 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_4)
   field.setPresence(true);
   field.setFieldOp(FieldOpPtr(new Codecs::FieldOpDelta));
   field.indexDictionaries(indexer, "global", "", "");
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 0);
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 0);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Codecs::SingleMessageConsumer consumer;
@@ -1147,10 +1164,11 @@ BOOST_AUTO_TEST_CASE(testAsciiTailMandatory)
   field.setPresence(true);
   field.setFieldOp(FieldOpPtr(new Codecs::FieldOpTail));
   field.indexDictionaries(indexer, "global", "", "");
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 1);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Codecs::SingleMessageConsumer consumer;
@@ -1261,9 +1279,10 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_6) // SPEC ERROR: _3 s/b _1
   mantissa->setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpCopy));
   field.setMantissaInstruction(mantissa);
   field.indexDictionaries(indexer, "global", "", "");
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+  field.finalize(*registry);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Codecs::SingleMessageConsumer consumer;
@@ -1348,10 +1367,11 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Copy_Mandatory)
   field.setPresence(true);
   field.setFieldOp(FieldOpPtr(new Codecs::FieldOpCopy));
   field.indexDictionaries(indexer, "global", "", "");
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 1);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Codecs::SingleMessageConsumer consumer;
@@ -1460,10 +1480,11 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Copy_optional)
   field.setPresence(false);
   field.setFieldOp(FieldOpPtr(new Codecs::FieldOpCopy));
   field.indexDictionaries(indexer, "global", "", "");
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 1);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Codecs::SingleMessageConsumer consumer;
@@ -1543,10 +1564,11 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Delta_Mandatory)
   field.setPresence(true);
   field.setFieldOp(FieldOpPtr(new Codecs::FieldOpDelta));
   field.indexDictionaries(indexer, "global", "", "");
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 0);
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 0);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Codecs::SingleMessageConsumer consumer;
@@ -1648,10 +1670,11 @@ BOOST_AUTO_TEST_CASE(testUtf8_Tail_Mandatory)
   field.setPresence(true);
   field.setFieldOp(FieldOpPtr(new Codecs::FieldOpTail));
   field.indexDictionaries(indexer, "global", "", "");
-  BOOST_CHECK_EQUAL(field.presenceMapBitsRequired(), 1);
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+  field.finalize(*registry);
+  BOOST_CHECK_EQUAL(field.getPresenceMapBitsUsed(), 1);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Codecs::SingleMessageConsumer consumer;
@@ -1738,9 +1761,10 @@ BOOST_AUTO_TEST_CASE(test_issue_30)
   field.setPresence(false);
 
   FieldOpPtr fieldOp(new Codecs::FieldOpCopy);
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,1,indexer.size()));
+  field.finalize(*registry);
 
   // We neeed the helper routines in the decoder
-  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,1,indexer.size()));
   Codecs::Decoder decoder(registry);
 
   Codecs::SingleMessageConsumer consumer;

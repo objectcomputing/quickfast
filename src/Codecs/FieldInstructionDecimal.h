@@ -153,6 +153,8 @@ namespace QuickFAST{
         const std::string & typeName,
         const std::string & typeNamespace);
 
+      virtual void finalize(TemplateRegistry & registry);
+
     private:
       void encodeDecimal(
         Codecs::DataDestination & destination,
@@ -167,7 +169,6 @@ namespace QuickFAST{
         mantissa_t mantissa) const;
 
     private:
-      virtual size_t maxPresenceMapBits()const;
       void interpretValue(const std::string & value);
 
     private:

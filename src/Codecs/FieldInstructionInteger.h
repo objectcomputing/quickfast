@@ -17,8 +17,8 @@
 
 #include <Common/Profiler.h>
 
-using namespace ::QuickFAST;
-using namespace ::QuickFAST::Codecs;
+using namespace QuickFAST;
+using namespace QuickFAST::Codecs;
 
 namespace QuickFAST{
   namespace Codecs{
@@ -787,7 +787,9 @@ namespace QuickFAST{
       if(!previousIsKnown && fieldOp_->hasValue())
       {
         previousIsKnown = true;
+        previousNotNull = true;
         previousValue = typedValue_;
+        fieldOp_->setDictionaryValue(encoder, FIELD_CLASS::create(previousValue));
       }
 
       // get the value from the application data
@@ -889,7 +891,9 @@ namespace QuickFAST{
       if(!previousIsKnown && fieldOp_->hasValue())
       {
         previousIsKnown = true;
+        previousNotNull;
         previousValue = typedValue_;
+        fieldOp_->setDictionaryValue(encoder, FIELD_CLASS::create(previousValue));
       }
 
       // get the value from the application data
@@ -963,9 +967,11 @@ namespace QuickFAST{
       if(!previousIsKnown && fieldOp_->hasValue())
       {
         previousIsKnown = true;
+        previousNotNull = true;
         // pretend the previous value was the value attribute - 1 so that
         // the increment will produce cause the initial value to be sent.
         previousValue = typedValue_ - 1;
+        fieldOp_->setDictionaryValue(encoder, FIELD_CLASS::create(previousValue));
       }
 
       // get the value from the application data

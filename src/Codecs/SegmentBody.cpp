@@ -67,11 +67,11 @@ SegmentBody::finalize(TemplateRegistry & templateRegistry)
   presenceMapBits_ = initialPresenceMapBits_;
   if(bool(lengthInstruction_))
   {
-    presenceMapBits_ += lengthInstruction_->presenceMapBitsRequired();
+    presenceMapBits_ += lengthInstruction_->getPresenceMapBitsUsed();
   }
   for (size_t pos = 0; pos < instructions_.size(); ++pos)
   {
-    presenceMapBits_ += instructions_[pos]->presenceMapBitsRequired();
+    presenceMapBits_ += instructions_[pos]->getPresenceMapBitsUsed();
   }
   isFinalizing_ = false;
   isFinalized_ = true;

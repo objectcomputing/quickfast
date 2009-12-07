@@ -14,8 +14,8 @@
 
 #include <Common/Profiler.h>
 
-using namespace ::QuickFAST;
-using namespace ::QuickFAST::Codecs;
+using namespace QuickFAST;
+using namespace QuickFAST::Codecs;
 
 
 FieldInstructionDecimal::FieldInstructionDecimal(
@@ -526,7 +526,9 @@ FieldInstructionDecimal::encodeCopy(
   if(!previousIsKnown && fieldOp_->hasValue())
   {
     previousIsKnown = true;
+    previousNotNull = true;
     previousValue = typedValue_;
+    fieldOp_->setDictionaryValue(encoder, Messages::FieldDecimal::create(previousValue));
   }
 
   // get the value from the application data
@@ -615,7 +617,9 @@ FieldInstructionDecimal::encodeDelta(
   if(!previousIsKnown && fieldOp_->hasValue())
   {
     previousIsKnown = true;
+    previousNotNull = true;
     previousValue = typedValue_;
+    fieldOp_->setDictionaryValue(encoder, Messages::FieldDecimal::create(previousValue));
   }
 
   // get the value from the application data
@@ -664,12 +668,6 @@ FieldInstructionDecimal::interpretValue(const std::string & value)
 
 }
 
-size_t
-FieldInstructionDecimal::maxPresenceMapBits()const
-{
-  return 2;
-}
-
 void
 FieldInstructionDecimal::indexDictionaries(
   DictionaryIndexer & indexer,
@@ -685,3 +683,19 @@ FieldInstructionDecimal::indexDictionaries(
   }
 }
 
+void
+FieldInstructionDecimal::finalize(TemplateRegistry & templateRegistry)
+{
+  if(bool(exponentInstruction_))
+  {
+    exponentInstruction_->finalize(templateRegistry);
+    mantissaInstruction_->finalize(templateRegistry);
+    presenceMapBitsUsed_ =
+      exponentInstruction_->getPresenceMapBitsUsed() +
+      mantissaInstruction_->getPresenceMapBitsUsed();
+  }
+  else
+  {
+    FieldInstruction::finalize(templateRegistry);
+  }
+}

@@ -499,7 +499,9 @@ FieldInstructionAscii::encodeCopy(
   if(!previousIsKnown && fieldOp_->hasValue())
   {
     previousIsKnown = true;
+    previousNotNull = true;
     previousValue = initialValue_->toAscii();
+    fieldOp_->setDictionaryValue(encoder, initialValue_);
   }
 
 
@@ -575,7 +577,9 @@ FieldInstructionAscii::encodeDelta(
   if(!previousIsKnown && fieldOp_->hasValue())
   {
     previousIsKnown = true;
+    previousNotNull = true;
     previousValue = initialValue_->toAscii();
+    fieldOp_->setDictionaryValue(encoder, initialValue_);
   }
 
   // get the value from the application data
@@ -653,7 +657,9 @@ FieldInstructionAscii::encodeTail(
   if(!previousIsKnown && fieldOp_->hasValue())
   {
     previousIsKnown = true;
+    previousNotNull = true;
     previousValue = initialValue_->toAscii();
+    fieldOp_->setDictionaryValue(encoder, initialValue_);
   }
 
   // get the value from the application data
