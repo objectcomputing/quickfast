@@ -100,6 +100,14 @@ namespace QuickFAST{
         const Messages::MessageAccessor & fieldSet) const;
 
     private:
+      /// @brief helper decoder.
+      /// @param source where the data comes from
+      /// @param mandatory true if field is presence="mandatory"
+      /// @param buffer a playground
+      /// @param[out] pointer to the decoded field.  Null if the field
+      ///             is optional and not present.
+      /// @returns false if decoding failed
+
      virtual bool decodeFromSource(
         Codecs::DataSource & source,
         bool mandatory,

@@ -177,6 +177,10 @@ FieldInstructionAscii::decodeCopy(
         field);
       fieldOp_->setDictionaryValue(decoder, field);
     }
+    else
+    {
+      fieldOp_->setDictionaryValue(decoder, Messages::FieldAscii::createNull());
+    }
   }
   else // pmap says not in stream
   {
