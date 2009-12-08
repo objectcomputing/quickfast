@@ -19,6 +19,9 @@ namespace QuickFAST{
     /// http://www.fixprotocol.org/fast
     /// for details on when a presence map bit is used for a field.
     class QuickFAST_Export PresenceMap{
+      /// How many bytes can be stored in this object without allocating additional memory
+      /// Consider ways to optimize this after parsing templates.
+      const static size_t defaultByteCapacity_ = 20;
     public:
       /// @brief Construct a presence map that may contain up to bitCount fields.
       /// @param bitCount how many fields can be represented in the presence map.
@@ -96,16 +99,91 @@ namespace QuickFAST{
     private:
       void appendByte(size_t & pos, uchar byte);
       void grow();
+      void verboseSetNext(bool present);
+      void verboseCheckNextField(bool result);
+      void verboseCheckSpecificField(size_t bit, size_t byte, uchar bitMask, bool result);
 
     private:
+      static const uchar startByteMask = '\x40';
       uchar bitMask_;
       size_t bytePosition_;
-      // IMPORTANT: byteLength_ must appear before bits_ in the header file
-      // to insure proper initialization
-      size_t byteLength_;
-      boost::scoped_array<uchar> bits_;
+      size_t byteCapacity_;
+      uchar internalBuffer_[defaultByteCapacity_];
+      boost::scoped_array<uchar> externalBuffer_;
+      uchar * bits_;
       std::ostream * vout_;
     };
+
+    inline
+    void
+    PresenceMap::setNextField(bool present)
+    {
+      if(bytePosition_ >= byteCapacity_)
+      {
+        grow();
+      }
+      if(present)
+      {
+        bits_[bytePosition_] |= bitMask_;
+      }
+      else
+      {
+        bits_[bytePosition_] &= ~bitMask_;
+      }
+      if(vout_)
+      {
+        verboseSetNext(present);
+      }
+      bitMask_ >>= 1;
+      if(bitMask_ == 0)
+      {
+        bitMask_ = startByteMask;
+        bytePosition_ += 1;
+      }
+    }
+
+    inline
+    bool
+    PresenceMap::checkNextField()
+    {
+      if(bytePosition_ >= byteCapacity_)
+      {
+        if(vout_)(*vout_) << "pmap:at end [" << bytePosition_ << "]" << std::endl;
+        return false;
+      }
+      bool result = (bits_[bytePosition_] & bitMask_) != 0;
+      if(vout_)
+      {
+        verboseCheckNextField(result);
+      }
+      bitMask_ >>= 1;
+      if(bitMask_ == 0)
+      {
+        bitMask_ = startByteMask;
+        bytePosition_ += 1;
+      }
+      return result;
+    }
+
+    inline
+    bool
+    PresenceMap::checkSpecificField(size_t bit)
+    {
+      size_t byte = bit / 7;
+      if(byte >= byteCapacity_)
+      {
+        return false;
+      }
+      size_t bitNum = bit % 7;
+      unsigned char bitmask = startByteMask >> bitNum;
+      bool result = ((bits_[byte] & bitmask) != 0);
+      if(vout_)
+      {
+        verboseCheckSpecificField(bit, byte, bitmask, result);
+      }
+      return result;
+    }
+
   }
 }
 #endif // PRESENCEMAP_H

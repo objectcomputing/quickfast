@@ -1,3 +1,7 @@
+Tue Dec  8 20:08:17 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/PresenceMap.h:
+        * src/Codecs/PresenceMap.cpp:
+
 Mon Dec  7 16:57:02 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionAscii.h:

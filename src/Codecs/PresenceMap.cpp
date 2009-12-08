@@ -11,27 +11,33 @@
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
 
-static const uchar startByteMask = '\x40';
-
 PresenceMap::PresenceMap(size_t bits)
   : bitMask_(startByteMask)
   , bytePosition_(0)
-  , byteLength_((bits + 7)/8)
-  , bits_(new uchar[byteLength_])
+  , byteCapacity_(defaultByteCapacity_)
+  , bits_(&internalBuffer_[0])
   , vout_(0)
 {
-  std::fill(bits_.get(), bits_.get()+byteLength_, '\0');
+  size_t bytesNeeded = (bits + 7)/8;
+  if(bytesNeeded > byteCapacity_)
+  {
+    byteCapacity_ = bytesNeeded;
+    externalBuffer_.reset(new uchar[bytesNeeded]);
+    bits_ = externalBuffer_.get();
+  }
+  std::fill(bits_, bits_ + byteCapacity_, '\0');
 }
 void
 PresenceMap::setRaw(const uchar * buffer, size_t byteLength)
 {
-  if(byteLength > byteLength_)
+  if(byteLength > byteCapacity_)
   {
-    byteLength_ = byteLength;
-    bits_.reset(new uchar[byteLength_]);
+    byteCapacity_ = byteLength;
+    externalBuffer_.reset(new uchar[byteCapacity_]);
+    bits_ = externalBuffer_.get();
   }
-  std::fill(bits_.get(), bits_.get()+byteLength_, 0);
-  std::copy(buffer, buffer+byteLength, bits_.get());
+  std::fill(bits_, bits_+byteCapacity_, 0);
+  std::copy(buffer, buffer+byteLength, bits_);
   rewind();
 }
 
@@ -39,26 +45,27 @@ void
 PresenceMap::getRaw(const uchar *& buffer, size_t &byteLength)const
 {
   buffer = &bits_[0];
-  byteLength = byteLength_;
+  byteLength = byteCapacity_;
 }
 
 void
 PresenceMap::grow()
 {
   // todo: consider reporting this as a recoverable error due to performance impact
-  boost::scoped_array<uchar> newBuffer(new uchar [byteLength_+1]);
-  newBuffer[byteLength_] = 0;
-  std::copy(bits_.get(), bits_.get()+byteLength_, newBuffer.get());
-  bits_.swap(newBuffer);
-  byteLength_ += 1;
+  boost::scoped_array<uchar> newBuffer(new uchar [byteCapacity_+1]);
+  newBuffer[byteCapacity_] = 0;
+  std::copy(bits_, bits_ + byteCapacity_, newBuffer.get());
+  bits_ = newBuffer.get();
+  externalBuffer_.swap(newBuffer);
+  byteCapacity_ += 1;
 }
 
 void
 PresenceMap::appendByte(size_t & pos, uchar byte)
 {
-  if(pos >= byteLength_)
+  if(pos >= byteCapacity_)
   {
-    assert(pos == byteLength_);
+    assert(pos == byteCapacity_);
     grow();
   }
   bits_[pos++] = byte;
@@ -67,6 +74,7 @@ PresenceMap::appendByte(size_t & pos, uchar byte)
 size_t
 PresenceMap::encodeBytesNeeded()const
 {
+  // if no bits have been written
   if(bytePosition_ == 0 && bitMask_ == startByteMask)
   {
     return 0;
@@ -108,11 +116,21 @@ PresenceMap::encode(DataDestination & destination)
   }
   if(vout_)
   {
-    (*vout_) << "pmap["  <<  byteLength_ << "]->" << std::hex;
-    for(size_t pos = 0; pos < byteLength_; ++pos)
+    (*vout_) << "pmap["  <<  byteCapacity_ << "]->" << std::hex;
+    for(size_t pos = 0; pos < byteCapacity_; ++pos)
     {
       (*vout_) << ' ' << std::setw(2) << static_cast<unsigned short>(bits_[pos]);
     }
+    (*vout_) << " = ";
+    for(size_t pos = 0; pos < byteCapacity_; ++pos)
+    {
+      uchar byte = bits_[pos];
+      for(uchar mask = startByteMask; mask != 0; mask >>= 1)
+      {
+        (*vout_) << ((byte & mask) ? 'T' : 'f');
+      }
+    }
+
     (*vout_) << std::dec << std::endl;
   }
 }
@@ -140,8 +158,8 @@ PresenceMap::decode(Codecs::DataSource & source)
 
   if(vout_)
   {
-    (*vout_) << "pmap["  <<  byteLength_ << "]<-" << std::hex;
-    for(size_t pos = 0; pos < byteLength_; ++pos)
+    (*vout_) << "pmap["  <<  byteCapacity_ << "]<-" << std::hex;
+    for(size_t pos = 0; pos < byteCapacity_; ++pos)
     {
       (*vout_) << ' ' << std::setw(2) <<  static_cast<unsigned short>(bits_[pos]);
     }
@@ -158,46 +176,22 @@ PresenceMap::rewind()
   bitMask_ = startByteMask;
 }
 
-bool
-PresenceMap::checkNextField()
+void
+PresenceMap::verboseCheckNextField(bool result)
 {
-  if(bytePosition_ >= byteLength_)
-  {
-    if(vout_)(*vout_) << "pmap:at end [" << bytePosition_ << "]" << std::endl;
-    return false;
-  }
-  bool result = (bits_[bytePosition_] & bitMask_) != 0;
-  if(vout_)(*vout_) << "check pmap[" << bytePosition_ << '/' <<  byteLength_ << ','
+  (*vout_) << "check pmap[" << bytePosition_ << '/' <<  byteCapacity_ << ','
     << std::hex << static_cast<unsigned short>(bitMask_) << std::dec << ']' <<(result?'T' : 'F')
     << std::endl;
-  bitMask_ >>= 1;
-  if(bitMask_ == 0)
-  {
-    bitMask_ = startByteMask;
-    bytePosition_ += 1;
-  }
-  return result;
 }
 
-bool
-PresenceMap::checkSpecificField(size_t bit)
+
+void
+PresenceMap::verboseCheckSpecificField(size_t bit, size_t byte, uchar bitmask, bool result)
 {
-  size_t byte = bit / 7;
-  if(byte >= byteLength_)
-  {
-    return false;
-  }
-  size_t bitNum = bit % 7;
-  unsigned char bitmask = startByteMask >> bitNum;
-  bool result = ((bits_[byte] & bitmask) != 0);
-  if(vout_)(*vout_) << "check specific pmap[" << bit << " -> " << byte << '/' <<  byteLength_ << ','
+  (*vout_) << "check specific pmap[" << bit << " -> " << byte << '/' <<  byteCapacity_ << ','
     << std::hex << static_cast<unsigned short>(bitmask) << '&' << bits_[byte] << std::dec << ']' <<(result?'T' : 'F')
     << std::endl;
-  return result;
-
 }
-
-
 
 void
 PresenceMap::reset(size_t bitCount)
@@ -205,41 +199,24 @@ PresenceMap::reset(size_t bitCount)
   if(bitCount > 0)
   {
     size_t bytes = (bitCount + 7)/8;
-    if(bytes > byteLength_)
+    if(bytes > byteCapacity_)
     {
-      bits_.reset(new uchar[bytes]);
-      byteLength_ = bytes;
+      externalBuffer_.reset(new uchar[bytes]);
+      bits_ = externalBuffer_.get();
+      byteCapacity_ = bytes;
     }
   }
 
-  std::fill(bits_.get(), bits_.get() + byteLength_, 0);
+  std::fill(bits_, bits_ + byteCapacity_, 0);
   rewind();
 
 }
 void
-PresenceMap::setNextField(bool present)
+PresenceMap::verboseSetNext(bool present)
 {
-  if(bytePosition_ >= byteLength_)
-  {
-    grow();
-  }
-  if(present)
-  {
-    bits_[bytePosition_] |= bitMask_;
-  }
-  else
-  {
-    bits_[bytePosition_] &= ~bitMask_;
-  }
-  if(vout_)(*vout_) << "set pmap[" << bytePosition_ << '/' <<  byteLength_ << ','
+  (*vout_) << "set pmap[" << bytePosition_ << '/' <<  byteCapacity_ << ','
     << std::hex << static_cast<unsigned short>(bitMask_) << std::dec << ']' <<(present?'T' : 'F')
     << std::endl;
-  bitMask_ >>= 1;
-  if(bitMask_ == 0)
-  {
-    bitMask_ = startByteMask;
-    bytePosition_ += 1;
-  }
 }
 
 bool
