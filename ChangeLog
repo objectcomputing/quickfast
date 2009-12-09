@@ -1,3 +1,9 @@
+Wed Dec  9 20:49:09 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Tests/testFieldInstructions.cpp:
+        Linux build error.  Passing temporary object as non-const
+        parameter.
+
 Tue Dec  8 20:08:17 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/PresenceMap.h:
         * src/Codecs/PresenceMap.cpp:

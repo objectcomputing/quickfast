@@ -2208,7 +2208,8 @@ BOOST_AUTO_TEST_CASE(test_issue_31)
   decField->setMantissaInstruction(mantissa);
 
   Codecs::SegmentBodyPtr segmentBody(new Codecs::SegmentBody);
-  segmentBody->addInstruction(Codecs::FieldInstructionPtr(decField));
+  Codecs::FieldInstructionPtr decFieldPtr(decField);
+  segmentBody->addInstruction(decFieldPtr);
 
   Codecs::FieldInstructionGroup field("Group", "");
   field.setSegmentBody(segmentBody);
