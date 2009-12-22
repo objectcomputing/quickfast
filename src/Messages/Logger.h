@@ -16,11 +16,11 @@ namespace QuickFAST{
       /// The importance of being a log message.
       enum LogLevel
       {
-        LOG_FATAL = 0,
-        LOG_SERIOUS = 1,
-        LOG_WARNING = 2,
-        LOG_INFO = 3,
-        LOG_VERBOSE = 4
+        QF_LOG_FATAL = 0,
+        QF_LOG_SERIOUS = 1,
+        QF_LOG_WARNING = 2,
+        QF_LOG_INFO = 3,
+        QF_LOG_VERBOSE = 4
       };
       /// @brief Does consumer wish to see logs with the given importance level.
       /// @param level is the importance level. low numbers are more important.

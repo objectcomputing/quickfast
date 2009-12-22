@@ -143,11 +143,34 @@ namespace QuickFAST
     /// not intended for general use.  I needed it while debugging and saw no reason to throw it away.
     /// @param address raw seek address of the beginning of a packet
     void seek(size_t address);
+
+    /// @brief force the reader to expect 64 bit headers even on a 32 bit system.
+    ///
+    /// Only one of 64bit and 32bit should be set.
+    /// @param state turns the 64bit state on or off (default is off)
+    void set64bit(bool state = true)
+    {
+      usetv64_ = state;
+    }
+
+    /// @brief force the reader to expect 32 bit headers even on a 64 bit system.
+    ///
+    /// Only one of 64bit and 32bit should be set.
+    /// @param state turns the 32bit state on or off (default is off)
+    void set32bit(bool state = true)
+    {
+      usetv32_ = state;
+    }
+
   private:
     boost::scoped_array<unsigned char> buffer_;
     size_t fileSize_;
     size_t pos_;
     bool ok_;
+    bool usetv32_;  // true forces 32 bit header on 64 bit platform
+    bool usetv64_;  // true forces 64 bit header on 32 bit platform
+                    // neither usetv32_ nor usetv64_ means use native
+                    // both is an (undetected) error.
     ByteSwapper swap;
     bool verbose_;
   };

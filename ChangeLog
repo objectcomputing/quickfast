@@ -1,3 +1,21 @@
+Tue Dec 22 21:12:03 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/MulticastReceiver.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Messages/Logger.h:
+        Rename LOG_xxxx symbols to avoid conflicts with #defined
+        symbols on some platforms.
+
+        * src/Examples/PCapToMulticast/PCapToMulticast.h:
+        * src/Examples/PCapToMulticast/PCapToMulticast.cpp:
+        * src/Common/PCapReader.h:
+        * src/Common/PCapReader.cpp:
+        Add new options to PCapToMulticast
+          -64 means input was captured on a 64 bit system
+          -32 means input was captured on a 32 bit system
+          If neither is specified, then native integer length is assumed.
+
 Wed Dec  9 20:49:09 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Tests/testFieldInstructions.cpp:

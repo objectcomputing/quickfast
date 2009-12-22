@@ -187,13 +187,13 @@ namespace QuickFAST
         socket_.bind(endpoint_);
 
         consumer_->receiverStarted();
-        if(consumer_->wantLog(BufferConsumer::LOG_INFO))
+        if(consumer_->wantLog(BufferConsumer::QF_LOG_INFO))
         {
           std::stringstream msg;
           msg << "Joining multicast group: " << multicastGroup_.to_string()
             << " via interface " << endpoint_.address().to_string()
             << ':' << endpoint_.port();
-          consumer_->logMessage(BufferConsumer::LOG_INFO, msg.str());
+          consumer_->logMessage(BufferConsumer::QF_LOG_INFO, msg.str());
         }
         // Join the multicast group.
         boost::asio::ip::multicast::join_group joinRequest(

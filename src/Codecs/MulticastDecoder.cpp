@@ -69,11 +69,11 @@ bool
 GenericMessageBufferConsumer::consumeBuffer(const unsigned char * buffer, size_t bufferSize)
 {
   ++messageCount_;
-  if(builder_.wantLog(Logger::LOG_VERBOSE))
+  if(builder_.wantLog(Logger::QF_LOG_VERBOSE))
   {
     std::stringstream message;
     message << "Received[" << messageCount_ << "]: " << bufferSize << " bytes";
-    builder_.logMessage(MessageConsumer::LOG_VERBOSE, message.str());
+    builder_.logMessage(MessageConsumer::QF_LOG_VERBOSE, message.str());
   }
   try
   {

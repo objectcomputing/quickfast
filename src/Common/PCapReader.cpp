@@ -92,6 +92,20 @@ namespace
     uint32 len;	/* length this packet (off wire) */
   };
 
+  struct pcap_pkthdr32 {
+    uint32 tv_sec;
+    uint32 tv_usec;
+    uint32 caplen;	/* length of portion present */
+    uint32 len;	/* length this packet (off wire) */
+  };
+
+  struct pcap_pkthdr64 {
+    uint64 tv_sec;
+    uint64 tv_usec;
+    uint32 caplen;	/* length of portion present */
+    uint32 len;	/* length this packet (off wire) */
+  };
+
   /*
    * Copyright (c) 1999 - 2005 NetGroup, Politecnico di Torino (Italy)
    * Copyright (c) 2005 - 2006 CACE Technologies, Davis (California)
@@ -172,6 +186,8 @@ PCapReader::PCapReader()
 : fileSize_(0)
 , pos_(0)
 , ok_(false)
+, usetv32_(false)
+, usetv64_(false)
 , swap(false)
 , verbose_(false)
 {
@@ -245,16 +261,45 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
   {
     ok_ = false;
     size_t skipped = 0;
+    size_t minBytes = sizeof(pcap_pkthdr) + sizeof(ip_header) + sizeof(udp_header);
+    if(usetv32_)
+    {
+      minBytes = sizeof(pcap_pkthdr32) + sizeof(ip_header) + sizeof(udp_header);
+    }
+    if(usetv64_)
+    {
+      minBytes = sizeof(pcap_pkthdr64) + sizeof(ip_header) + sizeof(udp_header);
+    }
 
-    while(!ok_ && (pos_ + sizeof(pcap_pkthdr) + sizeof(ip_header) + sizeof(udp_header) < fileSize_))
+    while(!ok_ && (pos_ + minBytes < fileSize_))
     {
       ////////////////////////////
       // process the packet header
       size_t headerPos = pos_;
-      pcap_pkthdr * packetHeader = reinterpret_cast<pcap_pkthdr *>(buffer_.get() + pos_);
-      pos_ += sizeof(pcap_pkthdr);
-      size_t datalen = swap(packetHeader->caplen);
-      if(packetHeader->caplen != packetHeader->len)
+      size_t datalen = 0;
+      bool truncate = false;
+      if(usetv32_)
+      {
+        pcap_pkthdr32 * packetHeader = reinterpret_cast<pcap_pkthdr32 *>(buffer_.get() + pos_);
+        pos_ += sizeof(pcap_pkthdr32);
+        datalen = swap(packetHeader->caplen);
+        truncate = (packetHeader->caplen != packetHeader->len);
+      }
+      else if(usetv64_)
+      {
+        pcap_pkthdr64 * packetHeader = reinterpret_cast<pcap_pkthdr64 *>(buffer_.get() + pos_);
+        pos_ += sizeof(pcap_pkthdr32);
+        datalen = swap(packetHeader->caplen);
+        truncate = (packetHeader->caplen != packetHeader->len);
+      }
+      else
+      {
+        pcap_pkthdr * packetHeader = reinterpret_cast<pcap_pkthdr *>(buffer_.get() + pos_);
+        pos_ += sizeof(pcap_pkthdr);
+        datalen = swap(packetHeader->caplen);
+        truncate = (packetHeader->caplen != packetHeader->len);
+      }
+      if(truncate)
       {
         pos_ += datalen;
         skipped+= 1;

@@ -57,6 +57,8 @@ namespace QuickFAST{
       size_t burst_;
       bool pauseEveryPass_;
       bool pauseEveryMessage_;
+      bool force32_;
+      bool force64_;
       bool verbose_;
 
       boost::asio::io_service ioService_;
