@@ -18,7 +18,7 @@ PresenceMap::PresenceMap(size_t bits)
   , bits_(&internalBuffer_[0])
   , vout_(0)
 {
-  size_t bytesNeeded = (bits + 7)/8;
+  size_t bytesNeeded = (bits + 6)/7;
   if(bytesNeeded > byteCapacity_)
   {
     byteCapacity_ = bytesNeeded;

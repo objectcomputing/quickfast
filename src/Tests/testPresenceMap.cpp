@@ -56,6 +56,22 @@ BOOST_AUTO_TEST_CASE(testPmapDecoding)
   }
   BOOST_CHECK_EQUAL(7, ones);
 
+  // had a problem in calculating the buffer size
+  Codecs::PresenceMap pmap197(197);
+  const size_t needed197 = 29;
+  const uchar * raw197 = 0;
+  size_t size197 = 0;
+  pmap197.getRaw(raw197, size197);
+  BOOST_CHECK_EQUAL(needed197, size197);
+  for(size_t n = 0; n < 197; ++n)
+  {
+    pmap197.setNextField(true);
+  }
+  BOOST_CHECK_EQUAL(needed197, pmap197.encodeBytesNeeded());
+  pmap197.getRaw(raw197, size197);
+  BOOST_CHECK_EQUAL(needed197, size197);
+
+
   // This case caused a failure
   std::string testString("\x6f\x62\xa0");
   Codecs::DataSourceString source(testString);

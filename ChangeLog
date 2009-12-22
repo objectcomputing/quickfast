@@ -1,3 +1,10 @@
+Tue Dec 22 22:19:15 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/PresenceMap.cpp:
+        * src/Tests/testPresenceMap.cpp:
+        Issue #34.  Presence map bit buffer size calculation was
+        wrong causing an unnecessary growth of the presence map.
+
 Tue Dec 22 21:12:03 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MulticastDecoder.cpp:
