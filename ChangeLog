@@ -1,3 +1,12 @@
+Mon Dec 28 21:56:15 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/SynchronousDecoder.h:
+        expose the decoder's getTemplateId() method.
+
+        * src/Common/StringBuffer.h:
+        Remove an unnecessary cast.
+
 Tue Dec 22 22:19:15 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/PresenceMap.cpp:

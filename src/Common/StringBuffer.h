@@ -100,7 +100,7 @@ namespace QuickFAST
     {
       assign(
         reinterpret_cast<const unsigned char *>(rhs),
-        std::strlen(reinterpret_cast<const char *>(rhs)));
+        std::strlen(rhs));
     }
 
     /// @brief construct from a character buffer
@@ -500,7 +500,7 @@ namespace QuickFAST
     {
       if (heapBuffer_ == 0)
       {
-        return internalBuffer_;//////////////////
+        return internalBuffer_;
       }
       return heapBuffer_;
     }

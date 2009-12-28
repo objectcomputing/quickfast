@@ -10,7 +10,6 @@
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/Decoder.h>
 #include <Codecs/DataSource.h>
-//#include <Codecs/MessageConsumer_fwd.h>
 #include <Messages/MessageBuilder.h>
 
 namespace QuickFAST{
@@ -79,6 +78,12 @@ namespace QuickFAST{
       bool getStrict()const
       {
         return decoder_.getStrict();
+      }
+
+      /// @brief Get the id of the template driving the decoding
+      template_id_t getTemplateId()const
+      {
+        return decoder_.getTemplateId();
       }
 
       /// @brief set an upper limit on the # of messages to be decoded

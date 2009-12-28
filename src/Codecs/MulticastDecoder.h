@@ -75,6 +75,12 @@ namespace QuickFAST{
       /// @returns true if strict checking is enabled.
       bool getStrict()const;
 
+      /// @brief Get the id of the template driving the decoding
+      template_id_t getTemplateId()const
+      {
+        return decoder_.getTemplateId();
+      }
+
       /// @brief set an upper limit on the # of messages to be decoded
       ///
       /// @param messageLimit how many messages to decode (0 means "forever")
