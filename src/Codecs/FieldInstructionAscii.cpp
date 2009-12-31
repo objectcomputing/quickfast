@@ -161,7 +161,6 @@ FieldInstructionAscii::decodeCopy(
   Messages::MessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeCopy");
-
   if(pmap.checkNextField())
   {
     // field is in the stream, use it
@@ -175,26 +174,29 @@ FieldInstructionAscii::decodeCopy(
       fieldSet.addField(
         identity_,
         field);
-      fieldOp_->setDictionaryValue(decoder, field);
+      fieldOp_->setDictionaryValue(decoder, field->toString()); // todo: performance
     }
     else
     {
-      fieldOp_->setDictionaryValue(decoder, Messages::FieldAscii::createNull());
+      fieldOp_->setDictionaryValueNull(decoder);
     }
   }
   else // pmap says not in stream
   {
-    Messages::FieldCPtr previousField;
-    if(!fieldOp_->findDictionaryField(decoder, previousField))
+    const uchar * value = 0;
+    size_t valueSize = 0;
+    Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, value, valueSize);
+    if(previousStatus == Context::OK_VALUE)
     {
-      previousField = initialValue_;
+      Messages::FieldCPtr field = Messages::FieldAscii::create(value, valueSize);
+      fieldSet.addField(identity_, field);
     }
-
-    if(bool(previousField) && previousField->isDefined())
+    else if(fieldOp_->hasValue())
     {
       fieldSet.addField(
         identity_,
-        previousField);
+        initialValue_);
+      fieldOp_->setDictionaryValue(decoder, fieldOp_->getValue());
     }
     else
     {
@@ -233,40 +235,40 @@ FieldInstructionAscii::decodeDelta(
   }
   const std::string & deltaValue = deltaField->toString();
 
-  Messages::FieldCPtr previousField;
-  if(!fieldOp_->findDictionaryField(decoder, previousField))
-  {
-    previousField = initialValue_;
-  }
-  std::string previousValue;
-  if(previousField->isDefined())
-  {
-    previousValue = previousField->toString();
-  }
-  size_t previousLength = previousValue.length();
 
+  std::string previousValue;
+  Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, previousValue);
+  if(previousStatus == Context::UNDEFINED_VALUE)
+  {
+    if(fieldOp_->hasValue())
+    {
+      previousValue = fieldOp_->getValue();
+    }
+  }
+
+  size_t previousLength = previousValue.length();
   if( deltaLength < 0)
   {
     // operate on front of string
     // compensete for the excess -1 encoding that allows -0 != +0
     deltaLength = -(deltaLength + 1);
     // don't chop more than is there
-    if(static_cast<uint32>(deltaLength) > previousLength)
+    if(static_cast<unsigned long>(deltaLength) > previousLength)
     {
-      decoder.reportError("[ERR D7]", "String head delta length exceeds length of previous string.", *identity_);
-      deltaLength = QuickFAST::uint32(previousLength);
+      deltaLength = QuickFAST::int32(previousLength);
     }
+    std::string value = deltaValue + previousValue.substr(deltaLength);
     Messages::FieldCPtr field = Messages::FieldAscii::create(
-      deltaValue + previousValue.substr(deltaLength));
+      value );
     fieldSet.addField(
       identity_,
       field);
-    fieldOp_->setDictionaryValue(decoder, field);
+    fieldOp_->setDictionaryValue(decoder, value);
   }
   else
   { // operate on end of string
     // don't chop more than is there
-    if(static_cast<uint32>(deltaLength) > previousLength)
+    if(static_cast<unsigned long>(deltaLength) > previousLength)
     {
 #if 0 // handy when debugging
       std::cout << "decode ascii delta length: " << deltaLength << " previous: " << previousLength << std::endl;
@@ -274,12 +276,12 @@ FieldInstructionAscii::decodeDelta(
       decoder.reportError("[ERR D7]", "String tail delta length exceeds length of previous string.", *identity_);
       deltaLength = QuickFAST::uint32(previousLength);
     }
-    Messages::FieldCPtr field = Messages::FieldAscii::create(
-      previousValue.substr(0, previousLength - deltaLength) + deltaValue);
+    std::string value = previousValue.substr(0, previousLength - deltaLength) + deltaValue;
+    Messages::FieldCPtr field = Messages::FieldAscii::create(value);
     fieldSet.addField(
       identity_,
       field);
-    fieldOp_->setDictionaryValue(decoder, field);
+    fieldOp_->setDictionaryValue(decoder, value);
   }
   return true;
 }
@@ -304,49 +306,47 @@ FieldInstructionAscii::decodeTail(
     if(bool(tailField)) // NULL?
     {
       const std::string & tailValue = tailField->toString();
-
-      Messages::FieldCPtr previousField;
-      if(!fieldOp_->findDictionaryField(decoder, previousField))
-      {
-        previousField = initialValue_;
-      }
-      std::string previousValue;
-      if(previousField->isDefined())
-      {
-        previousValue = previousField->toString();
-      }
-
       size_t tailLength = tailValue.length();
+      std::string previousValue;
+      Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, previousValue);
+      if(previousStatus == Context::UNDEFINED_VALUE)
+      {
+        if(fieldOp_->hasValue())
+        {
+          previousValue = fieldOp_->getValue();
+          fieldOp_->setDictionaryValue(decoder, previousValue);
+        }
+      }
       size_t previousLength = previousValue.length();
       if(tailLength > previousLength)
       {
         tailLength = previousLength;
       }
-      Messages::FieldCPtr field(Messages::FieldAscii::create(
-        previousValue.substr(0, previousLength - tailLength) + tailValue));
+      std::string value(previousValue.substr(0, previousLength - tailLength) + tailValue);
+      Messages::FieldCPtr field(Messages::FieldAscii::create(value));
       fieldSet.addField(
         identity_,
         field);
-      fieldOp_->setDictionaryValue(decoder, field);
+      fieldOp_->setDictionaryValue(decoder, value);
     }
     else // null
     {
-      fieldOp_->setDictionaryValue(decoder,  Messages::FieldAscii::createNull());
+      fieldOp_->setDictionaryValueNull(decoder);
     }
   }
   else // pmap says not in stream
   {
-    Messages::FieldCPtr previousField;
-    if(!fieldOp_->findDictionaryField(decoder, previousField))
+    std::string previousValue;
+    Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, previousValue);
+    if(previousStatus == Context::OK_VALUE)
     {
-      previousField = initialValue_;
-      fieldOp_->setDictionaryValue(decoder, previousField);
+      Messages::FieldCPtr field = Messages::FieldAscii::create(previousValue);
+      fieldSet.addField(identity_, field);
     }
-    if(bool(previousField) && previousField->isDefined())
+    else if(fieldOp_->hasValue())
     {
-      fieldSet.addField(
-        identity_,
-        previousField);
+      fieldSet.addField(identity_, initialValue_);
+      fieldOp_->setDictionaryValue(decoder, fieldOp_->getValue());
     }
     else
     {
@@ -479,42 +479,24 @@ FieldInstructionAscii::encodeCopy(
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & fieldSet) const
-{
-  // declare a couple of variables...
-  bool previousIsKnown = false;
-  bool previousNotNull = false;
+{  // Retrieve information from the dictionary
   std::string previousValue;
-
-  // ... then initialize them from the dictionary
-  Messages::FieldCPtr previousField;
-  if(fieldOp_->findDictionaryField(encoder, previousField))
+  Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
+  if(previousStatus == Context::UNDEFINED_VALUE)
   {
-    if(!previousField->isType(Messages::Field::ASCII))
+    if(fieldOp_->hasValue())
     {
-      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
-    }
-    previousIsKnown = true;
-    previousNotNull = previousField->isDefined();
-    if(previousNotNull)
-    {
-      previousValue = previousField->toAscii();
+      previousValue = fieldOp_->getValue();
+      fieldOp_->setDictionaryValue(encoder, previousValue);
     }
   }
-  if(!previousIsKnown && fieldOp_->hasValue())
-  {
-    previousIsKnown = true;
-    previousNotNull = true;
-    previousValue = initialValue_->toAscii();
-    fieldOp_->setDictionaryValue(encoder, initialValue_);
-  }
-
 
   // get the value from the application data
   Messages::FieldCPtr field;
   if(fieldSet.getField(identity_->name(), field))
   {
-    std::string value = field->toAscii();
-    if(previousNotNull && previousValue == value)
+    std::string value = field->toString();
+    if(previousStatus == Context::OK_VALUE && previousValue == value)
     {
       pmap.setNextField(false); // not in stream, use copy
     }
@@ -529,7 +511,7 @@ FieldInstructionAscii::encodeCopy(
       {
         encodeAscii(destination, value);
       }
-      fieldOp_->setDictionaryValue(encoder, Messages::FieldAscii::create(value));
+      fieldOp_->setDictionaryValue(encoder, value);
     }
   }
   else // not defined in fieldset
@@ -537,17 +519,23 @@ FieldInstructionAscii::encodeCopy(
     if(isMandatory())
     {
       encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      // if reportFatal returns we're being lax about the rules
+      // let the copy happen.
+      pmap.setNextField(false);
     }
-    if(previousIsKnown && previousNotNull)
+    if(previousStatus == Context::OK_VALUE)
     {
       // we have to null the previous value to avoid copy
       pmap.setNextField(true);// value in stream
       destination.putByte(nullAscii);
-      fieldOp_->setDictionaryValue(encoder, Messages::FieldAscii::createNull());
     }
     else
     {
       pmap.setNextField(false);
+    }
+    if(previousStatus != Context::NULL_VALUE)
+    {
+      fieldOp_->setDictionaryValueNull(encoder);
     }
   }
 }
@@ -558,32 +546,25 @@ FieldInstructionAscii::encodeDelta(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & fieldSet) const
 {
-    // declare a couple of variables...
-  bool previousIsKnown = false;
-  bool previousNotNull = false;
+  // get information from the dictionary
   std::string previousValue;
-
-  // ... then initialize them from the dictionary
-  Messages::FieldCPtr previousField;
-  if(fieldOp_->findDictionaryField(encoder, previousField))
+  Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
+  if(previousStatus == Context::UNDEFINED_VALUE)
   {
-    if(!previousField->isType(Messages::Field::ASCII))
+    if(fieldOp_->hasValue())
     {
-      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
-    }
-    previousIsKnown = true;
-    previousNotNull = previousField->isDefined();
-    if(previousNotNull)
-    {
-      previousValue = previousField->toAscii();
+      previousValue = fieldOp_->getValue();
+      fieldOp_->setDictionaryValue(encoder, previousValue);
     }
   }
-  if(!previousIsKnown && fieldOp_->hasValue())
+
+//      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
+
+
+  if(previousStatus != Context::OK_VALUE && fieldOp_->hasValue())
   {
-    previousIsKnown = true;
-    previousNotNull = true;
-    previousValue = initialValue_->toAscii();
-    fieldOp_->setDictionaryValue(encoder, initialValue_);
+    previousValue = fieldOp_->getValue();
+    fieldOp_->setDictionaryValue(encoder, previousValue);
   }
 
   // get the value from the application data
@@ -614,12 +595,10 @@ FieldInstructionAscii::encodeDelta(
     encodeSignedInteger(destination, encoder.getWorkingBuffer(), deltaCount);
     encodeAscii(destination, deltaValue);
 
-    if(!previousIsKnown  || value != previousValue)
+    if(previousStatus != Context::OK_VALUE  || value != previousValue)
     {
-      field = Messages::FieldAscii::create(value);
-      fieldOp_->setDictionaryValue(encoder, field);
+      fieldOp_->setDictionaryValue(encoder, value);
     }
-
   }
   else // not defined in fieldset
   {
@@ -638,32 +617,24 @@ FieldInstructionAscii::encodeTail(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & fieldSet) const
 {
-    // declare a couple of variables...
-  bool previousIsKnown = false;
-  bool previousNotNull = true;
+  // get information from the dictionary
   std::string previousValue;
-
-  // ... then initialize them from the dictionary
-  Messages::FieldCPtr previousField;
-  if(fieldOp_->findDictionaryField(encoder, previousField))
+  Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
+  if(previousStatus == Context::UNDEFINED_VALUE)
   {
-    if(!previousField->isType(Messages::Field::ASCII))
+    if(fieldOp_->hasValue())
     {
-      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
-    }
-    previousIsKnown = true;
-    previousNotNull = previousField->isDefined();
-    if(previousNotNull)
-    {
-      previousValue = previousField->toAscii();
+      previousValue = fieldOp_->getValue();
+      fieldOp_->setDictionaryValue(encoder, previousValue);
     }
   }
-  if(!previousIsKnown && fieldOp_->hasValue())
+
+//      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
+
+  if(previousStatus != Context::OK_VALUE && fieldOp_->hasValue())
   {
-    previousIsKnown = true;
-    previousNotNull = true;
-    previousValue = initialValue_->toAscii();
-    fieldOp_->setDictionaryValue(encoder, initialValue_);
+    previousValue = fieldOp_->getValue();
+    fieldOp_->setDictionaryValue(encoder, previousValue);
   }
 
   // get the value from the application data
@@ -689,10 +660,9 @@ FieldInstructionAscii::encodeTail(
         encodeAscii(destination, tailValue);
       }
     }
-    if(!previousIsKnown  || value != previousValue)
+    if(previousStatus != Context::OK_VALUE  || value != previousValue)
     {
-      field = Messages::FieldAscii::create(value);
-      fieldOp_->setDictionaryValue(encoder, field);
+      fieldOp_->setDictionaryValue(encoder, value);
     }
   }
   else // not defined in fieldset

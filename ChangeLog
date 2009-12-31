@@ -1,3 +1,24 @@
+Thu Dec 31 14:24:36 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Context.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FieldOp.cpp:
+
+        * src/Common/AsioService.h:
+        * src/Common/AsioService.cpp:
+        * src/Common/StringBuffer.h:
+        * src/Common/Value.h:
+        * src/Common/Value_fwd.h:
+        Define Value to store "any" value (extracted from Field)
+        Modify dictionaries to use Value rather than FieldCPtr.
+        The ultimate goal is to eliminate allocation/free of Fields.
+
 Mon Dec 28 21:56:15 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MulticastDecoder.h:

@@ -325,15 +325,14 @@ namespace QuickFAST{
           fieldSet.addField(
             identity_,
             newField);
-          fieldOp_->setDictionaryValue(decoder, newField);
+          fieldOp_->setDictionaryValue(decoder, value);
         }
         else
         {
           // not mandatory means it's nullable
           if(checkNullInteger(value))
           {
-            Messages::FieldCPtr newField(FIELD_CLASS::createNull());
-            fieldOp_->setDictionaryValue(decoder, newField);
+            fieldOp_->setDictionaryValueNull(decoder);
           }
           else
           {
@@ -341,13 +340,26 @@ namespace QuickFAST{
             fieldSet.addField(
               identity_,
               newField);
+#if 0
             fieldOp_->setDictionaryValue(decoder, newField);
+#else
+            fieldOp_->setDictionaryValue(decoder, value);
+#endif
           }
         }
 
       }
       else // pmap says not present, use copy
       {
+#if 1
+        INTEGER_TYPE previousValue = 0;
+        if(fieldOp_->getDictionaryValue(decoder, previousValue))
+        {
+          fieldSet.addField(
+            identity_,
+            FIELD_CLASS::create(previousValue));
+        }
+#else
         Messages::FieldCPtr previousField;
         if(fieldOp_->findDictionaryField(decoder, previousField))
         {
@@ -378,6 +390,7 @@ namespace QuickFAST{
             }
           }
         }
+#endif
         else
         {
           // value not found in dictionary
@@ -387,7 +400,12 @@ namespace QuickFAST{
             fieldSet.addField(
               identity_,
               initialField_);
+#if 0
             fieldOp_->setDictionaryValue(decoder, initialField_);
+#else
+            fieldOp_->setDictionaryValue(decoder, typedValue_);
+#endif
+
           }
           else
           {
@@ -401,7 +419,11 @@ namespace QuickFAST{
               fieldSet.addField(
                 identity_,
                 newField);
+#if 0
               fieldOp_->setDictionaryValue(decoder, newField);
+#else
+              fieldOp_->setDictionaryValue(decoder, INTEGER_TYPE(0));
+#endif
             }
           }
         }
@@ -481,6 +503,7 @@ namespace QuickFAST{
         }
       }
       INTEGER_TYPE value = typedValue_;
+#if 0
       Messages::FieldCPtr previousField;
       if(fieldOp_->findDictionaryField(decoder, previousField))
       {
@@ -491,6 +514,11 @@ namespace QuickFAST{
         }
         previousField->getValue(value);
       }
+#else
+      if(fieldOp_->getDictionaryValue(decoder, value))
+      {
+      }
+#endif
       else if(fieldOp_->hasValue()) // initial value in field op?
       {
         value = typedValue_;
@@ -502,7 +530,12 @@ namespace QuickFAST{
       fieldSet.addField(
         identity_,
         newField);
+#if 0
       fieldOp_->setDictionaryValue(decoder, newField);
+#else
+      fieldOp_->setDictionaryValue(decoder, value);
+#endif
+
       return true;
     }
 
@@ -547,7 +580,13 @@ namespace QuickFAST{
           fieldSet.addField(
             identity_,
             newField);
+#if 0
           fieldOp_->setDictionaryValue(decoder, newField);
+#else
+          fieldOp_->setDictionaryValue(decoder, value);
+#endif
+
+
         }
         else
         {
@@ -559,7 +598,13 @@ namespace QuickFAST{
             fieldSet.addField(
               identity_,
               newField);
+#if 0
           fieldOp_->setDictionaryValue(decoder, newField);
+#else
+          fieldOp_->setDictionaryValue(decoder, value);
+#endif
+
+
           }
         }
       }
@@ -567,15 +612,9 @@ namespace QuickFAST{
       {
         //PROFILE_POINT("int::decodeIncrement::absent");
         INTEGER_TYPE value = typedValue_;
-        Messages::FieldCPtr previousField;
-        if(fieldOp_->findDictionaryField(decoder, previousField))
+        Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, value);
+        if(previousStatus == Context::OK_VALUE)
         {
-          if(!previousField->isType(value))
-          {
-            decoder.reportError("[ERR D4]", "Previous value type mismatch.", *identity_);
-            previousField = FIELD_CLASS::create(0);
-          }
-          previousField->getValue(value);
           value += 1;
         }
         else
@@ -602,7 +641,7 @@ namespace QuickFAST{
         fieldSet.addField(
           identity_,
           newField);
-          fieldOp_->setDictionaryValue(decoder, newField);
+        fieldOp_->setDictionaryValue(decoder, value);
       }
       return true;
     }
@@ -770,6 +809,7 @@ namespace QuickFAST{
       INTEGER_TYPE previousValue = 0;
 
       // ... then initialize them from the dictionary
+#if 0
       Messages::FieldCPtr previousField;
       if(fieldOp_->findDictionaryField(encoder, previousField))
       {
@@ -784,12 +824,24 @@ namespace QuickFAST{
           previousField->getValue(previousValue);
         }
       }
+#else
+      if(fieldOp_->getDictionaryValue(encoder, previousValue))
+      {
+        previousIsKnown = true;
+        previousNotNull = true;
+        /// @TOOD: distinguish unknown from explicitly null?
+      }
+#endif
       if(!previousIsKnown && fieldOp_->hasValue())
       {
         previousIsKnown = true;
         previousNotNull = true;
         previousValue = typedValue_;
+#if 0
         fieldOp_->setDictionaryValue(encoder, FIELD_CLASS::create(previousValue));
+#else
+        fieldOp_->setDictionaryValue(encoder, typedValue_);
+#endif
       }
 
       // get the value from the application data
@@ -824,8 +876,13 @@ namespace QuickFAST{
           {
             encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), nullableValue);
           }
+#if 0
           field = FIELD_CLASS::create(value);
           fieldOp_->setDictionaryValue(encoder, field);
+#else
+          fieldOp_->setDictionaryValue(encoder, value);
+#endif
+
         }
       }
       else // not defined in fieldset
@@ -845,8 +902,13 @@ namespace QuickFAST{
           {
             pmap.setNextField(true);// value in stream
             destination.putByte(nullInteger);
+#if 0
             field = FIELD_CLASS::createNull();
             fieldOp_->setDictionaryValue(encoder, field);
+#else
+            fieldOp_->setDictionaryValueNull(encoder);
+#endif
+
           }
           else
           {
@@ -871,6 +933,7 @@ namespace QuickFAST{
       INTEGER_TYPE previousValue = 0;
 
       // ... then initialize them from the dictionary
+#if 0
       Messages::FieldCPtr previousField;
       if(fieldOp_->findDictionaryField(encoder, previousField))
       {
@@ -888,12 +951,25 @@ namespace QuickFAST{
           }
         }
       }
+#else
+      if(fieldOp_->getDictionaryValue(encoder, previousValue))
+      {
+        previousIsKnown = true;
+        previousNotNull = true;
+        /// @TOOD: distinguish unknown from explicitly null?
+      }
+#endif
       if(!previousIsKnown && fieldOp_->hasValue())
       {
         previousIsKnown = true;
         previousNotNull;
         previousValue = typedValue_;
+#if 0
         fieldOp_->setDictionaryValue(encoder, FIELD_CLASS::create(previousValue));
+#else
+        fieldOp_->setDictionaryValue(encoder, typedValue_);
+#endif
+
       }
 
       // get the value from the application data
@@ -913,8 +989,13 @@ namespace QuickFAST{
         encodeSignedInteger(destination, encoder.getWorkingBuffer(), deltaValue);
         if(!previousIsKnown  || value != previousValue)
         {
+#if 0
           field = FIELD_CLASS::create(value);
           fieldOp_->setDictionaryValue(encoder, field);
+#else
+          fieldOp_->setDictionaryValue(encoder, value);
+#endif
+
         }
 
       }
@@ -947,6 +1028,7 @@ namespace QuickFAST{
       INTEGER_TYPE previousValue = 0;
 
       // ... then initialize them from the dictionary
+#if 0
       Messages::FieldCPtr previousField;
       if(fieldOp_->findDictionaryField(encoder, previousField))
       {
@@ -964,6 +1046,15 @@ namespace QuickFAST{
           }
         }
       }
+#else
+      if(fieldOp_->getDictionaryValue(encoder, previousValue))
+      {
+        previousIsKnown = true;
+        previousNotNull = true;
+        /// @TOOD: distinguish unknown from explicitly null?
+      }
+#endif
+
       if(!previousIsKnown && fieldOp_->hasValue())
       {
         previousIsKnown = true;
@@ -971,7 +1062,12 @@ namespace QuickFAST{
         // pretend the previous value was the value attribute - 1 so that
         // the increment will produce cause the initial value to be sent.
         previousValue = typedValue_ - 1;
+#if 0
         fieldOp_->setDictionaryValue(encoder, FIELD_CLASS::create(previousValue));
+#else
+        fieldOp_->setDictionaryValue(encoder, previousValue);
+#endif
+
       }
 
       // get the value from the application data
@@ -1006,8 +1102,13 @@ namespace QuickFAST{
             encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), nullableValue);
           }
         }
+#if 0
         field = FIELD_CLASS::create(value);
         fieldOp_->setDictionaryValue(encoder, field);
+#else
+        fieldOp_->setDictionaryValue(encoder, value);
+#endif
+
       }
       else // not defined in fieldset
       {
@@ -1026,8 +1127,12 @@ namespace QuickFAST{
           {
             pmap.setNextField(true);// value in stream
             destination.putByte(nullInteger);
+#if 0
             field = FIELD_CLASS::createNull();
             fieldOp_->setDictionaryValue(encoder, field);
+#else
+            fieldOp_->setDictionaryValueNull(encoder);
+#endif
           }
           else
           {

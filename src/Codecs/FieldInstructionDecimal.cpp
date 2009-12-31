@@ -192,15 +192,23 @@ FieldInstructionDecimal::decodeCopy(
       accessor.addField(
         identity_,
         newField);
+#if 0
       fieldOp_->setDictionaryValue(decoder, newField);
+#else
+      fieldOp_->setDictionaryValue(decoder, value);
+#endif
     }
     else
     {
       // not mandatory means it's nullable
       if(checkNullInteger(exponent))
       {
+#if 0
         Messages::FieldCPtr newField(Messages::FieldDecimal::createNull());
         fieldOp_->setDictionaryValue(decoder, newField);
+#else
+      fieldOp_->setDictionaryValueNull(decoder);
+#endif
       }
       else
       {
@@ -210,13 +218,18 @@ FieldInstructionDecimal::decodeCopy(
         accessor.addField(
           identity_,
           newField);
+#if 0
         fieldOp_->setDictionaryValue(decoder, newField);
+#else
+        fieldOp_->setDictionaryValue(decoder, value);
+#endif
       }
     }
 
   }
   else // pmap says not present, use copy
   {
+#if 0
     Messages::FieldCPtr previousField;
     if(fieldOp_->findDictionaryField(decoder, previousField))
     {
@@ -242,6 +255,16 @@ FieldInstructionDecimal::decodeCopy(
         }
       }
     }
+#else
+    Decimal value(0,0);
+    if(fieldOp_->getDictionaryValue(decoder, value))
+    {
+      accessor.addField(
+        identity_,
+        Messages::FieldDecimal::create(value));
+    }
+
+#endif
     else
     {
       // value not found in dictionary
@@ -252,7 +275,12 @@ FieldInstructionDecimal::decodeCopy(
         accessor.addField(
           identity_,
           newField);
+#if 0
         fieldOp_->setDictionaryValue(decoder, newField);
+#else
+        fieldOp_->setDictionaryValue(decoder, typedValue_);
+#endif
+
       }
       else
       {
@@ -288,25 +316,14 @@ FieldInstructionDecimal::decodeDelta(
   decodeSignedInteger(source, decoder, mantissaDelta, identity_->name(), true);
 
   Decimal value(typedValue_);
-  Messages::FieldCPtr previousField;
-  if(fieldOp_->findDictionaryField(decoder, previousField))
-  {
-    if(previousField->isType(Messages::Field::DECIMAL))
-    {
-      value = previousField->toDecimal();
-    }
-    else
-    {
-      decoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
-    }
-  }
+  Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, value);
   value.setExponent(exponent_t(value.getExponent() + exponentDelta));
   value.setMantissa(mantissa_t(value.getMantissa() + mantissaDelta));
   Messages::FieldCPtr newField(Messages::FieldDecimal::create(value));
   accessor.addField(
     identity_,
     newField);
-  fieldOp_->setDictionaryValue(decoder, newField);
+  fieldOp_->setDictionaryValue(decoder, value);
   return true;
 }
 void
@@ -509,6 +526,7 @@ FieldInstructionDecimal::encodeCopy(
   Decimal previousValue(typedValue_);
 
   // ... then initialize them from the dictionary
+#if 0
   Messages::FieldCPtr previousField;
   if(fieldOp_->findDictionaryField(encoder, previousField))
   {
@@ -523,12 +541,25 @@ FieldInstructionDecimal::encodeCopy(
       previousValue = previousField->toDecimal();
     }
   }
+#else
+  if(fieldOp_->getDictionaryValue(encoder, previousValue))
+  {
+    previousIsKnown = true;
+    previousNotNull = true;
+    /// @TODO distinguish null vs unknown
+  }
+#endif
   if(!previousIsKnown && fieldOp_->hasValue())
   {
     previousIsKnown = true;
     previousNotNull = true;
     previousValue = typedValue_;
+#if 0
     fieldOp_->setDictionaryValue(encoder, Messages::FieldDecimal::create(previousValue));
+#else
+    fieldOp_->setDictionaryValue(encoder, previousValue);
+#endif
+
   }
 
   // get the value from the application data
@@ -552,8 +583,12 @@ FieldInstructionDecimal::encodeCopy(
       {
         encodeNullableDecimal(destination, encoder.getWorkingBuffer(), value.getExponent(), value.getMantissa());
       }
+#if 0
       field = Messages::FieldDecimal::create(value);
       fieldOp_->setDictionaryValue(encoder, field);
+#else
+      fieldOp_->setDictionaryValue(encoder, value);
+#endif
     }
   }
   else // not defined in fieldset
@@ -565,8 +600,13 @@ FieldInstructionDecimal::encodeCopy(
       // send a dummy value
       destination.putByte(zeroIntegerNonnullable);//exponent
       destination.putByte(zeroIntegerNonnullable);//mantissa
+#if 0
       field = Messages::FieldDecimal::create(0,0);
       fieldOp_->setDictionaryValue(encoder, field);
+#else
+      fieldOp_->setDictionaryValue(encoder, Decimal(0,0));
+#endif
+
     }
     else
     {
@@ -574,8 +614,13 @@ FieldInstructionDecimal::encodeCopy(
       {
         pmap.setNextField(true);// value in stream
         destination.putByte(nullDecimal);
+#if 0
         field = Messages::FieldDecimal::createNull();
         fieldOp_->setDictionaryValue(encoder, field);
+#else
+        fieldOp_->setDictionaryValueNull(encoder);
+#endif
+
       }
       else
       {
@@ -600,6 +645,7 @@ FieldInstructionDecimal::encodeDelta(
   Decimal previousValue(typedValue_);
 
   // ... then initialize them from the dictionary
+#if 0
   Messages::FieldCPtr previousField;
   if(fieldOp_->findDictionaryField(encoder, previousField))
   {
@@ -614,12 +660,26 @@ FieldInstructionDecimal::encodeDelta(
       previousValue = previousField->toDecimal();
     }
   }
+#else
+  if(fieldOp_->getDictionaryValue(encoder, previousValue))
+  {
+    previousIsKnown = true;
+    previousNotNull = true;
+    /// @TODO distinguish null vs unknown
+  }
+#endif
+
   if(!previousIsKnown && fieldOp_->hasValue())
   {
     previousIsKnown = true;
     previousNotNull = true;
     previousValue = typedValue_;
+#if 0
     fieldOp_->setDictionaryValue(encoder, Messages::FieldDecimal::create(previousValue));
+#else
+    fieldOp_->setDictionaryValue(encoder, previousValue);
+#endif
+
   }
 
   // get the value from the application data
@@ -643,8 +703,13 @@ FieldInstructionDecimal::encodeDelta(
 
     if(!previousIsKnown  || value != previousValue)
     {
+#if 0
       field = Messages::FieldDecimal::create(value);
       fieldOp_->setDictionaryValue(encoder, field);
+#else
+      fieldOp_->setDictionaryValue(encoder, value);
+#endif
+
     }
 
   }

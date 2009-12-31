@@ -142,6 +142,7 @@ namespace QuickFAST{
     protected:
       /// @brief a field of the appropriate type containing the intial value specified with the field Op
       Messages::FieldCPtr initialValue_;
+      std::string initialString_;
     };
   }
 }

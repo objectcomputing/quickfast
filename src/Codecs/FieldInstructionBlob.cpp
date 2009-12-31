@@ -166,22 +166,25 @@ FieldInstructionBlob::decodeCopy(
       fieldSet.addField(
         identity_,
         field);
-      fieldOp_->setDictionaryValue(decoder, field);
+      fieldOp_->setDictionaryValue(decoder, field->toString()); // todo performance
     }
   }
   else // pmap says not in stream
   {
-    Messages::FieldCPtr previousField;
-    if(!fieldOp_->findDictionaryField(decoder, previousField))
+    const uchar * value = 0;
+    size_t valueSize = 0;
+    Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, value, valueSize);
+    if(previousStatus == Context::OK_VALUE)
     {
-      previousField = initialValue_;
+       Messages::FieldCPtr field = createField(value, valueSize);
+       fieldSet.addField(identity_, field);
     }
-
-    if(bool(previousField) && previousField->isDefined())
+    else if(fieldOp_->hasValue())
     {
       fieldSet.addField(
         identity_,
-        previousField);
+        initialValue_);
+      fieldOp_->setDictionaryValue(decoder, fieldOp_->getValue());
     }
     else
     {
@@ -219,48 +222,53 @@ FieldInstructionBlob::decodeDelta(
     return false;
   }
   const std::string deltaValue = deltaField->toString();
-  Messages::FieldCPtr previousField;
-  if(!fieldOp_->findDictionaryField(decoder, previousField))
-  {
-    previousField = initialValue_;
-  }
-  std::string previousValue;
-  if(previousField->isDefined())
-  {
-    previousValue = previousField->toString();
-  }
-  size_t previousLength = previousValue.length();
 
+  std::string previousValue;
+  Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, previousValue);
+  if(previousStatus == Context::UNDEFINED_VALUE)
+  {
+    if(fieldOp_->hasValue())
+    {
+      previousValue = fieldOp_->getValue();
+    }
+  }
+
+  size_t previousLength = previousValue.length();
   if( deltaLength < 0)
   {
     // operate on front of string
-    // compensete for the excess -11 encoding that allows -0 != +0
+    // compensete for the excess -1 encoding that allows -0 != +0
     deltaLength = -(deltaLength + 1);
     // don't chop more than is there
     if(static_cast<unsigned long>(deltaLength) > previousLength)
     {
       deltaLength = QuickFAST::int32(previousLength);
     }
+    std::string value = deltaValue + previousValue.substr(deltaLength);
     Messages::FieldCPtr field = createField(
-      deltaValue + previousValue.substr(deltaLength));
+      value );
     fieldSet.addField(
       identity_,
       field);
-    fieldOp_->setDictionaryValue(decoder, field);
+    fieldOp_->setDictionaryValue(decoder, value);
   }
   else
   { // operate on end of string
     // don't chop more than is there
     if(static_cast<unsigned long>(deltaLength) > previousLength)
     {
+#if 0 // handy when debugging
+      std::cout << "decode blob delta length: " << deltaLength << " previous: " << previousLength << std::endl;
+#endif
+      decoder.reportError("[ERR D7]", "String tail delta length exceeds length of previous string.", *identity_);
       deltaLength = QuickFAST::uint32(previousLength);
     }
-    Messages::FieldCPtr field = createField(
-      previousValue.substr(0, previousLength - deltaLength) + deltaValue);
+    std::string value = previousValue.substr(0, previousLength - deltaLength) + deltaValue;
+    Messages::FieldCPtr field = createField(value);
     fieldSet.addField(
       identity_,
       field);
-    fieldOp_->setDictionaryValue(decoder, field);
+    fieldOp_->setDictionaryValue(decoder, value);
   }
   return true;
 }
@@ -285,47 +293,47 @@ FieldInstructionBlob::decodeTail(
     {
       const std::string & tailValue = tailField->toString();
 
-      Messages::FieldCPtr previousField;
-      if(!fieldOp_->findDictionaryField(decoder, previousField))
-      {
-        previousField = initialValue_;
-      }
-      std::string previousValue;
-      if(previousField->isDefined())
-      {
-        previousValue = previousField->toString();
-      }
-
       size_t tailLength = tailValue.length();
+      std::string previousValue;
+      Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, previousValue);
+      if(previousStatus == Context::UNDEFINED_VALUE)
+      {
+        if(fieldOp_->hasValue())
+        {
+          previousValue = fieldOp_->getValue();
+          fieldOp_->setDictionaryValue(decoder, previousValue);
+        }
+      }
       size_t previousLength = previousValue.length();
       if(tailLength > previousLength)
       {
         tailLength = previousLength;
       }
-      Messages::FieldCPtr field = createField(previousValue.substr(0, previousLength - tailLength) + tailValue);
+      std::string value(previousValue.substr(0, previousLength - tailLength) + tailValue);
+      Messages::FieldCPtr field = createField(value);
       fieldSet.addField(
         identity_,
         field);
-      fieldOp_->setDictionaryValue(decoder, field);
+      fieldOp_->setDictionaryValue(decoder, value);
     }
     else // null
     {
-      fieldOp_->setDictionaryValue(decoder, createEmptyField());
+      fieldOp_->setDictionaryValueNull(decoder);
     }
   }
   else // pmap says not in stream
   {
-    Messages::FieldCPtr previousField;
-    if(!fieldOp_->findDictionaryField(decoder, previousField))
+    std::string previousValue;
+    Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, previousValue);
+    if(previousStatus == Context::OK_VALUE)
     {
-      previousField = initialValue_;
-      fieldOp_->setDictionaryValue(decoder, previousField);
+      Messages::FieldCPtr field = createField(previousValue);
+      fieldSet.addField(identity_, field);
     }
-    if(bool(previousField) && previousField->isDefined())
+    else if(fieldOp_->hasValue())
     {
-      fieldSet.addField(
-        identity_,
-        previousField);
+      fieldSet.addField(identity_, initialValue_);
+      fieldOp_->setDictionaryValue(decoder, fieldOp_->getValue());
     }
     else
     {
@@ -439,7 +447,7 @@ FieldInstructionBlob::encodeDefault(
   if(fieldSet.getField(identity_->name(), field))
   {
     std::string value = field->toString();
-    if(initialValue_->isDefined() &&
+    if(fieldOp_->hasValue() &&
       initialValue_->toString() == value)
     {
       pmap.setNextField(false); // not in stream. use default
@@ -483,32 +491,16 @@ FieldInstructionBlob::encodeCopy(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & fieldSet) const
 {
-  // declare a couple of variables...
-  bool previousIsKnown = false;
-  bool previousNotNull = false;
+  // Retrieve information from the dictionary
   std::string previousValue;
-
-  // ... then initialize them from the dictionary
-  Messages::FieldCPtr previousField;
-  if(fieldOp_->findDictionaryField(encoder, previousField))
+  Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
+  if(previousStatus == Context::UNDEFINED_VALUE)
   {
-    if(!previousField->isString())
+    if(fieldOp_->hasValue())
     {
-      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
+      previousValue = fieldOp_->getValue();
+      fieldOp_->setDictionaryValue(encoder, previousValue);
     }
-    previousIsKnown = true;
-    previousNotNull = previousField->isDefined();
-    if(previousNotNull)
-    {
-      previousValue = previousField->toString();
-    }
-  }
-  if(!previousIsKnown && fieldOp_->hasValue())
-  {
-    previousIsKnown = true;
-    previousNotNull = true;
-    previousValue = initialValue_->toString();
-    fieldOp_->setDictionaryValue(encoder, initialValue_);
   }
 
   // get the value from the application data
@@ -516,7 +508,7 @@ FieldInstructionBlob::encodeCopy(
   if(fieldSet.getField(identity_->name(), field))
   {
     std::string value = field->toString();
-    if(previousNotNull && previousValue == value)
+    if(previousStatus == Context::OK_VALUE && previousValue == value)
     {
       pmap.setNextField(false); // not in stream, use copy
     }
@@ -531,8 +523,7 @@ FieldInstructionBlob::encodeCopy(
       {
         encodeBlob(destination, encoder.getWorkingBuffer(), value);
       }
-      Messages::FieldCPtr newField(createField(value));
-      fieldOp_->setDictionaryValue(encoder, newField);
+      fieldOp_->setDictionaryValue(encoder, value);
     }
   }
   else // not defined in fieldset
@@ -544,17 +535,19 @@ FieldInstructionBlob::encodeCopy(
       // let the copy happen.
       pmap.setNextField(false);
     }
-    if(previousIsKnown && previousNotNull)
+    if(previousStatus == Context::OK_VALUE)
     {
       // we have to null the previous value to avoid copy
       pmap.setNextField(true);// value in stream
       destination.putByte(nullBlob);
-      Messages::FieldCPtr newField = this->createEmptyField();
-      fieldOp_->setDictionaryValue(encoder, newField);
     }
     else
     {
       pmap.setNextField(false);
+    }
+    if(previousStatus != Context::NULL_VALUE)
+    {
+      fieldOp_->setDictionaryValueNull(encoder);
     }
   }
 }
@@ -566,32 +559,25 @@ FieldInstructionBlob::encodeDelta(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & fieldSet) const
 {
-    // declare a couple of variables...
-  bool previousIsKnown = false;
-  bool previousNotNull = false;
+  // get information from the dictionary
   std::string previousValue;
-
-  // ... then initialize them from the dictionary
-  Messages::FieldCPtr previousField;
-  if(fieldOp_->findDictionaryField(encoder, previousField))
+  Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
+  if(previousStatus == Context::UNDEFINED_VALUE)
   {
-    if(!previousField->isString())
+    if(fieldOp_->hasValue())
     {
-      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
-    }
-    previousIsKnown = true;
-    previousNotNull = previousField->isDefined();
-    if(previousNotNull)
-    {
-      previousValue = previousField->toString();
+      previousValue = fieldOp_->getValue();
+      fieldOp_->setDictionaryValue(encoder, previousValue);
     }
   }
-  if(!previousIsKnown && fieldOp_->hasValue())
+
+//      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
+
+
+  if(previousStatus != Context::OK_VALUE && fieldOp_->hasValue())
   {
-    previousIsKnown = true;
-    previousNotNull = true;
-    previousValue = initialValue_->toString();
-    fieldOp_->setDictionaryValue(encoder, initialValue_);
+    previousValue = fieldOp_->getValue();
+    fieldOp_->setDictionaryValue(encoder, previousValue);
   }
 
   // get the value from the application data
@@ -613,13 +599,18 @@ FieldInstructionBlob::encodeDelta(
     {
       deltaCount += 1;
     }
+#if 0 // handy when debugging
+    std::cout << "Encode blob delta prefix: " << prefix  << " suffix: " << suffix << std::endl;
+    std::cout << "Previous["<<previousValue <<"]" << std::endl;
+    std::cout << "   value[" << value <<      "]" << std::endl;
+    std::cout << "count:" << deltaCount << " Delta["<< deltaValue << ']' << std::endl;
+#endif
     encodeSignedInteger(destination, encoder.getWorkingBuffer(), deltaCount);
     encodeBlob(destination, encoder.getWorkingBuffer(), deltaValue);
 
-    if(!previousIsKnown  || value != previousValue)
+    if(previousStatus != Context::OK_VALUE  || value != previousValue)
     {
-      field = createField(value);
-      fieldOp_->setDictionaryValue(encoder, field);
+      fieldOp_->setDictionaryValue(encoder, value);
     }
 
   }
@@ -640,32 +631,24 @@ FieldInstructionBlob::encodeTail(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & fieldSet) const
 {
-    // declare a couple of variables...
-  bool previousIsKnown = false;
-  bool previousNotNull = true;
+  // get information from the dictionary
   std::string previousValue;
-
-  // ... then initialize them from the dictionary
-  Messages::FieldCPtr previousField;
-  if(fieldOp_->findDictionaryField(encoder, previousField))
+  Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
+  if(previousStatus == Context::UNDEFINED_VALUE)
   {
-    if(!previousField->isString())
+    if(fieldOp_->hasValue())
     {
-      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
-    }
-    previousIsKnown = true;
-    previousNotNull = previousField->isDefined();
-    if(previousNotNull)
-    {
-      previousValue = previousField->toString();
+      previousValue = fieldOp_->getValue();
+      fieldOp_->setDictionaryValue(encoder, previousValue);
     }
   }
-  if(!previousIsKnown && fieldOp_->hasValue())
+
+//      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
+
+  if(previousStatus != Context::OK_VALUE && fieldOp_->hasValue())
   {
-    previousIsKnown = true;
-    previousNotNull = true;
-    previousValue = initialValue_->toString();
-    fieldOp_->setDictionaryValue(encoder, initialValue_);
+    previousValue = fieldOp_->getValue();
+    fieldOp_->setDictionaryValue(encoder, previousValue);
   }
 
   // get the value from the application data
@@ -691,10 +674,9 @@ FieldInstructionBlob::encodeTail(
         encodeBlob(destination, encoder.getWorkingBuffer(), tailValue);
       }
     }
-    if(!previousIsKnown  || value != previousValue)
+    if(previousStatus != Context::OK_VALUE  || value != previousValue)
     {
-      field = createField(value);
-      fieldOp_->setDictionaryValue(encoder, field);
+      fieldOp_->setDictionaryValue(encoder, value);
     }
   }
   else // not defined in fieldset

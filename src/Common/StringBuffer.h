@@ -44,7 +44,7 @@ namespace QuickFAST
       assign(rhs.getBuffer(), rhs.size());
     }
 
-    /// @brief compy construct from a standard string
+    /// @brief copy construct from a standard string
     StringBufferT(const std::string & rhs)
       : heapBuffer_(0)
       , size_(0)

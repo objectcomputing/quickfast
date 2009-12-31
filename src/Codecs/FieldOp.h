@@ -12,7 +12,7 @@
 #include <Messages/Field_fwd.h>
 #include <Messages/MessageAccessor.h>
 #include <Messages/MessageBuilder_fwd.h>
-#include <Codecs/Context_fwd.h>
+#include <Codecs/Context.h>
 #include <Codecs/FieldInstruction_fwd.h>
 #include <Codecs/SchemaElement.h>
 #include <Codecs/DataSource_fwd.h>
@@ -129,6 +129,7 @@ namespace QuickFAST{
       /// @brief Store the current value in the dictionary entry assigned to this field.
       /// @param context contains the dictionaries for this encode/decode
       /// @param value is the entry to store in the dictionary
+#if 0
       void setDictionaryValue(
         Context & context,
         const Messages::FieldCPtr & value);
@@ -141,6 +142,7 @@ namespace QuickFAST{
         Context & context,
         Messages::FieldCPtr & value);
 
+#endif
       /// @brief Implement the dictionary= attribute
       /// @param name is the name of the dictionary to use.
       void setDictionaryName(const std::string & name)
@@ -162,6 +164,138 @@ namespace QuickFAST{
         const std::string & typeNamespace,
         const std::string & fieldName,
         const std::string & fieldNamespace);
+
+      void setDictionaryValueUndefined(Context & context)
+      {
+        context.setDictionaryValueUndefined(dictionaryIndex_);
+      }
+
+      void setDictionaryValueNull(Context & context)
+      {
+        context.setDictionaryValueNull(dictionaryIndex_);
+      }
+
+      void setDictionaryValue(Context & context, const int64 value)
+      {
+        context.setDictionaryValue(dictionaryIndex_, value);
+      }
+
+      void setDictionaryValue(Context & context, const uint64 value)
+      {
+        context.setDictionaryValue(dictionaryIndex_, value);
+      }
+
+      void setDictionaryValue(Context & context, const int32 value)
+      {
+        context.setDictionaryValue(dictionaryIndex_, value);
+      }
+
+      void setDictionaryValue(Context & context, const uint32 value)
+      {
+        context.setDictionaryValue(dictionaryIndex_, value);
+      }
+
+      void setDictionaryValue(Context & context, const int16 value)
+      {
+        context.setDictionaryValue(dictionaryIndex_, value);
+      }
+
+      void setDictionaryValue(Context & context, const uint16 value)
+      {
+        context.setDictionaryValue(dictionaryIndex_, value);
+      }
+
+      void setDictionaryValue(Context & context, const int8 value)
+      {
+        context.setDictionaryValue(dictionaryIndex_, value);
+      }
+
+      void setDictionaryValue(Context & context, const uchar value)
+      {
+        context.setDictionaryValue(dictionaryIndex_, value);
+      }
+
+      void setDictionaryValue(Context & context, const Decimal& value)
+      {
+        context.setDictionaryValue(dictionaryIndex_, value);
+      }
+
+      void setDictionaryValue(Context & context, const unsigned char * value, size_t length)
+      {
+        context.setDictionaryValue(dictionaryIndex_, value, length);
+      }
+
+      void setDictionaryValue(Context & context, const char * value)
+      {
+        context.setDictionaryValue(dictionaryIndex_, value);
+      }
+
+      void setDictionaryValue(Context & context, const std::string& value)
+      {
+        context.setDictionaryValue(dictionaryIndex_, value);
+      }
+
+      template<typename VALUE_TYPE>
+      Context::DictionaryStatus getDictionaryValue(Context & context, VALUE_TYPE & value)
+      {
+        return context.getDictionaryValue(dictionaryIndex_, value);
+      }
+#if 0
+      Context::DictionaryStatus getDictionaryValue(Context & context, uint64 & value)
+      {
+        return context.getDictionaryValue(dictionaryIndex_, value);
+      }
+
+      Context::DictionaryStatus getDictionaryValue(Context & context, int32 & value)
+      {
+        return context.getDictionaryValue(dictionaryIndex_, value);
+      }
+
+      Context::DictionaryStatus getDictionaryValue(Context & context, uint32 & value)
+      {
+        return context.getDictionaryValue(dictionaryIndex_, value);
+      }
+
+      Context::DictionaryStatus getDictionaryValue(Context & context, int16 & value)
+      {
+        return context.getDictionaryValue(dictionaryIndex_, value);
+      }
+
+      Context::DictionaryStatus  getDictionaryValue(Context & context, uint16 & value)
+      {
+        return context.getDictionaryValue(dictionaryIndex_, value);
+      }
+
+      Context::DictionaryStatus  getDictionaryValue(Context & context, int8 & value)
+      {
+        return context.getDictionaryValue(dictionaryIndex_, value);
+      }
+
+      Context::DictionaryStatus  getDictionaryValue(Context & context, uchar & value)
+      {
+        return context.getDictionaryValue(dictionaryIndex_, value);
+      }
+
+      Context::DictionaryStatus  getDictionaryValue(Context & context, Decimal & value)
+      {
+        return context.getDictionaryValue(dictionaryIndex_, value);
+      }
+
+      Context::DictionaryStatus  getDictionaryValue(Context & context, const char *& value)
+      {
+        return context.getDictionaryValue(dictionaryIndex_, value);
+      }
+
+      Context::DictionaryStatus  getDictionaryValue(Context & context, std::string& value)
+      {
+        return context.getDictionaryValue(dictionaryIndex_, value);
+      }
+#endif
+
+      Context::DictionaryStatus  getDictionaryValue(Context & context, const unsigned char *& value, size_t &length)
+      {
+        return context.getDictionaryValue(dictionaryIndex_, value, length);
+      }
 
     protected:
             /// Value specified by the operator associated with this instruction [as a string]

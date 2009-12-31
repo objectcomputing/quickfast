@@ -52,7 +52,7 @@ FieldOp::indexDictionaries(
   }
 }
 
-
+#if 0
 void
 FieldOp::setDictionaryValue(
   Context & context,
@@ -62,7 +62,7 @@ FieldOp::setDictionaryValue(
   {
     throw TemplateDefinitionError("No index available for field.");
   }
-  context.setDictionaryField(dictionaryIndex_, value);
+  context.setDictionaryValue(dictionaryIndex_, value);
 }
 
 bool
@@ -77,4 +77,4 @@ FieldOp::findDictionaryField(
   return context.findDictionaryField(dictionaryIndex_, value);
 }
 
-
+#endif

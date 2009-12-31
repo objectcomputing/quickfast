@@ -8,6 +8,8 @@
 #define CONTEXT_H
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
+#include <Common/Value.h>
+#include <Common/Exceptions.h>
 #include <Common/WorkingBuffer.h>
 #include <Codecs/TemplateRegistry_fwd.h>
 #include <Codecs/Template_fwd.h>
@@ -19,6 +21,12 @@ namespace QuickFAST{
     /// @brief Context in which Encode/Decode takes place.
     class QuickFAST_Export Context
     {
+    public:
+      enum DictionaryStatus{
+        UNDEFINED_VALUE,
+        NULL_VALUE,
+        OK_VALUE
+      };
     public:
       /// @brief Construct with a TemplateRegistry containing all templates to be used.
       /// @param registry A registry containing all templates to be used to decode messages.
@@ -81,12 +89,271 @@ namespace QuickFAST{
       /// @brief index identifies the dictionary entry corresponding to this field
       /// @brief field receives the pointer to the value found
       /// @returns true if a valid entry was found
-      bool findDictionaryField(size_t index, Messages::FieldCPtr & field);
+      bool findDictionaryField(size_t index, Value *& value);
 
       /// @brief Sets the definition of a field in the dictionary
       /// @brief index identifies the dictionary entry corresponding to this field
       /// @brief field points to the value to be set.
-      void setDictionaryField(size_t index, const Messages::FieldCPtr & field);
+//      void setDictionaryField(size_t index, const Messages::FieldCPtr & field);
+
+      void setDictionaryValueNull(size_t index)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setNull();
+      }
+
+      void setDictionaryValueUndefined(size_t index)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setUndefined();
+      }
+
+      template<typename VALUE_TYPE>
+      void setDictionaryValue(size_t index, const VALUE_TYPE value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setValue(value);
+      }
+#if 0
+      void setDictionaryValue(size_t index, const uint64 value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setValue(value);
+      }
+
+      void setDictionaryValue(size_t index, const int32 value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setValue(value);
+      }
+
+      void setDictionaryValue(size_t index, const uint32 value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setValue(value);
+      }
+
+      void setDictionaryValue(size_t index, const int16 value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setValue(value);
+      }
+
+      void setDictionaryValue(size_t index, const uint16 value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setValue(value);
+      }
+
+      void setDictionaryValue(size_t index, const int8  value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setValue(value);
+      }
+
+      void setDictionaryValue(size_t index, const uchar value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setValue(value);
+      }
+
+      void setDictionaryValue(size_t index, const Decimal& value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setValue(value);
+      }
+
+      void setDictionaryValue(size_t index, const char * value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setValue(value);
+      }
+
+      void setDictionaryValue(size_t index, const std::string& value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setValue(value);
+      }
+
+#endif
+      void setDictionaryValue(size_t index, const unsigned char * value, size_t length)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setValue(value, length);
+      }
+
+      template<typename VALUE_TYPE>
+      DictionaryStatus getDictionaryValue(size_t index, VALUE_TYPE & value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        Value & entry = indexedDictionary_[index];
+        if(!entry.isDefined())
+        {
+          return UNDEFINED_VALUE;
+        }
+        if(entry.isNull())
+        {
+          return NULL_VALUE;
+        }
+        (void)entry.getValue(value);
+        return OK_VALUE;
+      }
+
+#if 0
+
+      DictionaryStatus getDictionaryValue(size_t index, uint64 & value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        return indexedDictionary_[index].getValue(value);
+      }
+
+      bool getDictionaryValue(size_t index, int32 & value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        return indexedDictionary_[index].getValue(value);
+      }
+
+      bool getDictionaryValue(size_t index, uint32 & value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        return indexedDictionary_[index].getValue(value);
+      }
+
+      bool getDictionaryValue(size_t index, int16 & value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        return indexedDictionary_[index].getValue(value);
+      }
+
+      DictionaryStatus getDictionaryValue(size_t index, uint16 & value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        return indexedDictionary_[index].getValue(value);
+      }
+
+      DictionaryStatus getDictionaryValue(size_t index, int8 & value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        return indexedDictionary_[index].getValue(value);
+      }
+
+      bool getDictionaryValue(size_t index, uchar & value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        return indexedDictionary_[index].getValue(value);
+      }
+
+      bool getDictionaryValue(size_t index, Decimal & value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        return indexedDictionary_[index].getValue(value);
+      }
+      DictionaryStatus getDictionaryValue(size_t index, const char *& value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        return indexedDictionary_[index].getValue(value);
+      }
+
+      bool getDictionaryValue(size_t index, std::string& value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        return indexedDictionary_[index].getValue(value);
+      }
+#endif
+
+      DictionaryStatus getDictionaryValue(size_t index, const unsigned char *& value, size_t &length)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        Value & entry = indexedDictionary_[index];
+        if(!entry.isDefined())
+        {
+          return UNDEFINED_VALUE;
+        }
+        if(entry.isNull())
+        {
+          return NULL_VALUE;
+        }
+        (void)entry.getValue(value, length);
+        return OK_VALUE;
+      }
 
       /// @brief Report a warning
       /// @param errorCode as defined in the FIX standard (or invented for QuickFAST)
@@ -242,7 +509,7 @@ namespace QuickFAST{
       bool strict_;
     private:
       size_t indexedDictionarySize_;
-      typedef boost::scoped_array<Messages::FieldCPtr> IndexedDictionary;
+      typedef boost::scoped_array<Value> IndexedDictionary;
       IndexedDictionary indexedDictionary_;
       WorkingBuffer workingBuffer_;
     };
