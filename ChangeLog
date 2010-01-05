@@ -1,3 +1,85 @@
+Tue Jan  5 00:09:42 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Decoder.h:
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.h:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionByteVector.cpp:
+        * src/Codecs/FieldInstructionDecimal.h:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionGroup.h:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionSequence.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/FieldInstructionUtf8.cpp:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FieldOpConstant.h:
+        * src/Codecs/FieldOpConstant.cpp:
+        * src/Codecs/FieldOpCopy.h:
+        * src/Codecs/FieldOpCopy.cpp:
+        * src/Codecs/FieldOpDefault.h:
+        * src/Codecs/FieldOpDefault.cpp:
+        * src/Codecs/FieldOpDelta.h:
+        * src/Codecs/FieldOpDelta.cpp:
+        * src/Codecs/FieldOpIncrement.h:
+        * src/Codecs/FieldOpIncrement.cpp:
+        * src/Codecs/FieldOpNop.h:
+        * src/Codecs/FieldOpTail.h:
+        * src/Codecs/FieldOpTail.cpp:
+        * src/Codecs/GenericMessageBuilder.h:
+        * src/Codecs/GenericMessageBuilder.cpp:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/SynchronousDecoder.h:
+        * src/Examples/Examples/MessagePerformance.h:
+        * src/Examples/Examples/MessagePerformance.cpp:
+        * src/Examples/PerformanceTest/PerformanceTest.cpp:
+        * src/Messages/FieldAscii.h:
+        * src/Messages/FieldBitMap.h:
+        * src/Messages/FieldByteVector.h:
+        * src/Messages/FieldDecimal.h:
+        * src/Messages/FieldInt16.h:
+        * src/Messages/FieldInt32.h:
+        * src/Messages/FieldInt64.h:
+        * src/Messages/FieldInt8.h:
+        * src/Messages/FieldString.h:
+        * src/Messages/FieldString.cpp:
+        * src/Messages/FieldUInt16.h:
+        * src/Messages/FieldUInt32.h:
+        * src/Messages/FieldUInt64.h:
+        * src/Messages/FieldUInt8.h:
+        * src/Messages/FieldUtf8.h:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/MessageBuilder.cpp:
+        * src/Messages/SingleValueBuilder.h:
+        * src/Messages/SpecialAccessors.h:
+        * src/Messages/ValueMessageBuilder.h:
+        * src/Messages/ValueMessageBuilder_fwd.h:
+        * src/Tests/FieldInstructionMock.h:
+        * src/Tests/testRoundTrip1.cpp:
+
+        Allocating and freeing Field objects was having a significant impact
+        on performance.  This change replaces the pointer to immutable Field object
+        in the data dictionary with a mutable Value object, and adds a new
+        interface, ValueMessageBuilder, for passing decoded data to the application.
+
+        This new interface replaces the addField method with polymorphic addValue
+        methods for the various field types.  The application still receives a
+        FieldIdentity object to let it know what to do with the data.
+
+
+        * src/Codecs/FieldInstructionBitMap.h:
+        * src/Codecs/FieldInstructionBitMap.cpp:
+          Removed these files.
+
 Thu Dec 31 14:24:36 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Context.h:

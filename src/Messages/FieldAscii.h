@@ -23,7 +23,8 @@ namespace QuickFAST{
       FieldAscii(const uchar * value, size_t length);
       /// @brief Construct a NULL field (not an empty string)
       FieldAscii();
-
+    public:
+      const static Field::FieldType fieldType = Field::ASCII;
     public:
       /// @brief Construct the field from a value in a std::string
       /// @param value the value to be stored in the field

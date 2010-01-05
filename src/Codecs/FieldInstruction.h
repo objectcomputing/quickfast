@@ -14,7 +14,7 @@
 #include <Common/WorkingBuffer.h>
 #include <Common/Exceptions.h>
 #include <Messages/Message_fwd.h>
-#include <Messages/MessageBuilder_fwd.h>
+#include <Messages/ValueMessageBuilder_fwd.h>
 #include <Messages/FieldIdentity.h>
 #include <Codecs/SchemaElement.h>
 #include <Codecs/DataSource.h>
@@ -196,7 +196,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet)const
+        Messages::ValueMessageBuilder & fieldSet)const
       {
         return fieldOp_->decode(*this, source, pmap, decoder, fieldSet);
       }
@@ -244,7 +244,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const = 0;
+        Messages::ValueMessageBuilder & fieldSet) const = 0;
 
       /// @brief Decode when &lt;constant> operation is specified.
       /// @see decode()
@@ -256,7 +256,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       /// @brief Decode when &lt;default> operation is specified.
       /// @see decode()
@@ -268,7 +268,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       /// @brief Decode when &lt;copy> operation is specified.
       /// @see decode()
@@ -280,7 +280,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       /// @brief Decode when &lt;copy> operation is specified using specific pmap bit.
       ///
@@ -294,7 +294,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         bool pmapValue,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       /// @brief Decode when &lt;delta> operation is specified.
       /// @see decode()
@@ -306,7 +306,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       /// @brief Decode when &lt;increment> operation is specified.
       /// @see decode()
@@ -320,7 +320,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       /// @brief Decode when &lt;increment> operation is specified.
       /// @see decode()
@@ -334,7 +334,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         bool pmapValue,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       /// @brief Decode when &lt;tail> operation is specified.
       /// @see decode()
@@ -348,7 +348,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       ///////////////////
       // Encoding support

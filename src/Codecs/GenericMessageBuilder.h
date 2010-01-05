@@ -65,8 +65,8 @@ namespace QuickFAST{
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
-      virtual bool endMessage(Messages::MessageBuilder & messageBuilder);
-      virtual bool ignoreMessage(Messages::MessageBuilder & messageBuilder);
+      virtual bool endMessage(Messages::ValueMessageBuilder & messageBuilder);
+      virtual bool ignoreMessage(Messages::ValueMessageBuilder & messageBuilder);
 
       virtual Messages::MessageBuilder & startSequence(
         Messages::FieldIdentityCPtr identity,
@@ -78,7 +78,7 @@ namespace QuickFAST{
 
       virtual void endSequence(
         Messages::FieldIdentityCPtr identity,
-        Messages::MessageBuilder & sequenceBuilder);
+        Messages::ValueMessageBuilder & sequenceBuilder);
 
       virtual Messages::MessageBuilder & startSequenceEntry(
         const std::string & applicationType,
@@ -86,7 +86,7 @@ namespace QuickFAST{
         size_t size);
 
       virtual void endSequenceEntry(
-        Messages::MessageBuilder & entry);
+        Messages::ValueMessageBuilder & entry);
 
       virtual Messages::MessageBuilder & startGroup(
         Messages::FieldIdentityCPtr identity,
@@ -95,7 +95,7 @@ namespace QuickFAST{
         size_t size) ;
       virtual void endGroup(
         Messages::FieldIdentityCPtr identity,
-        Messages::MessageBuilder & groupBuilder);
+        Messages::ValueMessageBuilder & groupBuilder);
 
       ///////////////////
       // Implement Logger
@@ -162,8 +162,8 @@ namespace QuickFAST{
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
-      virtual bool endMessage(Messages::MessageBuilder & messageBuilder);
-      virtual bool ignoreMessage(Messages::MessageBuilder & messageBuilder);
+      virtual bool endMessage(Messages::ValueMessageBuilder & messageBuilder);
+      virtual bool ignoreMessage(Messages::ValueMessageBuilder & messageBuilder);
 
       virtual Messages::MessageBuilder & startSequence(
         Messages::FieldIdentityCPtr identity,
@@ -173,13 +173,13 @@ namespace QuickFAST{
         Messages::FieldIdentityCPtr lengthIdentity,
         size_t length);
       virtual void endSequence( Messages::FieldIdentityCPtr identity,
-        Messages::MessageBuilder & sequenceBuilder);
+        Messages::ValueMessageBuilder & sequenceBuilder);
 
       virtual Messages::MessageBuilder & startSequenceEntry(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
-      virtual void endSequenceEntry(Messages::MessageBuilder & entry);
+      virtual void endSequenceEntry(Messages::ValueMessageBuilder & entry);
 
       virtual Messages::MessageBuilder & startGroup(
         Messages::FieldIdentityCPtr identity,
@@ -188,7 +188,7 @@ namespace QuickFAST{
         size_t size) ;
       virtual void endGroup(
         Messages::FieldIdentityCPtr identity,
-        Messages::MessageBuilder & groupBuilder);
+        Messages::ValueMessageBuilder & groupBuilder);
 
       ///////////////////
       // Implement Logger
@@ -233,8 +233,8 @@ namespace QuickFAST{
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
-      virtual bool endMessage(Messages::MessageBuilder & messageBuilder);
-      virtual bool ignoreMessage(Messages::MessageBuilder & messageBuilder);
+      virtual bool endMessage(Messages::ValueMessageBuilder & messageBuilder);
+      virtual bool ignoreMessage(Messages::ValueMessageBuilder & messageBuilder);
 
       virtual Messages::MessageBuilder & startSequence(
         Messages::FieldIdentityCPtr identity,
@@ -245,13 +245,13 @@ namespace QuickFAST{
         size_t length);
       virtual void endSequence(
         Messages::FieldIdentityCPtr identity,
-        Messages::MessageBuilder & sequenceBuilder);
+        Messages::ValueMessageBuilder & sequenceBuilder);
 
       virtual Messages::MessageBuilder & startSequenceEntry(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
-      virtual void endSequenceEntry(Messages::MessageBuilder & entry);
+      virtual void endSequenceEntry(Messages::ValueMessageBuilder & entry);
 
       virtual Messages::MessageBuilder & startGroup(
         Messages::FieldIdentityCPtr identity,
@@ -260,7 +260,7 @@ namespace QuickFAST{
         size_t size) ;
       virtual void endGroup(
         Messages::FieldIdentityCPtr identity,
-        Messages::MessageBuilder & groupBuilder);
+        Messages::ValueMessageBuilder & groupBuilder);
 
       ///////////////////
       // Implement Logger
@@ -269,6 +269,7 @@ namespace QuickFAST{
       virtual bool logMessage(unsigned short level, const std::string & logMessage);
       virtual bool reportDecodingError(const std::string & errorMessage);
       virtual bool reportCommunicationError(const std::string & errorMessage);
+
 
     private:
       const Messages::MessagePtr & message()const;

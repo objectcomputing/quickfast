@@ -10,7 +10,7 @@
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/Decoder.h>
 #include <Codecs/DataSource.h>
-#include <Messages/MessageBuilder.h>
+#include <Messages/ValueMessageBuilder.h>
 
 namespace QuickFAST{
   namespace Codecs{
@@ -107,7 +107,7 @@ namespace QuickFAST{
       /// or messageCount() messages have been decoded.
       void decode(
         DataSource & source,
-        Messages::MessageBuilder & builder)
+        Messages::ValueMessageBuilder & builder)
       {
         bool more = true;
         while(source.messageAvailable() > 0 && messageCount_ < messageCountLimit_)

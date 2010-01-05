@@ -18,6 +18,10 @@ namespace QuickFAST{
       explicit FieldInt64(int64 value);
       /// @brief Construct a NULL field
       FieldInt64();
+
+    public:
+      const static Field::FieldType fieldType = Field::UINT64;
+
     public:
       /// @brief Construct the field from am int64 value
       /// @param value the value to be stored in the field

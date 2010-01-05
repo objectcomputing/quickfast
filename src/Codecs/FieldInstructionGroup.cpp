@@ -8,7 +8,7 @@
 #include <Codecs/Encoder.h>
 #include <Messages/Group.h>
 #include <Messages/FieldGroup.h>
-#include <Messages/MessageBuilder.h>
+#include <Messages/ValueMessageBuilder.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
@@ -39,7 +39,7 @@ FieldInstructionGroup::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & messageBuilder) const
+  Messages::ValueMessageBuilder & messageBuilder) const
 {
   bool present = true;
 
@@ -56,7 +56,7 @@ FieldInstructionGroup::decodeNop(
     }
     if(messageBuilder.getApplicationType() != segmentBody_->getApplicationType())
     {
-      Messages::MessageBuilder & groupBuilder(
+      Messages::ValueMessageBuilder & groupBuilder(
         messageBuilder.startGroup(
           identity_,
           segmentBody_->getApplicationType(),

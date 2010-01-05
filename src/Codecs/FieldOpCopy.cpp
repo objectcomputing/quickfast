@@ -25,7 +25,7 @@ FieldOpCopy::decode(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & fieldSet) const
+  Messages::ValueMessageBuilder & fieldSet) const
 {
   if(pmapBitValid_)
   {

@@ -11,7 +11,7 @@
 
 #include <Messages/Field_fwd.h>
 #include <Messages/MessageAccessor.h>
-#include <Messages/MessageBuilder_fwd.h>
+#include <Messages/ValueMessageBuilder_fwd.h>
 #include <Codecs/Context.h>
 #include <Codecs/FieldInstruction_fwd.h>
 #include <Codecs/SchemaElement.h>
@@ -58,7 +58,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const = 0;
+        Messages::ValueMessageBuilder & fieldSet) const = 0;
 
       /// @brief Encode a field to a data destination.
       ///

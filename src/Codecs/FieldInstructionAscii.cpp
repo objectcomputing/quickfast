@@ -7,7 +7,7 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/DataDestination.h>
 #include <Codecs/Encoder.h>
-#include <Messages/MessageBuilder.h>
+#include <Messages/ValueMessageBuilder.h>
 #include <Messages/MessageAccessor.h>
 #include <Messages/FieldAscii.h>
 
@@ -34,30 +34,24 @@ FieldInstructionAscii::~FieldInstructionAscii()
 }
 
 bool
-FieldInstructionAscii::decodeFromSource(
+FieldInstructionAscii::decodeAsciiFromSource(
   Codecs::DataSource & source,
   bool mandatory,
-  WorkingBuffer & buffer,
-  Messages::FieldCPtr & field) const
+  WorkingBuffer & buffer) const
 {
-  PROFILE_POINT("ascii::decodeFromSource");
-  if(!decodeAscii(source, buffer))
-  {
-    return false;
-  }
+  PROFILE_POINT("ascii::decodeAsciiFromSource");
+  decodeAscii(source, buffer);
   if(!mandatory)
   {
     if(checkNullAscii(buffer))
     {
-      return true;
+      return false;
     }
   }
   if(checkEmptyAscii(buffer))
   {
-    field = Messages::FieldAscii::create("");
-    return true;
+    buffer.clear(true);
   }
-  field = Messages::FieldAscii::create(buffer.begin(), buffer.size());
   return true;
 }
 
@@ -67,19 +61,15 @@ FieldInstructionAscii::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & /*pmap*/,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & fieldSet) const
+  Messages::ValueMessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeNop");
   // note NOP never uses pmap.  It uses a null value instead for optional fields
   // so it's always safe to do the basic decode.
-  Messages::FieldCPtr field;
-  if(!decodeFromSource(source, isMandatory(), decoder.getWorkingBuffer(), field))
+  WorkingBuffer & buffer = decoder.getWorkingBuffer();
+  if(decodeAsciiFromSource(source, isMandatory(), buffer))
   {
-    return false;
-  }
-  if(field)
-  {
-    fieldSet.addField(identity_, field);
+    fieldSet.addValue(identity_, Messages::Field::ASCII, buffer.begin(), buffer.size());
   }
   return true;
 }
@@ -89,22 +79,26 @@ FieldInstructionAscii::decodeConstant(
   Codecs::DataSource & /*source*/,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & /*decoder*/,
-  Messages::MessageBuilder & fieldSet) const
+  Messages::ValueMessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeConstant");
   if(isMandatory())
   {
-    fieldSet.addField(
+    fieldSet.addValue(
       identity_,
-      initialValue_);
+      Messages::Field::ASCII,
+      reinterpret_cast<const uchar *>(fieldOp_->getValue().c_str()),
+      fieldOp_->getValue().size());
   }
   else
   {
     if(pmap.checkNextField())
     {
-      fieldSet.addField(
+      fieldSet.addValue(
         identity_,
-        initialValue_);
+        Messages::Field::ASCII,
+        reinterpret_cast<const uchar *>(fieldOp_->getValue().c_str()),
+        fieldOp_->getValue().size());
     }
     else
     {
@@ -119,21 +113,19 @@ FieldInstructionAscii::decodeDefault(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & fieldSet) const
+  Messages::ValueMessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeDefault");
   if(pmap.checkNextField())
   {
-    Messages::FieldCPtr field;
-    if(!decodeFromSource(source, isMandatory(), decoder.getWorkingBuffer(), field))
+    WorkingBuffer & buffer = decoder.getWorkingBuffer();
+    if(!decodeAsciiFromSource(source, isMandatory(), buffer))
     {
-      return false;
-    }
-    if(field)
-    {
-      fieldSet.addField(
+      fieldSet.addValue(
         identity_,
-        field);
+        Messages::Field::ASCII,
+        buffer.begin(),
+        buffer.size());
     }
     return true;
   }
@@ -141,9 +133,12 @@ FieldInstructionAscii::decodeDefault(
   {
     if(fieldOp_->hasValue())
     {
-      fieldSet.addField(
+      fieldSet.addValue(
         identity_,
-        initialValue_);
+        Messages::Field::ASCII,
+        reinterpret_cast<const uchar *>(fieldOp_->getValue().c_str()),
+        fieldOp_->getValue().size()
+        );
     }
     else if(isMandatory())
     {
@@ -158,23 +153,22 @@ FieldInstructionAscii::decodeCopy(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & fieldSet) const
+  Messages::ValueMessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeCopy");
   if(pmap.checkNextField())
   {
     // field is in the stream, use it
-    Messages::FieldCPtr field;
-    if(!decodeFromSource(source, isMandatory(),decoder.getWorkingBuffer(), field))
+    WorkingBuffer & buffer = decoder.getWorkingBuffer();
+    if(decodeAsciiFromSource(source, isMandatory(), buffer))
     {
-      return false;
-    }
-    if(field)
-    {
-      fieldSet.addField(
+      fieldSet.addValue(
         identity_,
-        field);
-      fieldOp_->setDictionaryValue(decoder, field->toString()); // todo: performance
+        Messages::Field::ASCII,
+        buffer.begin(),
+        buffer.size()
+        );
+      fieldOp_->setDictionaryValue(decoder, buffer.begin(), buffer.size());
     }
     else
     {
@@ -188,14 +182,15 @@ FieldInstructionAscii::decodeCopy(
     Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, value, valueSize);
     if(previousStatus == Context::OK_VALUE)
     {
-      Messages::FieldCPtr field = Messages::FieldAscii::create(value, valueSize);
-      fieldSet.addField(identity_, field);
+      fieldSet.addValue(identity_, Messages::Field::ASCII, value, valueSize);
     }
     else if(fieldOp_->hasValue())
     {
-      fieldSet.addField(
+      fieldSet.addValue(
         identity_,
-        initialValue_);
+        Messages::Field::ASCII,
+        reinterpret_cast<const uchar *>(fieldOp_->getValue().c_str()),
+        fieldOp_->getValue().size());
       fieldOp_->setDictionaryValue(decoder, fieldOp_->getValue());
     }
     else
@@ -214,7 +209,7 @@ FieldInstructionAscii::decodeDelta(
   Codecs::DataSource & source,
   Codecs::PresenceMap & /*pmap*/,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & fieldSet) const
+  Messages::ValueMessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeDelta");
   int32 deltaLength;
@@ -228,12 +223,14 @@ FieldInstructionAscii::decodeDelta(
       return true;
     }
   }
-  Messages::FieldCPtr deltaField;
-  if(!decodeFromSource(source, true, decoder.getWorkingBuffer(), deltaField))
+  std::string deltaValue;
+  WorkingBuffer & buffer = decoder.getWorkingBuffer();
+  if(decodeAsciiFromSource(source, true, buffer))
   {
-    return false;
+    deltaValue = std::string(
+      reinterpret_cast<const char *>(buffer.begin()),
+      buffer.size());
   }
-  const std::string & deltaValue = deltaField->toString();
 
 
   std::string previousValue;
@@ -255,14 +252,17 @@ FieldInstructionAscii::decodeDelta(
     // don't chop more than is there
     if(static_cast<unsigned long>(deltaLength) > previousLength)
     {
+      decoder.reportError("[ERR D7]", "ASCII tail delta front length exceeds length of previous string.", *identity_);
       deltaLength = QuickFAST::int32(previousLength);
     }
     std::string value = deltaValue + previousValue.substr(deltaLength);
     Messages::FieldCPtr field = Messages::FieldAscii::create(
       value );
-    fieldSet.addField(
+    fieldSet.addValue(
       identity_,
-      field);
+      Messages::Field::ASCII,
+      reinterpret_cast<const uchar *>(value.c_str()),
+      value.size());
     fieldOp_->setDictionaryValue(decoder, value);
   }
   else
@@ -273,14 +273,15 @@ FieldInstructionAscii::decodeDelta(
 #if 0 // handy when debugging
       std::cout << "decode ascii delta length: " << deltaLength << " previous: " << previousLength << std::endl;
 #endif
-      decoder.reportError("[ERR D7]", "String tail delta length exceeds length of previous string.", *identity_);
+      decoder.reportError("[ERR D7]", "ASCII tail delta back length exceeds length of previous string.", *identity_);
       deltaLength = QuickFAST::uint32(previousLength);
     }
     std::string value = previousValue.substr(0, previousLength - deltaLength) + deltaValue;
-    Messages::FieldCPtr field = Messages::FieldAscii::create(value);
-    fieldSet.addField(
+    fieldSet.addValue(
       identity_,
-      field);
+      Messages::Field::ASCII,
+      reinterpret_cast<const uchar *>(value.c_str()),
+      value.size());
     fieldOp_->setDictionaryValue(decoder, value);
   }
   return true;
@@ -291,21 +292,16 @@ FieldInstructionAscii::decodeTail(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & fieldSet) const
+  Messages::ValueMessageBuilder & fieldSet) const
 {
   PROFILE_POINT("ascii::decodeTail");
   if(pmap.checkNextField())
   {
     // field is in the stream, use it
-    Messages::FieldCPtr tailField;
-    if(!decodeFromSource(source, isMandatory(), decoder.getWorkingBuffer(), tailField))
+    WorkingBuffer & buffer = decoder.getWorkingBuffer();
+    if(decodeAsciiFromSource(source, isMandatory(), buffer))
     {
-      return false;
-    }
-
-    if(bool(tailField)) // NULL?
-    {
-      const std::string & tailValue = tailField->toString();
+      const std::string tailValue(reinterpret_cast<const char *>(buffer.begin()), buffer.size());
       size_t tailLength = tailValue.length();
       std::string previousValue;
       Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, previousValue);
@@ -323,10 +319,11 @@ FieldInstructionAscii::decodeTail(
         tailLength = previousLength;
       }
       std::string value(previousValue.substr(0, previousLength - tailLength) + tailValue);
-      Messages::FieldCPtr field(Messages::FieldAscii::create(value));
-      fieldSet.addField(
+      fieldSet.addValue(
         identity_,
-        field);
+        Messages::Field::ASCII,
+        reinterpret_cast<const uchar *>(value.c_str()),
+        value.size());
       fieldOp_->setDictionaryValue(decoder, value);
     }
     else // null
@@ -341,11 +338,18 @@ FieldInstructionAscii::decodeTail(
     if(previousStatus == Context::OK_VALUE)
     {
       Messages::FieldCPtr field = Messages::FieldAscii::create(previousValue);
-      fieldSet.addField(identity_, field);
+      fieldSet.addValue(identity_,
+        Messages::Field::ASCII,
+        reinterpret_cast<const uchar *>(previousValue.c_str()),
+        previousValue.size());
     }
     else if(fieldOp_->hasValue())
     {
-      fieldSet.addField(identity_, initialValue_);
+      fieldSet.addValue(
+        identity_,
+        Messages::Field::ASCII,
+        reinterpret_cast<const uchar *>(fieldOp_->getValue().c_str()),
+        fieldOp_->getValue().size());
       fieldOp_->setDictionaryValue(decoder, fieldOp_->getValue());
     }
     else
@@ -560,13 +564,6 @@ FieldInstructionAscii::encodeDelta(
 
 //      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
 
-
-  if(previousStatus != Context::OK_VALUE && fieldOp_->hasValue())
-  {
-    previousValue = fieldOp_->getValue();
-    fieldOp_->setDictionaryValue(encoder, previousValue);
-  }
-
   // get the value from the application data
   Messages::FieldCPtr field;
   if(fieldSet.getField(identity_->name(), field))
@@ -630,12 +627,6 @@ FieldInstructionAscii::encodeTail(
   }
 
 //      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
-
-  if(previousStatus != Context::OK_VALUE && fieldOp_->hasValue())
-  {
-    previousValue = fieldOp_->getValue();
-    fieldOp_->setDictionaryValue(encoder, previousValue);
-  }
 
   // get the value from the application data
   Messages::FieldCPtr field;

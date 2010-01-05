@@ -9,8 +9,93 @@
 #include <Codecs/MessageConsumer.h>
 #include <Messages/Field_fwd.h>
 #include <Messages/FieldIdentity.h>
+#include <Messages/ValueMessageBuilder.h>
 namespace QuickFAST{
   namespace Examples{
+    class PerformanceBuilder: public Messages::ValueMessageBuilder
+    {
+    public:
+      PerformanceBuilder();
+      virtual ~PerformanceBuilder();
+      size_t fieldCount() const
+      {
+        return fieldCount_;
+      }
+      size_t msgCount() const
+      {
+        return msgCount_;
+      }
+      size_t sequenceCount() const
+      {
+        return sequenceCount_;
+      }
+
+      size_t sequenceEntryCount() const
+      {
+        return sequenceEntryCount_;
+      }
+
+      size_t groupCount() const
+      {
+        return groupCount_;
+      }
+
+      virtual const std::string & getApplicationType()const;
+      virtual const std::string & getApplicationTypeNs()const;
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const int64 value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const uint64 value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const int32 value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const uint32 value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const int16 value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const uint16 value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const int8 value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const uchar value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const Decimal& value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const unsigned char * value, size_t length);
+      virtual ValueMessageBuilder & startMessage(
+        const std::string & applicationType,
+        const std::string & applicationTypeNamespace,
+        size_t size);
+      virtual bool endMessage(ValueMessageBuilder & messageBuilder);
+      virtual bool ignoreMessage(ValueMessageBuilder & messageBuilder);
+      virtual ValueMessageBuilder & startSequence(
+        Messages::FieldIdentityCPtr identity,
+        const std::string & applicationType,
+        const std::string & applicationTypeNamespace,
+        size_t fieldCount,
+        Messages::FieldIdentityCPtr lengthIdentity,
+        size_t length);
+      virtual void endSequence(
+        Messages::FieldIdentityCPtr identity,
+        ValueMessageBuilder & sequenceBuilder);
+      virtual ValueMessageBuilder & startSequenceEntry(
+        const std::string & applicationType,
+        const std::string & applicationTypeNamespace,
+        size_t size) ;
+      virtual void endSequenceEntry(ValueMessageBuilder & entry);
+      virtual ValueMessageBuilder & startGroup(
+        Messages::FieldIdentityCPtr identity,
+        const std::string & applicationType,
+        const std::string & applicationTypeNamespace,
+        size_t size) ;
+      virtual void endGroup(
+        Messages::FieldIdentityCPtr identity,
+        ValueMessageBuilder & groupBuilder);
+
+      /////////////////////////////
+      // Implement Logger interface
+      virtual bool wantLog(unsigned short level);
+      virtual bool logMessage(unsigned short level, const std::string & logMessage);
+      virtual bool reportDecodingError(const std::string & errorMessage);
+      virtual bool reportCommunicationError(const std::string & errorMessage);
+
+    private:
+      size_t fieldCount_;
+      size_t msgCount_;
+      size_t sequenceCount_;
+      size_t sequenceEntryCount_;
+      size_t groupCount_;
+    };
 
     /// @brief A message consumer that attempts to produce a human readable version
     /// of a message that has been decoded by QuickFAST.

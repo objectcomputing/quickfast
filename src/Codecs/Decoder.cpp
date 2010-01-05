@@ -8,7 +8,7 @@
 #include <Codecs/PresenceMap.h>
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/FieldInstruction.h>
-#include <Messages/MessageBuilder.h>
+#include <Messages/ValueMessageBuilder.h>
 #include <Common/Profiler.h>
 
 using namespace ::QuickFAST;
@@ -22,7 +22,7 @@ Decoder::Decoder(Codecs::TemplateRegistryPtr registry)
 void
 Decoder::decodeMessage(
    DataSource & source,
-   Messages::MessageBuilder & messageBuilder)
+   Messages::ValueMessageBuilder & messageBuilder)
 {
   PROFILE_POINT("decode");
   source.beginMessage();
@@ -60,7 +60,7 @@ Decoder::decodeMessage(
     {
       reset(false);
     }
-    Messages::MessageBuilder & bodyBuilder(
+    Messages::ValueMessageBuilder & bodyBuilder(
       messageBuilder.startMessage(
         templatePtr->getApplicationType(),
         templatePtr->getApplicationTypeNamespace(),
@@ -88,7 +88,7 @@ Decoder::decodeMessage(
 void
 Decoder::decodeNestedTemplate(
    DataSource & source,
-   Messages::MessageBuilder & messageBuilder,
+   Messages::ValueMessageBuilder & messageBuilder,
    Messages::FieldIdentityCPtr identity)
 {
   Codecs::PresenceMap pmap(getTemplateRegistry()->presenceMapBits());
@@ -124,7 +124,7 @@ Decoder::decodeNestedTemplate(
     {
       reset(false);
     }
-    Messages::MessageBuilder & groupBuilder(
+    Messages::ValueMessageBuilder & groupBuilder(
       messageBuilder.startGroup(
         identity,
         templatePtr->getApplicationType(),
@@ -147,7 +147,7 @@ void
 Decoder::decodeGroup(
   DataSource & source,
   Codecs::SegmentBodyCPtr group,
-  Messages::MessageBuilder & messageBuilder)
+  Messages::ValueMessageBuilder & messageBuilder)
 {
   size_t presenceMapBits = group->presenceMapBitCount();
   Codecs::PresenceMap pmap(presenceMapBits);
@@ -174,7 +174,7 @@ Decoder::decodeSegmentBody(
   DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::SegmentBodyCPtr segment, //todo: reference to avoid copy?
-  Messages::MessageBuilder & messageBuilder)
+  Messages::ValueMessageBuilder & messageBuilder)
 {
   size_t instructionCount = segment->size();
   for( size_t nField = 0; nField < instructionCount; ++nField)

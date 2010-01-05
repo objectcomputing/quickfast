@@ -11,7 +11,7 @@ using namespace ::QuickFAST::Codecs;
 FieldInstructionUtf8::FieldInstructionUtf8(
       const std::string & name,
       const std::string & fieldNamespace)
-  : FieldInstructionBlob(name, fieldNamespace)
+  : FieldInstructionBlob(Messages::Field::UTF8, name, fieldNamespace)
 {
   initialValue_ = Messages::FieldUtf8::createNull();
 }

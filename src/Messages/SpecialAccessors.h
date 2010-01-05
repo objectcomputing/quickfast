@@ -7,6 +7,7 @@
 #ifndef SPECIALACCESSORS_H
 #define SPECIALACCESSORS_H
 #include <Messages/MessageAccessor.h>
+#include <Messages/MessageField.h>
 
 namespace QuickFAST
 {

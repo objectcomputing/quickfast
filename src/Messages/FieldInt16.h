@@ -20,6 +20,9 @@ namespace QuickFAST{
       /// @brief Construct a NULL field
       FieldInt16();
     public:
+      const static Field::FieldType fieldType = Field::INT16;
+
+    public:
       /// @brief Construct the field from am int16 value
       /// @param value the value to be stored in the field
       /// @returns a constant pointer to the immutable field

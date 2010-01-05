@@ -4,54 +4,51 @@
 #ifdef _MSC_VER
 # pragma once
 #endif
-#ifndef FIELDBITMAP_H
-#define FIELDBITMAP_H
+#ifndef FIELDSTRING_H
+#define FIELDSTRING_H
 #include <Messages/Field.h>
-#include <Common/BitMap.h>
 namespace QuickFAST{
   namespace Messages{
-    /// @brief A field containing arbitrary binary data
+    /// @brief A field containing ascii data.
     ///
-    /// In the XML template file this field is described as &lt;bitmap>
-    class QuickFAST_Export FieldBitMap
-      : public Field
-    {
+    /// In the XML template file this field is described as &lt;string charset="ascii">
+    class QuickFAST_Export FieldString : public Field
+{
       /// @brief Construct the field from a value in a std::string
       /// @param value the value to be stored in the field
-      explicit FieldBitMap(const BitMap & value);
+      explicit FieldString(const std::string & value);
+      /// @brief Construct the field from a value in byte buffer
+      /// @param value the start of the value to be stored in the field
+      /// @param length how many characters are in the value
+      FieldString(const uchar * value, size_t length);
+      /// @brief Construct a NULL field (not an empty string)
+      FieldString();
 
-      /// @brief Construct the field from a value in a std::string
-      /// @param buffer the start of the value to be stored in the field
-      /// @param length how many bytes are in the value
-      FieldBitMap(const uchar * buffer, size_t length);
-      /// @brief Construct a NULL field (not an empty field)
-      FieldBitMap();
-
-      const static Field::FieldType fieldType = Field::BITMAP;
     public:
       /// @brief Construct the field from a value in a std::string
       /// @param value the value to be stored in the field
       /// @returns a constant pointer to the immutable field
-      static FieldCPtr create(const BitMap & value);
-
+      static FieldCPtr create(const std::string & value);
       /// @brief Construct the field from a value in byte buffer
       /// @param buffer the start of the value to be stored in the field
       /// @param length how many bytes (not characters) are in the value
       /// @returns a constant pointer to the immutable field
       static FieldCPtr create(const uchar * buffer, size_t length);
-
-      /// @brief Construct a NULL field
+      /// @brief Construct a NULL field (not an empty string)
       /// @returns a constant pointer to the immutable field
       static FieldCPtr createNull();
 
       /// @brief a typical virtual destructor.
-      virtual ~FieldBitMap();
+      virtual ~FieldString();
 
       // implement selected virtual methods from Field
-      virtual const BitMap & toBitMap() const;
+      virtual bool isString() const;
+      virtual const StringBuffer & toAscii() const;
+      virtual const StringBuffer & toUtf8() const;
+      virtual const StringBuffer & toByteVector() const;
+      virtual const StringBuffer & toString() const;
     private:
-      BitMap value_;
     };
   }
 }
-#endif // FIELDBITMAP_H
+#endif // FIELDSTRING_H

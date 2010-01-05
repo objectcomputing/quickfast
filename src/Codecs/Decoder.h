@@ -13,7 +13,7 @@
 #include <Codecs/PresenceMap_fwd.h>
 #include <Codecs/Template.h>
 #include <Codecs/SegmentBody_fwd.h>
-#include <Messages/MessageBuilder_fwd.h>
+#include <Messages/ValueMessageBuilder_fwd.h>
 
 #include <Common/Exceptions.h>
 
@@ -36,7 +36,7 @@ namespace QuickFAST{
       /// @param[out] message an empty message into which the decoded fields will be stored.
       void decodeMessage(
         DataSource & source,
-        Messages::MessageBuilder & message);
+        Messages::ValueMessageBuilder & message);
 
       /// @brief Decode a group field.
       ///
@@ -53,7 +53,7 @@ namespace QuickFAST{
       decodeGroup(
         DataSource & source,
         SegmentBodyCPtr segment,
-        Messages::MessageBuilder & messageBuilder);
+        Messages::ValueMessageBuilder & messageBuilder);
 
       /// @brief Decode a segment into a messageBuilder.
       ///
@@ -62,7 +62,7 @@ namespace QuickFAST{
       /// @param[in] identity names the template.
       void decodeNestedTemplate(
         DataSource & source,
-        Messages::MessageBuilder & messageBuilder,
+        Messages::ValueMessageBuilder & messageBuilder,
         Messages::FieldIdentityCPtr identity);
 
       /// @brief Decode the body of a segment into a messageBuilder.
@@ -76,7 +76,7 @@ namespace QuickFAST{
         DataSource & source,
         PresenceMap & pmap,
         SegmentBodyCPtr segment,
-        Messages::MessageBuilder & messageBuilder);
+        Messages::ValueMessageBuilder & messageBuilder);
     };
   }
 }

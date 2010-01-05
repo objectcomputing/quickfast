@@ -240,8 +240,9 @@ PerformanceTest::run()
       std::cout << "Decoding input; pass " << nPass + 1 << " of " << count_ << std::endl;
       fastFile_.seekg(0, std::ios::beg);
       Codecs::DataSourceBufferedStream source(fastFile_);
-      MessagePerformance handler(head_, interpret_);
-      Codecs::GenericMessageBuilder builder(handler);
+//      MessagePerformance handler(head_, interpret_);
+//      Codecs::GenericMessageBuilder builder(handler);
+      PerformanceBuilder builder;
       Codecs::SynchronousDecoder decoder(templateRegistry);
       decoder.setResetOnMessage(resetOnMessage_);
       decoder.setStrict(strict_);
@@ -251,7 +252,7 @@ PerformanceTest::run()
         decoder.decode(source, builder);
       }//PROFILE_POINT
       unsigned long decodeLapse = decodeTimer.freeze();
-      size_t messageCount = handler.getMessageCount();
+      size_t messageCount = builder.msgCount();//handler.getMessageCount();
       (*performanceFile_)
 #ifdef _DEBUG
         << "[debug] "

@@ -11,7 +11,7 @@ using namespace ::QuickFAST::Codecs;
 FieldInstructionByteVector::FieldInstructionByteVector(
   const std::string & name,
   const std::string & fieldNamespace)
-  : FieldInstructionBlob(name, fieldNamespace)
+  : FieldInstructionBlob(Messages::Field::BYTEVECTOR, name, fieldNamespace)
 {
   initialValue_ = Messages::FieldByteVector::createNull();
 }

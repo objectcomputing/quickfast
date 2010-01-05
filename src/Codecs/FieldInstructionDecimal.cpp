@@ -57,7 +57,7 @@ FieldInstructionDecimal::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & accessor) const
+  Messages::ValueMessageBuilder & accessor) const
 {
   PROFILE_POINT("decimal::decodeNop");
 
@@ -84,8 +84,7 @@ FieldInstructionDecimal::decodeNop(
     }
 
     Decimal value(mantissa, exponent, false);
-    Messages::FieldCPtr field(Messages::FieldDecimal::create(value));
-    accessor.addField(identity_, field);
+    accessor.addValue(identity_, Messages::Field::DECIMAL, value);
   }
   else
   {
@@ -101,10 +100,10 @@ FieldInstructionDecimal::decodeNop(
     mantissa_t mantissa;
     decodeSignedInteger(source, decoder, mantissa, identity_->name());
     Decimal value(mantissa, exponent);
-    Messages::FieldCPtr newField(Messages::FieldDecimal::create(value));
-    accessor.addField(
+    accessor.addValue(
       identity_,
-      newField);
+      Messages::Field::DECIMAL,
+      value);
   }
   return true;
 }
@@ -114,15 +113,15 @@ FieldInstructionDecimal::decodeConstant(
   Codecs::DataSource & /*source*/,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & /*decoder*/,
-  Messages::MessageBuilder & accessor) const
+  Messages::ValueMessageBuilder & accessor) const
 {
   PROFILE_POINT("decimal::decodeConstant");
   if(isMandatory() || pmap.checkNextField())
   {
-    Messages::FieldCPtr newField(Messages::FieldDecimal::create(typedValue_));
-    accessor.addField(
+    accessor.addValue(
       identity_,
-      newField);
+      Messages::Field::DECIMAL,
+      typedValue_);
   }
   return true;
 }
@@ -132,7 +131,7 @@ FieldInstructionDecimal::decodeDefault(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & accessor) const
+  Messages::ValueMessageBuilder & accessor) const
 {
   PROFILE_POINT("decimal::decodeDefault");
   if(pmap.checkNextField())
@@ -149,19 +148,19 @@ FieldInstructionDecimal::decodeDefault(
     mantissa_t mantissa;
     decodeSignedInteger(source, decoder, mantissa, identity_->name());
     Decimal value(mantissa, exponent);
-    Messages::FieldCPtr newField(Messages::FieldDecimal::create(value));
-    accessor.addField(
+    accessor.addValue(
       identity_,
-      newField);
+      Messages::Field::DECIMAL,
+      value);
   }
   else // field not in stream
   {
     if(typedValueIsDefined_)
     {
-      Messages::FieldCPtr newField(Messages::FieldDecimal::create(typedValue_));
-      accessor.addField(
+      accessor.addValue(
         identity_,
-        newField);
+        Messages::Field::DECIMAL,
+        typedValue_);
     }
     else if(isMandatory())
     {
@@ -176,7 +175,7 @@ FieldInstructionDecimal::decodeCopy(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & accessor) const
+  Messages::ValueMessageBuilder & accessor) const
 {
   PROFILE_POINT("decimal::decodeCopy");
   exponent_t exponent = 0;
@@ -188,10 +187,10 @@ FieldInstructionDecimal::decodeCopy(
     {
       decodeSignedInteger(source, decoder, mantissa, identity_->name());
       Decimal value(mantissa, exponent, false);
-      Messages::FieldCPtr newField(Messages::FieldDecimal::create(value));
-      accessor.addField(
+      accessor.addValue(
         identity_,
-        newField);
+        Messages::Field::DECIMAL,
+        value);
 #if 0
       fieldOp_->setDictionaryValue(decoder, newField);
 #else
@@ -203,84 +202,42 @@ FieldInstructionDecimal::decodeCopy(
       // not mandatory means it's nullable
       if(checkNullInteger(exponent))
       {
-#if 0
-        Messages::FieldCPtr newField(Messages::FieldDecimal::createNull());
-        fieldOp_->setDictionaryValue(decoder, newField);
-#else
       fieldOp_->setDictionaryValueNull(decoder);
-#endif
       }
       else
       {
         decodeSignedInteger(source, decoder, mantissa, identity_->name());
         Decimal value(mantissa, exponent, false);
-        Messages::FieldCPtr newField(Messages::FieldDecimal::create(value));
-        accessor.addField(
+        accessor.addValue(
           identity_,
-          newField);
-#if 0
-        fieldOp_->setDictionaryValue(decoder, newField);
-#else
+          Messages::Field::DECIMAL,
+          value);
         fieldOp_->setDictionaryValue(decoder, value);
-#endif
       }
     }
 
   }
   else // pmap says not present, use copy
   {
-#if 0
-    Messages::FieldCPtr previousField;
-    if(fieldOp_->findDictionaryField(decoder, previousField))
-    {
-      //Decimal previous;
-      if(previousField->isDefined())
-      {
-        if(previousField->isType(Messages::Field::DECIMAL))
-        {
-          accessor.addField(
-            identity_,
-            previousField);
-        }
-        else
-        {
-          decoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
-        }
-      }
-      else // field present but not defined
-      {
-        if(isMandatory())
-        {
-          decoder.reportFatal("[ERR D6]", "Mandatory field is missing.", *identity_);
-        }
-      }
-    }
-#else
     Decimal value(0,0);
     if(fieldOp_->getDictionaryValue(decoder, value))
     {
-      accessor.addField(
+      accessor.addValue(
         identity_,
-        Messages::FieldDecimal::create(value));
+        Messages::Field::DECIMAL,
+        value);
     }
-
-#endif
     else
     {
       // value not found in dictionary
       // not a problem..  use initial value if it's available
       if(fieldOp_->hasValue())
       {
-        Messages::FieldCPtr newField(Messages::FieldDecimal::create(typedValue_));
-        accessor.addField(
+        accessor.addValue(
           identity_,
-          newField);
-#if 0
-        fieldOp_->setDictionaryValue(decoder, newField);
-#else
+          Messages::Field::DECIMAL,
+          typedValue_);
         fieldOp_->setDictionaryValue(decoder, typedValue_);
-#endif
-
       }
       else
       {
@@ -299,7 +256,7 @@ FieldInstructionDecimal::decodeDelta(
   Codecs::DataSource & source,
   Codecs::PresenceMap & /*pmap*/,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & accessor) const
+  Messages::ValueMessageBuilder & accessor) const
 {
   PROFILE_POINT("decimal::decodeDelta");
   int64 exponentDelta;
@@ -319,10 +276,10 @@ FieldInstructionDecimal::decodeDelta(
   Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, value);
   value.setExponent(exponent_t(value.getExponent() + exponentDelta));
   value.setMantissa(mantissa_t(value.getMantissa() + mantissaDelta));
-  Messages::FieldCPtr newField(Messages::FieldDecimal::create(value));
-  accessor.addField(
+  accessor.addValue(
     identity_,
-    newField);
+    Messages::Field::DECIMAL,
+    value);
   fieldOp_->setDictionaryValue(decoder, value);
   return true;
 }

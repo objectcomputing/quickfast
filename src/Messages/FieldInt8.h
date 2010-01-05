@@ -24,6 +24,8 @@ namespace QuickFAST
       /// @brief Construct a NULL field
       FieldInt8();
     public:
+      const static Field::FieldType fieldType = Field::INT8;
+    public:
       /// @brief Construct the field from am int8 value
       /// @param value the value to be stored in the field
       /// @returns a constant pointer to the immutable field
