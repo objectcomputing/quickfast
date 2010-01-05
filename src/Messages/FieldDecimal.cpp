@@ -9,19 +9,19 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldDecimal::FieldDecimal()
-  : Field(Field::DECIMAL, false)
+  : Field(ValueType::DECIMAL, false)
 {
 }
 
 FieldDecimal::FieldDecimal(const Decimal & value)
-  : Field(Field::DECIMAL, true)
+  : Field(ValueType::DECIMAL, true)
 {
   signedInteger_ = value.getMantissa();
   exponent_ = value.getExponent();
 }
 
 FieldDecimal::FieldDecimal(mantissa_t mantissa, exponent_t exponent)
-  : Field(Field::DECIMAL, true)
+  : Field(ValueType::DECIMAL, true)
 {
   signedInteger_ = mantissa;
   exponent_ = exponent;

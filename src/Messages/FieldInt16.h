@@ -20,7 +20,7 @@ namespace QuickFAST{
       /// @brief Construct a NULL field
       FieldInt16();
     public:
-      const static Field::FieldType fieldType = Field::INT16;
+      const static ValueType::Type fieldType = ValueType::INT16;
 
     public:
       /// @brief Construct the field from am int16 value

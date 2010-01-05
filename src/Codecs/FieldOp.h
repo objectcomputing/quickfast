@@ -9,7 +9,7 @@
 #include "FieldOp_fwd.h"
 #include <Common/QuickFAST_Export.h>
 
-#include <Messages/Field_fwd.h>
+//#include <Messages/Field_fwd.h>
 #include <Messages/MessageAccessor.h>
 #include <Messages/ValueMessageBuilder_fwd.h>
 #include <Codecs/Context.h>
@@ -153,7 +153,7 @@ namespace QuickFAST{
       /// @brief Assign a dictionary entry to the field associated with this operation.
       /// @param indexer assigns the index.
       /// @param dictionaryName is the parent's dictionary name (inherited unless overridden)
-      /// @param typeName is the application type for this instruction
+      /// @paramtypeName is the application type for this instruction
       /// @param typeNamespace is the namespace to qualify the application type.
       /// @param fieldName is the name of this field.
       /// @param fieldNamespace qualifies fieldName

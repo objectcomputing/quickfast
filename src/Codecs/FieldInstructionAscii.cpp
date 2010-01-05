@@ -69,7 +69,7 @@ FieldInstructionAscii::decodeNop(
   WorkingBuffer & buffer = decoder.getWorkingBuffer();
   if(decodeAsciiFromSource(source, isMandatory(), buffer))
   {
-    fieldSet.addValue(identity_, Messages::Field::ASCII, buffer.begin(), buffer.size());
+    fieldSet.addValue(identity_, ValueType::ASCII, buffer.begin(), buffer.size());
   }
   return true;
 }
@@ -86,7 +86,7 @@ FieldInstructionAscii::decodeConstant(
   {
     fieldSet.addValue(
       identity_,
-      Messages::Field::ASCII,
+      ValueType::ASCII,
       reinterpret_cast<const uchar *>(fieldOp_->getValue().c_str()),
       fieldOp_->getValue().size());
   }
@@ -96,7 +96,7 @@ FieldInstructionAscii::decodeConstant(
     {
       fieldSet.addValue(
         identity_,
-        Messages::Field::ASCII,
+        ValueType::ASCII,
         reinterpret_cast<const uchar *>(fieldOp_->getValue().c_str()),
         fieldOp_->getValue().size());
     }
@@ -123,7 +123,7 @@ FieldInstructionAscii::decodeDefault(
     {
       fieldSet.addValue(
         identity_,
-        Messages::Field::ASCII,
+        ValueType::ASCII,
         buffer.begin(),
         buffer.size());
     }
@@ -135,7 +135,7 @@ FieldInstructionAscii::decodeDefault(
     {
       fieldSet.addValue(
         identity_,
-        Messages::Field::ASCII,
+        ValueType::ASCII,
         reinterpret_cast<const uchar *>(fieldOp_->getValue().c_str()),
         fieldOp_->getValue().size()
         );
@@ -164,7 +164,7 @@ FieldInstructionAscii::decodeCopy(
     {
       fieldSet.addValue(
         identity_,
-        Messages::Field::ASCII,
+        ValueType::ASCII,
         buffer.begin(),
         buffer.size()
         );
@@ -182,13 +182,13 @@ FieldInstructionAscii::decodeCopy(
     Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, value, valueSize);
     if(previousStatus == Context::OK_VALUE)
     {
-      fieldSet.addValue(identity_, Messages::Field::ASCII, value, valueSize);
+      fieldSet.addValue(identity_, ValueType::ASCII, value, valueSize);
     }
     else if(fieldOp_->hasValue())
     {
       fieldSet.addValue(
         identity_,
-        Messages::Field::ASCII,
+        ValueType::ASCII,
         reinterpret_cast<const uchar *>(fieldOp_->getValue().c_str()),
         fieldOp_->getValue().size());
       fieldOp_->setDictionaryValue(decoder, fieldOp_->getValue());
@@ -260,7 +260,7 @@ FieldInstructionAscii::decodeDelta(
       value );
     fieldSet.addValue(
       identity_,
-      Messages::Field::ASCII,
+      ValueType::ASCII,
       reinterpret_cast<const uchar *>(value.c_str()),
       value.size());
     fieldOp_->setDictionaryValue(decoder, value);
@@ -279,7 +279,7 @@ FieldInstructionAscii::decodeDelta(
     std::string value = previousValue.substr(0, previousLength - deltaLength) + deltaValue;
     fieldSet.addValue(
       identity_,
-      Messages::Field::ASCII,
+      ValueType::ASCII,
       reinterpret_cast<const uchar *>(value.c_str()),
       value.size());
     fieldOp_->setDictionaryValue(decoder, value);
@@ -321,7 +321,7 @@ FieldInstructionAscii::decodeTail(
       std::string value(previousValue.substr(0, previousLength - tailLength) + tailValue);
       fieldSet.addValue(
         identity_,
-        Messages::Field::ASCII,
+        ValueType::ASCII,
         reinterpret_cast<const uchar *>(value.c_str()),
         value.size());
       fieldOp_->setDictionaryValue(decoder, value);
@@ -339,7 +339,7 @@ FieldInstructionAscii::decodeTail(
     {
       Messages::FieldCPtr field = Messages::FieldAscii::create(previousValue);
       fieldSet.addValue(identity_,
-        Messages::Field::ASCII,
+        ValueType::ASCII,
         reinterpret_cast<const uchar *>(previousValue.c_str()),
         previousValue.size());
     }
@@ -347,7 +347,7 @@ FieldInstructionAscii::decodeTail(
     {
       fieldSet.addValue(
         identity_,
-        Messages::Field::ASCII,
+        ValueType::ASCII,
         reinterpret_cast<const uchar *>(fieldOp_->getValue().c_str()),
         fieldOp_->getValue().size());
       fieldOp_->setDictionaryValue(decoder, fieldOp_->getValue());

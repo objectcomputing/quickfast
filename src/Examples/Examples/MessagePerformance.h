@@ -42,16 +42,16 @@ namespace QuickFAST{
 
       virtual const std::string & getApplicationType()const;
       virtual const std::string & getApplicationTypeNs()const;
-      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const int64 value);
-      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const uint64 value);
-      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const int32 value);
-      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const uint32 value);
-      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const int16 value);
-      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const uint16 value);
-      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const int8 value);
-      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const uchar value);
-      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const Decimal& value);
-      virtual void addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const unsigned char * value, size_t length);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int64 value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int32 value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int16 value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int8 value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uchar value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value);
+      virtual void addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length);
       virtual ValueMessageBuilder & startMessage(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,

@@ -10,13 +10,13 @@ using namespace ::QuickFAST::Messages;
 FieldCPtr FieldUInt16::nullField_ = new FieldUInt16;
 
 FieldUInt16::FieldUInt16(uint16 value)
-  : Field(Field::UINT16, true)
+  : Field(ValueType::UINT16, true)
 {
   unsignedInteger_ = value;
 }
 
 FieldUInt16::FieldUInt16()
-  : Field(Field::UINT16, false)
+  : Field(ValueType::UINT16, false)
 {
 }
 

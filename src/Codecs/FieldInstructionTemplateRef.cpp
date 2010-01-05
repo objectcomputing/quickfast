@@ -9,7 +9,7 @@
 #include <Codecs/TemplateRegistry.h>
 #include <Messages/ValueMessageBuilder.h>
 #include <Messages/Group.h>
-#include <Messages/FieldGroup.h>
+//#include <Messages/FieldGroup.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;

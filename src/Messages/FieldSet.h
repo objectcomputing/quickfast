@@ -10,7 +10,7 @@
 #include <Common/QuickFAST_Export.h>
 #include <Messages/MessageAccessor.h>
 #include <Messages/MessageField.h>
-#include <Messages/Field.h>
+//#include <Messages/Field.h>
 
 namespace QuickFAST{
   namespace Messages{
@@ -139,7 +139,7 @@ namespace QuickFAST{
       void getFieldInfo(
         size_t index,
         std::string & name,
-        Field::FieldType & type,
+        ValueType::Type & type,
         FieldCPtr & fieldPtr)const;
 
       bool equals(const FieldSet & rhs, std::ostream & reason) const;

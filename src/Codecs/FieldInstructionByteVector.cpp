@@ -11,7 +11,7 @@ using namespace ::QuickFAST::Codecs;
 FieldInstructionByteVector::FieldInstructionByteVector(
   const std::string & name,
   const std::string & fieldNamespace)
-  : FieldInstructionBlob(Messages::Field::BYTEVECTOR, name, fieldNamespace)
+  : FieldInstructionBlob(ValueType::BYTEVECTOR, name, fieldNamespace)
 {
   initialValue_ = Messages::FieldByteVector::createNull();
 }
@@ -24,7 +24,6 @@ FieldInstructionByteVector::FieldInstructionByteVector()
 FieldInstructionByteVector::~FieldInstructionByteVector()
 {
 }
-
 
 Messages::FieldCPtr
 FieldInstructionByteVector::createField(const uchar * buffer, size_t length)const

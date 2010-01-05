@@ -19,7 +19,7 @@ namespace QuickFAST{
       /// @brief Construct a NULL field
       FieldUInt32();
     public:
-      const static Field::FieldType fieldType = Field::UINT32;
+      const static ValueType::Type fieldType = ValueType::UINT32;
     public:
       /// @brief Construct the field from am uint32 value
       /// @param value the value to be stored in the field

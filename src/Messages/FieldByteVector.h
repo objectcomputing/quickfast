@@ -24,7 +24,7 @@ namespace QuickFAST{
       /// @brief Construct a NULL field (not an empty field)
       FieldByteVector();
     public:
-      const static Field::FieldType fieldType = Field::BYTEVECTOR;
+      const static ValueType::Type fieldType = ValueType::BYTEVECTOR;
 
     public:
       /// @brief Construct the field from a value in a std::string

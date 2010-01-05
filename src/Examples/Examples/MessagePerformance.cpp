@@ -6,7 +6,7 @@
 #include <Examples/ExamplesPch.h>
 #include "MessagePerformance.h"
 #include <Messages/Message.h>
-#include <Messages/Field.h>
+////////////#include <Messages/Field.h>
 #include <Messages/Sequence.h>
 #include <Messages/Group.h>
 
@@ -77,12 +77,12 @@ MessagePerformance::retrieveMessage(const Messages::Message & message)
   {
     const Messages::FieldIdentityCPtr & identity = it->getIdentity();
     const Messages::FieldCPtr & field = it->getField();
-    Messages::Field::FieldType type = field->getType();
-    if(type == Messages::Field::SEQUENCE)
+    ValueType::Type type = field->getType();
+    if(type == ValueType::SEQUENCE)
     {
       retrieveSequence(identity, field);
     }
-    else if(type == Messages::Field::GROUP)
+    else if(type == ValueType::GROUP)
     {
       retrieveGroup(field);
     }
@@ -112,12 +112,12 @@ MessagePerformance::retrieveSequence(
       // todo: refactor with message decoding
       const Messages::FieldIdentityCPtr & identity = fsit->getIdentity();
       const Messages::FieldCPtr & field = fsit->getField();
-      Messages::Field::FieldType type = field->getType();
-      if(type == Messages::Field::SEQUENCE)
+      ValueType::Type type = field->getType();
+      if(type == ValueType::SEQUENCE)
       {
         retrieveSequence(identity, field);
       }
-      else if(type == Messages::Field::GROUP)
+      else if(type == ValueType::GROUP)
       {
         retrieveGroup(field);
       }
@@ -139,12 +139,12 @@ MessagePerformance::retrieveGroup(const Messages::FieldCPtr & field)
   {
     const Messages::FieldIdentityCPtr & identity = fsit->getIdentity();
     const Messages::FieldCPtr & field = fsit->getField();
-    Messages::Field::FieldType type = field->getType();
-    if(type == Messages::Field::SEQUENCE)
+    ValueType::Type type = field->getType();
+    if(type == ValueType::SEQUENCE)
     {
       retrieveSequence(identity, field);
     }
-    else if(type == Messages::Field::GROUP)
+    else if(type == ValueType::GROUP)
     {
       retrieveGroup(field);
     }
@@ -162,49 +162,49 @@ MessagePerformance::retrieveFieldValue(const Messages::FieldCPtr & field)
 {
   switch(field->getType())
   {
-  case Messages::Field::INT32:
+  case ValueType::INT32:
     {
       volatile int32 value = field->toInt32();
       break;
     }
-  case Messages::Field::UINT32:
+  case ValueType::UINT32:
     {
       volatile uint32 value = field->toUInt32();
       break;
     }
-  case Messages::Field::INT64:
+  case ValueType::INT64:
     {
       volatile int64 value = field->toInt64();
       break;
     }
-  case Messages::Field::UINT64:
+  case ValueType::UINT64:
     {
       volatile uint64 value = field->toUInt64();
       break;
     }
-  case Messages::Field::DECIMAL:
+  case ValueType::DECIMAL:
     {
       volatile Decimal value = field->toDecimal();
       break;
     }
-  case Messages::Field::ASCII:
+  case ValueType::ASCII:
     {
       volatile std::string value = field->toAscii();
       break;
     }
-  case Messages::Field::UTF8:
+  case ValueType::UTF8:
     {
       volatile std::string value = field->toUtf8();
       break;
     }
-  case Messages::Field::BYTEVECTOR:
+  case ValueType::BYTEVECTOR:
     {
       // todo: we probably should hex dump this
       volatile std::string value = field->toByteVector();
       break;
     }
-  case Messages::Field::SEQUENCE:
-  case Messages::Field::GROUP:
+  case ValueType::SEQUENCE:
+  case ValueType::GROUP:
   default:
     {
       std::cerr << "unknown field type" << std::endl;
@@ -259,61 +259,61 @@ PerformanceBuilder::getApplicationTypeNs()const
 }
 
 void
-PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const int64 value)
+PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int64 value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const uint64 value)
+PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const int32 value)
+PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int32 value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const uint32 value)
+PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const int16 value)
+PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int16 value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const uint16 value)
+PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const int8 value)
+PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int8 value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const uchar value)
+PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uchar value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const Decimal& value)
+PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Messages::Field::FieldType type, const unsigned char * value, size_t length)
+PerformanceBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length)
 {
   ++fieldCount_;
 }

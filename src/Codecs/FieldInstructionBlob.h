@@ -21,7 +21,7 @@ namespace QuickFAST{
       /// @param name is the local name
       /// @param fieldNamespace is the namespace to qualify this name
       FieldInstructionBlob(
-        Messages::Field::FieldType type,
+        ValueType::Type type,
         const std::string & name,
         const std::string & fieldNamespace);
 
@@ -116,6 +116,7 @@ namespace QuickFAST{
       /// @brief create an empty field of the appropriate type
       /// @returns a pointer to the heap-allocated field
       virtual Messages::FieldCPtr createEmptyField()const = 0;
+
     protected:
       /// @brief interpret value set by the field operator at initialization time
       void interpretValue(const std::string & value);
@@ -141,7 +142,7 @@ namespace QuickFAST{
         WorkingBuffer & buffer,
         const std::string & value) const;
     protected:
-      Messages::Field::FieldType type_;
+      ValueType::Type type_;
       /// @brief a field of the appropriate type containing the intial value specified with the field Op
       Messages::FieldCPtr initialValue_;
       std::string initialString_;

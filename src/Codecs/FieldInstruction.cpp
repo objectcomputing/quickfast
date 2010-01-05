@@ -306,7 +306,7 @@ FieldInstruction::indexDictionaries(
   fieldOp_->indexDictionaries(
     indexer,
     dictionaryName,
-    typeName,
+   typeName,
     typeNamespace,
     identity_->getLocalName(),
     identity_->getNamespace());

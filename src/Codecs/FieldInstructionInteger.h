@@ -26,7 +26,7 @@ namespace QuickFAST{
     /// @brief A basic implementation for all integral types.
     ///
     /// Used for &lt;int32> &lt;uint32> &lt;int64> &lt;uint64> fields.
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     class FieldInstructionInteger : public FieldInstruction
     {
     public:
@@ -50,14 +50,12 @@ namespace QuickFAST{
       {
         typedValue_ = initialValue;
         typedValueIsDefined_ = true;
-        initialField_.reset(new FIELD_CLASS(typedValue_));
       }
 
       virtual void setDefaultValueIncrement()
       {
         typedValue_ = INTEGER_TYPE(1);
         typedValueIsDefined_ = true;
-        initialField_ = FIELD_CLASS::create(typedValue_);
       }
 
       virtual bool decodeNop(
@@ -145,45 +143,42 @@ namespace QuickFAST{
         const Messages::MessageAccessor & fieldSet) const;
 
     private:
-      FieldInstructionInteger(const FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED> &);
-      FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED> & operator=(const FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED> &);
+      FieldInstructionInteger(const FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED> &);
+      FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED> & operator=(const FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED> &);
 
     private:
       INTEGER_TYPE typedValue_;
       bool typedValueIsDefined_;
-      Messages::FieldCPtr initialField_;
     };
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     FieldInstructionInteger(
           const std::string & name,
           const std::string & fieldNamespace)
       : FieldInstruction(name, fieldNamespace)
       , typedValue_(INTEGER_TYPE(0))
       , typedValueIsDefined_(false)
-      , initialField_(FIELD_CLASS::create(0))
     {
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     FieldInstructionInteger()
       : typedValue_(INTEGER_TYPE(0))
       , typedValueIsDefined_(false)
-      , initialField_(FIELD_CLASS::create(0))
     {
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     ~FieldInstructionInteger()
     {
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     void
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     interpretValue(const std::string & value)
     {
       if(value.empty())
@@ -214,12 +209,11 @@ namespace QuickFAST{
           typedValueIsDefined_ = true;
         }
       }
-      initialField_ = FIELD_CLASS::create(typedValue_);
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     bool
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeNop(
       Codecs::DataSource & source,
       Codecs::PresenceMap & /*pmap*/,
@@ -243,7 +237,7 @@ namespace QuickFAST{
       {
         fieldSet.addValue(
           identity_,
-          FIELD_CLASS::fieldType,
+          VALUE_TYPE,
           value);
       }
       else
@@ -253,16 +247,16 @@ namespace QuickFAST{
         {
           fieldSet.addValue(
             identity_,
-            FIELD_CLASS::fieldType,
+            VALUE_TYPE,
             value);
         }
       }
       return true;
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     bool
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeConstant(
       Codecs::DataSource & /*source*/,
       Codecs::PresenceMap & pmap,
@@ -278,15 +272,15 @@ namespace QuickFAST{
       {
         fieldSet.addValue(
           identity_,
-          FIELD_CLASS::fieldType,
+          VALUE_TYPE,
           typedValue_);
       }
       return true;
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     bool
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeCopy(
       Codecs::DataSource & source,
       Codecs::PresenceMap & pmap,
@@ -296,9 +290,9 @@ namespace QuickFAST{
       return decodeCopy(source, pmap.checkNextField(), decoder, fieldSet);
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     bool
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeCopy(
         Codecs::DataSource & source,
         bool pmapValue,
@@ -323,7 +317,7 @@ namespace QuickFAST{
         {
           fieldSet.addValue(
             identity_,
-            FIELD_CLASS::fieldType,
+            VALUE_TYPE,
             value);
           fieldOp_->setDictionaryValue(decoder, value);
         }
@@ -338,7 +332,7 @@ namespace QuickFAST{
           {
             fieldSet.addValue(
               identity_,
-              FIELD_CLASS::fieldType,
+              VALUE_TYPE,
               value);
             fieldOp_->setDictionaryValue(decoder, value);
           }
@@ -352,7 +346,7 @@ namespace QuickFAST{
         {
           fieldSet.addValue(
             identity_,
-            FIELD_CLASS::fieldType,
+            VALUE_TYPE,
             previousValue);
         }
         else
@@ -363,7 +357,7 @@ namespace QuickFAST{
           {
             fieldSet.addValue(
               identity_,
-              FIELD_CLASS::fieldType,
+              VALUE_TYPE,
               typedValue_);
             fieldOp_->setDictionaryValue(decoder, typedValue_);
           }
@@ -377,7 +371,7 @@ namespace QuickFAST{
                 *identity_);
               fieldSet.addValue(
                 identity_,
-                FIELD_CLASS::fieldType,
+                VALUE_TYPE,
                 INTEGER_TYPE(0));
               fieldOp_->setDictionaryValue(decoder, INTEGER_TYPE(0));
             }
@@ -387,9 +381,9 @@ namespace QuickFAST{
       return true;
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     bool
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeDefault(
       Codecs::DataSource & source,
       Codecs::PresenceMap & pmap,
@@ -406,7 +400,7 @@ namespace QuickFAST{
         {
           fieldSet.addValue(
             identity_,
-            FIELD_CLASS::fieldType,
+            VALUE_TYPE,
             value);
         }
         else
@@ -416,7 +410,7 @@ namespace QuickFAST{
             PROFILE_POINT("int::decodeDefault:,addexplicit");
             fieldSet.addValue(
               identity_,
-              FIELD_CLASS::fieldType,
+              VALUE_TYPE,
               value);
           }
         }
@@ -429,7 +423,7 @@ namespace QuickFAST{
           PROFILE_POINT("int::decodeDefault:adddefault");
           fieldSet.addValue(
             identity_,
-            FIELD_CLASS::fieldType,
+            VALUE_TYPE,
             typedValue_);
         }
         else if(isMandatory())
@@ -440,9 +434,9 @@ namespace QuickFAST{
       return true;
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     bool
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeDelta(
       Codecs::DataSource & source,
       Codecs::PresenceMap & /*pmap*/,
@@ -474,7 +468,7 @@ namespace QuickFAST{
       // Save the results
       fieldSet.addValue(
         identity_,
-        FIELD_CLASS::fieldType,
+        VALUE_TYPE,
         value);
       fieldOp_->setDictionaryValue(decoder, value);
 
@@ -482,9 +476,9 @@ namespace QuickFAST{
     }
 
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     bool
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeIncrement(
       Codecs::DataSource & source,
       Codecs::PresenceMap & pmap,
@@ -494,9 +488,9 @@ namespace QuickFAST{
       return decodeIncrement(source, pmap.checkNextField(), decoder, fieldSet);
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     bool
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeIncrement(
         Codecs::DataSource & source,
         bool pmapValue,
@@ -520,7 +514,7 @@ namespace QuickFAST{
         {
           fieldSet.addValue(
             identity_,
-            FIELD_CLASS::fieldType,
+            VALUE_TYPE,
             value);
           fieldOp_->setDictionaryValue(decoder, value);
         }
@@ -532,7 +526,7 @@ namespace QuickFAST{
           {
             fieldSet.addValue(
               identity_,
-              FIELD_CLASS::fieldType,
+              VALUE_TYPE,
               value);
           fieldOp_->setDictionaryValue(decoder, value);
           }
@@ -569,16 +563,16 @@ namespace QuickFAST{
         }
         fieldSet.addValue(
           identity_,
-          FIELD_CLASS::fieldType,
+          VALUE_TYPE,
           value);
         fieldOp_->setDictionaryValue(decoder, value);
       }
       return true;
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     void
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     encodeNop(
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & /*pmap*/,
@@ -630,9 +624,9 @@ namespace QuickFAST{
       }
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     void
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     encodeConstant(
       Codecs::DataDestination & /*destination*/,
       Codecs::PresenceMap & pmap,
@@ -665,9 +659,9 @@ namespace QuickFAST{
       }
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     void
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     encodeDefault(
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & pmap,
@@ -724,9 +718,9 @@ namespace QuickFAST{
       }
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     void
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     encodeCopy(
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & pmap,
@@ -768,7 +762,7 @@ namespace QuickFAST{
         previousNotNull = true;
         previousValue = typedValue_;
 #if 0
-        fieldOp_->setDictionaryValue(encoder, FIELD_CLASS::create(previousValue));
+        fieldOp_->setDictionaryValue(encoder, VALUE_TYPE::create(previousValue));
 #else
         fieldOp_->setDictionaryValue(encoder, typedValue_);
 #endif
@@ -807,7 +801,7 @@ namespace QuickFAST{
             encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), nullableValue);
           }
 #if 0
-          field = FIELD_CLASS::create(value);
+          field = VALUE_TYPE::create(value);
           fieldOp_->setDictionaryValue(encoder, field);
 #else
           fieldOp_->setDictionaryValue(encoder, value);
@@ -833,7 +827,7 @@ namespace QuickFAST{
             pmap.setNextField(true);// value in stream
             destination.putByte(nullInteger);
 #if 0
-            field = FIELD_CLASS::createNull();
+            field = VALUE_TYPE::createNull();
             fieldOp_->setDictionaryValue(encoder, field);
 #else
             fieldOp_->setDictionaryValueNull(encoder);
@@ -848,9 +842,9 @@ namespace QuickFAST{
       }
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     void
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     encodeDelta(
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & /*pmap*/,
@@ -895,7 +889,7 @@ namespace QuickFAST{
         previousNotNull;
         previousValue = typedValue_;
 #if 0
-        fieldOp_->setDictionaryValue(encoder, FIELD_CLASS::create(previousValue));
+        fieldOp_->setDictionaryValue(encoder, VALUE_TYPE::create(previousValue));
 #else
         fieldOp_->setDictionaryValue(encoder, typedValue_);
 #endif
@@ -920,7 +914,7 @@ namespace QuickFAST{
         if(!previousIsKnown  || value != previousValue)
         {
 #if 0
-          field = FIELD_CLASS::create(value);
+          field = VALUE_TYPE::create(value);
           fieldOp_->setDictionaryValue(encoder, field);
 #else
           fieldOp_->setDictionaryValue(encoder, value);
@@ -943,9 +937,9 @@ namespace QuickFAST{
       }
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     void
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     encodeIncrement(
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & pmap,
@@ -993,7 +987,7 @@ namespace QuickFAST{
         // the increment will produce cause the initial value to be sent.
         previousValue = typedValue_ - 1;
 #if 0
-        fieldOp_->setDictionaryValue(encoder, FIELD_CLASS::create(previousValue));
+        fieldOp_->setDictionaryValue(encoder, VALUE_TYPE::create(previousValue));
 #else
         fieldOp_->setDictionaryValue(encoder, previousValue);
 #endif
@@ -1033,7 +1027,7 @@ namespace QuickFAST{
           }
         }
 #if 0
-        field = FIELD_CLASS::create(value);
+        field = VALUE_TYPE::create(value);
         fieldOp_->setDictionaryValue(encoder, field);
 #else
         fieldOp_->setDictionaryValue(encoder, value);
@@ -1058,7 +1052,7 @@ namespace QuickFAST{
             pmap.setNextField(true);// value in stream
             destination.putByte(nullInteger);
 #if 0
-            field = FIELD_CLASS::createNull();
+            field = VALUE_TYPE::createNull();
             fieldOp_->setDictionaryValue(encoder, field);
 #else
             fieldOp_->setDictionaryValueNull(encoder);

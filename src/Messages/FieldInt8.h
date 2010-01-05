@@ -24,7 +24,7 @@ namespace QuickFAST
       /// @brief Construct a NULL field
       FieldInt8();
     public:
-      const static Field::FieldType fieldType = Field::INT8;
+      const static ValueType::Type fieldType = ValueType::INT8;
     public:
       /// @brief Construct the field from am int8 value
       /// @param value the value to be stored in the field

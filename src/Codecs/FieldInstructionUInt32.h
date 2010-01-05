@@ -7,12 +7,12 @@
 #ifndef FIELDINSTRUCTIONUINT32_H
 #define FIELDINSTRUCTIONUINT32_H
 #include <Codecs/FieldInstructionInteger.h>
-#include <Messages/FieldUInt32.h>
+//#include <Messages/FieldUInt32.h>
 
 namespace QuickFAST{
   namespace Codecs{
     /// @brief An implementation for the &lt;uint32> field instruction.
-    typedef FieldInstructionInteger<uint32, Messages::FieldUInt32, false> FieldInstructionUInt32;
+    typedef FieldInstructionInteger<uint32, ValueType::UINT32, false> FieldInstructionUInt32;
   }
 }
 #endif // FIELDINSTRUCTIONUINT32_H

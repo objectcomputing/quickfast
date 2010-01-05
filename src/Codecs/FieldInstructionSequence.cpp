@@ -195,6 +195,6 @@ FieldInstructionSequence::indexDictionaries(
   const std::string & typeName,
   const std::string & typeNamespace)
 {
-  segment_->indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
+  segment_->indexDictionaries(indexer, dictionaryName,typeName, typeNamespace);
 }
 

@@ -7,15 +7,12 @@
 #ifndef FIELDINSTRUCTIONINT64_H
 #define FIELDINSTRUCTIONINT64_H
 #include <Codecs/FieldInstructionInteger.h>
-#include <Messages/FieldInt64.h>
+//#include <Messages/FieldInt64.h>
 
 namespace QuickFAST{
   namespace Codecs{
     /// @brief An implementation for the &lt;int64> field instruction.
-    typedef FieldInstructionInteger<
-      int64,
-      Messages::FieldInt64,
-      true> FieldInstructionInt64;
+    typedef FieldInstructionInteger<int64, ValueType::INT64, true> FieldInstructionInt64;
   }
 }
 #endif // FIELDINSTRUCTIONINT64_H

@@ -21,7 +21,7 @@ namespace QuickFAST{
       FieldInt32();
 
     public:
-      const static Field::FieldType fieldType = Field::INT32;
+      const static ValueType::Type fieldType = ValueType::INT32;
 
     public:
       /// @brief Construct the field from am int32 value

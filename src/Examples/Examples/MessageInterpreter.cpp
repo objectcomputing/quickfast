@@ -6,7 +6,7 @@
 #include <Examples/ExamplesPch.h>
 #include "MessageInterpreter.h"
 #include <Messages/Message.h>
-#include <Messages/Field.h>
+////////////#include <Messages/Field.h>
 #include <Messages/Sequence.h>
 #include <Messages/Group.h>
 
@@ -92,12 +92,12 @@ MessageInterpreter::formatMessage(const Messages::Message & message)
   {
     const Messages::FieldIdentityCPtr & identity = it->getIdentity();
     const Messages::FieldCPtr & field = it->getField();
-    Messages::Field::FieldType type = field->getType();
-    if(type == Messages::Field::SEQUENCE)
+    ValueType::Type type = field->getType();
+    if(type == ValueType::SEQUENCE)
     {
       formatSequence(identity, field);
     }
-    else if(type == Messages::Field::GROUP)
+    else if(type == ValueType::GROUP)
     {
       formatGroup(field);
     }
@@ -146,12 +146,12 @@ MessageInterpreter::formatSequence(
       // todo: refactor with message decoding
       const Messages::FieldIdentityCPtr & identity = fsit->getIdentity();
       const Messages::FieldCPtr & field = fsit->getField();
-      Messages::Field::FieldType type = field->getType();
-      if(type == Messages::Field::SEQUENCE)
+      ValueType::Type type = field->getType();
+      if(type == ValueType::SEQUENCE)
       {
         formatSequence(identity, field);
       }
-      else if(type == Messages::Field::GROUP)
+      else if(type == ValueType::GROUP)
       {
         formatGroup(field);
       }
@@ -177,12 +177,12 @@ MessageInterpreter::formatGroup(const Messages::FieldCPtr & field)
     // todo: refactor with message decoding
     const Messages::FieldIdentityCPtr & identity = fsit->getIdentity();
     const Messages::FieldCPtr & field = fsit->getField();
-    Messages::Field::FieldType type = field->getType();
-    if(type == Messages::Field::SEQUENCE)
+    ValueType::Type type = field->getType();
+    if(type == ValueType::SEQUENCE)
     {
       formatSequence(identity, field);
     }
-    else if(type == Messages::Field::GROUP)
+    else if(type == ValueType::GROUP)
     {
       formatGroup(field);
     }
@@ -201,47 +201,47 @@ MessageInterpreter::displayFieldValue(const Messages::FieldCPtr & field)
 {
   switch(field->getType())
   {
-  case Messages::Field::INT32:
+  case ValueType::INT32:
     out_ << field->toInt32();
     break;
-  case Messages::Field::UINT32:
+  case ValueType::UINT32:
     out_ << field->toUInt32();
     break;
-  case Messages::Field::INT64:
+  case ValueType::INT64:
     out_ << field->toInt64();
     break;
-  case Messages::Field::UINT64:
+  case ValueType::UINT64:
     out_ << field->toUInt64();
     break;
-  case Messages::Field::DECIMAL:
+  case ValueType::DECIMAL:
     {
       std::string value;
       field->toDecimal().toString(value);
       out_ << value;
       break;
     }
-  case Messages::Field::ASCII:
+  case ValueType::ASCII:
     {
       out_ << field->toAscii();
       break;
     }
-  case Messages::Field::UTF8:
+  case ValueType::UTF8:
     {
       out_ << field->toUtf8();
       break;
     }
-  case Messages::Field::BYTEVECTOR:
+  case ValueType::BYTEVECTOR:
     {
       // todo: we probably should hex dump this
       out_ << field->toByteVector();
       break;
     }
-  case Messages::Field::SEQUENCE:
+  case ValueType::SEQUENCE:
     {
       out_ << "sequence";
       break;
     }
-  case Messages::Field::GROUP:
+  case ValueType::GROUP:
     {
       static const std::string sts("group");
       out_ << "group";

@@ -9,13 +9,13 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldInt32::FieldInt32(int32 value)
-  : Field(Field::INT32, true)
+  : Field(ValueType::INT32, true)
 {
   signedInteger_ = value;
 }
 
 FieldInt32::FieldInt32()
-  : Field(Field::INT32, false)
+  : Field(ValueType::INT32, false)
 {
 }
 

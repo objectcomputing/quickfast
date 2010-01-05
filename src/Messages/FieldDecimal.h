@@ -26,7 +26,7 @@ namespace QuickFAST{
       FieldDecimal(mantissa_t mantissa, exponent_t exponent);
 
     public:
-      const static Field::FieldType fieldType = Field::DECIMAL;
+      const static ValueType::Type fieldType = ValueType::DECIMAL;
 
     public:
       /// @brief Construct the field from a Decimal value

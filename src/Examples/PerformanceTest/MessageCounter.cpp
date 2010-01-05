@@ -6,7 +6,7 @@
 #include <Examples/ExamplesPch.h>
 #include "MessageCounter.h"
 #include <Messages/Message.h>
-#include <Messages/Field.h>
+//#include <Messages/Field.h>
 #include <Messages/Sequence.h>
 #include <Messages/Group.h>
 

@@ -178,7 +178,7 @@ namespace QuickFAST{
       /// @brief Assign a dictionary index to this field and any subfields.
       /// @param indexer assigns the index.
       /// @param dictionaryName is the parent's dictionary name (inherited unless overridden)
-      /// @param typeName is the application type for this instruction
+      /// @paramtypeName is the application type for this instruction
       /// @param typeNamespace is the namespace to qualify the application type.
       virtual void indexDictionaries(
         DictionaryIndexer & indexer,

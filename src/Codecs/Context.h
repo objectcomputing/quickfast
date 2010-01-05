@@ -13,7 +13,7 @@
 #include <Common/WorkingBuffer.h>
 #include <Codecs/TemplateRegistry_fwd.h>
 #include <Codecs/Template_fwd.h>
-#include <Messages/Field_fwd.h>
+//#include <Messages/Field_fwd.h>
 #include <Messages/FieldIdentity_fwd.h>
 
 namespace QuickFAST{

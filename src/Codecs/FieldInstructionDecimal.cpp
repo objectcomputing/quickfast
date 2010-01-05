@@ -9,6 +9,8 @@
 #include <Codecs/FieldInstructionExponent.h>
 #include <Messages/SpecialAccessors.h>
 #include <Messages/FieldDecimal.h>
+#include <Messages/FieldInt32.h>
+#include <Messages/FieldInt64.h>
 #include <Common/Decimal.h>
 #include <Messages/SingleValueBuilder.h>
 
@@ -84,7 +86,7 @@ FieldInstructionDecimal::decodeNop(
     }
 
     Decimal value(mantissa, exponent, false);
-    accessor.addValue(identity_, Messages::Field::DECIMAL, value);
+    accessor.addValue(identity_, ValueType::DECIMAL, value);
   }
   else
   {
@@ -102,7 +104,7 @@ FieldInstructionDecimal::decodeNop(
     Decimal value(mantissa, exponent);
     accessor.addValue(
       identity_,
-      Messages::Field::DECIMAL,
+      ValueType::DECIMAL,
       value);
   }
   return true;
@@ -120,7 +122,7 @@ FieldInstructionDecimal::decodeConstant(
   {
     accessor.addValue(
       identity_,
-      Messages::Field::DECIMAL,
+      ValueType::DECIMAL,
       typedValue_);
   }
   return true;
@@ -150,7 +152,7 @@ FieldInstructionDecimal::decodeDefault(
     Decimal value(mantissa, exponent);
     accessor.addValue(
       identity_,
-      Messages::Field::DECIMAL,
+      ValueType::DECIMAL,
       value);
   }
   else // field not in stream
@@ -159,7 +161,7 @@ FieldInstructionDecimal::decodeDefault(
     {
       accessor.addValue(
         identity_,
-        Messages::Field::DECIMAL,
+        ValueType::DECIMAL,
         typedValue_);
     }
     else if(isMandatory())
@@ -189,7 +191,7 @@ FieldInstructionDecimal::decodeCopy(
       Decimal value(mantissa, exponent, false);
       accessor.addValue(
         identity_,
-        Messages::Field::DECIMAL,
+        ValueType::DECIMAL,
         value);
 #if 0
       fieldOp_->setDictionaryValue(decoder, newField);
@@ -210,7 +212,7 @@ FieldInstructionDecimal::decodeCopy(
         Decimal value(mantissa, exponent, false);
         accessor.addValue(
           identity_,
-          Messages::Field::DECIMAL,
+          ValueType::DECIMAL,
           value);
         fieldOp_->setDictionaryValue(decoder, value);
       }
@@ -224,7 +226,7 @@ FieldInstructionDecimal::decodeCopy(
     {
       accessor.addValue(
         identity_,
-        Messages::Field::DECIMAL,
+        ValueType::DECIMAL,
         value);
     }
     else
@@ -235,7 +237,7 @@ FieldInstructionDecimal::decodeCopy(
       {
         accessor.addValue(
           identity_,
-          Messages::Field::DECIMAL,
+          ValueType::DECIMAL,
           typedValue_);
         fieldOp_->setDictionaryValue(decoder, typedValue_);
       }
@@ -278,7 +280,7 @@ FieldInstructionDecimal::decodeDelta(
   value.setMantissa(mantissa_t(value.getMantissa() + mantissaDelta));
   accessor.addValue(
     identity_,
-    Messages::Field::DECIMAL,
+    ValueType::DECIMAL,
     value);
   fieldOp_->setDictionaryValue(decoder, value);
   return true;
@@ -487,7 +489,7 @@ FieldInstructionDecimal::encodeCopy(
   Messages::FieldCPtr previousField;
   if(fieldOp_->findDictionaryField(encoder, previousField))
   {
-    if(!previousField->isType(Messages::Field::DECIMAL))
+    if(!previousField->isType(ValueType::DECIMAL))
     {
       encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
     }
@@ -606,7 +608,7 @@ FieldInstructionDecimal::encodeDelta(
   Messages::FieldCPtr previousField;
   if(fieldOp_->findDictionaryField(encoder, previousField))
   {
-    if(!previousField->isType(Messages::Field::DECIMAL))
+    if(!previousField->isType(ValueType::DECIMAL))
     {
       encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
     }
@@ -697,11 +699,11 @@ FieldInstructionDecimal::indexDictionaries(
   const std::string & typeName,
   const std::string & typeNamespace)
 {
-  FieldInstruction::indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
+  FieldInstruction::indexDictionaries(indexer, dictionaryName,typeName, typeNamespace);
   if(bool(exponentInstruction_))
   {
-    exponentInstruction_->indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
-    mantissaInstruction_->indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
+    exponentInstruction_->indexDictionaries(indexer, dictionaryName,typeName, typeNamespace);
+    mantissaInstruction_->indexDictionaries(indexer, dictionaryName,typeName, typeNamespace);
   }
 }
 

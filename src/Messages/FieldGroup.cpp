@@ -9,7 +9,7 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldGroup::FieldGroup(Messages::GroupCPtr group)
-  : Field(Field::GROUP, true)
+  : Field(ValueType::GROUP, true)
   , group_(group)
 {
 }

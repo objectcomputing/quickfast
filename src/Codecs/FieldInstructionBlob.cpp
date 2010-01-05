@@ -14,7 +14,7 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
 
 FieldInstructionBlob::FieldInstructionBlob(
-  Messages::Field::FieldType type,
+  ValueType::Type type,
   const std::string & name,
   const std::string & fieldNamespace)
   : type_(type)

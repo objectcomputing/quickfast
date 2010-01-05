@@ -8,7 +8,7 @@
 #define FIELDIDENTITY_H
 #include "FieldIdentity_fwd.h"
 #include <Common/Types.h>
-#include <Messages/Field_fwd.h>
+//#include <Messages/Field_fwd.h>
 
 namespace QuickFAST{
   namespace Messages{

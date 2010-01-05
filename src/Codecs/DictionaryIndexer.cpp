@@ -41,7 +41,7 @@ DictionaryIndexer::getIndex(
   {
     return getDictionaryIndex(
       typeNames_,
-      typeNamespace + '\t' + typeName + '\t' + keyNamespace + '\t' + key);
+      typeNamespace + '\t' +typeName + '\t' + keyNamespace + '\t' + key);
   }
   else if(dictionaryName == "template")
   {
