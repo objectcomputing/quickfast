@@ -36,6 +36,7 @@
 #include <Codecs/DictionaryIndexer.h>
 #include <Codecs/TemplateRegistry.h>
 #include <Messages/FieldSet.h>
+#include <Messages/FieldUInt32.h>
 #include <Tests/FieldInstructionMock.h>
 #include <Tests/DataDestinationMock.h>
 
@@ -200,7 +201,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_1_1)
   // should generate 1 field
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
   BOOST_CHECK(pFieldEntry != fieldSet1.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   // the value should be the constant zero
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 0);
   ++pFieldEntry;
@@ -271,7 +272,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_1_2)
 
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
   BOOST_CHECK(pFieldEntry != fieldSet1.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::INT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::INT32));
   // the value should be the constant zero
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toInt32(), 0);
   ++pFieldEntry;
@@ -348,7 +349,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_2_1)
   fieldSet1.swap(consumer.message());
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
   BOOST_CHECK(pFieldEntry != fieldSet1.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::INT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::INT32));
   // the value should be the constant zero
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toInt32(), 0);
   ++pFieldEntry;
@@ -363,7 +364,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_2_1)
 
   pFieldEntry = fieldSet2.begin();
   BOOST_CHECK(pFieldEntry != fieldSet2.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::INT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::INT32));
   // the value should be the explicit 1
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toInt32(), 1);
   ++pFieldEntry;
@@ -505,19 +506,19 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_3_1)
   BOOST_CHECK_EQUAL(fieldSet1.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
   BOOST_CHECK(pFieldEntry != fieldSet1.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::ASCII));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toAscii(), "CME");
 
   BOOST_CHECK_EQUAL(fieldSet2.size(), 1);
   pFieldEntry = fieldSet2.begin();
   BOOST_CHECK(pFieldEntry != fieldSet2.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::ASCII));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toAscii(), "CME");
 
   BOOST_CHECK_EQUAL(fieldSet3.size(), 1);
   pFieldEntry = fieldSet3.begin();
   BOOST_CHECK(pFieldEntry != fieldSet3.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::ASCII));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toAscii(), "ISE");
 
   // Now reencode the data
@@ -620,7 +621,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_3_2)
   BOOST_CHECK_EQUAL(fieldSet3.size(), 1);
 
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet3.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::ASCII));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toAscii(), "CME");
 
   // Now reencode the data
@@ -712,22 +713,22 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_4_1)
   // should generate 4 fields; one in each fieldset
   BOOST_CHECK_EQUAL(fieldSet1.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 1);
 
   BOOST_CHECK_EQUAL(fieldSet2.size(), 1);
   pFieldEntry = fieldSet2.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 2);
 
   BOOST_CHECK_EQUAL(fieldSet3.size(), 1);
   pFieldEntry = fieldSet3.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 4);
 
   BOOST_CHECK_EQUAL(fieldSet4.size(), 1);
   pFieldEntry = fieldSet4.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 5);
 
   // Now reencode the data
@@ -812,22 +813,22 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_1)
 
   BOOST_CHECK_EQUAL(fieldSet1.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 942755);
 
   BOOST_CHECK_EQUAL(fieldSet2.size(), 1);
   pFieldEntry = fieldSet2.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 942750);
 
   BOOST_CHECK_EQUAL(fieldSet3.size(), 1);
   pFieldEntry = fieldSet3.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 942745);
 
   BOOST_CHECK_EQUAL(fieldSet4.size(), 1);
   pFieldEntry = fieldSet4.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 942745);
 
   // Now reencode the data
@@ -909,19 +910,19 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_2)
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
   Decimal expectA(942755,-2);
   BOOST_CHECK(pFieldEntry != fieldSet1.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expectA);
 
   BOOST_CHECK_EQUAL(fieldSet2.size(), 1);
   pFieldEntry = fieldSet2.begin();
   Decimal expectB(942751,-2);
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expectB);
 
   BOOST_CHECK_EQUAL(fieldSet3.size(), 1);
   pFieldEntry = fieldSet3.begin();
   Decimal expectC(942746,-2);
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expectC);
 
   // Now reencode the data
@@ -1002,20 +1003,20 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_3)
   BOOST_CHECK_EQUAL(fieldSet1.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
   Decimal expectB(12100);
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expectB);
 
 
   BOOST_CHECK_EQUAL(fieldSet2.size(), 1);
   pFieldEntry = fieldSet2.begin();
   Decimal expectC(12150);
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expectC);
 
   BOOST_CHECK_EQUAL(fieldSet3.size(), 1);
   pFieldEntry = fieldSet3.begin();
   Decimal expectD(12200);
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expectD);
 
   // Now reencode the data
@@ -1104,22 +1105,22 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_4)
   BOOST_CHECK_EQUAL(fieldSet1.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
   BOOST_CHECK(pFieldEntry != fieldSet1.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::ASCII));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toAscii(), "GEH6");
 
   BOOST_CHECK_EQUAL(fieldSet2.size(), 1);
   pFieldEntry = fieldSet2.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::ASCII));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toAscii(), "GEM6");
 
   BOOST_CHECK_EQUAL(fieldSet3.size(), 1);
   pFieldEntry = fieldSet3.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::ASCII));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toAscii(), "ESM6");
 
   BOOST_CHECK_EQUAL(fieldSet4.size(), 1);
   pFieldEntry = fieldSet4.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::ASCII));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toAscii(), "RSESM6");
 
   // Now reencode the data
@@ -1203,17 +1204,17 @@ BOOST_AUTO_TEST_CASE(testAsciiTailMandatory)
   BOOST_CHECK_EQUAL(fieldSet1.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
   BOOST_CHECK(pFieldEntry != fieldSet1.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::ASCII));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toAscii(), "GEH6");
 
   BOOST_CHECK_EQUAL(fieldSet2.size(), 1);
   pFieldEntry = fieldSet2.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::ASCII));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toAscii(), "GEM6");
 
   BOOST_CHECK_EQUAL(fieldSet3.size(), 1);
   pFieldEntry = fieldSet3.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::ASCII));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toAscii(), "GEM6");
 
   // Now reencode the data
@@ -1315,13 +1316,13 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_6) // SPEC ERROR: _3 s/b _1
 
   BOOST_CHECK_EQUAL(fieldSet1.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   Decimal expectedA(942755, -2);
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expectedA);
 
 
   pFieldEntry = fieldSet2.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   Decimal expectedB(942760, -2);
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expectedB);
 
@@ -1405,19 +1406,19 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Copy_Mandatory)
   BOOST_CHECK_EQUAL(fieldSet1.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
   BOOST_CHECK(pFieldEntry != fieldSet1.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UTF8));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UTF8));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUtf8(), "CME");
 
   BOOST_CHECK_EQUAL(fieldSet2.size(), 1);
   pFieldEntry = fieldSet2.begin();
   BOOST_CHECK(pFieldEntry != fieldSet2.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UTF8));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UTF8));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUtf8(), "CME");
 
   BOOST_CHECK_EQUAL(fieldSet3.size(), 1);
   pFieldEntry = fieldSet3.begin();
   BOOST_CHECK(pFieldEntry != fieldSet3.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UTF8));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UTF8));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUtf8(), "ISE");
 
   // Now reencode the data
@@ -1521,7 +1522,7 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Copy_optional)
   BOOST_CHECK_EQUAL(fieldSet3.size(), 1);
 
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet3.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UTF8));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UTF8));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUtf8(), "CME");
 
   // Now reencode the data
@@ -1610,22 +1611,22 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Delta_Mandatory)
   BOOST_CHECK_EQUAL(fieldSet1.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
   BOOST_CHECK(pFieldEntry != fieldSet1.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UTF8));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UTF8));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUtf8(), "GEH6");
 
   BOOST_CHECK_EQUAL(fieldSet2.size(), 1);
   pFieldEntry = fieldSet2.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UTF8));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UTF8));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUtf8(), "GEM6");
 
   BOOST_CHECK_EQUAL(fieldSet3.size(), 1);
   pFieldEntry = fieldSet3.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UTF8));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UTF8));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUtf8(), "ESM6");
 
   BOOST_CHECK_EQUAL(fieldSet4.size(), 1);
   pFieldEntry = fieldSet4.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UTF8));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UTF8));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUtf8(), "RSESM6");
 
   // Now reencode the data
@@ -1709,17 +1710,17 @@ BOOST_AUTO_TEST_CASE(testUtf8_Tail_Mandatory)
   BOOST_CHECK_EQUAL(fieldSet1.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
   BOOST_CHECK(pFieldEntry != fieldSet1.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UTF8));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UTF8));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUtf8(), "GEH6");
 
   BOOST_CHECK_EQUAL(fieldSet2.size(), 1);
   pFieldEntry = fieldSet2.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UTF8));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UTF8));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUtf8(), "GEM6");
 
   BOOST_CHECK_EQUAL(fieldSet3.size(), 1);
   pFieldEntry = fieldSet3.begin();
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UTF8));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UTF8));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUtf8(), "GEM6");
 
   // Now reencode the data
@@ -1779,7 +1780,7 @@ BOOST_AUTO_TEST_CASE(test_issue_30)
   fieldSet1.swap(consumer.message());
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
   BOOST_CHECK(pFieldEntry != fieldSet1.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   // the value should be the one
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 1);
   ++pFieldEntry;
@@ -1803,7 +1804,7 @@ BOOST_AUTO_TEST_CASE(test_issue_30)
   fieldSet3.swap(consumer.message());
   pFieldEntry = fieldSet3.begin();
   BOOST_CHECK(pFieldEntry != fieldSet3.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   // the value should be the zero
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 0);
   ++pFieldEntry;

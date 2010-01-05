@@ -3,7 +3,7 @@
 // See the file license.txt for licensing information.
 #include <Common/QuickFASTPch.h>
 #include "Message.h"
-#include <Messages/Field.h>
+//#include <Messages/Field.h>
 #include <Common/Exceptions.h>
 
 using namespace ::QuickFAST;

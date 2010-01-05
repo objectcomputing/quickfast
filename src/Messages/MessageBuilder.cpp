@@ -21,62 +21,62 @@ using namespace QuickFAST;
 using namespace Messages;
 ////////////////////////////////
 // Implement ValueMessageBuilder
-void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Field::FieldType type, const int64 value)
+void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int64 value)
 {
   FieldCPtr field(FieldInt64::create(value));
   addField(identity, field);
 }
-void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Field::FieldType type, const uint64 value)
+void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value)
 {
   FieldCPtr field(FieldUInt64::create(value));
   addField(identity, field);
 }
-void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Field::FieldType type, const int32 value)
+void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int32 value)
 {
   FieldCPtr field(FieldInt32::create(value));
   addField(identity, field);
 }
-void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Field::FieldType type, const uint32 value)
+void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value)
 {
   FieldCPtr field(FieldUInt32::create(value));
   addField(identity, field);
 }
-void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Field::FieldType type, const int16 value)
+void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int16 value)
 {
   FieldCPtr field(FieldInt16::create(value));
   addField(identity, field);
 }
-void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Field::FieldType type, const uint16 value)
+void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value)
 {
   FieldCPtr field(FieldUInt16::create(value));
   addField(identity, field);
 }
-void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Field::FieldType type, const int8 value)
+void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int8 value)
 {
   FieldCPtr field(FieldInt8::create(value));
   addField(identity, field);
 }
-void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Field::FieldType type, const uchar value)
+void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uchar value)
 {
   FieldCPtr field(FieldUInt8::create(value));
   addField(identity, field);
 }
-void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Field::FieldType type, const Decimal& value)
+void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value)
 {
   FieldCPtr field(FieldDecimal::create(value));
   addField(identity, field);
 }
-void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, Field::FieldType type, const unsigned char * value, size_t length)
+void MessageBuilder::addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length)
 {
   switch (type)
   {
-  case Field::ASCII:
+  case ValueType::ASCII:
     addField(identity, FieldAscii::create(value, length));
     break;
-  case Field::UTF8:
+  case ValueType::UTF8:
     addField(identity, FieldUtf8::create(value, length));
     break;
-  case Field::BYTEVECTOR:
+  case ValueType::BYTEVECTOR:
     addField(identity, FieldByteVector::create(value, length));
     break;
   default:

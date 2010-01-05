@@ -21,7 +21,7 @@ namespace QuickFAST{
       FieldUInt64();
 
     public:
-      const static Field::FieldType fieldType = Field::UINT64;
+      const static ValueType::Type fieldType = ValueType::UINT64;
 
     public:
       /// @brief Construct the field from am uint64 value

@@ -10,7 +10,7 @@
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
 #include <Messages/FieldIdentity_fwd.h>
-#include <Messages/Field.h>
+//#include <Messages/Field.h>
 #include <Messages/Logger.h>
 namespace QuickFAST{
   namespace Messages{
@@ -33,52 +33,52 @@ namespace QuickFAST{
       ///
       /// @param identity identifies this field
       /// @param value is the value to be assigned.
-      virtual void addValue(const FieldIdentityCPtr & identity, Field::FieldType type, const int64 value) = 0;
+      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const int64 value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param value is the value to be assigned.
-      virtual void addValue(const FieldIdentityCPtr & identity, Field::FieldType type, const uint64 value) = 0;
+      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param value is the value to be assigned.
-      virtual void addValue(const FieldIdentityCPtr & identity, Field::FieldType type, const int32 value) = 0;
+      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const int32 value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param value is the value to be assigned.
-      virtual void addValue(const FieldIdentityCPtr & identity, Field::FieldType type, const uint32 value) = 0;
+      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param value is the value to be assigned.
-      virtual void addValue(const FieldIdentityCPtr & identity, Field::FieldType type, const int16 value) = 0;
+      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const int16 value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param value is the value to be assigned.
-      virtual void addValue(const FieldIdentityCPtr & identity, Field::FieldType type, const uint16 value) = 0;
+      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param value is the value to be assigned.
-      virtual void addValue(const FieldIdentityCPtr & identity, Field::FieldType type, const int8 value) = 0;
+      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const int8 value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param value is the value to be assigned.
-      virtual void addValue(const FieldIdentityCPtr & identity, Field::FieldType type, const uchar value) = 0;
+      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const uchar value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param value is the value to be assigned.
-      virtual void addValue(const FieldIdentityCPtr & identity, Field::FieldType type, const Decimal& value) = 0;
+      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param value is the value to be assigned.
-      virtual void addValue(const FieldIdentityCPtr & identity, Field::FieldType type, const unsigned char * value, size_t length) = 0;
+      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length) = 0;
 
       /// @brief prepare to accept an entire message
       ///

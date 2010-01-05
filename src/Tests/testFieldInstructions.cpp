@@ -263,7 +263,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_1)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::INT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::INT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toInt32(), 942755);
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -324,7 +324,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_2)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::INT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::INT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toInt32(), 942755);
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -386,7 +386,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_3)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::INT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::INT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toInt32(), -942755);
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -447,7 +447,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_4)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::INT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::INT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toInt32(), -7942755);
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -509,7 +509,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_5)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::INT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::INT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toInt32(), 8193);
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -573,7 +573,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_6)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::INT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::INT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toInt32(), -8193);
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -697,7 +697,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1b)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 0);
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -761,7 +761,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1c)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 1);
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -825,7 +825,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1d)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 942755);
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -889,7 +889,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2a)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 0);
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -953,7 +953,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2b)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 1);
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -1017,7 +1017,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2c)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::UINT32));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT32));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 942755);
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -1141,7 +1141,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1b)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::ASCII));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toAscii(), "ABC");
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -1206,7 +1206,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1c)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::ASCII));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
   BOOST_CHECK(pFieldEntry->getField()->toAscii().empty());
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -1271,7 +1271,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_2a)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::ASCII));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toAscii(), "ABC");
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -1335,7 +1335,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_2b)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::ASCII));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
   BOOST_CHECK(pFieldEntry->getField()->toAscii().empty());
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -1461,7 +1461,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1b)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::BYTEVECTOR));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::BYTEVECTOR));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toByteVector(), "ABC");
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -1525,7 +1525,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1c)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::BYTEVECTOR));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::BYTEVECTOR));
   BOOST_CHECK(pFieldEntry->getField()->toByteVector().empty());
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -1590,7 +1590,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_2a)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::BYTEVECTOR));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::BYTEVECTOR));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toByteVector(), "ABC");
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -1653,7 +1653,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_2b)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::BYTEVECTOR));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::BYTEVECTOR));
   BOOST_CHECK(pFieldEntry->getField()->toByteVector().empty());
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
@@ -1715,7 +1715,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_1)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   Decimal expected(942755, 2);
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expected);
   ++pFieldEntry;
@@ -1777,7 +1777,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_2)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   Decimal expected(942755, 2);
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expected);
   ++pFieldEntry;
@@ -1839,7 +1839,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_3)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   Decimal expected(942755, 2);
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expected);
   ++pFieldEntry;
@@ -1901,7 +1901,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_4)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   Decimal expected(942755, -2);
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expected);
   ++pFieldEntry;
@@ -1962,7 +1962,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_5)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   Decimal expected(-942755, -2);
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expected);
   ++pFieldEntry;
@@ -2027,7 +2027,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_6)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   Decimal expected(942755, -2);
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expected);
   ++pFieldEntry;
@@ -2097,7 +2097,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_7)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   Decimal expected(942755, -2);
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expected);
   ++pFieldEntry;
@@ -2154,7 +2154,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_8)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   Decimal expected(-8193, -3);
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expected);
   ++pFieldEntry;
@@ -2237,7 +2237,7 @@ BOOST_AUTO_TEST_CASE(test_issue_31)
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(Messages::Field::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
   Decimal expected(942755, -2);
   BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expected);
   ++pFieldEntry;

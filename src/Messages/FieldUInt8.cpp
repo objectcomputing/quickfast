@@ -11,13 +11,13 @@ using namespace ::QuickFAST::Messages;
 FieldCPtr FieldUInt8::nullField_ = new FieldUInt8;
 
 FieldUInt8::FieldUInt8(uchar value)
-  : Field(Field::UINT8, true)
+  : Field(ValueType::UINT8, true)
 {
   unsignedInteger_ = value;
 }
 
 FieldUInt8::FieldUInt8()
-  : Field(Field::UINT8, false)
+  : Field(ValueType::UINT8, false)
 {
 }
 

@@ -19,7 +19,7 @@ namespace QuickFAST{
       /// @brief Construct a NULL field
       FieldUInt8();
     public:
-      const static Field::FieldType fieldType = Field::UINT8;
+      const static ValueType::Type fieldType = ValueType::UINT8;
 
     public:
       /// @brief Construct the field from an uchar value

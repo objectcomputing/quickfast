@@ -17,27 +17,27 @@ BOOST_AUTO_TEST_CASE(testFieldAscii)
 {
   Messages::FieldCPtr field = Messages::FieldAscii::createNull();
   BOOST_CHECK(!field->isDefined());
-  BOOST_CHECK( field->isType(Messages::Field::ASCII));
-  BOOST_CHECK(!field->isType(Messages::Field::BYTEVECTOR));
-  BOOST_CHECK(!field->isType(Messages::Field::DECIMAL));
-  BOOST_CHECK(!field->isType(Messages::Field::INT32));
-  BOOST_CHECK(!field->isType(Messages::Field::INT64));
-  BOOST_CHECK(!field->isType(Messages::Field::UINT32));
-  BOOST_CHECK(!field->isType(Messages::Field::UINT64));
-  BOOST_CHECK(!field->isType(Messages::Field::UTF8));
-  BOOST_CHECK(!field->isType(Messages::Field::SEQUENCE));
+  BOOST_CHECK( field->isType(ValueType::ASCII));
+  BOOST_CHECK(!field->isType(ValueType::BYTEVECTOR));
+  BOOST_CHECK(!field->isType(ValueType::DECIMAL));
+  BOOST_CHECK(!field->isType(ValueType::INT32));
+  BOOST_CHECK(!field->isType(ValueType::INT64));
+  BOOST_CHECK(!field->isType(ValueType::UINT32));
+  BOOST_CHECK(!field->isType(ValueType::UINT64));
+  BOOST_CHECK(!field->isType(ValueType::UTF8));
+  BOOST_CHECK(!field->isType(ValueType::SEQUENCE));
 
   field = Messages::FieldAscii::create("Hello, World!");
   BOOST_CHECK( field->isDefined());
-  BOOST_CHECK( field->isType(Messages::Field::ASCII));
-  BOOST_CHECK(!field->isType(Messages::Field::BYTEVECTOR));
-  BOOST_CHECK(!field->isType(Messages::Field::DECIMAL));
-  BOOST_CHECK(!field->isType(Messages::Field::INT32));
-  BOOST_CHECK(!field->isType(Messages::Field::INT64));
-  BOOST_CHECK(!field->isType(Messages::Field::UINT32));
-  BOOST_CHECK(!field->isType(Messages::Field::UINT64));
-  BOOST_CHECK(!field->isType(Messages::Field::UTF8));
-  BOOST_CHECK(!field->isType(Messages::Field::SEQUENCE));
+  BOOST_CHECK( field->isType(ValueType::ASCII));
+  BOOST_CHECK(!field->isType(ValueType::BYTEVECTOR));
+  BOOST_CHECK(!field->isType(ValueType::DECIMAL));
+  BOOST_CHECK(!field->isType(ValueType::INT32));
+  BOOST_CHECK(!field->isType(ValueType::INT64));
+  BOOST_CHECK(!field->isType(ValueType::UINT32));
+  BOOST_CHECK(!field->isType(ValueType::UINT64));
+  BOOST_CHECK(!field->isType(ValueType::UTF8));
+  BOOST_CHECK(!field->isType(ValueType::SEQUENCE));
 
   BOOST_CHECK_EQUAL(field->toAscii(), "Hello, World!");
 
@@ -54,27 +54,27 @@ BOOST_AUTO_TEST_CASE(testFieldUtf8)
 {
   Messages::FieldCPtr field = Messages::FieldUtf8::createNull();
   BOOST_CHECK(!field->isDefined());
-  BOOST_CHECK(!field->isType(Messages::Field::ASCII));
-  BOOST_CHECK(!field->isType(Messages::Field::BYTEVECTOR));
-  BOOST_CHECK(!field->isType(Messages::Field::DECIMAL));
-  BOOST_CHECK(!field->isType(Messages::Field::INT32));
-  BOOST_CHECK(!field->isType(Messages::Field::INT64));
-  BOOST_CHECK(!field->isType(Messages::Field::UINT32));
-  BOOST_CHECK(!field->isType(Messages::Field::UINT64));
-  BOOST_CHECK( field->isType(Messages::Field::UTF8));
-  BOOST_CHECK(!field->isType(Messages::Field::SEQUENCE));
+  BOOST_CHECK(!field->isType(ValueType::ASCII));
+  BOOST_CHECK(!field->isType(ValueType::BYTEVECTOR));
+  BOOST_CHECK(!field->isType(ValueType::DECIMAL));
+  BOOST_CHECK(!field->isType(ValueType::INT32));
+  BOOST_CHECK(!field->isType(ValueType::INT64));
+  BOOST_CHECK(!field->isType(ValueType::UINT32));
+  BOOST_CHECK(!field->isType(ValueType::UINT64));
+  BOOST_CHECK( field->isType(ValueType::UTF8));
+  BOOST_CHECK(!field->isType(ValueType::SEQUENCE));
 
   field = Messages::FieldUtf8::create("Hello, World!");
   BOOST_CHECK( field->isDefined());
-  BOOST_CHECK(!field->isType(Messages::Field::ASCII));
-  BOOST_CHECK(!field->isType(Messages::Field::BYTEVECTOR));
-  BOOST_CHECK(!field->isType(Messages::Field::DECIMAL));
-  BOOST_CHECK(!field->isType(Messages::Field::INT32));
-  BOOST_CHECK(!field->isType(Messages::Field::INT64));
-  BOOST_CHECK(!field->isType(Messages::Field::UINT32));
-  BOOST_CHECK(!field->isType(Messages::Field::UINT64));
-  BOOST_CHECK( field->isType(Messages::Field::UTF8));
-  BOOST_CHECK(!field->isType(Messages::Field::SEQUENCE));
+  BOOST_CHECK(!field->isType(ValueType::ASCII));
+  BOOST_CHECK(!field->isType(ValueType::BYTEVECTOR));
+  BOOST_CHECK(!field->isType(ValueType::DECIMAL));
+  BOOST_CHECK(!field->isType(ValueType::INT32));
+  BOOST_CHECK(!field->isType(ValueType::INT64));
+  BOOST_CHECK(!field->isType(ValueType::UINT32));
+  BOOST_CHECK(!field->isType(ValueType::UINT64));
+  BOOST_CHECK( field->isType(ValueType::UTF8));
+  BOOST_CHECK(!field->isType(ValueType::SEQUENCE));
 
   BOOST_CHECK_EQUAL(field->toUtf8(), "Hello, World!");
 
@@ -90,27 +90,27 @@ BOOST_AUTO_TEST_CASE(testFieldByteVector)
 {
   Messages::FieldCPtr field = Messages::FieldByteVector::createNull();
   BOOST_CHECK(!field->isDefined());
-  BOOST_CHECK(!field->isType(Messages::Field::ASCII));
-  BOOST_CHECK( field->isType(Messages::Field::BYTEVECTOR));
-  BOOST_CHECK(!field->isType(Messages::Field::DECIMAL));
-  BOOST_CHECK(!field->isType(Messages::Field::INT32));
-  BOOST_CHECK(!field->isType(Messages::Field::INT64));
-  BOOST_CHECK(!field->isType(Messages::Field::UINT32));
-  BOOST_CHECK(!field->isType(Messages::Field::UINT64));
-  BOOST_CHECK(!field->isType(Messages::Field::UTF8));
-  BOOST_CHECK(!field->isType(Messages::Field::SEQUENCE));
+  BOOST_CHECK(!field->isType(ValueType::ASCII));
+  BOOST_CHECK( field->isType(ValueType::BYTEVECTOR));
+  BOOST_CHECK(!field->isType(ValueType::DECIMAL));
+  BOOST_CHECK(!field->isType(ValueType::INT32));
+  BOOST_CHECK(!field->isType(ValueType::INT64));
+  BOOST_CHECK(!field->isType(ValueType::UINT32));
+  BOOST_CHECK(!field->isType(ValueType::UINT64));
+  BOOST_CHECK(!field->isType(ValueType::UTF8));
+  BOOST_CHECK(!field->isType(ValueType::SEQUENCE));
 
   field = Messages::FieldByteVector::create("Hello, World!");
   BOOST_CHECK( field->isDefined());
-  BOOST_CHECK(!field->isType(Messages::Field::ASCII));
-  BOOST_CHECK( field->isType(Messages::Field::BYTEVECTOR));
-  BOOST_CHECK(!field->isType(Messages::Field::DECIMAL));
-  BOOST_CHECK(!field->isType(Messages::Field::INT32));
-  BOOST_CHECK(!field->isType(Messages::Field::INT64));
-  BOOST_CHECK(!field->isType(Messages::Field::UINT32));
-  BOOST_CHECK(!field->isType(Messages::Field::UINT64));
-  BOOST_CHECK(!field->isType(Messages::Field::UTF8));
-  BOOST_CHECK(!field->isType(Messages::Field::SEQUENCE));
+  BOOST_CHECK(!field->isType(ValueType::ASCII));
+  BOOST_CHECK( field->isType(ValueType::BYTEVECTOR));
+  BOOST_CHECK(!field->isType(ValueType::DECIMAL));
+  BOOST_CHECK(!field->isType(ValueType::INT32));
+  BOOST_CHECK(!field->isType(ValueType::INT64));
+  BOOST_CHECK(!field->isType(ValueType::UINT32));
+  BOOST_CHECK(!field->isType(ValueType::UINT64));
+  BOOST_CHECK(!field->isType(ValueType::UTF8));
+  BOOST_CHECK(!field->isType(ValueType::SEQUENCE));
 
   BOOST_CHECK_EQUAL(field->toByteVector(), "Hello, World!");
 

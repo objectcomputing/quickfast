@@ -9,14 +9,14 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldUtf8::FieldUtf8(const std::string & value)
-  : Field(Field::UTF8, true)
+  : Field(ValueType::UTF8, true)
 {
   string_ = value;
   cachedValue_ = string_;
 }
 
 FieldUtf8::FieldUtf8(const uchar * buffer, size_t length)
-  : Field(Field::UTF8, true)
+  : Field(ValueType::UTF8, true)
 {
   string_.assign(buffer, length);
   cachedValue_ = string_;
@@ -24,7 +24,7 @@ FieldUtf8::FieldUtf8(const uchar * buffer, size_t length)
 
 
 FieldUtf8::FieldUtf8()
-  : Field(Field::UTF8, false)
+  : Field(ValueType::UTF8, false)
 {
 }
 

@@ -27,7 +27,7 @@ namespace QuickFAST{
       FieldUtf8();
 
     public:
-      const static Field::FieldType fieldType = Field::UTF8;
+      const static ValueType::Type fieldType = ValueType::UTF8;
 
     public:
       /// @brief Construct the field from a value in a std::string
