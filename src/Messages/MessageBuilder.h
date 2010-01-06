@@ -49,7 +49,7 @@ namespace QuickFAST{
       /// @param size is the maximum number of fields to expect in the message
       /// @returns a message builder that will accept the fields in the message
       ///        (which may be *this)
-      virtual MessageBuilder & startMessage(
+      virtual ValueMessageBuilder & startMessage(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size) = 0;
@@ -62,7 +62,7 @@ namespace QuickFAST{
       /// @param fieldCount is the maximum number of fields to expect in each entry
       /// @param lengthIdentity is the identity of the length field
       /// @param length is a count of how many entries will be in the sequence
-      virtual MessageBuilder & startSequence(
+      virtual ValueMessageBuilder & startSequence(
         FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
@@ -79,7 +79,7 @@ namespace QuickFAST{
       /// @param applicationTypeNamespace qualifies applicationTYpe
       /// @param size is the maximum number of fields to expect in the entry
       /// @returns a MessageBuilder to accumulate fields for this entry (*this is ok).
-      virtual MessageBuilder & startSequenceEntry(
+      virtual ValueMessageBuilder & startSequenceEntry(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size)  = 0;
@@ -90,7 +90,7 @@ namespace QuickFAST{
       /// @param applicationTypeNamespace qualifies applicationTYpe
       /// @param size is the maximum number of fields to expect in the group
       /// @returns a MessageBuilder to accumulate fields for this group (*this is ok)
-      virtual MessageBuilder & startGroup(
+      virtual ValueMessageBuilder & startGroup(
         FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,

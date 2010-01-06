@@ -27,6 +27,7 @@ namespace QuickFAST{
       FieldUtf8();
 
     public:
+      /// Identify the type of data associated with this field
       const static ValueType::Type fieldType = ValueType::UTF8;
 
     public:

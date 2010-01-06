@@ -76,6 +76,7 @@ namespace QuickFAST
           return value_;
         }
 
+        /// @brief access the identity that was used to set the value
         const FieldIdentityCPtr & identity()const
         {
           return identity_;
