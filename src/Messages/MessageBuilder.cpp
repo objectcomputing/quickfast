@@ -8,7 +8,7 @@
 #include <Messages/FieldInt32.h>
 #include <Messages/FieldUInt32.h>
 #include <Messages/FieldInt16.h>
-#include <Messages/FielduInt16.h>
+#include <Messages/FieldUInt16.h>
 #include <Messages/FieldInt8.h>
 #include <Messages/FieldUInt8.h>
 #include <Messages/FieldDecimal.h>

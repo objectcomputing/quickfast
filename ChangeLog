@@ -1,3 +1,13 @@
+Wed Jan  6 15:48:22 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Common/Types.cpp:
+        * src/Messages/MessageBuilder.cpp:
+        Linux build errors.
+
+        * src/Messages/FieldBitMap.h:
+        * src/Messages/FieldBitmap.cpp:
+          Removed these files.
+
 Wed Jan  6 00:01:56 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/Context.h:
         * src/Codecs/Context.cpp:
