@@ -31,8 +31,11 @@ namespace QuickFAST{
       ///
       /// The default implementation handles all string, integer, and decimal types.
       /// Override this for other types.
+      /// @param rhs is the target of the comparison.
       virtual bool operator == (const Field & rhs) const;
 
+      /// @brief inequality operator
+      /// @param rhs is the target of the comparison.
       bool operator != (const Field & rhs)const
       {
         return ! (*this == rhs);
@@ -61,7 +64,6 @@ namespace QuickFAST{
 
       /// @brief Get the field type
       /// @returns the enumerated field type
-//      virtual ValueType::Type getType()const = 0;
       ValueType::Type getType() const
       {
         return type_;

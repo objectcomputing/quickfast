@@ -38,6 +38,7 @@ namespace QuickFAST{
   /// @brief type type used to store a field Id.
   typedef std::string field_id_t;
 
+  /// @brief a "namespace" for value types and the method to interpret them.
   class QuickFAST_Export ValueType
   {
   public:
@@ -67,6 +68,7 @@ namespace QuickFAST{
     };
 
     /// @brief translate a ValueType::Type to a string
+    /// @param type is the type to be interpreted.
     static const std::string & typeName(Type type);
   };
 }

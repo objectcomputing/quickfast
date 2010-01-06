@@ -727,45 +727,13 @@ namespace QuickFAST{
       Codecs::Encoder & encoder,
       const Messages::MessageAccessor & fieldSet) const
     {
-      // declare a couple of variables...
-      bool previousIsKnown = false;
-      bool previousNotNull = false;
+      // get previous value from dictionary
       INTEGER_TYPE previousValue = 0;
-
-      // ... then initialize them from the dictionary
-#if 0
-      Messages::FieldCPtr previousField;
-      if(fieldOp_->findDictionaryField(encoder, previousField))
+      Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
+      if(previousStatus != Context::OK_VALUE && fieldOp_->hasValue())
       {
-        if(!previousField->isType(typedValue_))
-        {
-          encoder.reportError("[ERR D4]", "Previous value type mismatch.", *identity_);
-        }
-        previousIsKnown = true;
-        previousNotNull = previousField->isDefined();
-        if(previousNotNull)
-        {
-          previousField->getValue(previousValue);
-        }
-      }
-#else
-      if(fieldOp_->getDictionaryValue(encoder, previousValue))
-      {
-        previousIsKnown = true;
-        previousNotNull = true;
-        /// @TOOD: distinguish unknown from explicitly null?
-      }
-#endif
-      if(!previousIsKnown && fieldOp_->hasValue())
-      {
-        previousIsKnown = true;
-        previousNotNull = true;
         previousValue = typedValue_;
-#if 0
-        fieldOp_->setDictionaryValue(encoder, VALUE_TYPE::create(previousValue));
-#else
         fieldOp_->setDictionaryValue(encoder, typedValue_);
-#endif
       }
 
       // get the value from the application data
@@ -775,7 +743,7 @@ namespace QuickFAST{
         INTEGER_TYPE value;
         field->getValue(value);
 
-        if(previousNotNull && previousValue == value)
+        if(previousStatus == Context::OK_VALUE && previousValue == value)
         {
           pmap.setNextField(false); // not in stream, use copy
         }
@@ -800,13 +768,7 @@ namespace QuickFAST{
           {
             encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), nullableValue);
           }
-#if 0
-          field = VALUE_TYPE::create(value);
-          fieldOp_->setDictionaryValue(encoder, field);
-#else
           fieldOp_->setDictionaryValue(encoder, value);
-#endif
-
         }
       }
       else // not defined in fieldset
@@ -822,17 +784,11 @@ namespace QuickFAST{
         {
           // Missing optional field.  If we have a previous, non-null value
           // we need to explicitly null it out.  Otherwise just don't send it.
-          if(previousIsKnown && previousNotNull)
+          if(previousStatus != Context::NULL_VALUE)
           {
             pmap.setNextField(true);// value in stream
             destination.putByte(nullInteger);
-#if 0
-            field = VALUE_TYPE::createNull();
-            fieldOp_->setDictionaryValue(encoder, field);
-#else
             fieldOp_->setDictionaryValueNull(encoder);
-#endif
-
           }
           else
           {
@@ -851,49 +807,13 @@ namespace QuickFAST{
       Codecs::Encoder & encoder,
       const Messages::MessageAccessor & fieldSet) const
     {
-      // declare a couple of variables...
-      bool previousIsKnown = false;
-      bool previousNotNull = true;
+      // get previous value from dictionary
       INTEGER_TYPE previousValue = 0;
-
-      // ... then initialize them from the dictionary
-#if 0
-      Messages::FieldCPtr previousField;
-      if(fieldOp_->findDictionaryField(encoder, previousField))
+      Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
+      if(previousStatus != Context::OK_VALUE && fieldOp_->hasValue())
       {
-        if(!previousField->isType(typedValue_))
-        {
-          encoder.reportError("[ERR D4]", "Previous value type mismatch.", *identity_);
-        }
-        else
-        {
-          previousIsKnown = true;
-          previousNotNull = previousField->isDefined();
-          if(previousNotNull)
-          {
-            previousField->getValue(previousValue);
-          }
-        }
-      }
-#else
-      if(fieldOp_->getDictionaryValue(encoder, previousValue))
-      {
-        previousIsKnown = true;
-        previousNotNull = true;
-        /// @TOOD: distinguish unknown from explicitly null?
-      }
-#endif
-      if(!previousIsKnown && fieldOp_->hasValue())
-      {
-        previousIsKnown = true;
-        previousNotNull;
         previousValue = typedValue_;
-#if 0
-        fieldOp_->setDictionaryValue(encoder, VALUE_TYPE::create(previousValue));
-#else
         fieldOp_->setDictionaryValue(encoder, typedValue_);
-#endif
-
       }
 
       // get the value from the application data
@@ -911,15 +831,9 @@ namespace QuickFAST{
           }
         }
         encodeSignedInteger(destination, encoder.getWorkingBuffer(), deltaValue);
-        if(!previousIsKnown  || value != previousValue)
+        if(previousStatus != Context::OK_VALUE  || value != previousValue)
         {
-#if 0
-          field = VALUE_TYPE::create(value);
-          fieldOp_->setDictionaryValue(encoder, field);
-#else
           fieldOp_->setDictionaryValue(encoder, value);
-#endif
-
         }
 
       }
@@ -946,52 +860,15 @@ namespace QuickFAST{
       Codecs::Encoder & encoder,
       const Messages::MessageAccessor & fieldSet) const
     {
-      // declare a couple of variables...
-      bool previousIsKnown = false;
-      bool previousNotNull = false;
+      // get previous value from dictionary
       INTEGER_TYPE previousValue = 0;
-
-      // ... then initialize them from the dictionary
-#if 0
-      Messages::FieldCPtr previousField;
-      if(fieldOp_->findDictionaryField(encoder, previousField))
+      Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
+      if(previousStatus != Context::OK_VALUE && fieldOp_->hasValue())
       {
-        if(!previousField->isType(typedValue_))
-        {
-          encoder.reportError("[ERR D4]", "Previous value type mismatch.", *identity_);
-        }
-        else
-        {
-          previousIsKnown = true;
-          previousNotNull = previousField->isDefined();
-          if(previousNotNull)
-          {
-            previousField->getValue(previousValue);
-          }
-        }
-      }
-#else
-      if(fieldOp_->getDictionaryValue(encoder, previousValue))
-      {
-        previousIsKnown = true;
-        previousNotNull = true;
-        /// @TOOD: distinguish unknown from explicitly null?
-      }
-#endif
-
-      if(!previousIsKnown && fieldOp_->hasValue())
-      {
-        previousIsKnown = true;
-        previousNotNull = true;
         // pretend the previous value was the value attribute - 1 so that
         // the increment will produce cause the initial value to be sent.
         previousValue = typedValue_ - 1;
-#if 0
-        fieldOp_->setDictionaryValue(encoder, VALUE_TYPE::create(previousValue));
-#else
         fieldOp_->setDictionaryValue(encoder, previousValue);
-#endif
-
       }
 
       // get the value from the application data
@@ -1026,13 +903,7 @@ namespace QuickFAST{
             encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), nullableValue);
           }
         }
-#if 0
-        field = VALUE_TYPE::create(value);
-        fieldOp_->setDictionaryValue(encoder, field);
-#else
         fieldOp_->setDictionaryValue(encoder, value);
-#endif
-
       }
       else // not defined in fieldset
       {
@@ -1047,16 +918,11 @@ namespace QuickFAST{
         {
           // Missing optional field.  If we have a previous, non-null value
           // we need to explicitly null it out.  Otherwise just don't send it.
-          if (previousIsKnown && previousNotNull)
+          if(previousStatus != Context::NULL_VALUE)
           {
             pmap.setNextField(true);// value in stream
             destination.putByte(nullInteger);
-#if 0
-            field = VALUE_TYPE::createNull();
-            fieldOp_->setDictionaryValue(encoder, field);
-#else
             fieldOp_->setDictionaryValueNull(encoder);
-#endif
           }
           else
           {

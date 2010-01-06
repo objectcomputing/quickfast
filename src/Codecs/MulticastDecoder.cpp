@@ -139,7 +139,6 @@ MulticastDecoder::MulticastDecoder(
   unsigned short portNumber)
 : receiver_(multicastGroupIP, listenAddressIP, portNumber)
 , decoder_(templateRegistry)
-//, verbose_(false)
 , messageLimit_(0)
 , messageCount_(0)
 {
@@ -153,7 +152,6 @@ MulticastDecoder::MulticastDecoder(
   unsigned short portNumber)
 : receiver_(ioService, multicastGroupIP, listenAddressIP, portNumber)
 , decoder_(templateRegistry)
-//, verbose_(false)
 , messageLimit_(0)
 , messageCount_(0)
 {

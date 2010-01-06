@@ -20,6 +20,7 @@ namespace QuickFAST{
       FieldInt64();
 
     public:
+      /// Identify the type of data associated with this field
       const static ValueType::Type fieldType = ValueType::UINT64;
 
     public:

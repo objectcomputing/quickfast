@@ -19,6 +19,7 @@ namespace QuickFAST{
       /// @brief Construct a NULL field
       FieldUInt16();
     public:
+      /// Identify the type of data associated with this field
       const static ValueType::Type fieldType = ValueType::UINT32;
     public:
       /// @brief Construct the field from am uint16 value

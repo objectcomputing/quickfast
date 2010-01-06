@@ -21,6 +21,7 @@ namespace QuickFAST{
       FieldInt32();
 
     public:
+      /// Identify the type of data associated with this field
       const static ValueType::Type fieldType = ValueType::INT32;
 
     public:

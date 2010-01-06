@@ -24,6 +24,7 @@ namespace QuickFAST{
       /// @brief Construct a NULL field (not an empty field)
       FieldByteVector();
     public:
+      /// Identify the type of data associated with this field
       const static ValueType::Type fieldType = ValueType::BYTEVECTOR;
 
     public:

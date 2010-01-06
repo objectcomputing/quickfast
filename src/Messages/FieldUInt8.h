@@ -19,6 +19,7 @@ namespace QuickFAST{
       /// @brief Construct a NULL field
       FieldUInt8();
     public:
+      /// Identify the type of data associated with this field
       const static ValueType::Type fieldType = ValueType::UINT8;
 
     public:

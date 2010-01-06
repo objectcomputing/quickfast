@@ -4,9 +4,7 @@
 #include <Common/QuickFASTPch.h>
 #include "FieldSet.h"
 #include <Messages/Sequence.h>
-//#include <Messages/FieldSequence.h>
 #include <Messages/Group.h>
-//#include <Messages/FieldGroup.h>
 #include <Common/Exceptions.h>
 #include <Common/Profiler.h>
 

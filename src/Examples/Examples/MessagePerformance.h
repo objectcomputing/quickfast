@@ -12,34 +12,40 @@
 #include <Messages/ValueMessageBuilder.h>
 namespace QuickFAST{
   namespace Examples{
+    /// @brief Message Builder to be used in performance testing. Captures statistics about the test.
     class PerformanceBuilder: public Messages::ValueMessageBuilder
     {
     public:
       PerformanceBuilder();
       virtual ~PerformanceBuilder();
+      /// @brief Access statistic
       size_t fieldCount() const
       {
         return fieldCount_;
       }
+      /// @brief Access statistic
       size_t msgCount() const
       {
         return msgCount_;
       }
+      /// @brief Access statistic
       size_t sequenceCount() const
       {
         return sequenceCount_;
       }
-
+      /// @brief Access statistic
       size_t sequenceEntryCount() const
       {
         return sequenceEntryCount_;
       }
-
+      /// @brief Access statistic
       size_t groupCount() const
       {
         return groupCount_;
       }
 
+      ///////////////////////////////////////////
+      // Implement ValueMessageBuilder interface
       virtual const std::string & getApplicationType()const;
       virtual const std::string & getApplicationTypeNs()const;
       virtual void addValue(const Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int64 value);
@@ -56,9 +62,9 @@ namespace QuickFAST{
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
-      virtual bool endMessage(ValueMessageBuilder & messageBuilder);
-      virtual bool ignoreMessage(ValueMessageBuilder & messageBuilder);
-      virtual ValueMessageBuilder & startSequence(
+      virtual bool endMessage(Messages::ValueMessageBuilder & messageBuilder);
+      virtual bool ignoreMessage(Messages::ValueMessageBuilder & messageBuilder);
+      virtual Messages::ValueMessageBuilder & startSequence(
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
@@ -67,20 +73,20 @@ namespace QuickFAST{
         size_t length);
       virtual void endSequence(
         Messages::FieldIdentityCPtr identity,
-        ValueMessageBuilder & sequenceBuilder);
-      virtual ValueMessageBuilder & startSequenceEntry(
+        Messages::ValueMessageBuilder & sequenceBuilder);
+      virtual Messages::ValueMessageBuilder & startSequenceEntry(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size) ;
-      virtual void endSequenceEntry(ValueMessageBuilder & entry);
-      virtual ValueMessageBuilder & startGroup(
+      virtual void endSequenceEntry(Messages::ValueMessageBuilder & entry);
+      virtual Messages::ValueMessageBuilder & startGroup(
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size) ;
       virtual void endGroup(
         Messages::FieldIdentityCPtr identity,
-        ValueMessageBuilder & groupBuilder);
+        Messages::ValueMessageBuilder & groupBuilder);
 
       /////////////////////////////
       // Implement Logger interface
@@ -96,7 +102,7 @@ namespace QuickFAST{
       size_t sequenceEntryCount_;
       size_t groupCount_;
     };
-
+#if 0
     /// @brief A message consumer that attempts to produce a human readable version
     /// of a message that has been decoded by QuickFAST.
     class MessagePerformance : public Codecs::MessageConsumer
@@ -137,6 +143,7 @@ namespace QuickFAST{
       size_t recordDuplicate_;
       size_t recordCount_;
     };
+#endif
   }
 }
 #endif /* MESSAGEPERFORMANCE_H */

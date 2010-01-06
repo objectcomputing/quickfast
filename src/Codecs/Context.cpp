@@ -6,9 +6,7 @@
 #include "Context.h"
 #include <Codecs/TemplateRegistry.h>
 #include <Common/Exceptions.h>
-//#include <Messages/Field.h>
 #include <Messages/FieldIdentity.h>
-//#include <Messages/Field.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;

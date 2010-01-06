@@ -7,7 +7,6 @@
 #ifndef FIELDINSTRUCTIONEXPONENT_H
 #define FIELDINSTRUCTIONEXPONENT_H
 #include <Codecs/FieldInstructionInteger.h>
-//#include <Messages/FieldInt32.h>
 namespace QuickFAST{
   namespace Codecs{
     /// @brief An implementation for the &lt;exponent> field instruction within a &lt;decimal>.

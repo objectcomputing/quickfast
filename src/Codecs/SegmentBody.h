@@ -127,7 +127,7 @@ namespace QuickFAST{
       /// @brief Assign a dictionary entry to the field in this segment
       /// @param indexer assigns the index.
       /// @param dictionaryName is the parent's dictionary name (inherited unless overridden)
-      /// @paramtypeName is the application type for the parent of this segment
+      /// @param typeName is the application type for the parent of this segment
       /// @param typeNamespace is the namespace to qualify the application type.
       void indexDictionaries(
         DictionaryIndexer & indexer,

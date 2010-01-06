@@ -41,7 +41,7 @@ namespace QuickFAST{
         Codecs::Encoder & encoder,
         const Messages::MessageAccessor & fieldSet) const;
 
-      virtual size_t presenceMapBitsRequired() const;
+//      virtual size_t presenceMapBitsRequired() const;
 
     private:
       void interpretValue(const std::string & value);

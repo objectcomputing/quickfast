@@ -18,6 +18,7 @@ namespace QuickFAST{
     {
     public:
       /// @brief construct with a name and a namespace
+      /// @param type the actual type of this field instruction (UTF8 or BYTEVECTOR)
       /// @param name is the local name
       /// @param fieldNamespace is the namespace to qualify this name
       FieldInstructionBlob(
@@ -142,10 +143,10 @@ namespace QuickFAST{
         WorkingBuffer & buffer,
         const std::string & value) const;
     protected:
+      /// @brief the actual data type (UTF8, BITVECTOR)
       ValueType::Type type_;
       /// @brief a field of the appropriate type containing the intial value specified with the field Op
       Messages::FieldCPtr initialValue_;
-      std::string initialString_;
     };
   }
 }

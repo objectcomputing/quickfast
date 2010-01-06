@@ -20,6 +20,7 @@ namespace QuickFAST{
       /// @brief Construct a NULL field
       FieldInt16();
     public:
+      /// Identify the type of data associated with this field
       const static ValueType::Type fieldType = ValueType::INT16;
 
     public:

@@ -6,13 +6,12 @@
 #include <Examples/ExamplesPch.h>
 #include "MessagePerformance.h"
 #include <Messages/Message.h>
-////////////#include <Messages/Field.h>
 #include <Messages/Sequence.h>
 #include <Messages/Group.h>
 
 using namespace QuickFAST;
 using namespace Examples;
-
+#if 0
 MessagePerformance::MessagePerformance(size_t recordLimit, size_t recordDuplicate)
 : recordLimit_(recordLimit)
 , recordDuplicate_(recordDuplicate)
@@ -226,7 +225,7 @@ MessagePerformance::logMessage(unsigned short level, const std::string & logMess
 {
   return true;
 }
-
+#endif
 
 //////////////////////////
 // Performance Builder Implementation

@@ -9,7 +9,6 @@
 #include "FieldOp_fwd.h"
 #include <Common/QuickFAST_Export.h>
 
-//#include <Messages/Field_fwd.h>
 #include <Messages/MessageAccessor.h>
 #include <Messages/ValueMessageBuilder_fwd.h>
 #include <Codecs/Context.h>
@@ -126,23 +125,6 @@ namespace QuickFAST{
       }
 
 
-      /// @brief Store the current value in the dictionary entry assigned to this field.
-      /// @param context contains the dictionaries for this encode/decode
-      /// @param value is the entry to store in the dictionary
-#if 0
-      void setDictionaryValue(
-        Context & context,
-        const Messages::FieldCPtr & value);
-
-      /// @brief Retrieve the current value for this field from the dictionary.
-      /// @param context contains the dictionaries for this encode/decode
-      /// @param value will point to the entry that was found
-      /// @returns true if a valid entry was found.
-      bool findDictionaryField(
-        Context & context,
-        Messages::FieldCPtr & value);
-
-#endif
       /// @brief Implement the dictionary= attribute
       /// @param name is the name of the dictionary to use.
       void setDictionaryName(const std::string & name)
@@ -153,7 +135,7 @@ namespace QuickFAST{
       /// @brief Assign a dictionary entry to the field associated with this operation.
       /// @param indexer assigns the index.
       /// @param dictionaryName is the parent's dictionary name (inherited unless overridden)
-      /// @paramtypeName is the application type for this instruction
+      /// @param typeName is the application type for this instruction
       /// @param typeNamespace is the namespace to qualify the application type.
       /// @param fieldName is the name of this field.
       /// @param fieldNamespace qualifies fieldName
@@ -165,140 +147,139 @@ namespace QuickFAST{
         const std::string & fieldName,
         const std::string & fieldNamespace);
 
+      /// @brief set the value of the dictionary entry for this field to be undefined
+      /// @param context holds the dictionary
       void setDictionaryValueUndefined(Context & context)
       {
         context.setDictionaryValueUndefined(dictionaryIndex_);
       }
 
+      /// @brief set the value of the dictionary entry for this field to be null
+      /// @param context holds the dictionary
       void setDictionaryValueNull(Context & context)
       {
         context.setDictionaryValueNull(dictionaryIndex_);
       }
 
+      /// @brief set the value of the dictionary entry for this field
+      /// @param context holds the dictionary
+      /// @param value is the value to be set
       void setDictionaryValue(Context & context, const int64 value)
       {
         context.setDictionaryValue(dictionaryIndex_, value);
       }
 
+      /// @brief set the value of the dictionary entry for this field
+      /// @param context holds the dictionary
+      /// @param value is the value to be set
       void setDictionaryValue(Context & context, const uint64 value)
       {
         context.setDictionaryValue(dictionaryIndex_, value);
       }
 
+      /// @brief set the value of the dictionary entry for this field
+      /// @param context holds the dictionary
+      /// @param value is the value to be set
       void setDictionaryValue(Context & context, const int32 value)
       {
         context.setDictionaryValue(dictionaryIndex_, value);
       }
 
+      /// @brief set the value of the dictionary entry for this field
+      /// @param context holds the dictionary
+      /// @param value is the value to be set
       void setDictionaryValue(Context & context, const uint32 value)
       {
         context.setDictionaryValue(dictionaryIndex_, value);
       }
 
+      /// @brief set the value of the dictionary entry for this field
+      /// @param context holds the dictionary
+      /// @param value is the value to be set
       void setDictionaryValue(Context & context, const int16 value)
       {
         context.setDictionaryValue(dictionaryIndex_, value);
       }
 
+      /// @brief set the value of the dictionary entry for this field
+      /// @param context holds the dictionary
+      /// @param value is the value to be set
       void setDictionaryValue(Context & context, const uint16 value)
       {
         context.setDictionaryValue(dictionaryIndex_, value);
       }
 
+      /// @brief set the value of the dictionary entry for this field
+      /// @param context holds the dictionary
+      /// @param value is the value to be set
       void setDictionaryValue(Context & context, const int8 value)
       {
         context.setDictionaryValue(dictionaryIndex_, value);
       }
 
+      /// @brief set the value of the dictionary entry for this field
+      /// @param context holds the dictionary
+      /// @param value is the value to be set
       void setDictionaryValue(Context & context, const uchar value)
       {
         context.setDictionaryValue(dictionaryIndex_, value);
       }
 
+      /// @brief set the value of the dictionary entry for this field
+      /// @param context holds the dictionary
+      /// @param value is the value to be set
       void setDictionaryValue(Context & context, const Decimal& value)
       {
         context.setDictionaryValue(dictionaryIndex_, value);
       }
 
+      /// @brief set the value of the dictionary entry for this field
+      /// @param context holds the dictionary
+      /// @param value is the value to be set
+      /// @param length is the length of the string pointed to by value
       void setDictionaryValue(Context & context, const unsigned char * value, size_t length)
       {
         context.setDictionaryValue(dictionaryIndex_, value, length);
       }
 
+      /// @brief set the value of the dictionary entry for this field
+      /// @param context holds the dictionary
+      /// @param value is the value to be set (null terminated string)
       void setDictionaryValue(Context & context, const char * value)
       {
         context.setDictionaryValue(dictionaryIndex_, value);
       }
 
+      /// @brief set the value of the dictionary entry for this field
+      /// @param context holds the dictionary
+      /// @param value is the value to be set
       void setDictionaryValue(Context & context, const std::string& value)
       {
         context.setDictionaryValue(dictionaryIndex_, value);
       }
 
+      /// @brief retrieve the value of the dictionary entry for this field
+      /// @param context holds the dictionary
+      /// @param value is the value that was found
+      /// @returns a dictionary status indicating the results of the search
       template<typename VALUE_TYPE>
       Context::DictionaryStatus getDictionaryValue(Context & context, VALUE_TYPE & value)
       {
         return context.getDictionaryValue(dictionaryIndex_, value);
       }
-#if 0
-      Context::DictionaryStatus getDictionaryValue(Context & context, uint64 & value)
-      {
-        return context.getDictionaryValue(dictionaryIndex_, value);
-      }
 
-      Context::DictionaryStatus getDictionaryValue(Context & context, int32 & value)
-      {
-        return context.getDictionaryValue(dictionaryIndex_, value);
-      }
-
-      Context::DictionaryStatus getDictionaryValue(Context & context, uint32 & value)
-      {
-        return context.getDictionaryValue(dictionaryIndex_, value);
-      }
-
-      Context::DictionaryStatus getDictionaryValue(Context & context, int16 & value)
-      {
-        return context.getDictionaryValue(dictionaryIndex_, value);
-      }
-
-      Context::DictionaryStatus  getDictionaryValue(Context & context, uint16 & value)
-      {
-        return context.getDictionaryValue(dictionaryIndex_, value);
-      }
-
-      Context::DictionaryStatus  getDictionaryValue(Context & context, int8 & value)
-      {
-        return context.getDictionaryValue(dictionaryIndex_, value);
-      }
-
-      Context::DictionaryStatus  getDictionaryValue(Context & context, uchar & value)
-      {
-        return context.getDictionaryValue(dictionaryIndex_, value);
-      }
-
-      Context::DictionaryStatus  getDictionaryValue(Context & context, Decimal & value)
-      {
-        return context.getDictionaryValue(dictionaryIndex_, value);
-      }
-
-      Context::DictionaryStatus  getDictionaryValue(Context & context, const char *& value)
-      {
-        return context.getDictionaryValue(dictionaryIndex_, value);
-      }
-
-      Context::DictionaryStatus  getDictionaryValue(Context & context, std::string& value)
-      {
-        return context.getDictionaryValue(dictionaryIndex_, value);
-      }
-#endif
-
+      /// @brief retrieve the value of the dictionary entry for this field
+      /// @param context holds the dictionary
+      /// @param value is the value that was found
+      /// @param length is the length of the string pointed to by value
+      /// @returns a dictionary status indicating the results of the search
       Context::DictionaryStatus  getDictionaryValue(Context & context, const unsigned char *& value, size_t &length)
       {
         return context.getDictionaryValue(dictionaryIndex_, value, length);
       }
 
     protected:
-            /// Value specified by the operator associated with this instruction [as a string]
+       /// Value specified by the operator associated with this instruction [as a string]
       std::string value_;
       /// True if a value was provided
       bool valueIsDefined_;

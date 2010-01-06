@@ -7,7 +7,6 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/Encoder.h>
 #include <Messages/Group.h>
-//#include <Messages/FieldGroup.h>
 #include <Messages/ValueMessageBuilder.h>
 
 using namespace ::QuickFAST;
@@ -136,6 +135,7 @@ FieldInstructionGroup::encodeNop(
   }
 }
 
+#if 0
 size_t
 FieldInstructionGroup::presenceMapBitsRequired() const
 {
@@ -145,7 +145,7 @@ FieldInstructionGroup::presenceMapBitsRequired() const
   }
   return 0;
 }
-
+#endif
 
 void
 FieldInstructionGroup::interpretValue(const std::string & /*value*/)

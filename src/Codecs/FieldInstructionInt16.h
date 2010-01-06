@@ -7,7 +7,6 @@
 #ifndef FIELDINSTRUCTIONINT16_H
 #define FIELDINSTRUCTIONINT16_H
 #include <Codecs/FieldInstructionInteger.h>
-//#include <Messages/FieldInt16.h>
 
 namespace QuickFAST{
   namespace Codecs{

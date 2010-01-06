@@ -1,3 +1,72 @@
+Wed Jan  6 00:01:56 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/Context.h:
+        * src/Codecs/Context.cpp:
+        * src/Codecs/DictionaryIndexer.h:
+        * src/Codecs/Encoder.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionExponent.h:
+        * src/Codecs/FieldInstructionGroup.h:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInt16.h:
+        * src/Codecs/FieldInstructionInt32.h:
+        * src/Codecs/FieldInstructionInt64.h:
+        * src/Codecs/FieldInstructionInt8.h:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionMantissa.h:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/FieldInstructionUInt16.h:
+        * src/Codecs/FieldInstructionUInt32.h:
+        * src/Codecs/FieldInstructionUInt64.h:
+        * src/Codecs/FieldInstructionUInt8.h:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FieldOp.cpp:
+        * src/Codecs/GenericMessageBuilder.h:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/MulticastDecoder_fwd.h:
+        * src/Codecs/SegmentBody.h:
+        * src/Codecs/Template.h:
+        * src/Codecs/Template.cpp:
+        * src/Codecs/TemplateRegistry.h:
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/Common/StringBuffer.h:
+        * src/Common/Types.h:
+        * src/Common/Value.h:
+        * src/Common/Version.h:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/Examples/MessagePerformance.h:
+        * src/Examples/Examples/MessagePerformance.cpp:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+        * src/Examples/PerformanceTest/NullMessage.h:
+        * src/Examples/PerformanceTest/NullMessage.cpp:
+        * src/Messages/Field.h:
+        * src/Messages/FieldAscii.h:
+        * src/Messages/FieldByteVector.h:
+        * src/Messages/FieldDecimal.h:
+        * src/Messages/FieldGroup.cpp:
+        * src/Messages/FieldIdentity.h:
+        * src/Messages/FieldIdentity.cpp:
+        * src/Messages/FieldInt16.h:
+        * src/Messages/FieldInt32.h:
+        * src/Messages/FieldInt64.h:
+        * src/Messages/FieldInt8.h:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/FieldUInt16.h:
+        * src/Messages/FieldUInt32.h:
+        * src/Messages/FieldUInt64.h:
+        * src/Messages/FieldUInt8.h:
+        * src/Messages/FieldUtf8.h:
+        * src/Messages/Message.cpp:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/SingleValueBuilder.h:
+        * src/Messages/ValueMessageBuilder.h:
+        Update doxygen comments.
+
 Tue Jan  5 21:35:52 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Context.h:

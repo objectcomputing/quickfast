@@ -373,6 +373,12 @@ namespace QuickFAST
       return size() == 0;
     }
 
+    /// @brief discard value without discarding buffer
+    void erase()
+    {
+      size_ = 0;
+    }
+
     /// @brief discard contents, thereby making this an empty StringBufferT.
     void clear()
     {

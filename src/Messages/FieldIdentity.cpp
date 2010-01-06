@@ -34,35 +34,3 @@ FieldIdentity::freeFieldIdentity()const
   delete this;
 }
 
-#if 0
-
-void
-Messages::intrusive_ptr_add_ref(const Messages::FieldIdentity * ptr)
-{
-  ++ptr->refcount_;
-}
-
-void
-Messages::intrusive_ptr_release(const Messages::FieldIdentity * ptr)
-{
-  if(--ptr->refcount_ == 0)
-  {
-    ptr->freeFieldIdentity();
-  }
-}
-void
-Messages::intrusive_ptr_add_ref(Messages::FieldIdentity * ptr)
-{
-  ++ptr->refcount_;
-}
-
-void
-Messages::intrusive_ptr_release(Messages::FieldIdentity * ptr)
-{
-  if(--ptr->refcount_ == 0)
-  {
-    ptr->freeFieldIdentity();
-  }
-}
-
-#endif

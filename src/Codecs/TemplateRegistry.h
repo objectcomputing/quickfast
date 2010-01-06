@@ -59,6 +59,7 @@ namespace QuickFAST{
       /// @param value smart pointer to the template to be added
       virtual void addTemplate(TemplatePtr value);
 
+      /// @brief do any final processing after parsing is complete.
       virtual void finalize();
 
       /// @brief How many templates are defined?

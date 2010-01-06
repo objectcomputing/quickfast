@@ -37,6 +37,8 @@ namespace QuickFAST{
       /// @param applicationType is the data type for a sequence entry
       /// @param applicationTypeNamespace qualifies applicationTYpe
       /// @param fieldCount is the maximum number of fields to expect in each entry
+      /// @param lengthIdentity identifies the length field for this sequence
+      /// @param length sets the value of the length field.
       void initialize(
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,

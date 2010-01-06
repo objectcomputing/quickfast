@@ -10,7 +10,6 @@
 #include <Common/QuickFAST_Export.h>
 #include <Messages/MessageAccessor.h>
 #include <Messages/MessageField.h>
-//#include <Messages/Field.h>
 
 namespace QuickFAST{
   namespace Messages{
@@ -142,6 +141,10 @@ namespace QuickFAST{
         ValueType::Type & type,
         FieldCPtr & fieldPtr)const;
 
+      /// @brief compare two field sets for equality
+      /// @param rhs the target of the comparison
+      /// @param reason a discription of the cause of the mismatch is written to this stream
+      /// @returns true if the field sets are equal.
       bool equals(const FieldSet & rhs, std::ostream & reason) const;
 
     private:

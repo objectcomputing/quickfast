@@ -7,7 +7,6 @@
 #ifndef FIELDINSTRUCTIONINT64_H
 #define FIELDINSTRUCTIONINT64_H
 #include <Codecs/FieldInstructionInteger.h>
-//#include <Messages/FieldInt64.h>
 
 namespace QuickFAST{
   namespace Codecs{

@@ -115,8 +115,12 @@ namespace QuickFAST{
       /// the stop request is complete.
       void stop();
 
+      /// @brief Join any threads created by the run method
+      ///
+      /// Should be called AFTER stop()
       void joinThreads();
 
+      /// @brief access the underlying multicast receiver.
       const MulticastReceiver & receiver()const
       {
         return receiver_;

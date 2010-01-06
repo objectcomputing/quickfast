@@ -7,7 +7,7 @@
 #ifndef FIELDINSTRUCTIONMANTISSA_H
 #define FIELDINSTRUCTIONMANTISSA_H
 #include <Codecs/FieldInstructionInteger.h>
-//#include <Messages/FieldInt64.h>
+
 namespace QuickFAST{
   namespace Codecs{
     /// @brief An implementation for the &lt;mantissa> field instruction within a &lt;decimal>.

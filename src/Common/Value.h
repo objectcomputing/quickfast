@@ -18,6 +18,7 @@ namespace QuickFAST{
   class Value
   {
   public:
+    /// @brief Enumerate the types of values (orable)
     enum ValueClass
     {
       SIGNEDINTEGER = 2,
@@ -51,6 +52,7 @@ namespace QuickFAST{
     }
 
     /// @brief reset the value class
+    /// @param undefined defaults to UNDEFINED but can be used to set other classes for testing
     ///
     void setUndefined(ValueClass undefined = UNDEFINED)
     {
@@ -58,27 +60,32 @@ namespace QuickFAST{
       cachedString_ = false;
     }
 
+    /// @brief set the value to NULL
     void setNull()
     {
       class_ = EMPTY;
       cachedString_ = false;
     }
 
+    /// @brief check for NULL value
     bool isNull() const
     {
       return ((class_ & EMPTY) == EMPTY);
     }
 
+    /// @brief set the value to undefined
     void erase()
     {
       class_ = UNDEFINED;
       cachedString_ = false;
-      string_.clear();
+      string_.erase();
       signedInteger_ = 0;
       unsignedInteger_ = 0;
       exponent_ = 0;
     }
 
+    /// @brief assign a value
+    /// @param value is the value to be assigned
     void setValue(const int64 value)
     {
       class_ = SIGNEDINTEGER;
@@ -86,6 +93,8 @@ namespace QuickFAST{
       signedInteger_ = value;
     }
 
+    /// @brief assign a value
+    /// @param value is the value to be assigned
     void setValue(const uint64 value)
     {
       class_ = UNSIGNEDINTEGER;
@@ -93,6 +102,8 @@ namespace QuickFAST{
       unsignedInteger_ = value;
     }
 
+    /// @brief assign a value
+    /// @param value is the value to be assigned
     void setValue(const int32 value)
     {
       class_ = SIGNEDINTEGER;
@@ -100,6 +111,8 @@ namespace QuickFAST{
       signedInteger_ = value;
     }
 
+    /// @brief assign a value
+    /// @param value is the value to be assigned
     void setValue(const uint32 value)
     {
       class_ = UNSIGNEDINTEGER;
@@ -107,6 +120,8 @@ namespace QuickFAST{
       unsignedInteger_ = value;
     }
 
+    /// @brief assign a value
+    /// @param value is the value to be assigned
     void setValue(const int16 value)
     {
       class_ = SIGNEDINTEGER;
@@ -114,6 +129,8 @@ namespace QuickFAST{
       signedInteger_ = value;
     }
 
+    /// @brief assign a value
+    /// @param value is the value to be assigned
     void setValue(const uint16 value)
     {
       class_ = UNSIGNEDINTEGER;
@@ -121,6 +138,8 @@ namespace QuickFAST{
       unsignedInteger_ = value;
     }
 
+    /// @brief assign a value
+    /// @param value is the value to be assigned
     void setValue(const int8 value)
     {
       class_ = SIGNEDINTEGER;
@@ -128,6 +147,8 @@ namespace QuickFAST{
       signedInteger_ = value;
     }
 
+    /// @brief assign a value
+    /// @param value is the value to be assigned
     void setValue(const uchar value)
     {
       class_ = UNSIGNEDINTEGER;
@@ -135,6 +156,8 @@ namespace QuickFAST{
       unsignedInteger_ = value;
     }
 
+    /// @brief assign a value
+    /// @param value is the value to be assigned
     void setValue(const Decimal& value)
     {
       class_ = DECIMAL;
@@ -143,6 +166,9 @@ namespace QuickFAST{
       signedInteger_ = value.getMantissa();
     }
 
+    /// @brief assign a value
+    /// @param value is the value to be assigned
+    /// @param length is the lenght of the string pointed to by value.
     void setValue(const unsigned char * value, size_t length)
     {
       class_ = STRING;
@@ -150,11 +176,16 @@ namespace QuickFAST{
       string_.assign(value, length);
     }
 
+    /// @brief assign a value from a null terminated C-style string
+    ///
+    /// @param value is the value to be assigned
     void setValue(const char * value)
     {
       setValue(reinterpret_cast<const unsigned char*>(value), std::strlen(value));
     }
 
+    /// @brief assign a value
+    /// @param value is the value to be assigned
     void setValue(const std::string& value)
     {
       setValue(reinterpret_cast<const unsigned char*>(value.c_str()), value.length());
@@ -184,7 +215,7 @@ namespace QuickFAST{
       return true;
     }
 
-
+    /// @brief inequality operator
     bool operator != (const Value & rhs)const
     {
       return ! (*this == rhs);
@@ -213,26 +244,32 @@ namespace QuickFAST{
       return (class_ & (UNDEFINED | STRING)) == STRING;
     }
 
+    /// @brief true if signed integer
     bool isSignedInteger() const
     {
       return (class_ & (UNDEFINED | SIGNEDINTEGER)) == SIGNEDINTEGER;
     }
 
+    /// @brief true if unsigned integer
     bool isUnsignedInteger() const
     {
       return (class_ & (UNDEFINED | UNSIGNEDINTEGER)) == UNSIGNEDINTEGER;
     }
 
+    /// @brief true if numberic (integer, unsigned integer or decimal)
     bool isNumeric() const
     {
       return (class_ & (UNDEFINED | STRING | COMPOUND)) == 0;
     }
 
+    /// @brief true if compound value
     bool isCompound() const
     {
       return (class_ & (UNDEFINED | COMPOUND)) == COMPOUND;
     }
 
+    /// @brief get the value
+    /// @param value receives the data
     bool getValue(int64 & value)
     {
       if(class_ == SIGNEDINTEGER)
@@ -243,6 +280,8 @@ namespace QuickFAST{
       return false;
     }
 
+    /// @brief get the value
+    /// @param value receives the data
     bool getValue(uint64 & value)
     {
       if(class_ == UNSIGNEDINTEGER)
@@ -253,6 +292,8 @@ namespace QuickFAST{
       return false;
     }
 
+    /// @brief get the value
+    /// @param value receives the data
     bool getValue(int32 & value)
     {
       if(class_ == SIGNEDINTEGER)
@@ -263,6 +304,8 @@ namespace QuickFAST{
       return false;
     }
 
+    /// @brief get the value
+    /// @param value receives the data
     bool getValue(uint32 & value)
     {
       if(class_ == UNSIGNEDINTEGER)
@@ -273,6 +316,8 @@ namespace QuickFAST{
       return false;
     }
 
+    /// @brief get the value
+    /// @param value receives the data
     bool getValue(int16 & value)
     {
       if(class_ == SIGNEDINTEGER)
@@ -283,6 +328,8 @@ namespace QuickFAST{
       return false;
     }
 
+    /// @brief get the value
+    /// @param value receives the data
     bool getValue(uint16 & value)
     {
       if(class_ == UNSIGNEDINTEGER)
@@ -293,6 +340,8 @@ namespace QuickFAST{
       return false;
     }
 
+    /// @brief get the value
+    /// @param value receives the data
     bool getValue(int8 & value)
     {
       if(class_ == SIGNEDINTEGER)
@@ -303,6 +352,8 @@ namespace QuickFAST{
       return false;
     }
 
+    /// @brief get the value
+    /// @param value receives the data
     bool getValue(uchar & value)
     {
       if(class_ == UNSIGNEDINTEGER)
@@ -313,6 +364,8 @@ namespace QuickFAST{
       return false;
     }
 
+    /// @brief get the value
+    /// @param value receives the data
     bool getValue(Decimal & value)
     {
       if(class_ == DECIMAL)
@@ -324,6 +377,9 @@ namespace QuickFAST{
 
     }
 
+    /// @brief get the value
+    /// @param value is set to point to the string
+    /// @param length is the length of the string.
     bool getValue(const unsigned char *& value, size_t &length)
     {
       if(class_ == STRING)
@@ -335,6 +391,8 @@ namespace QuickFAST{
       return false;
     }
 
+    /// @brief get the value
+    /// @param value is set to point to the string
     bool getValue(const char *& value)
     {
       if(class_ == STRING)
@@ -345,6 +403,8 @@ namespace QuickFAST{
       return false;
     }
 
+    /// @brief get the value
+    /// @param value receives the data
     bool getValue(std::string& value)
     {
       if(class_ == STRING)
@@ -355,7 +415,8 @@ namespace QuickFAST{
       return false;
     }
 
-
+    /// @brief get the value
+    /// @returns the value
     uint64 getUnsignedInteger()const
     {
       if(class_ != UNSIGNEDINTEGER)
@@ -366,6 +427,8 @@ namespace QuickFAST{
       return unsignedInteger_;
     }
 
+    /// @brief get the value
+    /// @returns the value
     int64 getSignedInteger()const
     {
       if(class_ != SIGNEDINTEGER)
@@ -376,6 +439,8 @@ namespace QuickFAST{
       return signedInteger_;
     }
 
+    /// @brief get the value
+    /// @returns the value
     int64 getMantissa()const
     {
       if(class_ != DECIMAL)
@@ -386,6 +451,8 @@ namespace QuickFAST{
       return signedInteger_;
     }
 
+    /// @brief get the value
+    /// @returns the value
     exponent_t getExponent()const
     {
       if(class_ != DECIMAL)
@@ -396,6 +463,8 @@ namespace QuickFAST{
       return exponent_;
     }
 
+    /// @brief get the value
+    /// @returns the value
     Decimal getDecimal()const
     {
       if(class_ != DECIMAL)
@@ -406,9 +475,8 @@ namespace QuickFAST{
       return Decimal(signedInteger_, exponent_);
     }
 
-  protected:
-    /// @brief Data types that do NOT store their value in string_ should
-    /// override this and put a value in string_ for display purposes only.
+  private:
+    /// @brief Produce a cached "human readable" representation of the value
     void valueToStringBuffer()const
     {
       if(cachedString_ || (class_ == STRING))

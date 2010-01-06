@@ -4,7 +4,6 @@
 //
 #ifndef MULTICASTDECODER_FWD_H
 #define MULTICASTDECODER_FWD_H
-//#include <Messages/Message_fwd.h>
 #include <Codecs/GenericMessageBuilder.h>
 #include <Codecs/MessageConsumer.h>
 #include <Codecs/DataSourceBuffer.h>

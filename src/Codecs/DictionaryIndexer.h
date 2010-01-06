@@ -8,7 +8,6 @@
 #define DICTIONARYINDEXER_H
 #include <Common/QuickFAST_Export.h>
 #include "DictionaryIndexer_fwd.h"
-//#include <Common/Types.h>
 
 namespace QuickFAST{
   namespace Codecs{
@@ -33,7 +32,7 @@ namespace QuickFAST{
       /// @param dictionaryName identifies the dictionary to be used for this field.
       ///        Special values "", "global", "template", and "type" will be recognized.
       ///        Any other value is a user defined dictionary.
-      /// @paramtypeName names the application type in case dictionary name is "type"
+      /// @param typeName names the application type in case dictionary name is "type"
       /// @param typeNamespace namespace to qualifytypeName
       /// @param key is the key to identify the element in the dictionary
       /// @param keyNamespace qualifies the key name.

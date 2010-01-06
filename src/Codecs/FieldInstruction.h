@@ -178,7 +178,7 @@ namespace QuickFAST{
       /// @brief Assign a dictionary index to this field and any subfields.
       /// @param indexer assigns the index.
       /// @param dictionaryName is the parent's dictionary name (inherited unless overridden)
-      /// @paramtypeName is the application type for this instruction
+      /// @param typeName is the application type for this instruction
       /// @param typeNamespace is the namespace to qualify the application type.
       virtual void indexDictionaries(
         DictionaryIndexer & indexer,
@@ -485,6 +485,7 @@ namespace QuickFAST{
       /// @param[in] source supplies the data
       /// @param context in which the decoding occurs.
       /// @param[out] value returns the result
+      /// @param[in] name of this field to be used in error messages
       /// @param[in] allowOversize ignores one bit of overflow to cope
       ///            with out-of-range deltas (see section 6.3.7.1 of the Fast Specification v1x1)
       /// @returns true if successful; false if EOF
@@ -506,6 +507,7 @@ namespace QuickFAST{
       /// @param[in] source supplies the data
       /// @param context in which the decoding occurs.
       /// @param[out] value returns the result
+      /// @param[in] name of this field to be used in error messages
       /// @returns true if successful; false if EOF
       /// @throws OverflowError if the decoded value doesn't fit the supplied type
       template<typename UnsignedIntType>
@@ -564,6 +566,7 @@ namespace QuickFAST{
       /// Assumes byte vector of approriate length is present in input stream.
       /// @param[in] decoder for which this decoding is being done
       /// @param[in] source supplies the data
+      /// @param[in] name of this field to be used in error messages
       /// @param[out] buffer receives the result
       /// @param[in] length expected
       /// @throws EncodingError if not enough data is available
@@ -574,8 +577,10 @@ namespace QuickFAST{
         WorkingBuffer & buffer,
         size_t length);
 
+      /// @brief do final processing of this field instruction after parsing entire template set.
       void finalize(Codecs::TemplateRegistry & registry);
 
+      /// @brief how many presence map bits are used by this field instruction?
       size_t getPresenceMapBitsUsed() const
       {
         return presenceMapBitsUsed_;

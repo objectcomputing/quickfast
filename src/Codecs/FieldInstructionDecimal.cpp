@@ -193,11 +193,7 @@ FieldInstructionDecimal::decodeCopy(
         identity_,
         ValueType::DECIMAL,
         value);
-#if 0
-      fieldOp_->setDictionaryValue(decoder, newField);
-#else
       fieldOp_->setDictionaryValue(decoder, value);
-#endif
     }
     else
     {
@@ -485,40 +481,18 @@ FieldInstructionDecimal::encodeCopy(
   Decimal previousValue(typedValue_);
 
   // ... then initialize them from the dictionary
-#if 0
-  Messages::FieldCPtr previousField;
-  if(fieldOp_->findDictionaryField(encoder, previousField))
-  {
-    if(!previousField->isType(ValueType::DECIMAL))
-    {
-      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
-    }
-    previousIsKnown = true;
-    previousNotNull = previousField->isDefined();
-    if(previousNotNull)
-    {
-      previousValue = previousField->toDecimal();
-    }
-  }
-#else
   if(fieldOp_->getDictionaryValue(encoder, previousValue))
   {
     previousIsKnown = true;
     previousNotNull = true;
     /// @TODO distinguish null vs unknown
   }
-#endif
   if(!previousIsKnown && fieldOp_->hasValue())
   {
     previousIsKnown = true;
     previousNotNull = true;
     previousValue = typedValue_;
-#if 0
-    fieldOp_->setDictionaryValue(encoder, Messages::FieldDecimal::create(previousValue));
-#else
     fieldOp_->setDictionaryValue(encoder, previousValue);
-#endif
-
   }
 
   // get the value from the application data
@@ -542,12 +516,7 @@ FieldInstructionDecimal::encodeCopy(
       {
         encodeNullableDecimal(destination, encoder.getWorkingBuffer(), value.getExponent(), value.getMantissa());
       }
-#if 0
-      field = Messages::FieldDecimal::create(value);
-      fieldOp_->setDictionaryValue(encoder, field);
-#else
       fieldOp_->setDictionaryValue(encoder, value);
-#endif
     }
   }
   else // not defined in fieldset
@@ -559,13 +528,7 @@ FieldInstructionDecimal::encodeCopy(
       // send a dummy value
       destination.putByte(zeroIntegerNonnullable);//exponent
       destination.putByte(zeroIntegerNonnullable);//mantissa
-#if 0
-      field = Messages::FieldDecimal::create(0,0);
-      fieldOp_->setDictionaryValue(encoder, field);
-#else
       fieldOp_->setDictionaryValue(encoder, Decimal(0,0));
-#endif
-
     }
     else
     {
@@ -573,13 +536,7 @@ FieldInstructionDecimal::encodeCopy(
       {
         pmap.setNextField(true);// value in stream
         destination.putByte(nullDecimal);
-#if 0
-        field = Messages::FieldDecimal::createNull();
-        fieldOp_->setDictionaryValue(encoder, field);
-#else
         fieldOp_->setDictionaryValueNull(encoder);
-#endif
-
       }
       else
       {
@@ -597,48 +554,15 @@ FieldInstructionDecimal::encodeDelta(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & accessor) const
 {
-
-  // declare a couple of variables...
-  bool previousIsKnown = false;
-  bool previousNotNull = false;
-  Decimal previousValue(typedValue_);
+  // assume default
+  Decimal previousValue;
 
   // ... then initialize them from the dictionary
-#if 0
-  Messages::FieldCPtr previousField;
-  if(fieldOp_->findDictionaryField(encoder, previousField))
+  Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
+  if(previousStatus != Context::OK_VALUE && fieldOp_->hasValue())
   {
-    if(!previousField->isType(ValueType::DECIMAL))
-    {
-      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
-    }
-    previousIsKnown = true;
-    previousNotNull = previousField->isDefined();
-    if(previousNotNull)
-    {
-      previousValue = previousField->toDecimal();
-    }
-  }
-#else
-  if(fieldOp_->getDictionaryValue(encoder, previousValue))
-  {
-    previousIsKnown = true;
-    previousNotNull = true;
-    /// @TODO distinguish null vs unknown
-  }
-#endif
-
-  if(!previousIsKnown && fieldOp_->hasValue())
-  {
-    previousIsKnown = true;
-    previousNotNull = true;
     previousValue = typedValue_;
-#if 0
-    fieldOp_->setDictionaryValue(encoder, Messages::FieldDecimal::create(previousValue));
-#else
     fieldOp_->setDictionaryValue(encoder, previousValue);
-#endif
-
   }
 
   // get the value from the application data
@@ -660,17 +584,10 @@ FieldInstructionDecimal::encodeDelta(
     int64 mantissaDelta = int64(value.getMantissa()) - int64(previousValue.getMantissa());
     encodeSignedInteger(destination, encoder.getWorkingBuffer(), mantissaDelta);
 
-    if(!previousIsKnown  || value != previousValue)
+    if(previousStatus != Context::OK_VALUE  || value != previousValue)
     {
-#if 0
-      field = Messages::FieldDecimal::create(value);
-      fieldOp_->setDictionaryValue(encoder, field);
-#else
       fieldOp_->setDictionaryValue(encoder, value);
-#endif
-
     }
-
   }
   else // not defined in fieldset
   {

@@ -11,8 +11,8 @@ using namespace Codecs;
 void
 Template::qualifyName(
   std::string & out,
-  const std::string templateName,
-  const std::string &templateNamespace)
+  const std::string & templateName,
+  const std::string & templateNamespace)
 {
   if(templateNamespace.empty())
   {
