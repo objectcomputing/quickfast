@@ -34,6 +34,10 @@ WorkingBuffer::clear(bool reverse, size_t capacity)
   {
     startPos_ = capacity_;
   }
+  else
+  {
+    startPos_ = 0;
+  }
   endPos_ = startPos_;
 }
 

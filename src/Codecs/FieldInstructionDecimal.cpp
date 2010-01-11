@@ -200,7 +200,7 @@ FieldInstructionDecimal::decodeCopy(
       // not mandatory means it's nullable
       if(checkNullInteger(exponent))
       {
-      fieldOp_->setDictionaryValueNull(decoder);
+        fieldOp_->setDictionaryValueNull(decoder);
       }
       else
       {
@@ -218,14 +218,8 @@ FieldInstructionDecimal::decodeCopy(
   else // pmap says not present, use copy
   {
     Decimal value(0,0);
-    if(fieldOp_->getDictionaryValue(decoder, value))
-    {
-      accessor.addValue(
-        identity_,
-        ValueType::DECIMAL,
-        value);
-    }
-    else
+    Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, value);
+    if(previousStatus == Context::UNDEFINED_VALUE)
     {
       // value not found in dictionary
       // not a problem..  use initial value if it's available
@@ -245,6 +239,14 @@ FieldInstructionDecimal::decodeCopy(
         }
       }
     }
+    else if(previousStatus == Context::OK_VALUE)
+    {
+      accessor.addValue(
+        identity_,
+        ValueType::DECIMAL,
+        value);
+    }
+    //else previous was null so don't put anything in the record
   }
   return true;
 }
@@ -475,24 +477,15 @@ FieldInstructionDecimal::encodeCopy(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & accessor) const
 {
-  // declare a couple of variables...
-  bool previousIsKnown = typedValueIsDefined_;
-  bool previousNotNull = typedValueIsDefined_;
-  Decimal previousValue(typedValue_);
-
-  // ... then initialize them from the dictionary
-  if(fieldOp_->getDictionaryValue(encoder, previousValue))
+  Decimal previousValue(0,0);
+  Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
+  if(previousStatus == Context::UNDEFINED_VALUE)
   {
-    previousIsKnown = true;
-    previousNotNull = true;
-    /// @TODO distinguish null vs unknown
-  }
-  if(!previousIsKnown && fieldOp_->hasValue())
-  {
-    previousIsKnown = true;
-    previousNotNull = true;
-    previousValue = typedValue_;
-    fieldOp_->setDictionaryValue(encoder, previousValue);
+    if(fieldOp_->hasValue())
+    {
+      previousValue = typedValue_;
+      fieldOp_->setDictionaryValue(encoder, previousValue);
+    }
   }
 
   // get the value from the application data
@@ -501,7 +494,7 @@ FieldInstructionDecimal::encodeCopy(
   {
     Decimal value = field->toDecimal();
 
-    if(previousNotNull && previousValue == value)
+    if(previousStatus == Context::OK_VALUE && previousValue == value)
     {
       pmap.setNextField(false); // not in stream, use copy
     }
@@ -523,16 +516,16 @@ FieldInstructionDecimal::encodeCopy(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      encoder.reportFatal("[ERR U01]", "Missing mandatory decimal field.", *identity_);
       // if reportFatal returns we're being lax about encoding rules
       // send a dummy value
       destination.putByte(zeroIntegerNonnullable);//exponent
       destination.putByte(zeroIntegerNonnullable);//mantissa
-      fieldOp_->setDictionaryValue(encoder, Decimal(0,0));
+      fieldOp_->setDictionaryValueNull(encoder);
     }
     else
     {
-      if(previousIsKnown && previousNotNull)
+      if(previousValue != Context::NULL_VALUE)
       {
         pmap.setNextField(true);// value in stream
         destination.putByte(nullDecimal);

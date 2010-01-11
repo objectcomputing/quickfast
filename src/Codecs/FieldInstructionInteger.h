@@ -342,7 +342,8 @@ namespace QuickFAST{
       else // pmap says not present, use copy
       {
         INTEGER_TYPE previousValue = 0;
-        if(fieldOp_->getDictionaryValue(decoder, previousValue))
+        Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, previousValue);
+        if(previousStatus != Context::UNDEFINED_VALUE)
         {
           fieldSet.addValue(
             identity_,
@@ -460,7 +461,6 @@ namespace QuickFAST{
         if(fieldOp_->hasValue()) // initial value in field op?
         {
           value = typedValue_;
-          fieldOp_->setDictionaryValue(decoder, value);
         }
       }
       // Apply delta
@@ -730,7 +730,7 @@ namespace QuickFAST{
       // get previous value from dictionary
       INTEGER_TYPE previousValue = 0;
       Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
-      if(previousStatus != Context::OK_VALUE && fieldOp_->hasValue())
+      if(previousStatus == Context::UNDEFINED_VALUE && fieldOp_->hasValue())
       {
         previousValue = typedValue_;
         fieldOp_->setDictionaryValue(encoder, typedValue_);
@@ -775,7 +775,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR U01]", "Missing mandatory field.", *identity_);
+          encoder.reportError("[ERR U01]", "Missing mandatory integer field.", *identity_);
           // if reportEror returns we're being lax about the rules.
           // Let the copy happen
           pmap.setNextField(false);

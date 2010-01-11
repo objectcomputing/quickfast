@@ -273,7 +273,7 @@ namespace QuickFAST{
       /// @param value is the value that was found
       /// @param length is the length of the string pointed to by value
       /// @returns a dictionary status indicating the results of the search
-      Context::DictionaryStatus  getDictionaryValue(Context & context, const unsigned char *& value, size_t &length)
+      Context::DictionaryStatus getDictionaryValue(Context & context, const unsigned char *& value, size_t &length)
       {
         return context.getDictionaryValue(dictionaryIndex_, value, length);
       }

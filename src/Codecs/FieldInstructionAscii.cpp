@@ -184,7 +184,7 @@ FieldInstructionAscii::decodeCopy(
     {
       fieldSet.addValue(identity_, ValueType::ASCII, value, valueSize);
     }
-    else if(fieldOp_->hasValue())
+    else if(previousStatus == Context::UNDEFINED_VALUE && fieldOp_->hasValue())
     {
       fieldSet.addValue(
         identity_,

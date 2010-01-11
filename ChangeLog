@@ -1,3 +1,20 @@
+Mon Jan 11 23:14:37 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+          Handle dictionary status correctly.
+          Issue # 35.  Thanks to carlosz
+
+        * src/Codecs/FieldOp.h:
+          Minor cosmetic change
+
+        * src/Common/WorkingBuffer.cpp:
+          Clear start pos when necessary -- avoids unnecessary growth.
+          Issue #35
+        * src/Examples/PerformanceTest/PerformanceTest.cpp:
+          Add field and sequence entry stats to performance test
+
 Wed Jan  6 15:48:22 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Common/Types.cpp:
