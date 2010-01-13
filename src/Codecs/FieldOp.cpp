@@ -52,29 +52,3 @@ FieldOp::indexDictionaries(
   }
 }
 
-
-void
-FieldOp::setDictionaryValue(
-  Context & context,
-  const Messages::FieldCPtr & value)
-{
-  if(!dictionaryIndexValid_)
-  {
-    throw TemplateDefinitionError("No index available for field.");
-  }
-  context.setDictionaryField(dictionaryIndex_, value);
-}
-
-bool
-FieldOp::findDictionaryField(
-  Context & context,
-  Messages::FieldCPtr & value)
-{
-  if(!dictionaryIndexValid_)
-  {
-    throw TemplateDefinitionError("No index available for field.");
-  }
-  return context.findDictionaryField(dictionaryIndex_, value);
-}
-
-

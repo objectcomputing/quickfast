@@ -42,7 +42,7 @@ FieldInstructionSequence::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & messageBuilder) const
+  Messages::ValueMessageBuilder & messageBuilder) const
 {
   if(!segment_)
   {
@@ -75,7 +75,7 @@ FieldInstructionSequence::decodeNop(
   }
   length = lengthSet.value();
 
-  Messages::MessageBuilder & sequenceBuilder = messageBuilder.startSequence(
+  Messages::ValueMessageBuilder & sequenceBuilder = messageBuilder.startSequence(
     identity_,
     segment_->getApplicationType(),
     segment_->getApplicationTypeNamespace(),
@@ -92,7 +92,7 @@ FieldInstructionSequence::decodeNop(
       decoder.logMessage(msg.str());
     }
 
-    Messages::MessageBuilder & entrySet(
+    Messages::ValueMessageBuilder & entrySet(
       sequenceBuilder.startSequenceEntry(
         segment_->getApplicationType(),
         segment_->getApplicationTypeNamespace(),
@@ -195,6 +195,6 @@ FieldInstructionSequence::indexDictionaries(
   const std::string & typeName,
   const std::string & typeNamespace)
 {
-  segment_->indexDictionaries(indexer, dictionaryName, typeName, typeNamespace);
+  segment_->indexDictionaries(indexer, dictionaryName,typeName, typeNamespace);
 }
 

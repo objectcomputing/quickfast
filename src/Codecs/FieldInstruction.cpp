@@ -75,7 +75,7 @@ FieldInstruction::decodeConstant(
   Codecs::DataSource & /*source*/,
   Codecs::PresenceMap & /*pmap*/,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & /*fieldSet*/) const
+  Messages::ValueMessageBuilder & /*fieldSet*/) const
 {
   decoder.reportFatal("[ERR S2]", "Const Field Operator not supported for this data type.", *identity_);
   return false;
@@ -86,7 +86,7 @@ FieldInstruction::decodeDefault(
   Codecs::DataSource & /*source*/,
   Codecs::PresenceMap & /*pmap*/,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & /*fieldSet*/) const
+  Messages::ValueMessageBuilder & /*fieldSet*/) const
 {
   decoder.reportFatal("[ERR S2]", "Default Field Operator not supported for this data type.", *identity_);
   return false;
@@ -97,7 +97,7 @@ FieldInstruction::decodeCopy(
     Codecs::DataSource & /*source*/,
     Codecs::PresenceMap & /*pmap*/,
     Codecs::Decoder & decoder,
-    Messages::MessageBuilder & /*fieldSet*/) const
+    Messages::ValueMessageBuilder & /*fieldSet*/) const
 {
   decoder.reportFatal("[ERR S2]", "Copy Field Operator not supported for this data type.", *identity_);
   return false;
@@ -108,7 +108,7 @@ FieldInstruction::decodeCopy(
   Codecs::DataSource & /*source*/,
   bool /*pmapValue*/,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & /*fieldSet*/) const
+  Messages::ValueMessageBuilder & /*fieldSet*/) const
 {
   decoder.reportFatal("[ERR U93]", "Copy with specific presence map bit not supported for this data type.", *identity_);
   return false;
@@ -120,7 +120,7 @@ FieldInstruction::decodeDelta(
   Codecs::DataSource & /*source*/,
   Codecs::PresenceMap & /*pmap*/,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & /*fieldSet*/) const
+  Messages::ValueMessageBuilder & /*fieldSet*/) const
 {
   decoder.reportFatal("[ERR S2]", "Delta Field Operator not supported for this data type.", *identity_);
   return false;
@@ -131,7 +131,7 @@ FieldInstruction::decodeIncrement(
   Codecs::DataSource & /*source*/,
   Codecs::PresenceMap & /*pmap*/,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & /*fieldSet*/) const
+  Messages::ValueMessageBuilder & /*fieldSet*/) const
 {
   decoder.reportFatal("[ERR S2]", "Increment Field Operator not supported for this data type.", *identity_);
   return false;
@@ -142,7 +142,7 @@ FieldInstruction::decodeIncrement(
   Codecs::DataSource & /*source*/,
   bool /*pmapValue*/,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & /*fieldSet*/) const
+  Messages::ValueMessageBuilder & /*fieldSet*/) const
 {
   decoder.reportFatal("[ERR U93]", "Increment with specific presence map bit not supported for this data type.", *identity_);
   return false;
@@ -153,7 +153,7 @@ FieldInstruction::decodeTail(
   Codecs::DataSource & /*source*/,
   Codecs::PresenceMap & /*pmap*/,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & /*fieldSet*/) const
+  Messages::ValueMessageBuilder & /*fieldSet*/) const
 {
   decoder.reportFatal("[ERR S2]", "Tail Field Operator not supported for this data type.", *identity_);
   return false;
@@ -306,7 +306,7 @@ FieldInstruction::indexDictionaries(
   fieldOp_->indexDictionaries(
     indexer,
     dictionaryName,
-    typeName,
+   typeName,
     typeNamespace,
     identity_->getLocalName(),
     identity_->getNamespace());

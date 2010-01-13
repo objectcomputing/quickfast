@@ -10,7 +10,7 @@
 #include <Codecs/Decoder.h>
 
 #include <Codecs/TemplateRegistry_fwd.h>
-#include <Messages/MessageBuilder_fwd.h>
+#include <Messages/ValueMessageBuilder_fwd.h>
 
 namespace QuickFAST{
   namespace Codecs {
@@ -95,7 +95,7 @@ namespace QuickFAST{
       void reset();
 
       /// @brief Start the decoding process.  Returns immediately
-      void start(Messages::MessageBuilder & builder, size_t bufferSize=1400, size_t bufferCount=2);
+      void start(Messages::ValueMessageBuilder & builder, size_t bufferSize=1400, size_t bufferCount=2);
 
       /// @brief Run the event loop to accept incoming messages
       ///
@@ -108,15 +108,19 @@ namespace QuickFAST{
       ///
       /// Returns immediately, however decoding may continue until
       /// the decoder reaches a clean stopping point.  In particular
-      /// the MessageBuilder may receive additional messages after
+      /// the ValueMessageBuilder may receive additional messages after
       /// stop is called.
       ///
-      /// MessageBuilder::decodingStopped() will be called when
+      /// ValueMessageBuilder::decodingStopped() will be called when
       /// the stop request is complete.
       void stop();
 
+      /// @brief Join any threads created by the run method
+      ///
+      /// Should be called AFTER stop()
       void joinThreads();
 
+      /// @brief access the underlying multicast receiver.
       const MulticastReceiver & receiver()const
       {
         return receiver_;
@@ -127,7 +131,7 @@ namespace QuickFAST{
 
       BufferConsumerPtr bufferConsumer_;
       Decoder decoder_;
-      Messages::MessageBuilder * builder_;
+      Messages::ValueMessageBuilder * builder_;
       size_t messageLimit_;
       size_t messageCount_;
     };

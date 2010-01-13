@@ -7,9 +7,8 @@
 #include <Codecs/Decoder.h>
 #include <Codecs/Encoder.h>
 #include <Codecs/TemplateRegistry.h>
-#include <Messages/MessageBuilder.h>
+#include <Messages/ValueMessageBuilder.h>
 #include <Messages/Group.h>
-#include <Messages/FieldGroup.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
@@ -45,18 +44,20 @@ FieldInstructionStaticTemplateRef::finalize(TemplateRegistry & templateRegistry)
   presenceMapBitsRequired_ = target->presenceMapBitCount();
 }
 
+#if 0
 size_t
 FieldInstructionStaticTemplateRef::presenceMapBitsRequired() const
 {
   return presenceMapBitsRequired_;
 }
+#endif
 
 bool
 FieldInstructionStaticTemplateRef::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & messageBuilder) const
+  Messages::ValueMessageBuilder & messageBuilder) const
 {
   TemplateCPtr target;
   if(!decoder.findTemplate(templateName_, templateNamespace_, target))
@@ -66,7 +67,7 @@ FieldInstructionStaticTemplateRef::decodeNop(
 
   if(messageBuilder.getApplicationType() != target->getApplicationType())
   {
-    Messages::MessageBuilder & groupBuilder(
+    Messages::ValueMessageBuilder & groupBuilder(
       messageBuilder.startGroup(
         identity_,
         target->getApplicationType(),
@@ -161,7 +162,7 @@ FieldInstructionDynamicTemplateRef::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::MessageBuilder & messageBuilder) const
+  Messages::ValueMessageBuilder & messageBuilder) const
 {
    decoder.decodeNestedTemplate(source, messageBuilder, this->getIdentity());
    return true;

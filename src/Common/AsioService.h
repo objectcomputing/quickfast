@@ -82,8 +82,6 @@ namespace QuickFAST{
   protected:
     /// Protected reference to the io_service.
     boost::asio::io_service & ioService_;
-    /// Protected strand for thread-safe dispatching
-    boost::asio::io_service::strand strand_;
   };
 }
 #endif // ASIOSERVICE_H

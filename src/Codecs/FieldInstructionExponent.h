@@ -7,11 +7,10 @@
 #ifndef FIELDINSTRUCTIONEXPONENT_H
 #define FIELDINSTRUCTIONEXPONENT_H
 #include <Codecs/FieldInstructionInteger.h>
-#include <Messages/FieldInt32.h>
 namespace QuickFAST{
   namespace Codecs{
     /// @brief An implementation for the &lt;exponent> field instruction within a &lt;decimal>.
-    typedef FieldInstructionInteger</*exponent_t*/int32, Messages::FieldInt32, true> FieldInstructionExponent;
+    typedef FieldInstructionInteger</*exponent_t*/int32, ValueType::INT32, true> FieldInstructionExponent;
     /// @brief a pointer to a FieldInstrucionExponent
     typedef boost::shared_ptr<FieldInstructionExponent> FieldInstructionExponentPtr;
     /// @brief a const pointer to a FieldInstrucionExponent

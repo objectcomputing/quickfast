@@ -11,7 +11,7 @@
 #include <Codecs/Encoder.h>
 #include <Codecs/DataSource.h>
 #include <Codecs/DataDestination.h>
-#include <Messages/MessageBuilder.h>
+#include <Messages/ValueMessageBuilder.h>
 #include <Messages/MessageAccessor.h>
 #include <Messages/Field.h>
 
@@ -26,7 +26,7 @@ namespace QuickFAST{
     /// @brief A basic implementation for all integral types.
     ///
     /// Used for &lt;int32> &lt;uint32> &lt;int64> &lt;uint64> fields.
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     class FieldInstructionInteger : public FieldInstruction
     {
     public:
@@ -50,63 +50,61 @@ namespace QuickFAST{
       {
         typedValue_ = initialValue;
         typedValueIsDefined_ = true;
-        initialField_.reset(new FIELD_CLASS(typedValue_));
       }
 
       virtual void setDefaultValueIncrement()
       {
         typedValue_ = INTEGER_TYPE(1);
         typedValueIsDefined_ = true;
-        initialField_ = FIELD_CLASS::create(typedValue_);
       }
 
       virtual bool decodeNop(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual bool decodeConstant(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual bool decodeDefault(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual bool decodeCopy(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual bool decodeCopy(
         Codecs::DataSource & source,
         bool pmapValue,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual bool decodeDelta(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual bool decodeIncrement(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual bool decodeIncrement(
         Codecs::DataSource & source,
         bool pmapValue,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual void encodeNop(
         Codecs::DataDestination & destination,
@@ -145,45 +143,42 @@ namespace QuickFAST{
         const Messages::MessageAccessor & fieldSet) const;
 
     private:
-      FieldInstructionInteger(const FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED> &);
-      FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED> & operator=(const FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED> &);
+      FieldInstructionInteger(const FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED> &);
+      FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED> & operator=(const FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED> &);
 
     private:
       INTEGER_TYPE typedValue_;
       bool typedValueIsDefined_;
-      Messages::FieldCPtr initialField_;
     };
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     FieldInstructionInteger(
           const std::string & name,
           const std::string & fieldNamespace)
       : FieldInstruction(name, fieldNamespace)
       , typedValue_(INTEGER_TYPE(0))
       , typedValueIsDefined_(false)
-      , initialField_(FIELD_CLASS::create(0))
     {
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     FieldInstructionInteger()
       : typedValue_(INTEGER_TYPE(0))
       , typedValueIsDefined_(false)
-      , initialField_(FIELD_CLASS::create(0))
     {
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     ~FieldInstructionInteger()
     {
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     void
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     interpretValue(const std::string & value)
     {
       if(value.empty())
@@ -214,17 +209,16 @@ namespace QuickFAST{
           typedValueIsDefined_ = true;
         }
       }
-      initialField_ = FIELD_CLASS::create(typedValue_);
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     bool
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeNop(
       Codecs::DataSource & source,
       Codecs::PresenceMap & /*pmap*/,
       Codecs::Decoder & decoder,
-      Messages::MessageBuilder & fieldSet) const
+      Messages::ValueMessageBuilder & fieldSet) const
     {
       PROFILE_POINT("int::decodeNop");
 
@@ -241,34 +235,33 @@ namespace QuickFAST{
       }
       if(isMandatory())
       {
-        Messages::FieldCPtr newField(FIELD_CLASS::create(value));
-
-        fieldSet.addField(
+        fieldSet.addValue(
           identity_,
-          newField);
+          VALUE_TYPE,
+          value);
       }
       else
       {
         // not mandatory means it's nullable
         if(!checkNullInteger(value))
         {
-          Messages::FieldCPtr newField(FIELD_CLASS::create(value));
-          fieldSet.addField(
+          fieldSet.addValue(
             identity_,
-            newField);
+            VALUE_TYPE,
+            value);
         }
       }
       return true;
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     bool
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeConstant(
       Codecs::DataSource & /*source*/,
       Codecs::PresenceMap & pmap,
       Codecs::Decoder & /*decoder*/,
-      Messages::MessageBuilder & fieldSet) const
+      Messages::ValueMessageBuilder & fieldSet) const
     {
       PROFILE_POINT("int::decodeConstant");
       if(!isMandatory() && !pmap.checkNextField())
@@ -277,33 +270,34 @@ namespace QuickFAST{
       }
       else
       {
-        fieldSet.addField(
+        fieldSet.addValue(
           identity_,
-          initialField_);
+          VALUE_TYPE,
+          typedValue_);
       }
       return true;
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     bool
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeCopy(
       Codecs::DataSource & source,
       Codecs::PresenceMap & pmap,
       Codecs::Decoder & decoder,
-      Messages::MessageBuilder & fieldSet) const
+      Messages::ValueMessageBuilder & fieldSet) const
     {
       return decodeCopy(source, pmap.checkNextField(), decoder, fieldSet);
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     bool
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeCopy(
         Codecs::DataSource & source,
         bool pmapValue,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const
+        Messages::ValueMessageBuilder & fieldSet) const
     {
       PROFILE_POINT("int::decodeCopy");
       if(pmapValue)
@@ -321,62 +315,40 @@ namespace QuickFAST{
 
         if(isMandatory())
         {
-          Messages::FieldCPtr newField(FIELD_CLASS::create(value));
-          fieldSet.addField(
+          fieldSet.addValue(
             identity_,
-            newField);
-          fieldOp_->setDictionaryValue(decoder, newField);
+            VALUE_TYPE,
+            value);
+          fieldOp_->setDictionaryValue(decoder, value);
         }
         else
         {
           // not mandatory means it's nullable
           if(checkNullInteger(value))
           {
-            Messages::FieldCPtr newField(FIELD_CLASS::createNull());
-            fieldOp_->setDictionaryValue(decoder, newField);
+            fieldOp_->setDictionaryValueNull(decoder);
           }
           else
           {
-            Messages::FieldCPtr newField(FIELD_CLASS::create(value));
-            fieldSet.addField(
+            fieldSet.addValue(
               identity_,
-              newField);
-            fieldOp_->setDictionaryValue(decoder, newField);
+              VALUE_TYPE,
+              value);
+            fieldOp_->setDictionaryValue(decoder, value);
           }
         }
 
       }
       else // pmap says not present, use copy
       {
-        Messages::FieldCPtr previousField;
-        if(fieldOp_->findDictionaryField(decoder, previousField))
+        INTEGER_TYPE previousValue = 0;
+        Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, previousValue);
+        if(previousStatus != Context::UNDEFINED_VALUE)
         {
-          if(previousField->isDefined())
-          {
-            if(!previousField->isType(typedValue_))
-            {
-              // this will probably throw a template definition error
-              decoder.reportError("[ERR D4]", "Previous value type mismatch.", *identity_);
-              // but in case it doesn't ...
-              previousField = FIELD_CLASS::create(0);
-            }
-            fieldSet.addField(
-              identity_,
-              previousField);
-          }
-          else // field present but not defined
-          {
-            if(isMandatory())
-            {
-              // this will probably throw a template definition error
-              decoder.reportError("[ERR D6]", "Mandatory field is missing.", *identity_);
-              // but in case it doesn't ...
-              previousField = FIELD_CLASS::create(0);
-              fieldSet.addField(
-                identity_,
-                previousField);
-            }
-          }
+          fieldSet.addValue(
+            identity_,
+            VALUE_TYPE,
+            previousValue);
         }
         else
         {
@@ -384,10 +356,11 @@ namespace QuickFAST{
           // not a problem..  use initial value if it's available
           if(fieldOp_->hasValue())
           {
-            fieldSet.addField(
+            fieldSet.addValue(
               identity_,
-              initialField_);
-            fieldOp_->setDictionaryValue(decoder, initialField_);
+              VALUE_TYPE,
+              typedValue_);
+            fieldOp_->setDictionaryValue(decoder, typedValue_);
           }
           else
           {
@@ -397,11 +370,11 @@ namespace QuickFAST{
                 "[ERR D5]",
                 "Copy operator missing mandatory integer field/no initial value",
                 *identity_);
-              Messages::FieldCPtr newField(FIELD_CLASS::create(0));
-              fieldSet.addField(
+              fieldSet.addValue(
                 identity_,
-                newField);
-              fieldOp_->setDictionaryValue(decoder, newField);
+                VALUE_TYPE,
+                INTEGER_TYPE(0));
+              fieldOp_->setDictionaryValue(decoder, INTEGER_TYPE(0));
             }
           }
         }
@@ -409,14 +382,14 @@ namespace QuickFAST{
       return true;
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     bool
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeDefault(
       Codecs::DataSource & source,
       Codecs::PresenceMap & pmap,
       Codecs::Decoder & decoder,
-      Messages::MessageBuilder & fieldSet) const
+      Messages::ValueMessageBuilder & fieldSet) const
     {
       PROFILE_POINT("int::decodeDefault");
       if(pmap.checkNextField())
@@ -426,20 +399,20 @@ namespace QuickFAST{
         decodeSignedInteger(source, decoder, value, identity_->name());
         if(isMandatory())
         {
-          Messages::FieldCPtr newField(FIELD_CLASS::create(value));
-          fieldSet.addField(
+          fieldSet.addValue(
             identity_,
-            newField);
+            VALUE_TYPE,
+            value);
         }
         else
         {
           if(!checkNullInteger(value))
           {
             PROFILE_POINT("int::decodeDefault:,addexplicit");
-            Messages::FieldCPtr newField(FIELD_CLASS::create(value));
-            fieldSet.addField(
+            fieldSet.addValue(
               identity_,
-              newField);
+              VALUE_TYPE,
+              value);
           }
         }
       }
@@ -449,9 +422,10 @@ namespace QuickFAST{
         if(fieldOp_->hasValue())
         {
           PROFILE_POINT("int::decodeDefault:adddefault");
-          fieldSet.addField(
+          fieldSet.addValue(
             identity_,
-            initialField_);
+            VALUE_TYPE,
+            typedValue_);
         }
         else if(isMandatory())
         {
@@ -461,14 +435,14 @@ namespace QuickFAST{
       return true;
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     bool
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeDelta(
       Codecs::DataSource & source,
       Codecs::PresenceMap & /*pmap*/,
       Codecs::Decoder & decoder,
-      Messages::MessageBuilder & fieldSet) const
+      Messages::ValueMessageBuilder & fieldSet) const
     {
       PROFILE_POINT("int::decodeDelta");
       int64 delta;
@@ -481,52 +455,47 @@ namespace QuickFAST{
         }
       }
       INTEGER_TYPE value = typedValue_;
-      Messages::FieldCPtr previousField;
-      if(fieldOp_->findDictionaryField(decoder, previousField))
+      Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, value);
+      if(previousStatus == Context::UNDEFINED_VALUE)
       {
-        if(!previousField->isType(value))
+        if(fieldOp_->hasValue()) // initial value in field op?
         {
-          decoder.reportError("[ERR D4]", " Previous value type mismatch.", *identity_);
-          previousField = FIELD_CLASS::create(0);
+          value = typedValue_;
         }
-        previousField->getValue(value);
-      }
-      else if(fieldOp_->hasValue()) // initial value in field op?
-      {
-        value = typedValue_;
       }
       // Apply delta
       value = INTEGER_TYPE(value + delta);
-      Messages::FieldCPtr newField(FIELD_CLASS::create(value));
-
-      fieldSet.addField(
+      // Save the results
+      fieldSet.addValue(
         identity_,
-        newField);
-      fieldOp_->setDictionaryValue(decoder, newField);
+        VALUE_TYPE,
+        value);
+      fieldOp_->setDictionaryValue(decoder, value);
+
       return true;
     }
 
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     bool
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeIncrement(
       Codecs::DataSource & source,
       Codecs::PresenceMap & pmap,
       Codecs::Decoder & decoder,
-      Messages::MessageBuilder & fieldSet) const
+      Messages::ValueMessageBuilder & fieldSet) const
     {
       return decodeIncrement(source, pmap.checkNextField(), decoder, fieldSet);
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     bool
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeIncrement(
         Codecs::DataSource & source,
         bool pmapValue,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const
+        Messages::ValueMessageBuilder & fieldSet) const
     {
       PROFILE_POINT("int::decodeIncrement");
       if(pmapValue)
@@ -543,11 +512,11 @@ namespace QuickFAST{
         }
         if(isMandatory())
         {
-          Messages::FieldCPtr newField(FIELD_CLASS::create(value));
-          fieldSet.addField(
+          fieldSet.addValue(
             identity_,
-            newField);
-          fieldOp_->setDictionaryValue(decoder, newField);
+            VALUE_TYPE,
+            value);
+          fieldOp_->setDictionaryValue(decoder, value);
         }
         else
         {
@@ -555,11 +524,11 @@ namespace QuickFAST{
           // not mandatory means it's nullable
           if(!checkNullInteger(value))
           {
-            Messages::FieldCPtr newField(FIELD_CLASS::create(value));
-            fieldSet.addField(
+            fieldSet.addValue(
               identity_,
-              newField);
-          fieldOp_->setDictionaryValue(decoder, newField);
+              VALUE_TYPE,
+              value);
+          fieldOp_->setDictionaryValue(decoder, value);
           }
         }
       }
@@ -567,15 +536,9 @@ namespace QuickFAST{
       {
         //PROFILE_POINT("int::decodeIncrement::absent");
         INTEGER_TYPE value = typedValue_;
-        Messages::FieldCPtr previousField;
-        if(fieldOp_->findDictionaryField(decoder, previousField))
+        Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, value);
+        if(previousStatus == Context::OK_VALUE)
         {
-          if(!previousField->isType(value))
-          {
-            decoder.reportError("[ERR D4]", "Previous value type mismatch.", *identity_);
-            previousField = FIELD_CLASS::create(0);
-          }
-          previousField->getValue(value);
           value += 1;
         }
         else
@@ -598,18 +561,18 @@ namespace QuickFAST{
             }
           }
         }
-        Messages::FieldCPtr newField(FIELD_CLASS::create(value));
-        fieldSet.addField(
+        fieldSet.addValue(
           identity_,
-          newField);
-          fieldOp_->setDictionaryValue(decoder, newField);
+          VALUE_TYPE,
+          value);
+        fieldOp_->setDictionaryValue(decoder, value);
       }
       return true;
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     void
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     encodeNop(
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & /*pmap*/,
@@ -661,9 +624,9 @@ namespace QuickFAST{
       }
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     void
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     encodeConstant(
       Codecs::DataDestination & /*destination*/,
       Codecs::PresenceMap & pmap,
@@ -696,9 +659,9 @@ namespace QuickFAST{
       }
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     void
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     encodeDefault(
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & pmap,
@@ -755,41 +718,22 @@ namespace QuickFAST{
       }
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     void
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     encodeCopy(
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & pmap,
       Codecs::Encoder & encoder,
       const Messages::MessageAccessor & fieldSet) const
     {
-      // declare a couple of variables...
-      bool previousIsKnown = false;
-      bool previousNotNull = false;
+      // get previous value from dictionary
       INTEGER_TYPE previousValue = 0;
-
-      // ... then initialize them from the dictionary
-      Messages::FieldCPtr previousField;
-      if(fieldOp_->findDictionaryField(encoder, previousField))
+      Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
+      if(previousStatus == Context::UNDEFINED_VALUE && fieldOp_->hasValue())
       {
-        if(!previousField->isType(typedValue_))
-        {
-          encoder.reportError("[ERR D4]", "Previous value type mismatch.", *identity_);
-        }
-        previousIsKnown = true;
-        previousNotNull = previousField->isDefined();
-        if(previousNotNull)
-        {
-          previousField->getValue(previousValue);
-        }
-      }
-      if(!previousIsKnown && fieldOp_->hasValue())
-      {
-        previousIsKnown = true;
-        previousNotNull = true;
         previousValue = typedValue_;
-        fieldOp_->setDictionaryValue(encoder, FIELD_CLASS::create(previousValue));
+        fieldOp_->setDictionaryValue(encoder, typedValue_);
       }
 
       // get the value from the application data
@@ -799,7 +743,7 @@ namespace QuickFAST{
         INTEGER_TYPE value;
         field->getValue(value);
 
-        if(previousNotNull && previousValue == value)
+        if(previousStatus == Context::OK_VALUE && previousValue == value)
         {
           pmap.setNextField(false); // not in stream, use copy
         }
@@ -824,15 +768,14 @@ namespace QuickFAST{
           {
             encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), nullableValue);
           }
-          field = FIELD_CLASS::create(value);
-          fieldOp_->setDictionaryValue(encoder, field);
+          fieldOp_->setDictionaryValue(encoder, value);
         }
       }
       else // not defined in fieldset
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR U01]", "Missing mandatory field.", *identity_);
+          encoder.reportError("[ERR U01]", "Missing mandatory integer field.", *identity_);
           // if reportEror returns we're being lax about the rules.
           // Let the copy happen
           pmap.setNextField(false);
@@ -841,12 +784,11 @@ namespace QuickFAST{
         {
           // Missing optional field.  If we have a previous, non-null value
           // we need to explicitly null it out.  Otherwise just don't send it.
-          if(previousIsKnown && previousNotNull)
+          if(previousStatus != Context::NULL_VALUE)
           {
             pmap.setNextField(true);// value in stream
             destination.putByte(nullInteger);
-            field = FIELD_CLASS::createNull();
-            fieldOp_->setDictionaryValue(encoder, field);
+            fieldOp_->setDictionaryValueNull(encoder);
           }
           else
           {
@@ -856,44 +798,22 @@ namespace QuickFAST{
       }
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     void
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     encodeDelta(
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & /*pmap*/,
       Codecs::Encoder & encoder,
       const Messages::MessageAccessor & fieldSet) const
     {
-      // declare a couple of variables...
-      bool previousIsKnown = false;
-      bool previousNotNull = true;
+      // get previous value from dictionary
       INTEGER_TYPE previousValue = 0;
-
-      // ... then initialize them from the dictionary
-      Messages::FieldCPtr previousField;
-      if(fieldOp_->findDictionaryField(encoder, previousField))
+      Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
+      if(previousStatus != Context::OK_VALUE && fieldOp_->hasValue())
       {
-        if(!previousField->isType(typedValue_))
-        {
-          encoder.reportError("[ERR D4]", "Previous value type mismatch.", *identity_);
-        }
-        else
-        {
-          previousIsKnown = true;
-          previousNotNull = previousField->isDefined();
-          if(previousNotNull)
-          {
-            previousField->getValue(previousValue);
-          }
-        }
-      }
-      if(!previousIsKnown && fieldOp_->hasValue())
-      {
-        previousIsKnown = true;
-        previousNotNull;
         previousValue = typedValue_;
-        fieldOp_->setDictionaryValue(encoder, FIELD_CLASS::create(previousValue));
+        fieldOp_->setDictionaryValue(encoder, typedValue_);
       }
 
       // get the value from the application data
@@ -911,10 +831,9 @@ namespace QuickFAST{
           }
         }
         encodeSignedInteger(destination, encoder.getWorkingBuffer(), deltaValue);
-        if(!previousIsKnown  || value != previousValue)
+        if(previousStatus != Context::OK_VALUE  || value != previousValue)
         {
-          field = FIELD_CLASS::create(value);
-          fieldOp_->setDictionaryValue(encoder, field);
+          fieldOp_->setDictionaryValue(encoder, value);
         }
 
       }
@@ -932,46 +851,24 @@ namespace QuickFAST{
       }
     }
 
-    template<typename INTEGER_TYPE, typename FIELD_CLASS, bool SIGNED>
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
     void
-    FieldInstructionInteger<INTEGER_TYPE, FIELD_CLASS, SIGNED>::
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     encodeIncrement(
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & pmap,
       Codecs::Encoder & encoder,
       const Messages::MessageAccessor & fieldSet) const
     {
-      // declare a couple of variables...
-      bool previousIsKnown = false;
-      bool previousNotNull = false;
+      // get previous value from dictionary
       INTEGER_TYPE previousValue = 0;
-
-      // ... then initialize them from the dictionary
-      Messages::FieldCPtr previousField;
-      if(fieldOp_->findDictionaryField(encoder, previousField))
+      Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
+      if(previousStatus != Context::OK_VALUE && fieldOp_->hasValue())
       {
-        if(!previousField->isType(typedValue_))
-        {
-          encoder.reportError("[ERR D4]", "Previous value type mismatch.", *identity_);
-        }
-        else
-        {
-          previousIsKnown = true;
-          previousNotNull = previousField->isDefined();
-          if(previousNotNull)
-          {
-            previousField->getValue(previousValue);
-          }
-        }
-      }
-      if(!previousIsKnown && fieldOp_->hasValue())
-      {
-        previousIsKnown = true;
-        previousNotNull = true;
         // pretend the previous value was the value attribute - 1 so that
         // the increment will produce cause the initial value to be sent.
         previousValue = typedValue_ - 1;
-        fieldOp_->setDictionaryValue(encoder, FIELD_CLASS::create(previousValue));
+        fieldOp_->setDictionaryValue(encoder, previousValue);
       }
 
       // get the value from the application data
@@ -1006,8 +903,7 @@ namespace QuickFAST{
             encodeUnsignedInteger(destination, encoder.getWorkingBuffer(), nullableValue);
           }
         }
-        field = FIELD_CLASS::create(value);
-        fieldOp_->setDictionaryValue(encoder, field);
+        fieldOp_->setDictionaryValue(encoder, value);
       }
       else // not defined in fieldset
       {
@@ -1022,12 +918,11 @@ namespace QuickFAST{
         {
           // Missing optional field.  If we have a previous, non-null value
           // we need to explicitly null it out.  Otherwise just don't send it.
-          if (previousIsKnown && previousNotNull)
+          if(previousStatus != Context::NULL_VALUE)
           {
             pmap.setNextField(true);// value in stream
             destination.putByte(nullInteger);
-            field = FIELD_CLASS::createNull();
-            fieldOp_->setDictionaryValue(encoder, field);
+            fieldOp_->setDictionaryValueNull(encoder);
           }
           else
           {

@@ -43,15 +43,15 @@ namespace QuickFAST{
         segmentBody_ = segmentBody;
       }
 
-      virtual size_t presenceMapBitsRequired()const;
-
+      /// @brief how many fields are contained in this group?
+      /// @param parent allows checking to see if group will be merged into parent segment
       virtual size_t fieldCount(const SegmentBody & parent)const;
 
       virtual bool decodeNop(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual void encodeNop(
         Codecs::DataDestination & destination,

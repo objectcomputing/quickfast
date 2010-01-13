@@ -1,3 +1,425 @@
+p Wed Jan 13 16:22:28 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Context.cpp:
+        * src/Codecs/Decoder.h:
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/DictionaryIndexer.h:
+        * src/Codecs/DictionaryIndexer.cpp:
+        * src/Codecs/Encoder.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.h:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionByteVector.cpp:
+        * src/Codecs/FieldInstructionDecimal.h:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionExponent.h:
+        * src/Codecs/FieldInstructionGroup.h:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInt16.h:
+        * src/Codecs/FieldInstructionInt32.h:
+        * src/Codecs/FieldInstructionInt64.h:
+        * src/Codecs/FieldInstructionInt8.h:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionMantissa.h:
+        * src/Codecs/FieldInstructionSequence.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/FieldInstructionUInt16.h:
+        * src/Codecs/FieldInstructionUInt32.h:
+        * src/Codecs/FieldInstructionUInt64.h:
+        * src/Codecs/FieldInstructionUInt8.h:
+        * src/Codecs/FieldInstructionUtf8.cpp:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FieldOp.cpp:
+        * src/Codecs/FieldOpConstant.h:
+        * src/Codecs/FieldOpConstant.cpp:
+        * src/Codecs/FieldOpCopy.h:
+        * src/Codecs/FieldOpCopy.cpp:
+        * src/Codecs/FieldOpDefault.h:
+        * src/Codecs/FieldOpDefault.cpp:
+        * src/Codecs/FieldOpDelta.h:
+        * src/Codecs/FieldOpDelta.cpp:
+        * src/Codecs/FieldOpIncrement.h:
+        * src/Codecs/FieldOpIncrement.cpp:
+        * src/Codecs/FieldOpNop.h:
+        * src/Codecs/FieldOpTail.h:
+        * src/Codecs/FieldOpTail.cpp:
+        * src/Codecs/GenericMessageBuilder.h:
+        * src/Codecs/GenericMessageBuilder.cpp:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/MulticastDecoder_fwd.h:
+        * src/Codecs/SynchronousDecoder.h:
+        * src/Codecs/Template.h:
+        * src/Codecs/Template.cpp:
+        * src/Codecs/TemplateRegistry.h:
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/Common/AsioService.h:
+        * src/Common/AsioService.cpp:
+        * src/Common/StringBuffer.h:
+        * src/Common/Types.h:
+        * src/Common/Types.cpp:
+        * src/Common/Value.h:
+        * src/Common/Value_fwd.h:
+        * src/Common/Version.h:
+        * src/Common/WorkingBuffer.cpp:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/Examples/MessagePerformance.h:
+        * src/Examples/Examples/MessagePerformance.cpp:
+        * src/Examples/MulticastInterpreter:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+        * src/Examples/PerformanceTest/MessageCounter.h:
+        * src/Examples/PerformanceTest/MessageCounter.cpp:
+        * src/Examples/PerformanceTest/NullMessage.h:
+        * src/Examples/PerformanceTest/NullMessage.cpp:
+        * src/Examples/PerformanceTest/PerformanceTest.cpp:
+        * src/Messages/Field.h:
+        * src/Messages/Field.cpp:
+        * src/Messages/FieldAscii.h:
+        * src/Messages/FieldAscii.cpp:
+        * src/Messages/FieldByteVector.h:
+        * src/Messages/FieldByteVector.cpp:
+        * src/Messages/FieldDecimal.h:
+        * src/Messages/FieldDecimal.cpp:
+        * src/Messages/FieldGroup.cpp:
+        * src/Messages/FieldIdentity.h:
+        * src/Messages/FieldIdentity.cpp:
+        * src/Messages/FieldInt16.h:
+        * src/Messages/FieldInt16.cpp:
+        * src/Messages/FieldInt32.h:
+        * src/Messages/FieldInt32.cpp:
+        * src/Messages/FieldInt64.h:
+        * src/Messages/FieldInt64.cpp:
+        * src/Messages/FieldInt8.h:
+        * src/Messages/FieldInt8.cpp:
+        * src/Messages/FieldSequence.cpp:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/FieldString.h:
+        * src/Messages/FieldString.cpp:
+        * src/Messages/FieldUInt16.h:
+        * src/Messages/FieldUInt16.cpp:
+        * src/Messages/FieldUInt32.h:
+        * src/Messages/FieldUInt32.cpp:
+        * src/Messages/FieldUInt64.h:
+        * src/Messages/FieldUInt64.cpp:
+        * src/Messages/FieldUInt8.h:
+        * src/Messages/FieldUInt8.cpp:
+        * src/Messages/FieldUtf8.h:
+        * src/Messages/FieldUtf8.cpp:
+        * src/Messages/Message.cpp:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/MessageBuilder.cpp:
+        * src/Messages/SingleValueBuilder.h:
+        * src/Messages/SpecialAccessors.h:
+        * src/Messages/ValueMessageBuilder.h:
+        * src/Messages/ValueMessageBuilder_fwd.h:
+        * src/Tests/FieldInstructionMock.h:
+        * src/Tests/testFieldInstructions.cpp:
+        * src/Tests/testFieldOperations.cpp:
+        * src/Tests/testIntegerFields.cpp:
+        * src/Tests/testRoundTrip1.cpp:
+        * src/Tests/testStringFields.cpp:
+        * src/Tests/testTemplateRef.cpp:
+        * src/Codecs/FieldInstructionBitMap.h:
+        * src/Codecs/FieldInstructionBitMap.cpp:
+
+        * src/Messages/FieldBitMap.h:
+        * src/Messages/FieldBitmap.cpp:
+          Removed these files.
+        Merging changes from the ValueClass branch into the Trunk.
+        Change log entries from here down to Mon Dec 28 21:56:15 UTC 2009
+        were made in the ValueClass branch.
+
+Mon Jan 11 23:14:37 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+          Handle dictionary status correctly.
+          Issue # 35.  Thanks to carlosz
+
+        * src/Codecs/FieldOp.h:
+          Minor cosmetic change
+
+        * src/Common/WorkingBuffer.cpp:
+          Clear start pos when necessary -- avoids unnecessary growth.
+          Issue #35
+        * src/Examples/PerformanceTest/PerformanceTest.cpp:
+          Add field and sequence entry stats to performance test
+
+Wed Jan  6 15:48:22 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Common/Types.cpp:
+        * src/Messages/MessageBuilder.cpp:
+        Linux build errors.
+
+        * src/Messages/FieldBitMap.h:
+        * src/Messages/FieldBitmap.cpp:
+          Removed these files.
+
+Wed Jan  6 00:01:56 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/Context.h:
+        * src/Codecs/Context.cpp:
+        * src/Codecs/DictionaryIndexer.h:
+        * src/Codecs/Encoder.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionExponent.h:
+        * src/Codecs/FieldInstructionGroup.h:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInt16.h:
+        * src/Codecs/FieldInstructionInt32.h:
+        * src/Codecs/FieldInstructionInt64.h:
+        * src/Codecs/FieldInstructionInt8.h:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionMantissa.h:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/FieldInstructionUInt16.h:
+        * src/Codecs/FieldInstructionUInt32.h:
+        * src/Codecs/FieldInstructionUInt64.h:
+        * src/Codecs/FieldInstructionUInt8.h:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FieldOp.cpp:
+        * src/Codecs/GenericMessageBuilder.h:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/MulticastDecoder_fwd.h:
+        * src/Codecs/SegmentBody.h:
+        * src/Codecs/Template.h:
+        * src/Codecs/Template.cpp:
+        * src/Codecs/TemplateRegistry.h:
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/Common/StringBuffer.h:
+        * src/Common/Types.h:
+        * src/Common/Value.h:
+        * src/Common/Version.h:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/Examples/MessagePerformance.h:
+        * src/Examples/Examples/MessagePerformance.cpp:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+        * src/Examples/PerformanceTest/NullMessage.h:
+        * src/Examples/PerformanceTest/NullMessage.cpp:
+        * src/Messages/Field.h:
+        * src/Messages/FieldAscii.h:
+        * src/Messages/FieldByteVector.h:
+        * src/Messages/FieldDecimal.h:
+        * src/Messages/FieldGroup.cpp:
+        * src/Messages/FieldIdentity.h:
+        * src/Messages/FieldIdentity.cpp:
+        * src/Messages/FieldInt16.h:
+        * src/Messages/FieldInt32.h:
+        * src/Messages/FieldInt64.h:
+        * src/Messages/FieldInt8.h:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/FieldUInt16.h:
+        * src/Messages/FieldUInt32.h:
+        * src/Messages/FieldUInt64.h:
+        * src/Messages/FieldUInt8.h:
+        * src/Messages/FieldUtf8.h:
+        * src/Messages/Message.cpp:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/SingleValueBuilder.h:
+        * src/Messages/ValueMessageBuilder.h:
+        Update doxygen comments.
+
+Tue Jan  5 21:35:52 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Context.cpp:
+        * src/Codecs/DictionaryIndexer.h:
+        * src/Codecs/DictionaryIndexer.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionByteVector.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionExponent.h:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInt16.h:
+        * src/Codecs/FieldInstructionInt32.h:
+        * src/Codecs/FieldInstructionInt64.h:
+        * src/Codecs/FieldInstructionInt8.h:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionMantissa.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/FieldInstructionUInt16.h:
+        * src/Codecs/FieldInstructionUInt32.h:
+        * src/Codecs/FieldInstructionUInt64.h:
+        * src/Codecs/FieldInstructionUInt8.h:
+        * src/Codecs/FieldInstructionUtf8.cpp:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/SegmentBody.h:
+        * src/Common/Types.h:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/Examples/MessagePerformance.h:
+        * src/Examples/Examples/MessagePerformance.cpp:
+        * src/Examples/PerformanceTest/MessageCounter.h:
+        * src/Examples/PerformanceTest/MessageCounter.cpp:
+        * src/Messages/Field.h:
+        * src/Messages/Field.cpp:
+        * src/Messages/FieldAscii.h:
+        * src/Messages/FieldAscii.cpp:
+        * src/Messages/FieldByteVector.h:
+        * src/Messages/FieldByteVector.cpp:
+        * src/Messages/FieldDecimal.h:
+        * src/Messages/FieldDecimal.cpp:
+        * src/Messages/FieldGroup.cpp:
+        * src/Messages/FieldIdentity.h:
+        * src/Messages/FieldInt16.h:
+        * src/Messages/FieldInt16.cpp:
+        * src/Messages/FieldInt32.h:
+        * src/Messages/FieldInt32.cpp:
+        * src/Messages/FieldInt64.h:
+        * src/Messages/FieldInt64.cpp:
+        * src/Messages/FieldInt8.h:
+        * src/Messages/FieldInt8.cpp:
+        * src/Messages/FieldSequence.cpp:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/FieldString.cpp:
+        * src/Messages/FieldUInt16.h:
+        * src/Messages/FieldUInt16.cpp:
+        * src/Messages/FieldUInt32.h:
+        * src/Messages/FieldUInt32.cpp:
+        * src/Messages/FieldUInt64.h:
+        * src/Messages/FieldUInt64.cpp:
+        * src/Messages/FieldUInt8.h:
+        * src/Messages/FieldUInt8.cpp:
+        * src/Messages/FieldUtf8.h:
+        * src/Messages/FieldUtf8.cpp:
+        * src/Messages/Message.cpp:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/MessageBuilder.cpp:
+        * src/Messages/ValueMessageBuilder.h:
+        * src/Tests/testFieldInstructions.cpp:
+        * src/Tests/testFieldOperations.cpp:
+        * src/Tests/testIntegerFields.cpp:
+        * src/Tests/testStringFields.cpp:
+        * src/Tests/testTemplateRef.cpp:
+        Move FieldType definitions out of Field class into ValueType class.
+        This removes a widespread dependency on Field.h which is otherwise no
+        longer necessary due to the use of value methods rather than field methods
+        to deliver decoded data to the application.
+
+Tue Jan  5 00:09:42 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Decoder.h:
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.h:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionByteVector.cpp:
+        * src/Codecs/FieldInstructionDecimal.h:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionGroup.h:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionSequence.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/FieldInstructionUtf8.cpp:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FieldOpConstant.h:
+        * src/Codecs/FieldOpConstant.cpp:
+        * src/Codecs/FieldOpCopy.h:
+        * src/Codecs/FieldOpCopy.cpp:
+        * src/Codecs/FieldOpDefault.h:
+        * src/Codecs/FieldOpDefault.cpp:
+        * src/Codecs/FieldOpDelta.h:
+        * src/Codecs/FieldOpDelta.cpp:
+        * src/Codecs/FieldOpIncrement.h:
+        * src/Codecs/FieldOpIncrement.cpp:
+        * src/Codecs/FieldOpNop.h:
+        * src/Codecs/FieldOpTail.h:
+        * src/Codecs/FieldOpTail.cpp:
+        * src/Codecs/GenericMessageBuilder.h:
+        * src/Codecs/GenericMessageBuilder.cpp:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/SynchronousDecoder.h:
+        * src/Examples/Examples/MessagePerformance.h:
+        * src/Examples/Examples/MessagePerformance.cpp:
+        * src/Examples/PerformanceTest/PerformanceTest.cpp:
+        * src/Messages/FieldAscii.h:
+        * src/Messages/FieldBitMap.h:
+        * src/Messages/FieldByteVector.h:
+        * src/Messages/FieldDecimal.h:
+        * src/Messages/FieldInt16.h:
+        * src/Messages/FieldInt32.h:
+        * src/Messages/FieldInt64.h:
+        * src/Messages/FieldInt8.h:
+        * src/Messages/FieldString.h:
+        * src/Messages/FieldString.cpp:
+        * src/Messages/FieldUInt16.h:
+        * src/Messages/FieldUInt32.h:
+        * src/Messages/FieldUInt64.h:
+        * src/Messages/FieldUInt8.h:
+        * src/Messages/FieldUtf8.h:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/MessageBuilder.cpp:
+        * src/Messages/SingleValueBuilder.h:
+        * src/Messages/SpecialAccessors.h:
+        * src/Messages/ValueMessageBuilder.h:
+        * src/Messages/ValueMessageBuilder_fwd.h:
+        * src/Tests/FieldInstructionMock.h:
+        * src/Tests/testRoundTrip1.cpp:
+
+        Allocating and freeing Field objects was having a significant impact
+        on performance.  This change replaces the pointer to immutable Field object
+        in the data dictionary with a mutable Value object, and adds a new
+        interface, ValueMessageBuilder, for passing decoded data to the application.
+
+        This new interface replaces the addField method with polymorphic addValue
+        methods for the various field types.  The application still receives a
+        FieldIdentity object to let it know what to do with the data.
+
+
+        * src/Codecs/FieldInstructionBitMap.h:
+        * src/Codecs/FieldInstructionBitMap.cpp:
+          Removed these files.
+
+Thu Dec 31 14:24:36 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Context.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FieldOp.cpp:
+
+        * src/Common/AsioService.h:
+        * src/Common/AsioService.cpp:
+        * src/Common/StringBuffer.h:
+        * src/Common/Value.h:
+        * src/Common/Value_fwd.h:
+        Define Value to store "any" value (extracted from Field)
+        Modify dictionaries to use Value rather than FieldCPtr.
+        The ultimate goal is to eliminate allocation/free of Fields.
+
+
 Mon Dec 28 21:56:15 UTC 2009  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MulticastDecoder.h:

@@ -18,9 +18,11 @@ namespace QuickFAST{
     {
     public:
       /// @brief construct with a name and a namespace
+      /// @param type the actual type of this field instruction (UTF8 or BYTEVECTOR)
       /// @param name is the local name
       /// @param fieldNamespace is the namespace to qualify this name
       FieldInstructionBlob(
+        ValueType::Type type,
         const std::string & name,
         const std::string & fieldNamespace);
 
@@ -34,37 +36,37 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual bool decodeConstant(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual bool decodeDefault(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual bool decodeCopy(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual bool decodeDelta(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual bool decodeTail(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual void encodeNop(
         Codecs::DataDestination & destination,
@@ -115,17 +117,18 @@ namespace QuickFAST{
       /// @brief create an empty field of the appropriate type
       /// @returns a pointer to the heap-allocated field
       virtual Messages::FieldCPtr createEmptyField()const = 0;
+
     protected:
       /// @brief interpret value set by the field operator at initialization time
       void interpretValue(const std::string & value);
 
       /// @brief helper routine to decode the blob data
-      bool decodeFromSource(
+      bool
+      decodeBlobFromSource(
         Codecs::DataSource & source,
         Codecs::Context & context,
         bool mandatory,
-        WorkingBuffer & buffer,
-        Messages::FieldCPtr & field) const;
+        WorkingBuffer & buffer) const;
 
       /// @brief helper routine to encode a nullable, but not null value
       void encodeNullableBlob(
@@ -140,6 +143,8 @@ namespace QuickFAST{
         WorkingBuffer & buffer,
         const std::string & value) const;
     protected:
+      /// @brief the actual data type (UTF8, BITVECTOR)
+      ValueType::Type type_;
       /// @brief a field of the appropriate type containing the intial value specified with the field Op
       Messages::FieldCPtr initialValue_;
     };

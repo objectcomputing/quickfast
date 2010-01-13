@@ -33,7 +33,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual void encodeNop(
         Codecs::DataDestination & destination,
@@ -41,7 +41,7 @@ namespace QuickFAST{
         Codecs::Encoder & encoder,
         const Messages::MessageAccessor & fieldSet) const;
 
-      virtual size_t presenceMapBitsRequired() const;
+//      virtual size_t presenceMapBitsRequired() const;
 
     private:
       void interpretValue(const std::string & value);
@@ -68,7 +68,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & fieldSet) const;
 
       virtual void encodeNop(
         Codecs::DataDestination & destination,

@@ -120,14 +120,20 @@ namespace QuickFAST{
         return ignore_;
       }
 
+      /// @brief use the namespace to qualify the local name
+      /// @param out receives the qualified name
       void qualifyName(std::string &out)const
       {
         qualifyName(out, templateName_, templateNamespace_);
       }
 
+      /// @brief use a namespace to qualify the local name
+      /// @param[out] out receives the qualified name
+      /// @param[in] templateName is the local name of the template
+      /// @param[in] templateNamespace qualifies local name
       static void qualifyName(
         std::string & out,
-        const std::string templateName,
+        const std::string & templateName,
         const std::string &templateNamespace);
 
     private:

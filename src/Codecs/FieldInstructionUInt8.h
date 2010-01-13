@@ -7,14 +7,13 @@
 #ifndef FIELDINSTRUCTIONUINT8_H
 #define FIELDINSTRUCTIONUINT8_H
 #include <Codecs/FieldInstructionInteger.h>
-#include <Messages/FieldUInt8.h>
 
 namespace QuickFAST{
   namespace Codecs{
     /// @brief An implementation for the &lt;uint8> field instruction.
     ///
     /// This is NOT a FAST standard field type, but it is used by ARCA.
-    typedef FieldInstructionInteger<uchar, Messages::FieldUInt8, false> FieldInstructionUInt8;
+    typedef FieldInstructionInteger<uchar, ValueType::UINT8, false> FieldInstructionUInt8;
   }
 }
 #endif // FIELDINSTRUCTIONUINT8_H

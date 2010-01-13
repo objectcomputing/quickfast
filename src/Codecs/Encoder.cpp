@@ -5,7 +5,6 @@
 
 #include "Encoder.h"
 #include <Codecs/DataDestination.h>
-//#include <Messages/Message.h>
 #include <Messages/MessageAccessor.h>
 #include <Codecs/PresenceMap.h>
 #include <Codecs/TemplateRegistry.h>
@@ -106,31 +105,6 @@ Encoder::encodeGroup(
 
 }
 
-#if 0
-void
-Encoder::encodeStaticTemplateRef(
-  DataSource & destination,
-  Codecs::PresenceMap & pmap,
-  const std::string & templateName,
-  const std::string & templateNamespace,
-  const Messages::MessageAccessor & fieldSet)
-{
-  Codecs::TemplateCPtr templatePtr;
-  if(!templateRegistry_->findNamedTemplate(
-    templateName,
-    templateNamespace,
-    templatePtr))
-  {
-    throw EncodingError("[ERR D9] Unknown template name for static templateref.");
-  }
-
-  if(!encodeSegmentBody(destination, pmap, templatePtr, fieldSet))
-  {
-    throw EncodingError("Unexpected end of file during templateref decoding.");
-  }
-}
-
-#endif
 
 void
 Encoder::encodeSegmentBody(

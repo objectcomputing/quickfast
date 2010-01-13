@@ -13,7 +13,7 @@ namespace
   {
   public:
     GenericMessageBufferConsumer(
-        Messages::MessageBuilder & builder,
+        Messages::ValueMessageBuilder & builder,
         Decoder & decoder,
         size_t & messageCount,
         size_t & messageLimit);
@@ -39,7 +39,7 @@ namespace
     GenericMessageBufferConsumer();
 
   private:
-    Messages::MessageBuilder & builder_;
+    Messages::ValueMessageBuilder & builder_;
     Decoder & decoder_;
     size_t & messageLimit_;
     size_t & messageCount_;
@@ -49,7 +49,7 @@ namespace
 
 
 GenericMessageBufferConsumer::GenericMessageBufferConsumer(
-    Messages::MessageBuilder & builder,
+    Messages::ValueMessageBuilder & builder,
     Decoder & decoder,
     size_t & messageCount,
     size_t & messageLimit)
@@ -139,7 +139,6 @@ MulticastDecoder::MulticastDecoder(
   unsigned short portNumber)
 : receiver_(multicastGroupIP, listenAddressIP, portNumber)
 , decoder_(templateRegistry)
-//, verbose_(false)
 , messageLimit_(0)
 , messageCount_(0)
 {
@@ -153,7 +152,6 @@ MulticastDecoder::MulticastDecoder(
   unsigned short portNumber)
 : receiver_(ioService, multicastGroupIP, listenAddressIP, portNumber)
 , decoder_(templateRegistry)
-//, verbose_(false)
 , messageLimit_(0)
 , messageCount_(0)
 {
@@ -206,7 +204,7 @@ MulticastDecoder::reset()
 }
 
 void
-MulticastDecoder::start(Messages::MessageBuilder & builder, size_t bufferSize /*=1400*/, size_t bufferCount /*=2*/)
+MulticastDecoder::start(Messages::ValueMessageBuilder & builder, size_t bufferSize /*=1400*/, size_t bufferCount /*=2*/)
 {
   builder_ = &builder;
   bufferConsumer_.reset(new GenericMessageBufferConsumer(

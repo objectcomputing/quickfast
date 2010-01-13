@@ -79,13 +79,13 @@ GenericSequenceBuilder::startMessage(
 
 
 bool
-GenericSequenceBuilder::endMessage(Messages::MessageBuilder & /*messageBuilder*/)
+GenericSequenceBuilder::endMessage(Messages::ValueMessageBuilder & /*messageBuilder*/)
 {
   throw QuickFAST::UsageError("Attempt to build message.", "GenericSequenceBuilder");
 }
 
 bool
-GenericSequenceBuilder::ignoreMessage(MessageBuilder & /*messageBuilder*/)
+GenericSequenceBuilder::ignoreMessage(ValueMessageBuilder & /*messageBuilder*/)
 {
   throw QuickFAST::UsageError("Attempt to build message.", "GenericSequenceBuilder");
 }
@@ -119,7 +119,7 @@ GenericSequenceBuilder::startSequence(
 void
 GenericSequenceBuilder::endSequence(
   Messages::FieldIdentityCPtr identity,
-  Messages::MessageBuilder & /*sequenceBuilder*/)
+  Messages::ValueMessageBuilder & /*sequenceBuilder*/)
 {
   // Note this will be called to end a nested sequence
   if(sequenceBuilder_)
@@ -152,7 +152,7 @@ GenericSequenceBuilder::startSequenceEntry(
 
 void
 GenericSequenceBuilder::endSequenceEntry(
-  Messages::MessageBuilder & /*entry*/)
+  Messages::ValueMessageBuilder & /*entry*/)
 {
   sequence_->addEntry(fieldSet_);
   fieldSet_.reset();
@@ -182,7 +182,7 @@ GenericSequenceBuilder::startGroup(
 void
 GenericSequenceBuilder::endGroup(
   Messages::FieldIdentityCPtr identity,
-  Messages::MessageBuilder & /*entry*/)
+  Messages::ValueMessageBuilder & /*entry*/)
 {
   /// Note this will be called to end a nested group
   fieldSet()->addField(
@@ -293,13 +293,13 @@ GenericGroupBuilder::startMessage(
 
 bool
 GenericGroupBuilder::endMessage(
-  Messages::MessageBuilder & /*messageBuilder*/)
+  Messages::ValueMessageBuilder & /*messageBuilder*/)
 {
   throw QuickFAST::UsageError("Attempt to build message.", "GenericGroupBuilder");
 }
 
 bool
-GenericGroupBuilder::ignoreMessage(Messages::MessageBuilder & /*messageBuilder*/)
+GenericGroupBuilder::ignoreMessage(Messages::ValueMessageBuilder & /*messageBuilder*/)
 {
   throw QuickFAST::UsageError("Attempt to build message.", "GenericGroupBuilder");
 }
@@ -332,7 +332,7 @@ GenericGroupBuilder::startSequence(
 void
 GenericGroupBuilder::endSequence(
    Messages::FieldIdentityCPtr identity,
-  Messages::MessageBuilder & /*sequenceBuilder*/)
+  Messages::ValueMessageBuilder & /*sequenceBuilder*/)
 {
   // Note this will be called to end a nested sequence
   if(sequenceBuilder_)
@@ -360,7 +360,7 @@ GenericGroupBuilder::startSequenceEntry(
 }
 
 void
-GenericGroupBuilder::endSequenceEntry(Messages::MessageBuilder & /*entry*/)
+GenericGroupBuilder::endSequenceEntry(Messages::ValueMessageBuilder & /*entry*/)
 {
   throw QuickFAST::UsageError("Sequence operation applied to group.", "GenericGroupBuilder");
 }
@@ -389,7 +389,7 @@ GenericGroupBuilder::startGroup(
 void
 GenericGroupBuilder::endGroup(
   Messages::FieldIdentityCPtr identity,
-  Messages::MessageBuilder & /*entry*/)
+  Messages::ValueMessageBuilder & /*entry*/)
 {
   /// Note this will be called to end a nested group
   groupPtr()->addField(
@@ -490,7 +490,7 @@ GenericMessageBuilder::startMessage(
 }
 
 bool
-GenericMessageBuilder::endMessage(Messages::MessageBuilder &)
+GenericMessageBuilder::endMessage(Messages::ValueMessageBuilder &)
 {
   ///////////////////////////////
   // This is where the message is
@@ -503,7 +503,7 @@ GenericMessageBuilder::endMessage(Messages::MessageBuilder &)
 }
 
 bool
-GenericMessageBuilder::ignoreMessage(Messages::MessageBuilder & /*messageBuilder*/)
+GenericMessageBuilder::ignoreMessage(Messages::ValueMessageBuilder & /*messageBuilder*/)
 {
   return true;
 }
@@ -530,7 +530,7 @@ GenericMessageBuilder::startSequence(
 void
 GenericMessageBuilder::endSequence(
    Messages::FieldIdentityCPtr identity,
-   Messages::MessageBuilder &)
+   Messages::ValueMessageBuilder &)
 {
   message()->addField(
     identity,
@@ -549,7 +549,7 @@ GenericMessageBuilder::startSequenceEntry(
 }
 
 void
-GenericMessageBuilder::endSequenceEntry(Messages::MessageBuilder & /*entry*/)
+GenericMessageBuilder::endSequenceEntry(Messages::ValueMessageBuilder & /*entry*/)
 {
   throw QuickFAST::UsageError("Attempt to add sequence entry to message", "Generic Message Builder");
 }
@@ -572,7 +572,7 @@ GenericMessageBuilder::startGroup(
 void
 GenericMessageBuilder::endGroup(
   Messages::FieldIdentityCPtr identity,
-  Messages::MessageBuilder & /*groupBuilder*/)
+  Messages::ValueMessageBuilder & /*groupBuilder*/)
 {
   message()->addField(
     identity,

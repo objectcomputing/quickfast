@@ -6,6 +6,7 @@
 #endif
 #ifndef TYPES_H
 #define TYPES_H
+#include <Common/QuickFAST_Export.h>
 
 namespace QuickFAST{
   /// @brief Unsigned character. AKA: a byte
@@ -36,5 +37,39 @@ namespace QuickFAST{
   typedef uint32 template_id_t;
   /// @brief type type used to store a field Id.
   typedef std::string field_id_t;
+
+  /// @brief a "namespace" for value types and the method to interpret them.
+  class QuickFAST_Export ValueType
+  {
+  public:
+    /// @brief Identify the data type
+    ///
+    /// Most of these values correspond directly to the types of
+    /// fields defined in
+    /// the FAST standard.
+    enum Type
+    {
+      INT8,     // not FAST Standard
+      UINT8,    // not FAST Standard
+      INT16,    // not FAST Standard
+      UINT16,   // not FAST Standard
+      INT32,
+      UINT32,
+      INT64,
+      UINT64,
+      DECIMAL,
+      ASCII,
+      UTF8,
+      BYTEVECTOR,
+      BITMAP,   // not FAST Standard (and not properly supported, yet)
+      SEQUENCE,
+      GROUP,
+      UNDEFINED
+    };
+
+    /// @brief translate a ValueType::Type to a string
+    /// @param type is the type to be interpreted.
+    static const std::string & typeName(Type type);
+  };
 }
 #endif // TYPES_H

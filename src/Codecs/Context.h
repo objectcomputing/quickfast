@@ -8,10 +8,11 @@
 #define CONTEXT_H
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
+#include <Common/Value.h>
+#include <Common/Exceptions.h>
 #include <Common/WorkingBuffer.h>
 #include <Codecs/TemplateRegistry_fwd.h>
 #include <Codecs/Template_fwd.h>
-#include <Messages/Field_fwd.h>
 #include <Messages/FieldIdentity_fwd.h>
 
 namespace QuickFAST{
@@ -19,6 +20,13 @@ namespace QuickFAST{
     /// @brief Context in which Encode/Decode takes place.
     class QuickFAST_Export Context
     {
+    public:
+      /// @brief Return values from getDictionaryValue
+      enum DictionaryStatus{
+        UNDEFINED_VALUE,
+        NULL_VALUE,
+        OK_VALUE
+      };
     public:
       /// @brief Construct with a TemplateRegistry containing all templates to be used.
       /// @param registry A registry containing all templates to be used to decode messages.
@@ -69,24 +77,113 @@ namespace QuickFAST{
       }
 
       /// @brief Find a template in the TemplateRepository used by this Context
-      /// @brief name of the template being sought
-      /// @brief nameSpace that qualifies name
-      /// @brief result will point to the template that was found
+      /// @param name of the template being sought
+      /// @param nameSpace that qualifies name
+      /// @param result will point to the template that was found
       /// @returns true if successful
       bool findTemplate(const std::string & name, const std::string & nameSpace, TemplateCPtr & result) const;
 
       //////////////////////////////
       // Support for decoding fields
       /// @brief Find the definition of a field in the dictionary
-      /// @brief index identifies the dictionary entry corresponding to this field
-      /// @brief field receives the pointer to the value found
+      /// @param index identifies the dictionary entry corresponding to this field
+      /// @param value receives the pointer to the value found
       /// @returns true if a valid entry was found
-      bool findDictionaryField(size_t index, Messages::FieldCPtr & field);
+      bool findDictionaryField(size_t index, Value *& value);
 
-      /// @brief Sets the definition of a field in the dictionary
-      /// @brief index identifies the dictionary entry corresponding to this field
-      /// @brief field points to the value to be set.
-      void setDictionaryField(size_t index, const Messages::FieldCPtr & field);
+      /// @brief Sets the value in the dictionary to NULL
+      /// @param index identifies the dictionary entry corresponding to this field
+      void setDictionaryValueNull(size_t index)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setNull();
+      }
+
+      /// @brief Sets the value in the dictionary to be undefined
+      /// @param index identifies the dictionary entry corresponding to this field
+      void setDictionaryValueUndefined(size_t index)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setUndefined();
+      }
+
+      /// @brief Sets the value in the dictionary
+      /// @param index identifies the dictionary entry corresponding to this field
+      /// @param value is the new value for the dictionary entry
+      template<typename VALUE_TYPE>
+      void setDictionaryValue(size_t index, const VALUE_TYPE value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setValue(value);
+      }
+
+      /// @brief Sets the string value in the dictionary
+      /// @param index identifies the dictionary entry corresponding to this field
+      /// @param value points to the string to be stored
+      /// @param length is the lenght of the string pointed to by value
+      void setDictionaryValue(size_t index, const unsigned char * value, size_t length)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        indexedDictionary_[index].setValue(value, length);
+      }
+
+      /// @brief Get a value from the dictionary
+      /// @param index identifies the dictionary entry corresponding to this field
+      /// @param value receives the stored value
+      template<typename VALUE_TYPE>
+      DictionaryStatus getDictionaryValue(size_t index, VALUE_TYPE & value)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        Value & entry = indexedDictionary_[index];
+        if(!entry.isDefined())
+        {
+          return UNDEFINED_VALUE;
+        }
+        if(entry.isNull())
+        {
+          return NULL_VALUE;
+        }
+        (void)entry.getValue(value);
+        return OK_VALUE;
+      }
+
+      /// @brief Sets the value in the dictionary
+      /// @param index identifies the dictionary entry corresponding to this field
+      /// @param value is the new value for the dictionary entry
+      /// @param length is the length of the string pointed to by value
+      DictionaryStatus getDictionaryValue(size_t index, const unsigned char *& value, size_t &length)
+      {
+        if(index > indexedDictionarySize_)
+        {
+          throw TemplateDefinitionError("Illegal dictionary index.");
+        }
+        Value & entry = indexedDictionary_[index];
+        if(!entry.isDefined())
+        {
+          return UNDEFINED_VALUE;
+        }
+        if(entry.isNull())
+        {
+          return NULL_VALUE;
+        }
+        (void)entry.getValue(value, length);
+        return OK_VALUE;
+      }
 
       /// @brief Report a warning
       /// @param errorCode as defined in the FIX standard (or invented for QuickFAST)
@@ -242,7 +339,7 @@ namespace QuickFAST{
       bool strict_;
     private:
       size_t indexedDictionarySize_;
-      typedef boost::scoped_array<Messages::FieldCPtr> IndexedDictionary;
+      typedef boost::scoped_array<Value> IndexedDictionary;
       IndexedDictionary indexedDictionary_;
       WorkingBuffer workingBuffer_;
     };

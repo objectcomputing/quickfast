@@ -6,9 +6,7 @@
 #include "Context.h"
 #include <Codecs/TemplateRegistry.h>
 #include <Common/Exceptions.h>
-#include <Messages/Field.h>
 #include <Messages/FieldIdentity.h>
-#include <Messages/Field.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
@@ -20,7 +18,8 @@ Context::Context(Codecs::TemplateRegistryCPtr registry)
 , templateId_(~0)
 , strict_(true)
 , indexedDictionarySize_(registry->dictionarySize())
-, indexedDictionary_(new Messages::FieldCPtr[indexedDictionarySize_])
+//, indexedDictionary_(new Messages::FieldCPtr[indexedDictionarySize_])
+, indexedDictionary_(new Value[indexedDictionarySize_])
 {
 }
 
@@ -33,7 +32,7 @@ Context::reset(bool resetTemplateId /*= true*/)
 {
   for(size_t nDict = 0; nDict < indexedDictionarySize_; ++nDict)
   {
-    indexedDictionary_[nDict].reset();
+    indexedDictionary_[nDict].erase();
   }
   if(resetTemplateId)
   {
@@ -49,28 +48,6 @@ Context::findTemplate(const std::string & name, const std::string & nameSpace, T
         name,
         nameSpace,
         result);
-}
-
-
-bool
-Context::findDictionaryField(size_t index, Messages::FieldCPtr & field)
-{
-  if(index >= indexedDictionarySize_)
-  {
-    throw TemplateDefinitionError("Find invalid dictionary index: should not occur.");
-  }
-  field = indexedDictionary_[index];
-  return bool(field);
-}
-
-void
-Context::setDictionaryField(size_t index, const Messages::FieldCPtr & field)
-{
-  if(index >= indexedDictionarySize_)
-  {
-    throw TemplateDefinitionError("Set invalid dictionary index: should not occur.");
-  }
-  indexedDictionary_[index] = field;
 }
 
 void
