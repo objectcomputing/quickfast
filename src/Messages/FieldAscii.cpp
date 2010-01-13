@@ -9,19 +9,19 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldAscii::FieldAscii(const std::string & value)
-  : Field(Field::ASCII, true)
+  : Field(ValueType::ASCII, true)
 {
   string_ = value;
 }
 
 FieldAscii::FieldAscii(const uchar * value, size_t length)
-  : Field(Field::ASCII, true)
+  : Field(ValueType::ASCII, true)
 {
   string_.assign(value, length);
 }
 
 FieldAscii::FieldAscii()
-  : Field(Field::ASCII, false)
+  : Field(ValueType::ASCII, false)
 {
 }
 

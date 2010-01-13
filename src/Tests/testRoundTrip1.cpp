@@ -496,16 +496,24 @@ namespace{
     msg.addField(identity_bytevector_tail, Messages::FieldByteVector::create("blabla"));
 
     Codecs::Encoder encoder(templateRegistry);
-    //encoder.setVerboseOutput (std::cout);
+    // encoder.setVerboseOutput (std::cout);
     Codecs::DataDestinationString destination;
     template_id_t templId = 3; // from the XML file
     encoder.encodeMessage(destination, templId, msg);
     const std::string & fastString = destination.getValue();
-
+#if 0
+    for(size_t nb = 0; nb < fastString.length(); ++ nb)
+    {
+      if(nb %16 == 0) std::cout << std::endl; else std::cout << ' ';
+      std::cout << std::hex << std::setw(2) << std::setfill('0') << (0xFF & (unsigned short) fastString[nb]) << std::dec << std::setfill(' ');
+    }
+    std::cout << std::endl;
+#endif
     Codecs::Decoder decoder(templateRegistry);
-    //decoder.setVerboseOutput (std::cout);
+    // decoder.setVerboseOutput (std::cout);
 
     Codecs::DataSourceString source(fastString);
+//    source.setEcho(std::cout, Codecs::DataSource::HEX, true, true);
 
     Codecs::SingleMessageConsumer consumer;
     Codecs::GenericMessageBuilder builder(consumer);

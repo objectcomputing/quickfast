@@ -20,37 +20,9 @@ namespace QuickFAST{
     /// An abstract class intended to be specialized into the particular field type.
     class QuickFAST_Export Field
     {
-    public:
-      /// @brief Identify the data type of the field.
-      ///
-      /// These values correspond directly to the types of fields defined in
-      /// the FAST standard.
-      enum FieldType
-      {
-        INT8,     // not FAST Standard
-        UINT8,    // not FAST Standard
-        INT16,    // not FAST Standard
-        UINT16,   // not FAST Standard
-        INT32,
-        UINT32,
-        INT64,
-        UINT64,
-        DECIMAL,
-        ASCII,
-        UTF8,
-        BYTEVECTOR,
-        BITMAP,   // not FAST Standard (and not properly supported, yet)
-        SEQUENCE,
-        GROUP,
-        UNDEFINED
-      };
-
-      /// @brief translate a FieldType to a string
-      static const std::string & typeName(FieldType type);
-
     protected:
       /// Protected constructor reinforces pure virtual
-      Field(FieldType type, bool valid = false);
+      Field(ValueType::Type type, bool valid = false);
     public:
       /// @brief a typical virtual destructor.
       virtual ~Field() = 0;
@@ -59,8 +31,11 @@ namespace QuickFAST{
       ///
       /// The default implementation handles all string, integer, and decimal types.
       /// Override this for other types.
+      /// @param rhs is the target of the comparison.
       virtual bool operator == (const Field & rhs) const;
 
+      /// @brief inequality operator
+      /// @param rhs is the target of the comparison.
       bool operator != (const Field & rhs)const
       {
         return ! (*this == rhs);
@@ -82,15 +57,14 @@ namespace QuickFAST{
 
       /// @brief Check for a particular type of field
       /// @returns true if the field is the desired type
-      bool isType(FieldType type) const
+      bool isType(ValueType::Type type) const
       {
         return type == getType();
       }
 
       /// @brief Get the field type
       /// @returns the enumerated field type
-//      virtual FieldType getType()const = 0;
-      FieldType getType() const
+      ValueType::Type getType() const
       {
         return type_;
       }
@@ -107,7 +81,7 @@ namespace QuickFAST{
       /// This is convenenient for template-based code.
       bool isType(uchar /*type*/)const
       {
-        return isType(Field::UINT8);
+        return isType(ValueType::UINT8);
       }
 
       /// @brief An alternative way to retrieve the value.
@@ -131,7 +105,7 @@ namespace QuickFAST{
       /// This is convenenient for template-based code.
       bool isType(int8 /*type*/)const
       {
-        return isType(INT8);
+        return isType(ValueType::INT8);
       }
 
       /// @brief An alternative way to retrieve the value.
@@ -154,7 +128,7 @@ namespace QuickFAST{
       /// This is convenenient for template-based code.
       bool isType(uint16 /*type*/)const
       {
-        return isType(Field::UINT16);
+        return isType(ValueType::UINT16);
       }
 
       /// @brief An alternative way to retrieve the value.
@@ -177,7 +151,7 @@ namespace QuickFAST{
       /// This is convenenient for template-based code.
       bool isType(int16 /*type*/)const
       {
-        return isType(INT16);
+        return isType(ValueType::INT16);
       }
 
       /// @brief An alternative way to retrieve the value.
@@ -200,7 +174,7 @@ namespace QuickFAST{
       /// This is convenenient for template-based code.
       bool isType(uint32 /*type*/)const
       {
-        return isType(Field::UINT32);
+        return isType(ValueType::UINT32);
       }
 
       /// @brief An alternative way to retrieve the value.
@@ -224,7 +198,7 @@ namespace QuickFAST{
       /// This is convenenient for template-based code.
       bool isType(int32 /*type*/)const
       {
-        return isType(INT32);
+        return isType(ValueType::INT32);
       }
 
       /// @brief An alternative way to retrieve the value.
@@ -247,7 +221,7 @@ namespace QuickFAST{
       /// This is convenenient for template-based code.
       bool isType(uint64 /*type*/)const
       {
-        return isType(UINT64);
+        return isType(ValueType::UINT64);
       }
 
       /// @brief An alternative way to retrieve the value.
@@ -270,7 +244,7 @@ namespace QuickFAST{
       /// This is convenenient for template-based code.
       bool isType(int64 /*type*/)const
       {
-        return isType(Field::INT64);
+        return isType(ValueType::INT64);
       }
 
       /// @brief An alternative way to retrieve the value.
@@ -323,7 +297,7 @@ namespace QuickFAST{
 
     protected:
       /// What type of data does this field contain?
-      FieldType type_;
+      ValueType::Type type_;
       /// false means this is a NULL value
       bool valid_;
 

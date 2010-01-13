@@ -10,13 +10,13 @@ using namespace ::QuickFAST::Messages;
 FieldCPtr FieldUInt32::nullField_ = new FieldUInt32;
 
 FieldUInt32::FieldUInt32(uint32 value)
-  : Field(Field::UINT32, true)
+  : Field(ValueType::UINT32, true)
 {
   unsignedInteger_ = value;
 }
 
 FieldUInt32::FieldUInt32()
-  : Field(Field::UINT32, false)
+  : Field(ValueType::UINT32, false)
 {
 }
 

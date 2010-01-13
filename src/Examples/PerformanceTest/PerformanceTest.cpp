@@ -237,11 +237,15 @@ PerformanceTest::run()
       << std::endl;
     for(size_t nPass = 0; nPass < count_; ++nPass)
     {
-      std::cout << "Decoding input; pass " << nPass + 1 << " of " << count_ << std::endl;
+      if(count_ > 1)
+      {
+        std::cout << "Decoding input; pass " << nPass + 1 << " of " << count_ << std::endl;
+      }
       fastFile_.seekg(0, std::ios::beg);
       Codecs::DataSourceBufferedStream source(fastFile_);
-      MessagePerformance handler(head_, interpret_);
-      Codecs::GenericMessageBuilder builder(handler);
+//      MessagePerformance handler(head_, interpret_);
+//      Codecs::GenericMessageBuilder builder(handler);
+      PerformanceBuilder builder;
       Codecs::SynchronousDecoder decoder(templateRegistry);
       decoder.setResetOnMessage(resetOnMessage_);
       decoder.setStrict(strict_);
@@ -251,7 +255,11 @@ PerformanceTest::run()
         decoder.decode(source, builder);
       }//PROFILE_POINT
       unsigned long decodeLapse = decodeTimer.freeze();
-      size_t messageCount = handler.getMessageCount();
+      size_t messageCount = builder.msgCount();//handler.getMessageCount();
+      size_t groupCount = builder.groupCount();
+      size_t fieldCount = builder.fieldCount();
+      size_t sequenceCount = builder.sequenceCount();
+      size_t sequenceEntryCount = builder.sequenceEntryCount();
       (*performanceFile_)
 #ifdef _DEBUG
         << "[debug] "
@@ -260,11 +268,35 @@ PerformanceTest::run()
         << std::fixed << std::setprecision(3)
         << decodeLapse
         << " milliseonds. [";
-      (*performanceFile_) << std::fixed << std::setprecision(3)
-        << double(decodeLapse)/double(messageCount) << " msec/message. = "
-        << std::fixed << std::setprecision(3)
-        << 1000. * double(messageCount)/double(decodeLapse) << " messages/second]"
-        << std::endl;
+      if(decodeLapse != 0)
+      {
+        (*performanceFile_) << std::fixed << std::setprecision(3)
+          << 1000 * double(decodeLapse)/double(messageCount) << " usec/message. = "
+          << std::fixed << std::setprecision(3)
+          << 1000. * double(messageCount)/double(decodeLapse) << " messages/second]"
+          << std::endl;
+
+        if(fieldCount != 0)
+        {
+          (*performanceFile_)
+            << "      Fields: " << fieldCount << " -> "
+            << std::fixed << std::setprecision(3)
+            << 1000. * double(decodeLapse)/double(fieldCount) << " usec/field. = "
+            << std::fixed << std::setprecision(3)
+            << 1000. * double(fieldCount)/double(decodeLapse) << " fields/second]"
+            << std::endl;
+        }
+        if(sequenceEntryCount != 0)
+        {
+          (*performanceFile_)
+            << "      Sequence Entries: " << sequenceEntryCount << " -> "
+            << std::fixed << std::setprecision(3)
+            << 1000. * double(decodeLapse)/double(sequenceEntryCount) << " usec/entry. = "
+            << std::fixed << std::setprecision(3)
+            << 1000. * double(sequenceEntryCount)/double(decodeLapse) << " entries/second]"
+            << std::endl;
+        }
+      }
     }
   }
   catch (std::exception & e)

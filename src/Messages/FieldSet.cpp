@@ -4,9 +4,7 @@
 #include <Common/QuickFASTPch.h>
 #include "FieldSet.h"
 #include <Messages/Sequence.h>
-#include <Messages/FieldSequence.h>
 #include <Messages/Group.h>
-#include <Messages/FieldGroup.h>
 #include <Common/Exceptions.h>
 #include <Common/Profiler.h>
 
@@ -135,7 +133,7 @@ FieldSet::getIdentity(const std::string &name, FieldIdentityCPtr & identity) con
 }
 
 void
-FieldSet::getFieldInfo(size_t index, std::string & name, Field::FieldType & type, FieldCPtr & fieldPtr)const
+FieldSet::getFieldInfo(size_t index, std::string & name, ValueType::Type & type, FieldCPtr & fieldPtr)const
 {
   name = fields_[index].name();
   type = fields_[index].getField()->getType();

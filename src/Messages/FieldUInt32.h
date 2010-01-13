@@ -19,6 +19,9 @@ namespace QuickFAST{
       /// @brief Construct a NULL field
       FieldUInt32();
     public:
+      /// Identify the type of data associated with this field
+      const static ValueType::Type fieldType = ValueType::UINT32;
+    public:
       /// @brief Construct the field from am uint32 value
       /// @param value the value to be stored in the field
       /// @returns a constant pointer to the immutable field

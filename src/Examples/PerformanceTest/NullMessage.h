@@ -24,7 +24,7 @@ namespace QuickFAST{
 
       virtual void addField(const Messages::FieldIdentityCPtr & identity, const Messages::FieldCPtr & value);
 
-      virtual Messages::MessageBuilder & startSequence(
+      virtual Messages::ValueMessageBuilder & startSequence(
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
@@ -34,25 +34,25 @@ namespace QuickFAST{
 
       virtual void endSequence(
         Messages::FieldIdentityCPtr identity,
-        Messages::MessageBuilder & sequenceBuilder );
+        Messages::ValueMessageBuilder & sequenceBuilder );
 
-      virtual Messages::MessageBuilder & startSequenceEntry(
+      virtual Messages::ValueMessageBuilder & startSequenceEntry(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
 
       virtual void endSequenceEntry(
-        Messages::MessageBuilder & entry
+        Messages::ValueMessageBuilder & entry
         );
 
-      virtual Messages::MessageBuilder & startGroup(
+      virtual Messages::ValueMessageBuilder & startGroup(
         Messages::FieldIdentityCPtr identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
       virtual void endGroup(
         Messages::FieldIdentityCPtr identity,
-        Messages::MessageBuilder & groupBuilder);
+        Messages::ValueMessageBuilder & groupBuilder);
 
     private:
       int size_;

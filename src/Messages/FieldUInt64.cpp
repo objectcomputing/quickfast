@@ -9,13 +9,13 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldUInt64::FieldUInt64(uint64 value)
-  : Field(Field::UINT64, true)
+  : Field(ValueType::UINT64, true)
 {
   unsignedInteger_ = value;
 }
 
 FieldUInt64::FieldUInt64()
-  : Field(Field::UINT64, false)
+  : Field(ValueType::UINT64, false)
 {
 }
 

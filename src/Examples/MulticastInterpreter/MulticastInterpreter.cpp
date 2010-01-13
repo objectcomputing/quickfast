@@ -11,10 +11,8 @@
 #include <Messages/Message.h>
 #include <Examples/StopWatch.h>
 #include <Examples/MessageInterpreter.h>
-#if 1
 #include <Codecs/MulticastReceiver.h>
 #include <Codecs/MessageConsumer.h>
-#endif
 
 
 //////////////

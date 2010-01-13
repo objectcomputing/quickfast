@@ -9,13 +9,13 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldInt16::FieldInt16(int16 value)
-  : Field(Field::INT16, true)
+  : Field(ValueType::INT16, true)
 {
   signedInteger_ = value;
 }
 
 FieldInt16::FieldInt16()
-  : Field(Field::INT16, false)
+  : Field(ValueType::INT16, false)
 {
 }
 

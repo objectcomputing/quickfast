@@ -38,7 +38,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & message) const
+        Messages::ValueMessageBuilder & message) const
       {
         ++calledDecodeNop_;
         return true;
@@ -48,7 +48,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & message) const
+        Messages::ValueMessageBuilder & message) const
       {
         ++calledDecodeConstant_;
         return true;
@@ -58,7 +58,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & message) const
+        Messages::ValueMessageBuilder & message) const
       {
         ++calledDecodeDefault_;
         return true;
@@ -68,7 +68,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & message) const
+        Messages::ValueMessageBuilder & message) const
       {
         ++calledDecodeCopy_;
         return true;
@@ -78,7 +78,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & message) const
+        Messages::ValueMessageBuilder & message) const
       {
         ++calledDecodeDelta_;
         return true;
@@ -88,7 +88,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & message) const
+        Messages::ValueMessageBuilder & message) const
       {
         ++calledDecodeIncrement_;
         return true;
@@ -98,7 +98,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::MessageBuilder & message) const
+        Messages::ValueMessageBuilder & message) const
       {
         ++calledDecodeTail_;
         return true;

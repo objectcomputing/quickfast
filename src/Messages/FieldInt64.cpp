@@ -9,13 +9,13 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldInt64::FieldInt64(int64 value)
-  : Field(Field::INT64, true)
+  : Field(ValueType::INT64, true)
 {
   signedInteger_ = value;
 }
 
 FieldInt64::FieldInt64()
-  : Field(Field::INT64, false)
+  : Field(ValueType::INT64, false)
 {
 }
 

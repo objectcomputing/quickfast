@@ -9,20 +9,20 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldByteVector::FieldByteVector(const std::string & value)
-  : Field(Field::BYTEVECTOR, true)
+  : Field(ValueType::BYTEVECTOR, true)
 {
   string_ = value;
 }
 
 
 FieldByteVector::FieldByteVector(const uchar * buffer, size_t length)
-  : Field(Field::BYTEVECTOR, true)
+  : Field(ValueType::BYTEVECTOR, true)
 {
   string_.assign(buffer, length);
 }
 
 FieldByteVector::FieldByteVector()
-  : Field(Field::BYTEVECTOR, false)
+  : Field(ValueType::BYTEVECTOR, false)
 {
 }
 

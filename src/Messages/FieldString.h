@@ -4,28 +4,26 @@
 #ifdef _MSC_VER
 # pragma once
 #endif
-#ifndef FIELDASCII_H
-#define FIELDASCII_H
+#ifndef FIELDSTRING_H
+#define FIELDSTRING_H
 #include <Messages/Field.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief A field containing ascii data.
     ///
     /// In the XML template file this field is described as &lt;string charset="ascii">
-    class QuickFAST_Export FieldAscii : public Field
+    class QuickFAST_Export FieldString : public Field
 {
       /// @brief Construct the field from a value in a std::string
       /// @param value the value to be stored in the field
-      explicit FieldAscii(const std::string & value);
+      explicit FieldString(const std::string & value);
       /// @brief Construct the field from a value in byte buffer
       /// @param value the start of the value to be stored in the field
       /// @param length how many characters are in the value
-      FieldAscii(const uchar * value, size_t length);
+      FieldString(const uchar * value, size_t length);
       /// @brief Construct a NULL field (not an empty string)
-      FieldAscii();
-    public:
-      /// Identify the type of data associated with this field
-      const static ValueType::Type fieldType = ValueType::ASCII;
+      FieldString();
+
     public:
       /// @brief Construct the field from a value in a std::string
       /// @param value the value to be stored in the field
@@ -41,14 +39,16 @@ namespace QuickFAST{
       static FieldCPtr createNull();
 
       /// @brief a typical virtual destructor.
-      virtual ~FieldAscii();
+      virtual ~FieldString();
 
       // implement selected virtual methods from Field
       virtual bool isString() const;
       virtual const StringBuffer & toAscii() const;
+      virtual const StringBuffer & toUtf8() const;
+      virtual const StringBuffer & toByteVector() const;
       virtual const StringBuffer & toString() const;
     private:
     };
   }
 }
-#endif // FIELDASCII_H
+#endif // FIELDSTRING_H

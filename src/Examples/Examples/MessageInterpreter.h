@@ -8,7 +8,6 @@
 #define MESSAGEINTERPRETER_H
 #include <Codecs/MessageConsumer.h>
 #include <Messages/Message.h>
-#include <Messages/Field_fwd.h>
 #include <Messages/FieldIdentity.h>
 #include <Messages/Message_fwd.h>
 

@@ -19,7 +19,11 @@ namespace QuickFAST{
       explicit FieldUInt64(uint64 value);
       /// @brief Construct a NULL field
       FieldUInt64();
-      /// @brief a typical virtual destructor.
+
+    public:
+      /// Identify the type of data associated with this field
+      const static ValueType::Type fieldType = ValueType::UINT64;
+
     public:
       /// @brief Construct the field from am uint64 value
       /// @param value the value to be stored in the field

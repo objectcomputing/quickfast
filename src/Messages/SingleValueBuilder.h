@@ -39,12 +39,12 @@ namespace QuickFAST
           return *this;
         }
 
-        bool endMessage(MessageBuilder &/*messageBuilder*/)
+        bool endMessage(ValueMessageBuilder &/*messageBuilder*/)
         {
           return true;
         }
 
-        bool ignoreMessage(MessageBuilder & /*messageBuilder*/)
+        bool ignoreMessage(ValueMessageBuilder & /*messageBuilder*/)
         {
           set_ = false;
           return true;
@@ -76,6 +76,7 @@ namespace QuickFAST
           return value_;
         }
 
+        /// @brief access the identity that was used to set the value
         const FieldIdentityCPtr & identity()const
         {
           return identity_;
@@ -132,17 +133,17 @@ namespace QuickFAST
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
 
-        virtual void endSequenceEntry(MessageBuilder & /*entry*/)
+        virtual void endSequenceEntry(ValueMessageBuilder & /*entry*/)
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
-        virtual void endSequence( Messages::FieldIdentityCPtr /*identity*/, MessageBuilder & )
+        virtual void endSequence( Messages::FieldIdentityCPtr /*identity*/, ValueMessageBuilder & )
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
 
-        virtual QuickFAST::Messages::MessageBuilder & startGroup(
-          Messages::FieldIdentityCPtr /*identity*/,
+        virtual MessageBuilder & startGroup(
+          FieldIdentityCPtr /*identity*/,
           const std::string & /*applicationType*/,
           const std::string & /*applicationTypeNamespace*/,
           size_t /*size*/)
@@ -152,7 +153,7 @@ namespace QuickFAST
 
         virtual void endGroup(
           Messages::FieldIdentityCPtr /*identity*/,
-          MessageBuilder & /*entry*/)
+          ValueMessageBuilder & /*entry*/)
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Group.");
         }

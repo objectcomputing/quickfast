@@ -10,11 +10,13 @@
 #include <Common/Types.h>
 namespace QuickFAST
 {
+  /// @brief Product information about QuickFAST
   const char[] QuickFAST_Product = "QuickFAST Version "
     "1.0"
     " Copyright (c) 2009, Object Computing, Inc.\n"
     "All Rights Reserved\n"
     "See the file license.txt for licensing information.\n";
-  const long QuickFAST_Version = 0x00010000; // MMMM.mmmm {M=Major, m=minor)
+  /// @brief version number
+  const long QuickFAST_Version = 0x00010001; // MMMM.mmmm {M=Major, m=minor)
 }
 #endif // VERSION_H

@@ -3,13 +3,12 @@
 // See the file license.txt for licensing information.
 #include <Common/QuickFASTPch.h>
 #include "FieldGroup.h"
-//#include <Messages/FieldSet.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
 FieldGroup::FieldGroup(Messages::GroupCPtr group)
-  : Field(Field::GROUP, true)
+  : Field(ValueType::GROUP, true)
   , group_(group)
 {
 }
