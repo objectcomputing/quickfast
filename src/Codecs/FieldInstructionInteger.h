@@ -227,11 +227,11 @@ namespace QuickFAST{
       INTEGER_TYPE value = 0;
       if(SIGNED) // expect compile-time optimization here
       {
-        decodeSignedInteger(source, decoder, value, identity_->name());
+        decodeSignedInteger(source, decoder, value, identity_->name(), false, identity_->ignoreOverflow());
       }
       else
       {
-        decodeUnsignedInteger(source, decoder, value, identity_->name());
+        decodeUnsignedInteger(source, decoder, value, identity_->name(), identity_->ignoreOverflow());
       }
       if(isMandatory())
       {
@@ -306,11 +306,11 @@ namespace QuickFAST{
         // present in stream
         if(SIGNED) // expect compile-time optimization here
         {
-          decodeSignedInteger(source, decoder, value, identity_->name());
+          decodeSignedInteger(source, decoder, value, identity_->name(), false, identity_->ignoreOverflow());
         }
         else
         {
-          decodeUnsignedInteger(source, decoder, value, identity_->name());
+          decodeUnsignedInteger(source, decoder, value, identity_->name(), identity_->ignoreOverflow());
         }
 
         if(isMandatory())
@@ -396,7 +396,7 @@ namespace QuickFAST{
       {
         PROFILE_POINT("int::decodeDefault:present");
         INTEGER_TYPE value = 0;
-        decodeSignedInteger(source, decoder, value, identity_->name());
+        decodeSignedInteger(source, decoder, value, identity_->name(), false,  identity_->ignoreOverflow());
         if(isMandatory())
         {
           fieldSet.addValue(
@@ -504,11 +504,11 @@ namespace QuickFAST{
         INTEGER_TYPE value = 0;
         if(SIGNED) // expect compile-time optimization here
         {
-          decodeSignedInteger(source, decoder, value, identity_->name());
+          decodeSignedInteger(source, decoder, value, identity_->name(), false, identity_->ignoreOverflow());
         }
         else
         {
-          decodeUnsignedInteger(source, decoder, value, identity_->name());
+          decodeUnsignedInteger(source, decoder, value, identity_->name(), identity_->ignoreOverflow());
         }
         if(isMandatory())
         {

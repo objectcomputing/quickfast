@@ -50,6 +50,12 @@ FieldInstruction::setPresence(bool mandatory)
 }
 
 void
+FieldInstruction::setIgnoreOverflow(bool ignoreOverflow)
+{
+  mutableIdentity_->setIgnoreOverflow(ignoreOverflow);
+}
+
+void
 FieldInstruction::setFieldOp(FieldOpPtr fieldOp)
 {
   fieldOp_ = fieldOp;

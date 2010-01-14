@@ -41,15 +41,12 @@ namespace QuickFAST{
         Codecs::Encoder & encoder,
         const Messages::MessageAccessor & fieldSet) const;
 
-//      virtual size_t presenceMapBitsRequired() const;
-
     private:
       void interpretValue(const std::string & value);
 
     private:
       std::string templateName_;
       std::string templateNamespace_;
-      size_t presenceMapBitsRequired_;
     };
 
     /// @brief Implement dynamic &lt;templateRef> field instruction.

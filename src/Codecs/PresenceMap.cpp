@@ -11,6 +11,18 @@
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
 
+size_t
+PresenceMap::maskToBitNumber(uchar bitMask)
+{
+  size_t bitNumber = 0;
+  while(bitMask != PresenceMap::startByteMask &&  bitMask != 0)
+  {
+    bitNumber += 1;
+    bitMask <<= 1;
+  }
+  return bitNumber;
+}
+
 PresenceMap::PresenceMap(size_t bits)
   : bitMask_(startByteMask)
   , bytePosition_(0)
@@ -179,8 +191,11 @@ PresenceMap::rewind()
 void
 PresenceMap::verboseCheckNextField(bool result)
 {
-  (*vout_) << "check pmap[" << bytePosition_ << '/' <<  byteCapacity_ << ','
-    << std::hex << static_cast<unsigned short>(bitMask_) << std::dec << ']' <<(result?'T' : 'F')
+  (*vout_) << "check pmap[" << bitNumber(bytePosition_, bitMask_) << " -> "
+    << bytePosition_ << '/'
+    << std::hex << static_cast<unsigned short>(bitMask_) << '&'
+    << static_cast<unsigned short>(bits_[bytePosition_]) << std::dec << ']'
+    << (result ? 'T' : 'F')
     << std::endl;
 }
 
@@ -188,8 +203,11 @@ PresenceMap::verboseCheckNextField(bool result)
 void
 PresenceMap::verboseCheckSpecificField(size_t bit, size_t byte, uchar bitmask, bool result)
 {
-  (*vout_) << "check specific pmap[" << bit << " -> " << byte << '/' <<  byteCapacity_ << ','
-    << std::hex << static_cast<unsigned short>(bitmask) << '&' << bits_[byte] << std::dec << ']' <<(result?'T' : 'F')
+  (*vout_) << "check specific pmap[" << bit << " -> "
+    << byte << '/'
+    << std::hex << static_cast<unsigned short>(bitmask) << '&'
+    << static_cast<unsigned short>(bits_[byte]) << std::dec << ']'
+    << (result?'T' : 'F')
     << std::endl;
 }
 
@@ -214,7 +232,8 @@ PresenceMap::reset(size_t bitCount)
 void
 PresenceMap::verboseSetNext(bool present)
 {
-  (*vout_) << "set pmap[" << bytePosition_ << '/' <<  byteCapacity_ << ','
+  (*vout_) << "set pmap[" << bitNumber(bytePosition_, bitMask_) << " -> "
+    << bytePosition_ << '/'
     << std::hex << static_cast<unsigned short>(bitMask_) << std::dec << ']' <<(present?'T' : 'F')
     << std::endl;
 }

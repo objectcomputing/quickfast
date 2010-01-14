@@ -331,6 +331,7 @@ InterpretFAST::run()
     if(verboseDecode_)
     {
       decoder.setVerboseOutput(std::cout);
+      builder.setVerbose(&std::cout);
     }
     decoder.decode(source, builder);
 

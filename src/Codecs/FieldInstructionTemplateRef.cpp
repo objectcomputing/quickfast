@@ -18,7 +18,6 @@ FieldInstructionStaticTemplateRef::FieldInstructionStaticTemplateRef(
   : FieldInstruction(name, fieldNamespace)
   , templateName_(name)
   , templateNamespace_(fieldNamespace)
-  , presenceMapBitsRequired_(0)
 {
 }
 
@@ -41,16 +40,9 @@ FieldInstructionStaticTemplateRef::finalize(TemplateRegistry & templateRegistry)
     throw QuickFAST::TemplateDefinitionError(exception.str());
   }
   target->finalize(templateRegistry);
-  presenceMapBitsRequired_ = target->presenceMapBitCount();
+  // subtract one for the template ID
+  presenceMapBitsUsed_ = target->presenceMapBitCount() - 1;
 }
-
-#if 0
-size_t
-FieldInstructionStaticTemplateRef::presenceMapBitsRequired() const
-{
-  return presenceMapBitsRequired_;
-}
-#endif
 
 bool
 FieldInstructionStaticTemplateRef::decodeNop(

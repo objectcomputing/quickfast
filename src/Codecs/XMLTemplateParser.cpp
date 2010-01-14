@@ -605,6 +605,11 @@ TemplateBuilder::parseInt32(const std::string & tag, const AttributeMap& attribu
   {
     field->setPresence(presence == "mandatory");
   }
+  std::string allowOverflow;
+  if(getOptionalAttribute(attributes, "ignore_overflows", allowOverflow))
+  {
+    field->setIgnoreOverflow(std::tolower(allowOverflow[0]) == 'y');
+  }
   schemaElements_.top().second->addInstruction(field);
   schemaElements_.push(StackEntry(tag, field));
 }

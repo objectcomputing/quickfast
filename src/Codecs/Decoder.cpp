@@ -185,7 +185,7 @@ Decoder::decodeSegmentBody(
     {
       if(verboseOut_)
       {
-        (*verboseOut_) << "Decode instruction[" <<nField << "]: " << instruction->getIdentity()->name() << std::endl;
+        (*verboseOut_) <<std::endl << "Decode instruction[" <<nField << "]: " << instruction->getIdentity()->name() << std::endl;
       }
       source.beginField(instruction->getIdentity()->name());
       if(!instruction->decode(source, pmap, *this, messageBuilder))

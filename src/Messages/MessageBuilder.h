@@ -18,8 +18,16 @@ namespace QuickFAST{
     {
     public:
 
-      /// @brief Virtual destructor
+      MessageBuilder();
+
       virtual ~MessageBuilder(){};
+
+      /// @brief Write verbose information to ostream
+      /// @param vout is the stream to which to write.  0 disables verbosity.
+      void setVerbose(std::ostream * vout)
+      {
+        vout_ = vout;
+      }
 
 
       /// @brief Add a field to the set.
@@ -95,7 +103,8 @@ namespace QuickFAST{
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size)  = 0;
-
+    private:
+      std::ostream * vout_;
     };
   }
 }

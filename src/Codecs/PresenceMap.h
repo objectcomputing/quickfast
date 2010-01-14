@@ -103,6 +103,14 @@ namespace QuickFAST{
       void verboseCheckNextField(bool result);
       void verboseCheckSpecificField(size_t bit, size_t byte, uchar bitMask, bool result);
 
+      /// @brief convert byte to bit# in stop bit encoded pmap
+      /// slow-- not for production use
+      size_t maskToBitNumber(uchar bitMask);
+      size_t bitNumber(size_t byteOffset, uchar bitMask)
+      {
+        return byteOffset * 7 + maskToBitNumber(bitMask);
+      }
+
     private:
       static const uchar startByteMask = '\x40';
       uchar bitMask_;

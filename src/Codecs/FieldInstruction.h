@@ -95,6 +95,10 @@ namespace QuickFAST{
       /// @param mandatory true for presence="mandatory"; false for presence="optional"
       virtual void setPresence(bool mandatory);
 
+      /// @brief Provide a way to control overflow checking during decoding.
+      /// @param overFlow check is true to disable/false to enable overflow checking (default is false)
+      virtual void setIgnoreOverflow(bool allowOverflow);
+
       /// @brief Set a field operation
       ///
       /// Assigns the appropriate dispatching object to this field instruction.
@@ -488,6 +492,7 @@ namespace QuickFAST{
       /// @param[in] name of this field to be used in error messages
       /// @param[in] allowOversize ignores one bit of overflow to cope
       ///            with out-of-range deltas (see section 6.3.7.1 of the Fast Specification v1x1)
+      /// @param[in] ignoreOverflow ignores overflows completely to cope with funky ARCA encoding.
       /// @returns true if successful; false if EOF
       /// @throws OverflowError if the decoded value doesn't fit the supplied type
       template<typename IntType>
@@ -496,7 +501,8 @@ namespace QuickFAST{
         Codecs::Context & context,
         IntType & value,
         const std::string & name,
-        bool allowOversize = false);
+        bool allowOversize = false,
+        bool ignoreOverflow = false);
 
       /// @brief basic decoding for signed integer types.
       ///
@@ -508,6 +514,7 @@ namespace QuickFAST{
       /// @param context in which the decoding occurs.
       /// @param[out] value returns the result
       /// @param[in] name of this field to be used in error messages
+      /// @param[in] allowOversize ignores overflows
       /// @returns true if successful; false if EOF
       /// @throws OverflowError if the decoded value doesn't fit the supplied type
       template<typename UnsignedIntType>
@@ -515,7 +522,8 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::Context & context,
         UnsignedIntType & value,
-        const std::string & name);
+        const std::string & name,
+        bool ignoreOverflow = false);
 
       /// @brief Check nullable signed or unsigned integer field for null value
       ///
@@ -624,7 +632,8 @@ namespace QuickFAST{
       Codecs::Context & context,
       IntType & value,
       const std::string & name,
-      bool oversize)
+      bool oversize,
+      bool ignoreOverflow)
     {
       PROFILE_POINT("decodeSignedInteger");
       uchar byte;
@@ -651,21 +660,21 @@ namespace QuickFAST{
         overflowMask <<= 1;
         overflowCheck <<= 1;
       }
-
       while((byte & stopBit) == 0)
       {
-        if((value & overflowMask) != overflowCheck){
+        if(!ignoreOverflow && (value & overflowMask) != overflowCheck)
+        {
           context.reportError("[ERR D2]", "Integer Field overflow.", name);
         }
         value <<= dataShift;
         value |= byte;
         if(!source.getByte(byte))
         {
-          context.reportFatal("[ERR D2]", "Integer Field overflow.", name);
+          context.reportFatal("[ERR D2]", "Unexpected EOF in integer field.", name);
         }
       }
       // include the last byte (the one with the stop bit)
-      if((value & overflowMask) != overflowCheck)
+      if(!ignoreOverflow && (value & overflowMask) != overflowCheck)
       {
         context.reportError("[ERR D2]", "Integer Field overflow.", name);
       }
@@ -691,7 +700,8 @@ namespace QuickFAST{
       Codecs::DataSource & source,
       Codecs::Context & context,
       UnsignedIntType & value,
-      const std::string & name)
+      const std::string & name,
+      bool ignoreOverflow)
     {
       PROFILE_POINT("decodeUnsignedInteger");
       uchar byte;
@@ -711,9 +721,9 @@ namespace QuickFAST{
 
       while((byte & stopBit) == 0)
       {
-        if((value & overflowMask) != overflowCheck)
+        if(!ignoreOverflow && (value & overflowMask) != overflowCheck)
         {
-          context.reportError("[ERR D2]", "Unsigned Integer Field overflow.");
+          context.reportError("[ERR D2]", "Unsigned Integer Field overflow.", name);
         }
         value <<= dataShift;
         value |= byte;
@@ -722,9 +732,9 @@ namespace QuickFAST{
           context.reportFatal("[ERR U03]", "End of file without stop bit decoding unsigned integer.", name);
         }
       }
-      if((value & overflowMask) != overflowCheck)
+      if(!ignoreOverflow && (value & overflowMask) != overflowCheck)
       {
-        context.reportError("[ERR D2]", "Integer Field overflow.");
+        context.reportError("[ERR D2]", "Unsigned Integer Field overflow.", name);
       }
       value <<= dataShift;
       value |= (byte & dataBits);

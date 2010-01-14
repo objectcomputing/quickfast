@@ -54,6 +54,9 @@ SegmentBody::finalize(TemplateRegistry & templateRegistry)
   }
   isFinalizing_ = true;
 
+#ifdef DEBUG_PRESENCE_MAP_COUNTS
+  std::cout << "-Finalizing Segment Body " << std::endl;
+#endif // DEBUG_PRESENCE_MAP_COUNTS
   if(bool(lengthInstruction_))
   {
     lengthInstruction_->finalize(templateRegistry);
@@ -61,9 +64,15 @@ SegmentBody::finalize(TemplateRegistry & templateRegistry)
   for (size_t pos = 0; pos < instructions_.size(); ++pos)
   {
     FieldInstructionPtr pf = instructions_[pos];
+#ifdef DEBUG_PRESENCE_MAP_COUNTS
+    std::cout << "  Finalizing instruction: " << pf->getName() << std::endl;
+#endif // DEBUG_PRESENCE_MAP_COUNTS
     pf->finalize(templateRegistry);
   }
 
+#ifdef DEBUG_PRESENCE_MAP_COUNTS
+  std::cout << "-Calculating presence map bits " << std::endl;
+#endif // DEBUG_PRESENCE_MAP_COUNTS
   presenceMapBits_ = initialPresenceMapBits_;
   if(bool(lengthInstruction_))
   {
@@ -71,8 +80,16 @@ SegmentBody::finalize(TemplateRegistry & templateRegistry)
   }
   for (size_t pos = 0; pos < instructions_.size(); ++pos)
   {
-    presenceMapBits_ += instructions_[pos]->getPresenceMapBitsUsed();
+    size_t used = instructions_[pos]->getPresenceMapBitsUsed();
+#ifdef DEBUG_PRESENCE_MAP_COUNTS
+    std::cout << "--Instruction " << instructions_[pos]->getName() << " uses " << used << std::endl;
+#endif // DEBUG_PRESENCE_MAP_COUNTS
+    presenceMapBits_ += used;
   }
+#ifdef DEBUG_PRESENCE_MAP_COUNTS
+  std::cout << "-Total presence map bits: " << presenceMapBits_ << std::endl;
+#endif // DEBUG_PRESENCE_MAP_COUNTS
+
   isFinalizing_ = false;
   isFinalized_ = true;
 }

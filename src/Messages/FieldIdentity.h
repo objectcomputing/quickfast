@@ -27,6 +27,7 @@ namespace QuickFAST{
         : localName_(name)
         , fieldNamespace_(fieldNamespace)
         , mandatory_(true)
+        , ignoreOverflow_(false)
         , refcount_(0)
       {
         qualifyName();
@@ -63,6 +64,7 @@ namespace QuickFAST{
         , fullName_(rhs.fullName_)
         , id_(rhs.id_)
         , mandatory_(rhs.mandatory_)
+        , ignoreOverflow_(rhs.ignoreOverflow_)
         , refcount_(0)
       {
       }
@@ -116,6 +118,16 @@ namespace QuickFAST{
         return mandatory_;
       }
 
+      void setIgnoreOverflow(bool ignoreOverflow)
+      {
+        ignoreOverflow_ = ignoreOverflow;
+      }
+
+      bool ignoreOverflow()const
+      {
+        return ignoreOverflow_;
+      }
+
     private:
       void qualifyName()
       {
@@ -134,6 +146,7 @@ namespace QuickFAST{
       std::string fullName_; // cached for performance
       field_id_t id_;
       bool mandatory_;
+      bool ignoreOverflow_;
     private:
       friend void QuickFAST_Export intrusive_ptr_add_ref(const FieldIdentity * ptr);
       friend void QuickFAST_Export intrusive_ptr_release(const FieldIdentity * ptr);

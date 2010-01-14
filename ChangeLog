@@ -1,3 +1,26 @@
+Thu Jan 14 22:08:13 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * setup.cmd:
+
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/PresenceMap.h:
+        * src/Codecs/PresenceMap.cpp:
+        * src/Codecs/SegmentBody.cpp:
+        * src/Codecs/XMLTemplateParser.cpp:
+
+        * src/Examples/Examples.mpc:
+
+        * src/Examples/InterpretFAST/InterpretFAST.cpp:
+
+        * src/Messages/FieldIdentity.h:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/MessageBuilder.cpp:
+
 p Wed Jan 13 16:22:28 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Context.h:
