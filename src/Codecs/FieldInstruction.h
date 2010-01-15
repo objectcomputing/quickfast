@@ -96,7 +96,7 @@ namespace QuickFAST{
       virtual void setPresence(bool mandatory);
 
       /// @brief Provide a way to control overflow checking during decoding.
-      /// @param overFlow check is true to disable/false to enable overflow checking (default is false)
+      /// @param allowOverflow is true to disable/false to enable overflow checking (default is false)
       virtual void setIgnoreOverflow(bool allowOverflow);
 
       /// @brief Set a field operation
@@ -514,7 +514,7 @@ namespace QuickFAST{
       /// @param context in which the decoding occurs.
       /// @param[out] value returns the result
       /// @param[in] name of this field to be used in error messages
-      /// @param[in] allowOversize ignores overflows
+      /// @param[in] ignoreOverflow ignores overflows completely to cope with funky ARCA encoding.
       /// @returns true if successful; false if EOF
       /// @throws OverflowError if the decoded value doesn't fit the supplied type
       template<typename UnsignedIntType>

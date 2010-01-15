@@ -25,7 +25,7 @@ DataSourceBlockedStream::readByte(uchar & byte)
   bool ok = false;
   if(bufferPosition_ >= bufferUsed_)
   {
-    std::cout << std::endl << "DataSourceBlockedStream reading block size." << std::endl;
+//    std::cout << std::endl << "DataSourceBlockedStream reading block size." << std::endl;
     size_t blockSize = 0;
     uchar b = 0;
     b = uchar(stream_.get());

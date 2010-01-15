@@ -1,3 +1,28 @@
+Fri Jan 15 20:42:59 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Application:
+        * src/Application/FastConnection.h:
+        * src/Application/FastConnection.cpp:
+        create a new level of API.
+        QuickFAST::Application::FastConnection provides a single
+        point of contact for developing a FAST based application.
+
+        * src/Codecs/DataSourceBlockedStream.cpp:
+        * src/Codecs/FieldInstruction.h:
+        Support data streams containing block sizes.
+         (recommended by the spec for TCP/IP)
+
+        * src/Examples/Examples.mpc:
+        * src/Examples/InterpretApplication:
+
+        * src/Examples/InterpretApplication/InterpretApplication.h:
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+        * src/Examples/InterpretApplication/main.cpp:
+        * src/Messages/FieldIdentity.h:
+        * src/QuickFAST.mpc:
+        Add a new example application that uses FastConnection.
+        Eventually this should replace InterpretFAST.
+
 Thu Jan 14 22:27:51 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * setup.cmd:

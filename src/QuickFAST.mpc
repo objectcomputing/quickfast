@@ -11,11 +11,13 @@ project(*) : boost_base {
     Common
     Codecs
     Messages
+    Application
   }
   Header_Files {
     Common
     Codecs
     Messages
+    Application
   }
 
   specific(!vc8, !vc9) {

@@ -8,6 +8,16 @@ project(InterpretFAST) : boost_base, boost_filesystem, boost_thread, QuickFASTEx
   }
 }
 
+project(InterpretApplication) : boost_base, boost_filesystem, boost_thread, QuickFASTExample {
+  exename = InterpretApplication
+  Source_Files {
+    InterpretApplication
+  }
+  Header_Files {
+    InterpretApplication
+  }
+}
+
 project(PerformanceTest) : boost_base, boost_filesystem, boost_thread, QuickFASTExample {
   exename = PerformanceTest
   Source_Files {

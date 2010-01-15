@@ -118,11 +118,15 @@ namespace QuickFAST{
         return mandatory_;
       }
 
+      /// @brief enable/disable overflow checking during integer decoding
+      /// @param ignoreOverflow true disables checking/false enables checking
       void setIgnoreOverflow(bool ignoreOverflow)
       {
         ignoreOverflow_ = ignoreOverflow;
       }
 
+      ///@brief Access the overflow disable flag.
+      /// @returns the value assigened by setIgnoreOverflow()
       bool ignoreOverflow()const
       {
         return ignoreOverflow_;
