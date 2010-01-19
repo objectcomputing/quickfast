@@ -1,3 +1,10 @@
+Tue Jan 19 21:54:30 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Tests/testFieldOperations.cpp:
+        Add test for Issue #36.  Increment operator encoding misbehaves when there is no initial value.
+        Fix Issue #36.
+
 Tue Jan 19 21:02:51 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Examples/Examples/MessageInterpreter.h:

@@ -1826,13 +1826,116 @@ BOOST_AUTO_TEST_CASE(test_issue_30)
   const std::string & result = destination.getValue();
   BOOST_CHECK_EQUAL(result, testData);
   BOOST_CHECK(pmap == pmapResult);
+}
 
+BOOST_AUTO_TEST_CASE(test_issue_36)
+{
+/* <uInt64 name="MsgSeqNum" id="34"><increment/></uInt64>
+               Input    Prior Encoded PMAP   FAST
+    MsgSeqNum      1      NULL  1     true   0x81
+    MsgSeqNum      2      1     --    false  --
+    MsgSeqNum      3      2     --    false  --
+    MsgSeqNum      5      3     3     true   0x85
+*/
+  const char testData[] = "\x81\x85";
+  Codecs::DataSourceString source(testData);
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
+  Codecs::PresenceMap pmap(4);
+  pmap.setNextField(true);
+  pmap.setNextField(false);
+  pmap.setNextField(false);
+  pmap.setNextField(true);
+  pmap.rewind();
 
+  Codecs::FieldInstructionUInt64 field("MsgSeqNum","");
+  field.setPresence(true);
 
+  FieldOpPtr fieldOp(new Codecs::FieldOpIncrement);
+  field.setFieldOp(fieldOp);
+  field.indexDictionaries(indexer, "global", "", "");
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,1,indexer.size()));
+  field.finalize(*registry);
 
+  // We neeed the helper routines in the decoder
+  Codecs::Decoder decoder(registry);
 
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
 
+  // test a: decode the 1
+  builder.startMessage("UNIT_TEST", "", 1);
+  field.decode(source, pmap, decoder, builder);
+  BOOST_REQUIRE(builder.endMessage(builder));
 
+  Messages::Message fieldSet1(1);
+  fieldSet1.swap(consumer.message());
 
+  Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
+  BOOST_CHECK(pFieldEntry != fieldSet1.end());
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT64));
+  // the value should be the one
+  BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt64(), 1);
+  ++pFieldEntry;
+  BOOST_CHECK(pFieldEntry == fieldSet1.end());
 
+  // test b: decode the 2
+  builder.startMessage("UNIT_TEST", "", 1);
+  field.decode(source, pmap, decoder, builder);
+  BOOST_REQUIRE(builder.endMessage(builder));
+  Messages::Message fieldSet2(1);
+  fieldSet2.swap(consumer.message());
+
+  pFieldEntry = fieldSet2.begin();
+  BOOST_CHECK(pFieldEntry != fieldSet1.end());
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT64));
+  BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt64(), 2);
+  ++pFieldEntry;
+  BOOST_CHECK(pFieldEntry == fieldSet2.end());
+
+  // test c: decode the 3
+  builder.startMessage("UNIT_TEST", "", 1);
+  field.decode(source, pmap, decoder, builder);
+  BOOST_REQUIRE(builder.endMessage(builder));
+
+  Messages::Message fieldSet3(1);
+  fieldSet3.swap(consumer.message());
+  pFieldEntry = fieldSet3.begin();
+  BOOST_CHECK(pFieldEntry != fieldSet3.end());
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT64));
+  BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt64(), 3);
+  ++pFieldEntry;
+  BOOST_CHECK(pFieldEntry == fieldSet3.end());
+
+  // test d: decode the 5
+  builder.startMessage("UNIT_TEST", "", 1);
+  field.decode(source, pmap, decoder, builder);
+  BOOST_REQUIRE(builder.endMessage(builder));
+
+  Messages::Message fieldSet4(1);
+  fieldSet4.swap(consumer.message());
+  pFieldEntry = fieldSet4.begin();
+  BOOST_CHECK(pFieldEntry != fieldSet4.end());
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT64));
+  BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt64(), 5);
+  ++pFieldEntry;
+  BOOST_CHECK(pFieldEntry == fieldSet4.end());
+
+  // Was all input consumed?
+  uchar byte;
+  BOOST_CHECK(!source.getByte(byte));
+
+  // Now reencode the data
+  Codecs::PresenceMap pmapResult(4);
+  Codecs::DataDestinationString destination;
+  destination.startBuffer();
+  Codecs::Encoder encoder(registry);
+  field.encode(destination, pmapResult, encoder, fieldSet1);
+  field.encode(destination, pmapResult, encoder, fieldSet2);
+  field.encode(destination, pmapResult, encoder, fieldSet3);
+  field.encode(destination, pmapResult, encoder, fieldSet4);
+  destination.endMessage();
+  const std::string & result = destination.getValue();
+  BOOST_CHECK_EQUAL(result, testData);
+  BOOST_CHECK(pmap == pmapResult);
 }

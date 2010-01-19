@@ -856,12 +856,13 @@ namespace QuickFAST{
       // get previous value from dictionary
       INTEGER_TYPE previousValue = 0;
       Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
-      if(previousStatus != Context::OK_VALUE && fieldOp_->hasValue())
+      if(previousStatus == Context::UNDEFINED_VALUE && fieldOp_->hasValue())
       {
         // pretend the previous value was the value attribute - 1 so that
         // the increment will produce cause the initial value to be sent.
         previousValue = typedValue_ - 1;
-        fieldOp_->setDictionaryValue(encoder, previousValue);
+//        fieldOp_->setDictionaryValue(encoder, previousValue);
+        previousStatus = Context::OK_VALUE;
       }
 
       // get the value from the application data
@@ -871,9 +872,10 @@ namespace QuickFAST{
         INTEGER_TYPE value;
         field->getValue(value);
         INTEGER_TYPE nullableValue = value;
-        if(previousValue + 1 == value)
+        if(previousStatus == Context::OK_VALUE && previousValue + 1 == value)
         {
           pmap.setNextField(false);
+          fieldOp_->setDictionaryValue(encoder, value);
         }
         else
         {
