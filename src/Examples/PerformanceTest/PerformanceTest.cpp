@@ -229,7 +229,7 @@ PerformanceTest::run()
       << " templates in "
       << std::fixed << std::setprecision(3)
       << parseLapse
-      << " milliseonds. [";
+      << " milliseconds. [";
     (*performanceFile_) << std::fixed << std::setprecision(3)
       << double(parseLapse)/double(templateCount) << " msec/template. = "
       << std::fixed << std::setprecision(0)
@@ -267,7 +267,7 @@ PerformanceTest::run()
         << "Decoded " << messageCount << " messages in "
         << std::fixed << std::setprecision(3)
         << decodeLapse
-        << " milliseonds. [";
+        << " milliseconds. [";
       if(decodeLapse != 0)
       {
         (*performanceFile_) << std::fixed << std::setprecision(3)
