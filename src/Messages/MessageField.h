@@ -50,7 +50,7 @@ namespace QuickFAST{
       }
       /// @brief get the identity of the field
       /// @returns the identifying information for this field
-      FieldIdentityCPtr getIdentity()const
+      const FieldIdentityCPtr & getIdentity()const
       {
         return identity_;
       }

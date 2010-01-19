@@ -38,7 +38,7 @@ namespace QuickFAST{
       }
 
       /// @brief get the identity of the sequence's length field
-      Messages::FieldIdentityCPtr getLengthIdentity() const
+      const Messages::FieldIdentityCPtr & getLengthIdentity() const
       {
         return lengthIdentity_;
       }

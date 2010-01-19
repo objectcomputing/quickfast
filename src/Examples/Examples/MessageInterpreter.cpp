@@ -89,7 +89,7 @@ MessageInterpreter::formatMessage(const Messages::Message & message)
     it != message.end();
     ++it)
   {
-    Messages::FieldIdentityCPtr & identity = it->getIdentity();
+    const Messages::FieldIdentityCPtr & identity = it->getIdentity();
     const Messages::FieldCPtr & field = it->getField();
     ValueType::Type type = field->getType();
     if(type == ValueType::SEQUENCE)
@@ -116,7 +116,7 @@ MessageInterpreter::newline()
 
 void
 MessageInterpreter::formatSequence(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentityCPtr & identity,
   const Messages::FieldCPtr & field)
 {
   Messages::SequenceCPtr sequence = field->toSequence();
@@ -124,7 +124,7 @@ MessageInterpreter::formatSequence(
   newline();
   out_ << ' ' << identity->name() << '[' << identity->id() << "]=";
 
-  Messages::FieldIdentityCPtr lengthIdentity = sequence->getLengthIdentity();
+  const Messages::FieldIdentityCPtr lengthIdentity = sequence->getLengthIdentity();
 
   out_ << "Sequence: " << lengthIdentity->name() << '[' << lengthIdentity->id() << ']' << " = " << count;
 
@@ -143,7 +143,7 @@ MessageInterpreter::formatSequence(
       ++fsit)
     {
       // todo: refactor with message decoding
-      Messages::FieldIdentityCPtr & identity = fsit->getIdentity();
+      const Messages::FieldIdentityCPtr & identity = fsit->getIdentity();
       const Messages::FieldCPtr & field = fsit->getField();
       ValueType::Type type = field->getType();
       if(type == ValueType::SEQUENCE)
@@ -174,7 +174,7 @@ MessageInterpreter::formatGroup(const Messages::FieldCPtr & field)
     ++fsit)
   {
     // todo: refactor with message decoding
-    Messages::FieldIdentityCPtr & identity = fsit->getIdentity();
+    const Messages::FieldIdentityCPtr & identity = fsit->getIdentity();
     const Messages::FieldCPtr & field = fsit->getField();
     ValueType::Type type = field->getType();
     if(type == ValueType::SEQUENCE)

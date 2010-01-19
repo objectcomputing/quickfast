@@ -1,3 +1,11 @@
+Tue Jan 19 21:02:51 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Messages/MessageField.h:
+        * src/Messages/Sequence.h:
+        Linux build errors -- reference to temporary.
+
 Tue Jan 19 01:32:44 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Examples/PerformanceTest/PerformanceTest.cpp:
