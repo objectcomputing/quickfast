@@ -54,7 +54,7 @@ FieldInstructionDecimal::setPresence(bool mandatory)
 }
 
 
-bool
+void
 FieldInstructionDecimal::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
@@ -66,14 +66,11 @@ FieldInstructionDecimal::decodeNop(
   if(bool(exponentInstruction_))
   {
     Messages::SingleValueBuilder<int32> exponentBuilder;
-    if(!exponentInstruction_->decode(source, pmap, decoder, exponentBuilder))
-    {
-      return false;
-    }
+    exponentInstruction_->decode(source, pmap, decoder, exponentBuilder);
     if(!exponentBuilder.isSet())
     {
       // null field
-      return true;
+      return;
     }
     exponent_t exponent = static_cast<exponent_t>(exponentBuilder.value());
 
@@ -96,7 +93,7 @@ FieldInstructionDecimal::decodeNop(
     {
       if(checkNullInteger(exponent))
       {
-        return true;
+        return;
       }
     }
     mantissa_t mantissa;
@@ -107,10 +104,10 @@ FieldInstructionDecimal::decodeNop(
       ValueType::DECIMAL,
       value);
   }
-  return true;
+  return;
 }
 
-bool
+void
 FieldInstructionDecimal::decodeConstant(
   Codecs::DataSource & /*source*/,
   Codecs::PresenceMap & pmap,
@@ -125,10 +122,9 @@ FieldInstructionDecimal::decodeConstant(
       ValueType::DECIMAL,
       typedValue_);
   }
-  return true;
 }
 
-bool
+void
 FieldInstructionDecimal::decodeDefault(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
@@ -144,7 +140,7 @@ FieldInstructionDecimal::decodeDefault(
     {
       if(checkNullInteger(exponent))
       {
-        return true;
+        return;
       }
     }
     mantissa_t mantissa;
@@ -169,10 +165,9 @@ FieldInstructionDecimal::decodeDefault(
       decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.", *identity_);
     }
   }
-  return true;
 }
 
-bool
+void
 FieldInstructionDecimal::decodeCopy(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
@@ -248,10 +243,9 @@ FieldInstructionDecimal::decodeCopy(
     }
     //else previous was null so don't put anything in the record
   }
-  return true;
 }
 
-bool
+void
 FieldInstructionDecimal::decodeDelta(
   Codecs::DataSource & source,
   Codecs::PresenceMap & /*pmap*/,
@@ -266,7 +260,7 @@ FieldInstructionDecimal::decodeDelta(
     if(checkNullInteger(exponentDelta))
     {
       // nothing in Message; no change to saved value
-      return true;
+      return;
     }
   }
   int64 mantissaDelta;
@@ -281,8 +275,8 @@ FieldInstructionDecimal::decodeDelta(
     ValueType::DECIMAL,
     value);
   fieldOp_->setDictionaryValue(decoder, value);
-  return true;
 }
+
 void
 FieldInstructionDecimal::encodeNullableDecimal(
   Codecs::DataDestination & destination,

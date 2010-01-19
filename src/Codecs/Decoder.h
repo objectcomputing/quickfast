@@ -52,7 +52,7 @@ namespace QuickFAST{
       void
       decodeGroup(
         DataSource & source,
-        SegmentBodyCPtr segment,
+        const SegmentBodyCPtr & segment,
         Messages::ValueMessageBuilder & messageBuilder);
 
       /// @brief Decode a segment into a messageBuilder.
@@ -63,7 +63,7 @@ namespace QuickFAST{
       void decodeNestedTemplate(
         DataSource & source,
         Messages::ValueMessageBuilder & messageBuilder,
-        Messages::FieldIdentityCPtr identity);
+        Messages::FieldIdentityCPtr & identity);
 
       /// @brief Decode the body of a segment into a messageBuilder.
       ///
@@ -75,7 +75,7 @@ namespace QuickFAST{
       void decodeSegmentBody(
         DataSource & source,
         PresenceMap & pmap,
-        SegmentBodyCPtr segment,
+        const SegmentBodyCPtr & segment,
         Messages::ValueMessageBuilder & messageBuilder);
     };
   }

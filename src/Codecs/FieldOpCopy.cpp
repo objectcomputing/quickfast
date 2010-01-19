@@ -19,7 +19,7 @@ FieldOpCopy::usesDictionary() const
   return true;
 }
 
-bool
+void
 FieldOpCopy::decode(
   const Codecs::FieldInstruction & instruction,
   Codecs::DataSource & source,
@@ -29,11 +29,11 @@ FieldOpCopy::decode(
 {
   if(pmapBitValid_)
   {
-    return instruction.decodeCopy(source, pmap.checkSpecificField(pmapBit_), decoder, fieldSet);
+    instruction.decodeCopy(source, pmap.checkSpecificField(pmapBit_), decoder, fieldSet);
   }
   else
   {
-    return instruction.decodeCopy(source, pmap, decoder, fieldSet);
+    instruction.decodeCopy(source, pmap, decoder, fieldSet);
   }
 }
 

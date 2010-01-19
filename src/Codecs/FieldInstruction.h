@@ -145,7 +145,7 @@ namespace QuickFAST{
 
       /// @brief Retrieve the field's identity.
       /// @returns the field identity.
-      Messages::FieldIdentityCPtr getIdentity()const
+      Messages::FieldIdentityCPtr & getIdentity()const
       {
         return identity_;
       }
@@ -196,13 +196,13 @@ namespace QuickFAST{
       /// @param[in] pmap identifies fields present in the stream
       /// @param decoder provides context for decoding
       /// @param[out] fieldSet receives the decoded fields
-      bool decode(
+      void decode(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & fieldSet)const
       {
-        return fieldOp_->decode(*this, source, pmap, decoder, fieldSet);
+        fieldOp_->decode(*this, source, pmap, decoder, fieldSet);
       }
 
       /// @brief Decode the field from a data source.
@@ -244,7 +244,7 @@ namespace QuickFAST{
       /// @param[in] pmap indicating field presence
       /// @param[in] decoder driving this process
       /// @param[out] fieldSet
-      virtual bool decodeNop(
+      virtual void decodeNop(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
@@ -256,7 +256,7 @@ namespace QuickFAST{
       /// @param[in] pmap indicating field presence
       /// @param[in] decoder driving this process
       /// @param[out] fieldSet
-      virtual bool decodeConstant(
+      virtual void decodeConstant(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
@@ -268,7 +268,7 @@ namespace QuickFAST{
       /// @param[in] pmap indicating field presence
       /// @param[in] decoder driving this process
       /// @param[out] fieldSet
-      virtual bool decodeDefault(
+      virtual void decodeDefault(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
@@ -280,7 +280,7 @@ namespace QuickFAST{
       /// @param[in] pmap indicating field presence
       /// @param[in] decoder driving this process
       /// @param[out] fieldSet
-      virtual bool decodeCopy(
+      virtual void decodeCopy(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
@@ -294,7 +294,7 @@ namespace QuickFAST{
       /// @param[in] pmapValue prefetched to  indicate field presence
       /// @param[in] decoder driving this process
       /// @param[out] fieldSet
-      virtual bool decodeCopy(
+      virtual void decodeCopy(
         Codecs::DataSource & source,
         bool pmapValue,
         Codecs::Decoder & decoder,
@@ -306,7 +306,7 @@ namespace QuickFAST{
       /// @param[in] pmap indicating field presence
       /// @param[in] decoder driving this process
       /// @param[out] fieldSet
-      virtual bool decodeDelta(
+      virtual void decodeDelta(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
@@ -320,7 +320,7 @@ namespace QuickFAST{
       /// @param[in] pmap indicating field presence
       /// @param[in] decoder driving this process
       /// @param[out] fieldSet
-      virtual bool decodeIncrement(
+      virtual void decodeIncrement(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
@@ -334,7 +334,7 @@ namespace QuickFAST{
       /// @param[in] pmapValue prefetched to  indicate field presence
       /// @param[in] decoder driving this process
       /// @param[out] fieldSet
-      virtual bool decodeIncrement(
+      virtual void decodeIncrement(
         Codecs::DataSource & source,
         bool pmapValue,
         Codecs::Decoder & decoder,
@@ -348,7 +348,7 @@ namespace QuickFAST{
       /// @param[in] pmap indicating field presence
       /// @param[in] decoder driving this process
       /// @param[out] fieldSet
-      virtual bool decodeTail(
+      virtual void decodeTail(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
@@ -607,10 +607,12 @@ namespace QuickFAST{
       Messages::FieldIdentityPtr mutableIdentity_;
     protected:
       /// Identify information for the fields to be Xcoded by this instruction
-      Messages::FieldIdentityCPtr identity_;
+      /// Note the "mutable" applies to the pointer and permits assignement
+      /// The target identity is still immutable
+      mutable Messages::FieldIdentityCPtr identity_;
       /// Application type associated with this instruction
       std::string applicationType_;
-/// Namespace in which the application type is defined.
+      /// Namespace in which the application type is defined.
       std::string applicationTypeNamespace_;
       /// Cached applicationTypeNamespace.applicationType
       std::string qualifiedApplicationType_;

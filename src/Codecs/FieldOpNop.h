@@ -23,14 +23,14 @@ namespace QuickFAST{
       }
 
 
-      virtual bool decode(
+      virtual void decode(
         const Codecs::FieldInstruction & instruction,
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & fieldSet) const
       {
-        return instruction.decodeNop(source, pmap, decoder, fieldSet);
+        instruction.decodeNop(source, pmap, decoder, fieldSet);
       }
 
       virtual void encode(

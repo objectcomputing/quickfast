@@ -19,7 +19,7 @@ FieldOpConstant::usesDictionary() const
   return false;
 }
 
-bool
+void
 FieldOpConstant::decode(
   const Codecs::FieldInstruction & instruction,
   Codecs::DataSource & source,
@@ -27,7 +27,7 @@ FieldOpConstant::decode(
   Codecs::Decoder & decoder,
   Messages::ValueMessageBuilder & fieldSet) const
 {
-  return instruction.decodeConstant(source, pmap, decoder, fieldSet);
+  instruction.decodeConstant(source, pmap, decoder, fieldSet);
 }
 
 void

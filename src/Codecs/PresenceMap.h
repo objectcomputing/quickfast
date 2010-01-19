@@ -32,9 +32,7 @@ namespace QuickFAST{
 
       /// @brief Read a presence map from a data source.
       /// @param source provides the data.
-      /// @returns true if a presence map was found.  False normally means EOF.
-      bool decode(DataSource & source);
-
+      void decode(DataSource & source);
 
       /// @brief Return the number of bytes needed to encode this PMAP
       ///

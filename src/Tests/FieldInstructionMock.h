@@ -34,74 +34,67 @@ namespace QuickFAST{
       {
       }
 
-      virtual bool decodeNop(
+      virtual void decodeNop(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & message) const
       {
         ++calledDecodeNop_;
-        return true;
       }
 
-      virtual bool decodeConstant(
+      virtual void decodeConstant(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & message) const
       {
         ++calledDecodeConstant_;
-        return true;
       }
 
-      virtual bool decodeDefault(
+      virtual void decodeDefault(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & message) const
       {
         ++calledDecodeDefault_;
-        return true;
       }
 
-      virtual bool decodeCopy(
+      virtual void decodeCopy(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & message) const
       {
         ++calledDecodeCopy_;
-        return true;
       }
 
-      virtual bool decodeDelta(
+      virtual void decodeDelta(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & message) const
       {
         ++calledDecodeDelta_;
-        return true;
       }
 
-      virtual bool decodeIncrement(
+      virtual void decodeIncrement(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & message) const
       {
         ++calledDecodeIncrement_;
-        return true;
       }
 
-      virtual bool decodeTail(
+      virtual void decodeTail(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & message) const
       {
         ++calledDecodeTail_;
-        return true;
       }
 
       virtual void encodeNop(

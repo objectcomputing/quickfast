@@ -37,7 +37,7 @@ FieldInstructionSequence::finalize(TemplateRegistry & templateRegistry)
   segment_->finalize(templateRegistry);
 }
 
-bool
+void
 FieldInstructionSequence::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
@@ -54,55 +54,45 @@ FieldInstructionSequence::decodeNop(
   if(segment_->getLengthInstruction(lengthInstruction))
   {
     source.beginField(lengthInstruction->getIdentity()->name());
-    if(!lengthInstruction->decode(source, pmap, decoder, lengthSet))
-    {
-      return false;
-    }
+    lengthInstruction->decode(source, pmap, decoder, lengthSet);
   }
   else
   {
     FieldInstructionUInt32 defaultLengthInstruction;
     defaultLengthInstruction.setPresence(isMandatory());
-    if(!defaultLengthInstruction.decode(source, pmap, decoder, lengthSet))
-    {
-      return false;
-    }
+    defaultLengthInstruction.decode(source, pmap, decoder, lengthSet);
   }
-  if(!lengthSet.isSet())
+  if(lengthSet.isSet())
   {
-    // this optional sequence is not present
-    return true;
-  }
-  length = lengthSet.value();
+    length = lengthSet.value();
 
-  Messages::ValueMessageBuilder & sequenceBuilder = messageBuilder.startSequence(
-    identity_,
-    segment_->getApplicationType(),
-    segment_->getApplicationTypeNamespace(),
-    segment_->fieldCount(),
-    lengthSet.identity(),
-    length);
+    Messages::ValueMessageBuilder & sequenceBuilder = messageBuilder.startSequence(
+      identity_,
+      segment_->getApplicationType(),
+      segment_->getApplicationTypeNamespace(),
+      segment_->fieldCount(),
+      lengthSet.identity(),
+      length);
 
-  for(size_t nEntry = 0; nEntry < length; ++nEntry)
-  {
-    if(decoder.getLogOut())
+    for(size_t nEntry = 0; nEntry < length; ++nEntry)
     {
-      std::stringstream msg;
-      msg << "Sequence entry #" << nEntry << " of " << length << std::ends;
-      decoder.logMessage(msg.str());
+      if(decoder.getLogOut())
+      {
+        std::stringstream msg;
+        msg << "Sequence entry #" << nEntry << " of " << length << std::ends;
+        decoder.logMessage(msg.str());
+      }
+
+      Messages::ValueMessageBuilder & entrySet(
+        sequenceBuilder.startSequenceEntry(
+          segment_->getApplicationType(),
+          segment_->getApplicationTypeNamespace(),
+          segment_->fieldCount()));
+      decoder.decodeGroup(source, segment_, entrySet);
+      sequenceBuilder.endSequenceEntry(entrySet);
     }
-
-    Messages::ValueMessageBuilder & entrySet(
-      sequenceBuilder.startSequenceEntry(
-        segment_->getApplicationType(),
-        segment_->getApplicationTypeNamespace(),
-        segment_->fieldCount()));
-    decoder.decodeGroup(source, segment_, entrySet);
-    sequenceBuilder.endSequenceEntry(entrySet);
+    messageBuilder.endSequence(identity_, sequenceBuilder);
   }
-  messageBuilder.endSequence(identity_, sequenceBuilder);
-
-  return true;
 }
 
 void

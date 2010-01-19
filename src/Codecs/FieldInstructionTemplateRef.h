@@ -29,7 +29,7 @@ namespace QuickFAST{
       virtual void finalize(TemplateRegistry & templateRegistry);
       virtual size_t fieldCount(const SegmentBody & parent)const;
 
-      virtual bool decodeNop(
+      virtual void decodeNop(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
@@ -61,7 +61,7 @@ namespace QuickFAST{
 
       virtual size_t fieldCount(const SegmentBody & parent)const;
 
-      virtual bool decodeNop(
+      virtual void decodeNop(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,

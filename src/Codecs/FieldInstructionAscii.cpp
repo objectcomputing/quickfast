@@ -55,8 +55,7 @@ FieldInstructionAscii::decodeAsciiFromSource(
   return true;
 }
 
-
-bool
+void
 FieldInstructionAscii::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & /*pmap*/,
@@ -71,10 +70,9 @@ FieldInstructionAscii::decodeNop(
   {
     fieldSet.addValue(identity_, ValueType::ASCII, buffer.begin(), buffer.size());
   }
-  return true;
 }
 
-bool
+void
 FieldInstructionAscii::decodeConstant(
   Codecs::DataSource & /*source*/,
   Codecs::PresenceMap & pmap,
@@ -105,10 +103,9 @@ FieldInstructionAscii::decodeConstant(
       // not present. Nothing to do
     }
   }
-  return true;
 }
 
-bool
+void
 FieldInstructionAscii::decodeDefault(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
@@ -127,7 +124,6 @@ FieldInstructionAscii::decodeDefault(
         buffer.begin(),
         buffer.size());
     }
-    return true;
   }
   else // pmap says nothing in stream
   {
@@ -145,10 +141,9 @@ FieldInstructionAscii::decodeDefault(
       decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.", *identity_);
     }
   }
-  return true;
 }
 
-bool
+void
 FieldInstructionAscii::decodeCopy(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
@@ -201,10 +196,9 @@ FieldInstructionAscii::decodeCopy(
       }
     }
   }
-  return true;
 }
 
-bool
+void
 FieldInstructionAscii::decodeDelta(
   Codecs::DataSource & source,
   Codecs::PresenceMap & /*pmap*/,
@@ -220,7 +214,7 @@ FieldInstructionAscii::decodeDelta(
     {
       // NULL delta does not clear previous
       // so there's nothing to do
-      return true;
+      return;
     }
   }
   std::string deltaValue;
@@ -284,10 +278,9 @@ FieldInstructionAscii::decodeDelta(
       value.size());
     fieldOp_->setDictionaryValue(decoder, value);
   }
-  return true;
 }
 
-bool
+void
 FieldInstructionAscii::decodeTail(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
@@ -360,7 +353,6 @@ FieldInstructionAscii::decodeTail(
       }
     }
   }
-  return true;
 }
 
 void

@@ -147,7 +147,7 @@ PresenceMap::encode(DataDestination & destination)
   }
 }
 
-bool
+void
 PresenceMap::decode(Codecs::DataSource & source)
 {
   reset();
@@ -155,7 +155,7 @@ PresenceMap::decode(Codecs::DataSource & source)
   uchar byte;
   if(!source.getByte(byte))
   {
-    return false;
+    throw EncodingError("[ERR U03] EOF while decoding presence map.");
   }
   size_t pos = 0;
   while((byte & stopBit) == 0)
@@ -163,7 +163,7 @@ PresenceMap::decode(Codecs::DataSource & source)
     appendByte(pos, byte);
     if(!source.getByte(byte))
     {
-      return false;
+      throw EncodingError("[ERR U03] EOF while decoding presence map.");
     }
   }
   appendByte(pos, byte);
@@ -177,8 +177,6 @@ PresenceMap::decode(Codecs::DataSource & source)
     }
     (*vout_) << std::dec << std::endl;
   }
-
-  return true;
 }
 
 void

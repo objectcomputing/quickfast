@@ -46,7 +46,7 @@ namespace QuickFAST{
         segment_ = segment;
       }
 
-      virtual bool decodeNop(
+      virtual void decodeNop(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,

@@ -69,7 +69,7 @@ namespace QuickFAST
     public:
       /// @brief construct with the identity and value of the field to be contained in the "record"
       SingleFieldAccessor(
-          const Messages::FieldIdentityCPtr & identity,
+          Messages::FieldIdentityCPtr & identity,
           const Messages::FieldCPtr & field)
         : messageField_(identity, field)
       {

@@ -20,7 +20,7 @@ FieldOpDelta::usesDictionary() const
   return true;
 }
 
-bool
+void
 FieldOpDelta::decode(
   const Codecs::FieldInstruction & instruction,
   Codecs::DataSource & source,
@@ -28,7 +28,7 @@ FieldOpDelta::decode(
   Codecs::Decoder & decoder,
   Messages::ValueMessageBuilder & fieldSet) const
 {
-  return instruction.decodeDelta(source, pmap, decoder, fieldSet);
+  instruction.decodeDelta(source, pmap, decoder, fieldSet);
 }
 
 void

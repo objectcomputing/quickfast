@@ -76,7 +76,7 @@ Encoder::encodeSegment(
 void
 Encoder::encodeGroup(
   DataDestination & destination,
-  Codecs::SegmentBodyCPtr group,
+  const Codecs::SegmentBodyPtr & group,
   const Messages::MessageAccessor & fieldSet)
 {
   size_t presenceMapBits = group->presenceMapBitCount();
@@ -102,7 +102,6 @@ Encoder::encodeGroup(
   }
   // and just continue working in the buffer where we built the group body
   destination.selectBuffer(bodyBuffer);
-
 }
 
 
@@ -110,7 +109,7 @@ void
 Encoder::encodeSegmentBody(
   DataDestination & destination,
   Codecs::PresenceMap & pmap,
-  Codecs::SegmentBodyCPtr segment,
+  const Codecs::SegmentBodyCPtr & segment,
   const Messages::MessageAccessor & fieldSet)
 {
   size_t instructionCount = segment->size();

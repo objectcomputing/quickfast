@@ -19,7 +19,7 @@ FieldOpTail::usesDictionary() const
   return true;
 }
 
-bool
+void
 FieldOpTail::decode(
   const Codecs::FieldInstruction & instruction,
   Codecs::DataSource & source,
@@ -27,7 +27,7 @@ FieldOpTail::decode(
   Codecs::Decoder & decoder,
   Messages::ValueMessageBuilder & fieldSet) const
 {
-  return instruction.decodeTail(source, pmap, decoder, fieldSet);
+  instruction.decodeTail(source, pmap, decoder, fieldSet);
 }
 
 void
@@ -38,13 +38,13 @@ FieldOpTail::encode(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & fieldSet) const
 {
-  return instruction.encodeTail(destination, pmap, encoder, fieldSet);
+  instruction.encodeTail(destination, pmap, encoder, fieldSet);
 }
 
 void
 FieldOpTail::setDefaultValue(
   Codecs::FieldInstruction & instruction) const
 {
-  return instruction.setDefaultValueTail();
+  instruction.setDefaultValueTail();
 }
 

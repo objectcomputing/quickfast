@@ -48,7 +48,7 @@ namespace QuickFAST{
       void
       encodeGroup(
         DataDestination & destination,
-        Codecs::SegmentBodyCPtr group,
+        const Codecs::SegmentBodyPtr & group,
         const Messages::MessageAccessor & fieldSet);
 
       /// @brief Encode a segment into a fieldSet.
@@ -71,7 +71,7 @@ namespace QuickFAST{
       void encodeSegmentBody(
         DataDestination & destination,
         Codecs::PresenceMap & presenceMap,
-        Codecs::SegmentBodyCPtr segment,
+        const Codecs::SegmentBodyCPtr & segment,
         const Messages::MessageAccessor & fieldSet);
     private:
     };

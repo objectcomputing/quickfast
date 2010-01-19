@@ -26,7 +26,7 @@ namespace QuickFAST{
     public:
       /// @brief construct an empty sequence
       Sequence(
-        Messages::FieldIdentityCPtr lengthFieldIdentity,
+        Messages::FieldIdentityCPtr & lengthFieldIdentity,
         size_t sequenceLength)
         : lengthIdentity_(lengthFieldIdentity)
       {

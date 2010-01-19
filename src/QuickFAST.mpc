@@ -28,9 +28,8 @@ project(*) : boost_base {
     Debug::libout = $(QUICKFAST_ROOT)/Output/Debug
   }
   specific(make) {
-    // FieldInstructionInteger generates spuriouswarnings based on
-    // signed/unsigned template arguments.
-    cppflags += -Wtype-limits
+    // Enable full optimization on gcc/linux
+    Release::genflags += -O3
   }
   specific(vc8) { // vc9 doesn't need this
     macros += _WIN32_WINNT=0x0501

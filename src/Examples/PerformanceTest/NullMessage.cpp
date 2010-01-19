@@ -26,18 +26,18 @@ NullMessage::NullMessage(const NullMessage & rhs)
 }
 
 void
-NullMessage::addField(const Messages::FieldIdentityCPtr & identity, const Messages::FieldCPtr & value)
+NullMessage::addField(Messages::FieldIdentityCPtr & identity, const Messages::FieldCPtr & value)
 {
   ++ size_;
 }
 
 Messages::ValueMessageBuilder &
 NullMessage::startSequence(
-  Messages::FieldIdentityCPtr /*identity*/,
+  Messages::FieldIdentityCPtr & /*identity*/,
   const std::string & /*applicationType*/,
   const std::string & /*applicationTypeNamespace*/,
   size_t /*fieldCount*/,
-  Messages::FieldIdentityCPtr /*lengthIdentity*/,
+  Messages::FieldIdentityCPtr & /*lengthIdentity*/,
   size_t /*length*/)
 {
   throw QuickFAST::TemplateDefinitionError("NullMessage does not use Sequences");
@@ -59,7 +59,7 @@ NullMessage::endSequenceEntry(Messages::ValueMessageBuilder & entry)
 }
 
 void
-NullMessage::endSequence( Messages::FieldIdentityCPtr identity, Messages::ValueMessageBuilder & )
+NullMessage::endSequence( Messages::FieldIdentityCPtr & identity, Messages::ValueMessageBuilder & )
 {
   throw QuickFAST::TemplateDefinitionError("NullMessage does not use Sequences");
 }
@@ -68,7 +68,7 @@ NullMessage::endSequence( Messages::FieldIdentityCPtr identity, Messages::ValueM
 
 Messages::ValueMessageBuilder &
 NullMessage::startGroup(
-    Messages::FieldIdentityCPtr identity,
+    Messages::FieldIdentityCPtr & identity,
     const std::string & applicationType,
     const std::string & applicationTypeNamespace,
     size_t size)
@@ -78,7 +78,7 @@ NullMessage::startGroup(
 
 void
 NullMessage::endGroup(
-  Messages::FieldIdentityCPtr identity,
+  Messages::FieldIdentityCPtr & identity,
   Messages::ValueMessageBuilder & entry)
 {
   throw QuickFAST::TemplateDefinitionError("NullMessage does not use Group");

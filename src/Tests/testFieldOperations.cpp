@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(testFieldOperationDispatch)
   Codecs::Encoder encoder(registry);
 
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_CHECK_EQUAL(field.readDecodeNop(), 1);
   BOOST_CHECK(field.isClear());
 
@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE(testFieldOperationDispatch)
   Codecs::FieldOpPtr constantOp(new Codecs::FieldOpConstant);
   constantOp->setValue("1");
   field.setFieldOp(constantOp);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));//fieldSet1));
+  field.decode(source, pmap, decoder, builder);//fieldSet1));
   BOOST_CHECK_EQUAL(field.readDecodeConstant(), 1);
   BOOST_CHECK_EQUAL(field.readInterpretValue(), 1);
   BOOST_CHECK(field.isClear());
@@ -96,7 +96,7 @@ BOOST_AUTO_TEST_CASE(testFieldOperationDispatch)
   Codecs::FieldOpPtr defaultOp(new Codecs::FieldOpDefault);
   defaultOp->setValue("1");
   field.setFieldOp(defaultOp);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));//fieldSet1));
+  field.decode(source, pmap, decoder, builder);//fieldSet1));
   BOOST_CHECK_EQUAL(field.readDecodeDefault(), 1);
   BOOST_CHECK_EQUAL(field.readInterpretValue(), 1);
   BOOST_CHECK(field.isClear());
@@ -108,7 +108,7 @@ BOOST_AUTO_TEST_CASE(testFieldOperationDispatch)
   Codecs::FieldOpPtr copyOp(new Codecs::FieldOpCopy);
   copyOp->setValue("1");
   field.setFieldOp(copyOp);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));//fieldSet1));
+  field.decode(source, pmap, decoder, builder);//fieldSet1));
   BOOST_CHECK_EQUAL(field.readDecodeCopy(), 1);
   BOOST_CHECK_EQUAL(field.readInterpretValue(), 1);
   BOOST_CHECK(field.isClear());
@@ -120,7 +120,7 @@ BOOST_AUTO_TEST_CASE(testFieldOperationDispatch)
   Codecs::FieldOpPtr deltaOp(new Codecs::FieldOpDelta);
   deltaOp->setValue("1");
   field.setFieldOp(deltaOp);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));//fieldSet1));
+  field.decode(source, pmap, decoder, builder);//fieldSet1));
   BOOST_CHECK_EQUAL(field.readDecodeDelta(), 1);
   BOOST_CHECK_EQUAL(field.readInterpretValue(), 1);
   BOOST_CHECK(field.isClear());
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE(testFieldOperationDispatch)
   Codecs::FieldOpPtr incrementOp(new Codecs::FieldOpIncrement);
   incrementOp->setValue("1");
   field.setFieldOp(incrementOp);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));//fieldSet1));
+  field.decode(source, pmap, decoder, builder);//fieldSet1));
   BOOST_CHECK_EQUAL(field.readDecodeIncrement(), 1);
   BOOST_CHECK_EQUAL(field.readInterpretValue(), 1);
   BOOST_CHECK(field.isClear());
@@ -144,7 +144,7 @@ BOOST_AUTO_TEST_CASE(testFieldOperationDispatch)
   Codecs::FieldOpPtr tailOp(new Codecs::FieldOpTail);
   tailOp->setValue("1");
   field.setFieldOp(tailOp);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));//fieldSet1));
+  field.decode(source, pmap, decoder, builder);//fieldSet1));
   BOOST_CHECK_EQUAL(field.readDecodeTail(), 1);
   BOOST_CHECK_EQUAL(field.readInterpretValue(), 1);
   BOOST_CHECK(field.isClear());
@@ -189,7 +189,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_1_1)
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message & fieldSet1 = consumer.message();
@@ -264,7 +264,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_1_2)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet1(1);
@@ -280,7 +280,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_1_2)
 
   // test b: pmap = 0
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message & fieldSet2 = consumer.message();
@@ -341,7 +341,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_2_1)
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // should generate 1 field
@@ -358,7 +358,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_2_1)
   // test b: pmap = 1
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
   Messages::Message & fieldSet2 = consumer.message();
 
@@ -417,7 +417,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_2_2)
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message & fieldSet1 = consumer.message();
@@ -479,21 +479,21 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_3_1)
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet1(1);
   fieldSet1.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet2(1);
   fieldSet2.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet3(1);
@@ -591,21 +591,21 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_3_2)
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet1(1);
   fieldSet1.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet2(1);
   fieldSet2.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet3(1);
@@ -679,28 +679,28 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_4_1)
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet1(1);
   fieldSet1.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet2(1);
   fieldSet2.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet3(1);
   fieldSet3.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet4(1);
@@ -780,28 +780,28 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_1)
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet1(1);
   fieldSet1.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet2(1);
   fieldSet2.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet3(1);
   fieldSet3.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet4(1);
@@ -882,21 +882,21 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_2)
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet1(1);
   fieldSet1.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet2(1);
   fieldSet2.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet3(1);
@@ -976,21 +976,21 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_3)
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet1(1);
   fieldSet1.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet2(1);
   fieldSet2.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet3(1);
@@ -1070,28 +1070,28 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_4)
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet1(1);
   fieldSet1.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet2(1);
   fieldSet2.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet3(1);
   fieldSet3.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet4(1);
@@ -1176,21 +1176,21 @@ BOOST_AUTO_TEST_CASE(testAsciiTailMandatory)
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet1(1);
   fieldSet1.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet2(1);
   fieldSet2.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet3(1);
@@ -1290,21 +1290,21 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_6) // SPEC ERROR: _3 s/b _1
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet1(1);
   fieldSet1.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet2(1);
   fieldSet2.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet3(1);
@@ -1379,21 +1379,21 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Copy_Mandatory)
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet1(1);
   fieldSet1.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet2(1);
   fieldSet2.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet3(1);
@@ -1492,21 +1492,21 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Copy_optional)
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet1(1);
   fieldSet1.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet2(1);
   fieldSet2.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet3(1);
@@ -1576,28 +1576,28 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Delta_Mandatory)
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet1(1);
   fieldSet1.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet2(1);
   fieldSet2.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet3(1);
   fieldSet3.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet4(1);
@@ -1682,21 +1682,21 @@ BOOST_AUTO_TEST_CASE(testUtf8_Tail_Mandatory)
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet1(1);
   fieldSet1.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet2(1);
   fieldSet2.swap(consumer.message());
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet3(1);
@@ -1773,7 +1773,7 @@ BOOST_AUTO_TEST_CASE(test_issue_30)
 
   // test a: decode the 1
   builder.startMessage("UNIT_TEST", "", 1);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet1(1);
@@ -1788,7 +1788,7 @@ BOOST_AUTO_TEST_CASE(test_issue_30)
 
   // test b: decode the NULL
   builder.startMessage("UNIT_TEST", "", 1);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
   Messages::Message fieldSet2(1);
   fieldSet2.swap(consumer.message());
@@ -1797,7 +1797,7 @@ BOOST_AUTO_TEST_CASE(test_issue_30)
 
   // test c: decode the 0
   builder.startMessage("UNIT_TEST", "", 1);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message fieldSet3(1);

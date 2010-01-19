@@ -33,7 +33,7 @@ FieldInstructionGroup::finalize(TemplateRegistry & templateRegistry)
   segmentBody_->finalize(templateRegistry);
 }
 
-bool
+void
 FieldInstructionGroup::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
@@ -81,7 +81,6 @@ FieldInstructionGroup::decodeNop(
       decoder.decodeGroup(source, segmentBody_, messageBuilder);
     }
   }
-  return true;
 }
 
 void

@@ -20,7 +20,7 @@ FieldOpDefault::usesDictionary() const
 }
 
 
-bool
+void
 FieldOpDefault::decode(
   const Codecs::FieldInstruction & instruction,
   Codecs::DataSource & source,
@@ -28,7 +28,7 @@ FieldOpDefault::decode(
   Codecs::Decoder & decoder,
   Messages::ValueMessageBuilder & fieldSet) const
 {
-  return instruction.decodeDefault(source, pmap, decoder, fieldSet);
+  instruction.decodeDefault(source, pmap, decoder, fieldSet);
 }
 
 void

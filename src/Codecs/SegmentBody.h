@@ -81,7 +81,10 @@ namespace QuickFAST{
       /// be Xcoded because groups and template references may be merged into
       /// the Xcoded field set.  For the number of field instructions, @see size()
       /// @returns the maximum number of fields this segment might Xcode.
-      size_t fieldCount() const;
+      size_t fieldCount() const
+      {
+        return fieldCount_;
+      }
 
       /// @brief How many bits are needed in the presence map.
       /// @returns the maximum number of presence bits that might be used.
@@ -110,7 +113,10 @@ namespace QuickFAST{
       /// @brief Access the instruction with the assumption that it exists.
       /// @param[in] index identifies the desired field.
       /// @returns a reference to the field instruction.
-      FieldInstructionCPtr getInstruction(size_t index)const;
+      const FieldInstructionCPtr & getInstruction(size_t index)const
+      {
+        return instructions_[index];
+      }
 
       /// @brief Access the FieldInstructs for the length field (if any)
       /// @param value receives the length field instruction
@@ -151,11 +157,15 @@ namespace QuickFAST{
 
       /// @brief the maximum number of presence map bits needed to encode these fields
       size_t presenceMapBits_;
+      /// @brief How many fields will be Xcoded by this segment
+      size_t fieldCount_;
       /// @brief the number of presence map bits before any fields are added.
       size_t initialPresenceMapBits_;
       /// @brief the container type for instructions
-      typedef std::vector<FieldInstructionPtr> InstructionVector;
+      typedef std::vector<FieldInstructionPtr> MutableInstructionVector;
+      typedef std::vector<FieldInstructionCPtr> InstructionVector;
       /// @brief the instructions
+      MutableInstructionVector mutableInstructions_;
       InstructionVector instructions_;
       /// @brief true if this is being used as the body of a sequence
       bool allowLengthField_;

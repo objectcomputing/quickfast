@@ -58,49 +58,49 @@ namespace QuickFAST{
         typedValueIsDefined_ = true;
       }
 
-      virtual bool decodeNop(
+      virtual void decodeNop(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & fieldSet) const;
 
-      virtual bool decodeConstant(
+      virtual void decodeConstant(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & fieldSet) const;
 
-      virtual bool decodeDefault(
+      virtual void decodeDefault(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & fieldSet) const;
 
-      virtual bool decodeCopy(
+      virtual void decodeCopy(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & fieldSet) const;
 
-      virtual bool decodeCopy(
+      virtual void decodeCopy(
         Codecs::DataSource & source,
         bool pmapValue,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & fieldSet) const;
 
-      virtual bool decodeDelta(
+      virtual void decodeDelta(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & fieldSet) const;
 
-      virtual bool decodeIncrement(
+      virtual void decodeIncrement(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & fieldSet) const;
 
-      virtual bool decodeIncrement(
+      virtual void decodeIncrement(
         Codecs::DataSource & source,
         bool pmapValue,
         Codecs::Decoder & decoder,
@@ -212,7 +212,7 @@ namespace QuickFAST{
     }
 
     template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
-    bool
+    void
     FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeNop(
       Codecs::DataSource & source,
@@ -251,11 +251,10 @@ namespace QuickFAST{
             value);
         }
       }
-      return true;
     }
 
     template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
-    bool
+    void
     FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeConstant(
       Codecs::DataSource & /*source*/,
@@ -275,11 +274,10 @@ namespace QuickFAST{
           VALUE_TYPE,
           typedValue_);
       }
-      return true;
     }
 
     template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
-    bool
+    void
     FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeCopy(
       Codecs::DataSource & source,
@@ -287,11 +285,11 @@ namespace QuickFAST{
       Codecs::Decoder & decoder,
       Messages::ValueMessageBuilder & fieldSet) const
     {
-      return decodeCopy(source, pmap.checkNextField(), decoder, fieldSet);
+      decodeCopy(source, pmap.checkNextField(), decoder, fieldSet);
     }
 
     template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
-    bool
+    void
     FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeCopy(
         Codecs::DataSource & source,
@@ -379,11 +377,10 @@ namespace QuickFAST{
           }
         }
       }
-      return true;
     }
 
     template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
-    bool
+    void
     FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeDefault(
       Codecs::DataSource & source,
@@ -432,11 +429,10 @@ namespace QuickFAST{
           decoder.reportError("[ERR D5]", "Mandatory default operator with no value.", *identity_);
         }
       }
-      return true;
     }
 
     template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
-    bool
+    void
     FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeDelta(
       Codecs::DataSource & source,
@@ -451,7 +447,7 @@ namespace QuickFAST{
       {
         if(checkNullInteger(delta))
         {
-          return true; // nothing in Message; no change to saved value
+          return; // nothing in Message; no change to saved value
         }
       }
       INTEGER_TYPE value = typedValue_;
@@ -471,13 +467,11 @@ namespace QuickFAST{
         VALUE_TYPE,
         value);
       fieldOp_->setDictionaryValue(decoder, value);
-
-      return true;
     }
 
 
     template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
-    bool
+    void
     FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeIncrement(
       Codecs::DataSource & source,
@@ -485,11 +479,11 @@ namespace QuickFAST{
       Codecs::Decoder & decoder,
       Messages::ValueMessageBuilder & fieldSet) const
     {
-      return decodeIncrement(source, pmap.checkNextField(), decoder, fieldSet);
+      decodeIncrement(source, pmap.checkNextField(), decoder, fieldSet);
     }
 
     template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
-    bool
+    void
     FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
     decodeIncrement(
         Codecs::DataSource & source,
@@ -557,7 +551,7 @@ namespace QuickFAST{
             else
             {
               // missing value for optional field.  We're done
-              return true;
+              return;
             }
           }
         }
@@ -567,7 +561,6 @@ namespace QuickFAST{
           value);
         fieldOp_->setDictionaryValue(decoder, value);
       }
-      return true;
     }
 
     template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>

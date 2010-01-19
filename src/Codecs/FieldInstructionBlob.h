@@ -32,37 +32,37 @@ namespace QuickFAST{
       /// @brief a typical virtual destructor.
       virtual ~FieldInstructionBlob();
 
-      virtual bool decodeNop(
+      virtual void decodeNop(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & fieldSet) const;
 
-      virtual bool decodeConstant(
+      virtual void decodeConstant(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & fieldSet) const;
 
-      virtual bool decodeDefault(
+      virtual void decodeDefault(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & fieldSet) const;
 
-      virtual bool decodeCopy(
+      virtual void decodeCopy(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & fieldSet) const;
 
-      virtual bool decodeDelta(
+      virtual void decodeDelta(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & fieldSet) const;
 
-      virtual bool decodeTail(
+      virtual void decodeTail(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,

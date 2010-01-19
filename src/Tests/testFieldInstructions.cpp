@@ -251,7 +251,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_1)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -312,7 +312,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_2)
   Codecs::GenericMessageBuilder builder(consumer);
 
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -374,7 +374,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_3)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -435,7 +435,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_4)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -498,7 +498,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_5)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
   // Was all input consumed?
   uchar byte;
@@ -561,7 +561,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_6)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -625,7 +625,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1a)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -686,7 +686,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1b)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
   // Was all input consumed?
   uchar byte;
@@ -749,7 +749,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1c)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -814,7 +814,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1d)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
   // Was all input consumed?
   uchar byte;
@@ -877,7 +877,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2a)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -942,7 +942,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2b)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
   // Was all input consumed?
   uchar byte;
@@ -1005,7 +1005,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2c)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -1069,7 +1069,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1a)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -1130,7 +1130,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1b)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
   // Was all input consumed?
   uchar byte;
@@ -1194,7 +1194,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1c)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -1260,7 +1260,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_2a)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
   // Was all input consumed?
   uchar byte;
@@ -1323,7 +1323,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_2b)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -1387,7 +1387,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1a)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
   // Was all input consumed?
   uchar byte;
@@ -1447,7 +1447,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1b)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   Messages::Message & fieldSet(consumer.message());
@@ -1513,7 +1513,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1c)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -1577,7 +1577,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_2a)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
   Messages::Message & fieldSet = consumer.message();
 
@@ -1641,7 +1641,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_2b)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
   Messages::Message & fieldSet = consumer.message();
 
@@ -1702,7 +1702,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_1)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
   Messages::Message & fieldSet = consumer.message();
 
@@ -1765,7 +1765,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_2)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -1827,7 +1827,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_3)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -1889,7 +1889,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_4)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -1950,7 +1950,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_5)
   Codecs::SingleMessageConsumer consumer;
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
   Messages::Message & fieldSet = consumer.message();
 
@@ -2015,7 +2015,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_6)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -2085,7 +2085,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_7)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -2142,7 +2142,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_8)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("UNIT_TEST", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?
@@ -2225,7 +2225,7 @@ BOOST_AUTO_TEST_CASE(test_issue_31)
   Codecs::GenericMessageBuilder builder(consumer);
   builder.startMessage("", "", 10);
 
-  BOOST_REQUIRE(field.decode(source, pmap, decoder, builder));
+  field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
 
   // Was all input consumed?

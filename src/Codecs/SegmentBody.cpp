@@ -31,7 +31,7 @@ SegmentBody::setApplicationType(const std::string & type, const std::string & ty
       const std::string oldType = instructions_[pos]->getApplicationType();
       if(oldType.empty() || oldType == applicationType_)
       {
-        instructions_[pos]->setApplicationType(type, typeNs);
+        mutableInstructions_[pos]->setApplicationType(type, typeNs);
       }
     }
     applicationType_ = type;
@@ -54,26 +54,18 @@ SegmentBody::finalize(TemplateRegistry & templateRegistry)
   }
   isFinalizing_ = true;
 
-#ifdef DEBUG_PRESENCE_MAP_COUNTS
-  std::cout << "-Finalizing Segment Body " << std::endl;
-#endif // DEBUG_PRESENCE_MAP_COUNTS
   if(bool(lengthInstruction_))
   {
     lengthInstruction_->finalize(templateRegistry);
   }
-  for (size_t pos = 0; pos < instructions_.size(); ++pos)
+  for (size_t pos = 0; pos < mutableInstructions_.size(); ++pos)
   {
-    FieldInstructionPtr pf = instructions_[pos];
-#ifdef DEBUG_PRESENCE_MAP_COUNTS
-    std::cout << "  Finalizing instruction: " << pf->getName() << std::endl;
-#endif // DEBUG_PRESENCE_MAP_COUNTS
+    FieldInstructionPtr pf = mutableInstructions_[pos];
     pf->finalize(templateRegistry);
   }
 
-#ifdef DEBUG_PRESENCE_MAP_COUNTS
-  std::cout << "-Calculating presence map bits " << std::endl;
-#endif // DEBUG_PRESENCE_MAP_COUNTS
   presenceMapBits_ = initialPresenceMapBits_;
+  fieldCount_ = 0;
   if(bool(lengthInstruction_))
   {
     presenceMapBits_ += lengthInstruction_->getPresenceMapBitsUsed();
@@ -81,15 +73,9 @@ SegmentBody::finalize(TemplateRegistry & templateRegistry)
   for (size_t pos = 0; pos < instructions_.size(); ++pos)
   {
     size_t used = instructions_[pos]->getPresenceMapBitsUsed();
-#ifdef DEBUG_PRESENCE_MAP_COUNTS
-    std::cout << "--Instruction " << instructions_[pos]->getName() << " uses " << used << std::endl;
-#endif // DEBUG_PRESENCE_MAP_COUNTS
     presenceMapBits_ += used;
+    fieldCount_ += instructions_[pos]->fieldCount(*this);
   }
-#ifdef DEBUG_PRESENCE_MAP_COUNTS
-  std::cout << "-Total presence map bits: " << presenceMapBits_ << std::endl;
-#endif // DEBUG_PRESENCE_MAP_COUNTS
-
   isFinalizing_ = false;
   isFinalized_ = true;
 }
@@ -121,6 +107,7 @@ SegmentBody::addInstruction(FieldInstructionPtr & field)
   {
     field->setApplicationType(applicationType_, applicationNamespace_);
   }
+  mutableInstructions_.push_back(field);
   instructions_.push_back(field);
 }
 
@@ -161,7 +148,8 @@ SegmentBody::getInstruction(size_t index, FieldInstructionCPtr & value)const
   return bool(value);
 }
 
-FieldInstructionCPtr
+#if 0
+const FieldInstructionCPtr &
 SegmentBody::getInstruction(size_t index)const
 {
   if(index >= instructions_.size())
@@ -170,6 +158,7 @@ SegmentBody::getInstruction(size_t index)const
   }
   return instructions_[index];
 }
+#endif
 
 bool
 SegmentBody::getLengthInstruction(FieldInstructionCPtr & value)const
@@ -179,18 +168,6 @@ SegmentBody::getLengthInstruction(FieldInstructionCPtr & value)const
     value = lengthInstruction_;
   }
   return bool(lengthInstruction_);
-}
-
-size_t
-SegmentBody::fieldCount() const
-{
-  size_t count = 0;
-  size_t limit = instructions_.size();
-  for (size_t pos = 0; pos < limit; ++pos)
-  {
-    count += instructions_[pos]->fieldCount(*this);
-  }
-  return count;
 }
 
 void
@@ -218,8 +195,8 @@ SegmentBody::indexDictionaries(
   {
     lengthInstruction_->indexDictionaries(indexer, name, type, typeNs);
   }
-  for(InstructionVector::iterator it = instructions_.begin();
-    it != instructions_.end();
+  for(MutableInstructionVector::iterator it = mutableInstructions_.begin();
+    it != mutableInstructions_.end();
     ++it)
   {
     (*it)->indexDictionaries(indexer, name, type, typeNs);

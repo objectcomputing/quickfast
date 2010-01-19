@@ -51,7 +51,7 @@ namespace QuickFAST
         }
 
         virtual void addField(
-          const Messages::FieldIdentityCPtr & identity,
+          Messages::FieldIdentityCPtr & identity,
           const Messages::FieldCPtr & value)
         {
           identity_ = identity;
@@ -77,7 +77,7 @@ namespace QuickFAST
         }
 
         /// @brief access the identity that was used to set the value
-        const FieldIdentityCPtr & identity()const
+        FieldIdentityCPtr & identity()const
         {
           return identity_;
         }
@@ -115,11 +115,11 @@ namespace QuickFAST
         }
 
         virtual MessageBuilder & startSequence(
-          FieldIdentityCPtr identity,
+          FieldIdentityCPtr & identity,
           const std::string & applicationType,
           const std::string & applicationTypeNamespace,
           size_t fieldCount,
-          FieldIdentityCPtr lengthIdentity,
+          FieldIdentityCPtr & lengthIdentity,
           size_t length)
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
@@ -137,13 +137,13 @@ namespace QuickFAST
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
-        virtual void endSequence( Messages::FieldIdentityCPtr /*identity*/, ValueMessageBuilder & )
+        virtual void endSequence(Messages::FieldIdentityCPtr & /*identity*/, ValueMessageBuilder & )
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
         }
 
         virtual MessageBuilder & startGroup(
-          FieldIdentityCPtr /*identity*/,
+          FieldIdentityCPtr & /*identity*/,
           const std::string & /*applicationType*/,
           const std::string & /*applicationTypeNamespace*/,
           size_t /*size*/)
@@ -152,7 +152,7 @@ namespace QuickFAST
         }
 
         virtual void endGroup(
-          Messages::FieldIdentityCPtr /*identity*/,
+          Messages::FieldIdentityCPtr & /*identity*/,
           ValueMessageBuilder & /*entry*/)
         {
           throw QuickFAST::UsageError("Single Value", "Illegal Group.");
@@ -186,7 +186,7 @@ namespace QuickFAST
       private:
         bool set_;
         DATATYPE value_;
-        FieldIdentityCPtr identity_;
+        mutable FieldIdentityCPtr identity_;
     };
   }
 }

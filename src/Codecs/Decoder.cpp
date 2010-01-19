@@ -35,11 +35,7 @@ Decoder::decodeMessage(
 
   static const std::string pmp("PMAP");
   source.beginField(pmp);
-  if(!pmap.decode(source))
-  {
-    reportError("[ERR U03]", "Unexpected end of data in presence map.");
-    return;
-  }
+  pmap.decode(source);
 
   static const std::string tid("templateID");
   source.beginField(tid);
@@ -89,7 +85,7 @@ void
 Decoder::decodeNestedTemplate(
    DataSource & source,
    Messages::ValueMessageBuilder & messageBuilder,
-   Messages::FieldIdentityCPtr identity)
+   Messages::FieldIdentityCPtr & identity)
 {
   Codecs::PresenceMap pmap(getTemplateRegistry()->presenceMapBits());
   if(this->verboseOut_)
@@ -99,11 +95,7 @@ Decoder::decodeNestedTemplate(
 
   static const std::string pmp("PMAP");
   source.beginField(pmp);
-  if(!pmap.decode(source))
-  {
-    reportError("[ERR U03]", "Unexpected end of data in nested template presence map.");
-    return;
-  }
+  pmap.decode(source);
 
   static const std::string tid("templateID");
   source.beginField(tid);
@@ -146,7 +138,7 @@ Decoder::decodeNestedTemplate(
 void
 Decoder::decodeGroup(
   DataSource & source,
-  Codecs::SegmentBodyCPtr group,
+  const Codecs::SegmentBodyCPtr & group,
   Messages::ValueMessageBuilder & messageBuilder)
 {
   size_t presenceMapBits = group->presenceMapBitCount();
@@ -160,10 +152,7 @@ Decoder::decodeGroup(
   {
     static const std::string pm("PMAP");
     source.beginField(pm);
-    if(!pmap.decode(source))
-    {
-      throw EncodingError("Unexpected end of file expecting Group presence map.");
-    }
+    pmap.decode(source);
   }
 // for debugging:  pmap.setVerbose(source.getEcho());
   decodeSegmentBody(source, pmap, group, messageBuilder);
@@ -173,25 +162,19 @@ void
 Decoder::decodeSegmentBody(
   DataSource & source,
   Codecs::PresenceMap & pmap,
-  Codecs::SegmentBodyCPtr segment, //todo: reference to avoid copy?
+  const Codecs::SegmentBodyCPtr & segment,
   Messages::ValueMessageBuilder & messageBuilder)
 {
   size_t instructionCount = segment->size();
   for( size_t nField = 0; nField < instructionCount; ++nField)
   {
     PROFILE_POINT("decode field");
-    Codecs::FieldInstructionCPtr instruction;
-    if(segment->getInstruction(nField, instruction))
+    const Codecs::FieldInstructionCPtr & instruction = segment->getInstruction(nField);
+    if(verboseOut_)
     {
-      if(verboseOut_)
-      {
-        (*verboseOut_) <<std::endl << "Decode instruction[" <<nField << "]: " << instruction->getIdentity()->name() << std::endl;
-      }
-      source.beginField(instruction->getIdentity()->name());
-      if(!instruction->decode(source, pmap, *this, messageBuilder))
-      {
-        reportError("[ERR U03]", "Unexpected end of file in message body.");
-      }
+      (*verboseOut_) <<std::endl << "Decode instruction[" <<nField << "]: " << instruction->getIdentity()->name() << std::endl;
     }
+    source.beginField(instruction->getIdentity()->name());
+    (void)instruction->decode(source, pmap, *this, messageBuilder);
   }
 }

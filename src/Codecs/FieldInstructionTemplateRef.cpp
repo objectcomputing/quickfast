@@ -44,7 +44,7 @@ FieldInstructionStaticTemplateRef::finalize(TemplateRegistry & templateRegistry)
   presenceMapBitsUsed_ = target->presenceMapBitCount() - 1;
 }
 
-bool
+void
 FieldInstructionStaticTemplateRef::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
@@ -84,7 +84,6 @@ FieldInstructionStaticTemplateRef::decodeNop(
     // the technique used to encode/decode it.
     decoder.decodeSegmentBody(source, pmap, target, messageBuilder);
   }
-  return true;
 }
 
 void
@@ -149,7 +148,7 @@ FieldInstructionDynamicTemplateRef::~FieldInstructionDynamicTemplateRef()
 {
 }
 
-bool
+void
 FieldInstructionDynamicTemplateRef::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
@@ -157,7 +156,6 @@ FieldInstructionDynamicTemplateRef::decodeNop(
   Messages::ValueMessageBuilder & messageBuilder) const
 {
    decoder.decodeNestedTemplate(source, messageBuilder, this->getIdentity());
-   return true;
 }
 
 void

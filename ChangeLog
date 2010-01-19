@@ -1,3 +1,69 @@
+Tue Jan 19 00:59:21 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Decoder.h:
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/Encoder.h:
+        * src/Codecs/Encoder.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.h:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.h:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionGroup.h:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionSequence.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FieldOpConstant.h:
+        * src/Codecs/FieldOpConstant.cpp:
+        * src/Codecs/FieldOpCopy.h:
+        * src/Codecs/FieldOpCopy.cpp:
+        * src/Codecs/FieldOpDefault.h:
+        * src/Codecs/FieldOpDefault.cpp:
+        * src/Codecs/FieldOpDelta.h:
+        * src/Codecs/FieldOpDelta.cpp:
+        * src/Codecs/FieldOpIncrement.h:
+        * src/Codecs/FieldOpIncrement.cpp:
+        * src/Codecs/FieldOpNop.h:
+        * src/Codecs/FieldOpTail.h:
+        * src/Codecs/FieldOpTail.cpp:
+        * src/Codecs/GenericMessageBuilder.h:
+        * src/Codecs/GenericMessageBuilder.cpp:
+        * src/Codecs/PresenceMap.h:
+        * src/Codecs/PresenceMap.cpp:
+        * src/Codecs/SegmentBody.h:
+        * src/Codecs/SegmentBody.cpp:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/Examples/MessagePerformance.h:
+        * src/Examples/Examples/MessagePerformance.cpp:
+        * src/Examples/PerformanceTest/NullMessage.h:
+        * src/Examples/PerformanceTest/NullMessage.cpp:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/MessageBuilder.cpp:
+        * src/Messages/Sequence.h:
+        * src/Messages/SingleValueBuilder.h:
+        * src/Messages/SpecialAccessors.h:
+        * src/Messages/ValueMessageBuilder.h:
+        * src/Tests/FieldInstructionMock.h:
+        * src/Tests/testFieldInstructions.cpp:
+        * src/Tests/testFieldOperations.cpp:
+        * src/Tests/testRoundTrip.cpp:
+
+        Pass smart pointers by reference when possible to improve performance.
+        Decoder throws exceptions rather than returning false on EOF.
+        SegmentBody caches field count @ finalize time.
+        SegmentBody keeps parallel vectors of const and mutable ptrs to instructions for performance.
+
+        * src/QuickFAST.mpc:
+        Gcc build flag -> -O3 to enable "compile-time-expensive" optimizations.
+
 Fri Jan 15 20:42:59 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Application:

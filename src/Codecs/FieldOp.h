@@ -52,7 +52,7 @@ namespace QuickFAST{
       /// @param pmap determines whether the field is represented in the stream
       /// @param decoder defines the context in which decoding is happening
       /// @param fieldSet receives the decoded field.
-      virtual bool decode(
+      virtual void decode(
         const Codecs::FieldInstruction & instruction,
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,

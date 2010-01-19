@@ -19,7 +19,7 @@ FieldOpIncrement::usesDictionary() const
   return true;
 }
 
-bool
+void
 FieldOpIncrement::decode(
   const Codecs::FieldInstruction & instruction,
   Codecs::DataSource & source,
@@ -29,11 +29,11 @@ FieldOpIncrement::decode(
 {
   if(pmapBitValid_)
   {
-    return instruction.decodeIncrement(source, pmap.checkSpecificField(pmapBit_), decoder, fieldSet);
+    instruction.decodeIncrement(source, pmap.checkSpecificField(pmapBit_), decoder, fieldSet);
   }
   else
   {
-    return instruction.decodeIncrement(source, pmap, decoder, fieldSet);
+    instruction.decodeIncrement(source, pmap, decoder, fieldSet);
   }
 }
 

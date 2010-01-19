@@ -35,20 +35,20 @@ namespace QuickFAST{
       /// The FieldCPtr is copied, not the actual Field object.
       /// @param identity identifies this field
       /// @param value is the value to be assigned.
-      virtual void addField(const FieldIdentityCPtr & identity, const FieldCPtr & value) = 0;
+      virtual void addField(FieldIdentityCPtr & identity, const FieldCPtr & value) = 0;
 
       ////////////////////////////////
       // Implement ValueMessageBuilder
-      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const int64 value);
-      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value);
-      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const int32 value);
-      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value);
-      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const int16 value);
-      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value);
-      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const int8 value);
-      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const uchar value);
-      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value);
-      virtual void addValue(const FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length);
+      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int64 value);
+      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value);
+      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int32 value);
+      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value);
+      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int16 value);
+      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value);
+      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int8 value);
+      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uchar value);
+      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value);
+      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length);
 
       /// @brief prepare to accept an entire message
       ///
@@ -71,11 +71,11 @@ namespace QuickFAST{
       /// @param lengthIdentity is the identity of the length field
       /// @param length is a count of how many entries will be in the sequence
       virtual ValueMessageBuilder & startSequence(
-        FieldIdentityCPtr identity,
+        FieldIdentityCPtr & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t fieldCount,
-        FieldIdentityCPtr lengthIdentity,
+        FieldIdentityCPtr & lengthIdentity,
         size_t length) = 0;
 
 
@@ -99,7 +99,7 @@ namespace QuickFAST{
       /// @param size is the maximum number of fields to expect in the group
       /// @returns a MessageBuilder to accumulate fields for this group (*this is ok)
       virtual ValueMessageBuilder & startGroup(
-        FieldIdentityCPtr identity,
+        FieldIdentityCPtr & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size)  = 0;

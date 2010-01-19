@@ -52,7 +52,7 @@ FieldInstructionBlob::decodeBlobFromSource(
   return true;
 }
 
-bool
+void
 FieldInstructionBlob::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & /*pmap*/,
@@ -69,10 +69,9 @@ FieldInstructionBlob::decodeNop(
     size_t valueSize = buffer.size();
     fieldSet.addValue(identity_, type_, value, valueSize);
   }
-  return true;
 }
 
-bool
+void
 FieldInstructionBlob::decodeConstant(
   Codecs::DataSource & /*source*/,
   Codecs::PresenceMap & pmap,
@@ -103,10 +102,9 @@ FieldInstructionBlob::decodeConstant(
       // not present. Nothing to do
     }
   }
-  return true;
 }
 
-bool
+void
 FieldInstructionBlob::decodeDefault(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
@@ -127,7 +125,6 @@ FieldInstructionBlob::decodeDefault(
         value,
         valueSize);
     }
-    return true;
   }
   else // pmap says nothing in stream
   {
@@ -145,10 +142,9 @@ FieldInstructionBlob::decodeDefault(
     }
 
   }
-  return true;
 }
 
-bool
+void
 FieldInstructionBlob::decodeCopy(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
@@ -202,10 +198,9 @@ FieldInstructionBlob::decodeCopy(
       }
     }
   }
-  return true;
 }
 
-bool
+void
 FieldInstructionBlob::decodeDelta(
   Codecs::DataSource & source,
   Codecs::PresenceMap & /*pmap*/,
@@ -221,7 +216,7 @@ FieldInstructionBlob::decodeDelta(
     {
       // NULL delta does not clear previous
       // so there's nothing to do
-      return true;
+      return;
     }
   }
 
@@ -284,10 +279,9 @@ FieldInstructionBlob::decodeDelta(
       value.size());
     fieldOp_->setDictionaryValue(decoder, value);
   }
-  return true;
 }
 
-bool
+void
 FieldInstructionBlob::decodeTail(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
@@ -358,7 +352,6 @@ FieldInstructionBlob::decodeTail(
       }
     }
   }
-  return true;
 }
 
 void

@@ -40,11 +40,11 @@ namespace QuickFAST{
       /// @param lengthIdentity identifies the length field for this sequence
       /// @param length sets the value of the length field.
       void initialize(
-        Messages::FieldIdentityCPtr identity,
+        Messages::FieldIdentityCPtr & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t fieldCount,
-        Messages::FieldIdentityCPtr lengthIdentity,
+        Messages::FieldIdentityCPtr & lengthIdentity,
         size_t length
         );
 
@@ -60,7 +60,7 @@ namespace QuickFAST{
       virtual const std::string & getApplicationType()const;
       virtual const std::string & getApplicationTypeNs()const;
       virtual void addField(
-        const Messages::FieldIdentityCPtr & identity,
+        Messages::FieldIdentityCPtr & identity,
         const Messages::FieldCPtr & value);
 
       virtual Messages::MessageBuilder & startMessage(
@@ -71,15 +71,15 @@ namespace QuickFAST{
       virtual bool ignoreMessage(Messages::ValueMessageBuilder & messageBuilder);
 
       virtual Messages::MessageBuilder & startSequence(
-        Messages::FieldIdentityCPtr identity,
+        Messages::FieldIdentityCPtr & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t fieldCount,
-        Messages::FieldIdentityCPtr lengthIdentity,
+        Messages::FieldIdentityCPtr & lengthIdentity,
         size_t length);
 
       virtual void endSequence(
-        Messages::FieldIdentityCPtr identity,
+        Messages::FieldIdentityCPtr & identity,
         Messages::ValueMessageBuilder & sequenceBuilder);
 
       virtual Messages::MessageBuilder & startSequenceEntry(
@@ -91,12 +91,12 @@ namespace QuickFAST{
         Messages::ValueMessageBuilder & entry);
 
       virtual Messages::MessageBuilder & startGroup(
-        Messages::FieldIdentityCPtr identity,
+        Messages::FieldIdentityCPtr & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size) ;
       virtual void endGroup(
-        Messages::FieldIdentityCPtr identity,
+        Messages::FieldIdentityCPtr & identity,
         Messages::ValueMessageBuilder & groupBuilder);
 
       ///////////////////
@@ -140,7 +140,7 @@ namespace QuickFAST{
       /// @param applicationTypeNamespace qualifies applicationTYpe
       /// @param size is the maximum number of fields to expect in each entry
       void initialize(
-        Messages::FieldIdentityCPtr identity,
+        Messages::FieldIdentityCPtr & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
@@ -158,7 +158,7 @@ namespace QuickFAST{
       virtual const std::string & getApplicationType()const;
       virtual const std::string & getApplicationTypeNs()const;
       virtual void addField(
-        const Messages::FieldIdentityCPtr & identity,
+        Messages::FieldIdentityCPtr & identity,
         const Messages::FieldCPtr & value);
       virtual Messages::MessageBuilder & startMessage(
         const std::string & applicationType,
@@ -168,13 +168,14 @@ namespace QuickFAST{
       virtual bool ignoreMessage(Messages::ValueMessageBuilder & messageBuilder);
 
       virtual Messages::MessageBuilder & startSequence(
-        Messages::FieldIdentityCPtr identity,
+        Messages::FieldIdentityCPtr & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t fieldCount,
-        Messages::FieldIdentityCPtr lengthIdentity,
+        Messages::FieldIdentityCPtr & lengthIdentity,
         size_t length);
-      virtual void endSequence( Messages::FieldIdentityCPtr identity,
+      virtual void endSequence(
+        Messages::FieldIdentityCPtr & identity,
         Messages::ValueMessageBuilder & sequenceBuilder);
 
       virtual Messages::MessageBuilder & startSequenceEntry(
@@ -184,12 +185,12 @@ namespace QuickFAST{
       virtual void endSequenceEntry(Messages::ValueMessageBuilder & entry);
 
       virtual Messages::MessageBuilder & startGroup(
-        Messages::FieldIdentityCPtr identity,
+        Messages::FieldIdentityCPtr & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size) ;
       virtual void endGroup(
-        Messages::FieldIdentityCPtr identity,
+        Messages::FieldIdentityCPtr & identity,
         Messages::ValueMessageBuilder & groupBuilder);
 
       ///////////////////
@@ -228,7 +229,7 @@ namespace QuickFAST{
       virtual const std::string & getApplicationType()const;
       virtual const std::string & getApplicationTypeNs()const;
       virtual void addField(
-        const Messages::FieldIdentityCPtr & identity,
+        Messages::FieldIdentityCPtr & identity,
         const Messages::FieldCPtr & value);
 
       virtual Messages::MessageBuilder & startMessage(
@@ -239,14 +240,14 @@ namespace QuickFAST{
       virtual bool ignoreMessage(Messages::ValueMessageBuilder & messageBuilder);
 
       virtual Messages::MessageBuilder & startSequence(
-        Messages::FieldIdentityCPtr identity,
+        Messages::FieldIdentityCPtr & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t fieldCount,
-        Messages::FieldIdentityCPtr lengthIdentity,
+        Messages::FieldIdentityCPtr & lengthIdentity,
         size_t length);
       virtual void endSequence(
-        Messages::FieldIdentityCPtr identity,
+        Messages::FieldIdentityCPtr & identity,
         Messages::ValueMessageBuilder & sequenceBuilder);
 
       virtual Messages::MessageBuilder & startSequenceEntry(
@@ -256,12 +257,12 @@ namespace QuickFAST{
       virtual void endSequenceEntry(Messages::ValueMessageBuilder & entry);
 
       virtual Messages::MessageBuilder & startGroup(
-        Messages::FieldIdentityCPtr identity,
+        Messages::FieldIdentityCPtr & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size) ;
       virtual void endGroup(
-        Messages::FieldIdentityCPtr identity,
+        Messages::FieldIdentityCPtr & identity,
         Messages::ValueMessageBuilder & groupBuilder);
 
       ///////////////////
