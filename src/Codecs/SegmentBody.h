@@ -118,7 +118,7 @@ namespace QuickFAST{
         return instructions_[index];
       }
 
-      /// @brief Access the FieldInstructs for the length field (if any)
+      /// @brief Access the FieldInstruction for the length field (if any)
       /// @param value receives the length field instruction
       /// @returns true if one exists for this SegmentBody
       bool getLengthInstruction(FieldInstructionCPtr & value)const;

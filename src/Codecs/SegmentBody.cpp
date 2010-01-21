@@ -60,8 +60,7 @@ SegmentBody::finalize(TemplateRegistry & templateRegistry)
   }
   for (size_t pos = 0; pos < mutableInstructions_.size(); ++pos)
   {
-    FieldInstructionPtr pf = mutableInstructions_[pos];
-    pf->finalize(templateRegistry);
+    mutableInstructions_[pos]->finalize(templateRegistry);
   }
 
   presenceMapBits_ = initialPresenceMapBits_;

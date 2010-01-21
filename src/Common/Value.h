@@ -270,7 +270,7 @@ namespace QuickFAST{
 
     /// @brief get the value
     /// @param value receives the data
-    bool getValue(int64 & value)
+    bool getValue(int64 & value) const
     {
       if(class_ == SIGNEDINTEGER)
       {
@@ -282,7 +282,7 @@ namespace QuickFAST{
 
     /// @brief get the value
     /// @param value receives the data
-    bool getValue(uint64 & value)
+    bool getValue(uint64 & value) const
     {
       if(class_ == UNSIGNEDINTEGER)
       {
@@ -294,7 +294,7 @@ namespace QuickFAST{
 
     /// @brief get the value
     /// @param value receives the data
-    bool getValue(int32 & value)
+    bool getValue(int32 & value) const
     {
       if(class_ == SIGNEDINTEGER)
       {
@@ -306,7 +306,7 @@ namespace QuickFAST{
 
     /// @brief get the value
     /// @param value receives the data
-    bool getValue(uint32 & value)
+    bool getValue(uint32 & value) const
     {
       if(class_ == UNSIGNEDINTEGER)
       {
@@ -318,7 +318,7 @@ namespace QuickFAST{
 
     /// @brief get the value
     /// @param value receives the data
-    bool getValue(int16 & value)
+    bool getValue(int16 & value) const
     {
       if(class_ == SIGNEDINTEGER)
       {
@@ -330,7 +330,7 @@ namespace QuickFAST{
 
     /// @brief get the value
     /// @param value receives the data
-    bool getValue(uint16 & value)
+    bool getValue(uint16 & value) const
     {
       if(class_ == UNSIGNEDINTEGER)
       {
@@ -342,7 +342,7 @@ namespace QuickFAST{
 
     /// @brief get the value
     /// @param value receives the data
-    bool getValue(int8 & value)
+    bool getValue(int8 & value) const
     {
       if(class_ == SIGNEDINTEGER)
       {
@@ -354,7 +354,7 @@ namespace QuickFAST{
 
     /// @brief get the value
     /// @param value receives the data
-    bool getValue(uchar & value)
+    bool getValue(uchar & value) const
     {
       if(class_ == UNSIGNEDINTEGER)
       {
@@ -366,7 +366,7 @@ namespace QuickFAST{
 
     /// @brief get the value
     /// @param value receives the data
-    bool getValue(Decimal & value)
+    bool getValue(Decimal & value) const
     {
       if(class_ == DECIMAL)
       {
@@ -380,7 +380,7 @@ namespace QuickFAST{
     /// @brief get the value
     /// @param value is set to point to the string
     /// @param length is the length of the string.
-    bool getValue(const unsigned char *& value, size_t &length)
+    bool getValue(const unsigned char *& value, size_t &length) const
     {
       if(class_ == STRING)
       {
@@ -393,7 +393,7 @@ namespace QuickFAST{
 
     /// @brief get the value
     /// @param value is set to point to the string
-    bool getValue(const char *& value)
+    bool getValue(const char *& value) const
     {
       if(class_ == STRING)
       {
@@ -405,7 +405,7 @@ namespace QuickFAST{
 
     /// @brief get the value
     /// @param value receives the data
-    bool getValue(std::string& value)
+    bool getValue(std::string& value) const
     {
       if(class_ == STRING)
       {

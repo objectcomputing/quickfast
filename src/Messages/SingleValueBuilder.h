@@ -6,7 +6,8 @@
 #endif
 #ifndef SINGLEVALUEBUILDER_H
 #define SINGLEVALUEBUILDER_H
-#include <Messages/MessageBuilder.h>
+#include <Messages/ValueMessageBuilder.h>
+#include <Common/Value.h>
 
 namespace QuickFAST
 {
@@ -16,12 +17,10 @@ namespace QuickFAST
     ///
     /// Or more accurately, captures a single value produced by the decoder.
     template<typename DATATYPE>
-    class SingleValueBuilder : public Messages::MessageBuilder
+    class SingleValueBuilder : public ValueMessageBuilder
     {
       public:
         SingleValueBuilder()
-          : set_(false)
-          , value_(0)
         {
         }
 
@@ -30,8 +29,68 @@ namespace QuickFAST
         }
 
         ///////////////////////////
-        // Implement MessageBuilder
-        MessageBuilder & startMessage(
+        // Implement ValueMessageBuilder
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int64 value)
+        {
+          identity_ = identity;
+          value_.setValue(value);
+        }
+
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value)
+        {
+          identity_ = identity;
+          value_.setValue(value);
+        }
+
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int32 value)
+        {
+          identity_ = identity;
+          value_.setValue(value);
+        }
+
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value)
+        {
+          identity_ = identity;
+          value_.setValue(value);
+        }
+
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int16 value)
+        {
+          identity_ = identity;
+          value_.setValue(value);
+        }
+
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value)
+        {
+          identity_ = identity;
+          value_.setValue(value);
+        }
+
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int8 value)
+        {
+          identity_ = identity;
+          value_.setValue(value);
+        }
+
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uchar value)
+        {
+          identity_ = identity;
+          value_.setValue(value);
+        }
+
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value)
+        {
+          identity_ = identity;
+          value_.setValue(value);
+        }
+
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length)
+        {
+          identity_ = identity;
+          value_.setValue(value, length);
+        }
+
+        virtual ValueMessageBuilder & startMessage(
           const std::string & /*applicationType*/,
           const std::string & /*applicationTypeNamespace*/,
           size_t /*size*/)
@@ -39,24 +98,15 @@ namespace QuickFAST
           return *this;
         }
 
-        bool endMessage(ValueMessageBuilder &/*messageBuilder*/)
+        virtual bool endMessage(ValueMessageBuilder & messageBuilder)
         {
           return true;
         }
 
-        bool ignoreMessage(ValueMessageBuilder & /*messageBuilder*/)
+        virtual bool ignoreMessage(ValueMessageBuilder & messageBuilder)
         {
-          set_ = false;
+          value_.setNull();
           return true;
-        }
-
-        virtual void addField(
-          Messages::FieldIdentityCPtr & identity,
-          const Messages::FieldCPtr & value)
-        {
-          identity_ = identity;
-          value->getValue(value_);
-          set_ = true;
         }
 
         /// @brief check to see if a value was set
@@ -64,7 +114,7 @@ namespace QuickFAST
         /// @returns true if a value was set
         bool isSet()const
         {
-          return set_;
+          return value_.isDefined();
         }
 
         /// @brief retrieve the captured value
@@ -73,7 +123,9 @@ namespace QuickFAST
         /// @returns the value
         DATATYPE value()const
         {
-          return value_;
+          DATATYPE result;
+          value_.getValue(result);
+          return result;
         }
 
         /// @brief access the identity that was used to set the value
@@ -92,7 +144,7 @@ namespace QuickFAST
           return 1;
         }
 
-        virtual bool getIdentity(const std::string &/*name*/, Messages::FieldIdentityCPtr & identity) const
+        virtual bool getIdentity(const std::string &/*name*/, FieldIdentityCPtr & identity) const
         {
           identity = identity_;
           return bool(identity);
@@ -114,7 +166,7 @@ namespace QuickFAST
           return result;
         }
 
-        virtual MessageBuilder & startSequence(
+        virtual ValueMessageBuilder & startSequence(
           FieldIdentityCPtr & identity,
           const std::string & applicationType,
           const std::string & applicationTypeNamespace,
@@ -122,45 +174,45 @@ namespace QuickFAST
           FieldIdentityCPtr & lengthIdentity,
           size_t length)
         {
-          throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
+          throw UsageError("Single Value", "Illegal Sequence.");
         }
 
-        virtual QuickFAST::Messages::MessageBuilder & startSequenceEntry(
+        virtual ValueMessageBuilder & startSequenceEntry(
           const std::string & /*applicationType*/,
           const std::string & /*applicationTypeNamespace*/,
           size_t /*size*/)
         {
-          throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
+          throw UsageError("Single Value", "Illegal Sequence.");
         }
 
         virtual void endSequenceEntry(ValueMessageBuilder & /*entry*/)
         {
-          throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
+          throw UsageError("Single Value", "Illegal Sequence.");
         }
-        virtual void endSequence(Messages::FieldIdentityCPtr & /*identity*/, ValueMessageBuilder & )
+        virtual void endSequence(FieldIdentityCPtr & /*identity*/, ValueMessageBuilder & )
         {
-          throw QuickFAST::UsageError("Single Value", "Illegal Sequence.");
+          throw UsageError("Single Value", "Illegal Sequence.");
         }
 
-        virtual MessageBuilder & startGroup(
+        virtual ValueMessageBuilder & startGroup(
           FieldIdentityCPtr & /*identity*/,
           const std::string & /*applicationType*/,
           const std::string & /*applicationTypeNamespace*/,
           size_t /*size*/)
         {
-          throw QuickFAST::UsageError("Single Value", "Illegal Group.");
+          throw UsageError("Single Value", "Illegal Group.");
         }
 
         virtual void endGroup(
-          Messages::FieldIdentityCPtr & /*identity*/,
+          FieldIdentityCPtr & /*identity*/,
           ValueMessageBuilder & /*entry*/)
         {
-          throw QuickFAST::UsageError("Single Value", "Illegal Group.");
+          throw UsageError("Single Value", "Illegal Group.");
         }
 
         virtual const FieldSet & getFieldSet() const
         {
-          throw QuickFAST::UsageError("Single Value", "Illegal Sequence or Group.");
+          throw UsageError("Single Value", "Illegal Sequence or Group.");
         }
 
         virtual bool wantLog(unsigned short /*level*/)
@@ -184,8 +236,7 @@ namespace QuickFAST
         }
 
       private:
-        bool set_;
-        DATATYPE value_;
+        Value value_;
         mutable FieldIdentityCPtr identity_;
     };
   }

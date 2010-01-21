@@ -341,14 +341,14 @@ namespace QuickFAST{
       {
         INTEGER_TYPE previousValue = 0;
         Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, previousValue);
-        if(previousStatus != Context::UNDEFINED_VALUE)
+        if(previousStatus == Context::OK_VALUE)
         {
           fieldSet.addValue(
             identity_,
             VALUE_TYPE,
             previousValue);
         }
-        else
+        else if(previousStatus == Context::UNDEFINED_VALUE)
         {
           // value not found in dictionary
           // not a problem..  use initial value if it's available
@@ -374,6 +374,23 @@ namespace QuickFAST{
                 INTEGER_TYPE(0));
               fieldOp_->setDictionaryValue(decoder, INTEGER_TYPE(0));
             }
+          }
+        }
+        else // NULL value
+        {
+          if(isMandatory())
+          {
+            // This is unlikely, but if two fields share a dictionary entry and one
+            // is mandatory while the other is optional....
+            decoder.reportError(
+              "[ERR D5]",
+              "Copy operator mandatory integer field, but previous value was NULL",
+              *identity_);
+            fieldSet.addValue(
+              identity_,
+              VALUE_TYPE,
+              INTEGER_TYPE(0));
+            fieldOp_->setDictionaryValue(decoder, INTEGER_TYPE(0));
           }
         }
       }

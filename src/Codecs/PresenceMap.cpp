@@ -37,7 +37,7 @@ PresenceMap::PresenceMap(size_t bits)
     externalBuffer_.reset(new uchar[bytesNeeded]);
     bits_ = externalBuffer_.get();
   }
-  std::fill(bits_, bits_ + byteCapacity_, '\0');
+  memset(bits_, 0, byteCapacity_);
 }
 void
 PresenceMap::setRaw(const uchar * buffer, size_t byteLength)
@@ -48,7 +48,7 @@ PresenceMap::setRaw(const uchar * buffer, size_t byteLength)
     externalBuffer_.reset(new uchar[byteCapacity_]);
     bits_ = externalBuffer_.get();
   }
-  std::fill(bits_, bits_+byteCapacity_, 0);
+  memset(bits_, 0, byteCapacity_);
   std::copy(buffer, buffer+byteLength, bits_);
   rewind();
 }
@@ -171,9 +171,9 @@ PresenceMap::decode(Codecs::DataSource & source)
   if(vout_)
   {
     (*vout_) << "pmap["  <<  byteCapacity_ << "]<-" << std::hex;
-    for(size_t pos = 0; pos < byteCapacity_; ++pos)
+    for(size_t iter = 0; iter < pos; ++pos)
     {
-      (*vout_) << ' ' << std::setw(2) <<  static_cast<unsigned short>(bits_[pos]);
+      (*vout_) << ' ' << std::setw(2) <<  static_cast<unsigned short>(bits_[iter]);
     }
     (*vout_) << std::dec << std::endl;
   }
@@ -220,10 +220,14 @@ PresenceMap::reset(size_t bitCount)
       externalBuffer_.reset(new uchar[bytes]);
       bits_ = externalBuffer_.get();
       byteCapacity_ = bytes;
+      bytePosition_ = bytes;
     }
   }
-
-  std::fill(bits_, bits_ + byteCapacity_, 0);
+  bits_[0] = 0;
+  if(bytePosition_ != 0)
+  {
+    memset(bits_ + 1, 0, byteCapacity_ - 1);
+  }
   rewind();
 
 }

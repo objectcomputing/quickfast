@@ -1,3 +1,25 @@
+Thu Jan 21 18:48:21 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/SegmentBody.h:
+        * src/Codecs/DataSourceBlockedStream.h:
+        * src/Codecs/SegmentBody.cpp:
+        * src/Messages/MessageBuilder.h:
+        Cosmetic: fix commment, simplify statement
+        Remove orphan code
+
+        * src/Codecs/FieldInstructionInteger.h:
+        Don't put NULL value in decoded message
+
+        * src/Codecs/PresenceMap.cpp:
+        Use memset rather than std::fill for speed.
+        Skip memset if possible
+
+        * src/Common/Value.h:
+        getValue methods are const
+
+        * src/Messages/SingleValueBuilder.h:
+        Use Value class to store value.  Avoid use of Field object.
+
 Tue Jan 19 21:54:30 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionInteger.h:

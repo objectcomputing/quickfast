@@ -10,7 +10,7 @@
 #include <Common/QuickFAST_Export.h>
 namespace QuickFAST{
   namespace Codecs{
-    /// A data source that reads input from an istream.
+    /// @brief A data source that reads input from an istream containing block headers.
     class QuickFAST_Export DataSourceBlockedStream : public DataSource
     {
     public:
