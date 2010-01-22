@@ -12,8 +12,9 @@ namespace QuickFAST
 {
   /// @brief Product information about QuickFAST
   const char[] QuickFAST_Product = "QuickFAST Version "
-    "1.0"
-    " Copyright (c) 2009, Object Computing, Inc.\n"
+    "1.1"
+    "(interim)" /* indicates that this is not versioned release */
+    " Copyright (c) 2009,2010 Object Computing, Inc.\n"
     "All Rights Reserved\n"
     "See the file license.txt for licensing information.\n";
   /// @brief version number
