@@ -1,3 +1,25 @@
+Tue Jan 26 18:27:27 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Tests/testFieldOperations.cpp:
+        Decoding error on missing value for optional incremetal integer field.
+        Add unit test for the problem.
+
+        * src/Codecs/PresenceMap.cpp:
+        Echo/debug output display problem.
+
+        * src/Common/Version.h:
+        Switch to 1.2 [prerelease]
+
+        * src/Examples/Examples/CommandArgParser.cpp:
+        Add -V option to display QuickFAST version number.
+
+        * src/Examples/Examples/ExamplesPch.h:
+        Include boost::weak_ptr and boost::enable_shared_from_this
+
+        * src/Examples/Examples/MessagePerformance.cpp:
+        Remove #ifdeffed out code.
+
 Fri Jan 22 15:54:37 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Common/Version.h:

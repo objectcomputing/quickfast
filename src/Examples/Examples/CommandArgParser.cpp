@@ -3,6 +3,7 @@
 // See the file license.txt for licensing information.
 #include <Examples/ExamplesPch.h>
 #include "CommandArgParser.h"
+#include <Common/Version.h>
 
 using namespace ::QuickFAST;
 
@@ -45,7 +46,12 @@ CommandArgParser::parseArgs(int argc, char * argv[])
     if(consumed == 0)
     {
       std::string arg(argv[argp]);
-      if(arg != "-?")
+      if(arg == "-V")
+      {
+        std::cerr << QuickFAST_Product << std::endl;
+        consumed = 1;
+      }
+      else if(arg != "-?")
       {
         std::cerr << "Unknown argument: " << argv[argp] << std::endl;
       }
@@ -66,7 +72,8 @@ CommandArgParser::usage(std::ostream & out) const
     ++it)
   {
     (*it)->usage(out);
-    out << "  -?: Display this information" << std::endl;
+    out << "  -V: Display version information and exit." << std::endl;
+    out << "  -?: Display this information and exit" << std::endl;
   }
 }
 

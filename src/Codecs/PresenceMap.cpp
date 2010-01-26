@@ -171,7 +171,7 @@ PresenceMap::decode(Codecs::DataSource & source)
   if(vout_)
   {
     (*vout_) << "pmap["  <<  byteCapacity_ << "]<-" << std::hex;
-    for(size_t iter = 0; iter < pos; ++pos)
+    for(size_t iter = 0; iter < pos; ++iter)
     {
       (*vout_) << ' ' << std::setw(2) <<  static_cast<unsigned short>(bits_[iter]);
     }

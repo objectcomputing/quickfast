@@ -533,13 +533,17 @@ namespace QuickFAST{
         {
           //PROFILE_POINT("int::decodeIncrement::optional");
           // not mandatory means it's nullable
-          if(!checkNullInteger(value))
+          if(checkNullInteger(value))
+          {
+            fieldOp_->setDictionaryValueNull(decoder);
+          }
+          else
           {
             fieldSet.addValue(
               identity_,
               VALUE_TYPE,
               value);
-          fieldOp_->setDictionaryValue(decoder, value);
+            fieldOp_->setDictionaryValue(decoder, value);
           }
         }
       }
@@ -552,7 +556,7 @@ namespace QuickFAST{
         {
           value += 1;
         }
-        else
+        else if(previousStatus == Context::UNDEFINED_VALUE)
         {
           if(fieldOp_->hasValue())
           {
@@ -562,7 +566,7 @@ namespace QuickFAST{
           {
             if(isMandatory())
             {
-              decoder.reportError("[ERR D5]", "Missing initial value for Increment operator", *identity_);
+              decoder.reportError("[ERR D5]", "Missing initial value for mandatory integer with increment operator", *identity_);
               value = 0;
             }
             else
@@ -570,6 +574,19 @@ namespace QuickFAST{
               // missing value for optional field.  We're done
               return;
             }
+          }
+        }
+        else // prevousStatus = NULL_VALUE
+        {
+          if(isMandatory())
+          {
+            decoder.reportError("[ERR D5]", "Null value for mandatory integer with increment operator", *identity_);
+            value = 0;
+          }
+          else
+          {
+            // missing value for optional field.  We're done
+            return;
           }
         }
         fieldSet.addValue(

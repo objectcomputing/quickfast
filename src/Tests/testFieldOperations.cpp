@@ -1939,3 +1939,78 @@ BOOST_AUTO_TEST_CASE(test_issue_36)
   BOOST_CHECK_EQUAL(result, testData);
   BOOST_CHECK(pmap == pmapResult);
 }
+
+BOOST_AUTO_TEST_CASE(test_swxess_mdpricelevel_problem)
+{
+/* <uInt32 name="MDPriceLevel" id="1023" presence="optional"><increment value="1"/></uInt32>
+                  Input    Prior Encoded PMAP   FAST
+    MDPriceLevel     --      1    NULL   true   0x80
+    MDPriceLevel     --   NULL     --    false  --
+*/
+  const char testData[] = "\x80";
+  Codecs::DataSourceString source(testData);
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
+  Codecs::PresenceMap pmap(2);
+  pmap.setNextField(true);
+  pmap.setNextField(false);
+  pmap.rewind();
+
+  Codecs::FieldInstructionUInt64 field("MDPriceLevel","");
+  field.setPresence(false);
+
+  FieldOpPtr fieldOp(new Codecs::FieldOpIncrement);
+  field.setFieldOp(fieldOp);
+  fieldOp->setValue("1");
+  field.indexDictionaries(indexer, "global", "", "");
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,1,indexer.size()));
+  field.finalize(*registry);
+
+  // We neeed the helper routines in the decoder
+  Codecs::Decoder decoder(registry);
+
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+
+  // test a: decode explicit NULL
+  builder.startMessage("UNIT_TEST", "", 1);
+  field.decode(source, pmap, decoder, builder);
+  BOOST_REQUIRE(builder.endMessage(builder));
+
+  Messages::Message fieldSet1(1);
+  fieldSet1.swap(consumer.message());
+
+  Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
+  BOOST_CHECK(pFieldEntry == fieldSet1.end());
+
+  // test b: decode implicit NULL
+  builder.startMessage("UNIT_TEST", "", 1);
+  field.decode(source, pmap, decoder, builder);
+  BOOST_REQUIRE(builder.endMessage(builder));
+  Messages::Message fieldSet2(1);
+  fieldSet2.swap(consumer.message());
+
+  pFieldEntry = fieldSet2.begin();
+  BOOST_CHECK(pFieldEntry == fieldSet2.end());
+
+  // Was all input consumed?
+  uchar byte;
+  BOOST_CHECK(!source.getByte(byte));
+
+  // Now reencode the data
+  Codecs::PresenceMap pmapResult(4);
+  Codecs::DataDestinationString destination;
+  destination.startBuffer();
+  Codecs::Encoder encoder(registry);
+  field.encode(destination, pmapResult, encoder, fieldSet1);
+  field.encode(destination, pmapResult, encoder, fieldSet2);
+  destination.endMessage();
+  const std::string & result = destination.getValue();
+  BOOST_CHECK_EQUAL(result, testData);
+  BOOST_CHECK(pmap == pmapResult);
+}
+
+
+
+
+
