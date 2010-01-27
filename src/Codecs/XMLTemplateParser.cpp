@@ -334,6 +334,11 @@ namespace
       bool defaultResult
       );
 
+    bool hasAttribute(
+      const AttributeMap& attributes,
+      const std::string& name);
+
+
 
     void parseTemplateRegistry(const std::string & tag, const AttributeMap& attributes);
     void parseTemplate(const std::string & tag, const AttributeMap& attributes);
@@ -374,6 +379,16 @@ namespace
     std::ostream * out_;
   };
 }
+
+
+bool
+TemplateBuilder::hasAttribute(
+  const AttributeMap& attributes,
+  const std::string& name)
+{
+  return attributes.find(name) != attributes.end();
+}
+
 
 const std::string &
 TemplateBuilder::getRequiredAttribute(
@@ -486,8 +501,14 @@ TemplateBuilder::parseTemplate(const std::string & tag, const AttributeMap& attr
     target->setDictionaryName(dictionary);
   }
 
-  bool reset = getOptionalBooleanAttribute(attributes, "reset", false);
-  target->setReset(reset);
+  if(hasAttribute("reset)
+  {
+    target->setReset(getBooleanAttribute(attributes, "reset", false));
+  }
+  else
+  {
+    target->setReset(getBooleanAttribute(attributes, "scp:reset", false));
+  }
 
   bool ignore = getOptionalBooleanAttribute(attributes, "ignore", false);
   target->setIgnore(ignore);

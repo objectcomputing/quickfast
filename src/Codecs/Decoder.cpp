@@ -50,7 +50,7 @@ Decoder::decodeMessage(
     (*verboseOut_) << "Template ID: " << getTemplateId() << std::endl;
   }
   Codecs::TemplateCPtr templatePtr;
-  if(getTemplateRegistry()->getTemplate(getTemplateId(), templatePtr))
+  if(getTemplateRegistry()->getTemplate(templateId_, templatePtr))
   {
     if(templatePtr->getReset())
     {
@@ -71,6 +71,10 @@ Decoder::decodeMessage(
     {
       messageBuilder.endMessage(bodyBuilder);
     }
+  }
+  else if(templateId_ == SCPResetTemplateId)
+  {
+    reset(false);
   }
   else
   {

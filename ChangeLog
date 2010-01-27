@@ -1,3 +1,16 @@
+Wed Jan 27 15:46:12 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/XMLTemplateParser.cpp:
+        If template ID 120 is not defined in the template repository,
+        then reset the decoder and continue.
+        Honor scp:reset="yes" attribute for templates.
+        Technically QuickFAST is now SCP 1.1 Level 1 compliant.
+
+        * src/Common/LinkedBuffer.h:
+        fix grammar in comment
+
 Tue Jan 26 18:27:27 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionInteger.h:
