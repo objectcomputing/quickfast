@@ -1,3 +1,8 @@
+Wed Jan 27 20:25:39 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/XMLTemplateParser.cpp:
+        Editing error in previous checkin -- accidentally undid some
+        changes.
+
 Wed Jan 27 15:46:12 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Context.h:

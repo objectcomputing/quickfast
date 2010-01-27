@@ -328,6 +328,10 @@ namespace
     const std::string& name,
     std::string & result);
 
+    bool getRequiredBooleanAttribute(
+      const AttributeMap& attributes,
+      const std::string& name);
+
     bool getOptionalBooleanAttribute(
       const AttributeMap& attributes,
       const std::string& name,
@@ -424,6 +428,22 @@ TemplateBuilder::getOptionalAttribute(
 }
 
 bool
+TemplateBuilder::getRequiredBooleanAttribute(
+  const AttributeMap& attributes,
+  const std::string& name)
+{
+  AttributeMap::const_iterator it = attributes.find(name);
+  if(it == attributes.end())
+  {
+    std::string errMsg;
+    errMsg +=
+      "[ERR S1] Missing required attribute \"" + name + "\"";
+    throw TemplateDefinitionError(errMsg);
+  }
+  return getOptionalBooleanAttribute(attributes, name, false);
+}
+
+bool
 TemplateBuilder::getOptionalBooleanAttribute(
   const AttributeMap& attributes,
   const std::string& name,
@@ -501,13 +521,13 @@ TemplateBuilder::parseTemplate(const std::string & tag, const AttributeMap& attr
     target->setDictionaryName(dictionary);
   }
 
-  if(hasAttribute("reset)
+  if(hasAttribute(attributes, "reset"))
   {
-    target->setReset(getBooleanAttribute(attributes, "reset", false));
+    target->setReset(getRequiredBooleanAttribute(attributes, "reset"));
   }
   else
   {
-    target->setReset(getBooleanAttribute(attributes, "scp:reset", false));
+    target->setReset(getOptionalBooleanAttribute(attributes, "scp:reset", false));
   }
 
   bool ignore = getOptionalBooleanAttribute(attributes, "ignore", false);
