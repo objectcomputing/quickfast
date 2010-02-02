@@ -10,7 +10,7 @@
 
 namespace QuickFAST
 {
-  namespace Common
+  namespace Communication
   {
     ///@brief A buffer of unsigned chars to be stored in a linked list.
     class LinkedBuffer

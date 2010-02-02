@@ -8,6 +8,7 @@
 #include <Winsock2.h>
 #endif
 using namespace QuickFAST;
+using namespace Communication;
 
 namespace
 {

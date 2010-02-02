@@ -3,7 +3,7 @@
 // See the file license.txt for licensing information.
 //
 #include <Common/QuickFASTPch.h>
-#include <Common/BufferGenerator.h>
+#include <Communication/BufferGenerator.h>
 #include "MessagePerPacketBufferConsumer.h"
 #include <Messages/ValueMessageBuilder.h>
 #include <Codecs/DataSourceBuffer.h>
@@ -30,7 +30,7 @@ MessagePerPacketBufferConsumer::~MessagePerPacketBufferConsumer()
 }
 
 bool
-MessagePerPacketBufferConsumer::consumeBuffer(Common::BufferGenerator & generator, Common::LinkedBuffer * buffer)
+MessagePerPacketBufferConsumer::consumeBuffer(Communication::BufferGenerator & generator, Communication::LinkedBuffer * buffer)
 {
   bool result = true;
   ++messageCount_;

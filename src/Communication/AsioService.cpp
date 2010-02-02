@@ -5,7 +5,8 @@
 #include "AsioService.h"
 
 
-using namespace ::QuickFAST;
+using namespace QuickFAST;
+using namespace Communication;
 
 boost::asio::io_service AsioService::privateIoService_;
 

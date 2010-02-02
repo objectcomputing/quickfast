@@ -1,3 +1,46 @@
+Tue Feb  2 22:45:21 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MessagePerPacketBufferConsumer.h:
+        * src/Codecs/MessagePerPacketBufferConsumer.cpp:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/MulticastReceiver.h:
+        * src/Codecs/MulticastReceiverHandle.h:
+        * src/Codecs/MulticastReceiverHandle.cpp:
+        * src/Communication:
+        * src/Communication/AsioService.h:
+        * src/Communication/AsioService.cpp:
+        * src/Communication/BufferConsumer.h:
+        * src/Communication/BufferConsumer_fwd.h:
+        * src/Communication/BufferGenerator.h:
+        * src/Communication/BufferGenerator_fwd.h:
+        * src/Communication/LinkedBuffer.h:
+        * src/Communication/LinkedBuffer_fwd.h:
+        * src/Communication/PCapReader.h:
+        * src/Communication/PCapReader.cpp:
+        * src/Examples/PCapToMulticast/PCapToMulticast.h:
+        * src/QuickFAST.mpc:
+        * src/Tests/testCommon.cpp:
+        * src/Common/AsioService.h:
+        * src/Common/AsioService.cpp:
+        * src/Common/BufferConsumer.h:
+        * src/Common/BufferConsumer_fwd.h:
+        * src/Common/BufferGenerator.h:
+        * src/Common/BufferGenerator_fwd.h:
+        * src/Common/LinkedBuffer.h:
+        * src/Common/LinkedBuffer_fwd.h:
+        * src/Common/PCapReader.h:
+        * src/Common/PCapReader.cpp:
+        Added a new namespace and directory: Communication.
+        This gets the FAST independent communication stuff out
+        of Messages and Codecs.  It also moves some communication-
+        specific stuff from into a better home.
+
+        Depending on what level you are using QuickFAST this may
+        break builds (sorry) but only by changing #includes and
+        namespaces.  It should be easy to fix (I hope.)
+
+
 Tue Feb  2 21:43:35 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MessagePerPacketBufferConsumer.h:

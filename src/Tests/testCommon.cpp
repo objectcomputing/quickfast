@@ -7,7 +7,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
 
-#include <Common/LinkedBuffer.h>
+#include <Communication/LinkedBuffer.h>
 #include <Common/StringBuffer.h>
 #include <Common/Exceptions.h>
 
@@ -15,13 +15,13 @@ using namespace QuickFAST;
 BOOST_AUTO_TEST_CASE(TestLinkedBuffer)
 {
   // construct a root buffer
-  Common::LinkedBuffer root;
+  Communication::LinkedBuffer root;
   BOOST_CHECK(root.capacity() == 0);
   BOOST_CHECK(root.used() == 0);
   BOOST_CHECK(root.link() == 0);
   BOOST_CHECK(root.get() == 0);
 
-  Common::LinkedBuffer buffer1(100);
+  Communication::LinkedBuffer buffer1(100);
   BOOST_CHECK(buffer1.capacity() == 100);
   BOOST_CHECK(buffer1.used() == 0);
   BOOST_CHECK(buffer1.link() == 0);
@@ -41,25 +41,25 @@ BOOST_AUTO_TEST_CASE(TestLinkedBuffer)
 
 BOOST_AUTO_TEST_CASE(TestSimpleBufferCollection)
 {
-  Common::SimpleBufferCollection collection;
+  Communication::SimpleBufferCollection collection;
   BOOST_CHECK(collection.pop() == 0);
 
-  Common::LinkedBuffer buffer1(20);
+  Communication::LinkedBuffer buffer1(20);
   buffer1[0] = 1;
   buffer1[1] = 1;
   buffer1.setUsed(2);
 
-  Common::LinkedBuffer buffer2(20);
+  Communication::LinkedBuffer buffer2(20);
   buffer2[0] = 2;
   buffer2[1] = 1;
   buffer2.setUsed(2);
 
-  Common::LinkedBuffer buffer3(20);
+  Communication::LinkedBuffer buffer3(20);
   buffer2[0] = 3;
   buffer3[1] = 1;
   buffer2.setUsed(2);
 
-  Common::LinkedBuffer buffer4(20);
+  Communication::LinkedBuffer buffer4(20);
   buffer4[0] = 4;
   buffer4[1] = 1;
   buffer4.setUsed(2);
@@ -76,7 +76,7 @@ BOOST_AUTO_TEST_CASE(TestSimpleBufferCollection)
 
   // notice we don't care what order we get them back
   // but we do want to see all of them exactly once each.
-  Common::LinkedBuffer * p = collection.pop();
+  Communication::LinkedBuffer * p = collection.pop();
   BOOST_CHECK((*p)[1] == 1);
   (*p)[1] = 2;
 
@@ -100,7 +100,7 @@ BOOST_AUTO_TEST_CASE(TestSimpleBufferCollection)
   BOOST_CHECK(buffer3[1] == 2);
   BOOST_CHECK(buffer4[1] == 2);
 
-  Common::SimpleBufferCollection collection2;
+  Communication::SimpleBufferCollection collection2;
   collection2.push(&buffer4);
   collection2.push(&buffer3);
   collection2.push(&buffer2);
@@ -172,24 +172,24 @@ BOOST_AUTO_TEST_CASE(TestSingleServerBufferQueue)
   boost::mutex dummyMutex;
   boost::mutex::scoped_lock lock(dummyMutex);
 
-  Common::SingleServerBufferQueue queue;
+  Communication::SingleServerBufferQueue queue;
 
-  Common::LinkedBuffer buffer1(20);
+  Communication::LinkedBuffer buffer1(20);
   buffer1[0] = 1;
   buffer1[1] = 1;
   buffer1.setUsed(2);
 
-  Common::LinkedBuffer buffer2(20);
+  Communication::LinkedBuffer buffer2(20);
   buffer2[0] = 2;
   buffer2[1] = 1;
   buffer2.setUsed(2);
 
-  Common::LinkedBuffer buffer3(20);
+  Communication::LinkedBuffer buffer3(20);
   buffer2[0] = 3;
   buffer3[1] = 1;
   buffer2.setUsed(2);
 
-  Common::LinkedBuffer buffer4(20);
+  Communication::LinkedBuffer buffer4(20);
   buffer4[0] = 4;
   buffer4[1] = 1;
   buffer4.setUsed(2);

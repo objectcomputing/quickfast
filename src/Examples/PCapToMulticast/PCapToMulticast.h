@@ -7,7 +7,7 @@
 
 #define PCAP_SUPPORT_IS_HEREx
 #include <Examples/CommandArgParser.h>
-#include <Common/PCapReader.h>
+#include <Communication/PCapReader.h>
 #include <boost/asio.hpp>
 #include <stdio.h>
 
@@ -70,7 +70,7 @@ namespace QuickFAST{
 
       CommandArgParser commandArgParser_;
 //      FILE * dataFile_;
-      PCapReader pcapReader_;
+      Communication::PCapReader pcapReader_;
       size_t nPass_;
       size_t nMsg_;
       size_t totalMessageCount_;

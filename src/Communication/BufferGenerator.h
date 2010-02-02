@@ -8,10 +8,10 @@
 #define BUFFERGENERATOR_H
 //#include <Common/QuickFAST_Export.h>
 #include "BufferGenerator_fwd.h"
-#include <Common/LinkedBuffer.h>
+#include <Communication/LinkedBuffer.h>
 
 namespace QuickFAST{
-  namespace Common{
+  namespace Communication{
     /// @brief interface to be implemented by a generator of incoming raw data buffers.
     class BufferGenerator : public boost::enable_shared_from_this<BufferGenerator>
     {

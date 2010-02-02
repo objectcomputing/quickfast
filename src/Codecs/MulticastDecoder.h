@@ -129,7 +129,7 @@ namespace QuickFAST{
     private:
       MulticastReceiver receiver_;
 
-      Common::BufferConsumerPtr bufferConsumer_;
+      Communication::BufferConsumerPtr bufferConsumer_;
       Decoder decoder_;
       Messages::ValueMessageBuilder * builder_;
       size_t messageLimit_;

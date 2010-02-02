@@ -6,7 +6,7 @@
 #define LINKEDBUFFER_FWD_H
 namespace QuickFAST
 {
-  namespace Common
+  namespace Communication
   {
     class LinkedBuffer;
     class SimpleBufferCollection;

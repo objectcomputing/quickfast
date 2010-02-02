@@ -5,7 +5,7 @@
 #ifndef MESSAGEPERPACKETBUFFERCONSUMER_H
 #define MESSAGEPERPACKETBUFFERCONSUMER_H
 
-#include <Common/BufferConsumer.h>
+#include <Communication/BufferConsumer.h>
 #include <Codecs/Decoder_fwd.h>
 #include <Messages/ValueMessageBuilder_fwd.h>
 
@@ -13,7 +13,7 @@ namespace QuickFAST
 {
   namespace Codecs
   {
-    class MessagePerPacketBufferConsumer : public Common::BufferConsumer
+    class MessagePerPacketBufferConsumer : public Communication::BufferConsumer
     {
     public:
       MessagePerPacketBufferConsumer(
@@ -26,7 +26,7 @@ namespace QuickFAST
 
       ///////////////////////////
       // Implement BufferConsumer
-      virtual bool consumeBuffer(Common::BufferGenerator & generator, Common::LinkedBuffer * buffer);
+      virtual bool consumeBuffer(Communication::BufferGenerator & generator, Communication::LinkedBuffer * buffer);
       virtual void receiverStarted();
       virtual void receiverStopped();
 

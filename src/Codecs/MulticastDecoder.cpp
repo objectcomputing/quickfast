@@ -3,7 +3,7 @@
 // See the file license.txt for licensing information.
 #include <Common/QuickFASTPch.h>
 #include "MulticastDecoder.h"
-#include <Common/LinkedBuffer.h>
+#include <Communication/LinkedBuffer.h>
 #include <Codecs/MessagePerPacketBufferConsumer.h>
 
 using namespace QuickFAST;

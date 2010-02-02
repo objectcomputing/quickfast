@@ -6,7 +6,7 @@
 #define BUFFERCONSUMER_FWD_H
 
 namespace QuickFAST{
-  namespace Common{
+  namespace Communication{
     class BufferConsumer;
     /// @brief smart pointer to a BufferConsumer
     typedef boost::shared_ptr<BufferConsumer> BufferConsumerPtr;

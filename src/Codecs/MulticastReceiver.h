@@ -7,23 +7,22 @@
 // All inline, do not export.
 //#include <Common/QuickFAST_Export.h>
 #include "MulticastReceiver_fwd.h"
-#include <Common/BufferGenerator.h>
-#include <Common/BufferConsumer.h>
-#include <Common/AsioService.h>
-//
-#include <Common/LinkedBuffer.h>
+#include <Communication/BufferGenerator.h>
+#include <Communication/BufferConsumer.h>
+#include <Communication/AsioService.h>
+#include <Communication/LinkedBuffer.h>
 
 namespace QuickFAST
 {
   namespace Codecs
   {
     /// @brief Receive Multicast Packets and pass them to a packet handler
-    class /*QuickFAST_Export*/ MulticastReceiver : public AsioService, public Common::BufferGenerator
+    class /*QuickFAST_Export*/ MulticastReceiver : public Communication::AsioService, public Communication::BufferGenerator
     {
       // keep a shared_ptr to every buffer in a vector so that when this object
       // is destroyed, the destruction of the vector will trigger the release
       // of the buffers
-      typedef boost::shared_ptr<Common::LinkedBuffer> BufferLifetime;
+      typedef boost::shared_ptr<Communication::LinkedBuffer> BufferLifetime;
       typedef std::vector<BufferLifetime> BufferLifetimeManager;
 
     public:
@@ -178,7 +177,7 @@ namespace QuickFAST
       /// @param bufferSize determines the maximum size of an incoming packet
       /// @param bufferCount is the number of buffers to allocate to receive packets
       void start(
-        Common::BufferConsumer & bufferConsumer,
+        Communication::BufferConsumer & bufferConsumer,
         size_t bufferSize = 1400,
         size_t bufferCount = 2)
       {
@@ -207,7 +206,7 @@ namespace QuickFAST
 
         for(size_t nBuffer = 0; nBuffer < bufferCount; ++nBuffer)
         {
-          BufferLifetime buffer(new Common::LinkedBuffer(bufferSize));
+          BufferLifetime buffer(new Communication::LinkedBuffer(bufferSize));
           /// bufferLifetimes_ is used only to clean up on object destruction
           bufferLifetimes_.push_back(buffer);
           idleBufferPool_.push(buffer.get());
@@ -226,7 +225,7 @@ namespace QuickFAST
 
         for(size_t nBuffer = 0; nBuffer < bufferCount; ++nBuffer)
         {
-          BufferLifetime buffer(new Common::LinkedBuffer(bufferSize));
+          BufferLifetime buffer(new Communication::LinkedBuffer(bufferSize));
           /// bufferLifetimes_ is used only to clean up on object destruction
           bufferLifetimes_.push_back(buffer);
           idleBufferPool_.push(buffer.get());
@@ -249,7 +248,7 @@ namespace QuickFAST
         socket_.cancel();
       }
 
-      virtual void releaseBuffer(Common::LinkedBuffer * buffer)
+      virtual void releaseBuffer(Communication::LinkedBuffer * buffer)
       {
         idleBuffers_.push(buffer);
       }
@@ -261,7 +260,7 @@ namespace QuickFAST
       {
         if( !readInProgress_ && !stopping_)
         {
-          Common::LinkedBuffer *buffer = idleBufferPool_.pop();
+          Communication::LinkedBuffer *buffer = idleBufferPool_.pop();
           if(buffer != 0)
           {
             readInProgress_ = true;
@@ -284,7 +283,7 @@ namespace QuickFAST
 
       void handleReceive(
         const boost::system::error_code& error,
-        Common::LinkedBuffer * buffer,
+        Communication::LinkedBuffer * buffer,
         size_t bytesReceived)
       {
         // should this thread service the queue?
@@ -334,7 +333,7 @@ namespace QuickFAST
         {
           ++batchesProcessed_;
 
-          Common::LinkedBuffer * buffer = queue_.serviceNext();
+          Communication::LinkedBuffer * buffer = queue_.serviceNext();
           while(buffer != 0)
           {
             ++packetsProcessed_;
@@ -375,20 +374,20 @@ namespace QuickFAST
       boost::asio::ip::udp::endpoint endpoint_;
       boost::asio::ip::udp::endpoint senderEndpoint_;
       boost::asio::ip::udp::socket socket_;
-      Common::BufferConsumer * consumer_;
+      Communication::BufferConsumer * consumer_;
 
       BufferLifetimeManager bufferLifetimes_;
 
       boost::mutex bufferMutex_;
-      Common::SingleServerBufferQueue queue_;
+      Communication::SingleServerBufferQueue queue_;
 
       // accumulate idle buffers while we process the queue
       // but don't add them back to idle pool until we're done
       // this avoids extra locking, and applies some backpressure to the
       // incoming communication stream (which of course is ignored for multicast)
-      Common::SimpleBufferCollection idleBuffers_;
+      Communication::SimpleBufferCollection idleBuffers_;
 
-      Common::SimpleBufferCollection idleBufferPool_;
+      Communication::SimpleBufferCollection idleBufferPool_;
       bool readInProgress_;
 
       /////////////

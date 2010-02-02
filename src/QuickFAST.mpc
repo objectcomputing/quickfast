@@ -8,16 +8,18 @@ project(*) : boost_base, boost_filesystem, boost_system, boost_thread {
   pch_header = Common/QuickFASTPch.h
   pch_source = Common/QuickFASTPch.cpp
   Source_Files {
-    Common
-    Codecs
-    Messages
     Application
+    Codecs
+    Common
+    Communication
+    Messages
   }
   Header_Files {
-    Common
-    Codecs
-    Messages
     Application
+    Codecs
+    Common
+    Communication
+    Messages
   }
 
   specific(!vc8, !vc9) {
