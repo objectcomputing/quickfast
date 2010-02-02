@@ -2020,7 +2020,7 @@ TestRequestId   --       --    --      0      --
 TestRequestId   "ID"     --    "ID"    1      49 C4
 TestRequestId   "ID"     "ID"  "ID"    0      --
 TestRequestId   "JD"     "ID"  "JD"    1      4A C4
-TestRequestID   --       "ID"  NULL    1      80
+TestRequestID   --       "JD"  NULL    1      80
 TestRequestID   --       NULL  --      0      --
 */
   const char testData[] = "\x49\xC4\x4a\xC4\x80";

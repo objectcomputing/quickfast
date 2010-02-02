@@ -8,7 +8,7 @@
 #define QUICKFASTLOGGER_FWD_H
 namespace QuickFAST
 {
-  namespace Messages
+  namespace Common
   {
     class Logger;
   }

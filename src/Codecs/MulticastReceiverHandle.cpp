@@ -118,7 +118,7 @@ MulticastReceiverHandle::largestPacket() const
 
 void
 MulticastReceiverHandle::start(
-  BufferConsumer &  bufferConsumer,
+  Common::BufferConsumer &  bufferConsumer,
   size_t bufferSize,
   size_t bufferCount)
 {

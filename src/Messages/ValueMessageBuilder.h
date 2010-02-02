@@ -10,11 +10,11 @@
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
 #include <Messages/FieldIdentity_fwd.h>
-#include <Messages/Logger.h>
+#include <Common/Logger.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief Interface to support building a message during decoding.
-    class ValueMessageBuilder : public Logger
+    class ValueMessageBuilder : public Common::Logger
     {
     public:
 

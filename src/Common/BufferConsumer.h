@@ -8,11 +8,11 @@
 #define BUFFERCONSUMER_H
 #include "BufferConsumer_fwd.h"
 //#include <Common/QuickFAST_Export.h>
-#include <Messages/Logger.h>
+#include <Common/Logger.h>
 namespace QuickFAST{
-  namespace Codecs{
+  namespace Common{
     /// @brief interface to be implemented by a consumer of incoming raw data buffers.
-    class BufferConsumer : public Messages::Logger
+    class BufferConsumer : public Common::Logger
     {
     public:
       virtual ~BufferConsumer(){}

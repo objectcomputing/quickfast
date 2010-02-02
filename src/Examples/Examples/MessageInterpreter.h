@@ -25,7 +25,7 @@ namespace QuickFAST{
 
       /// @brief set the level of log messages that we are interested in.
       /// @param level is the first level that will *NOT* be displayed.
-      void setLogLevel(Messages::Logger::LogLevel level);
+      void setLogLevel(Common::Logger::LogLevel level);
 
       ////////////////////////////
       // Implement MessageConsumer
@@ -52,7 +52,7 @@ namespace QuickFAST{
       std::ostream & out_;
       size_t indent_;
       size_t recordCount_;
-      Messages::Logger::LogLevel logLevel_;
+      Common::Logger::LogLevel logLevel_;
       bool silent_;
     };
   }

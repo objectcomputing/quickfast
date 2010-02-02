@@ -16,7 +16,7 @@ MessageInterpreter::MessageInterpreter(std::ostream & out, bool silent)
   : out_(out)
   , indent_(0)
   , recordCount_(0)
-  , logLevel_(Messages::Logger::QF_LOG_WARNING)
+  , logLevel_(Common::Logger::QF_LOG_WARNING)
   , silent_(silent)
 {
 }

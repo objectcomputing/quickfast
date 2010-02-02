@@ -9,7 +9,7 @@ using namespace Codecs;
 
 namespace
 {
-  class GenericMessageBufferConsumer : public BufferConsumer
+  class GenericMessageBufferConsumer : public Common::BufferConsumer
   {
   public:
     GenericMessageBufferConsumer(
@@ -69,7 +69,7 @@ bool
 GenericMessageBufferConsumer::consumeBuffer(const unsigned char * buffer, size_t bufferSize)
 {
   ++messageCount_;
-  if(builder_.wantLog(Logger::QF_LOG_VERBOSE))
+  if(builder_.wantLog(Common::Logger::QF_LOG_VERBOSE))
   {
     std::stringstream message;
     message << "Received[" << messageCount_ << "]: " << bufferSize << " bytes";

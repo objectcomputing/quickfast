@@ -1,3 +1,27 @@
+Tue Feb  2 19:59:16 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MessageConsumer.h:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/MulticastReceiver.h:
+        * src/Codecs/MulticastReceiverHandle.h:
+        * src/Codecs/MulticastReceiverHandle.cpp:
+        * src/Common/BufferConsumer.h:
+        * src/Common/BufferConsumer_fwd.h:
+        * src/Common/Logger.h:
+        * src/Common/Logger_fwd.h:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Messages/MessageBuilder.h:
+        * src/Messages/ValueMessageBuilder.h:
+        * src/Tests/testFieldOperations.cpp:
+        * src/Codecs/BufferConsumer.h:
+        * src/Codecs/BufferConsumer_fwd.h:
+        * src/Messages/Logger.h:
+        * src/Messages/Logger_fwd.h:
+        Move Logger and BufferConsumer to Common
+        Groundwork for changing BufferConsumer, etc.
+
 Tue Feb  2 16:59:33 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Tests/testFieldOperations.cpp:

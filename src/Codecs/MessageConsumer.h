@@ -9,12 +9,12 @@
 #include "MessageConsumer_fwd.h"
 #include <Common/QuickFAST_Export.h>
 #include <Messages/Message_fwd.h>
-#include <Messages/Logger.h>
+#include <Common/Logger.h>
 
 namespace QuickFAST{
   namespace Codecs{
     /// @brief interface to be implemented by a consumer of decoded messages.
-    class MessageConsumer : public Messages::Logger
+    class MessageConsumer : public Common::Logger
     {
     public:
       virtual ~MessageConsumer(){}

@@ -8,7 +8,7 @@
 #define QUICKFASTLOGGER_H
 #include "Logger_fwd.h"
 namespace QuickFAST{
-  namespace Messages{
+  namespace Common{
     /// @brief interface to be implemented by a consumer of decoded messages.
     class Logger
     {

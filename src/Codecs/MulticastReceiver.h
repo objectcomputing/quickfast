@@ -7,7 +7,7 @@
 // All inline, do not export.
 //#include <Common/QuickFAST_Export.h>
 #include "MulticastReceiver_fwd.h"
-#include <Codecs/BufferConsumer.h>
+#include <Common/BufferConsumer.h>
 #include <Common/AsioService.h>
 #include <Common/LinkedBuffer.h>
 
@@ -176,7 +176,7 @@ namespace QuickFAST
       /// @param bufferSize determines the maximum size of an incoming packet
       /// @param bufferCount is the number of buffers to allocate to receive packets
       void start(
-        BufferConsumer & bufferConsumer,
+        Common::BufferConsumer & bufferConsumer,
         size_t bufferSize = 1400,
         size_t bufferCount = 2)
       {
@@ -187,13 +187,13 @@ namespace QuickFAST
         socket_.bind(endpoint_);
 
         consumer_->receiverStarted();
-        if(consumer_->wantLog(BufferConsumer::QF_LOG_INFO))
+        if(consumer_->wantLog(Common::Logger::QF_LOG_INFO))
         {
           std::stringstream msg;
           msg << "Joining multicast group: " << multicastGroup_.to_string()
             << " via interface " << endpoint_.address().to_string()
             << ':' << endpoint_.port();
-          consumer_->logMessage(BufferConsumer::QF_LOG_INFO, msg.str());
+          consumer_->logMessage(Common::Logger::QF_LOG_INFO, msg.str());
         }
         // Join the multicast group.
         boost::asio::ip::multicast::join_group joinRequest(
@@ -372,7 +372,7 @@ namespace QuickFAST
       boost::asio::ip::udp::endpoint endpoint_;
       boost::asio::ip::udp::endpoint senderEndpoint_;
       boost::asio::ip::udp::socket socket_;
-      BufferConsumer * consumer_;
+      Common::BufferConsumer * consumer_;
 
       BufferLifetimeManager bufferLifetimes_;
 

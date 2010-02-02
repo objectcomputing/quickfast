@@ -10,7 +10,7 @@
 #include <Common/QuickFAST_Export.h>
 #include <Messages/ValueMessageBuilder.h>
 #include <Messages/MessageField.h>
-#include <Messages/Logger.h>
+//#include <Common/Logger.h>
 namespace QuickFAST{
   namespace Messages{
     /// @brief Interface to support building a message during decoding.
