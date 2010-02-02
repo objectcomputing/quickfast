@@ -1,4 +1,4 @@
-project(InterpretFAST) : boost_base, boost_filesystem, boost_thread, QuickFASTExample {
+project(InterpretFAST) : QuickFASTExample {
   exename = InterpretFAST
   Source_Files {
     InterpretFAST
@@ -8,7 +8,7 @@ project(InterpretFAST) : boost_base, boost_filesystem, boost_thread, QuickFASTEx
   }
 }
 
-project(InterpretApplication) : boost_base, boost_filesystem, boost_thread, QuickFASTExample {
+project(InterpretApplication) : QuickFASTExample {
   exename = InterpretApplication
   Source_Files {
     InterpretApplication
@@ -18,7 +18,7 @@ project(InterpretApplication) : boost_base, boost_filesystem, boost_thread, Quic
   }
 }
 
-project(PerformanceTest) : boost_base, boost_filesystem, boost_thread, QuickFASTExample {
+project(PerformanceTest) : QuickFASTExample {
   exename = PerformanceTest
   Source_Files {
     PerformanceTest
@@ -28,7 +28,7 @@ project(PerformanceTest) : boost_base, boost_filesystem, boost_thread, QuickFAST
   }
 }
 
-project(FileToTCP) : boost_base, boost_filesystem, boost_system, boost_thread, QuickFASTExample {
+project(FileToTCP) : QuickFASTExample {
   exename = FileToTCP
   Source_Files {
     FileToTCP
@@ -38,7 +38,7 @@ project(FileToTCP) : boost_base, boost_filesystem, boost_system, boost_thread, Q
   }
 }
 
-project(FileToMulticast) : boost_base, boost_filesystem, boost_system, boost_thread, QuickFASTExample {
+project(FileToMulticast) : QuickFASTExample {
   exename = FileToMulticast
   Source_Files {
     FileToMulticast
@@ -48,7 +48,7 @@ project(FileToMulticast) : boost_base, boost_filesystem, boost_system, boost_thr
   }
 }
 
-project(PCapToMulticast) : boost_base, boost_filesystem, boost_system, boost_thread, QuickFASTExample {
+project(PCapToMulticast) : QuickFASTExample {
   exename = PCapToMulticast
   Source_Files {
     PCapToMulticast
@@ -58,7 +58,7 @@ project(PCapToMulticast) : boost_base, boost_filesystem, boost_system, boost_thr
   }
 }
 
-project(MulticastInterpreter) : boost_base, boost_filesystem, boost_system, boost_thread, QuickFASTExample {
+project(MulticastInterpreter) : QuickFASTExample {
   exename = MulticastInterpreter
   Source_Files {
     MulticastInterpreter

@@ -11,13 +11,8 @@
 #include <Messages/Message.h>
 #include <Examples/StopWatch.h>
 #include <Examples/MessageInterpreter.h>
-#include <Codecs/MulticastReceiver.h>
 #include <Codecs/MessageConsumer.h>
 
-
-//////////////
-// temp debugging
-#include <Codecs/MulticastReceiver.h>
 
 using namespace QuickFAST;
 using namespace Examples;

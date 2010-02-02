@@ -1,3 +1,16 @@
+Tue Feb  2 15:58:24 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * QuickFASTApplication.mpb:
+        * src/Examples/Examples.mpc:
+        * src/QuickFAST.mpc:
+        Promote use of boost mpb files to QuickFASTApplication and QuickFAST
+
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+        Remove unnecessary include
+
+        * src/Common/QuickFASTPch.h:
+        Add include_shared_from_this.hpp.  It'll be needed soon.
+
+
 Wed Jan 27 20:25:39 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/XMLTemplateParser.cpp:
         Editing error in previous checkin -- accidentally undid some
