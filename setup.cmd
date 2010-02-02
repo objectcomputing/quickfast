@@ -18,8 +18,7 @@ REM SET THE FOLLOWING VALUES HERE OR IN YOUR ENVIRONMENT
 if "a" == "a%MPC_ROOT%" set MPC_ROOT=c:\MPC
 if "a" == "a%XERCES_ROOT%" set XERCES_ROOT=C:\Progs\xerces-c-3.0.1-x86-windows-vc-9.0
 if "a" == "a%XERCES_LIBNAME%" set XERCES_LIBNAME=xerces-c_3
-rem if "a" == "a%BOOST_VERSION%" set BOOST_VERSION=boost_1_36_0
-if "a" == "a%BOOST_VERSION%" set BOOST_VERSION=boost_1_40_0
+if "a" == "a%BOOST_VERSION%" set BOOST_VERSION=boost_1_36_0
 if "a" == "a%BOOST_ROOT%" set BOOST_ROOT=c:\boost\%BOOST_VERSION%
 REM END OF VALUES TO BE SET
 
