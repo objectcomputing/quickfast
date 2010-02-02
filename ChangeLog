@@ -1,3 +1,9 @@
+Tue Feb  2 16:59:33 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Tests/testFieldOperations.cpp:
+        Added a unit test for issue # 38.  This test does NOT trigger the problem
+        reported in this issue so I've asked for more information.
+
 Tue Feb  2 15:58:24 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * QuickFASTApplication.mpb:
         * src/Examples/Examples.mpc:

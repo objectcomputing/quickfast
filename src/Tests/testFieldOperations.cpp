@@ -1887,7 +1887,7 @@ BOOST_AUTO_TEST_CASE(test_issue_36)
   fieldSet2.swap(consumer.message());
 
   pFieldEntry = fieldSet2.begin();
-  BOOST_CHECK(pFieldEntry != fieldSet1.end());
+  BOOST_CHECK(pFieldEntry != fieldSet2.end());
   BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::UINT64));
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt64(), 2);
   ++pFieldEntry;
@@ -2012,5 +2012,136 @@ BOOST_AUTO_TEST_CASE(test_swxess_mdpricelevel_problem)
 
 
 
+BOOST_AUTO_TEST_CASE(test_issue_38)
+{
+/* <string name="TestRequestId" presence="optional" id="112"><copy/></string>
+               Input    Prior Encoded PMAP   FAST
+TestRequestId   --       --    --      0      --
+TestRequestId   "ID"     --    "ID"    1      49 C4
+TestRequestId   "ID"     "ID"  "ID"    0      --
+TestRequestId   "JD"     "ID"  "JD"    1      4A C4
+TestRequestID   --       "ID"  NULL    1      80
+TestRequestID   --       NULL  --      0      --
+*/
+  const char testData[] = "\x49\xC4\x4a\xC4\x80";
+  Codecs::DataSourceString source(testData);
+  // create a dictionary indexer
+  DictionaryIndexer indexer;
+  Codecs::PresenceMap pmap(6);
+  pmap.setNextField(false);
+  pmap.setNextField(true);
+  pmap.setNextField(false);
+  pmap.setNextField(true);
+  pmap.setNextField(true);
+  pmap.setNextField(false);
+  pmap.rewind();
+
+  Codecs::FieldInstructionAscii field("TestRequestId","");
+  field.setPresence(false);
+
+  FieldOpPtr fieldOp(new Codecs::FieldOpCopy);
+  field.setFieldOp(fieldOp);
+  field.indexDictionaries(indexer, "global", "", "");
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(4,1,indexer.size()));
+  field.finalize(*registry);
+
+  // We neeed the helper routines in the decoder
+  Codecs::Decoder decoder(registry);
+
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+
+  // test1: decode the ID that isn't there
+  builder.startMessage("UNIT_TEST", "", 1);
+  field.decode(source, pmap, decoder, builder);
+  BOOST_REQUIRE(builder.endMessage(builder));
+
+  Messages::Message fieldSet1(1);
+  fieldSet1.swap(consumer.message());
+
+  Messages::FieldSet::const_iterator pFieldEntry = fieldSet1.begin();
+  BOOST_CHECK(pFieldEntry == fieldSet1.end()); // should be empty
+
+  // test2: decode the "ID"
+  builder.startMessage("UNIT_TEST", "", 1);
+  field.decode(source, pmap, decoder, builder);
+  BOOST_REQUIRE(builder.endMessage(builder));
+  Messages::Message fieldSet2(1);
+  fieldSet2.swap(consumer.message());
+
+  pFieldEntry = fieldSet2.begin();
+  BOOST_CHECK(pFieldEntry != fieldSet2.end());
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
+  BOOST_CHECK_EQUAL(pFieldEntry->getField()->toAscii(), "ID");
+  ++pFieldEntry;
+  BOOST_CHECK(pFieldEntry == fieldSet2.end());
+
+  // test3: decode copied "ID"
+  builder.startMessage("UNIT_TEST", "", 1);
+  field.decode(source, pmap, decoder, builder);
+  BOOST_REQUIRE(builder.endMessage(builder));
+  Messages::Message fieldSet3(1);
+  fieldSet3.swap(consumer.message());
+
+  pFieldEntry = fieldSet3.begin();
+  BOOST_CHECK(pFieldEntry != fieldSet3.end());
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
+  BOOST_CHECK_EQUAL(pFieldEntry->getField()->toAscii(), "ID");
+  ++pFieldEntry;
+  BOOST_CHECK(pFieldEntry == fieldSet3.end());
+
+  // test4: decode explicit "JD"
+  builder.startMessage("UNIT_TEST", "", 1);
+  field.decode(source, pmap, decoder, builder);
+  BOOST_REQUIRE(builder.endMessage(builder));
+  Messages::Message fieldSet4(1);
+  fieldSet4.swap(consumer.message());
+
+  pFieldEntry = fieldSet4.begin();
+  BOOST_CHECK(pFieldEntry != fieldSet4.end());
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::ASCII));
+  BOOST_CHECK_EQUAL(pFieldEntry->getField()->toAscii(), "JD");
+  ++pFieldEntry;
+  BOOST_CHECK(pFieldEntry == fieldSet4.end());
 
 
+  // test5: decode the explicitly nulled value
+  builder.startMessage("UNIT_TEST", "", 1);
+  field.decode(source, pmap, decoder, builder);
+  BOOST_REQUIRE(builder.endMessage(builder));
+
+  Messages::Message fieldSet5(1);
+  fieldSet5.swap(consumer.message());
+  pFieldEntry = fieldSet5.begin();
+  BOOST_CHECK(pFieldEntry == fieldSet5.end());
+
+  // test 6: decode the implicilty null entry
+  builder.startMessage("UNIT_TEST", "", 1);
+  field.decode(source, pmap, decoder, builder);
+  BOOST_REQUIRE(builder.endMessage(builder));
+
+  Messages::Message fieldSet6(1);
+  fieldSet5.swap(consumer.message());
+  pFieldEntry = fieldSet6.begin();
+  BOOST_CHECK(pFieldEntry == fieldSet6.end());
+
+  // Was all input consumed?
+  uchar byte;
+  BOOST_CHECK(!source.getByte(byte));
+
+  // Now reencode the data
+  Codecs::PresenceMap pmapResult(4);
+  Codecs::DataDestinationString destination;
+  destination.startBuffer();
+  Codecs::Encoder encoder(registry);
+  field.encode(destination, pmapResult, encoder, fieldSet1);
+  field.encode(destination, pmapResult, encoder, fieldSet2);
+  field.encode(destination, pmapResult, encoder, fieldSet3);
+  field.encode(destination, pmapResult, encoder, fieldSet4);
+  field.encode(destination, pmapResult, encoder, fieldSet5);
+  field.encode(destination, pmapResult, encoder, fieldSet6);
+  destination.endMessage();
+  const std::string & result = destination.getValue();
+  BOOST_CHECK_EQUAL(result, testData);
+  BOOST_CHECK(pmap == pmapResult);
+}
