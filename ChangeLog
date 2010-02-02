@@ -1,3 +1,19 @@
+Tue Feb  2 21:43:35 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MessagePerPacketBufferConsumer.h:
+        * src/Codecs/MessagePerPacketBufferConsumer.cpp:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/MulticastReceiver.h:
+        * src/Common/BufferConsumer.h:
+        * src/Common/BufferGenerator.h:
+        * src/Common/BufferGenerator_fwd.h:
+        * src/Common/LinkedBuffer.h:
+        * src/Common/LinkedBuffer_fwd.h:
+        * src/Tests/testCommon.cpp:
+        Moving Data communications support out of Codecs and Messages
+        Warning: The move is not complete.  This is not a good revision
+        on which to base any ongoing work.
+
 Tue Feb  2 19:59:16 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MessageConsumer.h:

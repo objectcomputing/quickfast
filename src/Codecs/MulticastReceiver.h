@@ -7,8 +7,10 @@
 // All inline, do not export.
 //#include <Common/QuickFAST_Export.h>
 #include "MulticastReceiver_fwd.h"
+#include <Common/BufferGenerator.h>
 #include <Common/BufferConsumer.h>
 #include <Common/AsioService.h>
+//
 #include <Common/LinkedBuffer.h>
 
 namespace QuickFAST
@@ -16,12 +18,12 @@ namespace QuickFAST
   namespace Codecs
   {
     /// @brief Receive Multicast Packets and pass them to a packet handler
-    class /*QuickFAST_Export*/ MulticastReceiver : public AsioService
+    class /*QuickFAST_Export*/ MulticastReceiver : public AsioService, public Common::BufferGenerator
     {
       // keep a shared_ptr to every buffer in a vector so that when this object
       // is destroyed, the destruction of the vector will trigger the release
       // of the buffers
-      typedef boost::shared_ptr<LinkedBuffer> BufferLifetime;
+      typedef boost::shared_ptr<Common::LinkedBuffer> BufferLifetime;
       typedef std::vector<BufferLifetime> BufferLifetimeManager;
 
     public:
@@ -205,7 +207,7 @@ namespace QuickFAST
 
         for(size_t nBuffer = 0; nBuffer < bufferCount; ++nBuffer)
         {
-          BufferLifetime buffer(new LinkedBuffer(bufferSize));
+          BufferLifetime buffer(new Common::LinkedBuffer(bufferSize));
           /// bufferLifetimes_ is used only to clean up on object destruction
           bufferLifetimes_.push_back(buffer);
           idleBufferPool_.push(buffer.get());
@@ -224,7 +226,7 @@ namespace QuickFAST
 
         for(size_t nBuffer = 0; nBuffer < bufferCount; ++nBuffer)
         {
-          BufferLifetime buffer(new LinkedBuffer(bufferSize));
+          BufferLifetime buffer(new Common::LinkedBuffer(bufferSize));
           /// bufferLifetimes_ is used only to clean up on object destruction
           bufferLifetimes_.push_back(buffer);
           idleBufferPool_.push(buffer.get());
@@ -247,13 +249,19 @@ namespace QuickFAST
         socket_.cancel();
       }
 
+      virtual void releaseBuffer(Common::LinkedBuffer * buffer)
+      {
+        idleBuffers_.push(buffer);
+      }
+
+
     private:
 
       void startReceive(boost::mutex::scoped_lock&)
       {
         if( !readInProgress_ && !stopping_)
         {
-          LinkedBuffer *buffer = idleBufferPool_.pop();
+          Common::LinkedBuffer *buffer = idleBufferPool_.pop();
           if(buffer != 0)
           {
             readInProgress_ = true;
@@ -276,7 +284,7 @@ namespace QuickFAST
 
       void handleReceive(
         const boost::system::error_code& error,
-        LinkedBuffer * buffer,
+        Common::LinkedBuffer * buffer,
         size_t bytesReceived)
       {
         // should this thread service the queue?
@@ -325,13 +333,8 @@ namespace QuickFAST
         while(service)
         {
           ++batchesProcessed_;
-          // accumulate idle buffers while we process the queue
-          // but don't add them back to idle pool until we're done
-          // this avoids extra locking, and applies some backpressure to the
-          // incoming communication stream (which of course is ignored for multicast)
-          SimpleBufferCollection idleBuffers;
 
-          LinkedBuffer * buffer = queue_.serviceNext();
+          Common::LinkedBuffer * buffer = queue_.serviceNext();
           while(buffer != 0)
           {
             ++packetsProcessed_;
@@ -340,7 +343,7 @@ namespace QuickFAST
               try
               {
                 bytesProcessed_ += buffer->used();
-                if(!consumer_->consumeBuffer(buffer->get(), buffer->used()))
+                if(!consumer_->consumeBuffer(*this, buffer))
                 {
                   stop();
                 }
@@ -352,13 +355,13 @@ namespace QuickFAST
                   stop();
                 }
               }
-              idleBuffers.push(buffer);
+//              idleBuffers_.push(buffer);
             }
             buffer = queue_.serviceNext();
           }
           boost::mutex::scoped_lock lock(bufferMutex_);
           // add idle buffers to pool before trying to start a read.
-          idleBufferPool_.push(idleBuffers);
+          idleBufferPool_.push(idleBuffers_);
           startReceive(lock);
           // see if this thread is still needed to service the queue
           service = queue_.endService(!stopping_, lock);
@@ -377,8 +380,15 @@ namespace QuickFAST
       BufferLifetimeManager bufferLifetimes_;
 
       boost::mutex bufferMutex_;
-      SingleServerBufferQueue queue_;
-      SimpleBufferCollection idleBufferPool_;
+      Common::SingleServerBufferQueue queue_;
+
+      // accumulate idle buffers while we process the queue
+      // but don't add them back to idle pool until we're done
+      // this avoids extra locking, and applies some backpressure to the
+      // incoming communication stream (which of course is ignored for multicast)
+      Common::SimpleBufferCollection idleBuffers_;
+
+      Common::SimpleBufferCollection idleBufferPool_;
       bool readInProgress_;
 
       /////////////

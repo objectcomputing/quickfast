@@ -8,11 +8,14 @@
 #define BUFFERCONSUMER_H
 #include "BufferConsumer_fwd.h"
 //#include <Common/QuickFAST_Export.h>
+#include <Common/BufferGenerator_fwd.h>
+#include <Common/LinkedBuffer.h>
 #include <Common/Logger.h>
+
 namespace QuickFAST{
   namespace Common{
     /// @brief interface to be implemented by a consumer of incoming raw data buffers.
-    class BufferConsumer : public Common::Logger
+    class BufferConsumer : public Logger
     {
     public:
       virtual ~BufferConsumer(){}
@@ -21,7 +24,7 @@ namespace QuickFAST{
       /// @param buffer a contiguous array of bytes.  Valid for the duration of this call
       /// @param bufferSize the count of bytes used in the buffer
       /// @returns true if receiving should continue; false to stop receiving
-      virtual bool consumeBuffer(const unsigned char * buffer, size_t bufferSize) = 0;
+      virtual bool consumeBuffer(Common::BufferGenerator & generator, LinkedBuffer * buffer) = 0;
 
       /// @brief notify consumer that receiver is started
       /// Will be called once before consumeBuffer is called
