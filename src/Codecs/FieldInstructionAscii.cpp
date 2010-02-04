@@ -116,7 +116,7 @@ FieldInstructionAscii::decodeDefault(
   if(pmap.checkNextField())
   {
     WorkingBuffer & buffer = decoder.getWorkingBuffer();
-    if(!decodeAsciiFromSource(source, isMandatory(), buffer))
+    if(decodeAsciiFromSource(source, isMandatory(), buffer))
     {
       fieldSet.addValue(
         identity_,

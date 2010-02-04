@@ -1,3 +1,10 @@
+Thu Feb  4 16:13:28 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Tests/testFieldOperations.cpp:
+        Fix error in decoding ascii w/ default operator.
+        Add unit test for the problem.
+
 Thu Feb  4 15:41:49 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MessagePerPacketBufferConsumer.h:
