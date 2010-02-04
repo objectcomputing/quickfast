@@ -1,3 +1,9 @@
+Thu Feb  4 15:41:49 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MessagePerPacketBufferConsumer.h:
+        * src/Examples/PerformanceTest/main.cpp:
+        Fix Linux build errors & warnings.
+
 Tue Feb  2 22:45:21 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MessagePerPacketBufferConsumer.h:
