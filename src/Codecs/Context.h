@@ -27,6 +27,7 @@ namespace QuickFAST{
         NULL_VALUE,
         OK_VALUE
       };
+      /// @brief Template ID defined in SCP to mean: reset the xcoder.
       static const template_id_t SCPResetTemplateId = 120;
     public:
       /// @brief Construct with a TemplateRegistry containing all templates to be used.

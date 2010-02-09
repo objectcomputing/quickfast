@@ -5,10 +5,10 @@
 #ifndef MULTICASTRECEIVERHANDLE_H
 #define MULTICASTRECEIVERHANDLE_H
 #include <Common/QuickFAST_Export.h>
-#include <Communication/BufferConsumer_fwd.h>
+#include <Communication/BufferQueueService_fwd.h>
 
 namespace QuickFAST{
-  namespace Codecs {
+  namespace Communication {
 
     class MulticastReceiverHandle_i;
 
@@ -78,7 +78,7 @@ namespace QuickFAST{
       /// @param bufferSize determines the maximum size of an incoming packet
       /// @param bufferCount is how many input buffers to use
       void start(
-        Communication::BufferConsumer & bufferConsumer,
+        Communication::BufferQueueService & queueService,
         size_t bufferSize = 1400,
         size_t bufferCount = 2
         );

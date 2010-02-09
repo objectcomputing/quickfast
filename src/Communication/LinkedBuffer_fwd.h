@@ -9,7 +9,14 @@ namespace QuickFAST
   namespace Communication
   {
     class LinkedBuffer;
-    class SimpleBufferCollection;
+    /// Normal use will be via raw pointer for speed. This is here to manage buffer lifetime (separately from use)
+    typedef boost::shared_ptr<LinkedBuffer> BufferLifetime;
+    /// A collection of BufferLifetimes
+    typedef std::vector<BufferLifetime> BufferLifetimeManager;
+
+    class BufferQueue;
+    ///  Formerly separate classes, but BufferQueue was just as fast as the unordered collection so they merged.
+    typedef BufferQueue BufferCollection;
     class SingleServerBufferQueue;
   }
 }

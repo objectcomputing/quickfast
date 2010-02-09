@@ -112,69 +112,110 @@ namespace QuickFAST
       size_t used_;
     };
 
-    /// @brief A collection of buffers with no ordering constraints.
-    ///
-    /// Empty when:   head_.next_ = 0
-    ///               tail_ -> head_;
+    /// @brief No frills ordered collection of buffers: FIFO
     ///
     /// No internal synchronization.
     /// This object does not manage buffer lifetimes.  It assumes
     /// that buffers outlive the collection.
-    class SimpleBufferCollection
+    class BufferQueue
     {
     public:
-      /// @brief Construct an empty list
-      SimpleBufferCollection()
-        : tail_(&head_)
+      BufferQueue()
+        : head_()
+        , tail_(&head_)
       {
       }
 
-      /// @brief Add one buffer to the collection
-      ///
-      /// @param buffer to be added.
-      void push(LinkedBuffer * buffer)
+      ///@brief return true if empty
+      bool isEmpty() const
       {
-  //      std::cout << "Simple @ " << this << " push " << buffer << std::endl;
+        return head_.link() == 0;
+      }
+
+      /// @brief Push a single buffer onto the queue
+      /// @returns true if this queue was empty before the push; and not empty afterward
+      bool push(LinkedBuffer * buffer)
+      {
+        bool first = isEmpty();
+        assert(buffer != 0);
         buffer->link(0);
         tail_->link(buffer);
         tail_ = buffer;
-  //      std::cout << "       head: " << head_.link() << "  tail: " << tail_ << std::endl;
+        return first;
       }
 
-      /// @brief Combine two collections into one.
-      ///
-      /// This collection ends up with all entries.
-      /// The other collection ends up empty.
-      /// @param collection to be combined into this one.
-      void push(SimpleBufferCollection & collection)
+      /// @brief Push a list of buffers onto the queue.
+      /// @param buffer is the first of a linked list of buffers to be added to the queue
+      /// @returns true if this queue was empty before the push; and not empty afterward
+      bool pushList(LinkedBuffer * buffer)
       {
-  //      std::cout << "Simple @ " << this << " push collection " << &collection << std::endl;
-        tail_->link(collection.head_.link());
-        tail_ = collection.tail_;
-        collection.head_.link(0);
-        collection.tail_ = &collection.head_;
-  //      std::cout << "       head: " << head_.link() << "  tail: " << tail_ << std::endl;
+        bool first = isEmpty();
+        assert(buffer != 0);
+        tail_->link(buffer);
+        while(buffer->link() != 0)
+        {
+          buffer = buffer->link();
+        }
+        tail_ = buffer;
+        return first;
       }
 
-      /// @brief retrieve a buffer from the collection
-      /// @returns the pointer to the buffer, or zero if the collection is empty.
+      /// @brief Push buffers from one queue to another.
+      ///
+      /// The source queue is empty after this call.
+      /// @param queue the source queue.
+      /// @returns true if this queue was empty before the push; and not empty afterward
+      bool push(BufferQueue & queue)
+      {
+        bool first = isEmpty();
+        LinkedBuffer * head = queue.head_.link();
+        if(head != 0)
+        {
+          tail_->link(head);
+          tail_ = queue.tail_;
+        }
+        queue.head_.link(0);
+        queue.tail_ = & queue.head_;
+        return first && !isEmpty();
+      }
+
+      /// @brief Pop the first entry from the queue
+      /// @returns the buffer or 0 if the queue is empty.
       LinkedBuffer * pop()
       {
-        LinkedBuffer * buffer = head_.link();
-        if(buffer != 0)
+        LinkedBuffer * result = head_.link();
+        if(result != 0)
         {
-          LinkedBuffer *next = buffer->link();
-          head_.link(next);
-          if(next == 0)
+          head_.link(result->link());
+          result->link(0);
+          if(head_.link() == 0)
           {
             tail_ = &head_;
           }
-          buffer->link(0);
         }
-  //      std::cout << "Simple @ " << this << " pop " << buffer << std::endl;
-  //      std::cout << "       head: " << head_.link() << "  tail: " << tail_ << std::endl;
-        return buffer;
+        return result;
       }
+
+      /// @brief Pop the entire contents of the queue as a linked list.
+      LinkedBuffer * popList()
+      {
+        LinkedBuffer * result = head_.link();
+        head_.link(0);
+        tail_ = &head_;
+      }
+
+      /// @brief nondestructive access to the first item in the queue
+      LinkedBuffer * begin() const
+      {
+        return head_.link();
+      }
+
+      /// @brief to enable stl-like algorithms
+      LinkedBuffer * end() const
+      {
+        return 0;
+      }
+
     private:
       LinkedBuffer head_;
       LinkedBuffer * tail_;
@@ -212,10 +253,7 @@ namespace QuickFAST
     public:
       /// @brief Construct an empty queue.
       SingleServerBufferQueue()
-        : head_()
-        , tail_(&head_)
-        , outgoing_(0)
-        , busy_(false)
+        : busy_(false)
       {
       }
 
@@ -226,9 +264,7 @@ namespace QuickFAST
       /// @returns true if if the queue needs to be serviced
       bool push(LinkedBuffer * buffer, boost::mutex::scoped_lock &)
       {
-        buffer->link(0);
-        tail_->link(buffer);
-        tail_ = buffer;
+        incoming_.push(buffer);
         return !busy_;
       }
 
@@ -250,28 +286,28 @@ namespace QuickFAST
         {
           return false;
         }
-        assert(outgoing_ == 0);
-        outgoing_ = head_.link();
-        head_.link(0);
-        tail_ = &head_;
-        busy_ = (outgoing_ != 0);
+        outgoing_.push(incoming_);
+        busy_ = !outgoing_.isEmpty();
         return busy_;
       }
 
       /// @brief Service the next entry
       ///
       /// No locking is required because the queue should be serviced
-      /// by a single thread.
+      /// by a single thread (the one that set busy_ to true).
       /// @returns the entry to be processed or zero if this batch of entries is finished.
       LinkedBuffer * serviceNext()
       {
         assert(busy_);
-        LinkedBuffer * next = outgoing_;
-        if(next != 0)
-        {
-          outgoing_ = next->link();
-        }
-        return next;
+        return outgoing_.pop();
+      }
+
+      /// @brief Service all pending entries at once
+      /// @returns the first entry in a linked list of buffers.
+      LinkedBuffer * serviceAll()
+      {
+        assert(busy_);
+        return outgoing_.popList();
       }
 
       /// @brief Relinquish responsibility for servicing the queue
@@ -289,7 +325,6 @@ namespace QuickFAST
       /// @returns true if there are more entries to be serviced.
       bool endService(bool recheck, boost::mutex::scoped_lock & lock)
       {
-        assert(outgoing_ == 0);
         assert(busy_);
         busy_ = false;
         if(recheck)
@@ -299,14 +334,50 @@ namespace QuickFAST
         return false;
       }
 
+      /// @brief Promote buffers from incoming to outgoing (service thread only)
+      /// This method should be called only by the service thread
+      /// Any accumulated buffers in the input queue will be appended to the output queue.
+      /// If wait is false, then the return value is false if nothing was changed.
+      /// if wait is true, then this call waits until some incoming buffers are available.
+      /// The (external) mutex must be locked when this method is called (even if wait is false).
+      /// @param lock is used for the wait.  It also confirms that the caller has locked the mutex.
+      /// @wait is true if this call should wait for incoming buffers to be available.
+      bool refresh(boost::mutex::scoped_lock & lock, bool wait)
+      {
+        assert(busy_);
+        bool wasEmpty = incoming_.isEmpty();
+        while(wait && wasEmpty)
+        {
+          condition_.wait(lock);
+          wasEmpty = incoming_.isEmpty();
+        }
+        if(!wasEmpty)
+        {
+          outgoing_.push(incoming_);
+        }
+        return !wasEmpty;
+      }
+
+      /// @brief A nondestructive peek at the outgoing queue.
+      const LinkedBuffer * peekOutgoing()const
+      {
+        return outgoing_.begin();
+      }
+
       /// @brief Apply a function to every buffer in the queue
       ///
       /// The unused scoped lock parameter indicates this method should be protected.
       ///
       /// @param f is the function to apply
-      void apply(boost::function<void (LinkedBuffer *)> f, boost::mutex::scoped_lock &)
+      void applyx(boost::function<void (LinkedBuffer *)> f, boost::mutex::scoped_lock &)
       {
-        LinkedBuffer * buffer = head_.link();
+        LinkedBuffer * buffer = outgoing_.begin();
+        while(buffer != 0)
+        {
+          f(buffer);
+          buffer = buffer->link();
+        }
+        buffer = incoming_.begin();
         while(buffer != 0)
         {
           f(buffer);
@@ -314,9 +385,9 @@ namespace QuickFAST
         }
       }
     private:
-      LinkedBuffer head_;
-      LinkedBuffer * tail_;
-      LinkedBuffer * outgoing_;
+      BufferQueue incoming_;
+      BufferQueue outgoing_;
+      boost::condition_variable condition_;
       bool busy_;
       // todo: statistics would be interesting
     };

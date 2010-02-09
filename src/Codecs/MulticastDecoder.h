@@ -6,8 +6,8 @@
 #define MULTICASTDECODER_H
 #include <Common/QuickFAST_Export.h>
 #include "MulticastDecoder_fwd.h"
-#include <Codecs/MulticastReceiver.h>
-#include <Codecs/Decoder.h>
+#include <Communication/MulticastReceiver.h>
+#include <Codecs/MessagePerPacketQueueService.h>
 
 #include <Codecs/TemplateRegistry_fwd.h>
 #include <Messages/ValueMessageBuilder_fwd.h>
@@ -78,13 +78,17 @@ namespace QuickFAST{
       /// @brief Get the id of the template driving the decoding
       template_id_t getTemplateId()const
       {
-        return decoder_.getTemplateId();
+        return queueService_->decoder().getTemplateId();
       }
 
       /// @brief set an upper limit on the # of messages to be decoded
       ///
+      /// must call before start
       /// @param messageLimit how many messages to decode (0 means "forever")
-      void setLimit(size_t messageLimit);
+      void setLimit(size_t messageLimit)
+      {
+        messageLimit_ = messageLimit;
+      }
 
       /// @brief How many messages have been decoded.
       ///
@@ -99,10 +103,18 @@ namespace QuickFAST{
 
       /// @brief Run the event loop to accept incoming messages
       ///
-      void run();
+      void run()
+      {
+        receiver_.run();
+      }
+
 
       /// @brief Run the event loop to accept incoming messages in multiple threads
-      void run(size_t threadCount, bool useThisThread);
+      void run(size_t threadCount, bool useThisThread)
+      {
+        receiver_.runThreads(threadCount,useThisThread);
+      }
+
 
       /// @brief Stop the decoding process.
       ///
@@ -113,27 +125,36 @@ namespace QuickFAST{
       ///
       /// ValueMessageBuilder::decodingStopped() will be called when
       /// the stop request is complete.
-      void stop();
+      void stop()
+      {
+        receiver_.stop();
+      }
+
 
       /// @brief Join any threads created by the run method
       ///
       /// Should be called AFTER stop()
-      void joinThreads();
+      void joinThreads()
+      {
+        receiver_.joinThreads();
+      }
 
       /// @brief access the underlying multicast receiver.
-      const MulticastReceiver & receiver()const
+      const Communication::MulticastReceiver & receiver()const
       {
         return receiver_;
       }
 
     private:
-      MulticastReceiver receiver_;
-
-      Communication::BufferConsumerPtr bufferConsumer_;
-      Decoder decoder_;
+      Communication::MulticastReceiver receiver_;
+      TemplateRegistryPtr templateRegistry_;
+      Codecs::MessagePerPacketQueueServicePtr queueService_;
       Messages::ValueMessageBuilder * builder_;
       size_t messageLimit_;
+      size_t byteCount_;
       size_t messageCount_;
+      bool strict_;
+      std::ostream * verboseOut_;
     };
   }
 }

@@ -6,13 +6,13 @@
 #endif
 #ifndef NULLMESSAGE_H
 #define NULLMESSAGE_H
-#include <Messages/MessageBuilder.h>
+#include <Messages/ValueMessageBuilder.h>
 #include <Common/Types.h>
 namespace QuickFAST{
   namespace Examples{
     /// @brief Internal representation of a Null Message
     /// @todo: consider typedef FieldSet Message
-    class NullMessage : public Messages::MessageBuilder
+    class NullMessage : public Messages::ValueMessageBuilder
     {
       NullMessage();
     public:
@@ -22,7 +22,17 @@ namespace QuickFAST{
       /// @brief Copy construct NullMessage
       NullMessage(const NullMessage & rhs);
 
-      virtual void addField(Messages::FieldIdentityCPtr & identity, const Messages::FieldCPtr & value);
+//      virtual void addField(Messages::FieldIdentityCPtr & identity, const Messages::FieldCPtr & value);
+      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int64 value);
+      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value);
+      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int32 value);
+      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value);
+      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int16 value);
+      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value);
+      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int8 value);
+      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uchar value);
+      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value);
+      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length);
 
       virtual Messages::ValueMessageBuilder & startSequence(
         Messages::FieldIdentityCPtr & identity,

@@ -4,10 +4,10 @@
 //
 #include <Common/QuickFASTPch.h>
 #include "MulticastReceiverHandle.h"
-#include <Codecs/MulticastReceiver.h>
+#include <Communication/MulticastReceiver.h>
 
 namespace QuickFAST{
-  namespace Codecs {
+  namespace Communication {
     class MulticastReceiverHandle_i
     {
     public:
@@ -29,7 +29,7 @@ namespace QuickFAST{
 
 
 using namespace QuickFAST;
-using namespace Codecs;
+using namespace Communication;
 
 MulticastReceiverHandle::MulticastReceiverHandle(
     const std::string & multicastGroupIP,
@@ -114,15 +114,13 @@ MulticastReceiverHandle::largestPacket() const
 }
 
 
-
-
 void
 MulticastReceiverHandle::start(
-  Communication::BufferConsumer &  bufferConsumer,
+  Communication::BufferQueueService & queueService,
   size_t bufferSize,
   size_t bufferCount)
 {
-  pImpl_->ptr_->start(bufferConsumer, bufferSize, bufferCount);
+  pImpl_->ptr_->start(queueService, bufferSize, bufferCount);
 }
 
 void

@@ -72,6 +72,17 @@ namespace QuickFAST{
     }
   };
 
+  /// @brief Exception to be thrown when processing cannot continue due to a communication error
+  class /* QuickFAST_Export */ CommunicationError: public std::runtime_error{
+  public:
+    /// @brief Construct explaining what's wrong.
+    /// @param reason describes the problem.
+    CommunicationError(const std::string & reason)
+      : std::runtime_error(reason.c_str())
+    {
+    }
+  };
+
   /// @brief Exception to be thrown when the application misuses QuickFAST
   class /* QuickFAST_Export */ UsageError : public std::invalid_argument{
   public:

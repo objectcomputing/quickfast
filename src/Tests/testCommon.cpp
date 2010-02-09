@@ -39,9 +39,9 @@ BOOST_AUTO_TEST_CASE(TestLinkedBuffer)
   BOOST_CHECK(buffer1.used() == 20);
 }
 
-BOOST_AUTO_TEST_CASE(TestSimpleBufferCollection)
+BOOST_AUTO_TEST_CASE(TestBufferCollection)
 {
-  Communication::SimpleBufferCollection collection;
+  Communication::BufferCollection collection;
   BOOST_CHECK(collection.pop() == 0);
 
   Communication::LinkedBuffer buffer1(20);
@@ -100,7 +100,7 @@ BOOST_AUTO_TEST_CASE(TestSimpleBufferCollection)
   BOOST_CHECK(buffer3[1] == 2);
   BOOST_CHECK(buffer4[1] == 2);
 
-  Communication::SimpleBufferCollection collection2;
+  Communication::BufferCollection collection2;
   collection2.push(&buffer4);
   collection2.push(&buffer3);
   collection2.push(&buffer2);
@@ -167,12 +167,103 @@ BOOST_AUTO_TEST_CASE(TestSimpleBufferCollection)
   BOOST_CHECK(buffer4[1] == 4);
 }
 
+BOOST_AUTO_TEST_CASE(TestBufferQueue)
+{
+  Communication::BufferQueue queue1;
+  Communication::BufferQueue queue2;
+  Communication::LinkedBuffer buffer1(20);
+  buffer1[0] = 1;
+  buffer1[1] = 1;
+  buffer1.setUsed(2);
+
+  Communication::LinkedBuffer buffer2(20);
+  buffer2[0] = 2;
+  buffer2[1] = 1;
+  buffer2.setUsed(2);
+
+  Communication::LinkedBuffer buffer3(20);
+  buffer2[0] = 3;
+  buffer3[1] = 1;
+  buffer2.setUsed(2);
+
+  Communication::LinkedBuffer buffer4(20);
+  buffer4[0] = 4;
+  buffer4[1] = 1;
+  buffer4.setUsed(2);
+
+  // keep the first test simple
+  // four buffers in, four buffers out
+  // and make sure it works at least twice
+  for(size_t loop = 0; loop < 2; ++loop)
+  {
+    BOOST_CHECK( queue1.push(&buffer1));
+    BOOST_CHECK(!queue1.push(&buffer2));
+    BOOST_CHECK( queue1.pop() == &buffer1);
+    BOOST_CHECK( queue1.pop() == &buffer2);
+    BOOST_CHECK( queue1.pop() == 0);
+  }
+
+  // simple test of pushing a queue
+  for(size_t loop = 0; loop < 2; ++loop)
+  {
+    BOOST_CHECK( queue1.push(&buffer1));
+    BOOST_CHECK(!queue1.push(&buffer2));
+    BOOST_CHECK( queue2.push(queue1));
+    BOOST_CHECK( queue1.pop() == 0);
+    BOOST_CHECK( queue2.pop() == &buffer1);
+    BOOST_CHECK( queue2.pop() == &buffer2);
+    BOOST_CHECK( queue2.pop() == 0);
+  }
+
+  // test mixed arrivals and departures
+  for(size_t loop = 0; loop < 2; ++loop)
+  {
+    BOOST_CHECK( queue1.push(&buffer1));
+    BOOST_CHECK(!queue1.push(&buffer2));
+    BOOST_CHECK(!queue1.push(&buffer3));
+    BOOST_CHECK( queue1.pop() == &buffer1);
+    BOOST_CHECK(!queue1.push(&buffer4));
+    BOOST_CHECK( queue1.pop() == &buffer2);
+    BOOST_CHECK(!queue1.push(&buffer1));
+    BOOST_CHECK( queue1.pop() == &buffer3);
+    BOOST_CHECK( queue1.pop() == &buffer4);
+    BOOST_CHECK( queue1.pop() == &buffer1);
+    BOOST_CHECK( queue1.pop() == 0);
+  }
+
+  // test mixed arrivals and departures with 2 queues
+  for(size_t loop = 0; loop < 2; ++loop)
+  {
+    BOOST_CHECK( queue1.push(&buffer1));
+    BOOST_CHECK(!queue1.push(&buffer2));
+    BOOST_CHECK( queue2.push(queue1));
+    BOOST_CHECK( queue1.push(&buffer3));
+    BOOST_CHECK( queue2.pop() == &buffer1);
+    BOOST_CHECK(!queue2.push(queue1));
+    BOOST_CHECK(!queue2.push(queue1));
+    BOOST_CHECK( queue1.push(&buffer4));
+    BOOST_CHECK( queue2.pop() == &buffer2);
+    BOOST_CHECK(!queue1.push(&buffer1));
+    BOOST_CHECK( queue2.pop() == &buffer3);
+    BOOST_CHECK( queue2.pop() == 0);
+    BOOST_CHECK( queue2.push(queue1));
+    BOOST_CHECK( queue2.pop() == &buffer4);
+    BOOST_CHECK( queue2.pop() == &buffer1);
+    BOOST_CHECK( queue2.pop() == 0);
+    BOOST_CHECK( queue1.pop() == 0);
+    BOOST_CHECK(!queue2.push(queue1));
+    BOOST_CHECK( queue2.pop() == 0);
+    BOOST_CHECK( queue1.pop() == 0);
+  }
+
+}
+
 BOOST_AUTO_TEST_CASE(TestSingleServerBufferQueue)
 {
   boost::mutex dummyMutex;
   boost::mutex::scoped_lock lock(dummyMutex);
 
-  Communication::SingleServerBufferQueue queue;
+  Communication::SingleServerBufferQueue queue1;
 
   Communication::LinkedBuffer buffer1(20);
   buffer1[0] = 1;
@@ -199,40 +290,40 @@ BOOST_AUTO_TEST_CASE(TestSingleServerBufferQueue)
   // and make sure it works at least twice
   for(size_t loop = 0; loop < 2; ++loop)
   {
-    BOOST_CHECK( queue.push(&buffer1, lock));
-    BOOST_CHECK( queue.push(&buffer2, lock));
-    BOOST_CHECK( queue.startService(lock));
-    BOOST_CHECK( queue.serviceNext() == &buffer1);
-    BOOST_CHECK( queue.serviceNext() == &buffer2);
-    BOOST_CHECK( queue.serviceNext() == 0);
-    BOOST_CHECK(!queue.endService(true, lock));
+    BOOST_CHECK( queue1.push(&buffer1, lock));
+    BOOST_CHECK( queue1.push(&buffer2, lock));
+    BOOST_CHECK( queue1.startService(lock));
+    BOOST_CHECK( queue1.serviceNext() == &buffer1);
+    BOOST_CHECK( queue1.serviceNext() == &buffer2);
+    BOOST_CHECK( queue1.serviceNext() == 0);
+    BOOST_CHECK(!queue1.endService(true, lock));
   }
 
   // Next test gets more elaborate to simulate
   // buffers arriving while the queue is being serviced
   for(size_t loop = 0; loop < 2; ++loop)
   {
-    BOOST_CHECK( queue.push(&buffer1, lock));
-    BOOST_CHECK( queue.push(&buffer2, lock));
-    BOOST_CHECK( queue.startService(lock));
+    BOOST_CHECK( queue1.push(&buffer1, lock));
+    BOOST_CHECK( queue1.push(&buffer2, lock));
+    BOOST_CHECK( queue1.startService(lock));
     // be sure only one service at a time
-    BOOST_CHECK(!queue.startService(lock));
+    BOOST_CHECK(!queue1.startService(lock));
     // push and return "service not necessary"
-    BOOST_CHECK(!queue.push(&buffer3, lock));
-    BOOST_CHECK( queue.serviceNext() == &buffer1);
-    BOOST_CHECK(!queue.startService(lock));
-    BOOST_CHECK(!queue.push(&buffer4, lock));
-    BOOST_CHECK( queue.serviceNext() == &buffer2);
-    BOOST_CHECK(!queue.push(&buffer1, lock));
+    BOOST_CHECK(!queue1.push(&buffer3, lock));
+    BOOST_CHECK( queue1.serviceNext() == &buffer1);
+    BOOST_CHECK(!queue1.startService(lock));
+    BOOST_CHECK(!queue1.push(&buffer4, lock));
+    BOOST_CHECK( queue1.serviceNext() == &buffer2);
+    BOOST_CHECK(!queue1.push(&buffer1, lock));
     // batch should be complete even though new messages are queued
-    BOOST_CHECK( queue.serviceNext() == 0);
+    BOOST_CHECK( queue1.serviceNext() == 0);
     // so when we endService it should return true->there's more to do
-    BOOST_CHECK( queue.endService(true, lock));
-    BOOST_CHECK( queue.serviceNext() == &buffer3);
-    BOOST_CHECK( queue.serviceNext() == &buffer4);
-    BOOST_CHECK( queue.serviceNext() == &buffer1);
-    BOOST_CHECK( queue.serviceNext() == 0);
-    BOOST_CHECK(!queue.endService(true, lock));
+    BOOST_CHECK( queue1.endService(true, lock));
+    BOOST_CHECK( queue1.serviceNext() == &buffer3);
+    BOOST_CHECK( queue1.serviceNext() == &buffer4);
+    BOOST_CHECK( queue1.serviceNext() == &buffer1);
+    BOOST_CHECK( queue1.serviceNext() == 0);
+    BOOST_CHECK(!queue1.endService(true, lock));
   }
 }
 

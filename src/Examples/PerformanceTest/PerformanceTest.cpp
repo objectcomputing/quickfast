@@ -88,6 +88,7 @@ PerformanceTest::parseSingleArg(int argc, char * argv[])
     else if(opt == "-null")
     {
       useNullMessage_ = true;
+      consumed = 1;
     }
     else if(opt == "-head" && argc > 1)
     {
@@ -243,8 +244,7 @@ PerformanceTest::run()
       }
       fastFile_.seekg(0, std::ios::beg);
       Codecs::DataSourceBufferedStream source(fastFile_);
-//      MessagePerformance handler(head_, interpret_);
-//      Codecs::GenericMessageBuilder builder(handler);
+
       PerformanceBuilder builder;
       Codecs::SynchronousDecoder decoder(templateRegistry);
       decoder.setResetOnMessage(resetOnMessage_);

@@ -6,7 +6,7 @@
 #define MULTICASTRECEIVER_FWD_H
 
 namespace QuickFAST{
-  namespace Codecs{
+  namespace Communication{
     class MulticastReceiver;
     /// @brief smart pointer to a MulticastReceiver
     typedef boost::shared_ptr<MulticastReceiver> MulticastReceiverPtr;

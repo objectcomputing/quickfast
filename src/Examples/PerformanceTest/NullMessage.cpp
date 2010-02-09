@@ -26,7 +26,61 @@ NullMessage::NullMessage(const NullMessage & rhs)
 }
 
 void
-NullMessage::addField(Messages::FieldIdentityCPtr & identity, const Messages::FieldCPtr & value)
+NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int64 value)
+{
+  ++ size_;
+}
+
+void
+NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value)
+{
+  ++ size_;
+}
+
+void
+NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int32 value)
+{
+  ++ size_;
+}
+
+void
+NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value)
+{
+  ++ size_;
+}
+
+void
+NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int16 value)
+{
+  ++ size_;
+}
+
+void
+NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value)
+{
+  ++ size_;
+}
+
+void
+NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int8 value)
+{
+  ++ size_;
+}
+
+void
+NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uchar value)
+{
+  ++ size_;
+}
+
+void
+NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value)
+{
+  ++ size_;
+}
+
+void
+NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length)
 {
   ++ size_;
 }
