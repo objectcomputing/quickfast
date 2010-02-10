@@ -1,3 +1,27 @@
+Wed Feb 10 21:17:12 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FastEncodedHeaderAnalyzer.h:
+        * src/Codecs/FastEncodedHeaderAnalyzer.cpp:
+        * src/Codecs/FixedSizeHeaderAnalyzer.h:
+        * src/Codecs/FixedSizeHeaderAnalyzer.cpp:
+        * src/Codecs/HeaderAnalyzer.h:
+        * src/Codecs/HeaderAnalyzer_fwd.h:
+        * src/Codecs/MessagePerPacketQueueService.h:
+        * src/Codecs/MessagePerPacketQueueService.cpp:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/NoHeaderAnalyzer.h:
+        Define interface HeaderAnalyzer to cope with the headers, aka preambles,
+        aka block sizes that frame FAST encoded messages.
+        Add three implementations:
+          NoHeaderAnalyzer for FAST data with no framing information.
+          FastEncodedHeaderAnalyzer for messages that include one or
+           more FAST-encoded fields in the header.
+          FixedSizeHeaderAnalyzer for messages that have a fixed size
+           unencoded header.
+        Among other things this provide the hooks necessary to cope with
+        CME's FIX/FAST 2.0 changes.
+
 Wed Feb 10 16:22:56 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * setup.cmd:

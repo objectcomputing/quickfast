@@ -104,6 +104,29 @@ MulticastDecoder::start(
   builder_ = &builder;
   queueService_.reset(new MessagePerPacketQueueService(
     templateRegistry_,
+    headerAnalyzer_,
+    builder));
+  queueService_->setMessageLimit(messageLimit_);
+  queueService_->decoder().setStrict(strict_);
+  if(verboseOut_ != 0)
+  {
+    queueService_->decoder().setVerboseOutput(*verboseOut_);
+  }
+
+  receiver_.start(*queueService_, bufferSize, bufferCount);
+}
+
+void
+MulticastDecoder::start(
+  Messages::ValueMessageBuilder & builder,
+  HeaderAnalyzer & headerAnalyzer,
+  size_t bufferSize /*=1400*/,
+  size_t bufferCount /*=2*/)
+{
+  builder_ = &builder;
+  queueService_.reset(new MessagePerPacketQueueService(
+    templateRegistry_,
+    headerAnalyzer,
     builder));
   queueService_->setMessageLimit(messageLimit_);
   queueService_->decoder().setStrict(strict_);

@@ -9,6 +9,7 @@
 #include <Communication/BufferQueueService.h>
 #include <Codecs/Decoder.h>
 #include <Codecs/DataSource.h>
+#include <Codecs/HeaderAnalyzer.h>
 #include <Codecs/TemplateRegistry_fwd.h>
 #include <Messages/ValueMessageBuilder_fwd.h>
 
@@ -28,6 +29,7 @@ namespace QuickFAST
       /// @param builder receives the data from the decoder.
       MessagePerPacketQueueService(
           TemplateRegistryPtr templateRegistry,
+          HeaderAnalyzer & headerAnalyzer,
           Messages::ValueMessageBuilder & builder);
 
       virtual ~MessagePerPacketQueueService();
@@ -85,6 +87,7 @@ namespace QuickFAST
       MessagePerPacketQueueService();
 
     private:
+      HeaderAnalyzer & headerAnalyzer_;
       Messages::ValueMessageBuilder & builder_;
       Decoder decoder_;
       const unsigned char * buffer_;

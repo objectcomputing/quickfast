@@ -13,8 +13,10 @@ using namespace Codecs;
 
 MessagePerPacketQueueService::MessagePerPacketQueueService(
       TemplateRegistryPtr templateRegistry,
+      HeaderAnalyzer & headerAnalyzer,
       Messages::ValueMessageBuilder & builder)
   : Communication::BufferQueueService(builder)
+  , headerAnalyzer_(headerAnalyzer)
   , builder_(builder)
   , decoder_(templateRegistry)
   , messageCount_(0)
@@ -74,11 +76,21 @@ MessagePerPacketQueueService::consumeBuffer(const unsigned char * buffer, size_t
   {
     buffer_ = buffer;
     size_ = size;
-    // Unreliable multicast.  Always reset the decoder
-    decoder_.reset();
-    while(bytesAvailable() > 0)
+    size_t blockSize = 0;
+    bool skipBlock = false;
+    if(!headerAnalyzer_.analyzeHeader(*this, blockSize, skipBlock))
     {
-      decoder_.decodeMessage(*this, builder_);
+      builder_.reportDecodingError("Invalid header in packet.  Ignoring packet.");
+      return true;
+    }
+    if(!skipBlock)
+    {
+      // Unreliable multicast.  Always reset the decoder
+      decoder_.reset();
+      while(bytesAvailable() > 0)
+      {
+        decoder_.decodeMessage(*this, builder_);
+      }
     }
   }
   catch (const std::exception &ex)
