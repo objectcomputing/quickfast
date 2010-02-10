@@ -6,7 +6,6 @@
 #include <Communication/Receiver.h>
 #include "MessagePerPacketQueueService.h"
 #include <Messages/ValueMessageBuilder.h>
-#include <Codecs/DataSourceBuffer.h>
 #include <Codecs/Decoder.h>
 
 using namespace QuickFAST;
@@ -27,7 +26,6 @@ MessagePerPacketQueueService::MessagePerPacketQueueService(
 MessagePerPacketQueueService::~MessagePerPacketQueueService()
 {
 }
-
 
 bool
 MessagePerPacketQueueService::serviceQueue(Communication::Receiver & receiver)
@@ -74,12 +72,13 @@ MessagePerPacketQueueService::consumeBuffer(const unsigned char * buffer, size_t
   }
   try
   {
-    DataSourceBuffer source(buffer, size);
+    buffer_ = buffer;
+    size_ = size;
     // Unreliable multicast.  Always reset the decoder
     decoder_.reset();
-    while(source.bytesAvailable() > 0)
+    while(bytesAvailable() > 0)
     {
-      decoder_.decodeMessage(source, builder_);
+      decoder_.decodeMessage(*this, builder_);
     }
   }
   catch (const std::exception &ex)
@@ -108,5 +107,15 @@ MessagePerPacketQueueService::receiverStopped(Communication::Receiver & /*receiv
   {
     builder_.logMessage(Common::Logger::QF_LOG_INFO, "Receiver stopped");
   }
+}
+
+bool
+MessagePerPacketQueueService::getBuffer(const uchar *& buffer, size_t & size)
+{
+  bool result = size_ > 0;
+  buffer = buffer_;
+  size = size_;
+  size_ = 0;
+  return result;
 }
 

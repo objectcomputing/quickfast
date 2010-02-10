@@ -8,6 +8,7 @@
 #include "MessagePerPacketQueueService_fwd.h"
 #include <Communication/BufferQueueService.h>
 #include <Codecs/Decoder.h>
+#include <Codecs/DataSource.h>
 #include <Codecs/TemplateRegistry_fwd.h>
 #include <Messages/ValueMessageBuilder_fwd.h>
 
@@ -17,7 +18,9 @@ namespace QuickFAST
   {
     /// @brief Service a Receiver's Queue when expecting packet boundaries to match message boundaries (UDP or Multicast)
     /// with (or without) block headers.
-    class MessagePerPacketQueueService : public Communication::BufferQueueService
+    class MessagePerPacketQueueService
+      : public Communication::BufferQueueService
+      , public Codecs::DataSource
     {
     public:
       /// @brief Constuct given multicast info
@@ -70,6 +73,10 @@ namespace QuickFAST
       virtual void receiverStopped(Communication::Receiver & receiver);
       virtual bool serviceQueue(Communication::Receiver & receiver);
 
+      ///////////////////////
+      // Implement DataSource
+      virtual bool getBuffer(const uchar *& buffer, size_t & size);
+
     private:
       bool consumeBuffer(const unsigned char * buffer, size_t size);
     private:
@@ -80,6 +87,9 @@ namespace QuickFAST
     private:
       Messages::ValueMessageBuilder & builder_;
       Decoder decoder_;
+      const unsigned char * buffer_;
+      size_t size_;
+
       size_t messageCount_;
       size_t byteCount_;
       size_t messageLimit_;

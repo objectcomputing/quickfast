@@ -8,6 +8,8 @@ REM Setting up QuickFAST environment
 
 @REM Customize this file by setting variables to suit your environment
 @REM Also you should customize QuickFAST.features to enable particular features on your system.
+@REM Delete the following line when you finishing customizing this file.
+@echo See remarks in %0 for information about setting your build environment
 
 @echo off
 REM: This avoids growing PATH and INCLUDE every time setup is run

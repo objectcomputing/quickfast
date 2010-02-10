@@ -1,3 +1,17 @@
+Wed Feb 10 16:22:56 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * setup.cmd:
+        Add message about customizing setup.cmd
+
+        * src/Codecs/BlockedStreamQueueService.h:
+        Fix linux build warning.
+
+        * src/Codecs/MessagePerPacketQueueService.h:
+        * src/Codecs/MessagePerPacketQueueService.cpp:
+        MessagePerPacketQueueService now serves as its own data source
+        rather than delegating to DataSourceBuffer
+
+
 Wed Feb 10 15:49:34 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/BlockedStreamQueueService.h:
