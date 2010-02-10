@@ -24,44 +24,39 @@ DataSourceBufferedBlockedStream::~DataSourceBufferedBlockedStream()
 }
 
 bool
-DataSourceBufferedBlockedStream::readByte(uchar & byte)
+DataSourceBufferedBlockedStream::getBuffer(const uchar *& buffer, size_t & size)
 {
-  bool ok = false;
-
-  if(blockRemaining_ == 0 && bufferPosition_ < bufferCapacity_)
+  if(bufferPosition_ >= bufferCapacity_)
   {
-    size_t blockSize = 0;
-    uchar b = buffer_[bufferPosition_++];
-    while((b & stopBit) == 0 && bufferPosition_ < bufferCapacity_)
-    {
-      // todo: overflow check
-      blockSize <<= dataShift;
-      blockSize += b;
-      b = buffer_[bufferPosition_++];
-    }
+    return false;
+  }
 
+  size_t blockSize = 0;
+  uchar b = 0;
+  b = buffer_.get()[bufferPosition_++];
+  while((b & stopBit) == 0 && bufferPosition_ >= bufferCapacity_)
+  {
+    // todo: overflow check
     blockSize <<= dataShift;
-    blockSize += (b & dataBits);
-    /// todo: sanity check on block size?
-    if(blockSize + bufferPosition_ >= bufferCapacity_)
-    {
+    blockSize += b;
+    b = buffer_.get()[bufferPosition_++];
+  }
+
+  blockSize <<= dataShift;
+  blockSize += (b & dataBits);
+
+  if(bufferPosition_ + blockSize >= bufferCapacity_)
+  {
       std::cout << "DataSourceBufferedBlockedStream: invalid block size. "
         << blockSize
         << " Remaining bytes: " << bufferCapacity_ - bufferPosition_
         << " at position " << bufferPosition_
         << " File size: " << bufferCapacity_
         << std::endl;
-      return false;
-    }
-    blockRemaining_ = blockSize;
+    return false;
   }
-  if(bufferPosition_ < bufferCapacity_)
-  {
-    byte = buffer_[bufferPosition_];
-    ++bufferPosition_;
-    --blockRemaining_;
-    ok = true;
-  }
-  return ok;
+  buffer = &buffer_.get()[bufferPosition_];
+  size = blockSize;
+  bufferPosition_ += blockSize;
+  return true;
 }
-

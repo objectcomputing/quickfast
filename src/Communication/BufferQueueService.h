@@ -34,11 +34,13 @@ namespace QuickFAST{
 
       /// @brief notify queue service that receiver is started
       /// Will be called once before serviceQueue is called
+      /// @param receiver identifies the Receiver of incoming buffers.
       virtual void receiverStarted(Receiver & receiver) = 0;
 
       /// @brief notify queue service that receiver is stopped
       /// @param receiver in case the consumer needs to release buffers.
       /// No calls to serviceQueue will be generated after this call.
+      /// @param receiver identifies the Receiver of incoming buffers.
       virtual void receiverStopped(Receiver & receiver) = 0;
 
       /// @brief Service the queue via Receiver callbacks

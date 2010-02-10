@@ -10,8 +10,6 @@ using namespace QuickFAST::Codecs;
 DataSourceBlockedStream::DataSourceBlockedStream(std::istream & stream)
 : stream_(stream)
 , bufferCapacity_(0)
-, bufferUsed_(0)
-, bufferPosition_(0)
 {
 }
 
@@ -20,44 +18,39 @@ DataSourceBlockedStream::~DataSourceBlockedStream()
 }
 
 bool
-DataSourceBlockedStream::readByte(uchar & byte)
+DataSourceBlockedStream::getBuffer(const uchar *& buffer, size_t & size)
 {
-  bool ok = false;
-  if(bufferPosition_ >= bufferUsed_)
+  if(!stream_.good() || stream_.eof())
   {
-//    std::cout << std::endl << "DataSourceBlockedStream reading block size." << std::endl;
-    size_t blockSize = 0;
-    uchar b = 0;
-    b = uchar(stream_.get());
-    while((b & stopBit) == 0 && stream_.good() && !stream_.eof())
-    {
-      // todo: overflow check
-      blockSize <<= dataShift;
-      blockSize += b;
-      b = uchar(stream_.get());
-    }
-
+    return false;
+  }
+  size_t blockSize = 0;
+  uchar b = 0;
+  b = uchar(stream_.get());
+  while((b & stopBit) == 0 && stream_.good() && !stream_.eof())
+  {
+    // todo: overflow check
     blockSize <<= dataShift;
-    blockSize += (b & dataBits);
-    /// todo: sanity check on block size?
-    if(blockSize > bufferCapacity_)
-    {
-      buffer_.reset(new unsigned char[blockSize]);
-      bufferCapacity_ = blockSize;
-    }
-    if(stream_.good() && !stream_.eof())
-    {
-      stream_.read(reinterpret_cast<char *>(buffer_.get()), blockSize);
-      bufferUsed_ = stream_.gcount();
-      bufferPosition_ = 0;
-    }
+    blockSize += b;
+    b = uchar(stream_.get());
   }
-  if(bufferPosition_ < bufferUsed_)
+
+  blockSize <<= dataShift;
+  blockSize += (b & dataBits);
+  /// todo: sanity check on block size?
+  if(blockSize > bufferCapacity_)
   {
-    byte = buffer_[bufferPosition_];
-    bufferPosition_++;
-    ok = true;
+    buffer_.reset(new unsigned char[blockSize]);
+    bufferCapacity_ = blockSize;
   }
-  return ok;
+  if(!stream_.good() || stream_.eof())
+  {
+    return false;
+  }
+  stream_.read(reinterpret_cast<char *>(buffer_.get()), blockSize);
+  size = stream_.gcount();
+  buffer = buffer_.get();
+  return true;
 }
+
 

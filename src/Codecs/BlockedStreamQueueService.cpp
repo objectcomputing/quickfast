@@ -31,6 +31,7 @@ BlockedStreamQueueService::BlockedStreamQueueService(
   , parsingBlockSize_(false)
   , blockSize_(0)
   , headerPos_(0)
+  , inDecoder_(false)
 {
 }
 
@@ -50,15 +51,14 @@ BlockedStreamQueueService::serviceQueue(
   {
     if(messageAvailable () > 0)
     {
+      inDecoder_ = true;
       try
       {
         decoder_.decodeMessage(*this, builder_);
       }
       catch(std::exception & ex)
       {
-        std::stringstream message;
-        message << "Caught exception while decoding FAST message: " << ex.what() << std::ends;
-        more = builder_.reportDecodingError(message.str());
+        more = builder_.reportDecodingError(ex.what());
         if(!more)
         {
           stopping_ = true;
@@ -69,6 +69,7 @@ BlockedStreamQueueService::serviceQueue(
           }
         }
       }
+      inDecoder_ = false;
     }
     else
     {
@@ -104,48 +105,12 @@ BlockedStreamQueueService::receiverStopped(Communication::Receiver & receiver)
   }
 }
 
-bool
-BlockedStreamQueueService::readByte(uchar & byte)
-{
-  bool result = false;
-  while(!result && !stopping_)
-  {
-    result = readByteInternal(byte);
-    if(!result && !stopping_)
-    {
-      if(receiver_ == 0)
-      {
-        throw UsageError(
-          "[U100]",
-          "BlockedStreamQueueService::readByte called in the wrong scope.");
-      }
-      /// wait for the next buffer to be available
-      currentBuffer_ = receiver_->getBuffer(true);
-    }
-  }
-  if(stopping_)
-  {
-    if(currentBuffer_ != 0 && receiver_ != 0)
-    {
-      receiver_->releaseBuffer(currentBuffer_);
-      currentBuffer_ = 0;
-    }
-    result = false;
-  }
-  return result;
-}
-
 
 bool
-BlockedStreamQueueService::readByteInternal(uchar & byte)
+BlockedStreamQueueService::getBuffer(const uchar *& buffer, size_t & size)
 {
-  if(currentBuffer_ == 0)
-  {
-    return false;
-  }
-  byte = currentBuffer_->get()[pos_];
-  pos_ += 1;
-  if(pos_ >= currentBuffer_->used())
+  size = 0;
+  if(currentBuffer_ != 0)
   {
     if(receiver_ == 0)
     {
@@ -154,9 +119,16 @@ BlockedStreamQueueService::readByteInternal(uchar & byte)
         "BlockedStreamQueueService::readByte called in the wrong scope.");
     }
     receiver_->releaseBuffer(currentBuffer_);
-    currentBuffer_ = 0;
+
+    // Look for a new buffer.  If we're in the decoder, wait for it.
+    currentBuffer_ = receiver_->getBuffer(inDecoder_);
+    if(currentBuffer_ != 0)
+    {
+      buffer = currentBuffer_->get();
+      size = currentBuffer_->used();
+    }
   }
-  return true;
+  return size > 0;
 }
 
 int
@@ -183,7 +155,7 @@ BlockedStreamQueueService::messageAvailable()
         headerPos_ = 0;
       }
       uchar next;
-      if(!readByteInternal(next))
+      if(!getByte(next))
       {
         return 0;
       }
@@ -214,7 +186,7 @@ BlockedStreamQueueService::messageAvailable()
         headerPos_ = 0;
       }
       uchar next;
-      if(!readByteInternal(next))
+      if(!getByte(next))
       {
         return 0;
       }

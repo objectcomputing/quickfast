@@ -53,12 +53,32 @@ namespace QuickFAST{
 
       /// @brief Get the next byte.
       ///
-      /// Honors "lookAhead" then calls readByte if necessary
-      /// See messageAvailable() for a discussion of blocking in getByte().
-      ///
       /// @param[out] byte where to store the byte.
       /// @returns true if successful; false if end of data
-      virtual bool getByte(uchar & byte);
+      inline
+      bool getByte(uchar & byte)
+      {
+        bool ok = true;
+        if(position_ < size_)
+        {
+          byte = buffer_[position_++];
+        }
+        else if(getBuffer(buffer_, size_))
+        {
+          position_ = 0;
+          byte = buffer_[position_++];
+        }
+        else
+        {
+          ok = false;
+        }
+
+        if(echo_)
+        {
+          doEcho(ok, byte);
+        }
+        return ok;
+      }
 
       /// @brief A FYI from the decoder to tell the DataSource about a message boundary.
       /// No action is required but some data sources can do interesting things with
@@ -104,19 +124,38 @@ namespace QuickFAST{
       }
 
     protected:
+      /// @brief Honor the echo parameters
+      /// @param ok the result about to be returned from getByte
+      /// @param byte the byte found by getByte
+      void doEcho(bool ok, uchar byte);
+
+      /// @brief get a new buffer (releasing the old one)
+      /// This is the preferred method to override.
+      /// Free the previous buffer and start a new one.
+      /// @param[out] buffer should be set to point to a ne bufferfull of data
+      /// @param[out] size should be set to the size of the buffer. If return is true, size must be > 0!
+      /// @returns true if more data is available;  false means EOF and stops the decoder
+      virtual bool getBuffer(const uchar *& buffer, size_t & size);
+
       /// @brief Get the next byte.
       ///
-      /// This is the method that should be implemented by
-      /// derived classes so that look-ahead will work correctly.
+      /// This is deprecated in favor of getBuffer. It will be removed RSN.
+      ///
       /// @param[out] byte where to store the byte.
       /// @returns true if successful; false if end of data
-      virtual bool readByte(uchar & byte) = 0;
+      virtual bool readByte(uchar & byte);
 
     protected:
-      /// @brief Store a byte that was read before it was needed.
-      uchar lookAhead_;
-      /// @brief True if lookAhead_ contains a valid byte.
-      bool lookedAhead_;
+      /// current buffer being delivered to decoder
+      const uchar * buffer_;
+      /// size of current buffer
+      size_t size_;
+      /// position within current buffer
+      size_t position_;
+
+      /// deprecated: used only to "translate" readByte to getBuffer
+      uchar byteBuffer_;
+
     private:
       std::ostream * echo_;
       bool verboseMessages_;

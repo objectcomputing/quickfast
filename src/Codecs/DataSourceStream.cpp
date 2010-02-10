@@ -6,9 +6,20 @@
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
 
-DataSourceStream::DataSourceStream(std::istream & stream)
+DataSourceStream::DataSourceStream(std::istream & stream, size_t bufferSize)
 : stream_(stream)
+, pos_(0)
+, end_(0)
+, capacity_(bufferSize)
 {
+  stream.seekg(0,std::ios::end);
+  end_ = stream.tellg();
+  stream.seekg(0,std::ios::beg);
+  if(capacity_ > end_)
+  {
+    capacity_ = end_;
+  }
+  buffer_.reset(new unsigned char[capacity_]);
 }
 
 DataSourceStream::~DataSourceStream()
@@ -16,12 +27,15 @@ DataSourceStream::~DataSourceStream()
 }
 
 bool
-DataSourceStream::readByte(uchar & byte)
+DataSourceStream::getBuffer(const uchar *& buffer, size_t & size)
 {
+  size = 0;
   if(stream_.good() && !stream_.eof())
   {
-    byte = uchar(stream_.get());
+    buffer = buffer_.get();
+    stream_.read(reinterpret_cast<char *>(buffer_.get()), capacity_);
+    size = stream_.gcount();
+    pos_ += size;
   }
-  return stream_.good() && !stream_.eof();
+  return size > 0;
 }
-

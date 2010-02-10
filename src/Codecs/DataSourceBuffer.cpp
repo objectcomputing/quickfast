@@ -9,7 +9,7 @@ using namespace ::QuickFAST::Codecs;
 DataSourceBuffer::DataSourceBuffer(const unsigned char * buffer, size_t length)
 : buffer_(buffer)
 , end_(length)
-, pos_(0)
+, first_(true)
 {
 }
 
@@ -17,14 +17,16 @@ DataSourceBuffer::~DataSourceBuffer()
 {
 }
 
-bool
-DataSourceBuffer::readByte(uchar & byte)
-{
-  if(pos_ < end_)
-  {
-    byte = buffer_[pos_++];
-    return true;
-  }
-  return false;
-}
 
+bool
+DataSourceBuffer::getBuffer(const uchar *& buffer, size_t & size)
+{
+  if(!first_)
+  {
+    return false;
+  }
+  first_ = false;
+  buffer = buffer_;
+  size = end_;
+  return true;
+}

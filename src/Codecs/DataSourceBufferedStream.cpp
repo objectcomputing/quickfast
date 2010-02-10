@@ -7,7 +7,8 @@ using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
 
 DataSourceBufferedStream::DataSourceBufferedStream(std::istream & stream)
-: pos_(0)
+: first_(true)
+, pos_(0)
 , end_(0)
 {
   stream.seekg(0,std::ios::end);
@@ -22,13 +23,14 @@ DataSourceBufferedStream::~DataSourceBufferedStream()
 }
 
 bool
-DataSourceBufferedStream::readByte(uchar & byte)
+DataSourceBufferedStream::getBuffer(const uchar *& buffer, size_t & size)
 {
-  if(pos_ < end_)
+  if(!first_)
   {
-    byte = buffer_[pos_++];
-    return true;
+    return false;
   }
-  return false;
+  first_ = false;
+  buffer = buffer_.get();
+  size = end_;
+  return true;
 }
-

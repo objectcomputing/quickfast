@@ -28,9 +28,13 @@ namespace QuickFAST{
       /// @brief a typical virtual destructor.
       virtual ~DataSourceBufferedStream();
 
-      virtual bool readByte(uchar & byte);
+//      virtual bool readByte(uchar & byte);
+      ///////////////////////
+      // Implement DataSource
+      virtual bool getBuffer(const uchar *& buffer, size_t & size);
 
     private:
+      bool first_;
       boost::scoped_array<unsigned char> buffer_;
       size_t pos_;
       size_t end_;

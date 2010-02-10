@@ -163,9 +163,11 @@ namespace QuickFAST{
       size_t initialPresenceMapBits_;
       /// @brief the container type for instructions
       typedef std::vector<FieldInstructionPtr> MutableInstructionVector;
+      /// @brief a parallel container of const pointers to instructions
       typedef std::vector<FieldInstructionCPtr> InstructionVector;
       /// @brief the instructions
       MutableInstructionVector mutableInstructions_;
+      /// @brief the const instructions
       InstructionVector instructions_;
       /// @brief true if this is being used as the body of a sequence
       bool allowLengthField_;

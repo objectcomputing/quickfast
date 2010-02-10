@@ -8,28 +8,28 @@ using namespace ::QuickFAST::Codecs;
 
 DataSourceString::DataSourceString(const char * cstring)
 : string_(cstring)
-, pos_(0)
+, first_(true)
 {
 }
 
 DataSourceString::DataSourceString(const std::string & string)
 : string_(string)
-, pos_(0)
+, first_(true)
 {
 }
 
 DataSourceString::~DataSourceString()
 {
 }
-
 bool
-DataSourceString::readByte(uchar & byte)
+DataSourceString::getBuffer(const uchar *& buffer, size_t & size)
 {
-  if(pos_ < string_.size())
+  size = 0;
+  if(first_)
   {
-    byte = static_cast<uchar>(string_[pos_++]);
-    return true;
+    first_ = false;
+    buffer = reinterpret_cast<const uchar *>(string_.data());
+    size = string_.size();
   }
-  return false;
+  return size > 0;
 }
-

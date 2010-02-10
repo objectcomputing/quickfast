@@ -14,6 +14,9 @@ namespace QuickFAST{
     class QuickFAST_Export DataSourceStream : public DataSource
     {
     public:
+      /// Default size for the buffer
+      const static size_t defaultBufferSize = 1024;
+
       /// @brief Wrap a standard istream into a DataSource
       ///
       /// The input stream should be opened in binary mode
@@ -21,12 +24,15 @@ namespace QuickFAST{
       /// system and stream type. (i.e. specify std::ios::binary
       /// when you open a ofstream on Windows.)
       /// @param stream supplies the data
-      explicit DataSourceStream(std::istream & stream);
+      /// @param bufferSize specifies how large a buffer to allocate to read the data
+      explicit DataSourceStream(std::istream & stream, size_t bufferSize = defaultBufferSize);
 
       /// @brief a typical virtual destructor.
       virtual ~DataSourceStream();
 
-      virtual bool readByte(uchar & byte);
+      ///////////////////////
+      // Implement DataSource
+      virtual bool getBuffer(const uchar *& buffer, size_t & size);
 
     private:
       DataSourceStream();
@@ -34,6 +40,11 @@ namespace QuickFAST{
       DataSourceStream & operator =(const DataSourceStream & );
     private:
       std::istream & stream_;
+      size_t pos_; // position within file
+      size_t end_; // end of file
+
+      boost::scoped_array<uchar> buffer_;
+      size_t capacity_; // size of buffer
     };
   }
 }

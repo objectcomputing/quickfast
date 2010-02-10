@@ -23,11 +23,12 @@ namespace QuickFAST{
       /// @brief a typical virtual destructor.
       virtual ~DataSourceString();
 
-      virtual bool readByte(uchar & byte);
+      virtual bool getBuffer(const uchar *& buffer, size_t & size);
+//      virtual bool readByte(uchar & byte);
 
     private:
       std::string string_;
-      size_t pos_;
+      bool first_;
     };
   }
 }

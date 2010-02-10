@@ -26,7 +26,7 @@ namespace QuickFAST{
       /// @brief a typical virtual destructor.
       virtual ~DataSourceBlockedStream();
 
-      virtual bool readByte(uchar & byte);
+      virtual bool getBuffer(const uchar *& buffer, size_t & size);
 
     private:
       DataSourceBlockedStream();
@@ -36,8 +36,6 @@ namespace QuickFAST{
       std::istream & stream_;
       boost::scoped_array<uchar> buffer_;
       size_t bufferCapacity_;
-      size_t bufferUsed_;
-      size_t bufferPosition_;
     };
   }
 }

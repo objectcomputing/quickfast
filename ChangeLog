@@ -1,3 +1,31 @@
+Wed Feb 10 15:49:34 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/BlockedStreamQueueService.h:
+        * src/Codecs/BlockedStreamQueueService.cpp:
+        * src/Codecs/DataSource.h:
+        * src/Codecs/DataSource.cpp:
+        * src/Codecs/DataSourceBlockedStream.h:
+        * src/Codecs/DataSourceBlockedStream.cpp:
+        * src/Codecs/DataSourceBuffer.h:
+        * src/Codecs/DataSourceBuffer.cpp:
+        * src/Codecs/DataSourceBufferedBlockedStream.h:
+        * src/Codecs/DataSourceBufferedBlockedStream.cpp:
+        * src/Codecs/DataSourceBufferedStream.h:
+        * src/Codecs/DataSourceBufferedStream.cpp:
+        * src/Codecs/DataSourceStream.h:
+        * src/Codecs/DataSourceStream.cpp:
+        * src/Codecs/DataSourceString.h:
+        * src/Codecs/DataSourceString.cpp:
+        DataSource manages a buffer/count rather than a single byte at a time
+        to avoid virtual call for every byte.   New getByte method should be
+        inline on release builds.
+
+        * src/Communication/BufferQueueService.h:
+        * src/Codecs/FieldOpNop.h:
+        * src/Codecs/SegmentBody.h:
+        Eliminiate doxygen warnings
+
+
 Tue Feb  9 18:49:55 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/BlockedStreamQueueService.h:

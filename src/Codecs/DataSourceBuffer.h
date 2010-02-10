@@ -24,12 +24,12 @@ namespace QuickFAST{
       /// @brief a typical virtual destructor.
       virtual ~DataSourceBuffer();
 
-      virtual bool readByte(uchar & byte);
+      virtual bool getBuffer(const uchar *& buffer, size_t & size);
 
     private:
       const unsigned char * buffer_;
       size_t end_;
-      size_t pos_;
+      bool first_;
     };
   }
 }

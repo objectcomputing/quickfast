@@ -3,12 +3,14 @@
 // See the file license.txt for licensing information.
 #include <Common/QuickFASTPch.h>
 #include "DataSource.h"
+#include <Common/Exceptions.h>
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
 
 DataSource::DataSource()
-: lookAhead_(0)
-, lookedAhead_(false)
+: buffer_(0)
+, size_(0)
+, position_(0)
 , echo_(0)
 , raw_(false)
 , hex_(true)
@@ -33,61 +35,49 @@ DataSource::messageAvailable()
 int
 DataSource::bytesAvailable()
 {
-  if(lookedAhead_)
+  if(position_ >= size_)
   {
-    return 1;
+    if(getBuffer(buffer_, size_))
+    {
+      position_ = 0;
+    }
   }
-
-  if(readByte(lookAhead_))
-  {
-    lookedAhead_ = true;
-    return 1;
-  }
-  return -1;
+  return size_ - position_;
 }
 
 bool
-DataSource::getByte(uchar & byte)
+DataSource::getBuffer(const uchar *& buffer, size_t & size)
 {
-  bool ok = true;
-  if(lookedAhead_)
-  {
-    lookedAhead_ = false;
-    byte = lookAhead_;
-  }
-  else
-  {
-    ok = readByte(byte);
-  }
+  // for backwards compatibility
+  buffer = &byteBuffer_;
+  size_ = 1;
+  return readByte(byteBuffer_);
+}
 
+void
+DataSource::doEcho(bool ok, uchar byte)
+{
   if(ok)
   {
     ++byteCount_;
-    if(echo_)
+    if(hex_)
     {
-      if(hex_)
-      {
-        (*echo_) << std::hex << std::setw(2) << std::setfill('0')
-          << short(byte) << ' '
-          << std::setfill(' ') << std::setw(0) << std::dec;
-      }
-      else if(raw_)
-      {
-        echo_->put(byte);
-      }
+      (*echo_) << std::hex << std::setw(2) << std::setfill('0')
+        << short(byte) << ' '
+        << std::setfill(' ') << std::setw(0) << std::dec;
+    }
+    else if(raw_)
+    {
+      echo_->put(byte);
     }
   }
   else
   {
-    if(echo_)
+    if(verboseMessages_)
     {
-      if(verboseMessages_)
-      {
-        (*echo_) << "*** End of data @" << std::hex << byteCount_ << std::dec << "***" << std::endl;
-      }
+      (*echo_) << "*** End of data @" << std::hex << byteCount_ << std::dec << "***" << std::endl;
     }
   }
-  return ok;
 }
 
 void
@@ -133,4 +123,10 @@ DataSource::beginField(const std::string & name)
   {
     (*echo_) << std::endl << "***Field: " << name << " @" << std::hex<< byteCount_ << std::dec << "***" << std::endl;
   }
+}
+
+bool
+DataSource::readByte(uchar & byte)
+{
+  throw UsageError("[U110]", "DataSource::Derived class must override getBuffer or readByte.");
 }

@@ -63,18 +63,16 @@ namespace QuickFAST
 
       ///////////////////////////
       // Implement BufferQueueService
-      virtual bool serviceQueue(Communication::Receiver & receiver);
       virtual void receiverStarted(Communication::Receiver & receiver);
       virtual void receiverStopped(Communication::Receiver & receiver);
+      virtual bool serviceQueue(Communication::Receiver & receiver);
 
       ///////////////////////
       // Implement DataSource
       //
-      virtual bool readByte(uchar & byte);
+      virtual bool getBuffer(const uchar *& buffer, size_t & size);
       virtual int messageAvailable();
 
-    private:
-      bool readByteInternal(uchar & byte);
     private:
       BlockedStreamQueueService & operator = (const BlockedStreamQueueService &);
       BlockedStreamQueueService(const BlockedStreamQueueService &);
@@ -121,6 +119,7 @@ namespace QuickFAST
       bool parsingBlockSize_;
       size_t blockSize_;
       size_t headerPos_;
+      bool inDecoder_;
       // end of busy_ protection
       //////////////////////////
     };
