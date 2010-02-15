@@ -2248,15 +2248,17 @@ BOOST_AUTO_TEST_CASE(testAppendix_optionalDefaultNonNullUnsignedInt)
 Name    Input  Prior Encoded PMap  FAST Hex/Binary
 Flag    none   1     NULL    1     80
 Flag    1      1     --      0     --
-Flag    2      1     2       1     83
+Flag    2      1     2+1     1     83
+Flag    126    1     126+1   1     FF
 */
-  const char testData[] = "\x80\x83";
+  const char testData[] = "\x80\x83\xFF";
   Codecs::DataSourceString source(testData);
   // create a dictionary indexer
   DictionaryIndexer indexer;
-  Codecs::PresenceMap pmap(3);
+  Codecs::PresenceMap pmap(4);
   pmap.setNextField(true);
   pmap.setNextField(false);
+  pmap.setNextField(true);
   pmap.setNextField(true);
   pmap.rewind();
 
@@ -2313,18 +2315,34 @@ Flag    2      1     2       1     83
   BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 2);
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet3.end());
+
+  // test4: decode field that would be negative if signed
+  builder.startMessage("UNIT_TEST", "", 10);
+  field.decode(source, pmap, decoder, builder);
+  BOOST_REQUIRE(builder.endMessage(builder));
+  Messages::Message fieldSet4(1);
+  fieldSet4.swap(consumer.message());
+
+  pFieldEntry = fieldSet4.begin();
+  BOOST_REQUIRE(pFieldEntry != fieldSet4.end());
+  BOOST_REQUIRE(pFieldEntry->getField()->isType(ValueType::UINT32));
+  BOOST_CHECK_EQUAL(pFieldEntry->getField()->toUInt32(), 126);
+  ++pFieldEntry;
+  BOOST_CHECK(pFieldEntry == fieldSet4.end());
+
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
 
   // Now reencode the data
-  Codecs::PresenceMap pmapResult(3);
+  Codecs::PresenceMap pmapResult(4);
   Codecs::DataDestinationString destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet1);
   field.encode(destination, pmapResult, encoder, fieldSet2);
   field.encode(destination, pmapResult, encoder, fieldSet3);
+  field.encode(destination, pmapResult, encoder, fieldSet4);
   destination.endMessage();
   const std::string & result = destination.getValue();
   BOOST_CHECK_EQUAL(result, testData);

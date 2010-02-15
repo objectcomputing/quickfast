@@ -410,7 +410,14 @@ namespace QuickFAST{
       {
         PROFILE_POINT("int::decodeDefault:present");
         INTEGER_TYPE value = 0;
-        decodeSignedInteger(source, decoder, value, identity_->name(), false,  identity_->ignoreOverflow());
+        if(SIGNED)
+        {
+          decodeSignedInteger(source, decoder, value, identity_->name(), false,  identity_->ignoreOverflow());
+        }
+        else
+        {
+          decodeUnsignedInteger(source, decoder, value, identity_->name(), identity_->ignoreOverflow());
+        }
         if(isMandatory())
         {
           fieldSet.addValue(
