@@ -35,6 +35,7 @@ void
 FieldInstructionSequence::finalize(TemplateRegistry & templateRegistry)
 {
   segment_->finalize(templateRegistry);
+  FieldInstruction::finalize(templateRegistry);
 }
 
 void

@@ -67,6 +67,13 @@ namespace QuickFAST{
 
       virtual void finalize(TemplateRegistry & templateRegistry);
 
+      virtual bool getSegmentBody(Codecs::SegmentBodyPtr & segment) const
+      {
+        segment = segmentBody_;
+        return bool(segmentBody_);
+      }
+
+
     private:
       void interpretValue(const std::string & value);
     private:

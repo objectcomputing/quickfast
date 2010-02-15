@@ -1,3 +1,20 @@
+Mon Feb 15 15:54:23 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionGroup.h:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionSequence.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/SegmentBody.cpp:
+        * src/Codecs/StreamingAssembler.h:
+        * src/Tests/testXMLTemplateParser.cpp:
+        Fix a problem handling PMAP for a sequence.  This problem
+        could manifest itself in a number of ways including:
+          Expecting a pmap for a seqence entry when none is required.
+          Getting the pmap "out of sync" while decoding sequence entries.
+        Add a unit test for the problem to testXMLTemplateParser.cpp.
+
 Wed Feb 10 21:17:12 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FastEncodedHeaderAnalyzer.h:

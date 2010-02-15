@@ -39,11 +39,15 @@ namespace QuickFAST{
       /// @brief a typical virtual destructor.
       virtual ~FieldInstructionSequence();
 
-      /// @brief set the segment body which defines the contents of the sequence.
-      /// @param segment is a set of field instructions that define a sequence entry
       void setSegmentBody(Codecs::SegmentBodyPtr segment)
       {
         segment_ = segment;
+      }
+
+      virtual bool getSegmentBody(Codecs::SegmentBodyPtr & segment) const
+      {
+        segment = segment_;
+        return bool(segment);
       }
 
       virtual void decodeNop(

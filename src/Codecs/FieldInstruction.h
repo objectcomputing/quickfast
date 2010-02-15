@@ -105,7 +105,7 @@ namespace QuickFAST{
       void setFieldOp(FieldOpPtr fieldOp);
 
       /// @brief Get the currently used field operation
-      bool getFieldOp(FieldOpCPtr & fieldOp) const;
+      FieldOpCPtr getFieldOp() const;
 
       virtual void setApplicationType(const std::string & type, const std::string & ns)
       {
@@ -172,6 +172,12 @@ namespace QuickFAST{
       /// throws a TemplateDefinition error.
       /// @param segment is a set of field instructions that define the element
       virtual void setSegmentBody(Codecs::SegmentBodyPtr segment);
+
+
+      /// @brief Access the segment body for this field instruction if any
+      /// @param[out] segment is set to point to the segment.
+      /// @returns true if the segment exists
+      virtual bool getSegmentBody(Codecs::SegmentBodyPtr & segment) const;
 
       /// @brief How many fields will this field instruction produce
       ///

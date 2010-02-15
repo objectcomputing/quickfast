@@ -31,6 +31,7 @@ void
 FieldInstructionGroup::finalize(TemplateRegistry & templateRegistry)
 {
   segmentBody_->finalize(templateRegistry);
+  FieldInstruction::finalize(templateRegistry);
 }
 
 void

@@ -37,7 +37,8 @@ void
 FieldInstruction::finalize(Codecs::TemplateRegistry & /*registry*/)
 {
   presenceMapBitsUsed_ = 0;
-  if(fieldOp_->usesPresenceMap(isMandatory()))
+  /// Note: do not use fieldOp_ directly here.  GetFieldOp may resolve to a "subfield"
+  if(getFieldOp()->usesPresenceMap(isMandatory()))
   {
     presenceMapBitsUsed_ = 1;
   }
@@ -65,15 +66,22 @@ FieldInstruction::setFieldOp(FieldOpPtr fieldOp)
   }
 }
 
-bool
-FieldInstruction::getFieldOp(FieldOpCPtr & fieldOp) const
+FieldOpCPtr
+FieldInstruction::getFieldOp() const
 {
-  if (!boost::dynamic_pointer_cast<const FieldOpNop>(fieldOp_))
+  if (boost::dynamic_pointer_cast<const FieldOpNop>(fieldOp_))
   {
-    fieldOp = fieldOp_;
-    return true;
+    SegmentBodyPtr segment;
+    if(getSegmentBody(segment))
+    {
+      FieldInstructionCPtr length;
+      if(segment->getLengthInstruction(length))
+      {
+        return length->getFieldOp();
+      }
+    }
   }
-  return false;
+  return fieldOp_;
 }
 
 void
@@ -489,4 +497,10 @@ size_t
 FieldInstruction::fieldCount(const SegmentBody & /*parent*/)const
 {
   return 1;
+}
+
+bool
+FieldInstruction::getSegmentBody(SegmentBodyPtr & /*segment*/) const
+{
+  return false;
 }

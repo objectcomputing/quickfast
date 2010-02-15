@@ -65,10 +65,6 @@ SegmentBody::finalize(TemplateRegistry & templateRegistry)
 
   presenceMapBits_ = initialPresenceMapBits_;
   fieldCount_ = 0;
-  if(bool(lengthInstruction_))
-  {
-    presenceMapBits_ += lengthInstruction_->getPresenceMapBitsUsed();
-  }
   for (size_t pos = 0; pos < instructions_.size(); ++pos)
   {
     size_t used = instructions_[pos]->getPresenceMapBitsUsed();
