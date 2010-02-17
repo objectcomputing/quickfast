@@ -360,7 +360,7 @@ namespace QuickFAST
         while(service)
         {
           ++batchesProcessed_;
-          if(queueService_->serviceQueue(*this))
+          if(!queueService_->serviceQueue(*this))
           {
             stop();
           }

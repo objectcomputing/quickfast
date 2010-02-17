@@ -1,3 +1,9 @@
+Wed Feb 17 22:09:28 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Communication/Receiver.h:
+        Bad test for success of queue service caused the receiver to shut down early.
+
+
 Mon Feb 15 20:30:49 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionInteger.h:
