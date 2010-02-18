@@ -4,9 +4,9 @@
 #ifdef _MSC_VER
 # pragma once
 #endif
-#ifndef BUFFERQUEUESERVICE_H
-#define BUFFERQUEUESERVICE_H
-#include "BufferQueueService_fwd.h"
+#ifndef ASSEMBLER_H
+#define ASSEMBLER_H
+#include "Assembler_fwd.h"
 //#include <Common/QuickFAST_Export.h>
 #include <Communication/Receiver_fwd.h>
 #include <Communication/LinkedBuffer.h>
@@ -20,17 +20,17 @@ namespace QuickFAST{
     /// then requesting queue service from an implementation of this interface.
     /// The implementation of this interface retrieves the buffers from the receiver and processes
     /// them as necessary.
-    class BufferQueueService : public Common::Logger
+    class Assembler : public Common::Logger
     {
     public:
       /// @brief Construct
       /// @param logger is used to log requests to a "real" logger
-      BufferQueueService(Common::Logger & logger)
+      Assembler(Common::Logger & logger)
         : logger_(logger)
       {
       }
 
-      virtual ~BufferQueueService(){}
+      virtual ~Assembler(){}
 
       /// @brief notify queue service that receiver is started
       /// Will be called once before serviceQueue is called
@@ -77,4 +77,4 @@ namespace QuickFAST{
     };
   }
 }
-#endif /* BUFFERQUEUESERVICE_H */
+#endif /* ASSEMBLER_H */

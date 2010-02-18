@@ -28,6 +28,12 @@ Context::~Context()
 }
 
 void
+Context::setTemplateRegistry(TemplateRegistryCPtr registry)
+{
+  templateRegistry_ = registry;
+}
+
+void
 Context::reset(bool resetTemplateId /*= true*/)
 {
   for(size_t nDict = 0; nDict < indexedDictionarySize_; ++nDict)

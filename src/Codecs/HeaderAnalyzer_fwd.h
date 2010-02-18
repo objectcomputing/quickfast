@@ -4,12 +4,12 @@
 #ifdef _MSC_VER
 # pragma once
 #endif
-#ifndef BLOCKHEADER_FWD_H
-#define BLOCKHEADER_FWD_H
+#ifndef HEADERANALYZER_FWD_H
+#define HEADERANALYZER_FWD_H
 namespace QuickFAST{
   namespace Codecs{
     /// An interface to be used to adapt to various styles of block header
     class HeaderAnalyzer;
   }
 }
-#endif // BLOCKHEADER_H
+#endif // HEADERANALYZER_H

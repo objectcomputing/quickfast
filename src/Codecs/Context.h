@@ -15,8 +15,10 @@
 #include <Codecs/Template_fwd.h>
 #include <Messages/FieldIdentity_fwd.h>
 
-namespace QuickFAST{
-  namespace Codecs{
+namespace QuickFAST
+{
+  namespace Codecs
+  {
     /// @brief Context in which Encode/Decode takes place.
     class QuickFAST_Export Context
     {
@@ -32,10 +34,16 @@ namespace QuickFAST{
     public:
       /// @brief Construct with a TemplateRegistry containing all templates to be used.
       /// @param registry A registry containing all templates to be used to decode messages.
-      Context(Codecs::TemplateRegistryCPtr registry);
+      Context(TemplateRegistryCPtr registry);
+
+      /// @brief Construct with a registry to be named later.
+//      Context();
+
 
       /// @brief a typical virtual destructor.
       virtual ~Context();
+
+      void setTemplateRegistry(TemplateRegistryCPtr registry);
 
       /// @brief Enable/disable strict checking of conformance to the FAST standard
       ///
@@ -73,7 +81,7 @@ namespace QuickFAST{
 
       /// @brief Access the TemplateRegistry used in this context.
       /// @returns a constant pointer to the registry
-      Codecs::TemplateRegistryCPtr getTemplateRegistry()const
+      TemplateRegistryCPtr getTemplateRegistry()const
       {
         return templateRegistry_;
       }
@@ -320,8 +328,17 @@ namespace QuickFAST{
       /// @param message to be written
       void logMessage(const std::string & message);
 
+      /// @brief Take exception if the templateRegistry hasn't been defined.
+      /// A helper routine -- produces a more meaningful error message.
+      void registryIsRequired() const
+      {
+        if(! bool(templateRegistry_))
+        {
+          throw UsageError("Coding error", "Template Registry not defined when needed.");
+        }
+      }
+
     private:
-      Context();
       Context(const Context &);
       Context & operator = (const Context &);
 
@@ -333,7 +350,7 @@ namespace QuickFAST{
       std::ostream * logOut_;
 
       /// The template registry to be used during this Xcoding process
-      Codecs::TemplateRegistryCPtr templateRegistry_;
+      TemplateRegistryCPtr templateRegistry_;
       /// The ID of the currently active template
       template_id_t templateId_;
 

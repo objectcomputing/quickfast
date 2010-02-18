@@ -128,5 +128,5 @@ DataSource::beginField(const std::string & name)
 bool
 DataSource::readByte(uchar & byte)
 {
-  throw UsageError("[U110]", "DataSource::Derived class must override getBuffer or readByte.");
+  throw UsageError("Coding error", "Derived class must override DataSource::getBuffer or DataSource::readByte.");
 }

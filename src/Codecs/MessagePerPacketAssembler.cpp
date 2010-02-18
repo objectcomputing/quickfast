@@ -4,18 +4,18 @@
 //
 #include <Common/QuickFASTPch.h>
 #include <Communication/Receiver.h>
-#include "MessagePerPacketQueueService.h"
+#include "MessagePerPacketAssembler.h"
 #include <Messages/ValueMessageBuilder.h>
 #include <Codecs/Decoder.h>
 
 using namespace QuickFAST;
 using namespace Codecs;
 
-MessagePerPacketQueueService::MessagePerPacketQueueService(
+MessagePerPacketAssembler::MessagePerPacketAssembler(
       TemplateRegistryPtr templateRegistry,
       HeaderAnalyzer & headerAnalyzer,
       Messages::ValueMessageBuilder & builder)
-  : Communication::BufferQueueService(builder)
+  : Communication::Assembler(builder)
   , headerAnalyzer_(headerAnalyzer)
   , builder_(builder)
   , decoder_(templateRegistry)
@@ -25,12 +25,12 @@ MessagePerPacketQueueService::MessagePerPacketQueueService(
 {
 }
 
-MessagePerPacketQueueService::~MessagePerPacketQueueService()
+MessagePerPacketAssembler::~MessagePerPacketAssembler()
 {
 }
 
 bool
-MessagePerPacketQueueService::serviceQueue(Communication::Receiver & receiver)
+MessagePerPacketAssembler::serviceQueue(Communication::Receiver & receiver)
 {
   bool result = true;
   Communication::LinkedBuffer * buffer = receiver.getBuffer(false);
@@ -61,7 +61,7 @@ MessagePerPacketQueueService::serviceQueue(Communication::Receiver & receiver)
 }
 
 bool
-MessagePerPacketQueueService::consumeBuffer(const unsigned char * buffer, size_t size)
+MessagePerPacketAssembler::consumeBuffer(const unsigned char * buffer, size_t size)
 {
   bool result = true;
   ++messageCount_;
@@ -105,7 +105,7 @@ MessagePerPacketQueueService::consumeBuffer(const unsigned char * buffer, size_t
 }
 
 void
-MessagePerPacketQueueService::receiverStarted(Communication::Receiver & /*receiver*/)
+MessagePerPacketAssembler::receiverStarted(Communication::Receiver & /*receiver*/)
 {
   if(builder_.wantLog(Common::Logger::QF_LOG_INFO))
   {
@@ -113,7 +113,7 @@ MessagePerPacketQueueService::receiverStarted(Communication::Receiver & /*receiv
   }
 }
 void
-MessagePerPacketQueueService::receiverStopped(Communication::Receiver & /*receiver*/)
+MessagePerPacketAssembler::receiverStopped(Communication::Receiver & /*receiver*/)
 {
   if(builder_.wantLog(Common::Logger::QF_LOG_INFO))
   {
@@ -122,7 +122,7 @@ MessagePerPacketQueueService::receiverStopped(Communication::Receiver & /*receiv
 }
 
 bool
-MessagePerPacketQueueService::getBuffer(const uchar *& buffer, size_t & size)
+MessagePerPacketAssembler::getBuffer(const uchar *& buffer, size_t & size)
 {
   bool result = size_ > 0;
   buffer = buffer_;

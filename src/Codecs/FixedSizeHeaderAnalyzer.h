@@ -4,8 +4,8 @@
 #ifdef _MSC_VER
 # pragma once
 #endif
-#ifndef FIXEDSIZEBLOCKHEADER_H
-#define FIXEDSIZEBLOCKHEADER_H
+#ifndef FIXEDSIZEHEADERANALYZER_H
+#define FIXEDSIZEHEADERANALYZER_H
 #include <Common/QuickFAST_Export.h>
 #include "HeaderAnalyzer.h"
 namespace QuickFAST{
@@ -56,4 +56,4 @@ namespace QuickFAST{
     };
   }
 }
-#endif // FIXEDSIZEBLOCKHEADER_H
+#endif // FIXEDSIZEHEADERANALYZER_H

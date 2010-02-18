@@ -87,10 +87,10 @@ namespace QuickFAST{
   class /* QuickFAST_Export */ UsageError : public std::invalid_argument{
   public:
     /// @brief Construct explaining what's wrong.
-    /// @param error describes the problem.
-    /// @param context describes the context in which the error was detected
-    UsageError(const char * error, const char * context)
-      : std::invalid_argument((std::string(error) + context).c_str())
+    /// @param errorType the type of problem. (Coding Error, Internal Error, etc.)
+    /// @param description the actual problem.
+    UsageError(const char * errorType, const char * description)
+      : std::invalid_argument((std::string(errorType) + description).c_str())
     {
     }
   };

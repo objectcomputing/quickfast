@@ -30,7 +30,7 @@ GenericSequenceBuilder::fieldSet()const
 {
   if(!fieldSet_)
   {
-    throw QuickFAST::UsageError("Illegal sequence of calls", "Generic Sequence Builder.");
+    throw QuickFAST::UsageError("Coding Error: Illegal sequence of calls", "FieldSet not defined in Generic Sequence Builder.");
   }
   return fieldSet_;
 }
@@ -74,20 +74,20 @@ GenericSequenceBuilder::startMessage(
   const std::string & /*applicationTypeNamespace*/,
   size_t /*size*/)
 {
-  throw QuickFAST::UsageError("Attempt to build message.", "GenericSequenceBuilder");
+  throw QuickFAST::UsageError("Internal Error", "GenericSequenceBuilder: Attempt to start nested message");
 }
 
 
 bool
 GenericSequenceBuilder::endMessage(Messages::ValueMessageBuilder & /*messageBuilder*/)
 {
-  throw QuickFAST::UsageError("Attempt to build message.", "GenericSequenceBuilder");
+  throw QuickFAST::UsageError("Internal Error", "GenericSequenceBuilder: Attempt to end nested message");
 }
 
 bool
 GenericSequenceBuilder::ignoreMessage(ValueMessageBuilder & /*messageBuilder*/)
 {
-  throw QuickFAST::UsageError("Attempt to build message.", "GenericSequenceBuilder");
+  throw QuickFAST::UsageError("Internal Error", "GenericSequenceBuilder: Attempt to ignore nested message");
 }
 
 
@@ -132,7 +132,7 @@ GenericSequenceBuilder::endSequence(
   }
   else
   {
-    throw QuickFAST::UsageError("ending an unstarted nested sequence", "GenericSequenceBuilder");
+    throw QuickFAST::UsageError("Internal Error", "GenericSequenceBuilder: ending an unstarted nested sequence");
   }
 }
 
@@ -246,7 +246,7 @@ GenericGroupBuilder::groupPtr()const
 {
   if(!group_)
   {
-    throw QuickFAST::UsageError("Illegal sequence of calls", "Generic Group Builder.");
+    throw QuickFAST::UsageError("Coding Error", "Generic Group Builder: group is undefined");
   }
   return group_;
 }
@@ -288,20 +288,20 @@ GenericGroupBuilder::startMessage(
   const std::string & /*applicationTypeNamespace*/,
   size_t /*size*/)
 {
-  throw QuickFAST::UsageError("Attempt to build message.", "GenericGroupBuilder");
+  throw QuickFAST::UsageError("Internal Error", "GenericGroupBuilder: Attempt to start nested message");
 }
 
 bool
 GenericGroupBuilder::endMessage(
   Messages::ValueMessageBuilder & /*messageBuilder*/)
 {
-  throw QuickFAST::UsageError("Attempt to build message.", "GenericGroupBuilder");
+  throw QuickFAST::UsageError("Internal Error", "GenericGroupBuilder: Attempt to end nested message");
 }
 
 bool
 GenericGroupBuilder::ignoreMessage(Messages::ValueMessageBuilder & /*messageBuilder*/)
 {
-  throw QuickFAST::UsageError("Attempt to build message.", "GenericGroupBuilder");
+  throw QuickFAST::UsageError("Internal Error", "GenericGroupBuilder: Attempt to ignore nested message");
 }
 
 
@@ -345,7 +345,7 @@ GenericGroupBuilder::endSequence(
   }
   else
   {
-    throw QuickFAST::UsageError("ending an unstarted nested sequence", "GenericSequenceBuilder");
+    throw QuickFAST::UsageError("Coding Error", "GenericGroupBuilder: ending an unstarted nested sequence");
   }
 }
 
@@ -356,13 +356,13 @@ GenericGroupBuilder::startSequenceEntry(
   size_t /*fieldCount*/)
 
 {
-  throw QuickFAST::UsageError("Sequence operation applied to group.", "GenericGroupBuilder");
+  throw QuickFAST::UsageError("Internal Error", "GenericGroupBuilder: Start sequence operation applied to group.");
 }
 
 void
 GenericGroupBuilder::endSequenceEntry(Messages::ValueMessageBuilder & /*entry*/)
 {
-  throw QuickFAST::UsageError("Sequence operation applied to group.", "GenericGroupBuilder");
+  throw QuickFAST::UsageError("Internal Error", "GenericGroupBuilder: End sequence operation applied to group.");
 }
 
 
@@ -545,13 +545,13 @@ GenericMessageBuilder::startSequenceEntry(
   const std::string & /*applicationTypeNamespace*/,
   size_t /*size*/)
 {
-  throw QuickFAST::UsageError("Attempt to add sequence entry to message", "Generic Message Builder");
+  throw QuickFAST::UsageError("Internal Error", "GenericGroupBuilder: Attempt to add sequence entry to message");
 }
 
 void
 GenericMessageBuilder::endSequenceEntry(Messages::ValueMessageBuilder & /*entry*/)
 {
-  throw QuickFAST::UsageError("Attempt to add sequence entry to message", "Generic Message Builder");
+  throw QuickFAST::UsageError("Internal Error", "GenericGroupBuilder: Attempt to end sequence entry in a message");
 }
 
 Messages::MessageBuilder &
@@ -586,7 +586,7 @@ GenericMessageBuilder::message()const
 {
   if(!message_)
   {
-    throw QuickFAST::UsageError("Illegal sequence of calls", "Generic Message Builder.");
+    throw QuickFAST::UsageError("Coding Error", "GenericMessageBuilder: message not defined when needed.");
   }
   return message_;
 }

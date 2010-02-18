@@ -29,27 +29,27 @@ namespace QuickFAST
       ~AsioService();
 
       /// @brief Run the event loop with this threads and threadCount additional threads.
-      void runThreads(size_t threadCount = 0, bool useThisThread = true);
+      virtual void runThreads(size_t threadCount = 0, bool useThisThread = true);
 
       /// @brief run the event loop in this thread
       ///
       /// Exceptions are caught, logged, and ignored.  The event loop continues.
-      void run();
+      virtual void run();
 
       /// @brief run the event loop until one event is handled.
-      void run_one()
+      virtual void run_one()
       {
         ioService_.run_one();
       }
 
       /// @brief execute any ready event handlers than return.
-      size_t poll()
+      virtual size_t poll()
       {
         return ioService_.poll();
       }
 
       /// @brief execute at most one ready event handler than return.
-      size_t poll_one()
+      virtual size_t poll_one()
       {
         return ioService_.poll_one();
       }

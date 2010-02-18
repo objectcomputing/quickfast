@@ -137,23 +137,11 @@ SegmentBody::getInstruction(size_t index, FieldInstructionCPtr & value)const
 {
   if(index >= instructions_.size())
   {
-    throw UsageError("SegmentBody::getInstruction: ", "index out of range.");
+    throw UsageError("Coding Error", "SegmentBody::getInstruction: index out of range.");
   }
   value = instructions_[index];
   return bool(value);
 }
-
-#if 0
-const FieldInstructionCPtr &
-SegmentBody::getInstruction(size_t index)const
-{
-  if(index >= instructions_.size())
-  {
-    throw UsageError("SegmentBody::getInstruction: ", "index out of range.");
-  }
-  return instructions_[index];
-}
-#endif
 
 bool
 SegmentBody::getLengthInstruction(FieldInstructionCPtr & value)const

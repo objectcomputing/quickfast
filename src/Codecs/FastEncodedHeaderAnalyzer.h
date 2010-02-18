@@ -4,8 +4,8 @@
 #ifdef _MSC_VER
 # pragma once
 #endif
-#ifndef FASTENCODEDBLOCKHEADER_H
-#define FASTENCODEDBLOCKHEADER_H
+#ifndef FASTENCODEDHEADERANALYZER_H
+#define FASTENCODEDHEADERANALYZER_H
 #include <Common/QuickFAST_Export.h>
 #include <Codecs/HeaderAnalyzer.h>
 namespace QuickFAST{
@@ -54,4 +54,4 @@ namespace QuickFAST{
     };
   }
 }
-#endif // FASTENCODEDBLOCKHEADER_H
+#endif // FASTENCODEDHEADERANALYZER_H

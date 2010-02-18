@@ -53,7 +53,7 @@ namespace QuickFAST
       }
 
       // Implement Receiver method
-      virtual bool startIO()
+      virtual bool initializeReceiver()
       {
         bool ok = true;
         // generate a collection of possible endpoints for this host:port
@@ -73,15 +73,15 @@ namespace QuickFAST
           ok = false;
           std::stringstream msg;
           msg << "Cannot connect to [" << hostName_ << ':' << port_ << "]: " << error;
-          (void) queueService_->reportCommunicationError(msg.str());
+          (void) assembler_->reportCommunicationError(msg.str());
         }
         else
         {
-          if(queueService_->wantLog(Common::Logger::QF_LOG_INFO))
+          if(assembler_->wantLog(Common::Logger::QF_LOG_INFO))
           {
             std::stringstream msg;
             msg << "Connected to: " << hostName_ << ':' << port_;
-            queueService_->logMessage(Common::Logger::QF_LOG_INFO, msg.str());
+            assembler_->logMessage(Common::Logger::QF_LOG_INFO, msg.str());
           }
         }
         return ok;
@@ -100,7 +100,7 @@ namespace QuickFAST
 
     private:
 
-      void fillBuffer(LinkedBuffer * buffer)
+      bool fillBuffer(LinkedBuffer * buffer, boost::mutex::scoped_lock& lock)
       {
         socket_.async_receive(
           boost::asio::buffer(buffer->get(), buffer->capacity()),
@@ -110,6 +110,7 @@ namespace QuickFAST
             buffer,
             boost::asio::placeholders::bytes_transferred)
           );
+        return true;
       }
 
     private:

@@ -7,7 +7,7 @@
 #include <Common/QuickFAST_Export.h>
 #include "MulticastDecoder_fwd.h"
 #include <Communication/MulticastReceiver.h>
-#include <Codecs/MessagePerPacketQueueService.h>
+#include <Codecs/MessagePerPacketAssembler.h>
 #include <Codecs/NoHeaderAnalyzer.h>
 #include <Codecs/TemplateRegistry_fwd.h>
 #include <Messages/ValueMessageBuilder_fwd.h>
@@ -78,7 +78,7 @@ namespace QuickFAST{
       /// @brief Get the id of the template driving the decoding
       template_id_t getTemplateId()const
       {
-        return queueService_->decoder().getTemplateId();
+        return assembler_->decoder().getTemplateId();
       }
 
       /// @brief set an upper limit on the # of messages to be decoded
@@ -158,7 +158,7 @@ namespace QuickFAST{
       Communication::MulticastReceiver receiver_;
       NoHeaderAnalyzer headerAnalyzer_;
       TemplateRegistryPtr templateRegistry_;
-      Codecs::MessagePerPacketQueueServicePtr queueService_;
+      Codecs::MessagePerPacketAssemblerPtr assembler_;
       Messages::ValueMessageBuilder * builder_;
       size_t messageLimit_;
       size_t byteCount_;

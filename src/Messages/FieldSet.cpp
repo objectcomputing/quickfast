@@ -71,7 +71,7 @@ FieldSet::operator[](size_t index)const
 {
   if(index >= used_)
   {
-    throw UsageError("Accessing FieldSet entry", "index out of range.");
+    throw UsageError("Coding Error", "Accessing FieldSet entry: index out of range.");
   }
   return fields_[index];
 }

@@ -116,11 +116,11 @@ MulticastReceiverHandle::largestPacket() const
 
 void
 MulticastReceiverHandle::start(
-  Communication::BufferQueueService & queueService,
+  Communication::Assembler & assembler,
   size_t bufferSize,
   size_t bufferCount)
 {
-  pImpl_->ptr_->start(queueService, bufferSize, bufferCount);
+  pImpl_->ptr_->start(assembler, bufferSize, bufferCount);
 }
 
 void

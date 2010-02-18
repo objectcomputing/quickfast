@@ -4,15 +4,15 @@
 #ifdef _MSC_VER
 # pragma once
 #endif
-#ifndef BUFFERQUEUESERVICE_FWD_H
-#define BUFFERQUEUESERVICE_FWD_H
+#ifndef ASSEMBLER_FWD_H
+#define ASSEMBLER_FWD_H
 namespace QuickFAST{
   namespace Communication
   {
-    class BufferQueueService;
+    class Assembler;
     /// @brief smart pointer to a BufferConsumer
-    typedef boost::shared_ptr<BufferQueueService> BufferQueueServicePtr;
+    typedef boost::shared_ptr<Assembler> AssemblerPtr;
 
   }
 }
-#endif /* BUFFERQUEUESERVICE_FWD_H */
+#endif /* ASSEMBLER_FWD_H */

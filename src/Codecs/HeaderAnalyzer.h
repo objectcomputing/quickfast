@@ -4,8 +4,8 @@
 #ifdef _MSC_VER
 # pragma once
 #endif
-#ifndef BLOCKHEADER_H
-#define BLOCKHEADER_H
+#ifndef HEADERANALYZER_H
+#define HEADERANALYZER_H
 #include "HeaderAnalyzer_fwd.h"
 #include <Codecs/DataSource_fwd.h>
 namespace QuickFAST{
@@ -42,8 +42,9 @@ namespace QuickFAST{
       /// @param[in] source for the bytes that make up the header.
       /// @param[out] blockSize (if any) from the header.  zero means unspecified.
       /// @param[out] skip true if this message should ignored if possible.
+      /// @returns true if header is complete; false if more data is needed
       virtual bool analyzeHeader(DataSource & source, size_t & blockSize, bool & skip) = 0;
     };
   }
 }
-#endif // BLOCKHEADER_H
+#endif // HEADERANALYZER_H

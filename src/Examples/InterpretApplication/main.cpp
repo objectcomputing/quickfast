@@ -8,7 +8,9 @@
 
 #if 10
 #include <Communication/TCPReceiver.h>
-#include <Codecs/BlockedStreamQueueService.h>
+#include <Communication/RawFileReceiver.h>
+#include <Codecs/StreamingAssembler.h>
+#include <Codecs/NoHeaderAnalyzer.h>
 #include <Messages/SingleValueBuilder.h>
 #endif
 
@@ -23,11 +25,19 @@ int main(int argc, char* argv[])
   {
     // this is here to test TCPReceiver
     // it doeesn't belong here.  I just needed a place to put it temporarily.
+#if 1
+    Communication::RawFileReceiver receiver(std::cin);
+#else
     Communication::TCPReceiver receiver("localhost", "1000");
+#endif
+    Codecs::NoHeaderAnalyzer analyzer;
     Codecs::TemplateRegistryPtr templateRegistry;
     Messages::SingleValueBuilder<int> builder;
-    Codecs::BlockedStreamQueueService queueService(templateRegistry, builder);
-    receiver.start(queueService);
+    Codecs::StreamingAssembler assembler(
+      templateRegistry,
+      analyzer,
+      builder);
+    receiver.start(assembler);
 
     return 0;
   }

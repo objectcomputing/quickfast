@@ -4,8 +4,8 @@
 #ifdef _MSC_VER
 # pragma once
 #endif
-#ifndef NOBLOCKHEADER_H
-#define NOBLOCKHEADER_H
+#ifndef NOHEADERANALYZER_H
+#define NOHEADERANALYZER_H
 #include <Codecs/HeaderAnalyzer.h>
 namespace QuickFAST{
   namespace Codecs{
@@ -35,4 +35,4 @@ namespace QuickFAST{
     }
   }
 }
-#endif // NOBLOCKHEADER_H
+#endif // NOHEADERANALYZER_H

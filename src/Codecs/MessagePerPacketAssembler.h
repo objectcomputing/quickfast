@@ -2,11 +2,13 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
-#ifndef MESSAGEPERPACKETQUEUESERVICE_H
-#define MESSAGEPERPACKETQUEUESERVICE_H
+#ifndef MESSAGEPERPACKETASSEMBLER_H
+#define MESSAGEPERPACKETASSEMBLER_H
 
-#include "MessagePerPacketQueueService_fwd.h"
-#include <Communication/BufferQueueService.h>
+#include "MessagePerPacketAssembler_fwd.h"
+#include <Common/QuickFAST_Export.h>
+
+#include <Communication/Assembler.h>
 #include <Codecs/Decoder.h>
 #include <Codecs/DataSource.h>
 #include <Codecs/HeaderAnalyzer.h>
@@ -19,20 +21,21 @@ namespace QuickFAST
   {
     /// @brief Service a Receiver's Queue when expecting packet boundaries to match message boundaries (UDP or Multicast)
     /// with (or without) block headers.
-    class MessagePerPacketQueueService
-      : public Communication::BufferQueueService
+    class QuickFAST_Export MessagePerPacketAssembler
+      : public Communication::Assembler
       , public Codecs::DataSource
     {
     public:
-      /// @brief Constuct given multicast info
+      /// @brief Constuct the Assembler
       /// @param templateRegistry defines the decoding instructions for the decoder
+      /// @param analyzer analyzes the header of each packet (if any)
       /// @param builder receives the data from the decoder.
-      MessagePerPacketQueueService(
+      MessagePerPacketAssembler(
           TemplateRegistryPtr templateRegistry,
           HeaderAnalyzer & headerAnalyzer,
           Messages::ValueMessageBuilder & builder);
 
-      virtual ~MessagePerPacketQueueService();
+      virtual ~MessagePerPacketAssembler();
 
       /// @brief set the maximum number of messages to decode
       /// @param messageLimit is the number of messages to decode
@@ -70,7 +73,7 @@ namespace QuickFAST
       }
 
       ///////////////////////////
-      // Implement BufferQueueService
+      // Implement Assembler
       virtual void receiverStarted(Communication::Receiver & receiver);
       virtual void receiverStopped(Communication::Receiver & receiver);
       virtual bool serviceQueue(Communication::Receiver & receiver);
@@ -82,14 +85,15 @@ namespace QuickFAST
     private:
       bool consumeBuffer(const unsigned char * buffer, size_t size);
     private:
-      MessagePerPacketQueueService & operator = (const MessagePerPacketQueueService &);
-      MessagePerPacketQueueService(const MessagePerPacketQueueService &);
-      MessagePerPacketQueueService();
+      MessagePerPacketAssembler & operator = (const MessagePerPacketAssembler &);
+      MessagePerPacketAssembler(const MessagePerPacketAssembler &);
+      MessagePerPacketAssembler();
 
     private:
       HeaderAnalyzer & headerAnalyzer_;
       Messages::ValueMessageBuilder & builder_;
       Decoder decoder_;
+
       const unsigned char * buffer_;
       size_t size_;
 
@@ -99,4 +103,4 @@ namespace QuickFAST
     };
   }
 }
-#endif // MESSAGEPERPACKETQUEUESERVICE_H
+#endif // MESSAGEPERPACKETASSEMBLER_H

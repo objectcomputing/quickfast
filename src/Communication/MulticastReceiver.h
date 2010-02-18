@@ -61,19 +61,19 @@ namespace QuickFAST
       }
 
       // Implement Receiver method
-      virtual bool startIO()
+      virtual bool initializeReceiver()
       {
         socket_.open(endpoint_.protocol());
         socket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
         socket_.bind(endpoint_);
 
-        if(queueService_->wantLog(Common::Logger::QF_LOG_INFO))
+        if(assembler_->wantLog(Common::Logger::QF_LOG_INFO))
         {
           std::stringstream msg;
           msg << "Joining multicast group: " << multicastGroup_.to_string()
             << " via interface " << endpoint_.address().to_string()
             << ':' << endpoint_.port();
-          queueService_->logMessage(Common::Logger::QF_LOG_INFO, msg.str());
+          assembler_->logMessage(Common::Logger::QF_LOG_INFO, msg.str());
         }
 
         // Join the multicast group
@@ -99,7 +99,7 @@ namespace QuickFAST
 
     private:
 
-      void fillBuffer(LinkedBuffer * buffer)
+      bool fillBuffer(LinkedBuffer * buffer, boost::mutex::scoped_lock& lock)
       {
         socket_.async_receive_from(
           boost::asio::buffer(buffer->get(), buffer->capacity()),
@@ -110,6 +110,7 @@ namespace QuickFAST
           buffer,
           boost::asio::placeholders::bytes_transferred)
           );
+        return true;
       }
 
     private:

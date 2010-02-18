@@ -50,7 +50,7 @@ WorkingBuffer::pop_front()
   }
   else
   {
-    throw UsageError("pop_front on empty WorkingBuffer.", "");
+    throw UsageError("Coding error", "WorkingBuffer: pop_front on empty WorkingBuffer.");
   }
 }
 

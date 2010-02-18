@@ -174,7 +174,7 @@ namespace QuickFAST
           FieldIdentityCPtr & lengthIdentity,
           size_t length)
         {
-          throw UsageError("Single Value", "Illegal Sequence.");
+          throw UsageError("Coding Error", "SingleValueBuilder does not support start sequence.");
         }
 
         virtual ValueMessageBuilder & startSequenceEntry(
@@ -182,16 +182,16 @@ namespace QuickFAST
           const std::string & /*applicationTypeNamespace*/,
           size_t /*size*/)
         {
-          throw UsageError("Single Value", "Illegal Sequence.");
+          throw UsageError("Coding Error", "SingleValueBuilder does not support start sequence entry.");
         }
 
         virtual void endSequenceEntry(ValueMessageBuilder & /*entry*/)
         {
-          throw UsageError("Single Value", "Illegal Sequence.");
+          throw UsageError("Coding Error", "SingleValueBuilder does not support end sequence entry.");
         }
         virtual void endSequence(FieldIdentityCPtr & /*identity*/, ValueMessageBuilder & )
         {
-          throw UsageError("Single Value", "Illegal Sequence.");
+          throw UsageError("Coding Error", "SingleValueBuilder does not support end sequence.");
         }
 
         virtual ValueMessageBuilder & startGroup(
@@ -200,21 +200,22 @@ namespace QuickFAST
           const std::string & /*applicationTypeNamespace*/,
           size_t /*size*/)
         {
-          throw UsageError("Single Value", "Illegal Group.");
+          throw UsageError("Coding Error", "SingleValueBuilder does not support start group.");
         }
 
         virtual void endGroup(
           FieldIdentityCPtr & /*identity*/,
           ValueMessageBuilder & /*entry*/)
         {
-          throw UsageError("Single Value", "Illegal Group.");
+          throw UsageError("Coding Error", "SingleValueBuilder does not support end group.");
         }
 
+#if 0
         virtual const FieldSet & getFieldSet() const
         {
-          throw UsageError("Single Value", "Illegal Sequence or Group.");
+          throw UsageError("Coding Error", "SingleValueBuilder does not support group or sequence.");
         }
-
+#endif
         virtual bool wantLog(unsigned short /*level*/)
         {
           return false;

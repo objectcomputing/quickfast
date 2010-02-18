@@ -7,10 +7,11 @@
 
 #include <Common/QuickFAST_Export.h>
 
-#include <Communication/IncomingBufferAssembler.h>
+#include <Communication/Assembler.h>
 #include <Communication/LinkedBuffer.h>
 #include <Codecs/DataSource.h>
-#include <Codecs/SynchronousDecoder.h>
+#include <Codecs/HeaderAnalyzer.h>
+#include <Codecs/Decoder.h>
 #include <Codecs/TemplateRegistry_fwd.h>
 #include <Messages/ValueMessageBuilder_fwd.h>
 
@@ -20,49 +21,31 @@ namespace QuickFAST
   {
     /// @brief Service a Receiver's Queue when expecting streaming data (TCP/IP) with (or without) block headers.
     class QuickFAST_Export StreamingAssembler
-      : public Communication::IncomingBufferAssembler
+      : public Communication::Assembler
       , public Codecs::DataSource
     {
     public:
-      /// @brief Expected type of header
-      enum HeaderType {
-        HEADER_FIXED,
-        HEADER_FAST,
-        HEADER_NONE};
-
-    public:
-      /// @brief Construct given the registry to be used by the decoder and the builder to receive data
-      /// @param templateRegistry defines the messages to be decoded
-      /// @param builder accepts data from the decoder for use by the application
+      /// @brief Constuct the Assembler
+      /// @param templateRegistry defines the decoding instructions for the decoder
+      /// @param analyzer analyzes the header of each message (if any)
+      /// @param builder receives the data from the decoder.
       StreamingAssembler(
           TemplateRegistryPtr templateRegistry,
-          Messages::ValueMessageBuilder & builder);
+          HeaderAnalyzer & headerAnalyzer,
+          Messages::ValueMessageBuilder & builder,
+          bool waitForCompleteMessage = false);
 
       virtual ~StreamingAssembler();
 
-
-      /// @brief Define the header expected on each message
-      /// @param type of header expected.
-      /// @param prefix what comes before the message size field( (HEADER_FIXED: byte count, HEADER_FAST: field count)
-      /// @param size number of bytes in message size field (HEADER_FIXED only)
-      /// @param swap endian swap the size field (HEADER_FIXED only
-      /// @param suffix what comes after the message size field( (HEADER_FIXED: byte count, HEADER_FAST: field count)
-      void setHeader(
-        HeaderType type,
-        size_t prefix = 0,
-        size_t size = 0,
-        bool swap = false,
-        size_t suffix = 0)
+      /// @brief set the maximum number of messages to decode
+      /// @param messageLimit is the number of messages to decode
+      void setMessageLimit(size_t messageLimit)
       {
-        headerType_ = type;
-        headerPrefix_ = prefix;
-        blockSizeBytes_ = size;
-        blockSizeSwap_ = swap;
-        headerSuffix_ = suffix;
+        messageLimit_ = messageLimit;
       }
 
       ///////////////////////////
-      // Implement IncomingBufferAssembler
+      // Implement Assembler
       virtual void receiverStarted(Communication::Receiver & receiver);
       virtual void receiverStopped(Communication::Receiver & receiver);
       virtual bool serviceQueue(Communication::Receiver & receiver);
@@ -73,38 +56,24 @@ namespace QuickFAST
       virtual bool getBuffer(const uchar *& buffer, size_t & size);
       virtual int messageAvailable();
 
+      /// @brief Access the internal decoder
+      /// @returns a reference to the internal decoder
+      Codecs::Decoder & decoder()
+      {
+        return decoder_;
+      }
+
     private:
       StreamingAssembler & operator = (const StreamingAssembler &);
       StreamingAssembler(const StreamingAssembler &);
       StreamingAssembler();
 
     private:
+      HeaderAnalyzer & headerAnalyzer_;
       Messages::ValueMessageBuilder & builder_;
-      bool stopping_;
-
-      /////////////////////////////////////
-      // describe the block header (if any)
-
-      HeaderType headerType_;
-      // header prefix:
-      // for fixed size headers: how many bytes preceed the message size field in the header
-      // for FAST encoded headers: how many "simple" FAST fields proceed the message size (stop bit terminated)
-      size_t headerPrefix_;
-
-      // message size
-      // for fixed size headers only: how many bytes in header
-      size_t blockSizeBytes_;
-      // for fixed size headers only: endian-swap message size?
-      bool blockSizeSwap_;
-
-      // header suffix:
-      // for fixed size headers: how many bytes follow the message size field in the header
-      // for FAST encoded headers: how many "simple" FAST fields follow the message size (stop bit terminated)
-      size_t headerSuffix_;
-      // end of block header description
-      //////////////////////////////////
-
       Decoder decoder_;
+      bool stopping_;
+      bool waitForCompleteMessage_;
 
       // Nonzero during call to consumeBuffer ->decoder
       // zero the rest of the time.
@@ -114,14 +83,15 @@ namespace QuickFAST
       Communication::LinkedBuffer * currentBuffer_;
       size_t pos_;
 
-      // Message size extracted from header
-      bool blockSizeIsValid_;
-      bool parsingBlockSize_;
+      bool headerIsComplete_;
+      bool skipBlock_;
       size_t blockSize_;
-      size_t headerPos_;
+
       bool inDecoder_;
-      // end of busy_ protection
-      //////////////////////////
+
+      size_t messageCount_;
+      size_t byteCount_;
+      size_t messageLimit_;
     };
   }
 }

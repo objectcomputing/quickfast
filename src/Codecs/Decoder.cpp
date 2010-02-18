@@ -19,6 +19,11 @@ Decoder::Decoder(Codecs::TemplateRegistryPtr registry)
 {
 }
 
+//Decoder::Decoder()
+//{
+//}
+
+
 void
 Decoder::decodeMessage(
    DataSource & source,

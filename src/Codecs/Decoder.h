@@ -31,6 +31,9 @@ namespace QuickFAST{
       /// @param registry A registry containing all templates to be used to decode messages.
       explicit Decoder(TemplateRegistryPtr registry);
 
+      /// @brief Construct with a TemplateRegistry to be provided later.
+//      Decoder();
+
       /// @brief Decode the next message.
       /// @param[in] source where to read the incoming message(s).
       /// @param[out] message an empty message into which the decoded fields will be stored.

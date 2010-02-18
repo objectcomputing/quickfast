@@ -4,7 +4,7 @@
 #include <Common/QuickFASTPch.h>
 #include "MulticastDecoder.h"
 #include <Communication/LinkedBuffer.h>
-#include <Codecs/MessagePerPacketQueueService.h>
+#include <Codecs/MessagePerPacketAssembler.h>
 
 using namespace QuickFAST;
 using namespace Codecs;
@@ -43,9 +43,9 @@ MulticastDecoder::~MulticastDecoder()
 void
 MulticastDecoder::setVerboseOutput(std::ostream & out)
 {
-  if(queueService_)
+  if(assembler_)
   {
-    queueService_->decoder().setVerboseOutput(out);
+    assembler_->decoder().setVerboseOutput(out);
   }
   verboseOut_ = &out;
 }
@@ -53,9 +53,9 @@ MulticastDecoder::setVerboseOutput(std::ostream & out)
 void
 MulticastDecoder::disableVerboseOutput()
 {
-  if(queueService_)
+  if(assembler_)
   {
-    queueService_->decoder().disableVerboseOutput();
+    assembler_->decoder().disableVerboseOutput();
   }
   verboseOut_ = 0;
 }
@@ -63,9 +63,9 @@ MulticastDecoder::disableVerboseOutput()
 void
 MulticastDecoder::setStrict(bool strict)
 {
-  if(queueService_)
+  if(assembler_)
   {
-    queueService_->decoder().setStrict(strict);
+    assembler_->decoder().setStrict(strict);
   }
   strict_ = true;
 }
@@ -79,9 +79,9 @@ MulticastDecoder::getStrict()const
 size_t
 MulticastDecoder::messageCount() const
 {
-  if(queueService_)
+  if(assembler_)
   {
-    return queueService_->messageCount();
+    return assembler_->messageCount();
   }
   return 0;
 }
@@ -89,9 +89,9 @@ MulticastDecoder::messageCount() const
 void
 MulticastDecoder::reset()
 {
-  if(queueService_)
+  if(assembler_)
   {
-    queueService_->decoder().reset();
+    assembler_->decoder().reset();
   }
 }
 
@@ -102,18 +102,18 @@ MulticastDecoder::start(
   size_t bufferCount /*=2*/)
 {
   builder_ = &builder;
-  queueService_.reset(new MessagePerPacketQueueService(
+  assembler_.reset(new MessagePerPacketAssembler(
     templateRegistry_,
     headerAnalyzer_,
     builder));
-  queueService_->setMessageLimit(messageLimit_);
-  queueService_->decoder().setStrict(strict_);
+  assembler_->setMessageLimit(messageLimit_);
+  assembler_->decoder().setStrict(strict_);
   if(verboseOut_ != 0)
   {
-    queueService_->decoder().setVerboseOutput(*verboseOut_);
+    assembler_->decoder().setVerboseOutput(*verboseOut_);
   }
 
-  receiver_.start(*queueService_, bufferSize, bufferCount);
+  receiver_.start(*assembler_, bufferSize, bufferCount);
 }
 
 void
@@ -124,17 +124,17 @@ MulticastDecoder::start(
   size_t bufferCount /*=2*/)
 {
   builder_ = &builder;
-  queueService_.reset(new MessagePerPacketQueueService(
+  assembler_.reset(new MessagePerPacketAssembler(
     templateRegistry_,
     headerAnalyzer,
     builder));
-  queueService_->setMessageLimit(messageLimit_);
-  queueService_->decoder().setStrict(strict_);
+  assembler_->setMessageLimit(messageLimit_);
+  assembler_->decoder().setStrict(strict_);
   if(verboseOut_ != 0)
   {
-    queueService_->decoder().setVerboseOutput(*verboseOut_);
+    assembler_->decoder().setVerboseOutput(*verboseOut_);
   }
 
-  receiver_.start(*queueService_, bufferSize, bufferCount);
+  receiver_.start(*assembler_, bufferSize, bufferCount);
 }
 

@@ -1,3 +1,90 @@
+Thu Feb 18 22:42:35 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Context.cpp:
+        * src/Codecs/DataSource.cpp:
+        * src/Codecs/Decoder.h:
+        * src/Codecs/Decoder.cpp:
+        * src/Codecs/FastEncodedHeaderAnalyzer.h:
+        * src/Codecs/FixedSizeHeaderAnalyzer.h:
+        * src/Codecs/GenericMessageBuilder.cpp:
+        * src/Codecs/HeaderAnalyzer.h:
+        * src/Codecs/HeaderAnalyzer_fwd.h:
+        * src/Codecs/MessagePerPacketAssembler.h:
+        * src/Codecs/MessagePerPacketAssembler.cpp:
+        * src/Codecs/MessagePerPacketAssembler_fwd.h:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Codecs/NoHeaderAnalyzer.h:
+        * src/Codecs/SegmentBody.cpp:
+        * src/Codecs/StreamingAssembler.h:
+        * src/Codecs/StreamingAssembler.cpp:
+        * src/Common/Exceptions.h:
+        * src/Common/WorkingBuffer.cpp:
+        * src/Communication/AsioService.h:
+        * src/Communication/Assembler.h:
+        * src/Communication/Assembler_fwd.h:
+        * src/Communication/MulticastReceiver.h:
+        * src/Communication/MulticastReceiverHandle.h:
+        * src/Communication/MulticastReceiverHandle.cpp:
+        * src/Communication/PCapFileReceiver.h:
+        * src/Communication/PCapFileReceiver_fwd.h:
+        * src/Communication/RawFileReceiver.h:
+        * src/Communication/RawFileReceiver_fwd.h:
+        * src/Communication/Receiver.h:
+        * src/Communication/TCPReceiver.h:
+        * src/Examples/InterpretApplication/InterpretApplication.h:
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+        * src/Examples/InterpretApplication/main.cpp:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/SingleValueBuilder.h:
+        * src/Application/FastConnection.h:
+        * src/Application/FastConnection.cpp:
+        * src/Codecs/BlockedStreamQueueService.h:
+        * src/Codecs/BlockedStreamQueueService.cpp:
+        * src/Codecs/MessagePerPacketQueueService.h:
+        * src/Codecs/MessagePerPacketQueueService.cpp:
+        * src/Codecs/MessagePerPacketQueueService_fwd.h:
+        * src/Communication/BufferQueueService.h:
+        * src/Communication/BufferQueueService_fwd.h:
+        This is the major check-in I mentioned on the QuickFAST_users list.
+        Refactor the infrastructure that receives incoming FAST data and passes
+        it to the decoder to support a wide variety of environments.
+
+        As of this checkin, there are four roles that need to be filled
+        and several actors available for each role:
+
+        o Receiver -- accepts incoming data into buffers.
+           -- MulticastReceiver
+           -- TCPIPReceiver
+           -- RawFileReceiver
+           -- PCapFileReceiver
+        o Assembler -- Organizes the incoming buffers and delivers the data
+                       to the decoder
+           -- MessagePerPacketAssembler
+           -- StreamingAssembler
+        o HeaderAnalyzer -- Examines the beginning of each incoming message
+                            for header information.
+           -- NoHeaderAnalyzer
+           -- FixedSizeHeaderAnalyzer
+           -- FastEncodedHeaderAnalyzer
+           -- custom header analyzer implement the HeaderAnalyzer interface.
+        o MessageBuilder -- Accepts the decoded data and delivers it to the
+                            client application.
+           -- GenericMessageBuilder
+           -- custom message builders implement the ValueMessageBuilder interface.
+
+        The InterpretApplication has been reworked so that any combination of
+        the available actors may be used together in these roles.
+
+        Because this check-in may break existing code, the repository was tagged
+        before the checkin for users who wish to stay with the old version
+        (for a while.  Please don't stay there forever!) The URL for this tag
+        is //quickfast.googlecode.com/svn/tags/BeforeReceiverAssemblerAnalyzerRework
+
+
+
+
 Wed Feb 17 22:09:28 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Communication/Receiver.h:
