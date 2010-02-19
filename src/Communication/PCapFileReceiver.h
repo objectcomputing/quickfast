@@ -19,13 +19,9 @@ namespace QuickFAST
       : public Receiver
     {
     public:
-    /// @brief Wrap a standard istream into a Receiver
-    ///
-    /// The input stream should be opened in binary mode
-    /// if that option is available/needed on your operating
-    /// system and stream type. (i.e. specify std::ios::binary
-    /// when you open a ofstream on Windows.)
-    /// @param stream supplies the data
+      /// @brief Wrap a PCapFileReader into a Receiver
+      ///
+      /// @param filename names the PCap file
       PCapFileReceiver(
         const std::string & filename
         )

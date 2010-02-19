@@ -1,3 +1,20 @@
+Fri Feb 19 15:47:08 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+        gcc build error.
+
+        * src/Codecs/Context.h:
+        * src/Codecs/Context.cpp:
+        * src/Codecs/Decoder.h:
+        * src/Codecs/FixedSizeHeaderAnalyzer.h:
+        * src/Codecs/MessagePerPacketAssembler.h:
+        * src/Codecs/StreamingAssembler.h:
+        * src/Communication/PCapFileReceiver.h:
+        * src/Communication/RawFileReceiver.h:
+        * src/Messages/SpecialAccessors.h:
+        Polishing Doxygen comments.
+
 Thu Feb 18 22:42:35 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Context.h:

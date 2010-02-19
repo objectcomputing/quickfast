@@ -23,7 +23,8 @@ namespace QuickFAST{
       ///
       /// @param sizeBytes is the number of bytes in the block size field.  Zero means no block size.
       /// @param bigEndian if true means the data on the wire is big endian (network order)
-      /// @param prefixBytes is the number if bytes in the header after the block size.
+      /// @param prefixBytes is the number if bytes in the header before the block size.
+      /// @param suffixBytes is the number if bytes in the header after the block size.
       explicit FixedSizeHeaderAnalyzer(
         size_t sizeBytes,
         bool bigEndian = false,

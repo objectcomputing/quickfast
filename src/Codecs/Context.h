@@ -36,14 +36,8 @@ namespace QuickFAST
       /// @param registry A registry containing all templates to be used to decode messages.
       Context(TemplateRegistryCPtr registry);
 
-      /// @brief Construct with a registry to be named later.
-//      Context();
-
-
       /// @brief a typical virtual destructor.
       virtual ~Context();
-
-      void setTemplateRegistry(TemplateRegistryCPtr registry);
 
       /// @brief Enable/disable strict checking of conformance to the FAST standard
       ///

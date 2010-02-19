@@ -27,8 +27,10 @@ namespace QuickFAST
     public:
       /// @brief Constuct the Assembler
       /// @param templateRegistry defines the decoding instructions for the decoder
-      /// @param analyzer analyzes the header of each message (if any)
+      /// @param headerAnalyzer analyzes the header of each message (if any)
       /// @param builder receives the data from the decoder.
+      /// @param waitForCompleteMessage if true cause decoding to be delayed (without thread blocking)
+      ///        until a complete message is available.
       StreamingAssembler(
           TemplateRegistryPtr templateRegistry,
           HeaderAnalyzer & headerAnalyzer,
