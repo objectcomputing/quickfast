@@ -29,7 +29,7 @@ namespace
 #ifdef _WIN32
   const std::ios::openmode binaryMode = std::ios::binary;
 #else
-  const std::ios::openmode binaryMode = reinterpret_cast(std::ios::openmode)(0);
+  const std::ios::openmode binaryMode = reinterpret_cast<std::ios::openmode>(0);
 #endif
 }
 
