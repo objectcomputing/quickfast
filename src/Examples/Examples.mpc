@@ -18,6 +18,16 @@ project(InterpretApplication) : QuickFASTExample {
   }
 }
 
+project(TutorialApplication) : QuickFASTExample {
+  exename = TutorialApplication
+  Source_Files {
+    TutorialApplication
+  }
+  Header_Files {
+    TutorialApplication
+  }
+}
+
 project(PerformanceTest) : QuickFASTExample {
   exename = PerformanceTest
   Source_Files {

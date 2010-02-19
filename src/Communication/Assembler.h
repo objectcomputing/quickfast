@@ -27,6 +27,8 @@ namespace QuickFAST{
       /// @param logger is used to log requests to a "real" logger
       Assembler(Common::Logger & logger)
         : logger_(logger)
+        , strict_(true)
+        , reset_(false)
       {
       }
 
@@ -70,8 +72,26 @@ namespace QuickFAST{
         return logger_.reportCommunicationError(errorMessage);
       }
 
+      /// @brief Set flag to reset the decoder on every message.
+      /// @param reset is true to enable message-level reset
+      void setReset(bool reset = true)
+      {
+        reset_ = reset;
+      }
+
+      /// @brief set the flag to use strict decoding rulese
+      /// @param strict is true to enable strict decoding
+      void setStrict(bool strict = true)
+      {
+        strict_ = strict;
+      }
     protected:
+      /// Log information is delegated to this logger
       Common::Logger & logger_;
+      /// Strict decoding rules
+      bool strict_;
+      /// Reset the decoder for every message
+      bool reset_;
 
 
     };

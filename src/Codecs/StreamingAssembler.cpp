@@ -87,6 +87,10 @@ StreamingAssembler::serviceQueue(
       inDecoder_ = true;
       try
       {
+        if(reset_)
+        {
+          decoder_.reset();
+        }
         decoder_.decodeMessage(*this, builder_);
       }
       catch(std::exception & ex)
@@ -112,6 +116,7 @@ StreamingAssembler::serviceQueue(
 void
 StreamingAssembler::receiverStarted(Communication::Receiver & /*receiver*/)
 {
+  decoder_.setStrict(strict_);
   if(builder_.wantLog(Common::Logger::QF_LOG_INFO))
   {
     builder_.logMessage(Common::Logger::QF_LOG_INFO, "Start receiver.");

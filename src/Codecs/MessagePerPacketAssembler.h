@@ -19,7 +19,7 @@ namespace QuickFAST
 {
   namespace Codecs
   {
-    /// @brief Service a Receiver's Queue when expecting packet boundaries to match message boundaries (UDP or Multicast)
+    /// @brief Service a Receiver's Queue when expecting packet bounda  ries to match message boundaries (UDP or Multicast)
     /// with (or without) block headers.
     class QuickFAST_Export MessagePerPacketAssembler
       : public Communication::Assembler

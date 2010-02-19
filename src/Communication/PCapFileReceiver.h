@@ -34,14 +34,23 @@ namespace QuickFAST
       {
       }
 
+      // Override AsioService run method
+      virtual void run()
+      {
+        while(!stopping_ && reader_.good())
+        {
+          tryServiceQueue();
+        }
+      }
+
+    private:
+
       // Implement Receiver method
       virtual bool initializeReceiver()
       {
         reader_.open(filename_.c_str());
         return reader_.good();
       }
-
-    private:
 
       bool fillBuffer(LinkedBuffer * buffer, boost::mutex::scoped_lock& lock)
       {
@@ -58,14 +67,6 @@ namespace QuickFAST
           }
         }
         return result;
-      }
-
-      virtual void run()
-      {
-        while(!stopping_ && reader_.good())
-        {
-          tryServiceQueue();
-        }
       }
 
     private:

@@ -37,13 +37,21 @@ namespace QuickFAST
       {
       }
 
+      virtual void run()
+      {
+        while(!stopping_ && stream_.good() && !stream_.eof())
+        {
+          tryServiceQueue();
+        }
+      }
+
+    private:
+
       // Implement Receiver method
       virtual bool initializeReceiver()
       {
         return stream_.good() && !stream_.eof();
       }
-
-    private:
 
       bool fillBuffer(LinkedBuffer * buffer, boost::mutex::scoped_lock& lock)
       {
@@ -59,14 +67,6 @@ namespace QuickFAST
           filling = true;
         }
         return filling;
-      }
-
-      virtual void run()
-      {
-        while(!stopping_ && stream_.good() && !stream_.eof())
-        {
-          tryServiceQueue();
-        }
       }
 
     private:

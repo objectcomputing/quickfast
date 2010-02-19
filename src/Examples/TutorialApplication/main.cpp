@@ -4,7 +4,7 @@
 //
 
 #include <Examples/ExamplesPch.h>
-#include <InterpretApplication/InterpretApplication.h>
+#include <TutorialApplication/TutorialApplication.h>
 
 using namespace QuickFAST;
 using namespace Examples;
@@ -12,7 +12,7 @@ using namespace Examples;
 int main(int argc, char* argv[])
 {
   int result = -1;
-  InterpretApplication application;
+  TutorialApplication application;
   if(application.init(argc, argv))
   {
     result = application.run();

@@ -20,119 +20,41 @@ namespace QuickFAST
     class SingleValueBuilder : public ValueMessageBuilder
     {
       public:
-        SingleValueBuilder()
-        {
-        }
-
-        virtual ~SingleValueBuilder()
-        {
-        }
+        SingleValueBuilder();
+        virtual ~SingleValueBuilder();
 
         ///////////////////////////
         // Implement ValueMessageBuilder
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int64 value)
-        {
-          identity_ = identity;
-          value_.setValue(value);
-        }
-
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value)
-        {
-          identity_ = identity;
-          value_.setValue(value);
-        }
-
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int32 value)
-        {
-          identity_ = identity;
-          value_.setValue(value);
-        }
-
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value)
-        {
-          identity_ = identity;
-          value_.setValue(value);
-        }
-
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int16 value)
-        {
-          identity_ = identity;
-          value_.setValue(value);
-        }
-
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value)
-        {
-          identity_ = identity;
-          value_.setValue(value);
-        }
-
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int8 value)
-        {
-          identity_ = identity;
-          value_.setValue(value);
-        }
-
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uchar value)
-        {
-          identity_ = identity;
-          value_.setValue(value);
-        }
-
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value)
-        {
-          identity_ = identity;
-          value_.setValue(value);
-        }
-
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length)
-        {
-          identity_ = identity;
-          value_.setValue(value, length);
-        }
-
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int64 value);
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value);
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int32 value);
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value);
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int16 value);
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value);
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int8 value);
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uchar value);
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value);
+        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length);
         virtual ValueMessageBuilder & startMessage(
-          const std::string & /*applicationType*/,
-          const std::string & /*applicationTypeNamespace*/,
-          size_t /*size*/)
-        {
-          return *this;
-        }
-
-        virtual bool endMessage(ValueMessageBuilder & messageBuilder)
-        {
-          return true;
-        }
-
-        virtual bool ignoreMessage(ValueMessageBuilder & messageBuilder)
-        {
-          value_.setNull();
-          return true;
-        }
+          const std::string & applicationType,
+          const std::string & applicationTypeNamespace,
+          size_t size);
+        virtual bool endMessage(ValueMessageBuilder & messageBuilder);
+        virtual bool ignoreMessage(ValueMessageBuilder & messageBuilder);
 
         /// @brief check to see if a value was set
         ///
         /// @returns true if a value was set
-        bool isSet()const
-        {
-          return value_.isDefined();
-        }
+        bool isSet()const;
 
         /// @brief retrieve the captured value
         ///
         /// probably a good idea to check isSet() first
         /// @returns the value
-        DATATYPE value()const
-        {
-          DATATYPE result;
-          value_.getValue(result);
-          return result;
-        }
+        DATATYPE value()const;
 
         /// @brief access the identity that was used to set the value
-        FieldIdentityCPtr & identity()const
-        {
-          return identity_;
-        }
+        FieldIdentityCPtr & identity()const;
 
       private:
         /////////////////////////////////////////////////
@@ -210,12 +132,6 @@ namespace QuickFAST
           throw UsageError("Coding Error", "SingleValueBuilder does not support end group.");
         }
 
-#if 0
-        virtual const FieldSet & getFieldSet() const
-        {
-          throw UsageError("Coding Error", "SingleValueBuilder does not support group or sequence.");
-        }
-#endif
         virtual bool wantLog(unsigned short /*level*/)
         {
           return false;
@@ -240,6 +156,146 @@ namespace QuickFAST
         Value value_;
         mutable FieldIdentityCPtr identity_;
     };
+
+    template<typename DATATYPE>
+    inline
+    SingleValueBuilder<DATATYPE>::SingleValueBuilder()
+    {
+    }
+
+    template<typename DATATYPE>
+    inline
+    SingleValueBuilder<DATATYPE>::~SingleValueBuilder()
+    {
+    }
+
+    template<typename DATATYPE>
+    inline void
+    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int64 value)
+    {
+      identity_ = identity;
+      value_.setValue(value);
+    }
+
+    template<typename DATATYPE>
+    inline void
+    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value)
+    {
+      identity_ = identity;
+      value_.setValue(value);
+    }
+
+    template<typename DATATYPE>
+    inline void
+    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int32 value)
+    {
+      identity_ = identity;
+      value_.setValue(value);
+    }
+
+    template<typename DATATYPE>
+    inline void
+    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value)
+    {
+      identity_ = identity;
+      value_.setValue(value);
+    }
+
+    template<typename DATATYPE>
+    inline void
+    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int16 value)
+    {
+      identity_ = identity;
+      value_.setValue(value);
+    }
+
+    template<typename DATATYPE>
+    inline void
+    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value)
+    {
+      identity_ = identity;
+      value_.setValue(value);
+    }
+
+    template<typename DATATYPE>
+    inline void
+    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int8 value)
+    {
+      identity_ = identity;
+      value_.setValue(value);
+    }
+
+    template<typename DATATYPE>
+    inline void
+    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uchar value)
+    {
+      identity_ = identity;
+      value_.setValue(value);
+    }
+
+    template<typename DATATYPE>
+    inline void
+    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value)
+    {
+      identity_ = identity;
+      value_.setValue(value);
+    }
+
+    template<typename DATATYPE>
+    inline void
+    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length)
+    {
+      identity_ = identity;
+      value_.setValue(value, length);
+    }
+
+    template<typename DATATYPE>
+    inline ValueMessageBuilder &
+    SingleValueBuilder<DATATYPE>::startMessage(
+      const std::string & /*applicationType*/,
+      const std::string & /*applicationTypeNamespace*/,
+      size_t /*size*/)
+    {
+      return *this;
+    }
+
+    template<typename DATATYPE>
+    inline bool
+    SingleValueBuilder<DATATYPE>::endMessage(ValueMessageBuilder & messageBuilder)
+    {
+      return true;
+    }
+
+    template<typename DATATYPE>
+    inline bool
+    SingleValueBuilder<DATATYPE>::ignoreMessage(ValueMessageBuilder & messageBuilder)
+    {
+      value_.setNull();
+      return true;
+    }
+
+    template<typename DATATYPE>
+    inline bool
+    SingleValueBuilder<DATATYPE>::isSet()const
+    {
+      return value_.isDefined();
+    }
+
+    template<typename DATATYPE>
+    inline DATATYPE
+    SingleValueBuilder<DATATYPE>::value()const
+    {
+      DATATYPE result;
+      value_.getValue(result);
+      return result;
+    }
+
+    template<typename DATATYPE>
+    inline FieldIdentityCPtr &
+    SingleValueBuilder<DATATYPE>::identity()const
+    {
+      return identity_;
+    }
   }
 }
 

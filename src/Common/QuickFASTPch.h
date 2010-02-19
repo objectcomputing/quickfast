@@ -192,6 +192,23 @@ namespace QuickFAST{
   ///
   /// <i>This page was generated from comments in src/common/QuickFASTPCH.h</i>
   namespace Messages{}
+
+  /// @brief Classes involved in passing data to/from the Decoder/Encoder from/to the outside world.
+  ///
+  /// Classes in this namespace address the issues involved in:
+  /// <ul>
+  /// <li>reading data from communication sockets</li>
+  /// <li>reading data from data files</li>
+  /// <li>handling any framing or other non-FAST information in the incoming data.</li>
+  /// <li>delivering the incoming data to a decoder</li>
+  /// <li>accepting outgoing data from an encoder</li>
+  /// <li>adding any framing or other non-FAST information to the outgoing data.</li>
+  /// <li>writing outgoing data to communication sockets</li>
+  /// <li>writing outgoing data to files</li>
+  /// </ul>
+  /// Source files for elements in this namespace are in src/Communication directory.
+  namespace Communication{}
+
 }
 
 #endif // QuickFAST_H

@@ -85,8 +85,12 @@ MessagePerPacketAssembler::consumeBuffer(const unsigned char * buffer, size_t si
     }
     if(!skipBlock)
     {
-      // Unreliable multicast.  Always reset the decoder
-      decoder_.reset();
+      // note we apply reset at the packet level. If there are multiple messages per packet
+      // the decoder is NOT reset for each one.
+      if(reset_)
+      {
+        decoder_.reset();
+      }
       while(bytesAvailable() > 0)
       {
         decoder_.decodeMessage(*this, builder_);
@@ -107,6 +111,7 @@ MessagePerPacketAssembler::consumeBuffer(const unsigned char * buffer, size_t si
 void
 MessagePerPacketAssembler::receiverStarted(Communication::Receiver & /*receiver*/)
 {
+  decoder_.setStrict(strict_);
   if(builder_.wantLog(Common::Logger::QF_LOG_INFO))
   {
     builder_.logMessage(Common::Logger::QF_LOG_INFO, "Receiver started");
