@@ -5,8 +5,6 @@
 #ifndef TUTORIALAPPLICATION_H
 #define TUTORIALAPPLICATION_H
 
-#include <Codecs/DataSource.h>
-
 namespace QuickFAST{
   namespace Examples{
     /// @brief A simple application to demonstrate how QuickFAST is intended to be used.

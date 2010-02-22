@@ -1,3 +1,10 @@
+Mon Feb 22 16:55:06 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+        * src/Examples/TutorialApplication/TutorialApplication.h:
+        * src/Examples/TutorialApplication/TutorialApplication.cpp:
+        gcc build errors.  Apparently gcc and I disagree on the meaning
+        of reinterpret_cast.   I'll let it have its way for now.
+
 Fri Feb 19 19:38:05 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Communication/Assembler.h:

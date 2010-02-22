@@ -22,7 +22,7 @@ namespace
 #ifdef _WIN32
   const std::ios::openmode binaryMode = std::ios::binary;
 #else
-  const std::ios::openmode binaryMode = reinterpret_cast<std::ios::openmode>(0);
+  const std::ios::openmode binaryMode = static_cast<std::ios::openmode>(0);
 #endif
 }
 
@@ -82,10 +82,6 @@ TutorialApplication::run()
 
     if(result == 0)
     {
-      ///////////////////////////////////////////////////////////////////////////////
-      // Create an object to receive data from a raw data file (i.e to read the file)
-      Communication::RawFileReceiver receiver(fastFile);
-
       /////////////////////////////////////////////
       // Parse the templates from the template file
       // errors are reported by throwing exceptions
@@ -122,6 +118,10 @@ TutorialApplication::run()
       // In this case configure the assembler to
       // reset the decoder on every incoming message
       assembler.setReset(true);
+
+      ///////////////////////////////////////////////////////////////////////////////
+      // Create an object to receive data from a raw data file (i.e to read the file)
+      Communication::RawFileReceiver receiver(fastFile);
 
       /////////////////////////////////////////////
       // do final initialzation of the data receiver.
