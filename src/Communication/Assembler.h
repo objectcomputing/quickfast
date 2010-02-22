@@ -16,6 +16,7 @@ namespace QuickFAST{
   namespace Communication
   {
     /// @brief A companion class to service the queue in Communication::Receiver
+    ///
     /// The Receiver is responsible for filling buffers, adding them to the service queue
     /// then requesting queue service from an implementation of this interface.
     /// The implementation of this interface retrieves the buffers from the receiver and processes

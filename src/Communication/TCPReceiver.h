@@ -33,8 +33,7 @@ namespace QuickFAST
 
       /// @brief construct given shared io_service and multicast information
       /// @param ioService an ioService to be shared with other objects
-      /// @param multicastGroupIP multicast address as a text string
-      /// @param listenInterfaceIP listen address as a text string
+      /// @param hostName is the name or dotted IP to connect to
       /// @param port port service name or number
       TCPReceiver(
         boost::asio::io_service & ioService,

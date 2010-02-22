@@ -1,3 +1,24 @@
+Mon Feb 22 23:44:57 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Common/ByteSwapper.h:
+        * src/Common/ByteSwapper.cpp:
+        Consolidating byte-order support.
+
+        * src/Codecs/DataSource.cpp:
+        * src/Codecs/FixedSizeHeaderAnalyzer.cpp:
+        * src/Codecs/StreamingAssembler.cpp:
+        * src/Common/QuickFASTPch.h:
+        * src/Communication/Assembler.h:
+        * src/Communication/AsynchReceiver.h:
+        * src/Communication/LinkedBuffer.h:
+        * src/Communication/MulticastReceiverHandle.h:
+        * src/Communication/PCapReader.h:
+        * src/Communication/Receiver.h:
+        * src/Communication/SynchReceiver.h:
+        * src/Communication/TCPReceiver.h:
+        * src/Doxyfile:
+        Updating doxygen comments after recent Receiver refactoring.
+
 Mon Feb 22 18:50:18 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/StreamingAssembler.cpp:

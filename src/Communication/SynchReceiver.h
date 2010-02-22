@@ -76,7 +76,7 @@ namespace QuickFAST
           boost::mutex::scoped_lock lock(bufferMutex_);
           service = queue_.startService(lock);
         }
-        while(service)
+        while(service && !stopping_)
         {
           service = serviceQueue();
           ++count;

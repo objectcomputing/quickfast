@@ -74,7 +74,7 @@ namespace QuickFAST{
       size_t largestPacket() const;
 
       /// @brief Start accepting packets.  Returns immediately
-      /// @param bufferConsumer accepts and processes the filled buffers
+      /// @param assembler accepts and processes the filled buffers
       /// @param bufferSize determines the maximum size of an incoming packet
       /// @param bufferCount is how many input buffers to use
       void start(

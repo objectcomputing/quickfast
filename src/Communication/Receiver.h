@@ -44,7 +44,7 @@ namespace QuickFAST
       /// @param assembler accepts and processes the filled buffers
       /// @param bufferSize determines the maximum size of an incoming packet
       /// @param bufferCount is the number of buffers to allocate to receive packets
-      /// @param returns true if service started successfully
+      /// @returns true if service started successfully
       bool start(
         Assembler & assembler,
         size_t bufferSize = 1400,
@@ -134,7 +134,7 @@ namespace QuickFAST
       /// @brief get the next buffer if possible
       /// WARNING: This should be called only by a Assembler
       ///          during a call from this Receiver
-      /// @param if true, will wait until a buffer is available
+      /// @param wait if true, will wait until a buffer is available
       ///        or the service is stopped)
       /// @return true pointer to the buffer or zero
       virtual LinkedBuffer * getBuffer(bool wait)
@@ -165,8 +165,8 @@ namespace QuickFAST
       /// WARNING: This should be called only by a Assembler
       ///          during a call from this Receiver
       /// @param needed number of bytes needed
-      /// @wait true if we should wait for them to arrive;
-      ///       false if we should just return false
+      /// @param wait true if we should wait for them to arrive;
+      ///             false if we should just return false
       /// @returns true if needed bytes are available.
       bool needBytes(size_t needed, bool wait)
       {
@@ -210,12 +210,13 @@ namespace QuickFAST
 
 
     protected:
-
+      /// @brief Enter the startReceive method without a lock
       void startReceiveUnlocked()
       {
         boost::mutex::scoped_lock lock(bufferMutex_);
         startReceive(lock);
       }
+
       /// @brief Receive a new buffer full if possible
       /// scoped_lock parameter means a mutex must be locked
       void startReceive(boost::mutex::scoped_lock& lock)
@@ -262,6 +263,7 @@ namespace QuickFAST
       /// return false if data cannot be read.
       ///
       /// @param buffer to be filled
+      /// @param lock to be sure we have it.
       /// @returns true if the buffer is, or will be filled.
       virtual bool fillBuffer(
         LinkedBuffer * buffer,
@@ -374,35 +376,59 @@ namespace QuickFAST
       }
 
     protected:
+      /// The assembler to receive full buffers
       Assembler * assembler_;
-
+      /// Manage the buffers' lifetimes
       BufferLifetimeManager bufferLifetimes_;
 
+      /// Protect access to the SingleServerBufferQueue
       boost::mutex bufferMutex_;
+
+      /// @brief Accept buffers from multiple threads and deliver them to a single thread.
+      ///
+      /// See the documentation of SingleServerBufferQueue for details.
       SingleServerBufferQueue queue_;
 
-      // accumulate idle buffers while we process the queue
-      // but don't add them back to idle pool until we're done
-      // this avoids extra locking, and applies some backpressure to the
-      // incoming communication stream (which of course is ignored for multicast)
+      /// @brief accumulate idle buffers while we process the queue
+      ///
+      /// Don't add them back to idle pool until we're done
+      /// this avoids extra locking, and applies some backpressure to the
+      /// incoming communication stream (which of course is ignored for multicast)
       BufferCollection idleBuffers_;
 
+      /// @brief Buffers waiting to be filled
       BufferCollection idleBufferPool_;
+
+      /// @brief All buffers have the same size
       size_t bufferSize_;
+
+      /// @brief True when we're trying to shut down
       bool stopping_;
+
+      /// @brief True when a buffer is being filled.
       bool readInProgress_;
 
       /////////////
       // Statistics
+      /// No buffers avaliable when we could have started a read
       size_t noBufferAvailable_;
+      /// Packets accepted (includes error & empty)
       size_t packetsReceived_;
+      /// Bytes in those packets
       size_t bytesReceived_;
+      /// Packets received with errors (usually disconnect or EOF0
       size_t errorPackets_;
+      /// Packets containing no data (usually during shutdown)
       size_t emptyPackets_;
+      /// Packets containing valid data: queued to be processed
       size_t packetsQueued_;
+      /// Batches of packets collected by queue_
       size_t batchesProcessed_;
+      /// Individual packets in the batches
       size_t packetsProcessed_;
+      /// Bytes in the processed packets.
       size_t bytesProcessed_;
+      /// Largest single packet received
       size_t largestPacket_;
     };
   }

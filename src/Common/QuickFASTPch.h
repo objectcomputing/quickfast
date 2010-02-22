@@ -56,6 +56,9 @@
 /// This project is an implementation of the FAST Protcol.
 ///  http://www.fixprotocol.org/fast
 ///
+/// The home page for this project is
+///  http://quickfast.org/
+///
 /// <h3>FAST</h3>
 /// FAST is a standard for serializing an <b><i>application data type</i></b>
 /// into a <b><i>message</i></b>.
@@ -77,45 +80,30 @@
 /// The template file is shared between both counterparties via out-of-band
 /// communication. It is vital that both counterparties be using the same set of templates.
 ///
-/// <h3>Using QuickFAST in an application that receives FAST data -- low level approach.</h3>
-/// To receive FAST encoded data, a typical application would:<ul>
-/// <li>Use a QuickFAST::Codecs::XMLTemplateParser to read a template file and produce
-/// a QuickFAST::Codecs::TemplateRegistry.</li>
-/// <li>Create a QuickFAST::Codecs::Decoder and supply it with the template registry to use.</li>
-/// <li>Create an object that implements the QuickFAST::Codecs::DataSource interface to supply the
-/// incoming stream of data to the decoder.</li>
-/// <li>Create an object that implements the QuickFAST::Messages::MessageBuilder interface to
-/// accept the decoded fields and store them in a message object.</li>
-/// <li>Each time the data source has a complete message available<ul>
-///  <li>Pass the data source and the message to the decoder's decodeMessage() method.</li>
-///  <li>When the decoder calls the MessageBuilder::endMessage method, process the decoded message</li></ul>
-/// </li></ul>
+/// <h3>Using QuickFAST in an application that receives FAST data.</h3>
 ///
-/// The application should catch exceptions thrown by the decoder.  The data source should have
-/// a method for resynchronizing the input after an exception has disrupted the decoding of an
-/// incoming message.
+/// Two example applications that are bundled with QuickFAST will help you to get started
+/// quickly using QuickFAST to decode incoming FAST data for your application:<ul>
+///  <li><b>TutorialApplication</b> is a simple application that shows QuickFAST configured
+///         for one particular use-case.  Source for this application is in
+///          .../src/Examples/TutorialApplication<br>
+///         There is  <a href="http://code.google.com/p/quickfast/wiki/TutorialApplication">
+///         a more detailed discription of this application on the QuickFAST web site.</a></li>
+///  <li><b>InterpretApplication</b> is an application that uses command line options to configure
+///         the QuickFAST for a variety of situations.  It supports all of the options available in
+///         QuickFAST except those requiring custom code.  Source for this application is in
+///         .../src/Examples/InterpretApplication.</li>
+/// </ul>
 ///
-/// <h3>"Prepackaged" decoders.</h3>
-/// The QuickFAST::Codecs::SynchronousDecoder and QuickFAST::Codecs::MulticastDecoder
-/// objects support simpler approach to writing a decoder application.  To use either
-/// of these objects, you need an application object that can handle the incoming messages.
-/// This object should implement the QuickFAST::Codecs::MessageConsumer interface.
+/// <h4>Other decoding techiniques</h4>
+/// Earlier versions of QuickFAST simpler, less flexiable techinques to configuring QuickFAST.
+/// These techinques are still supported; however, it is suggested that future development
+/// be done by starting with one of the applications described above.
 ///
-/// The SynchronousDecoder or MulticastDecoder handles the details of receiving and decoding
-/// incoming messages.  Each time a complete messages has been decoded, the consumeMessage()
-/// method of your MessageConsumer object will be called.
-///
-/// The SynchronousDecoder can be used to receive messages from a DataSource that either has
-/// all incoming data available (reading from a file, for example.) or that blocks waiting
-/// for incoming data to arrive when necessary.
-///
-/// The MulticastDecoder using nonblocking boost::asio to dispatch incoming data to the
-/// decoder out of an event loop run by a boost::io_service object.  Multiple input channels
-/// can be supported--each with it's own independent decoder.  Multiple threads can be used.
-/// be used, to allow parallel processing, although each decoder will only be executing in one
-/// thread at a time.  The documentation for MulticastDecoder provides more details on how it
-/// should be used.
-/// You might also want to read the boost::asio documentation for details.
+/// For details on this lower level support see: <ul>
+/// <li>QuickFAST::Codecs::SynchronousDecoder, and</li>
+/// <li>QuickFAST::Codecs::MulticastDecoder.</li>
+/// </ul>
 ///
 /// <h3>Using QuickFAST in an application that sends FAST data.</h3>
 /// To send FAST encoded data, a typical application would:<ul>
@@ -140,18 +128,10 @@
 /// The application should catch exceptions thrown by the encoder and tell the the data destination
 /// to discard any partially encoded information.
 ///
-/// <h4>
-/// For examples of how QuickFAST can be used in an application </h4>
-/// @see QuickFAST::InterpretFAST
-/// @see QuickFAST::MulticastInterpreter
-/// @see QuickFAST::PerformanceTest
-///
-/// These examples use some support programs
+/// The Examples directory also includes some support applications that do not explictly use QuickFAST but
+/// that can be helpful in testing QuickFAST-based application:
 /// @see QuickFAST::FileToTCP
 /// @see QuickFAST::FileToMulticast
-///
-/// @todo: Discuss threading issues.
-/// @todo: Discuss message buffering issues.
 ///
 /// This page was generated from comments in src/common/QuickFASTPCH.h
 

@@ -5,10 +5,11 @@
 #include "FixedSizeHeaderAnalyzer.h"
 #include <Common/Types.h>
 #include <Codecs/DataSource.h>
+#include <Common/ByteSwapper.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
-
+#if 0
 namespace
 {
   // A function object to test the endian-ness of the platform on which we're running
@@ -30,6 +31,7 @@ namespace
     }
   } nativeBigEndian;
 }
+#endif
 
 FixedSizeHeaderAnalyzer::FixedSizeHeaderAnalyzer(
   size_t sizeBytes,
@@ -40,7 +42,7 @@ FixedSizeHeaderAnalyzer::FixedSizeHeaderAnalyzer(
 : prefixBytes_(prefixBytes)
 , sizeBytes_(sizeBytes)
 , suffixBytes_(suffixBytes)
-, swapNeeded_(nativeBigEndian() ? !bigEndian : bigEndian)
+, swapNeeded_(ByteSwapper::isBigEndian() ? !bigEndian : bigEndian)
 , state_(ParsingIdle)
 , blockSize_(0)
 , byteCount_(0)

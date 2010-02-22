@@ -335,13 +335,15 @@ namespace QuickFAST
       }
 
       /// @brief Promote buffers from incoming to outgoing (service thread only)
+      ///
       /// This method should be called only by the service thread
       /// Any accumulated buffers in the input queue will be appended to the output queue.
       /// If wait is false, then the return value is false if nothing was changed.
       /// if wait is true, then this call waits until some incoming buffers are available.
       /// The (external) mutex must be locked when this method is called (even if wait is false).
       /// @param lock is used for the wait.  It also confirms that the caller has locked the mutex.
-      /// @wait is true if this call should wait for incoming buffers to be available.
+      /// @param wait is true if this call should wait for incoming buffers to be available.
+      /// Returns true if the incoming buffer queue has changed from empty to populated
       bool refresh(boost::mutex::scoped_lock & lock, bool wait)
       {
         assert(busy_);

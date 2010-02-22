@@ -143,7 +143,8 @@ namespace QuickFAST
           service = serviceQueue();
         }
       }
-      protected:
+    protected:
+      /// @brief a manager for the boost::io_service object
       AsioService ioService_;
     };
   }

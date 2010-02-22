@@ -110,6 +110,10 @@ StreamingAssembler::serviceQueue(
         }
         inDecoder_ = false;
       }
+      else
+      {
+        more = false;
+      }
     }
   }
   receiver_ = 0;
@@ -176,6 +180,6 @@ StreamingAssembler::messageAvailable()
   {
     return -1;
   }
-  return 1;
+  return bytesAvailable();
 }
 
