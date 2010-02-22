@@ -7,7 +7,7 @@
 // All inline, do not export.
 //#include <Common/QuickFAST_Export.h>
 #include "MulticastReceiver_fwd.h"
-#include <Communication/Receiver.h>
+#include <Communication/AsynchReceiver.h>
 
 namespace QuickFAST
 {
@@ -15,7 +15,7 @@ namespace QuickFAST
   {
     /// @brief Receive Multicast Packets and pass them to a packet handler
     class MulticastReceiver
-      : public Receiver
+      : public AsynchReceiver
     {
     public:
       /// @brief Construct given multicast information.
@@ -29,7 +29,7 @@ namespace QuickFAST
         const std::string & listenInterfaceIP,
         unsigned short portNumber
         )
-        : Receiver()
+        : AsynchReceiver()
         , listenInterface_(boost::asio::ip::address::from_string(listenInterfaceIP))
         , multicastGroup_(boost::asio::ip::address::from_string(multicastGroupIP))
         , endpoint_(listenInterface_, portNumber)
@@ -48,11 +48,11 @@ namespace QuickFAST
         const std::string & listenInterfaceIP,
         unsigned short portNumber
         )
-        : Receiver(ioService)
+        : AsynchReceiver(ioService)
         , listenInterface_(boost::asio::ip::address::from_string(listenInterfaceIP))
         , multicastGroup_(boost::asio::ip::address::from_string(multicastGroupIP))
         , endpoint_(listenInterface_, portNumber)
-        , socket_(ioService_)
+        , socket_(ioService_.ioService())
       {
       }
 
@@ -86,7 +86,7 @@ namespace QuickFAST
 
       virtual void stop()
       {
-        Receiver::stop();
+        AsynchReceiver::stop();
         // attempt to cancel any receive requests in progress.
         try
         {

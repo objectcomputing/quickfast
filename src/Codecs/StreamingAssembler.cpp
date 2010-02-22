@@ -83,30 +83,33 @@ StreamingAssembler::serviceQueue(
 //not implemented yet        builder_.skipMessage();
       }
       skipBlock_ = false;
-      // Set this to indicate we block during decoding
-      inDecoder_ = true;
-      try
+      if(messageAvailable() > 0)
       {
-        if(reset_)
+        // Set this to indicate we block during decoding
+        inDecoder_ = true;
+        try
         {
-          decoder_.reset();
-        }
-        decoder_.decodeMessage(*this, builder_);
-      }
-      catch(std::exception & ex)
-      {
-        more = builder_.reportDecodingError(ex.what());
-        if(!more)
-        {
-          stopping_ = true;
-          if(currentBuffer_ != 0)
+          if(reset_)
           {
-            receiver.releaseBuffer(currentBuffer_);
-            currentBuffer_ = 0;
+            decoder_.reset();
+          }
+          decoder_.decodeMessage(*this, builder_);
+        }
+        catch(std::exception & ex)
+        {
+          more = builder_.reportDecodingError(ex.what());
+          if(!more)
+          {
+            stopping_ = true;
+            if(currentBuffer_ != 0)
+            {
+              receiver.releaseBuffer(currentBuffer_);
+              currentBuffer_ = 0;
+            }
           }
         }
+        inDecoder_ = false;
       }
-      inDecoder_ = false;
     }
   }
   receiver_ = 0;

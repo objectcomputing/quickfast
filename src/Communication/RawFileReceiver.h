@@ -7,7 +7,7 @@
 // All inline, do not export.
 //#include <Common/QuickFAST_Export.h>
 #include "RawFileReceiver_fwd.h"
-#include <Communication/Receiver.h>
+#include <Communication/SynchReceiver.h>
 
 namespace QuickFAST
 {
@@ -15,7 +15,7 @@ namespace QuickFAST
   {
     /// A Receiver that reads input from an istream.
     class RawFileReceiver
-      : public Receiver
+      : public SynchReceiver
     {
     public:
       /// @brief Wrap a standard istream into a Receiver
@@ -28,21 +28,12 @@ namespace QuickFAST
       RawFileReceiver(
         std::istream & stream
         )
-        : Receiver()
-        , stream_(stream)
+        : stream_(stream)
       {
       }
 
       ~RawFileReceiver()
       {
-      }
-
-      virtual void run()
-      {
-        while(!stopping_ && stream_.good() && !stream_.eof())
-        {
-          tryServiceQueue();
-        }
       }
 
     private:
@@ -53,6 +44,7 @@ namespace QuickFAST
         return stream_.good() && !stream_.eof();
       }
 
+      // Implement Receiver method
       bool fillBuffer(LinkedBuffer * buffer, boost::mutex::scoped_lock& lock)
       {
         bool filling = false;

@@ -8,7 +8,6 @@
 //#include <Common/QuickFAST_Export.h>
 #include "Receiver_fwd.h"
 #include <Communication/Assembler.h>
-#include <Communication/AsioService.h>
 #include <Communication/LinkedBuffer.h>
 #include <Common/Exceptions.h>
 
@@ -18,31 +17,10 @@ namespace QuickFAST
   {
     /// @brief Receiver base class for receiving incoming data
     class Receiver
-      : public AsioService
     {
     public:
       Receiver()
         : bufferSize_(1400)
-        , stopping_(false)
-        , readInProgress_(false)
-        , noBufferAvailable_(0)
-        , packetsReceived_(0)
-        , bytesReceived_(0)
-        , errorPackets_(0)
-        , emptyPackets_(0)
-        , packetsQueued_(0)
-        , batchesProcessed_(0)
-        , packetsProcessed_(0)
-        , bytesProcessed_(0)
-        , largestPacket_(0)
-      {
-      }
-
-      /// @brief construct given shared io_service
-      /// @param ioService an ioService to be shared with other objects
-      Receiver(boost::asio::io_service & ioService)
-        : AsioService(ioService)
-        , bufferSize_(1400)
         , stopping_(false)
         , readInProgress_(false)
         , noBufferAvailable_(0)
@@ -95,7 +73,62 @@ namespace QuickFAST
         return result;
       }
 
-      ///////////////////////////////////////
+
+      /// @brief add additional buffers on-the-fly
+      /// @param bufferCount is how many buffers to add
+      void addBuffers(
+        size_t bufferCount = 1)
+      {
+        boost::mutex::scoped_lock lock(bufferMutex_);
+
+        for(size_t nBuffer = 0; nBuffer < bufferCount; ++nBuffer)
+        {
+          BufferLifetime buffer(new LinkedBuffer(bufferSize_));
+          /// bufferLifetimes_ is used only to clean up on object destruction
+          bufferLifetimes_.push_back(buffer);
+          idleBufferPool_.push(buffer.get());
+        }
+      }
+
+      ////////////////////////////////////////////////////////////////////
+      // public methods to be implemented by specific types of receiver
+
+      /// @brief Stop accepting packets
+      ///
+      /// Returns immediately, however decoding may continue until
+      /// the decoder reaches a clean stopping point.  In particular
+      /// the Assembler may receive additional messages after
+      /// stop is called.
+      ///
+      /// Assembler::decodingStopped() will be called when
+      /// the stop request is complete.
+      virtual void stop()
+      {
+        stopping_ = true;
+      }
+
+      /// @brief run the event loop in this thread
+      ///
+      /// Exceptions are caught, logged, and ignored.  The event loop continues.
+      virtual void run() = 0;
+
+      /// @brief run the event loop until one event is handled.
+      virtual void run_one() = 0;
+      /// @brief execute any ready event handlers than return.
+      virtual size_t poll() = 0;
+
+      /// @brief execute at most one ready event handler than return.
+      virtual size_t poll_one() = 0;
+
+      /// @brief create additional threads to run the event loop
+      virtual void runThreads(size_t threadCount = 0, bool useThisThread = true) = 0;
+
+      /// @brief join all additional threads after calling stopService()
+      ///
+      /// If stop() has not been called, this will block "forever".
+      virtual void joinThreads() = 0;
+
+      /////////////////////////////
       // Assembler support routines
 
       /// @brief get the next buffer if possible
@@ -108,7 +141,7 @@ namespace QuickFAST
       {
         LinkedBuffer *next = queue_.serviceNext();
         bool more = true;
-        while(more && next == 0)
+        while(more && next == 0  && !stopping_)
         {
           more = wait;
           {
@@ -116,7 +149,7 @@ namespace QuickFAST
             // add any idle buffers to pool
             idleBufferPool_.push(idleBuffers_);
             startReceive(lock);
-            queue_.refresh(lock, wait);
+            queue_.refresh(lock, wait && !stopping_);
           }
           next = queue_.serviceNext();
         }
@@ -172,33 +205,9 @@ namespace QuickFAST
       {
         idleBuffers_.push(buffer);
       }
+      // Assembler support routines
+      /////////////////////////////
 
-      //////////////////////////////////////////////////////////
-      // methods to be implemented by specific types of receiver
-    protected:
-      /// @brief Do initial communications startup.
-      ///
-      /// Do not start I/O during this method.
-      /// @returns true if started successfully
-      virtual bool initializeReceiver() = 0;
-
-      /// @brief Fill a buffer
-      ///
-      /// Asynchrounous Receivers should arrange for handleReceive()
-      /// to be called at the completion of the read started during
-      /// this method.  Normally an asynchronous receiver will return
-      /// true from this method and report any errors asynchronously
-      /// via the error parameter of handleReceive.
-      ///
-      /// Synchronous Receivers should call acceptFullBuffer() during
-      /// this method.  Synchronous Receivers in particular should
-      /// return false if data cannot be read.
-      ///
-      /// @param buffer to be filled
-      /// @returns true if the buffer is, or will be filled.
-      virtual bool fillBuffer(
-        LinkedBuffer * buffer,
-        boost::mutex::scoped_lock& lock) = 0;
 
     protected:
 
@@ -231,171 +240,37 @@ namespace QuickFAST
         }
       }
 
-      /// @brief Accept a buffer from a synchronous receiver
+      ////////////////////////////////////////////////////////////////////
+      // protected methods to be implemented by specific types of receiver
+    protected:
+      /// @brief Do initial communications startup.
       ///
-      /// The Receiver implementation should call this method
-      /// if the buffer is filled during the fillBuffer() call.
-      /// I.e. if synchronous I/O is used to fill the buffer.
-      /// For asynchronous I/O use handleReceive() instead.
+      /// Do not start I/O during this method.
+      /// @returns true if started successfully
+      virtual bool initializeReceiver() = 0;
+
+      /// @brief Fill a buffer
       ///
-      /// The lock from the fill buffer call should be returned
-      /// for this call.
-      /// If this returns true then the caller shoul eventually
-      /// call tryServiceQueue() -- but NOT from the fill buffer call.
-      bool acceptFullBuffer(
+      /// Asynchrounous Receivers should arrange for handleReceive()
+      /// to be called at the completion of the read started during
+      /// this method.  Normally an asynchronous receiver will return
+      /// true from this method and report any errors asynchronously
+      /// via the error parameter of handleReceive.
+      ///
+      /// Synchronous Receivers should call acceptFullBuffer() during
+      /// this method.  Synchronous Receivers in particular should
+      /// return false if data cannot be read.
+      ///
+      /// @param buffer to be filled
+      /// @returns true if the buffer is, or will be filled.
+      virtual bool fillBuffer(
         LinkedBuffer * buffer,
-        size_t bytesReceived,
-        boost::mutex::scoped_lock & lock
-        )
-      {
-        bool needService = false;
-        readInProgress_ = false;
-        ++packetsReceived_;
-        if(bytesReceived > 0)
-        {
-          ++packetsQueued_;
-          largestPacket_ = std::max(largestPacket_, bytesReceived);
-          buffer->setUsed(bytesReceived);
-          needService = queue_.push(buffer, lock);
-        }
-        else
-        {
-          // empty buffer? just use it again
-          ++emptyPackets_;
-          idleBufferPool_.push(buffer);
-        }
-        return needService;
-      }
+        boost::mutex::scoped_lock& lock) = 0;
 
-      /// @brief service the queue from a synchronous receiver.
-      void tryServiceQueue()
-      {
-        bool service = false;
-        { // Scope for lock
-          boost::mutex::scoped_lock lock(bufferMutex_);
-          service = queue_.startService(lock);
-        }
-        while(service)
-        {
-          service = serviceQueue();
-        }
-      }
 
-      /// @brief handle I/O completion from an asynchronous receiver
-      ///
-      /// Handle the asynchronous callback from I/O initiatied
-      /// by fillBuffer().
-      /// This is intended to be a callback from boost::asio
-      /// For synchronous I/O use acceptFullBuffer() and
-      /// tryServiceQueue();
-      ///
-      /// @param error indicates status of the receive
-      /// @param buffer into which the receive happened
-      /// @param bytesReceived How much data is in the buffer
-      void handleReceive(
-        const boost::system::error_code& error,
-        LinkedBuffer * buffer,
-        size_t bytesReceived)
-      {
-        // should this thread service the queue?
-        bool service = false;
-        { // Scope for lock
-          boost::mutex::scoped_lock lock(bufferMutex_);
-          readInProgress_ = false;
-          ++packetsReceived_;
-          if (!error)
-          {
-            // it's possible to receive empty packets.
-            if(bytesReceived > 0)
-            {
-              ++packetsQueued_;
-              bytesReceived_ += bytesReceived;
-              largestPacket_ = std::max(largestPacket_, bytesReceived);
-              buffer->setUsed(bytesReceived);
-              if(queue_.push(buffer, lock))
-              {
-                // A true return from push means that no one is servicing the queue
-                // Volunteer to service it. If it returns true, then the offer was
-                // accepted.  We'll service the queue after releasing the lock.
-                service = queue_.startService(lock);
-              }
-            }
-            else
-            {
-              // empty buffer? just use it again
-              ++emptyPackets_;
-              idleBufferPool_.push(buffer);
-            }
-          }
-          else
-          {
-            ++errorPackets_;
-            // after an error, recover the buffer
-            idleBufferPool_.push(buffer);
-            // and let the consumer decide what to do
-            if(!assembler_->reportCommunicationError(error.message()))
-            {
-              stop();
-            }
-          }
-          // if possible fill another buffer while we process this one
-          startReceive(lock);
-          // end of scope for lock
-        }
-
-        while(service)
-        {
-          service = serviceQueue();
-        }
-      }
-
-    private:
-      /// @brief implement queue service
-      bool serviceQueue()
-      {
-          ++batchesProcessed_;
-          if(!assembler_->serviceQueue(*this))
-          {
-            stop();
-          }
-          boost::mutex::scoped_lock lock(bufferMutex_);
-          // add idle buffers to pool before trying to start a read.
-          idleBufferPool_.push(idleBuffers_);
-          startReceive(lock);
-          // see if this thread is still needed to service the queue
-          return queue_.endService(!stopping_, lock);
-      }
+      /////////////
+      // Statistics
     public:
-      /// @brief Stop accepting packets
-      ///
-      /// Returns immediately, however decoding may continue until
-      /// the decoder reaches a clean stopping point.  In particular
-      /// the Assembler may receive additional messages after
-      /// stop is called.
-      ///
-      /// Assembler::decodingStopped() will be called when
-      /// the stop request is complete.
-      virtual void stop()
-      {
-        stopping_ = true;
-      }
-
-      /// @brief add additional buffers on-the-fly
-      /// @param bufferCount is how many buffers to add
-      void addBuffers(
-        size_t bufferCount = 1)
-      {
-        boost::mutex::scoped_lock lock(bufferMutex_);
-
-        for(size_t nBuffer = 0; nBuffer < bufferCount; ++nBuffer)
-        {
-          BufferLifetime buffer(new LinkedBuffer(bufferSize_));
-          /// bufferLifetimes_ is used only to clean up on object destruction
-          bufferLifetimes_.push_back(buffer);
-          idleBufferPool_.push(buffer.get());
-        }
-      }
-
       /// @brief Statistic: How many times were all buffers busy?
       /// @returns the number of times no buffers were available to receive packets.
       size_t noBufferAvailable() const
@@ -471,6 +346,31 @@ namespace QuickFAST
       {
         // todo: we *could* ask the socket how much data is waiting
         return bytesReceived_ - bytesProcessed_;
+      }
+      // Statistics
+      /////////////
+
+    protected:
+
+      /// @brief Service the queeue of full buffers
+      ///
+      /// Processes one batch of input buffers
+      /// See: SingleServerBufferQueue for details about
+      /// what a batch is.
+      /// @returns true if more service is needed
+      bool serviceQueue()
+      {
+          ++batchesProcessed_;
+          if(!assembler_->serviceQueue(*this))
+          {
+            stop();
+          }
+          boost::mutex::scoped_lock lock(bufferMutex_);
+          // add idle buffers to pool before trying to start a read.
+          idleBufferPool_.push(idleBuffers_);
+          startReceive(lock);
+          // see if this thread is still needed to service the queue
+          return queue_.endService(!stopping_, lock);
       }
 
     protected:

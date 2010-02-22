@@ -29,27 +29,27 @@ namespace QuickFAST
       ~AsioService();
 
       /// @brief Run the event loop with this threads and threadCount additional threads.
-      virtual void runThreads(size_t threadCount = 0, bool useThisThread = true);
+      void runThreads(size_t threadCount = 0, bool useThisThread = true);
 
       /// @brief run the event loop in this thread
       ///
       /// Exceptions are caught, logged, and ignored.  The event loop continues.
-      virtual void run();
+      void run();
 
       /// @brief run the event loop until one event is handled.
-      virtual void run_one()
+      void run_one()
       {
         ioService_.run_one();
       }
 
       /// @brief execute any ready event handlers than return.
-      virtual size_t poll()
+      size_t poll()
       {
         return ioService_.poll();
       }
 
       /// @brief execute at most one ready event handler than return.
-      virtual size_t poll_one()
+      size_t poll_one()
       {
         return ioService_.poll_one();
       }
@@ -73,6 +73,13 @@ namespace QuickFAST
 
       /// @brief stop the ioservice
       void stopService();
+
+      /// @brief allow implicit cast to io_service
+      operator boost::asio::io_service &()
+      {
+        return ioService_;
+      }
+
     private:
       static boost::asio::io_service privateIoService_;
       /// Pointer to a boost thread
@@ -84,6 +91,7 @@ namespace QuickFAST
     protected:
       /// Protected reference to the io_service.
       boost::asio::io_service & ioService_;
+
     };
   }
 }

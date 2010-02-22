@@ -7,7 +7,7 @@
 // All inline, do not export.
 //#include <Common/QuickFAST_Export.h>
 #include "PCapFileReceiver_fwd.h"
-#include <Communication/Receiver.h>
+#include <Communication/SynchReceiver.h>
 #include <Communication/PCapReader.h>
 
 namespace QuickFAST
@@ -16,7 +16,7 @@ namespace QuickFAST
   {
     /// A Receiver that reads input from an istream.
     class PCapFileReceiver
-      : public Receiver
+      : public SynchReceiver
     {
     public:
       /// @brief Wrap a PCapFileReader into a Receiver
@@ -25,22 +25,13 @@ namespace QuickFAST
       PCapFileReceiver(
         const std::string & filename
         )
-        : Receiver()
+        : SynchReceiver()
         , filename_(filename)
       {
       }
 
       ~PCapFileReceiver()
       {
-      }
-
-      // Override AsioService run method
-      virtual void run()
-      {
-        while(!stopping_ && reader_.good())
-        {
-          tryServiceQueue();
-        }
       }
 
     private:
@@ -52,6 +43,7 @@ namespace QuickFAST
         return reader_.good();
       }
 
+      // Implement Receiver method
       bool fillBuffer(LinkedBuffer * buffer, boost::mutex::scoped_lock& lock)
       {
         const unsigned char * pcapBuffer;

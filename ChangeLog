@@ -1,3 +1,25 @@
+Mon Feb 22 18:50:18 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/StreamingAssembler.cpp:
+        * src/Communication/AsioService.h:
+        * src/Communication/AsynchReceiver.h:
+        * src/Communication/AsynchReceiver_fwd.h:
+        * src/Communication/MulticastReceiver.h:
+        * src/Communication/PCapFileReceiver.h:
+        * src/Communication/RawFileReceiver.h:
+        * src/Communication/Receiver.h:
+        * src/Communication/SynchReceiver.h:
+        * src/Communication/SynchReceiver_fwd.h:
+        * src/Communication/TCPReceiver.h:
+        Refactor Receiver into
+          Receiver base class;
+          AsynchReceiver;
+            (Multicast & TCPIP)
+          SynchReceiver;
+            (Raw and PCap)
+        This eliminates excess baggage and makes it more clear
+        which methods should be used by which derived classes.
+
 Mon Feb 22 16:55:06 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * src/Examples/InterpretApplication/InterpretApplication.cpp:
         * src/Examples/TutorialApplication/TutorialApplication.h:

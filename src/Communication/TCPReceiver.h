@@ -7,14 +7,14 @@
 // All inline, do not export.
 //#include <Common/QuickFAST_Export.h>
 #include "TCPReceiver_fwd.h"
-#include <Communication/Receiver.h>
+#include <Communication/AsynchReceiver.h>
 namespace QuickFAST
 {
   namespace Communication
   {
     /// @brief Receive TCP Packets and pass them to a packet handler
     class TCPReceiver
-      : public Receiver
+      : public AsynchReceiver
     {
     public:
       /// @brief Construct given multicast information.
@@ -24,7 +24,7 @@ namespace QuickFAST
         const std::string & hostName,
         const std::string & port
         )
-        : Receiver()
+        : AsynchReceiver()
         , hostName_(hostName)
         , port_(port)
         , socket_(ioService_)
@@ -41,7 +41,7 @@ namespace QuickFAST
         const std::string & hostName,
         const std::string & port
         )
-        : Receiver(ioService)
+        : AsynchReceiver(ioService)
         , hostName_(hostName)
         , port_(port)
         , socket_(ioService_)
