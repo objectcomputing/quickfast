@@ -326,7 +326,7 @@ namespace QuickFAST
       /// A helper routine -- produces a more meaningful error message.
       void registryIsRequired() const
       {
-        if(! bool(templateRegistry_))
+        if(! templateRegistry_)
         {
           throw UsageError("Coding error", "Template Registry not defined when needed.");
         }

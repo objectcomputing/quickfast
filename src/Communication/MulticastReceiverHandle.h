@@ -69,8 +69,8 @@ namespace QuickFAST{
       /// @returns the number of bytes that have been processed
       size_t bytesProcessed() const;
 
-      /// @brief How many bytes have been processed
-      /// @returns the number of bytes that have been processed
+      /// @brief What was the largest incoming packet
+      /// @returns the number of bytes in the largest packet
       size_t largestPacket() const;
 
       /// @brief Start accepting packets.  Returns immediately

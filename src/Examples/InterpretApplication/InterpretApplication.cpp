@@ -39,26 +39,7 @@ namespace
 InterpretApplication::InterpretApplication()
   : fastFile_(0)
   , echoFile_(0)
-  , echoType_(Codecs::DataSource::HEX)
-  , echoMessage_(true)
-  , echoField_(false)
   , verboseFile_(0)
-  , head_(0)
-  , reset_(false)
-  , strict_(true)
-  , headerType_(NO_HEADER)
-  , headerMessageSizeBytes_(0)
-  , headerBigEndian_(true)
-  , headerPrefixCount_(0)
-  , headerSuffixCount_(0)
-  , assemblerType_(UNSPECIFIED_ASSEMBLER)
-  , waitForCompleteMessage_(false)
-  , receiverType_(UNSPECIFIED_RECEIVER)
-  , multicastGroupIP_("224.1.2.133")
-  , listenInterfaceIP_("0.0.0.0")
-  , portNumber_(13014)
-  , bufferSize_(1400)
-  , bufferCount_(2)
 {
 }
 
@@ -82,112 +63,112 @@ InterpretApplication::parseSingleArg(int argc, char * argv[])
   {
     if(opt == "-t" && argc > 1)
     {
-      templateFileName_ = argv[1];
+      config_.templateFileName_ = argv[1];
       consumed = 2;
     }
     else if(opt == "-limit" && argc > 1)
     {
-      head_ = boost::lexical_cast<size_t>(argv[1]);
+      config_.head_ = boost::lexical_cast<size_t>(argv[1]);
       consumed = 2;
     }
     else if(opt == "-reset")
     {
-      reset_ = true;
+      config_.reset_ = true;
       consumed = 1;
     }
     else if(opt == "-strict")
     {
-      strict_ = false;
+      config_.strict_ = false;
       consumed = 1;
     }
     else if(opt == "-vo" && argc > 1)
     {
-      verboseFileName_ = argv[1];
+      config_.verboseFileName_ = argv[1];
       consumed = 2;
     }
     else if(opt == "-e" && argc > 1)
     {
-      echoFileName_ = argv[1];
+      config_.echoFileName_ = argv[1];
       consumed = 2;
     }
     else if(opt == "-ehex")
     {
-      echoType_ = Codecs::DataSource::HEX;
+      config_.echoType_ = Codecs::DataSource::HEX;
       consumed = 1;
     }
     else if(opt == "-eraw")
     {
-      echoType_ = Codecs::DataSource::RAW;
+      config_.echoType_ = Codecs::DataSource::RAW;
       consumed = 1;
     }
     else if(opt == "-enone")
     {
-      echoType_ = Codecs::DataSource::NONE;
+      config_.echoType_ = Codecs::DataSource::NONE;
       consumed = 1;
     }
     else if(opt == "-em")
     {
-      echoMessage_ = !echoMessage_;
+      config_.echoMessage_ = !config_.echoMessage_;
       consumed = 1;
     }
     else if(opt == "-ef")
     {
-      echoField_ = !echoField_;
+      config_.echoField_ = !config_.echoField_;
       consumed = 1;
     }
     else if(opt == "-file" && argc > 1)
     {
-      receiverType_ = RAWFILE_RECEIVER;
-      fastFileName_ = argv[1];
+      config_.receiverType_ = DecoderConfiguration::RAWFILE_RECEIVER;
+      config_.fastFileName_ = argv[1];
       consumed = 2;
     }
-    else if(opt == "-pcap" && argc > 1) //          : PCap FAST Message file" << std::endl;
+    else if(opt == "-pcap" && argc > 1)
     {
-      receiverType_ = PCAPFILE_RECEIVER;
-      pcapFileName_ = argv[1];
+      config_.receiverType_ = DecoderConfiguration::PCAPFILE_RECEIVER;
+      config_.pcapFileName_ = argv[1];
       consumed = 2;
     }
-    else if(opt == "-multicast" && argc > 1) // ip       : Enable Multicast receiver.  Subscribe to dotted \"ip\" address (default is " << multicastGroupIP_ << ")" << std::endl;
+    else if(opt == "-multicast" && argc > 1)
     {
-      receiverType_ = MULTICAST_RECEIVER;
+      config_.receiverType_ = DecoderConfiguration::MULTICAST_RECEIVER;
       std::string address = argv[1];
       std::string::size_type colon = address.find(':');
-      multicastGroupIP_ = address.substr(0, colon);
+      config_.multicastGroupIP_ = address.substr(0, colon);
       if(colon != std::string::npos)
       {
-        portNumber_ = boost::lexical_cast<unsigned short>(
+        config_.portNumber_ = boost::lexical_cast<unsigned short>(
           address.substr(colon+1));
       }
       consumed = 2;
     }
-    else if(opt == "-mlisten" && argc > 1) // dotted_ip    : Multicast listen address (default is " << listenInterfaceIP_ << ")" << std::endl;
+    else if(opt == "-mlisten" && argc > 1)
     {
-      listenInterfaceIP_ = argv[1];
+      config_.listenInterfaceIP_ = argv[1];
       consumed = 2;
     }
-    else if(opt == "-tcp" && argc > 1) // host         : Enable TCP/IP receiver.  Connect to \"host\"" << std::endl;
+    else if(opt == "-tcp" && argc > 1)
     {
-      receiverType_ = TCP_RECEIVER;
+      config_.receiverType_ = DecoderConfiguration::TCP_RECEIVER;
       std::string address = argv[1];
       std::string::size_type colon = address.find(':');
-      hostName_ = address.substr(0, colon);
+      config_.hostName_ = address.substr(0, colon);
       if(colon != std::string::npos)
       {
-        portName_ = address.substr(colon+1);
+        config_.portName_ = address.substr(colon+1);
       }
       consumed = 2;
     }
-    else if(opt == "-streaming" ) // [no]block : Message boundaries do not match packet boundaries (default if TCP/IP or raw file).
+    else if(opt == "-streaming" )
     {
-      assemblerType_ = STREAMING_ASSEMBLER;
+      config_.assemblerType_ = DecoderConfiguration::STREAMING_ASSEMBLER;
       consumed = 1;
-      waitForCompleteMessage_ = false;
+      config_.waitForCompleteMessage_ = false;
       if(argc > 1)
       {
         if(argv[1] == "block")
         {
           consumed = 2;
-          waitForCompleteMessage_ = true;
+          config_.waitForCompleteMessage_ = true;
         }
         else if(argv[1] == "noblock")
         {
@@ -197,66 +178,67 @@ InterpretApplication::parseSingleArg(int argc, char * argv[])
     }
     else if(opt == "-datagram") //           : Message boundaries match packet boundaries (default if Multicast or PCap file).
     {
-      assemblerType_ = MESSAGE_PER_PACKET_ASSEMBLER;
+      config_.assemblerType_ = DecoderConfiguration::MESSAGE_PER_PACKET_ASSEMBLER;
       consumed = 1;
     }
     else if(opt == "-hnone" ) //              : No header
     {
-      headerType_ = NO_HEADER;
+      config_.headerType_ = DecoderConfiguration::NO_HEADER;
       consumed = 1;
     }
     else if(opt == "-hfix" && argc > 1) // n             : Header contains fixed size fields; block size field is n bytes" << std::endl;
     {
-      headerType_ = FIXED_HEADER;
-      headerMessageSizeBytes_ =  boost::lexical_cast<size_t>(argv[1]);
+      config_.headerType_ = DecoderConfiguration::FIXED_HEADER;
+      config_.headerMessageSizeBytes_ =  boost::lexical_cast<size_t>(argv[1]);
       consumed = 2;
     }
     else if(opt == "-hfast" ) //              : Header contains fast encoded fields" << std::endl;
     {
-      headerType_ = FAST_HEADER;
+      config_.headerType_ = DecoderConfiguration::FAST_HEADER;
       consumed = 1;
     }
     else if(opt == "-hprefix" && argc > 1) // n            : 'n' bytes (fixed) or fields (FAST) preceed block size" << std::endl;
     {
-      headerPrefixCount_ =  boost::lexical_cast<size_t>(argv[1]);
+      config_.headerPrefixCount_ =  boost::lexical_cast<size_t>(argv[1]);
       consumed = 2;
     }
     else if(opt == "-hsuffix" && argc > 1) // n            : 'n' bytes (fixed) or fields (FAST) follow block size" << std::endl;
     {
-      headerSuffixCount_ =  boost::lexical_cast<size_t>(argv[1]);
+      config_.headerSuffixCount_ =  boost::lexical_cast<size_t>(argv[1]);
       consumed = 2;
     }
     else if(opt == "-hbig" ) //                 : fixed size header is big-endian" << std::endl;
     {
-      headerBigEndian_ = true;
+      config_.headerBigEndian_ = true;
       consumed = 1;
       if(argc > 1)
       {
         if(argv[1] == "no")
         {
-          headerBigEndian_ = false;
+          config_.headerBigEndian_ = false;
           consumed = 2;
         }
         else if(argv[1] == "yes")
         {
-          headerBigEndian_ = true;
+          config_.headerBigEndian_ = true;
           consumed = 2;
         }
       }
     }
     else if(opt == "-buffersize" && argc > 1) // size         : Size of communication buffers. For multicast largest expected message. (default " << bufferSize_ << ")" << std::endl;
     {
-      bufferSize_ =  boost::lexical_cast<size_t>(argv[1]);
+      config_.bufferSize_ =  boost::lexical_cast<size_t>(argv[1]);
       consumed = 2;
     }
     else if(opt == "-buffers" && argc > 1) // count      : Number of buffers. (default " << bufferCount_ << ")" << std::endl;
     {
-      bufferCount_ =  boost::lexical_cast<size_t>(argv[1]);
+      config_.bufferCount_ =  boost::lexical_cast<size_t>(argv[1]);
       consumed = 2;
     }
   }
   catch (std::exception & ex)
   {
+    // because the lexical cast can throw
     std::cerr << ex.what() << " while interpreting " << opt << std::endl;
     consumed = 0;
   }
@@ -291,7 +273,7 @@ InterpretApplication::usage(std::ostream & out) const
   out << "                         Subscribe to dotted \"ip\" address" << std::endl;
   out << "                         on port number \"port\":" << std::endl;
   out << "  -mlisten ip            : Multicast dotted IP listen address" << std::endl;
-  out << "                           (default is " << listenInterfaceIP_ << ")." << std::endl;
+  out << "                           (default is " << config_.listenInterfaceIP_ << ")." << std::endl;
   out << "                           Select local network interface (NIC)" << std::endl;
   out << "                           on which to subscribe and listen." << std::endl;
   out << "                           0.0.0.0 means pick any NIC." << std::endl;
@@ -321,8 +303,8 @@ InterpretApplication::usage(std::ostream & out) const
   out << std::endl;
   out << "  -buffersize size     : Size of communication buffers." << std::endl;
   out << "                         For \"-datagram\" largest expected message." << std::endl;
-  out << "                         (default " << bufferSize_ << ")." << std::endl;
-  out << "  -buffers count       : Number of buffers. (default " << bufferCount_ << ")." << std::endl;
+  out << "                         (default " << config_.bufferSize_ << ")." << std::endl;
+  out << "  -buffers count       : Number of buffers. (default " << config_.bufferCount_ << ")." << std::endl;
   out << "                         For \"-streaming block\" buffersize * buffers must" << std::endl;
   out << "                         exceed largest expected message." << std::endl;
 }
@@ -333,71 +315,71 @@ InterpretApplication::applyArgs()
   bool ok = true;
   try
   {
-    if(templateFileName_.empty())
+    if(config_.templateFileName_.empty())
     {
       ok = false;
       std::cerr << "ERROR: -t [templatefile] option is required." << std::endl;
     }
-    if(!fastFileName_.empty())
+    if(!config_.fastFileName_.empty())
     {
-      fastFile_ = new std::ifstream(fastFileName_.c_str(), binaryMode);
+      fastFile_ = new std::ifstream(config_.fastFileName_.c_str(), binaryMode);
       if(!fastFile_->good())
       {
         ok = false;
         std::cerr << "ERROR: Can't open FAST data file: "
-          << fastFileName_
+          << config_.fastFileName_
           << std::endl;
       }
     }
 
-    if(!verboseFileName_.empty())
+    if(!config_.verboseFileName_.empty())
     {
-      if(verboseFileName_ == "cerr")
+      if(config_.verboseFileName_ == "cerr")
       {
         verboseFile_= &std::cerr;
       }
-      else if(verboseFileName_ == "cout")
+      else if(config_.verboseFileName_ == "cout")
       {
         verboseFile_ = &std::cout;
       }
       else
       {
-        verboseFile_ = new std::ofstream(verboseFileName_.c_str());
+        verboseFile_ = new std::ofstream(config_.verboseFileName_.c_str());
         if(!verboseFile_->good())
         {
           ok = false;
           std::cerr << "ERROR: Can't open verbose file: "
-            << verboseFileName_
+            << config_.verboseFileName_
             << std::endl;
         }
       }
     }
 
-    if(! echoFileName_.empty())
+    if(! config_.echoFileName_.empty())
     {
 
       std::ios::openmode mode = std::ios::out | std::ios::trunc;
-      if(echoType_ == Codecs::DataSource::RAW)
+      if(config_.echoType_ == Codecs::DataSource::RAW)
       {
         mode |= binaryMode;
       }
-      if(echoFileName_ == "cout")
+      if(config_.echoFileName_ == "cout")
       {
         echoFile_ = & std::cout;
       }
-      else if(echoFileName_ == "cerr")
+      else if(config_.echoFileName_ == "cerr")
       {
         echoFile_ = & std::cerr;
       }
       else
       {
-        echoFile_ = new std::ofstream(echoFileName_.c_str(), mode);
+        echoFile_ = new std::ofstream(config_.echoFileName_.c_str(), mode);
       }
       if(!echoFile_->good())
       {
         ok = false;
         std::cerr << "ERROR: Can't open echo file: "
-          << echoFileName_
+          << config_.echoFileName_
           << std::endl;
       }
     }
@@ -420,11 +402,11 @@ InterpretApplication::run()
   int result = 0;
   try
   {
-    std::ifstream templates(templateFileName_.c_str());
+    std::ifstream templates(config_.templateFileName_.c_str());
     if(!templates.good())
     {
         std::cerr << "ERROR: Can't open template file: "
-          << templateFileName_
+          << config_.templateFileName_
           << std::endl;
         return -1;
     }
@@ -434,29 +416,29 @@ InterpretApplication::run()
     Codecs::TemplateRegistryPtr registry = parser.parse(templates);
 
     boost::scoped_ptr<Codecs::HeaderAnalyzer> analyzer;
-    switch(headerType_)
+    switch(config_.headerType_)
     {
-    case NO_HEADER:
+    case DecoderConfiguration::NO_HEADER:
       {
         analyzer.reset(new Codecs::NoHeaderAnalyzer);
         break;
       }
-    case FIXED_HEADER:
+    case DecoderConfiguration::FIXED_HEADER:
       {
         analyzer.reset(new Codecs::FixedSizeHeaderAnalyzer(
-          headerMessageSizeBytes_,
-          headerBigEndian_,
-          headerPrefixCount_,
-          headerSuffixCount_
+          config_.headerMessageSizeBytes_,
+          config_.headerBigEndian_,
+          config_.headerPrefixCount_,
+          config_.headerSuffixCount_
         ));
         break;
       }
-    case FAST_HEADER:
+    case DecoderConfiguration::FAST_HEADER:
       {
         analyzer.reset(new Codecs::FastEncodedHeaderAnalyzer(
-          headerPrefixCount_,
-          headerSuffixCount_,
-          headerMessageSizeBytes_ != 0)); // true if header contains message size
+          config_.headerPrefixCount_,
+          config_.headerSuffixCount_,
+          config_.headerMessageSizeBytes_ != 0)); // true if header contains message size
         break;
       }
     }
@@ -464,58 +446,58 @@ InterpretApplication::run()
     Codecs::GenericMessageBuilder builder(handler);
 
     boost::scoped_ptr<Communication::Assembler> assembler;
-    switch(assemblerType_)
+    switch(config_.assemblerType_)
     {
-    case MESSAGE_PER_PACKET_ASSEMBLER:
+    case DecoderConfiguration::MESSAGE_PER_PACKET_ASSEMBLER:
       {
         Codecs::MessagePerPacketAssembler * pAssembler = new Codecs::MessagePerPacketAssembler(
           registry,
           *analyzer,
           builder);
         assembler.reset(pAssembler);
-        pAssembler->setEcho(*echoFile_, echoType_, echoMessage_, echoField_);
-        pAssembler->setMessageLimit(head_);
+        pAssembler->setEcho(*echoFile_, config_.echoType_, config_.echoMessage_, config_.echoField_);
+        pAssembler->setMessageLimit(config_.head_);
         break;
       }
-    case STREAMING_ASSEMBLER:
+    case DecoderConfiguration::STREAMING_ASSEMBLER:
       {
         Codecs::StreamingAssembler * pAssembler = new Codecs::StreamingAssembler(
           registry,
           *analyzer,
           builder,
-          waitForCompleteMessage_);
+          config_.waitForCompleteMessage_);
         assembler.reset(pAssembler);
-        pAssembler->setEcho(*echoFile_, echoType_, echoMessage_, echoField_);
-        pAssembler->setMessageLimit(head_);
+        pAssembler->setEcho(*echoFile_, config_.echoType_, config_.echoMessage_, config_.echoField_);
+        pAssembler->setMessageLimit(config_.head_);
         break;
       }
     default:
       {
-        switch(receiverType_)
+        switch(config_.receiverType_)
         {
-        case MULTICAST_RECEIVER:
-        case PCAPFILE_RECEIVER:
+        case DecoderConfiguration::MULTICAST_RECEIVER:
+        case DecoderConfiguration::PCAPFILE_RECEIVER:
           {
             Codecs::MessagePerPacketAssembler * pAssembler = new Codecs::MessagePerPacketAssembler(
               registry,
               *analyzer,
               builder);
             assembler.reset(pAssembler);
-            pAssembler->setEcho(*echoFile_, echoType_, echoMessage_, echoField_);
-            pAssembler->setMessageLimit(head_);
+            pAssembler->setEcho(*echoFile_, config_.echoType_, config_.echoMessage_, config_.echoField_);
+            pAssembler->setMessageLimit(config_.head_);
             break;
           }
-        case TCP_RECEIVER:
-        case RAWFILE_RECEIVER:
+        case DecoderConfiguration::TCP_RECEIVER:
+        case DecoderConfiguration::RAWFILE_RECEIVER:
           {
             Codecs::StreamingAssembler * pAssembler = new Codecs::StreamingAssembler(
               registry,
               *analyzer,
               builder,
-              waitForCompleteMessage_);
+              config_.waitForCompleteMessage_);
             assembler.reset(pAssembler);
-            pAssembler->setEcho(*echoFile_, echoType_, echoMessage_, echoField_);
-            pAssembler->setMessageLimit(head_);
+            pAssembler->setEcho(*echoFile_, config_.echoType_, config_.echoMessage_, config_.echoField_);
+            pAssembler->setMessageLimit(config_.head_);
             break;
           }
         default:
@@ -528,38 +510,38 @@ InterpretApplication::run()
     }
 
     boost::scoped_ptr<Communication::Receiver> receiver;
-    switch(receiverType_)
+    switch(config_.receiverType_)
     {
-    case MULTICAST_RECEIVER:
+    case DecoderConfiguration::MULTICAST_RECEIVER:
       {
         receiver.reset(new Communication::MulticastReceiver(
-          multicastGroupIP_,
-          listenInterfaceIP_,
-          portNumber_));
+          config_.multicastGroupIP_,
+          config_.listenInterfaceIP_,
+          config_.portNumber_));
         break;
       }
-    case TCP_RECEIVER:
+    case DecoderConfiguration::TCP_RECEIVER:
       {
         receiver.reset(new Communication::TCPReceiver(
-        hostName_,
-        portName_));
+        config_.hostName_,
+        config_.portName_));
         break;
       }
-    case RAWFILE_RECEIVER:
+    case DecoderConfiguration::RAWFILE_RECEIVER:
       {
         receiver.reset(new Communication::RawFileReceiver(
           *fastFile_));
         break;
       }
-    case PCAPFILE_RECEIVER:
+    case DecoderConfiguration::PCAPFILE_RECEIVER:
       {
         receiver.reset(new Communication::PCapFileReceiver(
-          pcapFileName_));
+          config_.pcapFileName_));
         break;
       }
     }
 
-    receiver->start(*assembler, bufferSize_, bufferCount_);
+    receiver->start(*assembler, config_.bufferSize_, config_.bufferCount_);
 
     // run the event loop in this thread.  Do not return until
     // receiver is stopped.

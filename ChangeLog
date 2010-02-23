@@ -1,3 +1,15 @@
+Tue Feb 23 19:48:26 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.h:
+        Suppress a silly warning from msvc
+
+        * src/Communication/MulticastReceiverHandle.h:
+        Fix a documentation error
+
+        * src/Examples/InterpretApplication/InterpretApplication.h:
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+        Internal reorg to prepare for some future work.  Nothing visible.
+
 Mon Feb 22 23:44:57 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Common/ByteSwapper.h:
