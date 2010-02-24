@@ -1,3 +1,34 @@
+Wed Feb 24 20:28:22 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Application/DecoderConfiguration.h:
+        * src/Application/DecoderConnection.h:
+        * src/Application/DecoderConnection.cpp:
+        * src/Communication/PCapFileReceiver.h:
+        * src/Examples/InterpretApplication/InterpretApplication.h:
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+        Use InterpretApplication as a prototype for a "typical"
+        application that needs to decode FAST encoded data.
+
+        The "guts" of InterpretApplication were refactored into
+        - DecoderConfiguration which holds everything you need to
+          know in order to configure a decoder for "any" supported
+          type of incoming data, and
+        - DecoderConnection which creates all the necessary
+          QuickFAST objects (as described by a DecoderConfiguration),
+          links them together, and makes the results available
+          to the application.
+
+        With this change, the InterpretApplication collapses into:
+           Populate a DecoderConfiguration from command line arguments
+           Create a MessageBuilder to accept decoded information
+           Configure a DecoderConnection
+              using the MessageBuilder and the DecoderConfiguration
+           Run the DecoderConnection
+
+       The DecoderConfiguration and DecoderConnection
+       are available for use in other applications which was the
+       point of the exercise.
+
 Tue Feb 23 19:48:26 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Context.h:

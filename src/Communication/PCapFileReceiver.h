@@ -22,11 +22,14 @@ namespace QuickFAST
       /// @brief Wrap a PCapFileReader into a Receiver
       ///
       /// @param filename names the PCap file
+      /// @param wordSize is the word size of the platform where the file was captured.
       PCapFileReceiver(
-        const std::string & filename
+        const std::string & filename,
+        size_t wordSize = 0
         )
         : SynchReceiver()
         , filename_(filename)
+        , wordSize_(wordSize)
       {
       }
 
@@ -39,6 +42,14 @@ namespace QuickFAST
       // Implement Receiver method
       virtual bool initializeReceiver()
       {
+        if(wordSize_ == 32)
+        {
+          reader_.set32bit(true);
+        }
+        else if (wordSize_ == 64)
+        {
+          reader_.set64bit(true);
+        }
         reader_.open(filename_.c_str());
         return reader_.good();
       }
@@ -63,6 +74,7 @@ namespace QuickFAST
 
     private:
       std::string filename_;
+      size_t wordSize_;
       PCapReader reader_;
     };
   }
