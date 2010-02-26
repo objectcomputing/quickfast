@@ -38,6 +38,7 @@ DataSource::bytesAvailable()
   if(position_ >= size_)
   {
     position_ = 0;
+    size_ = 0;
     (void)getBuffer(buffer_, size_);
   }
   return size_ - position_;

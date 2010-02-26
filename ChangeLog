@@ -1,3 +1,8 @@
+Fri Feb 26 18:00:48 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/DataSource.cpp:
+        Problem detecting end of data in DataSource::bytesAvailable();
+
 Wed Feb 24 20:28:22 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Application/DecoderConfiguration.h:
