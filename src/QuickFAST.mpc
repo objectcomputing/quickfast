@@ -1,3 +1,9 @@
+// Copyright (c) 2009, Object Computing, Inc.
+// All rights reserved.
+// See the file license.txt for licensing information.
+
+//////////////////////////////
+// Build the QuickFAST library
 project(*) : boost_base, boost_filesystem, boost_system, boost_thread {
   sharedname = QuickFAST
   dynamicflags += QUICKFAST_BUILD_DLL
@@ -39,6 +45,8 @@ project(*) : boost_base, boost_filesystem, boost_system, boost_thread {
   }
 }
 
+////////////////////////////
+// Build the QuickFAST tests
 project(*tests) : boost_unit_test_framework, boost_base, boost_filesystem, boost_system, boost_thread {
   exename = QuickFASTTest
   includes += $(QUICKFAST_ROOT)/src

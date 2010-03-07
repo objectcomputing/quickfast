@@ -1,3 +1,47 @@
+Sun Mar  7 19:57:02 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * QuickFAST.mwc:
+        * src/DotNet/AssemblyInfo.cpp:
+        * src/DotNet/DNDecimal.h:
+        * src/DotNet/DNDecimal.cpp:
+        * src/DotNet/DNDecoderConnection.h:
+        * src/DotNet/DNDecoderConnection.cpp:
+        * src/DotNet/DNField.h:
+        * src/DotNet/DNField.cpp:
+        * src/DotNet/DNFieldSet.h:
+        * src/DotNet/DNFieldSet.cpp:
+        * src/DotNet/DNMessage.h:
+        * src/DotNet/DNMessageBuilder.h:
+        * src/DotNet/DNMessageDeliverer.h:
+        * src/DotNet/DNMessageDeliverer.cpp:
+        * src/DotNet/DNSequence.h:
+        * src/DotNet/DNSequence.cpp:
+        * src/DotNet/DNSequenceEntry.h:
+        * src/DotNet/ImplBuilderBase.h:
+        * src/DotNet/ImplBuilderBase.cpp:
+        * src/DotNet/ImplField.h:
+        * src/DotNet/ImplField.cpp:
+        * src/DotNet/ImplFieldSet.h:
+        * src/DotNet/ImplFieldSet.cpp:
+        * src/DotNet/ImplFieldSetBuilder.h:
+        * src/DotNet/ImplFieldSetBuilder.cpp:
+        * src/DotNet/ImplSequence.h:
+        * src/DotNet/ImplSequence.cpp:
+        * src/DotNet/ImplSequenceBuilder.h:
+        * src/DotNet/ImplSequenceBuilder.cpp:
+        * src/DotNet/QuickFASTDotNet.mpc:
+        * src/DotNet/QuickFASTDotNetPch.h:
+        * src/DotNet/QuickFASTDotNetPch.cpp:
+        * src/DotNet/StringConversion.h:
+        * src/DotNet/app.aps:
+        * src/DotNet/resource.h:
+        * src/DotNetExamples/InterpretFASTDotNet/FieldSetInterpreter.cs:
+        * src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.cs:
+        * src/DotNetExamples/InterpretFASTDotNet/Properties/AssemblyInfo.cs:
+        * src/QuickFAST.mpc:
+        Reenable .NET support.   It needs work, but it is successfully decoding incoming messages.
+
+
 Sun Mar  7 19:22:31 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * QuickFAST.features:

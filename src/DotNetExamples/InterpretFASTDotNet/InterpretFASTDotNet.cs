@@ -8,73 +8,48 @@ namespace QuickFASTDotNet
     {
         public class InterpretFASTDotNet
         {
-            string templateFileName_;
-            System.IO.FileStream templateFile_;
-            string fastFileName_;
-            System.IO.FileStream fastFile_;
-            string outputFileName_;
-            System.IO.FileStream outputFileStream_;
-            System.IO.TextWriter outputFile_;
-
-            bool resetOnMessage_;
-            bool strict_;
-            bool verboseExecution_;
-
+            long recordCount_ = 0;
             public InterpretFASTDotNet()
             {
-                templateFileName_ = null;
-                fastFileName_ = null;
-                outputFileName_ = null;
-                resetOnMessage_ = false;
-                strict_ = true;
-                verboseExecution_ = false;
             }
-
 
             public void usage()
             {
-                System.Console.WriteLine("Usage of this program:");
-                System.Console.WriteLine("  -t file     : Template file (required)");
-                System.Console.WriteLine("  -f file     : FAST Message file (required)");
-                System.Console.WriteLine("  -o file     : File to which performance measurements are written. (default standard output)");
-                System.Console.WriteLine("  -r          : Toggle 'reset decoder on every message' (default false).");
-                System.Console.WriteLine("  -s          : Toggle 'strict decoding rules' (default true).");
-                System.Console.WriteLine("  -vx         : Toggle 'noisy execution progress' (default false).");
+                Console.WriteLine("Usage of this program:");
+                Console.WriteLine("  -t file     : Template file (required)");
+                Console.WriteLine("  -f file     : FAST Message file (required)");
+                Console.WriteLine("  -r          : Toggle 'reset decoder on every message' (default false).");
+                Console.WriteLine("  -s          : Toggle 'strict decoding rules' (default true).");
+                Console.WriteLine("  -vx         : Toggle 'noisy execution progress' (default false).");
             }
-
-
 
             public bool init(ref string[] args)
             {
                 bool readTemplateName = false;
                 bool readSourceName = false;
-                bool readOutName = false;
                 bool ok = true;
 
                 foreach (string opt in args)
                 {
                     if (readTemplateName)
                     {
-                        templateFileName_ = opt;
+                        decoder_.TemplateFileName = opt;
                         readTemplateName = false;
                     }
                     else if (readSourceName)
                     {
-                        fastFileName_ = opt;
+                        decoder_.FastFileName = opt;
+                        decoder_.ReceiverType = QuickFAST.DotNet.DNDecoderConnection.ReceiverTypes.RAWFILE_RECEIVER;
+                        decoder_.HeaderType = QuickFAST.DotNet.DNDecoderConnection.HeaderTypes.NO_HEADER;
                         readSourceName = false;
-                    }
-                    else if (readOutName)
-                    {
-                        outputFileName_ = opt;
-                        readOutName = false;
                     }
                     else if (opt == "-r")
                     {
-                        resetOnMessage_ = !resetOnMessage_;
+                        decoder_.Reset = true;
                     }
                     else if (opt == "-s")
                     {
-                        strict_ = !strict_;
+                        decoder_.Strict = true;
                     }
                     else if (opt == "-t")
                     {
@@ -84,84 +59,19 @@ namespace QuickFASTDotNet
                     {
                         readSourceName = true;
                     }
-                    else if (opt == "-o")
-                    {
-                        readOutName = true;
-                    }
                     else if (opt == "-h")
                     {
                         ok = false;
                     }
                     else if (opt == "-vx")
                     {
-                        verboseExecution_ = !verboseExecution_;
-                    }
-                }
-
-                try
-                {
-                    if (templateFileName_ == null)
-                    {
-                        ok = false;
-                        System.Console.WriteLine("ERROR: -t [templatefile] option is required.");
-                    }
-                    if (ok)
-                    {
-                        try
-                        {
-
-                            templateFile_ = new System.IO.FileStream(templateFileName_, System.IO.FileMode.Open);
-                        }
-                        catch (System.IO.IOException iex)
-                        {
-                            ok = false;
-                            System.Console.WriteLine("ERROR: Can't open template file: {0}", templateFileName_);
-                            System.Console.WriteLine(iex.ToString());
-                        }
-                    }
-                    if (fastFileName_ == null)
-                    {
-                        ok = false;
-                        System.Console.WriteLine("ERROR: -f [FASTfile] option is required.");
-                    }
-                    if (ok)
-                    {
-                        try
-                        {
-                            fastFile_ = new System.IO.FileStream(fastFileName_, System.IO.FileMode.Open);
-                        }
-                        catch (System.IO.IOException iex)
-                        {
-                            ok = false;
-                            System.Console.WriteLine("ERROR: Can't open FAST Message file: {0}", fastFileName_);
-                            System.Console.WriteLine(iex.ToString());
-                        }
-                    }
-                    if (ok && outputFileName_ != null)
-                    {
-                        try
-                        {
-                            outputFileStream_ = new System.IO.FileStream(outputFileName_, System.IO.FileMode.OpenOrCreate);
-                            outputFile_ = new System.IO.StreamWriter(outputFileStream_);
-                        }
-
-                        catch (System.IO.IOException iex)
-                        {
-                            ok = false;
-                            System.Console.WriteLine("ERROR: Can't open performance output file: {0}", outputFileName_);
-                            System.Console.WriteLine(iex.ToString());
-                        }
+                        decoder_.VerboseFileName = "cout";
                     }
                     else
                     {
-                        outputFile_ = System.Console.Out;
+                        Console.Error.WriteLine("Unknown Option: {0}", opt);
+                        ok = false;
                     }
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    ok = false;
                 }
 
                 if (!ok)
@@ -177,29 +87,12 @@ namespace QuickFASTDotNet
                 int result = 0;
                 try
                 {
-                    if (verboseExecution_)
-                    {
-                        System.Console.WriteLine("Parsing templates");
-                    }
-                    QuickFASTDotNet.Codecs.TemplateRegistry templateRegistry = QuickFASTDotNet.Codecs.TemplateRegistry.Parse(templateFile_);
-                    if (verboseExecution_)
-                    {
-                        System.Console.WriteLine("Parsed {0} templates.", templateRegistry.Size);
-                        System.Console.WriteLine("Decoding messages");
-                    }
+                    /// Handle incoming FAST decoded messages
+                    builder_.MessageReceived +=
+                        new QuickFAST.DotNet.DNMessageDeliverer.MessageReceiver(
+                            MessageInterpreter);
 
-                    MessageInterpreter handler = new MessageInterpreter(outputFile_);
-                    QuickFASTDotNet.Codecs.SynchronousDecoder decoder = new QuickFASTDotNet.Codecs.SynchronousDecoder(templateRegistry, fastFile_);
-                    decoder.ResetOnMessage = resetOnMessage_;
-                    decoder.Strict = strict_;
-                    QuickFASTDotNet.Codecs.MessageReceivedDelegate handlerDelegate;
-                    handlerDelegate = new QuickFASTDotNet.Codecs.MessageReceivedDelegate(handler.MessageReceived);
-
-                    decoder.Decode(handlerDelegate);
-                    if (verboseExecution_)
-                    {
-                        System.Console.WriteLine("Decoded {0} messages.", decoder.MessageCount);
-                    }
+                    decoder_.run(builder_, 0, true);
                 }
                 catch (Exception ex)
                 {
@@ -210,8 +103,18 @@ namespace QuickFASTDotNet
                 return result;
             }
 
+            public bool MessageInterpreter(
+                QuickFAST.DotNet.DNMessageDeliverer builder,
+                QuickFAST.DotNet.DNFieldSet message)
+            {
+                ++recordCount_;
+                Console.Write("Record #{0} ", recordCount_);
+                interpreter_.interpret(message);
+                Console.WriteLine();
+                return true;
+            }
 
-            
+
             static int Main(string[] args)
             {
                 int result = 0;
@@ -223,11 +126,14 @@ namespace QuickFASTDotNet
                 }
                 else
                 {
-                    System.Console.WriteLine("ERROR: Failed initialization.");
+                    Console.WriteLine("ERROR: Failed initialization.");
                     result = 1;
                 }
                 return result;
             }
+            private QuickFAST.DotNet.DNDecoderConnection decoder_ = new QuickFAST.DotNet.DNDecoderConnection();
+            private QuickFAST.DotNet.DNMessageDeliverer builder_ = new QuickFAST.DotNet.DNMessageDeliverer();
+            private FieldSetInterpreter interpreter_ = new FieldSetInterpreter();
         }
     }
 }

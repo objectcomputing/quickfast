@@ -6,8 +6,7 @@ workspace(*) {
   // .NET support only for Visual Studio compilers
   exclude(!vc8, !vc9) {
     //C++/Cli Visual Studio Projects
-//     src/DotNet/QuickFASTDotNet.mpc
-//  src/DotNetTwo/QuickFASTDotNet.mpc
+    src/DotNet/QuickFASTDotNet.mpc
   
     //C# Visual Studio Projects
     specific {
