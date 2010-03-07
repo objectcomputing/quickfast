@@ -1,5 +1,6 @@
 project(PerformanceTestDotNet): QuickFASTDotNetExample {
   requires += dotnet
+  requires += obsolete
   after += DotNetExampleCode
   exename = PerformanceTestDotNet
   managed = 1

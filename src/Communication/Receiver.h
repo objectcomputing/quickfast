@@ -36,7 +36,7 @@ namespace QuickFAST
       {
       }
 
-      ~Receiver()
+      virtual ~Receiver()
       {
       }
 

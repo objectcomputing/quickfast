@@ -11,7 +11,7 @@
 namespace QuickFAST{
   namespace Codecs{
     /// @brief An implementation for the &lt;int32> field instruction.
-    typedef FieldInstructionInteger<int32, ValueType::UINT32, true> FieldInstructionInt32;
+    typedef FieldInstructionInteger<int32, ValueType::INT32, true> FieldInstructionInt32;
   }
 }
 #endif // FIELDINSTRUCTIONINT32_H

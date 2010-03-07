@@ -1,3 +1,77 @@
+Sun Mar  7 19:22:31 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * QuickFAST.features:
+        Add "obsolete" feature for use during transtion to new .NET support
+
+        * QuickFAST.mwc:
+        Disable .NET builds during transition
+
+        * src/Application/DecoderConfiguration.h:
+        * src/Application/DecoderConnection_fwd.h:
+        Documentation changes.
+        Add forward declaration.
+
+        * src/Codecs/FieldInstructionInt32.h:
+        * src/Codecs/FieldInstructionUInt64.h:
+        Fix some field type errors.
+
+        * src/Common/QuickFASTPch.h:
+        Link boost::threads dynamically to cope with .NET
+
+        * src/Communication/Receiver.h:
+        Declare destructor as virtual.
+
+
+        * src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.mpc:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.mpc:
+        Disable DotNet examples during transition to new DotNet support
+
+        * src/DotNet/AssemblyInfo.cpp:
+        * src/DotNet/BoostPtr.h:
+        * src/DotNet/DataDestination.h:
+        * src/DotNet/DataDestination.cpp:
+        * src/DotNet/DataSource.h:
+        * src/DotNet/DataSource.cpp:
+        * src/DotNet/DataSourceBuffered.h:
+        * src/DotNet/DataSourceBuffered.cpp:
+        * src/DotNet/Decimal.h:
+        * src/DotNet/Decimal.cpp:
+        * src/DotNet/Decoder.h:
+        * src/DotNet/Decoder.cpp:
+        * src/DotNet/Encoder.h:
+        * src/DotNet/Encoder.cpp:
+        * src/DotNet/Exceptions.h:
+        * src/DotNet/Exceptions.cpp:
+        * src/DotNet/Field.h:
+        * src/DotNet/Field.cpp:
+        * src/DotNet/FieldIdentity.h:
+        * src/DotNet/FieldIdentity.cpp:
+        * src/DotNet/FieldSet.h:
+        * src/DotNet/FieldSet.cpp:
+        * src/DotNet/ManagedHelpers.h:
+        * src/DotNet/MutableFieldSet.h:
+        * src/DotNet/MutableFieldSet.cpp:
+        * src/DotNet/MutableSequence.h:
+        * src/DotNet/MutableSequence.cpp:
+        * src/DotNet/QuickFASTDotNet.mpc:
+        * src/DotNet/Sequence.h:
+        * src/DotNet/Sequence.cpp:
+        * src/DotNet/Stdafx.h:
+        * src/DotNet/Stdafx.cpp:
+        * src/DotNet/StlDotNet.h:
+        * src/DotNet/Stopwatch.h:
+        * src/DotNet/Stopwatch.cpp:
+        * src/DotNet/SynchronousDecoder.h:
+        * src/DotNet/SynchronousDecoder.cpp:
+        * src/DotNet/TemplateRegistry.h:
+        * src/DotNet/TemplateRegistry.cpp:
+        * src/DotNet/UnmanagedPtr.h:
+        * src/DotNet/UnmanagedPtr.cpp:
+        * src/DotNet/resource.h:
+        * src/DotNetExamples/InterpretFASTDotNet/MessageInterpreter.cs:
+        Remove previous attempt at DotNet support to make room for the
+        new way.
+
 Fri Feb 26 18:00:48 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/DataSource.cpp:

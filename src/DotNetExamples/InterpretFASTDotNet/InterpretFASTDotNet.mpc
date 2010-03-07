@@ -1,5 +1,6 @@
 project(*): QuickFASTDotNetExample {
   requires += dotnet
+
   exename = InterpretFASTDotNet
   managed = 1
 

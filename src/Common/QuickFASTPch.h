@@ -23,6 +23,10 @@
 # include <windows.h>
 #endif // _WIN32
 
+// If building for .NET, must link boost threads dynamically
+#define BOOST_THREAD_USE_DLL
+#define BOOST_LIB_DIAGNOSTIC
+
 #include <sstream>
 #include <string>
 #include <vector>
@@ -35,7 +39,7 @@
 #include <fstream>
 #include <cstdlib>
 
-
+#include <boost/date_time/gregorian/gregorian_types.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/enable_shared_from_this.hpp>

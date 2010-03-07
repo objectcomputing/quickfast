@@ -4,8 +4,10 @@ boost=1
 // NOTE: Original dotnet support is disabled while refactoring the decoder.
 // once the refactoring is complete the .NET support should be completely
 // reconsidered and reworked.
-dotnet=0
-dotnetapp=0
+dotnet=1
+dotnetapp=1
 nunit=0
 arca=1
 arcadotnet=1
+obsolete=0
+
