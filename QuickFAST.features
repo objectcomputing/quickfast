@@ -1,13 +1,19 @@
 // This file defines MPC features used to enable and disable portions of the build
 QuickFAST=1
 boost=1
-// NOTE: Original dotnet support is disabled while refactoring the decoder.
-// once the refactoring is complete the .NET support should be completely
-// reconsidered and reworked.
-dotnet=1
+// .NET is disabled by default to avoid build errors for people using
+// the express edition of Visual Studio C++.
+// To enable .NET build, change the following from '0' to '1'
+dotnet=0
 dotnetapp=1
+// If nUnit is installed, change the following from '0' to '1'
 nunit=0
-arca=1
-arcadotnet=1
+// If ARCA support is present (separate project) change the following
+// from '0' to '1'
+arca=0
+// If ARCA .NET support is present (separate project) change the following
+// from '0' to '1'
+arcadotnet=0
+// This is a "feature" used to temporarily disable parts of the build.
 obsolete=0
 
