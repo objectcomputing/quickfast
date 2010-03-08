@@ -26,14 +26,14 @@ DNFieldSet::clear()
   impl_ = 0;
 }
 
-size_t
-DNFieldSet::size()
+int
+DNFieldSet::Count::get()
 {
   if(impl_ == 0)
   {
-    throw std::logic_error("Call size on cleared DNFieldSet");
+    throw std::logic_error("Access Count property on cleared DNFieldSet");
   }
-  return impl_->size();
+  return int(impl_->size());
 }
 
 int
@@ -58,13 +58,13 @@ DNFieldSet::findIndexByName(System::String ^ fieldName)
 }
 
 DNField ^
-DNFieldSet::getField(size_t index)
+DNFieldSet::getField(int index)
 {
   if(impl_ == 0)
   {
     throw std::logic_error("Call getField on cleared DNFieldSet");
   }
-  return gcnew DNField((*impl_)[index]);
+  return gcnew DNField((*impl_)[size_t(index)]);
 }
 
 DNField ^
@@ -88,3 +88,66 @@ DNFieldSet::findFieldByName(System::String ^ fieldName)
   return nullptr;
 }
 
+System::Collections::IEnumerator^ DNFieldSet::GetEnumerator()
+{
+  return gcnew DNFieldSet::DNFieldSetEnumerator(impl_, this);
+}
+
+System::Collections::Generic::IEnumerator<DNField ^ >^
+DNFieldSet::GetSpecializedEnumerator()
+{
+  return gcnew DNFieldSet::DNFieldSetEnumerator(impl_, this);
+}
+
+DNFieldSet::DNFieldSetEnumerator::DNFieldSetEnumerator(ImplFieldSet * impl, DNFieldSet^ parent)
+  : parent_(parent)
+  , impl_(impl)
+  , position_(size_t(-1))
+  , size_(impl_->size())
+{
+}
+
+DNFieldSet::DNFieldSetEnumerator::~DNFieldSetEnumerator()
+{
+}
+
+bool
+DNFieldSet::DNFieldSetEnumerator::MoveNext()
+{
+  if(position_ < size_)
+  {
+    ++position_;
+  }
+  else if (position_ == size_t(-1))
+  {
+    position_ = 0;
+  }
+  return position_ < size_;
+}
+
+void
+DNFieldSet::DNFieldSetEnumerator::Reset()
+{
+  position_ = size_t(-1);
+}
+
+
+DNField ^
+DNFieldSet::DNFieldSetEnumerator::GenericCurrent::get()
+{
+  if(position_ < size_)
+  {
+    return gcnew DNField(impl_->operator[] (position_));
+  }
+  return nullptr;
+}
+
+System::Object^
+DNFieldSet::DNFieldSetEnumerator::Current::get()
+{
+  if(position_ < size_)
+  {
+    return gcnew DNField(impl_->operator[] (position_));
+  }
+  return nullptr;
+}

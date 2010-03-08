@@ -67,18 +67,6 @@ DNSequence::DNSequenceEnumerator::DNSequenceEnumerator(ImplSequence * impl, DNSe
 {
 }
 
-#if 0
-DNSequence::DNSequenceEnumerator::DNSequenceEnumerator(const DNSequence::DNSequenceEnumerator & rhs)
-  : parent_(rhs.parent_)
-  , impl_(rhs.impl_)
-  , position_(rhs.position_)
-  , size_(rhs_size())
-{
-}
-#endif
-
-
-
 DNSequence::DNSequenceEnumerator::~DNSequenceEnumerator()
 {
 }

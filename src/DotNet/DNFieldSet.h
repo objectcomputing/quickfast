@@ -12,28 +12,63 @@ namespace QuickFAST
   {
     class ImplFieldSet;
 
-    // Design decsion: Rather than defining DNField, I chose to provide access to field content and identity via indexing the field set.
     public ref class DNFieldSet
+      : public System::Collections::Generic::IEnumerable<DNField ^ >
     {
     public:
       DNFieldSet(ImplFieldSet & impl);
       ~DNFieldSet();
 
+      virtual System::Collections::IEnumerator^ GetEnumerator() = System::Collections::IEnumerable::GetEnumerator;
+
+      virtual System::Collections::Generic::IEnumerator<DNField ^ >^ GetSpecializedEnumerator()
+        = System::Collections::Generic::IEnumerable<DNField^>::GetEnumerator;
+
       /// How many fields are defined
-      size_t size();
+      property int Count
+      {
+        int get();
+      }
 
       /// @brief find a field with the given local name (ignores namespace)
       int findIndexByName(System::String ^ fieldName);
 
-      DNField ^ getField(size_t   index);
+      DNField ^ getField(int index);
 
       DNField ^ findFieldByName(System::String ^ fieldName);
 
       void clear();
 
+    private:
+      ref class DNFieldSetEnumerator
+        : public System::Collections::IEnumerator
+        , public System::Collections::Generic::IEnumerator<DNField ^ >
+      {
+      public:
 
-      /// @brief for internal use
-//      ImplFieldSet * getImpl();
+        // The enumerator requires a reference to the source of the interators
+        // to prevent their source from being prematurely released.
+        DNFieldSetEnumerator(ImplFieldSet * impl_, DNFieldSet^ parent);
+
+        ~DNFieldSetEnumerator();
+
+        property DNField ^ GenericCurrent{
+          virtual DNField ^ get () = System::Collections::Generic::IEnumerator<DNField ^ >::Current::get;
+        }
+
+        virtual property System::Object^ Current{
+          System::Object^ get () = System::Collections::IEnumerator::Current::get;
+        }
+
+        virtual bool MoveNext();
+        virtual void Reset();
+
+      private:
+        DNFieldSet^ parent_;
+        ImplFieldSet * impl_;
+        size_t position_;
+        size_t size_;
+      };
 
     private:
       ImplFieldSet * impl_;

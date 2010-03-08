@@ -18,11 +18,13 @@ namespace QuickFASTDotNet
 
             public void formatFieldSet(QuickFAST.DotNet.DNFieldSet fieldSet)
             {
-                uint size = fieldSet.size();
+                int size = fieldSet.Count;
                 //Console.WriteLine("{0}fields: {1}", indent_, size);
-                for (uint nField = 0; nField < size; ++nField)
+//                for (int nField = 0; nField < size; ++nField)
+//                {
+//                    DNField field = fieldSet.getField(nField);
+                foreach (DNField field in fieldSet)
                 {
-                    DNField field = fieldSet.getField(nField);
                     FieldType type = field.Type;
                     if (type == FieldType.SEQUENCE)
                     {
