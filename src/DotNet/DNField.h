@@ -42,33 +42,118 @@ namespace QuickFAST{
       DNField(ImplField & impl);
       ~DNField();
 
-      System::String ^ localName();
-      System::String ^ fieldNamespace();
-      System::String ^ id();
-      bool isDefined();
-      FieldType type();
-      int toInt32();
-      unsigned int toUInt32();
-      __int64 toInt64();
-      unsigned __int64 toUInt64();
-      short toInt16();
-      unsigned short toUInt16();
-      signed char toInt8();
-      unsigned char toUInt8();
-      DNDecimal toDecimal();
-      System::String ^ toAscii();
-      System::String ^ toUtf8();
+      property System::String ^ LocalName
+      {
+        System::String ^ get();
+      }
+
+      property System::String ^ FieldNamespace
+      {
+        System::String ^ get();
+      }
+
+      property System::String ^ Id
+      {
+        System::String ^ get();
+      }
+
+      property bool IsDefined
+      {
+        bool get();
+      }
+
+      property FieldType Type
+      {
+        FieldType get();
+      }
+
+      property int Int32
+      {
+        int get();
+      }
+
+      property unsigned int UInt32
+      {
+        unsigned int get();
+      }
+
+      property __int64 Int64
+      {
+        __int64 get();
+      }
+
+      property unsigned __int64 UInt64
+      {
+        unsigned __int64 get();
+      }
+
+      property short Int16
+      {
+        short get();
+      }
+
+      property unsigned short UInt16
+      {
+        unsigned short get();
+      }
+
+      property signed char Int8
+      {
+        signed char get();
+      }
+
+      property unsigned char UInt8
+      {
+        unsigned char get();
+      }
+
+      property DNDecimal Decimal
+      {
+        DNDecimal get();
+      }
+
+      property System::String ^ Ascii
+      {
+        System::String ^ get();
+      }
+
+      property System::String ^ Utf8
+      {
+        System::String ^ get();
+      }
 
       // todo sequence of octets
-      System::String ^ toByteVector();
-      DNFieldSet ^ toGroup();
+      property System::String ^ ByteVector
+      {
+        System::String ^ get();
+      }
 
-      DNSequence ^ toSequence();
 
-      System::String ^ asString();
+      property DNFieldSet ^ Group
+      {
+        DNFieldSet ^ get();
+      }
 
-      QuickFAST::mantissa_t mantissa();
-      QuickFAST::exponent_t exponent();
+      property DNSequence ^ Sequence
+      {
+        DNSequence ^ get();
+      }
+
+
+      property System::String ^ DisplayString
+      {
+        System::String ^ get();
+      }
+
+      property QuickFAST::mantissa_t Mantissa
+      {
+        QuickFAST::mantissa_t get();
+      }
+
+      property QuickFAST::exponent_t Exponent
+      {
+        QuickFAST::exponent_t get();
+      }
 
     private:
       ImplField * impl_;

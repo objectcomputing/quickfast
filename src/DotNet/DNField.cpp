@@ -21,134 +21,134 @@ DNField::~DNField()
 }
 
 System::String ^
-DNField::localName()
+DNField::LocalName::get()
 {
   return string_cast(impl_->localName());
 }
 
 System::String ^
-DNField::fieldNamespace()
+DNField::FieldNamespace::get()
 {
   return string_cast(impl_->fieldNamespace());
 }
 
 System::String ^
-DNField::id()
+DNField::Id::get()
 {
   return string_cast(impl_->id());
 }
 
 bool
-DNField::isDefined()
+DNField::IsDefined::get()
 {
   return impl_->isDefined();
 }
 
 FieldType
-DNField::type()
+DNField::Type::get()
 {
   return impl_->type();
 }
 
 int
-DNField::toInt32()
+DNField::Int32::get()
 {
   return impl_->toInt32();
 }
 
 unsigned int
-DNField::toUInt32()
+DNField::UInt32::get()
 {
   return impl_->toUInt32();
 }
 
 __int64
-DNField::toInt64()
+DNField::Int64::get()
 {
   return impl_->toInt64();
 }
 
 unsigned __int64
-DNField::toUInt64()
+DNField::UInt64::get()
 {
   return impl_->toUInt64();
 }
 
 short
-DNField::toInt16()
+DNField::Int16::get()
 {
   return impl_->toInt16();
 }
 
 unsigned short
-DNField::toUInt16()
+DNField::UInt16::get()
 {
   return impl_->toUInt16();
 }
 
 signed char
-DNField::toInt8()
+DNField::Int8::get()
 {
   return impl_->toInt8();
 }
 
 unsigned char
-DNField::toUInt8()
+DNField::UInt8::get()
 {
   return impl_->toUInt8();
 }
 
 DNDecimal
-DNField::toDecimal()
+DNField::Decimal::get()
 {
   return impl_->toDecimal();
 }
 
 System::String ^
-DNField::toAscii()
+DNField::Ascii::get()
 {
   return string_cast(impl_->toAscii());
 }
 
 System::String ^
-DNField::toUtf8()
+DNField::Utf8::get()
 {
   return string_cast(impl_->toUtf8());
 }
 
 System::String ^
-DNField::toByteVector()
+DNField::ByteVector::get()
 {
   return string_cast(impl_->toByteVector());
 }
 
 DNFieldSet ^
-DNField::toGroup()
+DNField::Group::get()
 {
   return gcnew DNFieldSet(impl_->toGroup());
 }
 
 DNSequence ^
-DNField::toSequence()
+DNField::Sequence::get()
 {
   return gcnew DNSequence(impl_->toSequence());
 }
 
 System::String ^
-DNField::asString()
+DNField::DisplayString::get()
 {
   return string_cast(impl_->asString());
 }
 
 QuickFAST::mantissa_t
-DNField::mantissa()
+DNField::Mantissa::get()
 {
   return impl_->mantissa();
 }
 
 
 QuickFAST::exponent_t
-DNField::exponent()
+DNField::Exponent::get()
 {
   return impl_->exponent();
 }

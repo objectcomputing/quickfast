@@ -23,22 +23,22 @@ namespace QuickFASTDotNet
                 for (uint nField = 0; nField < size; ++nField)
                 {
                     DNField field = fieldSet.getField(nField);
-                    FieldType type = field.type();
+                    FieldType type = field.Type;
                     if (type == FieldType.SEQUENCE)
                     {
                         formatSequence(field);
                     }
                     else if (type == FieldType.GROUP)
                     {
-                        Console.WriteLine("{0}Group {1}:", indent_, field.localName());
+                        Console.WriteLine("{0}Group {1}:", indent_, field.LocalName);
                         formatGroup(field);
                     }
                     else
                     {
                         Console.Write(" {0}[{1}]={2}",
-                            field.localName(),
-                            field.id(),
-                            field.asString()
+                            field.LocalName,
+                            field.Id,
+                            field.DisplayString
                             );
                     }
                 }
@@ -46,10 +46,10 @@ namespace QuickFASTDotNet
 
             public void formatSequence(DNField field)
             {
-                DNSequence sequence = field.toSequence();
+                DNSequence sequence = field.Sequence;
                 uint size = sequence.size();
                 Console.WriteLine();
-                Console.Write("{0} {1}[{2}]=", indent_, field.localName(), field.id());
+                Console.Write("{0} {1}[{2}]=", indent_, field.LocalName, field.Id);
                 Console.Write("{0}Sequence: {1}[{2}] = {3}", indent_, sequence.lengthName(), sequence.lengthId(), size);
                 String saveIndent = indent_;
                 indent_ += "  ";
@@ -66,9 +66,9 @@ namespace QuickFASTDotNet
 
             public void formatGroup(DNField field)
             {
-                DNFieldSet group = field.toGroup();
+                DNFieldSet group = field.Group;
                 Console.WriteLine();
-                Console.Write("{0}{1}[{2}]=", indent_, field.localName(), field.id());
+                Console.Write("{0}{1}[{2}]=", indent_, field.LocalName, field.Id);
                 Console.Write("{0}Group:", indent_);
                 String saveIndent = indent_;
                 indent_ = indent_ + "  ";
