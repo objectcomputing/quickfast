@@ -20,31 +20,107 @@ DNSequence::~DNSequence()
 }
 
 System::String ^
-DNSequence::lengthName()
+DNSequence::LengthName::get()
 {
   return string_cast(impl_->lengthName());
 }
 
 System::String ^
-DNSequence::lengthNamespace()
+DNSequence::LengthNamespace::get()
 {
   return string_cast(impl_->lengthNamespace());
 }
 
 System::String ^
-DNSequence::lengthId()
+DNSequence::LengthId::get()
 {
   return string_cast(impl_->lengthId());
 }
 
-size_t
-DNSequence::size()
+int
+DNSequence::Count::get()
 {
-  return impl_->size();
+  return static_cast<int>(impl_->size());
 }
 
 DNFieldSet ^
-DNSequence::entry(size_t index)
+DNSequence::entry(int index)
 {
-  return gcnew DNFieldSet(impl_->operator[] (index));
+  return gcnew DNFieldSet(impl_->operator[] (size_t(index)));
 }
+
+System::Collections::IEnumerator^ DNSequence::GetEnumerator()
+{
+  return gcnew DNSequenceEnumerator(impl_, this);
+}
+
+System::Collections::Generic::IEnumerator<DNFieldSet^>^ DNSequence::GetSpecializedEnumerator()
+{
+  return gcnew DNSequenceEnumerator(impl_, this);
+}
+
+DNSequence::DNSequenceEnumerator::DNSequenceEnumerator(ImplSequence * impl, DNSequence^ parent)
+  : parent_(parent)
+  , impl_(impl)
+  , position_(size_t(-1))
+  , size_(impl_->size())
+{
+}
+
+#if 0
+DNSequence::DNSequenceEnumerator::DNSequenceEnumerator(const DNSequence::DNSequenceEnumerator & rhs)
+  : parent_(rhs.parent_)
+  , impl_(rhs.impl_)
+  , position_(rhs.position_)
+  , size_(rhs_size())
+{
+}
+#endif
+
+
+
+DNSequence::DNSequenceEnumerator::~DNSequenceEnumerator()
+{
+}
+
+bool
+DNSequence::DNSequenceEnumerator::MoveNext()
+{
+  if(position_ < size_)
+  {
+    ++position_;
+  }
+  else if (position_ == size_t(-1))
+  {
+    position_ = 0;
+  }
+  return position_ < size_;
+}
+
+void
+DNSequence::DNSequenceEnumerator::Reset()
+{
+  position_ = size_t(-1);
+}
+
+
+DNFieldSet^
+DNSequence::DNSequenceEnumerator::GenericCurrent::get()
+{
+  if(position_ < size_)
+  {
+    return gcnew DNFieldSet(impl_->operator[] (position_));
+  }
+  return nullptr;
+}
+
+System::Object^
+DNSequence::DNSequenceEnumerator::Current::get()
+{
+  if(position_ < size_)
+  {
+    return gcnew DNFieldSet(impl_->operator[] (position_));
+  }
+  return nullptr;
+}
+

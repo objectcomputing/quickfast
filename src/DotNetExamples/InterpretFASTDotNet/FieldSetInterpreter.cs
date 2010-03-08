@@ -47,17 +47,19 @@ namespace QuickFASTDotNet
             public void formatSequence(DNField field)
             {
                 DNSequence sequence = field.Sequence;
-                uint size = sequence.size();
+                int size = sequence.Count;
                 Console.WriteLine();
                 Console.Write("{0} {1}[{2}]=", indent_, field.LocalName, field.Id);
-                Console.Write("{0}Sequence: {1}[{2}] = {3}", indent_, sequence.lengthName(), sequence.lengthId(), size);
+                Console.Write("{0}Sequence: {1}[{2}] = {3}", indent_, sequence.LengthName, sequence.LengthId, size);
                 String saveIndent = indent_;
                 indent_ += "  ";
-                for (uint nEntry = 0; nEntry < size; ++nEntry)
+                int nEntry = 0;
+                foreach (DNFieldSet entry in sequence)
+//                for (int nEntry = 0; nEntry < size; ++nEntry)
                 {
                     Console.WriteLine();
-                    Console.Write("{0}[{1}]: ", indent_, nEntry);
-                    DNFieldSet entry = sequence.entry(nEntry);
+                    Console.Write("{0}[{1}]: ", indent_, nEntry++);
+//                    DNFieldSet entry = sequence.entry(nEntry);
                     formatFieldSet(entry);
                 }
                 indent_ = saveIndent;
