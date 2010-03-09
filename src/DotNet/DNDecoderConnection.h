@@ -14,7 +14,7 @@ namespace QuickFAST
 {
   namespace DotNet
   {
-    /// @Brief a class to configure and run a FAST decoder
+    /// @brief a class to configure and run a FAST decoder
     public ref class DNDecoderConnection
     {
     public:
@@ -23,6 +23,11 @@ namespace QuickFAST
       !DNDecoderConnection();
       ~DNDecoderConnection();
 
+      /// @brief Run the decoder's event loop.
+      /// @param dnBuilder is the Message Builder that receives the decoded information
+      /// @param extraThreadCount determines how many additional threads will be started to support decoding'
+      /// @param useThisThread True: control will not return to the caller until the decoding stops.
+      ///        False: return immediately (only makes sense if extraThreadCount > 0)
       void run(DNMessageBuilder ^ dnBuilder, size_t extraThreadCount, bool useThisThread);
 
       /////////////
@@ -154,6 +159,7 @@ namespace QuickFAST
         }
       }
 
+      /// @brief what type of header (if any) appears in incoming FAST data
       enum class HeaderTypes{
         NO_HEADER = Application::DecoderConfiguration::NO_HEADER,
         FIXED_HEADER = Application::DecoderConfiguration::FIXED_HEADER,
@@ -168,6 +174,7 @@ namespace QuickFAST
         }
       }
 
+      /// @brief for FIXED_HEADER, how long is the message size field
       property
       unsigned int HeaderMessageSizeBytes
       {
@@ -177,6 +184,7 @@ namespace QuickFAST
         }
       }
 
+      /// @brief for FIXED_HEADER, is the message size field big or little -endian
       property
       bool HeaderBigEndian
       {
@@ -185,6 +193,8 @@ namespace QuickFAST
           configuration_->headerBigEndian_ = headerBigEndian;
         }
       }
+
+      /// @brief for FIXED_HEADER/FAST_HEADER how many bytes/fields come before the message size field
       property
       unsigned int HeaderPrefixCount
       {
@@ -193,6 +203,8 @@ namespace QuickFAST
           configuration_->headerPrefixCount_ = headerPrefixCount;
         }
       }
+
+      /// @brief for FIXED_HEADER/FAST_HEADER how many bytes/fields come after the message size field
       property
       unsigned int HeaderSuffixCount
       {
@@ -202,6 +214,7 @@ namespace QuickFAST
         }
       }
 
+      /// @brief How should incoming packets be assembled into messages?
       enum class AssemblerTypes{
         MESSAGE_PER_PACKET_ASSEMBLER = Application::DecoderConfiguration::MESSAGE_PER_PACKET_ASSEMBLER,
         STREAMING_ASSEMBLER = Application::DecoderConfiguration::STREAMING_ASSEMBLER,
@@ -218,6 +231,7 @@ namespace QuickFAST
         }
       }
 
+      /// @brief for STREAMING_ASSEMBLER, wait for complete message before decoding begins?
       property
       bool WaitForCompleteMessage
       {
@@ -227,6 +241,7 @@ namespace QuickFAST
         }
       }
 
+      /// @brief Where does the FAST data come from?
       enum class ReceiverTypes
       {
         MULTICAST_RECEIVER = Application::DecoderConfiguration::MULTICAST_RECEIVER,
@@ -246,6 +261,7 @@ namespace QuickFAST
         }
       }
 
+      /// @brief for MULTICAST_RECEIVER identify the group IP to subscribe to
       property
       System::String ^ MulticastGroupIP
       {
@@ -255,6 +271,7 @@ namespace QuickFAST
         }
       }
 
+      /// @brief for MULTICAST_RECEIVER identify the group port to subscribe to
       property
       unsigned short PortNumber
       {
@@ -264,6 +281,7 @@ namespace QuickFAST
         }
       }
 
+      /// @brief for MULTICAST_RECEIVER Select a NIC on the local machine to use for multicaast
       property
       System::String ^ ListenInterfaceIP
       {
@@ -273,6 +291,7 @@ namespace QuickFAST
         }
       }
 
+      /// @brief for TCP_RECEIVER identify the host to connect to
       property
       System::String ^ HostName
       {
@@ -282,6 +301,7 @@ namespace QuickFAST
         }
       }
 
+      /// @brief for TCP_RECEIVER identify the port (name or number) to connect to
       property
       System::String ^ PortName
       {
@@ -291,6 +311,9 @@ namespace QuickFAST
         }
       }
 
+      /// @brief What size buffers should be allocated for the receiver
+      ///
+      /// For MESSAGE_PER_PACKET_ASSEMBLER must equal or exceed the size of the largest expected message
       property
       unsigned int BufferSize
       {
@@ -300,6 +323,10 @@ namespace QuickFAST
         }
       }
 
+      /// @brief How many buffers should be allocated for the receiver
+      ///
+      /// For STREAMING_ASSEMBLER with  WaitForCompleteMessage set:
+      ///  BufferSize * BufferCount must equal or exceed the size of the largest expected message
       property
       unsigned int BufferCount
       {

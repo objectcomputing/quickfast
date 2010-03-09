@@ -450,7 +450,7 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT = Codecs Common Communication Messages Examples
+INPUT = Codecs Common Communication Messages Examples DotNet
 #INPUT = .
 
 # If the value of the INPUT tag contains directories, you can use the 

@@ -8,6 +8,7 @@ namespace QuickFAST
 {
   namespace DotNet
   {
+    /// @brief A Message is just an alias for a FieldSet
     typedef DNFieldSet DNMessage;
   }
 }

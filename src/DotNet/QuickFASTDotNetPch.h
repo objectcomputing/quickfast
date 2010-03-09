@@ -47,4 +47,21 @@
 
 #pragma managed
 
+namespace QuickFAST
+{
+  /// @brief The API to allow QuickFAST to be used from .NET
+  ///
+  /// Note the API methods all begin with the prefix DN
+  /// The classes that are named Impl* are implementation details that should not
+  /// be exposed to the .NET world.
+  ///
+  /// To Decode incoming fast messages:
+  ///   Create a DNDecoderConnection
+  ///   Cofigure it by setting properties.
+  ///   Create a class that implements DNMessageBuilder.  Note that DNMessageDeliverer is a good candidate for this role.
+  ///   Call the DNDecoderConnection::run passing the builder and threading information.
+  namespace DotNet
+  {
+  }
+}
 

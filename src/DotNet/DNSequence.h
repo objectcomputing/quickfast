@@ -10,41 +10,50 @@ namespace QuickFAST
     ref class DNMessageBuilder;
     ref class DNFieldSet;
 
+    /// @brief C++ implementation of a sequence
     class ImplSequence;
 
+    /// @brief Sequence of field sets.
     public ref class DNSequence
       : public System::Collections::Generic::IEnumerable<DNFieldSet^>
     {
     public:
+      /// @brief wrap the .NET accessor around a Sequence implementatoin.
       DNSequence(ImplSequence & impl);
       ~DNSequence();
 
+      /// @brief the name of the length field in the sequence
       property System::String ^ LengthName
       {
         System::String ^ get();
       }
 
+      /// @brief the namespace of the length field in the sequence
       property System::String ^ LengthNamespace
       {
         System::String ^ get();
       }
 
+      /// @brief the id of the length field in the sequence
       property System::String ^ LengthId
       {
         System::String ^ get();
       }
 
+      /// @brief support enumeration
       virtual System::Collections::IEnumerator^ GetEnumerator() = System::Collections::IEnumerable::GetEnumerator;
 
+      /// @brief support enumeration
       virtual System::Collections::Generic::IEnumerator<DNFieldSet^>^ GetSpecializedEnumerator() = System::Collections::Generic::IEnumerable<DNFieldSet^>::GetEnumerator;
 
-      /// How many entries are defined
+      /// @brief How many entries are defined
       property int Count
       {
         int get();
       }
 
-      DNFieldSet ^ entry(int   index);
+      /// @brief Access a specific entry by index (0 <= index <= Count)
+      DNFieldSet ^ entry(int index);
 
     private:
       ref class DNSequenceEnumerator

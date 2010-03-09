@@ -18,16 +18,20 @@ namespace QuickFAST
     class ImplSequence;
     class ImplFieldSetBuilder;
 
+    /// @brief an implementation class to build a sequence
     class ImplSequenceBuilder : public ImplBuilderBase
     {
     public:
+      /// @brief construct given some place to deliver the decoded information and notifications
       ImplSequenceBuilder(DNMessageDeliverer ^ deliverer);
       ~ImplSequenceBuilder();
+      /// @brief start or restart the builder
       void initialize(
         Messages::FieldIdentityCPtr & lengthIdentity,
         size_t length
         );
 
+      /// @brief finish building the sequence; return a pointer to the sequence --passing ownership to the caller
       ImplSequence * endSequence();
 
       //////////////////////////

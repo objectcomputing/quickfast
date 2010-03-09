@@ -10,9 +10,11 @@ namespace QuickFAST
   {
     class ImplFieldSet;
 
+    /// @brief Implement the .NET FAST Sequence
     class ImplSequence
     {
     public:
+      /// @brief Construct given info about the length field
       ImplSequence(
         Messages::FieldIdentityCPtr & lengthIdentity,
         size_t length
@@ -20,20 +22,28 @@ namespace QuickFAST
 
       ~ImplSequence();
 
-      /// How many entries are defined
+      /// @brief How many entries are defined
       size_t size();
+
+      /// @brief Access an entry by index
       ImplFieldSet & operator[](size_t index);
 
+      /// @brief Append a newly filled entry
       void append(ImplFieldSet * entry);
 
+      /// @brief access the name of the length field
       const std::string lengthName()const
       {
         return lengthName_;
       }
+
+      /// @brief access the namespace of the length field
       const std::string lengthNamespace()const
       {
         return lengthNamespace_;
       }
+
+      /// @brief access the id of the length field
       const std::string lengthId()const
       {
         return lengthId_;

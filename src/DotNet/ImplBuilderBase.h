@@ -13,13 +13,19 @@ namespace QuickFAST
   {
     ref class DNMessageDeliverer;
 
+    /// @brief base class for DotNet Builder implementations
+    ///
+    /// Handles Appplication type data; forwarding requests to Deliverer, and provides
+    /// default, throwing implementations of other virtual methods.
     class ImplBuilderBase
       : public Messages::ValueMessageBuilder
     {
     public:
+      /// @brief Construct given a deliverer to receive the results
       ImplBuilderBase(DNMessageDeliverer ^ deliverer);
       virtual ~ImplBuilderBase();
 
+      /// @brief set the name and namespace for this buildr
       void setApplicationType(const std::string & applicationType, const std::string & applicationTypeNamespace = "");
 
       ///@brief set the least interesting log message level
@@ -78,10 +84,14 @@ namespace QuickFAST
       virtual bool reportCommunicationError(const std::string & errorMessage);
 
     protected:
+      /// @brief the name= attribute from the template.
       std::string applicationType_;
+      /// @brief the ns= attribute from the template
       std::string applicationTypeNs_;
 
+      /// @brief what's the minimum interesting log message
       unsigned short logLimit_;
+      /// @brief Where to deliver notifications
       gcroot<DNMessageDeliverer ^> deliverer_;
     };
   }

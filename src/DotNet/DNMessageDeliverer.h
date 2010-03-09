@@ -12,6 +12,9 @@ namespace QuickFAST
     /// An implemntation class
     class ImplFieldSetBuilder;
 
+    /// @brief Message delivery part of the .NET API.
+    ///
+    /// Applications should subscribe to the appropriate events to receive callbacks from QuickFAST
     public ref class DNMessageDeliverer
       : public DNMessageBuilder
     {
@@ -19,6 +22,9 @@ namespace QuickFAST
       DNMessageDeliverer();
       virtual ~DNMessageDeliverer();
       !DNMessageDeliverer();
+
+      /// @brief Access a C++ message builder
+      /// @returns the C++ builder
       virtual Messages::ValueMessageBuilder & builder()override;
 
       /// @brief Delagate to handle incoming messages
@@ -95,11 +101,22 @@ namespace QuickFAST
 
       // semi-private: for internal use only
       // managed classes don't support friends
+      /// @brief internal use
+      /// @param message internal use
       bool signalMessageArrived(DNMessage ^ message);
+      /// @brief internal use
+      /// @param level internal use
+      /// @param message internal use
       bool signalLogMessage(unsigned short level, System::String ^ message);
+      /// @brief internal use
+      /// @param message internal use
       bool signalCommunicationError(System::String ^ message);
+      /// @brief internal use
+      /// @param message internal use
       bool signalDecodingError(System::String ^ message);
+      /// @brief internal use
       void signalReceiverStarted();
+      /// @brief internal use
       void signalReceiverStopped();
 
     private:

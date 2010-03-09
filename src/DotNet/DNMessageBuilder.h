@@ -20,6 +20,7 @@ namespace QuickFAST
       }
 
       /// @brief Access a C++ message builder
+      /// @returns the C++ builder
       virtual Messages::ValueMessageBuilder & builder() = 0;
 
     };

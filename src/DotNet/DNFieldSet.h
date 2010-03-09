@@ -12,19 +12,24 @@ namespace QuickFAST
   {
     class ImplFieldSet;
 
+    /// @brief A set of fields (Message, Group, or SequenceEntry)
     public ref class DNFieldSet
       : public System::Collections::Generic::IEnumerable<DNField ^ >
     {
     public:
+      /// @brief construct the .NET field set to access the implementation field set
       DNFieldSet(ImplFieldSet & impl);
+
       ~DNFieldSet();
 
+      /// @brief support enumeration
       virtual System::Collections::IEnumerator^ GetEnumerator() = System::Collections::IEnumerable::GetEnumerator;
 
+      /// @brief support typesafe enumeration
       virtual System::Collections::Generic::IEnumerator<DNField ^ >^ GetSpecializedEnumerator()
         = System::Collections::Generic::IEnumerable<DNField^>::GetEnumerator;
 
-      /// How many fields are defined
+      /// @brief How many fields are defined
       property int Count
       {
         int get();
@@ -33,10 +38,16 @@ namespace QuickFAST
       /// @brief find a field with the given local name (ignores namespace)
       int findIndexByName(System::String ^ fieldName);
 
+      /// @brief Find a field given an index
+      /// @brief identifies the field (0 <= index < Count)
+      /// @returns the field or nullptr
       DNField ^ getField(int index);
 
+      /// @brief Find a field given the localName
+      /// @returns the field or nullptr
       DNField ^ findFieldByName(System::String ^ fieldName);
 
+      /// @brief clear all fields and start over.
       void clear();
 
     private:

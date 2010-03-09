@@ -14,15 +14,19 @@ namespace QuickFAST
     class ImplFieldSet;
     class ImplSequenceBuilder;
 
+    /// @brief implementation class for field set builder
     class ImplFieldSetBuilder
       : public ImplBuilderBase
     {
     public:
+      /// @brief construct given a deliverer to receive the results
       ImplFieldSetBuilder(DNMessageDeliverer ^ deliverer);
       ~ImplFieldSetBuilder();
 
+      /// @brief End this set, return the implementation (losing ownership)
       ImplFieldSet * endSet();
 
+      /// @brief Start a new set
       void reset(size_t size);
 
       //////////////////////////

@@ -21,6 +21,7 @@ namespace QuickFAST
        Marshal::FreeHGlobal(System::IntPtr((void*)chars));
     }
 
+    /// @brief Cast from a .NET string to the specified c++ string-like object
     template<typename StdStringType>
     StdStringType string_cast(System::String^ stringIn)
     {
@@ -29,6 +30,7 @@ namespace QuickFAST
       return stdStrOut;
     }
 
+    /// @brief cast from a C++ string-like object to a .NET String
     template<typename StdString>
     System::String^ string_cast(const StdString& stdString)
     {

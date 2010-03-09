@@ -1,3 +1,27 @@
+Tue Mar  9 18:59:44 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/DotNet/DNDecimal.h:
+        * src/DotNet/DNDecoderConnection.h:
+        * src/DotNet/DNField.h:
+        * src/DotNet/DNFieldSet.h:
+        * src/DotNet/DNMessage.h:
+        * src/DotNet/DNMessageBuilder.h:
+        * src/DotNet/DNMessageDeliverer.h:
+        * src/DotNet/DNSequence.h:
+        * src/DotNet/ImplBuilderBase.h:
+        * src/DotNet/ImplField.h:
+        * src/DotNet/ImplFieldSet.h:
+        * src/DotNet/ImplFieldSetBuilder.h:
+        * src/DotNet/ImplSequence.h:
+        * src/DotNet/ImplSequenceBuilder.h:
+        * src/DotNet/QuickFASTDotNetPch.h:
+        * src/DotNet/StringConversion.h:
+        * src/DotNet/app.aps:
+        * src/Doxyfile:
+        * src/DotNet/DNSequenceEntry.h:
+          Removed this file.
+        Update Doxygen Documentation for .NET API
+
 Mon Mar  8 23:52:21 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/DotNet/DNFieldSet.h:
