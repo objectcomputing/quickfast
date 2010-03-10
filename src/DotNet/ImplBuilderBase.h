@@ -5,13 +5,12 @@
 
 #pragma unmanaged
 #include <Messages/ValueMessageBuilder.h>
-#pragma managed
 
 namespace QuickFAST
 {
   namespace DotNet
   {
-    ref class DNMessageDeliverer;
+    class ImplMessageDeliverer;
 
     /// @brief base class for DotNet Builder implementations
     ///
@@ -22,7 +21,7 @@ namespace QuickFAST
     {
     public:
       /// @brief Construct given a deliverer to receive the results
-      ImplBuilderBase(DNMessageDeliverer ^ deliverer);
+      ImplBuilderBase(ImplMessageDeliverer & deliverer);
       virtual ~ImplBuilderBase();
 
       /// @brief set the name and namespace for this buildr
@@ -92,7 +91,8 @@ namespace QuickFAST
       /// @brief what's the minimum interesting log message
       unsigned short logLimit_;
       /// @brief Where to deliver notifications
-      gcroot<DNMessageDeliverer ^> deliverer_;
+      ImplMessageDeliverer & deliverer_;
     };
   }
 }
+#pragma managed

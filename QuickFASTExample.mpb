@@ -1,3 +1,7 @@
+// Copyright (c) 2009, 2010 Object Computing, Inc.
+// All rights reserved.
+// See the file license.txt for licensing information.
+// Define build parameters for the QuickFAST example programs
 project : QuickFASTApplication, QuickFASTExeOut{
   
   includes += $(QUICKFAST_ROOT)/src/Examples

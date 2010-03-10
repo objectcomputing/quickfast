@@ -2,10 +2,9 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 #pragma once
-#include <DotNet/ImplBuilderBase.h>
 #pragma unmanaged
+#include <DotNet/ImplBuilderBase.h>
 #include <Messages/FieldIdentity_fwd.h>
-#pragma managed
 
 namespace QuickFAST
 {
@@ -20,9 +19,8 @@ namespace QuickFAST
     {
     public:
       /// @brief construct given a deliverer to receive the results
-      ImplFieldSetBuilder(DNMessageDeliverer ^ deliverer);
+      ImplFieldSetBuilder(ImplMessageDeliverer & deliverer);
       ~ImplFieldSetBuilder();
-
       /// @brief End this set, return the implementation (losing ownership)
       ImplFieldSet * endSet();
 
@@ -65,7 +63,6 @@ namespace QuickFAST
       virtual void endGroup(
         Messages::FieldIdentityCPtr & identity,
         Messages::ValueMessageBuilder & groupBuilder);
-
     private:
       ImplFieldSet * fieldSet_;
       boost::scoped_ptr<ImplSequenceBuilder> sequenceBuilder_;
@@ -73,3 +70,4 @@ namespace QuickFAST
     };
   }
 }
+#pragma managed

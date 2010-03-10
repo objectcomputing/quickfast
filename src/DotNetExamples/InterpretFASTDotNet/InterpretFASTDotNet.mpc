@@ -1,9 +1,5 @@
 project(*): QuickFASTDotNetExample {
-  requires += dotnet
-
   exename = InterpretFASTDotNet
-  managed = 1
-
   Source_Files {
     Properties{
       Properties\AssemblyInfo.cs

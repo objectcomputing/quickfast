@@ -4,6 +4,7 @@
 #include "QuickFASTDotNetPch.h"
 #include "ImplFieldSet.h"
 #include <DotNet/ImplField.h>
+#pragma unmanaged
 using namespace QuickFAST;
 using namespace DotNet;
 

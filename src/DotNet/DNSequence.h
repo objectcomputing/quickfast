@@ -69,7 +69,7 @@ namespace QuickFAST
 
         ~DNSequenceEnumerator();
 
-        property DNFieldSet^ GenericCurrent{
+        virtual property DNFieldSet^ GenericCurrent{
           virtual DNFieldSet^ get () = System::Collections::Generic::IEnumerator<DNFieldSet^>::Current::get;
         }
 

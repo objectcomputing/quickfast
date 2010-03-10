@@ -21,8 +21,13 @@ using namespace DotNet;
 // DNMessageDeliverer
 
 DNMessageDeliverer::DNMessageDeliverer()
+: proxyDeliverer_(0)
+, fieldSetBuilder_(0)
 {
-  fieldSetBuilder_ = new ImplFieldSetBuilder(this);
+  // defer creating these to body of constructor to avoid
+  //  warning C4355: 'this' : used in base member initializer list
+  proxyDeliverer_ = new ImplMessageDeliverer(this);
+  fieldSetBuilder_ = new ImplFieldSetBuilder(*proxyDeliverer_);
 }
 
 DNMessageDeliverer::~DNMessageDeliverer()

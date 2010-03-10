@@ -4,17 +4,14 @@
 
 #include "QuickFASTDotNetPch.h"
 #include "ImplBuilderBase.h"
+#include <DotNet/ImplMessageDeliverer.h>
 
-#include <DotNet/DNMessageDeliverer.h>
-#include <DotNet/StringConversion.h>
 #pragma unmanaged
-//#include <Messages/FieldIdentity.h>
-#pragma managed
 
 using namespace QuickFAST;
 using namespace DotNet;
 
-ImplBuilderBase::ImplBuilderBase(DNMessageDeliverer ^ deliverer)
+ImplBuilderBase::ImplBuilderBase(ImplMessageDeliverer & deliverer)
   : deliverer_(deliverer)
   , logLimit_(0)
 {
@@ -196,8 +193,7 @@ ImplBuilderBase::logMessage(unsigned short level, const std::string & logMessage
 {
   if(level >= logLimit_)
   {
-    System::String ^ value = string_cast(logMessage);
-    return deliverer_->signalLogMessage(level, value);
+    return deliverer_.logMessage(level, logMessage);
   }
   return true;
 }
@@ -205,13 +201,11 @@ ImplBuilderBase::logMessage(unsigned short level, const std::string & logMessage
 bool
 ImplBuilderBase::reportDecodingError(const std::string & errorMessage)
 {
-  System::String ^ value = string_cast(errorMessage);
-  return deliverer_->signalDecodingError(value);
+  return deliverer_.reportDecodingError(errorMessage);
 }
 
 bool
 ImplBuilderBase::reportCommunicationError(const std::string & errorMessage)
 {
-  System::String ^ value = string_cast(errorMessage);
-  return deliverer_->signalCommunicationError(value);
+  return deliverer_.reportDecodingError(errorMessage);
 }

@@ -1,3 +1,39 @@
+Wed Mar 10 15:48:14 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * QuickFAST.features:
+        * QuickFASTApplication.mpb:
+        * QuickFASTDotNetApplication.mpb:
+        * QuickFASTDotNetExample.mpb:
+        * QuickFASTExample.mpb:
+        * QuickFASTExeOut.mpb:
+        * src/DotNet/DNField.cpp:
+        * src/DotNet/DNMessageDeliverer.h:
+        * src/DotNet/DNMessageDeliverer.cpp:
+        * src/DotNet/DNSequence.h:
+        * src/DotNet/ImplBuilderBase.h:
+        * src/DotNet/ImplBuilderBase.cpp:
+        * src/DotNet/ImplField.h:
+        * src/DotNet/ImplField.cpp:
+        * src/DotNet/ImplFieldSet.h:
+        * src/DotNet/ImplFieldSet.cpp:
+        * src/DotNet/ImplFieldSetBuilder.h:
+        * src/DotNet/ImplFieldSetBuilder.cpp:
+        * src/DotNet/ImplMessageDeliverer.h:
+        * src/DotNet/ImplMessageDeliverer.cpp:
+        * src/DotNet/ImplSequence.cpp:
+        * src/DotNet/ImplSequenceBuilder.h:
+        * src/DotNet/ImplSequenceBuilder.cpp:
+        * src/DotNet/Stopwatch.h:
+        * src/DotNet/Stopwatch.cpp:
+        * src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.cs:
+        * src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.mpc:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.cs:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.mpc:
+        * src/DotNetExamples/PerformanceTestDotNet/MessageInterpreter.cs:
+        Reenable the PerformanceTestDotNet application.
+        Change most Impl* classes to be unmanaged to improve .NET performance.
+        Note this check in has dotnet enabled in the features file.
+
 Tue Mar  9 18:59:44 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/DotNet/DNDecimal.h:

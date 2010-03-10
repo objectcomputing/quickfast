@@ -4,8 +4,8 @@
 #include "QuickFASTDotNetPch.h"
 #include "ImplSequence.h"
 #include <DotNet/ImplFieldSet.h>
+#pragma unmanaged
 #include <Messages/FieldIdentity.h>
-
 
 using namespace QuickFAST;
 using namespace DotNet;

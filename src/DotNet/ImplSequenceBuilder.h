@@ -3,13 +3,11 @@
 // See the file license.txt for licensing information.
 #pragma once
 
-#include "DNMessageDeliverer.h"
-#include <DotNet/ImplBuilderBase.h>
-
 #pragma unmanaged
+#include "ImplMessageDeliverer.h"
+#include <DotNet/ImplBuilderBase.h>
 #include <Messages/ValueMessageBuilder.h>
 #include <Messages/FieldIdentity_fwd.h>
-#pragma managed
 
 namespace QuickFAST
 {
@@ -23,7 +21,7 @@ namespace QuickFAST
     {
     public:
       /// @brief construct given some place to deliver the decoded information and notifications
-      ImplSequenceBuilder(DNMessageDeliverer ^ deliverer);
+      ImplSequenceBuilder(ImplMessageDeliverer & deliverer);
       ~ImplSequenceBuilder();
       /// @brief start or restart the builder
       void initialize(
@@ -46,6 +44,6 @@ namespace QuickFAST
       ImplSequence * sequence_;
       boost::scoped_ptr<ImplFieldSetBuilder> sequenceEntryBuilder_;
     };
-
   }
 }
+#pragma managed

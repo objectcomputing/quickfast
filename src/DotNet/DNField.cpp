@@ -47,7 +47,7 @@ DNField::IsDefined::get()
 FieldType
 DNField::Type::get()
 {
-  return impl_->type();
+  return static_cast<FieldType>(impl_->type());
 }
 
 int
@@ -101,7 +101,8 @@ DNField::UInt8::get()
 DNDecimal
 DNField::Decimal::get()
 {
-  return impl_->toDecimal();
+  DNDecimal value(impl_->toDecimal());
+  return value;
 }
 
 System::String ^

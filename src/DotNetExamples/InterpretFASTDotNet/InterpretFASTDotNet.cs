@@ -8,7 +8,6 @@ namespace QuickFASTDotNet
     {
         public class InterpretFASTDotNet
         {
-            long recordCount_ = 0;
             public InterpretFASTDotNet()
             {
             }
@@ -134,6 +133,7 @@ namespace QuickFASTDotNet
             private QuickFAST.DotNet.DNDecoderConnection decoder_ = new QuickFAST.DotNet.DNDecoderConnection();
             private QuickFAST.DotNet.DNMessageDeliverer builder_ = new QuickFAST.DotNet.DNMessageDeliverer();
             private FieldSetInterpreter interpreter_ = new FieldSetInterpreter();
+            long recordCount_ = 0;
         }
     }
 }

@@ -5,13 +5,14 @@
 #include <DotNet/ImplField.h>
 #include <DotNet/ImplSequence.h>
 #include <DotNet/ImplFieldSet.h>
-#include <DotNet/DNFieldSet.h>
+#pragma unmanaged
+#include <Common/Decimal.h>
 
 using namespace QuickFAST;
 using namespace DotNet;
 
 ImplField::ImplField()
-  : type_(FieldType::UNDEFINED)
+  : type_(ValueType::UNDEFINED)
   , unsignedInteger_(0)
   , signedInteger_(0)
   , exponent_(0)
@@ -24,14 +25,14 @@ ImplField::~ImplField()
 }
 
 void
-ImplField::setUnsignedValue(FieldType type, unsigned long long value)
+ImplField::setUnsignedValue(ValueType::Type type, unsigned long long value)
 {
   type_ = type;
   unsignedInteger_ = value;
 }
 
 void
-ImplField::setSignedValue(FieldType type, long long value)
+ImplField::setSignedValue(ValueType::Type type, long long value)
 {
   type_ = type;
   signedInteger_ = value;
@@ -40,13 +41,13 @@ ImplField::setSignedValue(FieldType type, long long value)
 void
 ImplField::setDecimalValue(Decimal value)
 {
-  type_ = FieldType::DECIMAL;
+  type_ = ValueType::DECIMAL;
   signedInteger_ = value.getMantissa();
   exponent_ = value.getExponent();
 }
 
 void
-ImplField::setStringValue(FieldType type, const std::string & value)
+ImplField::setStringValue(ValueType::Type type, const std::string & value)
 {
   type_ = type;
   string_ = value;
@@ -55,14 +56,14 @@ ImplField::setStringValue(FieldType type, const std::string & value)
 void
 ImplField::setSequence(ImplSequence * sequence)
 {
-  type_ = FieldType::SEQUENCE;
+  type_ = ValueType::SEQUENCE;
   sequence_.reset(sequence);
 }
 
 void
 ImplField::setGroup(ImplFieldSet * group)
 {
-  type_ = FieldType::GROUP;
+  type_ = ValueType::GROUP;
   group_.reset(group);
 }
 
@@ -110,11 +111,11 @@ ImplField::id()
 bool
 ImplField::isDefined()
 {
-  return type_ != FieldType::UNDEFINED;
+  return type_ != ValueType::UNDEFINED;
 }
 
 
-FieldType
+ValueType::Type
 ImplField::type()
 {
   return type_;
@@ -175,10 +176,10 @@ ImplField::toUInt8()
   return static_cast<unsigned char>(unsignedInteger_);
 }
 
-DNDecimal
+Decimal
 ImplField::toDecimal()
 {
-  DNDecimal value(signedInteger_, exponent_);
+  Decimal value(signedInteger_, exponent_);
   return value;
 }
 
@@ -222,10 +223,10 @@ ImplField::asString()
   {
     switch(type_)
     {
-    case FieldType::INT8:
-    case FieldType::INT16:
-    case FieldType::INT32:
-    case FieldType::INT64:
+    case ValueType::INT8:
+    case ValueType::INT16:
+    case ValueType::INT32:
+    case ValueType::INT64:
       {
         std::stringstream v;
         v << signedInteger_;
@@ -233,10 +234,10 @@ ImplField::asString()
         break;
       }
 
-    case FieldType::UINT8:
-    case FieldType::UINT16:
-    case FieldType::UINT32:
-    case FieldType::UINT64:
+    case ValueType::UINT8:
+    case ValueType::UINT16:
+    case ValueType::UINT32:
+    case ValueType::UINT64:
       {
         std::stringstream v;
         v << unsignedInteger_;
@@ -250,32 +251,32 @@ ImplField::asString()
         break;
       }
 
-    case FieldType::DECIMAL:
+    case ValueType::DECIMAL:
       {
         Decimal decimal(signedInteger_, exponent_);
         decimal.toString(string_);
         break;
       }
 
-    case FieldType::ASCII:
-    case FieldType::UTF8:
-    case FieldType::BYTEVECTOR:
+    case ValueType::ASCII:
+    case ValueType::UTF8:
+    case ValueType::BYTEVECTOR:
       {
         break;
       }
 
-    case FieldType::SEQUENCE:
+    case ValueType::SEQUENCE:
       {
         string_ = "Sequence";
         break;
       }
-    case FieldType::GROUP:
+    case ValueType::GROUP:
       {
         string_ = "Group";
         break;
       }
-    case FieldType::BITMAP:
-    case FieldType::UNDEFINED:
+    case ValueType::BITMAP:
+    case ValueType::UNDEFINED:
       {
         string_= "Undefined";
       }

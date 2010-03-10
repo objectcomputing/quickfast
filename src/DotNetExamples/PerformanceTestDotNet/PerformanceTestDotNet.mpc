@@ -1,10 +1,5 @@
 project(PerformanceTestDotNet): QuickFASTDotNetExample {
-  requires += dotnet
-  requires += obsolete
-  after += DotNetExampleCode
   exename = PerformanceTestDotNet
-  managed = 1
-
   specific {
     guid = E8D33726-46EB-44C3-88B8-ACA7A7B366F9
   }

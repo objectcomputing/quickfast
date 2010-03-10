@@ -5,20 +5,19 @@
 #include "QuickFASTDotNetPch.h"
 #include "ImplFieldSetBuilder.h"
 
-#include <DotNet/DNMessageDeliverer.h>
+//#include <DotNet/DNMessageDeliverer.h>
 #include <DotNet/ImplSequenceBuilder.h>
 #include <DotNet/ImplFieldSet.h>
 #include <DotNet/ImplField.h>
-
-#include <DotNet/StringConversion.h>
+//#include <DotNet/StringConversion.h>
 #pragma unmanaged
 #include <Messages/FieldIdentity.h>
-#pragma managed
 
 using namespace QuickFAST;
 using namespace DotNet;
+#pragma unmanaged
 
-ImplFieldSetBuilder::ImplFieldSetBuilder(DNMessageDeliverer ^ deliverer)
+ImplFieldSetBuilder::ImplFieldSetBuilder(ImplMessageDeliverer & deliverer)
   : ImplBuilderBase(deliverer)
   , fieldSet_(0)
 {
@@ -53,7 +52,7 @@ ImplFieldSetBuilder::addValue(
   field.setLocalName(identity->getLocalName());
   field.setFieldNamespace(identity->getNamespace());
   field.setId(identity->id());
-  field.setSignedValue(FieldType(type), value);
+  field.setSignedValue(type, value);
 }
 
 void
@@ -66,7 +65,7 @@ ImplFieldSetBuilder::addValue(
   field.setLocalName(identity->getLocalName());
   field.setFieldNamespace(identity->getNamespace());
   field.setId(identity->id());
-  field.setUnsignedValue(FieldType(type), value);
+  field.setUnsignedValue(type, value);
 }
 
 void
@@ -79,7 +78,7 @@ ImplFieldSetBuilder::addValue(
   field.setLocalName(identity->getLocalName());
   field.setFieldNamespace(identity->getNamespace());
   field.setId(identity->id());
-  field.setSignedValue(FieldType(type), value);
+  field.setSignedValue(type, value);
 }
 
 void
@@ -92,7 +91,7 @@ ImplFieldSetBuilder::addValue(
   field.setLocalName(identity->getLocalName());
   field.setFieldNamespace(identity->getNamespace());
   field.setId(identity->id());
-  field.setUnsignedValue(FieldType(type), value);
+  field.setUnsignedValue(type, value);
 }
 
 void
@@ -105,7 +104,7 @@ ImplFieldSetBuilder::addValue(
   field.setLocalName(identity->getLocalName());
   field.setFieldNamespace(identity->getNamespace());
   field.setId(identity->id());
-  field.setSignedValue(FieldType(type), value);
+  field.setSignedValue(type, value);
 }
 
 void
@@ -118,7 +117,7 @@ ImplFieldSetBuilder::addValue(
   field.setLocalName(identity->getLocalName());
   field.setFieldNamespace(identity->getNamespace());
   field.setId(identity->id());
-  field.setUnsignedValue(FieldType(type), value);
+  field.setUnsignedValue(type, value);
 }
 
 
@@ -132,7 +131,7 @@ ImplFieldSetBuilder::addValue(
   field.setLocalName(identity->getLocalName());
   field.setFieldNamespace(identity->getNamespace());
   field.setId(identity->id());
-  field.setSignedValue(FieldType(type), value);
+  field.setSignedValue(type, value);
 }
 
 
@@ -146,7 +145,7 @@ ImplFieldSetBuilder::addValue(
   field.setLocalName(identity->getLocalName());
   field.setFieldNamespace(identity->getNamespace());
   field.setId(identity->id());
-  field.setUnsignedValue(FieldType(type), value);
+  field.setUnsignedValue(type, value);
 }
 
 
@@ -176,7 +175,7 @@ ImplFieldSetBuilder::addValue(
   field.setFieldNamespace(identity->getNamespace());
   field.setId(identity->id());
   std::string v(reinterpret_cast<const char *>(value), length);
-  field.setStringValue(FieldType(type), v);
+  field.setStringValue(type, v);
 }
 
 
@@ -190,6 +189,7 @@ ImplFieldSetBuilder::startMessage(
   fieldSet_ = new ImplFieldSet(size);
   return *this;
 }
+#pragma managed
 
 bool
 ImplFieldSetBuilder::endMessage(Messages::ValueMessageBuilder & messageBuilder)
@@ -197,14 +197,14 @@ ImplFieldSetBuilder::endMessage(Messages::ValueMessageBuilder & messageBuilder)
   bool result = true;
   if(fieldSet_ && fieldSet_->size() > 0)
   {
-    gcroot<DNMessage ^> message = gcnew DNMessage(*fieldSet_);
-    result = deliverer_->signalMessageArrived(message);
-    message->clear();
+    result = deliverer_.deliverMessage(*fieldSet_);
   }
   delete fieldSet_;
   fieldSet_ = 0;
   return result;
 }
+
+#pragma unmanaged
 
 bool
 ImplFieldSetBuilder::ignoreMessage(Messages::ValueMessageBuilder & messageBuilder)
@@ -270,3 +270,4 @@ ImplFieldSetBuilder::endGroup(
   field.setFieldNamespace(identity->getNamespace());
   field.setId(identity->id());
 }
+#pragma managed

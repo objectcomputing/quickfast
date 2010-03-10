@@ -4,6 +4,7 @@
 #pragma once
 #include <DotNet/DNMessageBuilder.h>
 #include <DotNet/DNMessage.h>
+#include <DotNet/ImplMessageDeliverer.h>
 
 namespace QuickFAST
 {
@@ -123,7 +124,9 @@ namespace QuickFAST
       void release();
 
     private:
+      ImplMessageDeliverer * proxyDeliverer_;
       ImplFieldSetBuilder * fieldSetBuilder_;
+
     };
   }
 }

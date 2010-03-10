@@ -2,9 +2,14 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 #pragma once
-#include <DotNet/DNField.h>
+
+#pragma unmanaged
+#include <Common/Value.h>
+#include <Common/Decimal.h>
+
 namespace QuickFAST{
   namespace DotNet{
+
 
     class ImplFieldSet;
     class ImplSequence;
@@ -25,7 +30,7 @@ namespace QuickFAST{
       /// @brief True if a value has been assigned
       bool isDefined();
       /// @brief What type of value does this field hold.
-      FieldType type();
+      ValueType::Type type();
       /// @brief The value as a 32 bit integer
       int toInt32();
       /// @brief The value as an unsigned 32 bit integer
@@ -43,7 +48,7 @@ namespace QuickFAST{
       /// @brief The value as an unsigned 8 bit integer
       unsigned char toUInt8();
       /// @brief The value as a FAST Decimal number
-      DNDecimal toDecimal();
+      Decimal toDecimal();
       /// @brief The value as an Ascii string
       const std::string & toAscii();
       /// @brief The value as a UTF8 string.
@@ -76,15 +81,15 @@ namespace QuickFAST{
       void setId(const std::string & id);
 
       /// @brief Store an unsigned value of the given type in the field
-      void setUnsignedValue(FieldType type, unsigned long long value);
+      void setUnsignedValue(ValueType::Type type, unsigned long long value);
 
       /// @brief Store a signed value of the given type in the field
-      void setSignedValue(FieldType type, long long value);
+      void setSignedValue(ValueType::Type type, long long value);
 
       /// @brief Store a Decimal value in the field
       void setDecimalValue(Decimal value);
       /// @brief Store a string value of the given type in the field
-      void setStringValue(FieldType type, const std::string & string);
+      void setStringValue(ValueType::Type type, const std::string & string);
       /// @brief Store a Sequence in the field
       void setSequence(ImplSequence * sequence);
       /// @brief Store a Group in the field
@@ -95,7 +100,7 @@ namespace QuickFAST{
       std::string fieldNamespace_;
       std::string id_;
 
-      FieldType type_;
+      ValueType::Type type_;
 
       ///@brief Data for any of the unsigned integral types.
       unsigned long long unsignedInteger_;
@@ -111,3 +116,5 @@ namespace QuickFAST{
 
   }
 }
+#pragma managed
+

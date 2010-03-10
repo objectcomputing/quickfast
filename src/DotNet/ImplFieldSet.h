@@ -2,7 +2,10 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 #pragma once
-#include <DotNet/DNField.h>
+#include <DotNet/ImplField.h>
+#pragma unmanaged
+//#include <Common/Value.h>
+
 
 namespace QuickFAST
 {
@@ -33,3 +36,4 @@ namespace QuickFAST
     };
   }
 }
+#pragma managed

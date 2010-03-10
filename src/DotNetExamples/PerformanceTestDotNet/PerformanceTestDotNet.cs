@@ -10,49 +10,21 @@ namespace QuickFASTDotNet
     {
         public class PerformanceTestDotNet
         {
-            string templateFileName_;
-            System.IO.FileStream templateFile_;
-            string fastFileName_;
-            System.IO.FileStream fastFile_;
             string performanceFileName_;
             System.IO.FileStream performanceFileStream_;
             System.IO.TextWriter performanceFile_;
 
-            bool resetOnMessage_;
-            bool strict_;
             uint loop_;
             uint limit_;
             uint duplicate_;
 
-
             public PerformanceTestDotNet()
             {
-                templateFileName_ = null;
-                fastFileName_ = null;
                 performanceFileName_ = null;
                 loop_ = 1;
                 limit_ = 0;
                 duplicate_ = 0;
             }
-
-
-            //~PerformanceTestDotNet()
-            //{
-            //    if (templateFile_ != null && templateFile_ != System.IO.FileStream.Null)
-            //    {
-            //        templateFile_.Close();
-            //    }
-            //    if (templateFile_ != null && fastFile_ != System.IO.FileStream.Null)
-            //    {
-            //        fastFile_.Close();
-            //    }
-            //    if (performanceFileName_ != null && performanceFileStream_ != System.IO.FileStream.Null)
-            //    {
-            //        performanceFileStream_.Close();
-
-            //    }
-            //}
-
 
             public void usage()
             {
@@ -83,12 +55,14 @@ namespace QuickFASTDotNet
                 {
                     if (readTemplateName)
                     {
-                        templateFileName_ = opt;
+                        decoder_.TemplateFileName = opt;
                         readTemplateName = false;
                     }
                     else if (readSourceName)
                     {
-                        fastFileName_ = opt;
+                        decoder_.FastFileName = opt;
+                        decoder_.ReceiverType = QuickFAST.DotNet.DNDecoderConnection.ReceiverTypes.RAWFILE_RECEIVER;
+                        decoder_.HeaderType = QuickFAST.DotNet.DNDecoderConnection.HeaderTypes.NO_HEADER;
                         readSourceName = false;
                     }
                     else if (readPerfName)
@@ -113,11 +87,11 @@ namespace QuickFASTDotNet
                     }
                     else if (opt == "-r")
                     {
-                      resetOnMessage_ = !resetOnMessage_;
+                        decoder_.Reset = true;
                     }
                     else if (opt == "-s")
                     {
-                      strict_ = !strict_;
+                        decoder_.Strict = true;
                     }
                     else if (opt == "-t")
                     {
@@ -147,47 +121,16 @@ namespace QuickFASTDotNet
                     {
                       readLimit = true;
                     }
+                    else
+                    {
+                        Console.Error.WriteLine("Unknown Option: {0}", opt);
+                        ok = false;
+                    }
+
                 }
 
                 try
                 {
-                    if (templateFileName_ == null)
-                    {
-                        ok = false;
-                        System.Console.WriteLine("ERROR: -t [templatefile] option is required.");
-                    }
-                    if (ok)
-                    {
-                        try
-                        {
-
-                            templateFile_ = new System.IO.FileStream(templateFileName_, System.IO.FileMode.Open);
-                        }
-                        catch (System.IO.IOException iex)
-                        {
-                            ok = false;
-                            System.Console.WriteLine("ERROR: Can't open template file: {0}", templateFileName_);
-                            System.Console.WriteLine(iex.ToString());
-                        }
-                    }
-                    if (fastFileName_ == null)
-                    {
-                        ok = false;
-                        System.Console.WriteLine("ERROR: -f [FASTfile] option is required.");
-                    }
-                    if (ok)
-                    {
-                        try
-                        {
-                            fastFile_ = new System.IO.FileStream(fastFileName_, System.IO.FileMode.Open);
-                        }
-                        catch (System.IO.IOException iex)
-                        {
-                            ok = false;
-                            System.Console.WriteLine("ERROR: Can't open FAST Message file: {0}", fastFileName_);
-                            System.Console.WriteLine(iex.ToString());
-                        }
-                    }
                     if (ok && performanceFileName_ != null)
                     {
                         try
@@ -222,106 +165,48 @@ namespace QuickFASTDotNet
                 return ok;
             }
 
-
-            public int parseTemplates(ref QuickFASTDotNet.Codecs.TemplateRegistry templateRegistry)
-            {
-                try
-                {
-                    Console.WriteLine("Parsing templates");
-                    Console.Out.Flush();
-                    QuickFASTDotNet.Stopwatch parseTimer = new QuickFASTDotNet.Stopwatch();
-                    templateRegistry = QuickFASTDotNet.Codecs.TemplateRegistry.Parse(templateFile_);
-                    parseTimer.Stop();
-                    ulong parseLapse = parseTimer.ElapsedMilliseconds;
-
-                    uint templateCount = templateRegistry.Size;
-                    performanceFile_.Write("Parsed ");
-                    performanceFile_.Write(templateCount);
-                    performanceFile_.Write(" templates in ");
-                    performanceFile_.Write(parseLapse.ToString("F3"));
-                    performanceFile_.WriteLine(" milliseconds.");
-                    performanceFile_.Write(" milliseconds. [");
-                    performanceFile_.Write("{0:F3} msec/template. = ", (double)parseLapse / (double)templateCount);
-                    performanceFile_.WriteLine("{0:F0} template/second.]", (double)1000 * (double)templateCount / (double)parseLapse);
-                    performanceFile_.Flush();
-
-                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
-
-                return 0;
-            }
-
-
-            public int decodeMessages(QuickFASTDotNet.Codecs.TemplateRegistry templateRegistry)
-            {
-                try
-                {
-                    for (ulong nPass = 0; nPass < loop_; ++nPass)
-                    {
-                        System.Console.WriteLine("Decoding input; pass {0} of {1}", nPass + 1, loop_);
-                        System.Console.Out.Flush();
-                        MessageInterpreter interpreter = new MessageInterpreter(limit_, duplicate_);
-
-                        fastFile_.Seek(0, System.IO.SeekOrigin.Begin);
-                        QuickFASTDotNet.Codecs.SynchronousDecoder decoder = new QuickFASTDotNet.Codecs.SynchronousDecoder(templateRegistry, fastFile_);
-                        decoder.ResetOnMessage = resetOnMessage_;
-                        decoder.Strict = strict_;
-
-                        QuickFASTDotNet.Codecs.MessageReceivedDelegate handlerDelegate;
-                        handlerDelegate = new QuickFASTDotNet.Codecs.MessageReceivedDelegate(interpreter.MessageReceived);
-
-                        GCSettings.LatencyMode = GCLatencyMode.LowLatency;
-
-                        QuickFASTDotNet.Stopwatch decodeTimer = new QuickFASTDotNet.Stopwatch();
-                        { //PROFILE_POINT("Main");
-
-                            decoder.Decode(handlerDelegate);
-
-                        }//PROFILE_POINT
-                        decodeTimer.Stop();
-                        ulong decodeLapse = decodeTimer.ElapsedMilliseconds;
-
-                        GCSettings.LatencyMode = GCLatencyMode.Interactive;
-
-                        ulong messageCount = interpreter.getMessageCount();
-#if DEBUG
-                        performanceFile_.Write("[debug] ");
-#endif // DEBUG
-                        performanceFile_.Write("Decoded {0} messages in {1}  milliseconds. [", messageCount, decodeLapse);
-                        performanceFile_.Write("{0:F3} msec/message. = ", (double)decodeLapse / (double)messageCount);
-                        performanceFile_.WriteLine("{0:F3} messages/second]", (double)1000 * (double)messageCount / (double)decodeLapse);
-
-                        //performanceFile_.WriteLine("Decoder time is {0} milliseconds", decoder.DecodeTime);
-
-                        performanceFile_.Flush();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
-
-                return 0;
-            }
-
-
-
             public int run()
             {
                 int result = 0;
-                QuickFASTDotNet.Codecs.TemplateRegistry templateRegistry = null;
-                result += parseTemplates(ref templateRegistry);
-                System.Console.WriteLine("Running second run so JIT will have already run");
-                result += parseTemplates(ref templateRegistry);
+                try
+                {
+                    /// Handle incoming FAST decoded messages
+                    QuickFAST.DotNet.DNMessageDeliverer builder = new QuickFAST.DotNet.DNMessageDeliverer();
+                    builder.MessageReceived +=
+                        new QuickFAST.DotNet.DNMessageDeliverer.MessageReceiver(
+                            MessageInterpreter);
 
-                result += decodeMessages(templateRegistry);
-                System.Console.WriteLine("Running second run so JIT will have already run");
-                result += decodeMessages(templateRegistry);
+                    GCSettings.LatencyMode = GCLatencyMode.LowLatency;
 
+                    QuickFAST.DotNet.Stopwatch decodeTimer = new QuickFAST.DotNet.Stopwatch();
+                    decoder_.run(builder, 0, true);
+                    decodeTimer.Stop();
+                    ulong decodeLapse = decodeTimer.ElapsedMilliseconds;
+
+                    GCSettings.LatencyMode = GCLatencyMode.Interactive;
+
+#if DEBUG
+                    performanceFile_.Write("[debug] ");
+#endif // DEBUG
+                    performanceFile_.Write("Decoded {0} messages in {1}  milliseconds. [", recordCount_, decodeLapse);
+                    performanceFile_.Write("{0:F3} msec/message. = ", (double)decodeLapse / (double)recordCount_);
+                    performanceFile_.WriteLine("{0:F3} messages/second]", (double)1000 * (double)recordCount_ / (double)decodeLapse);
+                    performanceFile_.Flush();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    result = 1;
+                }
                 return result;
+            }
+
+            public bool MessageInterpreter(
+                QuickFAST.DotNet.DNMessageDeliverer builder,
+                QuickFAST.DotNet.DNFieldSet message)
+            {
+                ++recordCount_;
+                return true;
             }
 
 
@@ -340,6 +225,8 @@ namespace QuickFASTDotNet
                 }
                 return 0;
             }
+            private QuickFAST.DotNet.DNDecoderConnection decoder_ = new QuickFAST.DotNet.DNDecoderConnection();
+            long recordCount_ = 0;
         }
     }
 }

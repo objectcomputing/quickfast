@@ -1,19 +1,33 @@
+// Copyright (c) 2009, 2010 Object Computing, Inc.
+// All rights reserved.
+// See the file license.txt for licensing information.
 // This file defines MPC features used to enable and disable portions of the build
 QuickFAST=1
 boost=1
-// .NET is disabled by default to avoid build errors for people using
-// the express edition of Visual Studio C++.
-// To enable .NET build, change the following from '0' to '1'
-dotnet=0
+
+// Build .NET library
+//    To enable .NET build, change the following from '0' to '1'
+dotnet=1
+
+// Build .NET examples
 dotnetapp=1
-// If nUnit is installed, change the following from '0' to '1'
+
+// Build NUNIT based .NET tests
+//    If nUnit is installed, change the following from '0' to '1'
 nunit=0
-// If ARCA support is present (separate project) change the following
-// from '0' to '1'
+
+// Build ARCA support library
+//    If ARCA support is present (separate project) change the following
+//    from '0' to '1'
 arca=0
-// If ARCA .NET support is present (separate project) change the following
-// from '0' to '1'
+
+// Build ARCA .NET support library
+//    If ARCA .NET support is present (separate project) change the following
+//    from '0' to '1'
 arcadotnet=0
+
 // This is a "feature" used to temporarily disable parts of the build.
+// by making the depend on the "obsolete" feature.  It should always be
+// assigned a 0.
 obsolete=0
 

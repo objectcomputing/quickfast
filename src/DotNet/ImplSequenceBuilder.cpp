@@ -7,10 +7,12 @@
 #include <DotNet/ImplFieldSetBuilder.h>
 #include <DotNet/ImplSequence.h>
 
+#pragma unmanaged
+
 using namespace QuickFAST;
 using namespace DotNet;
 
-ImplSequenceBuilder::ImplSequenceBuilder(DNMessageDeliverer ^ deliverer)
+ImplSequenceBuilder::ImplSequenceBuilder(ImplMessageDeliverer & deliverer)
   : ImplBuilderBase(deliverer)
   , sequence_(0)//new ImplSequence)
 {
@@ -22,7 +24,7 @@ ImplSequenceBuilder::~ImplSequenceBuilder()
   // however...
   delete sequence_;
 }
-
+#pragma unmanaged
 void
 ImplSequenceBuilder::initialize(
   Messages::FieldIdentityCPtr & lengthIdentity,
@@ -61,3 +63,4 @@ ImplSequenceBuilder::endSequenceEntry(Messages::ValueMessageBuilder & entry)
   sequence_->append(sequenceEntryBuilder_->endSet());
 }
 
+#pragma managed
