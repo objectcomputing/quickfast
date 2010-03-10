@@ -49,9 +49,7 @@ ImplFieldSetBuilder::addValue(
   ValueType::Type type, const int64 value)
 {
   ImplField & field = fieldSet_->append();
-  field.setLocalName(identity->getLocalName());
-  field.setFieldNamespace(identity->getNamespace());
-  field.setId(identity->id());
+  field.setIdentity(identity);
   field.setSignedValue(type, value);
 }
 
@@ -62,9 +60,7 @@ ImplFieldSetBuilder::addValue(
   const uint64 value)
 {
   ImplField & field = fieldSet_->append();
-  field.setLocalName(identity->getLocalName());
-  field.setFieldNamespace(identity->getNamespace());
-  field.setId(identity->id());
+  field.setIdentity(identity);
   field.setUnsignedValue(type, value);
 }
 
@@ -75,9 +71,7 @@ ImplFieldSetBuilder::addValue(
   const int32 value)
 {
   ImplField & field = fieldSet_->append();
-  field.setLocalName(identity->getLocalName());
-  field.setFieldNamespace(identity->getNamespace());
-  field.setId(identity->id());
+  field.setIdentity(identity);
   field.setSignedValue(type, value);
 }
 
@@ -88,9 +82,7 @@ ImplFieldSetBuilder::addValue(
   const uint32 value)
 {
   ImplField & field = fieldSet_->append();
-  field.setLocalName(identity->getLocalName());
-  field.setFieldNamespace(identity->getNamespace());
-  field.setId(identity->id());
+  field.setIdentity(identity);
   field.setUnsignedValue(type, value);
 }
 
@@ -101,9 +93,7 @@ ImplFieldSetBuilder::addValue(
   const int16 value)
 {
   ImplField & field = fieldSet_->append();
-  field.setLocalName(identity->getLocalName());
-  field.setFieldNamespace(identity->getNamespace());
-  field.setId(identity->id());
+  field.setIdentity(identity);
   field.setSignedValue(type, value);
 }
 
@@ -114,9 +104,7 @@ ImplFieldSetBuilder::addValue(
   const uint16 value)
 {
   ImplField & field = fieldSet_->append();
-  field.setLocalName(identity->getLocalName());
-  field.setFieldNamespace(identity->getNamespace());
-  field.setId(identity->id());
+  field.setIdentity(identity);
   field.setUnsignedValue(type, value);
 }
 
@@ -128,9 +116,7 @@ ImplFieldSetBuilder::addValue(
   const int8 value)
 {
   ImplField & field = fieldSet_->append();
-  field.setLocalName(identity->getLocalName());
-  field.setFieldNamespace(identity->getNamespace());
-  field.setId(identity->id());
+  field.setIdentity(identity);
   field.setSignedValue(type, value);
 }
 
@@ -142,9 +128,7 @@ ImplFieldSetBuilder::addValue(
   const uchar value)
 {
   ImplField & field = fieldSet_->append();
-  field.setLocalName(identity->getLocalName());
-  field.setFieldNamespace(identity->getNamespace());
-  field.setId(identity->id());
+  field.setIdentity(identity);
   field.setUnsignedValue(type, value);
 }
 
@@ -156,9 +140,7 @@ ImplFieldSetBuilder::addValue(
   const Decimal& value)
 {
   ImplField & field = fieldSet_->append();
-  field.setLocalName(identity->getLocalName());
-  field.setFieldNamespace(identity->getNamespace());
-  field.setId(identity->id());
+  field.setIdentity(identity);
   field.setDecimalValue(value);
 }
 
@@ -171,9 +153,7 @@ ImplFieldSetBuilder::addValue(
   size_t length)
 {
   ImplField & field = fieldSet_->append();
-  field.setLocalName(identity->getLocalName());
-  field.setFieldNamespace(identity->getNamespace());
-  field.setId(identity->id());
+  field.setIdentity(identity);
   std::string v(reinterpret_cast<const char *>(value), length);
   field.setStringValue(type, v);
 }
@@ -238,9 +218,7 @@ ImplFieldSetBuilder::endSequence(
 {
   ImplField & field = fieldSet_->append();
   field.setSequence(sequenceBuilder_->endSequence());
-  field.setLocalName(identity->getLocalName());
-  field.setFieldNamespace(identity->getNamespace());
-  field.setId(identity->id());
+  field.setIdentity(identity);
   sequenceBuilder_.reset();
 }
 
@@ -266,8 +244,6 @@ ImplFieldSetBuilder::endGroup(
 {
   ImplField & field = fieldSet_->append();
   field.setGroup(groupBuilder_->endSet());
-  field.setLocalName(identity->getLocalName());
-  field.setFieldNamespace(identity->getNamespace());
-  field.setId(identity->id());
+  field.setIdentity(identity);
 }
 #pragma managed

@@ -7,6 +7,7 @@
 #include <DotNet/ImplFieldSet.h>
 #pragma unmanaged
 #include <Common/Decimal.h>
+#include <Messages/FieldIdentity.h>
 
 using namespace QuickFAST;
 using namespace DotNet;
@@ -67,44 +68,23 @@ ImplField::setGroup(ImplFieldSet * group)
   group_.reset(group);
 }
 
-void
-ImplField::setLocalName(const std::string & localName)
-{
-  localName_ = localName;
-}
-
-void
-ImplField::setFieldNamespace(const std::string & fieldNamespace)
-{
-  fieldNamespace_ = fieldNamespace;
-}
-
-void
-ImplField::setId(const std::string & id)
-{
-  id_ = id;
-}
-
-
-
-
 const std::string &
 ImplField::localName()
 {
-  return localName_;
+  return identity_->getLocalName();
 }
 
 const std::string &
 ImplField::fieldNamespace()
 {
-  return fieldNamespace_;
+  return identity_->getNamespace();
 }
 
 
 const std::string &
 ImplField::id()
 {
-  return id_;
+  return identity_->id();
 }
 
 

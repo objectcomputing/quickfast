@@ -15,29 +15,54 @@ ImplSequence::ImplSequence(
     Messages::FieldIdentityCPtr & lengthIdentity,
     size_t length
   )
-  : lengthName_(lengthIdentity->getLocalName())
-  , lengthNamespace_(lengthIdentity->getNamespace())
-  , lengthId_(lengthIdentity->id())
+  : capacity_(length)
+  , used_(0)
+  , lengthIdentity_(lengthIdentity)
+  , entries_(new EntryPtr[length])
 {
 }
 
 ImplSequence::~ImplSequence()
 {
-  for(size_t nEntry = 0; nEntry < entries_.size(); ++ nEntry)
+  for(size_t nEntry = 0; nEntry < used_; ++ nEntry)
   {
     delete entries_[nEntry];
   }
 }
 
+const std::string
+ImplSequence::lengthName()const
+{
+  return lengthIdentity_->getLocalName();
+}
+
+/// @brief access the namespace of the length field
+const std::string
+ImplSequence::lengthNamespace()const
+{
+  return lengthIdentity_->getNamespace();;
+}
+
+/// @brief access the id of the length field
+const std::string
+ImplSequence::lengthId()const
+{
+  return lengthIdentity_->id();
+}
+
 size_t
 ImplSequence::size()
 {
-  return entries_.size();
+  return used_;
 }
 
 ImplFieldSet &
 ImplSequence::operator[](size_t index)
 {
+  if(index >= used_)
+  {
+    throw std::range_error("Sequence index out of range.");
+  }
   return *(entries_[index]);
 }
 
@@ -45,6 +70,11 @@ ImplSequence::operator[](size_t index)
 void
 ImplSequence::append(ImplFieldSet * entry)
 {
-  entries_.push_back(entry);
+  if(used_ >= capacity_)
+  {
+    throw std::range_error("Sequence full.");
+  }
+  entries_[used_] = entry;
+  ++used_;
 }
 

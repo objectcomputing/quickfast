@@ -32,28 +32,20 @@ namespace QuickFAST
       void append(ImplFieldSet * entry);
 
       /// @brief access the name of the length field
-      const std::string lengthName()const
-      {
-        return lengthName_;
-      }
+      const std::string lengthName()const;
 
       /// @brief access the namespace of the length field
-      const std::string lengthNamespace()const
-      {
-        return lengthNamespace_;
-      }
+      const std::string lengthNamespace()const;
 
       /// @brief access the id of the length field
-      const std::string lengthId()const
-      {
-        return lengthId_;
-      }
+      const std::string lengthId()const;
 
     private:
-      std::string lengthName_;
-      std::string lengthNamespace_;
-      std::string lengthId_;
-      std::vector<ImplFieldSet *> entries_;
+      size_t capacity_;
+      size_t used_;
+      Messages::FieldIdentityCPtr lengthIdentity_;
+      typedef ImplFieldSet * EntryPtr;
+      boost::scoped_array<EntryPtr> entries_;
     };
   }
 }

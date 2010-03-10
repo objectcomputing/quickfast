@@ -170,11 +170,23 @@ namespace QuickFASTDotNet
                 int result = 0;
                 try
                 {
-                    /// Handle incoming FAST decoded messages
                     QuickFAST.DotNet.DNMessageDeliverer builder = new QuickFAST.DotNet.DNMessageDeliverer();
+                    // Handle incoming FAST decoded messages
                     builder.MessageReceived +=
                         new QuickFAST.DotNet.DNMessageDeliverer.MessageReceiver(
                             MessageInterpreter);
+                    // Handle log messages
+                    builder.LogMessage +=
+                        new QuickFAST.DotNet.DNMessageDeliverer.LogHandler(
+                            Logger);
+                    // Handle communications errors
+                    builder.CommunicationError +=
+                        new QuickFAST.DotNet.DNMessageDeliverer.ErrorHandler(
+                            CommunicationErrorHandler);
+                    // Handle decoding errors
+                    builder.DecodingError +=
+                        new QuickFAST.DotNet.DNMessageDeliverer.ErrorHandler(
+                            DecoderErrorHandler);
 
                     GCSettings.LatencyMode = GCLatencyMode.LowLatency;
 
@@ -208,6 +220,31 @@ namespace QuickFASTDotNet
                 ++recordCount_;
                 return true;
             }
+            public bool Logger(
+                QuickFAST.DotNet.DNMessageDeliverer builder,
+                ushort logLevel,
+                String message)
+            {
+                Console.WriteLine("{0}", message);
+                return true;
+            }
+
+            bool CommunicationErrorHandler(
+                QuickFAST.DotNet.DNMessageDeliverer builder,
+                String message)
+            {
+                Console.WriteLine("Communication error: {0}", message);
+                return true;
+            }
+
+            bool DecoderErrorHandler(
+                QuickFAST.DotNet.DNMessageDeliverer builder,
+                String message)
+            {
+                Console.WriteLine("Decoder error: {0}", message);
+                return true;
+            }
+
 
 
             static int Main(string[] args)

@@ -1,3 +1,15 @@
+Wed Mar 10 20:15:18 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/DotNet/ImplField.h:
+        * src/DotNet/ImplField.cpp:
+        * src/DotNet/ImplFieldSetBuilder.cpp:
+        * src/DotNet/ImplSequence.h:
+        * src/DotNet/ImplSequence.cpp:
+        * src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.cs:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.cs:
+        Improve performance as measured by PerformanceTestDotNet
+        Display log and error messages in InterpretFASTDotNet and PerformanceTestDotNet.
+
 Wed Mar 10 15:48:14 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * QuickFAST.features:

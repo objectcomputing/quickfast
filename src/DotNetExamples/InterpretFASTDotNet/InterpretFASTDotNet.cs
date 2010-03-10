@@ -87,11 +87,21 @@ namespace QuickFASTDotNet
                 try
                 {
                     /// Handle incoming FAST decoded messages
-                    builder_.MessageReceived +=
+                    QuickFAST.DotNet.DNMessageDeliverer builder = new QuickFAST.DotNet.DNMessageDeliverer();
+                    builder.MessageReceived +=
                         new QuickFAST.DotNet.DNMessageDeliverer.MessageReceiver(
-                            MessageInterpreter);
+                            this.MessageInterpreter);
+                    builder.LogMessage +=
+                        new QuickFAST.DotNet.DNMessageDeliverer.LogHandler(
+                            Logger);
+                    builder.CommunicationError +=
+                        new QuickFAST.DotNet.DNMessageDeliverer.ErrorHandler(
+                            CommunicationErrorHandler);
+                    builder.DecodingError +=
+                        new QuickFAST.DotNet.DNMessageDeliverer.ErrorHandler(
+                            DecoderErrorHandler);
 
-                    decoder_.run(builder_, 0, true);
+                    decoder_.run(builder, 0, true);
                 }
                 catch (Exception ex)
                 {
@@ -113,6 +123,30 @@ namespace QuickFASTDotNet
                 return true;
             }
 
+            public bool Logger(
+                QuickFAST.DotNet.DNMessageDeliverer builder,
+                ushort logLevel,
+                String message)
+            {
+                Console.WriteLine("{0}", message);
+                return true;
+            }
+
+            bool CommunicationErrorHandler(
+                QuickFAST.DotNet.DNMessageDeliverer builder,
+                String message)
+            {
+                Console.WriteLine("Communication error: {0}", message);
+                return true;
+            }
+
+            bool DecoderErrorHandler(
+                QuickFAST.DotNet.DNMessageDeliverer builder,
+                String message)
+            {
+                Console.WriteLine("Decoder error: {0}", message);
+                return true;
+            }
 
             static int Main(string[] args)
             {
@@ -131,7 +165,6 @@ namespace QuickFASTDotNet
                 return result;
             }
             private QuickFAST.DotNet.DNDecoderConnection decoder_ = new QuickFAST.DotNet.DNDecoderConnection();
-            private QuickFAST.DotNet.DNMessageDeliverer builder_ = new QuickFAST.DotNet.DNMessageDeliverer();
             private FieldSetInterpreter interpreter_ = new FieldSetInterpreter();
             long recordCount_ = 0;
         }

@@ -6,6 +6,7 @@
 #pragma unmanaged
 #include <Common/Value.h>
 #include <Common/Decimal.h>
+#include <Messages/FieldIdentity_fwd.h>
 
 namespace QuickFAST{
   namespace DotNet{
@@ -71,6 +72,7 @@ namespace QuickFAST{
       /// @brief The exponent portion of a Decimal value
       QuickFAST::exponent_t exponent();
 
+#if 0
       /// @brief Set the local name
       void setLocalName(const std::string & localName);
       /// @brief Set the field's namespace
@@ -79,6 +81,12 @@ namespace QuickFAST{
 
       /// @brief Set the field ID
       void setId(const std::string & id);
+#else
+      void setIdentity(Messages::FieldIdentityCPtr & identity)
+      {
+        identity_ = identity;
+      }
+#endif
 
       /// @brief Store an unsigned value of the given type in the field
       void setUnsignedValue(ValueType::Type type, unsigned long long value);
@@ -96,9 +104,10 @@ namespace QuickFAST{
       void setGroup(ImplFieldSet * group);
     private:
 
-      std::string localName_;
-      std::string fieldNamespace_;
-      std::string id_;
+      Messages::FieldIdentityCPtr identity_;
+//      std::string localName_;
+//      std::string fieldNamespace_;
+//      std::string id_;
 
       ValueType::Type type_;
 
