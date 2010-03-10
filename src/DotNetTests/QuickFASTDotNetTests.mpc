@@ -1,7 +1,13 @@
+//DOT NET TESTS ARE DISABLED
+// They need to be rewritten to support the newly rewritten .NET support in
+// QUICKFAST.
+// (as of March 10, 2010)
 project {
   requires += dotnet
   requires += nunit
+  requires += obsolete
   lit_libs += nunit.framework.dll
+
 
 
   libout = $(QuickFAST_ROOT)/Output

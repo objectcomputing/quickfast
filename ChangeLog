@@ -1,3 +1,8 @@
+Wed Mar 10 21:57:36 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/DotNetTests/QuickFASTDotNetTests.mpc:
+        Disable .NET tests until they can be reworked.
+
 Wed Mar 10 20:15:18 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/DotNet/ImplField.h:
