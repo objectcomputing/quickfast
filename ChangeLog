@@ -1,3 +1,20 @@
+Thu Mar 11 19:59:37 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Application/DecoderConfiguration.h:
+        * src/Application/DecoderConnection.cpp:
+        * src/DotNet/DNDecoderConnection.h:
+        * src/DotNet/DNFieldSet.h:
+        * src/DotNet/DNFieldSet.cpp:
+        * src/DotNet/ImplBuilderBase.cpp:
+        * src/DotNetExamples/InterpretFASTDotNet/FieldSetInterpreter.cs:
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+          Add get and set methods to DecoderConfiguration rather than
+          accessing data members directly.
+          Honor the strict and reset parameters for decoding.
+          Add Find*ByQualifiedName methods to DNFieldSet to honor field namespace
+          Set the default log level in DotNet to LOG_WARNING
+          Improve internal documentation
+
 Wed Mar 10 21:57:36 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/DotNetTests/QuickFASTDotNetTests.mpc:

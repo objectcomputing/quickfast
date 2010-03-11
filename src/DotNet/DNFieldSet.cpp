@@ -57,6 +57,30 @@ DNFieldSet::findIndexByName(System::String ^ fieldName)
   return -1;
 }
 
+int
+DNFieldSet::findIndexByQualifiedName(System::String ^ fieldName, System::String ^ fieldNamespace)
+{
+  if(impl_ == 0)
+  {
+    throw std::logic_error("Call findIndexByQualifiedName on cleared DNFieldSet");
+  }
+  std::string name;
+  assignString(name, fieldName);
+  std::string ns;
+  assignString(ns, fieldNamespace);
+  size_t size = impl_->size();
+  for(size_t index = 0; index < size; ++index)
+  {
+    ImplField & field = (*impl_)[index];
+    if(name == field.localName() && ns == field.fieldNamespace())
+    {
+      return static_cast<int>(index);
+    }
+  }
+  return -1;
+}
+
+
 DNField ^
 DNFieldSet::getField(int index)
 {
@@ -81,6 +105,29 @@ DNFieldSet::findFieldByName(System::String ^ fieldName)
   {
     ImplField & field = (*impl_)[index];
     if(name == field.localName())
+    {
+      return gcnew DNField(field);
+    }
+  }
+  return nullptr;
+}
+
+DNField ^
+DNFieldSet::findFieldByQualifiedName(System::String ^ fieldName, System::String ^ fieldNamespace)
+{
+  if(impl_ == 0)
+  {
+    throw std::logic_error("Call getFieldByName on cleared DNFieldSet");
+  }
+  std::string name;
+  assignString(name, fieldName);
+  std::string ns;
+  assignString(ns, fieldNamespace);
+  size_t size = impl_->size();
+  for(size_t index = 0; index < size; ++index)
+  {
+    ImplField & field = (*impl_)[index];
+    if(name == field.localName() && ns == field.fieldNamespace())
     {
       return gcnew DNField(field);
     }

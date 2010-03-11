@@ -36,7 +36,15 @@ namespace QuickFAST
       }
 
       /// @brief find a field with the given local name (ignores namespace)
+      /// @param fieldName is the local name of the field
+      /// @returns -1 if field not found
       int findIndexByName(System::String ^ fieldName);
+
+      /// @brief find a field with the given local name (ignores namespace)
+      /// @param fieldNamespace is the namespace qualifier for fieldName
+      /// @param fieldName is the local name of the field
+      /// @returns -1 if field not found
+      int findIndexByQualifiedName(System::String ^ fieldName, System::String ^ fieldNamespace);
 
       /// @brief Find a field given an index
       /// @brief identifies the field (0 <= index < Count)
@@ -44,8 +52,15 @@ namespace QuickFAST
       DNField ^ getField(int index);
 
       /// @brief Find a field given the localName
+      /// @param fieldName is the local name of the field
       /// @returns the field or nullptr
       DNField ^ findFieldByName(System::String ^ fieldName);
+
+      /// @brief Find a field given the localName
+      /// @param fieldName is the local name of the field
+      /// @param fieldNamespace is the namespace qualifier for fieldName
+      /// @returns the field or nullptr
+      DNField ^ findFieldByQualifiedName(System::String ^ fieldName, System::String ^ fieldNamespace);
 
       /// @brief clear all fields and start over.
       void clear();

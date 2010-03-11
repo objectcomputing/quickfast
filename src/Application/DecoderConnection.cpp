@@ -56,77 +56,77 @@ DecoderConnection::configure(
   Messages::ValueMessageBuilder & builder,
   Application::DecoderConfiguration &configuration)
 {
-  if(!configuration.fastFileName_.empty())
+  if(!configuration.fastFileName().empty())
   {
-    fastFile_ = new std::ifstream(configuration.fastFileName_.c_str(), binaryMode);
+    fastFile_ = new std::ifstream(configuration.fastFileName().c_str(), binaryMode);
     if(!fastFile_->good())
     {
       std::stringstream msg;
       msg << "Can't open FAST data file: "
-        << configuration.fastFileName_;
+        << configuration.fastFileName();
       throw std::invalid_argument(msg.str());
     }
   }
 
-  if(!configuration.verboseFileName_.empty())
+  if(!configuration.verboseFileName().empty())
   {
-    if(configuration.verboseFileName_ == "cerr")
+    if(configuration.verboseFileName() == "cerr")
     {
       verboseFile_= &std::cerr;
     }
-    else if(configuration.verboseFileName_ == "cout")
+    else if(configuration.verboseFileName() == "cout")
     {
       verboseFile_ = &std::cout;
     }
     else
     {
       ownVerboseFile_ = true;
-      verboseFile_ = new std::ofstream(configuration.verboseFileName_.c_str());
+      verboseFile_ = new std::ofstream(configuration.verboseFileName().c_str());
       if(!verboseFile_->good())
       {
         std::stringstream msg;
         msg << "Can't open verbose file: "
-          << configuration.verboseFileName_;
+          << configuration.verboseFileName();
         throw std::invalid_argument(msg.str());
       }
     }
   }
 
-  if(! configuration.echoFileName_.empty())
+  if(! configuration.echoFileName().empty())
   {
     ownEchoFile_ = true;
     std::ios::openmode mode = std::ios::out | std::ios::trunc;
-    if(configuration.echoType_ == Codecs::DataSource::RAW)
+    if(configuration.echoType() == Codecs::DataSource::RAW)
     {
       mode |= binaryMode;
     }
-    if(configuration.echoFileName_ == "cout")
+    if(configuration.echoFileName() == "cout")
     {
       echoFile_ = & std::cout;
     }
-    else if(configuration.echoFileName_ == "cerr")
+    else if(configuration.echoFileName() == "cerr")
     {
       echoFile_ = & std::cerr;
     }
     else
     {
-      echoFile_ = new std::ofstream(configuration.echoFileName_.c_str(), mode);
+      echoFile_ = new std::ofstream(configuration.echoFileName().c_str(), mode);
     }
     if(!echoFile_->good())
     {
       std::stringstream msg;
       msg << "Can't open echo file: "
-        << configuration.echoFileName_;
+        << configuration.echoFileName();
       throw std::invalid_argument(msg.str());
     }
   }
 
-  std::ifstream templates(configuration.templateFileName_.c_str());
+  std::ifstream templates(configuration.templateFileName().c_str());
   if(!templates.good())
   {
       std::stringstream msg;
       msg << "Can't open template file: "
-        << configuration.templateFileName_;
+        << configuration.templateFileName();
       throw std::invalid_argument(msg.str());
   }
   Codecs::XMLTemplateParser parser;
@@ -134,7 +134,7 @@ DecoderConnection::configure(
 
   registry_ = parser.parse(templates);
 
-  switch(configuration.headerType_)
+  switch(configuration.headerType())
   {
   case Application::DecoderConfiguration::NO_HEADER:
     {
@@ -144,24 +144,24 @@ DecoderConnection::configure(
   case Application::DecoderConfiguration::FIXED_HEADER:
     {
       analyzer_.reset(new Codecs::FixedSizeHeaderAnalyzer(
-        configuration.headerMessageSizeBytes_,
-        configuration.headerBigEndian_,
-        configuration.headerPrefixCount_,
-        configuration.headerSuffixCount_
+        configuration.headerMessageSizeBytes(),
+        configuration.headerBigEndian(),
+        configuration.headerPrefixCount(),
+        configuration.headerSuffixCount()
       ));
       break;
     }
   case Application::DecoderConfiguration::FAST_HEADER:
     {
       analyzer_.reset(new Codecs::FastEncodedHeaderAnalyzer(
-        configuration.headerPrefixCount_,
-        configuration.headerSuffixCount_,
-        configuration.headerMessageSizeBytes_ != 0)); // true if header contains message size
+        configuration.headerPrefixCount(),
+        configuration.headerSuffixCount(),
+        configuration.headerMessageSizeBytes() != 0)); // true if header contains message size
       break;
     }
   }
 
-  switch(configuration.assemblerType_)
+  switch(configuration.assemblerType())
   {
   case Application::DecoderConfiguration::MESSAGE_PER_PACKET_ASSEMBLER:
     {
@@ -170,8 +170,8 @@ DecoderConnection::configure(
         *analyzer_,
         builder);
       assembler_.reset(pAssembler);
-      pAssembler->setEcho(*echoFile_, configuration.echoType_, configuration.echoMessage_, configuration.echoField_);
-      pAssembler->setMessageLimit(configuration.head_);
+      pAssembler->setEcho(*echoFile_, configuration.echoType(), configuration.echoMessage(), configuration.echoField());
+      pAssembler->setMessageLimit(configuration.head());
       break;
     }
   case Application::DecoderConfiguration::STREAMING_ASSEMBLER:
@@ -180,15 +180,15 @@ DecoderConnection::configure(
         registry_,
         *analyzer_,
         builder,
-        configuration.waitForCompleteMessage_);
+        configuration.waitForCompleteMessage());
       assembler_.reset(pAssembler);
-      pAssembler->setEcho(*echoFile_, configuration.echoType_, configuration.echoMessage_, configuration.echoField_);
-      pAssembler->setMessageLimit(configuration.head_);
+      pAssembler->setEcho(*echoFile_, configuration.echoType(), configuration.echoMessage(), configuration.echoField());
+      pAssembler->setMessageLimit(configuration.head());
       break;
     }
   default:
     {
-      switch(configuration.receiverType_)
+      switch(configuration.receiverType())
       {
       case Application::DecoderConfiguration::MULTICAST_RECEIVER:
       case Application::DecoderConfiguration::PCAPFILE_RECEIVER:
@@ -198,8 +198,8 @@ DecoderConnection::configure(
             *analyzer_,
             builder);
           assembler_.reset(pAssembler);
-          pAssembler->setEcho(*echoFile_, configuration.echoType_, configuration.echoMessage_, configuration.echoField_);
-          pAssembler->setMessageLimit(configuration.head_);
+          pAssembler->setEcho(*echoFile_, configuration.echoType(), configuration.echoMessage(), configuration.echoField());
+          pAssembler->setMessageLimit(configuration.head());
           break;
         }
       case Application::DecoderConfiguration::TCP_RECEIVER:
@@ -209,10 +209,10 @@ DecoderConnection::configure(
             registry_,
             *analyzer_,
             builder,
-            configuration.waitForCompleteMessage_);
+            configuration.waitForCompleteMessage());
           assembler_.reset(pAssembler);
-          pAssembler->setEcho(*echoFile_, configuration.echoType_, configuration.echoMessage_, configuration.echoField_);
-          pAssembler->setMessageLimit(configuration.head_);
+          pAssembler->setEcho(*echoFile_, configuration.echoType(), configuration.echoMessage(), configuration.echoField());
+          pAssembler->setMessageLimit(configuration.head());
           break;
         }
       default:
@@ -225,21 +225,24 @@ DecoderConnection::configure(
     }
   }
 
-  switch(configuration.receiverType_)
+  assembler_->setReset(configuration.reset());
+  assembler_->setStrict(configuration.strict());
+
+  switch(configuration.receiverType())
   {
   case Application::DecoderConfiguration::MULTICAST_RECEIVER:
     {
       receiver_.reset(new Communication::MulticastReceiver(
-        configuration.multicastGroupIP_,
-        configuration.listenInterfaceIP_,
-        configuration.portNumber_));
+        configuration.multicastGroupIP(),
+        configuration.listenInterfaceIP(),
+        configuration.portNumber()));
       break;
     }
   case Application::DecoderConfiguration::TCP_RECEIVER:
     {
       receiver_.reset(new Communication::TCPReceiver(
-      configuration.hostName_,
-      configuration.portName_));
+      configuration.hostName(),
+      configuration.portName()));
       break;
     }
   case Application::DecoderConfiguration::RAWFILE_RECEIVER:
@@ -251,14 +254,13 @@ DecoderConnection::configure(
   case Application::DecoderConfiguration::PCAPFILE_RECEIVER:
     {
       receiver_.reset(new Communication::PCapFileReceiver(
-        configuration.pcapFileName_,
-        configuration.pcapWordSize_));
-
+        configuration.pcapFileName(),
+        configuration.pcapWordSize()));
       break;
     }
   }
 
-  receiver_->start(*assembler_, configuration.bufferSize_, configuration.bufferCount_);
+  receiver_->start(*assembler_, configuration.bufferSize(), configuration.bufferCount());
 
 }
 

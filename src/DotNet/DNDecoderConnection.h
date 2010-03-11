@@ -39,7 +39,7 @@ namespace QuickFAST
       {
         void set(unsigned int head)
         {
-          configuration_->head_ = head;
+          configuration_->setHead(head);
         }
       }
 
@@ -49,7 +49,7 @@ namespace QuickFAST
       {
         void set(bool reset)
         {
-          configuration_->reset_ = reset;
+          configuration_->setReset(reset);
         }
       }
 
@@ -59,7 +59,7 @@ namespace QuickFAST
       {
         void set(bool strict)
         {
-          configuration_->strict_ = strict;
+          configuration_->setStrict(strict);
         }
       }
 
@@ -69,7 +69,9 @@ namespace QuickFAST
       {
         void set(System::String ^ templateFileName)
         {
-          assignString(configuration_->templateFileName_, templateFileName);
+          std::string name;
+          assignString(name, templateFileName);
+          configuration_->setTemplateFileName(name);
         }
       }
 
@@ -79,7 +81,9 @@ namespace QuickFAST
       {
         void set(System::String ^ fastFileName)
         {
-          assignString(configuration_->fastFileName_, fastFileName);
+          std::string name;
+          assignString(name, fastFileName);
+          configuration_->setFastFileName(name);
         }
       }
 
@@ -89,7 +93,9 @@ namespace QuickFAST
       {
         void set(System::String ^ verboseFileName)
         {
-          assignString(configuration_->verboseFileName_, verboseFileName);
+          std::string name;
+          assignString(name, verboseFileName);
+          configuration_->setVerboseFileName(name);
         }
       }
 
@@ -99,7 +105,9 @@ namespace QuickFAST
       {
         void set(System::String ^ pcapFileName)
         {
-          assignString(configuration_->pcapFileName_, pcapFileName);
+          std::string name;
+          assignString(name, pcapFileName);
+          configuration_->setPcapFileName(name);
         }
       }
 
@@ -109,7 +117,9 @@ namespace QuickFAST
       {
         void set(System::String ^ echoFileName)
         {
-          assignString(configuration_->echoFileName_, echoFileName);
+          std::string name;
+          assignString(name, echoFileName);
+          configuration_->setEchoFileName(name);
         }
       }
 
@@ -125,7 +135,7 @@ namespace QuickFAST
       {
         void set(EchoTypes echoType)
         {
-          configuration_->echoType_ = static_cast<Codecs::DataSource::EchoType>(echoType);
+          configuration_->setEchoType(static_cast<Codecs::DataSource::EchoType>(echoType));
         }
       }
 
@@ -135,7 +145,7 @@ namespace QuickFAST
       {
         void set(bool echoMessage)
         {
-          configuration_->echoMessage_ = echoMessage;
+          configuration_->setEchoMessage(echoMessage);
         }
       }
 
@@ -145,7 +155,7 @@ namespace QuickFAST
       {
         void set(bool echoField)
         {
-          configuration_->echoField_ = echoField;
+          configuration_->setEchoField(echoField);
         }
       }
 
@@ -155,7 +165,7 @@ namespace QuickFAST
       {
         void set(unsigned int pcapWordSize)
         {
-          configuration_->pcapWordSize_ = pcapWordSize;
+          configuration_->setPcapWordSize(pcapWordSize);
         }
       }
 
@@ -170,7 +180,7 @@ namespace QuickFAST
       {
         void set(HeaderTypes headerType)
         {
-          configuration_->headerType_ = static_cast<Application::DecoderConfiguration::HeaderType>(headerType);
+          configuration_->setHeaderType(static_cast<Application::DecoderConfiguration::HeaderType>(headerType));
         }
       }
 
@@ -180,7 +190,7 @@ namespace QuickFAST
       {
         void set(unsigned int headerMessageSizeBytes)
         {
-          configuration_->headerMessageSizeBytes_ = headerMessageSizeBytes;
+          configuration_->setHeaderMessageSizeBytes(headerMessageSizeBytes);
         }
       }
 
@@ -190,7 +200,7 @@ namespace QuickFAST
       {
         void set(bool headerBigEndian)
         {
-          configuration_->headerBigEndian_ = headerBigEndian;
+          configuration_->setHeaderBigEndian(headerBigEndian);
         }
       }
 
@@ -200,7 +210,7 @@ namespace QuickFAST
       {
         void set(unsigned int headerPrefixCount)
         {
-          configuration_->headerPrefixCount_ = headerPrefixCount;
+          configuration_->setHeaderPrefixCount(headerPrefixCount);
         }
       }
 
@@ -210,7 +220,7 @@ namespace QuickFAST
       {
         void set(unsigned int headerSuffixCount)
         {
-          configuration_->headerSuffixCount_ = headerSuffixCount;
+          configuration_->setHeaderSuffixCount(headerSuffixCount);
         }
       }
 
@@ -226,8 +236,8 @@ namespace QuickFAST
       {
         void set(AssemblerTypes assemblerType)
         {
-          configuration_->assemblerType_ =
-            static_cast<Application::DecoderConfiguration::AssemblerType>(assemblerType);
+          configuration_->setAssemblerType(
+            static_cast<Application::DecoderConfiguration::AssemblerType>(assemblerType));
         }
       }
 
@@ -237,7 +247,7 @@ namespace QuickFAST
       {
         void set(bool waitForCompleteMessage)
         {
-          configuration_->waitForCompleteMessage_ = waitForCompleteMessage;
+          configuration_->setWaitForCompleteMessage(waitForCompleteMessage);
         }
       }
 
@@ -256,8 +266,8 @@ namespace QuickFAST
       {
         void set(ReceiverTypes receiverType)
         {
-          configuration_->receiverType_ =
-            static_cast<Application::DecoderConfiguration::ReceiverType>(receiverType);
+          configuration_->setReceiverType(
+            static_cast<Application::DecoderConfiguration::ReceiverType>(receiverType));
         }
       }
 
@@ -267,7 +277,9 @@ namespace QuickFAST
       {
         void set(System::String ^ multicastGroupIP)
         {
-          assignString(configuration_->multicastGroupIP_, multicastGroupIP);
+          std::string ip;
+          assignString(ip, multicastGroupIP);
+          configuration_->setMulticastGroupIP(ip);
         }
       }
 
@@ -277,7 +289,7 @@ namespace QuickFAST
       {
         void set(unsigned short portNumber)
         {
-          configuration_->portNumber_ = portNumber;
+          configuration_->setPortNumber(portNumber);
         }
       }
 
@@ -287,7 +299,9 @@ namespace QuickFAST
       {
         void set(System::String ^ listenInterfaceIP)
         {
-          assignString(configuration_->listenInterfaceIP_, listenInterfaceIP);
+          std::string ip;
+          assignString(ip, listenInterfaceIP);
+          configuration_->setListenInterfaceIP(ip);
         }
       }
 
@@ -297,7 +311,9 @@ namespace QuickFAST
       {
         void set(System::String ^ hostName)
         {
-          assignString(configuration_->hostName_, hostName);
+          std::string name;
+          assignString(name, hostName);
+          configuration_->setHostName(name);
         }
       }
 
@@ -307,7 +323,9 @@ namespace QuickFAST
       {
         void set(System::String ^ portName)
         {
-          assignString(configuration_->portName_, portName);
+          std::string port;
+          assignString(port, portName);
+          configuration_->setPortName(port);
         }
       }
 
@@ -319,7 +337,7 @@ namespace QuickFAST
       {
         void set(unsigned int bufferSize)
         {
-          configuration_->bufferSize_ = bufferSize;
+          configuration_->setBufferSize(bufferSize);
         }
       }
 
@@ -332,7 +350,7 @@ namespace QuickFAST
       {
         void set(unsigned int bufferCount)
         {
-          configuration_->bufferCount_ = bufferCount;
+          configuration_->setBufferCount(bufferCount);
         }
       }
 

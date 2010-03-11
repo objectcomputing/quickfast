@@ -13,7 +13,7 @@ using namespace DotNet;
 
 ImplBuilderBase::ImplBuilderBase(ImplMessageDeliverer & deliverer)
   : deliverer_(deliverer)
-  , logLimit_(0)
+  , logLimit_(Common::Logger::QF_LOG_WARNING)
 {
 }
 

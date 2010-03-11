@@ -19,10 +19,18 @@ namespace QuickFASTDotNet
             public void formatFieldSet(QuickFAST.DotNet.DNFieldSet fieldSet)
             {
                 int size = fieldSet.Count;
-                //Console.WriteLine("{0}fields: {1}", indent_, size);
-//                for (int nField = 0; nField < size; ++nField)
-//                {
-//                    DNField field = fieldSet.getField(nField);
+                // There are two equivalent ways to iterate through the fields; by index or by foreach (enumerator)
+                //   for (int nField = 0; nField < size; ++nField)
+                //   {
+                //      DNField field = fieldSet.getField(nField);
+                // is equivalent to:
+                //    foreach (DNField field in fieldSet)
+                //    {
+                // You can also find fields by name
+                // This uses the unqualified local name.  It does not use field namespace
+                //   DNField field = fieldSet.findFieldByName("hello");
+                // And this one uses the namespace
+                //   DNField field = fieldSet.findFieldByQualifiedName("hello", "namespace");
                 foreach (DNField field in fieldSet)
                 {
                     FieldType type = field.Type;
