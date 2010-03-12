@@ -1,3 +1,13 @@
+Fri Mar 12 20:19:15 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Messages/FieldIdentity.h:
+        * src/Messages/FieldIdentity.cpp:
+        * src/Tests/testFieldInstructions.cpp:
+        Required should be a property of the field instruction, not the identity.
+        Now it is.
+
 Thu Mar 11 19:59:37 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Application/DecoderConfiguration.h:

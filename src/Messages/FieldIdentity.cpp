@@ -17,8 +17,7 @@ std::string anonName(void * address)
 }
 
 FieldIdentity::FieldIdentity()
-  : mandatory_(true)
-  , localName_(anonName(this))
+  : localName_(anonName(this))
   , refcount_(0)
 {
   qualifyName();

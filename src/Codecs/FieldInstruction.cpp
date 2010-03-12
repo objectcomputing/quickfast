@@ -18,6 +18,7 @@ FieldInstruction::FieldInstruction(
   , identity_(mutableIdentity_)
   , fieldOp_(new FieldOpNop)
   , presenceMapBitsUsed_(0)
+  , mandatory_(true)
 {
 }
 
@@ -26,6 +27,7 @@ FieldInstruction::FieldInstruction()
   , identity_(mutableIdentity_)
   , fieldOp_(new FieldOpNop)
   , presenceMapBitsUsed_(0)
+  , mandatory_(true)
 {
 }
 
@@ -47,7 +49,7 @@ FieldInstruction::finalize(Codecs::TemplateRegistry & /*registry*/)
 void
 FieldInstruction::setPresence(bool mandatory)
 {
-  mutableIdentity_->setMandatory(mandatory);
+  mandatory_ = mandatory;
 }
 
 void

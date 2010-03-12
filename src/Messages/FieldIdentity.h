@@ -26,7 +26,6 @@ namespace QuickFAST{
         const std::string & fieldNamespace = "")
         : localName_(name)
         , fieldNamespace_(fieldNamespace)
-        , mandatory_(true)
         , ignoreOverflow_(false)
         , refcount_(0)
       {
@@ -63,7 +62,6 @@ namespace QuickFAST{
         , fieldNamespace_(rhs.fieldNamespace_)
         , fullName_(rhs.fullName_)
         , id_(rhs.id_)
-        , mandatory_(rhs.mandatory_)
         , ignoreOverflow_(rhs.ignoreOverflow_)
         , refcount_(0)
       {
@@ -104,20 +102,6 @@ namespace QuickFAST{
         return id_;
       }
 
-      /// @brief set the mandatory flag for this field.
-      /// @param mandatory is true if the field must appear in the application data type
-      void setMandatory(bool mandatory)
-      {
-        mandatory_ = mandatory;
-      }
-
-      /// @brief access the mandatory flag
-      /// @returns the value as set by setMandatory
-      bool mandatory()const
-      {
-        return mandatory_;
-      }
-
       /// @brief enable/disable overflow checking during integer decoding
       /// @param ignoreOverflow true disables checking/false enables checking
       void setIgnoreOverflow(bool ignoreOverflow)
@@ -149,7 +133,6 @@ namespace QuickFAST{
       std::string fieldNamespace_;
       std::string fullName_; // cached for performance
       field_id_t id_;
-      bool mandatory_;
       bool ignoreOverflow_;
     private:
       friend void QuickFAST_Export intrusive_ptr_add_ref(const FieldIdentity * ptr);

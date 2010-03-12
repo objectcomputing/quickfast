@@ -66,7 +66,6 @@ namespace
     BOOST_CHECK_EQUAL(instruction.getId(), "id");
 
     Messages::FieldIdentityCPtr identity = instruction.getIdentity();
-    BOOST_CHECK(!identity->mandatory());
     BOOST_CHECK_EQUAL(identity->id(),"id");
     if(hasName)
     {

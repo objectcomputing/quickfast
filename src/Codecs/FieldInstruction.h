@@ -154,7 +154,7 @@ namespace QuickFAST{
       /// @returns true if the field is mandatory.
       bool isMandatory()const
       {
-        return identity_->mandatory();
+        return mandatory_;
       }
 
       /// @brief Implement the dictionary= attribute.
@@ -628,6 +628,8 @@ namespace QuickFAST{
       /// Presence map bits used by this instruction/opererator combination
       /// only valid after finalize has been called
       size_t presenceMapBitsUsed_;
+
+      bool mandatory_;
     };
 
     ///////////////////////////////
