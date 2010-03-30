@@ -1,3 +1,10 @@
+Tue Mar 30 16:09:00 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * QuickFAST.mwc:
+        exclude(!vc8,!vc9) was not working as expected so I switched
+        to exclude(!prop:windows)  Downside is lack of support for mono
+        and possibly unexpected results running mingw/gcc.
+
 Fri Mar 12 20:19:15 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstruction.h:

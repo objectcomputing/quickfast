@@ -4,7 +4,9 @@ workspace(*) {
   src/Examples/Examples.mpc
   
   // .NET support only for Visual Studio compilers
-  exclude(!vc8, !vc9) {
+  //  exclude(!vc8,!vc9)  [was not working so instead...
+  // .Net support only on windows
+  exclude(!prop:windows) {
     //C++/Cli Visual Studio Projects
     src/DotNet/QuickFASTDotNet.mpc
   
