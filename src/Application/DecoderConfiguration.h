@@ -32,6 +32,7 @@ namespace QuickFAST{
         TCP_RECEIVER,
         RAWFILE_RECEIVER,
         PCAPFILE_RECEIVER,
+        BUFFER_RECEIVER,
         UNSPECIFIED_RECEIVER
       };
 
@@ -102,6 +103,7 @@ namespace QuickFAST{
       /// For StreamingAssembler with waitForCompleteMessage_ specified,
       /// bufferCount_ * bufferSize_ must equal or exceed maximum message size.
       size_t bufferCount_;
+
     public:
       /// @brief Iniitalize to defaults
       DecoderConfiguration()

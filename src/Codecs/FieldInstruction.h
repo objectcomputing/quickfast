@@ -629,6 +629,7 @@ namespace QuickFAST{
       /// only valid after finalize has been called
       size_t presenceMapBitsUsed_;
 
+      /// True if the field described by this instruction MUST appear in the application message.
       bool mandatory_;
     };
 

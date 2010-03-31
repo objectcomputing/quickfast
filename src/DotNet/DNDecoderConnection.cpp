@@ -7,6 +7,7 @@
 #pragma unmanaged
 #include <Application/DecoderConnection.h>
 #include <Communication/Receiver.h>
+#include <Codecs/DataSourceBuffer.h>
 #pragma managed
 
 using namespace QuickFAST;
@@ -46,3 +47,32 @@ DNDecoderConnection::run(DNMessageBuilder ^ dnBuilder, size_t extraThreadCount, 
     throw gcnew System::Exception(gcnew System::String(ex.what()));
   }
 }
+
+void
+DNDecoderConnection::run(
+  DNMessageBuilder ^ dnBuilder,
+  array<unsigned char>^ memoryBuffer,
+  long byteOffset,
+  long bytesUsed,
+  bool reset
+  )
+{
+  try
+  {
+    Messages::ValueMessageBuilder & builder = dnBuilder->builder();
+    connection_->configure(builder, *configuration_);
+    if(reset)
+    {
+      connection_->decoder().reset();
+    }
+    pin_ptr<unsigned char> pinnedBuffer = &memoryBuffer[0];
+    const unsigned char * pBuffer = pinnedBuffer;
+    connection_->receiver().receiveBuffer(pBuffer + byteOffset, bytesUsed);
+
+  }
+  catch (std::exception const & ex)
+  {
+    throw gcnew System::Exception(gcnew System::String(ex.what()));
+  }
+}
+

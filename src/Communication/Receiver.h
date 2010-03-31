@@ -107,6 +107,17 @@ namespace QuickFAST
         stopping_ = true;
       }
 
+      /// @brief Special method for BUFFER_RECEIVER
+      ///
+      /// Process data from an external buffer;
+      virtual void receiveBuffer(
+        const unsigned char * buffer,
+        size_t used
+        )
+      {
+        throw std::logic_error("Unexpected call to Communications::Receiver::receiveBuffer()");
+      }
+
       /// @brief run the event loop in this thread
       ///
       /// Exceptions are caught, logged, and ignored.  The event loop continues.

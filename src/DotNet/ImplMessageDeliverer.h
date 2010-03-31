@@ -2,6 +2,9 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 #pragma once
+#pragma unmanaged
+#include <Common/Logger.h>
+#pragma managed
 
 namespace QuickFAST
 {
@@ -9,13 +12,14 @@ namespace QuickFAST
   {
     class ImplFieldSet;
 
+    /// Expose log levels to .NET
     enum LogLevel
     {
-      QF_LOG_FATAL,
-      QF_LOG_SERIOUS = 1,
-      QF_LOG_WARNING = 2,
-      QF_LOG_INFO = 3,
-      QF_LOG_VERBOSE = 4
+      QF_LOG_FATAL = Common::Logger::QF_LOG_FATAL,
+      QF_LOG_SERIOUS = Common::Logger::QF_LOG_SERIOUS,
+      QF_LOG_WARNING = Common::Logger::QF_LOG_WARNING,
+      QF_LOG_INFO = Common::Logger::QF_LOG_INFO,
+      QF_LOG_VERBOSE = Common::Logger::QF_LOG_VERBOSE
     };
     ref class DNMessageDeliverer;
     /// @brief link from unmanaged code to the managed DNMessageDeliverer
@@ -25,6 +29,8 @@ namespace QuickFAST
       /// @brief construct with reference to the "real" deliverer
       ImplMessageDeliverer(DNMessageDeliverer ^ deliverer);
       ~ImplMessageDeliverer();
+      /// @brief deliver a completed message (represented as a field set) to the application
+      /// @param fieldSet is the message to be delivered.
       bool deliverMessage(ImplFieldSet & fieldSet);
 
       /// @brief report an "interesting" event

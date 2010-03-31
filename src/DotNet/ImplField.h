@@ -72,21 +72,12 @@ namespace QuickFAST{
       /// @brief The exponent portion of a Decimal value
       QuickFAST::exponent_t exponent();
 
-#if 0
-      /// @brief Set the local name
-      void setLocalName(const std::string & localName);
-      /// @brief Set the field's namespace
-
-      void setFieldNamespace(const std::string & fieldNamespace);
-
-      /// @brief Set the field ID
-      void setId(const std::string & id);
-#else
+      /// @brief Identify this field
+      /// @param identity identifies this field.
       void setIdentity(Messages::FieldIdentityCPtr & identity)
       {
         identity_ = identity;
       }
-#endif
 
       /// @brief Store an unsigned value of the given type in the field
       void setUnsignedValue(ValueType::Type type, unsigned long long value);

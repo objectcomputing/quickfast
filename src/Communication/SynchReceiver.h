@@ -40,7 +40,7 @@ namespace QuickFAST
       ///
       /// The lock from the fill buffer call should be returned
       /// for this call.
-      /// If this returns true then the caller shoul eventually
+      /// If this returns true then the caller should eventually
       /// call tryServiceQueue() -- but NOT from the fill buffer call.
       bool acceptFullBuffer(
         LinkedBuffer * buffer,

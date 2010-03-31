@@ -37,6 +37,13 @@ BOOST_AUTO_TEST_CASE(TestLinkedBuffer)
   }
   buffer1.setUsed(20);
   BOOST_CHECK(buffer1.used() == 20);
+
+  Communication::LinkedBuffer external;
+  unsigned char * hello = (unsigned char *)"hello";
+  external.setExternal(hello, sizeof(hello));
+  BOOST_CHECK_EQUAL(0, std::strcmp((char *)hello, (char *)external.get()));
+  // note part of the test is being sure that hello does not get deleted[] when external goes out of scope.
+  // we count on the debug memory allocater to detect that case.
 }
 
 BOOST_AUTO_TEST_CASE(TestBufferCollection)

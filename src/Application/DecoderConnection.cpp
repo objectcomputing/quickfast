@@ -15,6 +15,7 @@
 #include <Communication/TCPReceiver.h>
 #include <Communication/RawFileReceiver.h>
 #include <Communication/PCapFileReceiver.h>
+#include <Communication/BufferReceiver.h>
 
 using namespace QuickFAST;
 using namespace Application;
@@ -192,6 +193,7 @@ DecoderConnection::configure(
       {
       case Application::DecoderConfiguration::MULTICAST_RECEIVER:
       case Application::DecoderConfiguration::PCAPFILE_RECEIVER:
+      case Application::DecoderConfiguration::BUFFER_RECEIVER:
         {
           Codecs::MessagePerPacketAssembler * pAssembler = new Codecs::MessagePerPacketAssembler(
             registry_,
@@ -258,9 +260,30 @@ DecoderConnection::configure(
         configuration.pcapWordSize()));
       break;
     }
+  case Application::DecoderConfiguration::BUFFER_RECEIVER:
+    {
+      receiver_.reset(new Communication::BufferReceiver);
+      break;
+    }
+  default:
+    {
+      std::stringstream msg;
+      msg << "DecoderConnection: Cannot determine what type of receiver to use.";
+      throw std::invalid_argument(msg.str());
+    }
   }
 
   receiver_->start(*assembler_, configuration.bufferSize(), configuration.bufferCount());
 
+}
+
+Codecs::Decoder &
+DecoderConnection::decoder() const
+{
+  if(!assembler_)
+  {
+    throw UsageError("Coding Error","Using DecoderConnection decoder before it is configured.");
+  }
+  return assembler_->decoder();
 }
 

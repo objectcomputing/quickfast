@@ -30,6 +30,25 @@ namespace QuickFAST
       ///        False: return immediately (only makes sense if extraThreadCount > 0)
       void run(DNMessageBuilder ^ dnBuilder, size_t extraThreadCount, bool useThisThread);
 
+
+      /// @brief Run the decoder to read bytes from a buffer
+      ///
+      /// May be called repeatedly.
+      /// Should be called instead of the run() method with thread counts.
+      ///  i.e. do not call both run() methods.
+      /// @param dnBuilder is the Message Builder that receives the decoded information
+      /// @param  memoryBuffer contains the data to be decoded
+      /// @param byteOffset is the starting position in the buffer
+      /// @param bytesUsed is the number of bytes to be decoded
+      /// @param reset resets the decoder before decoding begins.
+      void run(
+        DNMessageBuilder ^ dnBuilder,
+        array<unsigned char>^ memoryBuffer,
+        long byteOffset,
+        long bytesUsed,
+        bool reset
+        );
+
       /////////////
       // Properties
 
@@ -258,6 +277,7 @@ namespace QuickFAST
         TCP_RECEIVER = Application::DecoderConfiguration::TCP_RECEIVER,
         RAWFILE_RECEIVER = Application::DecoderConfiguration::RAWFILE_RECEIVER,
         PCAPFILE_RECEIVER = Application::DecoderConfiguration::PCAPFILE_RECEIVER,
+        BUFFER_RECEIVER = Application::DecoderConfiguration::BUFFER_RECEIVER,
         UNSPECIFIED_RECEIVER = Application::DecoderConfiguration::UNSPECIFIED_RECEIVER
       };
 

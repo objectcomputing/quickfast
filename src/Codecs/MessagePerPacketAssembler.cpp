@@ -15,10 +15,9 @@ MessagePerPacketAssembler::MessagePerPacketAssembler(
       TemplateRegistryPtr templateRegistry,
       HeaderAnalyzer & headerAnalyzer,
       Messages::ValueMessageBuilder & builder)
-  : Communication::Assembler(builder)
+  : Communication::Assembler(templateRegistry, builder)
   , headerAnalyzer_(headerAnalyzer)
   , builder_(builder)
-  , decoder_(templateRegistry)
   , messageCount_(0)
   , byteCount_(0)
   , messageLimit_(0)

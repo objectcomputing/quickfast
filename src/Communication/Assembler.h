@@ -9,6 +9,8 @@
 #include "Assembler_fwd.h"
 //#include <Common/QuickFAST_Export.h>
 #include <Communication/Receiver_fwd.h>
+#include <Codecs/TemplateRegistry_fwd.h>
+#include <Codecs/Decoder.h>
 #include <Communication/LinkedBuffer.h>
 #include <Common/Logger.h>
 
@@ -25,9 +27,13 @@ namespace QuickFAST{
     {
     public:
       /// @brief Construct
+      /// @param templateRegistry contains the templates to be used during decoding
       /// @param logger is used to log requests to a "real" logger
-      Assembler(Common::Logger & logger)
-        : logger_(logger)
+      Assembler(
+          Codecs::TemplateRegistryPtr templateRegistry,
+          Common::Logger & logger)
+        : decoder_(templateRegistry)
+        , logger_(logger)
         , strict_(true)
         , reset_(false)
       {
@@ -80,13 +86,23 @@ namespace QuickFAST{
         reset_ = reset;
       }
 
-      /// @brief set the flag to use strict decoding rulese
+      /// @brief set the flag to use strict decoding rules
       /// @param strict is true to enable strict decoding
       void setStrict(bool strict = true)
       {
         strict_ = strict;
       }
+
+      /// @brief Provide direct access to the decoder.
+      Codecs::Decoder & decoder()
+      {
+        return decoder_;
+      }
+
     protected:
+      /// The decoder that does the work.
+      Codecs::Decoder decoder_;
+
       /// Log information is delegated to this logger
       Common::Logger & logger_;
       /// Strict decoding rules

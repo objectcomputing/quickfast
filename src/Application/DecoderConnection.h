@@ -10,6 +10,7 @@
 #include <Common/Exceptions.h>
 #include <Codecs/TemplateRegistry_fwd.h>
 #include <Codecs/HeaderAnalyzer_fwd.h>
+#include <Codecs/Decoder_fwd.h>
 #include <Communication/Assembler_fwd.h>
 #include <Communication/Receiver_fwd.h>
 #include <Application/DecoderConfiguration.h>
@@ -58,6 +59,8 @@ namespace QuickFAST{
         }
         return *receiver_;
       }
+
+      Codecs::Decoder & decoder() const;
 
     private:
       std::istream * fastFile_;

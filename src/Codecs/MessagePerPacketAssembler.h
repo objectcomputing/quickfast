@@ -92,7 +92,6 @@ namespace QuickFAST
     private:
       HeaderAnalyzer & headerAnalyzer_;
       Messages::ValueMessageBuilder & builder_;
-      Decoder decoder_;
 
       const unsigned char * buffer_;
       size_t size_;

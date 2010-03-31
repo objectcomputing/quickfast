@@ -17,10 +17,9 @@ StreamingAssembler::StreamingAssembler(
       HeaderAnalyzer & headerAnalyzer,
       Messages::ValueMessageBuilder & builder,
       bool waitForCompleteMessage)
-  : Communication::Assembler(builder)
+  : Communication::Assembler(templateRegistry, builder)
   , headerAnalyzer_(headerAnalyzer)
   , builder_(builder)
-  , decoder_(templateRegistry)
   , stopping_(false)
   , waitForCompleteMessage_(waitForCompleteMessage)
   , receiver_(0)

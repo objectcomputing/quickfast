@@ -73,7 +73,6 @@ namespace QuickFAST
     private:
       HeaderAnalyzer & headerAnalyzer_;
       Messages::ValueMessageBuilder & builder_;
-      Decoder decoder_;
       bool stopping_;
       bool waitForCompleteMessage_;
 

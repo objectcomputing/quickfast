@@ -16,7 +16,8 @@ namespace QuickFASTDotNet
             {
                 Console.WriteLine("Usage of this program:");
                 Console.WriteLine("  -t file     : Template file (required)");
-                Console.WriteLine("  -f file     : FAST Message file (required)");
+                Console.WriteLine("  -f file     : FAST Message file");
+                Console.WriteLine("  -b file     : FAST Message file: buffer the data in memory before decoding");
                 Console.WriteLine("  -r          : Toggle 'reset decoder on every message' (default false).");
                 Console.WriteLine("  -s          : Toggle 'strict decoding rules' (default true).");
                 Console.WriteLine("  -vx         : Toggle 'noisy execution progress' (default false).");
@@ -26,6 +27,7 @@ namespace QuickFASTDotNet
             {
                 bool readTemplateName = false;
                 bool readSourceName = false;
+                bool readBufferedFileName = false;
                 bool ok = true;
 
                 foreach (string opt in args)
@@ -41,6 +43,17 @@ namespace QuickFASTDotNet
                         decoder_.ReceiverType = QuickFAST.DotNet.DNDecoderConnection.ReceiverTypes.RAWFILE_RECEIVER;
                         decoder_.HeaderType = QuickFAST.DotNet.DNDecoderConnection.HeaderTypes.NO_HEADER;
                         readSourceName = false;
+                    }
+                    else if (readBufferedFileName)
+                    {
+                        memoryBuffer_ = System.IO.File.ReadAllBytes(opt);
+                        decoder_.ReceiverType = QuickFAST.DotNet.DNDecoderConnection.ReceiverTypes.BUFFER_RECEIVER;
+                        decoder_.HeaderType = QuickFAST.DotNet.DNDecoderConnection.HeaderTypes.NO_HEADER;
+                        readBufferedFileName = false;
+                    }
+                    else if (opt == "-b")
+                    {
+                        readBufferedFileName = true;
                     }
                     else if (opt == "-r")
                     {
@@ -100,8 +113,15 @@ namespace QuickFASTDotNet
                     builder.DecodingError +=
                         new QuickFAST.DotNet.DNMessageDeliverer.ErrorHandler(
                             DecoderErrorHandler);
+                    if (memoryBuffer_ != null)
+                    {
+                        decoder_.run(builder, memoryBuffer_, 0, memoryBuffer_.Length, true);
 
-                    decoder_.run(builder, 0, true);
+                    }
+                    else
+                    {
+                        decoder_.run(builder, 0, true);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -166,7 +186,9 @@ namespace QuickFASTDotNet
             }
             private QuickFAST.DotNet.DNDecoderConnection decoder_ = new QuickFAST.DotNet.DNDecoderConnection();
             private FieldSetInterpreter interpreter_ = new FieldSetInterpreter();
-            long recordCount_ = 0;
+            private long recordCount_ = 0;
+
+            private byte[] memoryBuffer_;
         }
     }
 }

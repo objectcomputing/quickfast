@@ -26,48 +26,58 @@ namespace QuickFAST
       {
       }
 
-      /// @brief Special constructor used to construct a list root
-      /// This buffer will not actually be used, it's allows pointers
-      /// to head-of-list to be type safe.
+      /// @brief Construct an empty buffer
+      ///
+      /// This can be used either as a list head in which case it will never contain data
+      /// or it can be used to link to external data.
       LinkedBuffer()
         : link_(0)
+        , buffer_(0)
         , capacity_(0)
         , used_(0)
       {
+      }
+
+      ~LinkedBuffer()
+      {
+        if(capacity_ != 0)
+        {
+          delete[] buffer_;
+        }
       }
 
       /// @brief Access the raw buffer
       /// @returns a pointer to the raw buffer
       unsigned char * get()
       {
-        return buffer_.get();
+        return buffer_;
       }
 
       /// @brief Constant access to the raw buffer
       /// @returns a const pointer to the raw buffer
       const unsigned char * get() const
       {
-        return buffer_.get();
+        return buffer_;
       }
 
       /// @brief Support indexing
       unsigned char & operator[](size_t index)
       {
-        if(index >= capacity_)
+        if((capacity_ == 0 && index >= used_) || index >= capacity_)
         {
           throw std::range_error("LinkedBuffer: Index out of bounds.");
         }
-        return buffer_.get()[index];
+        return buffer_[index];
       }
 
       /// @brief Support indexing constant
       const unsigned char & operator[](size_t index) const
       {
-        if(index >= capacity_)
+        if(index >= used_)
         {
           throw std::range_error("LinkedBuffer (const): Index out of bounds.");
         }
-        return buffer_.get()[index];
+        return buffer_[index];
       }
 
       /// @brief Access the allocated size.
@@ -75,6 +85,19 @@ namespace QuickFAST
       size_t capacity() const
       {
         return capacity_;
+      }
+
+      /// @brief set external buffer
+      ///
+      void setExternal(const unsigned char * externalBuffer, size_t used)
+      {
+        if(capacity_ != 0)
+        {
+          delete[] buffer_;
+          capacity_ = 0;
+        }
+        buffer_ = const_cast<unsigned char *>(externalBuffer);
+        used_ = used;
       }
 
       /// @brief Set the number of bytes used in this buffer
@@ -107,9 +130,10 @@ namespace QuickFAST
 
     private:
       LinkedBuffer * link_;
-      boost::scoped_array<unsigned char> buffer_;
+      unsigned char * buffer_;
       size_t capacity_;
       size_t used_;
+      bool external_;
     };
 
     /// @brief No frills ordered collection of buffers: FIFO

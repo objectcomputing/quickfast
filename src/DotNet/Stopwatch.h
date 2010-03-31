@@ -17,9 +17,13 @@ namespace QuickFAST
     public ref class Stopwatch
     {
     public:
+      /// @brief Create and start the timer
       Stopwatch();
+
+      /// @brief Stop the timer
       void Stop();
 
+      /// @brief Lapsed time in milliseconds.
       property unsigned __int64 ElapsedMilliseconds
       {
         unsigned __int64 get();

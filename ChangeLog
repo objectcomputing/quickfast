@@ -1,3 +1,32 @@
+Wed Mar 31 14:30:29 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Application/DecoderConfiguration.h:
+        * src/Application/DecoderConnection.h:
+        * src/Application/DecoderConnection.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/MessagePerPacketAssembler.h:
+        * src/Codecs/MessagePerPacketAssembler.cpp:
+        * src/Codecs/StreamingAssembler.h:
+        * src/Codecs/StreamingAssembler.cpp:
+        * src/Communication/Assembler.h:
+        * src/Communication/BufferReceiver.h:
+        * src/Communication/BufferReceiver_fwd.h:
+        * src/Communication/LinkedBuffer.h:
+        * src/Communication/PCapFileReceiver_fwd.h:
+        * src/Communication/Receiver.h:
+        * src/Communication/SynchReceiver.h:
+        * src/DotNet/DNDecoderConnection.h:
+        * src/DotNet/DNDecoderConnection.cpp:
+        * src/DotNet/ImplField.h:
+        * src/DotNet/ImplMessageDeliverer.h:
+        * src/DotNet/Stopwatch.h:
+        * src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.cs:
+        * src/Tests/testCommon.cpp:
+        Add support to DNDecoderConnection to decode from memory buffer (.NET byte[])
+         -- use receiver type BUFFER_RECEIVER
+         -- call Assembler::run(builder, buffer, offset, used, reset)
+            rather than run(builder, threadCount, useThisThread)
+
 Tue Mar 30 16:09:00 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * QuickFAST.mwc:
