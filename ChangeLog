@@ -1,3 +1,14 @@
+Fri Apr  2 16:31:58 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Messages/FieldIdentity.h:
+        Move the "no-overflow" flag into the field instruction where it belongs.
+        * src/Examples/InterpretApplication/InterpretApplication.h:
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+        Add support for decoding-from-a-buffer.
+
 Wed Mar 31 14:30:29 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Application/DecoderConfiguration.h:

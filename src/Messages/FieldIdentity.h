@@ -26,7 +26,6 @@ namespace QuickFAST{
         const std::string & fieldNamespace = "")
         : localName_(name)
         , fieldNamespace_(fieldNamespace)
-        , ignoreOverflow_(false)
         , refcount_(0)
       {
         qualifyName();
@@ -34,9 +33,6 @@ namespace QuickFAST{
 
       /// @brief Construct an anonomous FieldIdentity
       FieldIdentity();
-
-    private:
-      /// @brief private constructor prevents stack or static allocations, or embedding
       ~FieldIdentity();
     public:
       /// @brief set name after construction
@@ -62,7 +58,6 @@ namespace QuickFAST{
         , fieldNamespace_(rhs.fieldNamespace_)
         , fullName_(rhs.fullName_)
         , id_(rhs.id_)
-        , ignoreOverflow_(rhs.ignoreOverflow_)
         , refcount_(0)
       {
       }
@@ -102,20 +97,6 @@ namespace QuickFAST{
         return id_;
       }
 
-      /// @brief enable/disable overflow checking during integer decoding
-      /// @param ignoreOverflow true disables checking/false enables checking
-      void setIgnoreOverflow(bool ignoreOverflow)
-      {
-        ignoreOverflow_ = ignoreOverflow;
-      }
-
-      ///@brief Access the overflow disable flag.
-      /// @returns the value assigened by setIgnoreOverflow()
-      bool ignoreOverflow()const
-      {
-        return ignoreOverflow_;
-      }
-
     private:
       void qualifyName()
       {
@@ -133,7 +114,6 @@ namespace QuickFAST{
       std::string fieldNamespace_;
       std::string fullName_; // cached for performance
       field_id_t id_;
-      bool ignoreOverflow_;
     private:
       friend void QuickFAST_Export intrusive_ptr_add_ref(const FieldIdentity * ptr);
       friend void QuickFAST_Export intrusive_ptr_release(const FieldIdentity * ptr);

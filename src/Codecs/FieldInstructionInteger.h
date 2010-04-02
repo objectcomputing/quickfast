@@ -227,11 +227,11 @@ namespace QuickFAST{
       INTEGER_TYPE value = 0;
       if(SIGNED) // expect compile-time optimization here
       {
-        decodeSignedInteger(source, decoder, value, identity_->name(), false, identity_->ignoreOverflow());
+        decodeSignedInteger(source, decoder, value, identity_->name(), false, ignoreOverflow_);
       }
       else
       {
-        decodeUnsignedInteger(source, decoder, value, identity_->name(), identity_->ignoreOverflow());
+        decodeUnsignedInteger(source, decoder, value, identity_->name(), ignoreOverflow_);
       }
       if(isMandatory())
       {
@@ -304,11 +304,11 @@ namespace QuickFAST{
         // present in stream
         if(SIGNED) // expect compile-time optimization here
         {
-          decodeSignedInteger(source, decoder, value, identity_->name(), false, identity_->ignoreOverflow());
+          decodeSignedInteger(source, decoder, value, identity_->name(), false, ignoreOverflow_);
         }
         else
         {
-          decodeUnsignedInteger(source, decoder, value, identity_->name(), identity_->ignoreOverflow());
+          decodeUnsignedInteger(source, decoder, value, identity_->name(), ignoreOverflow_);
         }
 
         if(isMandatory())
@@ -412,11 +412,11 @@ namespace QuickFAST{
         INTEGER_TYPE value = 0;
         if(SIGNED)
         {
-          decodeSignedInteger(source, decoder, value, identity_->name(), false,  identity_->ignoreOverflow());
+          decodeSignedInteger(source, decoder, value, identity_->name(), false,  ignoreOverflow_);
         }
         else
         {
-          decodeUnsignedInteger(source, decoder, value, identity_->name(), identity_->ignoreOverflow());
+          decodeUnsignedInteger(source, decoder, value, identity_->name(), ignoreOverflow_);
         }
         if(isMandatory())
         {
@@ -522,11 +522,11 @@ namespace QuickFAST{
         INTEGER_TYPE value = 0;
         if(SIGNED) // expect compile-time optimization here
         {
-          decodeSignedInteger(source, decoder, value, identity_->name(), false, identity_->ignoreOverflow());
+          decodeSignedInteger(source, decoder, value, identity_->name(), false, ignoreOverflow_);
         }
         else
         {
-          decodeUnsignedInteger(source, decoder, value, identity_->name(), identity_->ignoreOverflow());
+          decodeUnsignedInteger(source, decoder, value, identity_->name(), ignoreOverflow_);
         }
         if(isMandatory())
         {

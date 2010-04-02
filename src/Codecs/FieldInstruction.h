@@ -631,6 +631,7 @@ namespace QuickFAST{
 
       /// True if the field described by this instruction MUST appear in the application message.
       bool mandatory_;
+      bool ignoreOverflow_;
     };
 
     ///////////////////////////////

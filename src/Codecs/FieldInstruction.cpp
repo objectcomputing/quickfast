@@ -19,6 +19,7 @@ FieldInstruction::FieldInstruction(
   , fieldOp_(new FieldOpNop)
   , presenceMapBitsUsed_(0)
   , mandatory_(true)
+  , ignoreOverflow_(false)
 {
 }
 
@@ -28,6 +29,7 @@ FieldInstruction::FieldInstruction()
   , fieldOp_(new FieldOpNop)
   , presenceMapBitsUsed_(0)
   , mandatory_(true)
+  , ignoreOverflow_(false)
 {
 }
 
@@ -55,7 +57,7 @@ FieldInstruction::setPresence(bool mandatory)
 void
 FieldInstruction::setIgnoreOverflow(bool ignoreOverflow)
 {
-  mutableIdentity_->setIgnoreOverflow(ignoreOverflow);
+  ignoreOverflow_ = true;
 }
 
 void

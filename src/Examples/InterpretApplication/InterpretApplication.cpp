@@ -120,6 +120,12 @@ InterpretApplication::parseSingleArg(int argc, char * argv[])
       configuration_.setFastFileName(argv[1]);
       consumed = 2;
     }
+    else if(opt == "-buffer" && argc > 1)
+    {
+      configuration_.setReceiverType(Application::DecoderConfiguration::BUFFER_RECEIVER);
+      bufferFilename_ = argv[1];
+      consumed = 2;
+    }
     else if(opt == "-pcap" && argc > 1)
     {
       configuration_.setReceiverType(Application::DecoderConfiguration::PCAPFILE_RECEIVER);
@@ -277,6 +283,7 @@ InterpretApplication::usage(std::ostream & out) const
   out << "    -ef / -ef-           : Echo field boundaries on/off (default off)" << std::endl;
   out << std::endl;
   out << "  -file file           : Input from raw FAST message file." << std::endl;
+  out << "  -buffer file         : Input from raw FAST message file into a buffer; decode from buffer." << std::endl;
   out << "  -pcap file           : Input from PCap FAST message file." << std::endl;
   out << "  -pcapsource [64|32]    : Word size of the machine where the PCap data was captured." << std::endl;
   out << "                           Defaults to the current platform." << std::endl;
@@ -353,9 +360,34 @@ InterpretApplication::run()
     MessageInterpreter handler(std::cout);
     Codecs::GenericMessageBuilder builder(handler);
       connection_.configure(builder, configuration_);
-    // run the event loop in this thread.  Do not return until
-    // receiver is stopped.
-    connection_.receiver().run();
+
+    if(bufferFilename_.empty())
+    {
+      // run the event loop in this thread.  Do not return until
+      // receiver is stopped.
+      connection_.receiver().run();
+    }
+    else
+    {
+      std::FILE * bufferFile = std::fopen(bufferFilename_.c_str(),
+#ifdef _WIN32
+        "rb"
+#else
+        "r"
+#endif
+        );
+      if(bufferFile <= 0)
+      {
+        std::cerr << "Can't open file " << bufferFilename_ << std::endl;
+        return -1;
+      }
+      std::fseek(bufferFile, 0, SEEK_END);
+      size_t fileSize = std::ftell(bufferFile);
+      std::fseek(bufferFile, 0, SEEK_SET);
+      boost::scoped_array<unsigned char> buffer(new unsigned char[fileSize]);
+      std::fread(buffer.get(), 1, fileSize, bufferFile);
+      connection_.receiver().receiveBuffer(buffer.get(), fileSize);
+    }
   }
   catch (std::exception & e)
   {
