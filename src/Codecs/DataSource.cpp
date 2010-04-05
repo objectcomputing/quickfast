@@ -17,6 +17,7 @@ DataSource::DataSource()
 , verboseMessages_(true)
 , verboseFields_(false)
 , byteCount_(0)
+, isPmap_(false)
 {
 }
 
@@ -69,6 +70,10 @@ DataSource::doEcho(bool ok, uchar byte)
     {
       echo_->put(byte);
     }
+    if(verboseFields_)
+    {
+      echoString_ += byte;
+    }
   }
   else
   {
@@ -120,9 +125,54 @@ DataSource::beginField(const std::string & name)
 {
   if(echo_ && verboseFields_)
   {
-    (*echo_) << std::endl << "***Field: " << name << " @" << std::hex<< byteCount_ << std::dec << "***" << std::endl;
+    if(!echoString_.empty())
+    {
+      if(isPmap_)
+      {
+        (*echo_) << std::endl << "  PMAP: ";
+        for(size_t pos = 0; pos < echoString_.length(); ++pos)
+        {
+          unsigned char byte = echoString_[pos];
+          for(size_t b = 0; b < 7; ++b)
+          {
+            (*echo_) << ' ' << (short)(byte >>6 & 1);
+            byte <<= 1;
+          }
+        }
+      }
+      else
+      {
+        (*echo_) << std::endl << "  Value: \"";
+        unsigned long long unsignedInt = 0;
+        long long signedInt = 0;
+        for(size_t pos = 0; pos < echoString_.length(); ++pos)
+        {
+          unsigned char byte = echoString_[pos];
+          char c = (byte & 0x7f);
+          if(c < ' ' || c == 0x7F) c = '.';
+          (*echo_) << c;
+          if(pos == 0 && (c & 0x40) != 0)
+          {
+            signedInt = -1;
+          }
+          signedInt <<= 7;
+          signedInt += (byte & 0x7F);
+          unsignedInt <<= 7;
+          unsignedInt += (byte & 0x7F);
+        }
+        (*echo_) << "\": " << signedInt;
+        if(signedInt != unsignedInt)
+        {
+          (*echo_) << " (" << unsignedInt << ')';
+        }
+      }
+      echoString_.erase();
+    }
+    isPmap_ = name == "PMAP";
+    (*echo_) << std::endl << "***Field: " << name << " @" << std::hex<< byteCount_ << std::dec << "***" << std::endl << "  ";
   }
 }
+
 
 bool
 DataSource::readByte(uchar & byte)

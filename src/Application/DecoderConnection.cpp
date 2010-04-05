@@ -104,10 +104,12 @@ DecoderConnection::configure(
     if(configuration.echoFileName() == "cout")
     {
       echoFile_ = & std::cout;
+      ownEchoFile_ = false;
     }
     else if(configuration.echoFileName() == "cerr")
     {
       echoFile_ = & std::cerr;
+      ownEchoFile_ = false;
     }
     else
     {

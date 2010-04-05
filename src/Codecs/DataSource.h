@@ -9,6 +9,7 @@
 #include "DataSource_fwd.h"
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
+#include <Common/StringBuffer.h>
 namespace QuickFAST{
   namespace Codecs{
     /// An inteface for data sources to be used by a Decoder.
@@ -163,6 +164,8 @@ namespace QuickFAST{
       bool raw_;
       bool hex_;
       size_t byteCount_;
+      StringBuffer echoString_;
+      bool isPmap_;
     };
   }
 }

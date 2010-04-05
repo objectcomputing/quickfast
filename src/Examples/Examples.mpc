@@ -1,3 +1,9 @@
+// Copyright (c) 2009, Object Computing, Inc.
+// All rights reserved.
+// See the file license.txt for licensing information.
+
+//////////////////////////////
+// Build the QuickFAST Examples
 project(InterpretFAST) : QuickFASTExample {
   exename = InterpretFAST
   Source_Files {
