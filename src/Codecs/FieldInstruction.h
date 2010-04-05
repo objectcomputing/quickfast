@@ -631,6 +631,7 @@ namespace QuickFAST{
 
       /// True if the field described by this instruction MUST appear in the application message.
       bool mandatory_;
+      /// True if overflows in the integer field should be ignored (settable via XML)
       bool ignoreOverflow_;
     };
 

@@ -1,5 +1,22 @@
 Mon Apr  5 20:55:21 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
+        * src/Codecs/FieldInstruction.h:
+        Add doxygen comment for ignoreOverflow_
+
+        * src/Application/DecoderConnection.cpp:
+        avoid deleting cout and cerr when used as an echo file.
+
+        * src/Codecs/DataSource.h:
+        * src/Codecs/DataSource.cpp:
+        Add additional info to echo display: interpret FAST encoded data
+        as string and as raw integer (warning, field nullability so the
+        actual decoded value may need adjusting.)
+
+        * src/Examples/Examples.mpc:
+        Add standard boilerplate comments.
+
+Mon Apr  5 20:55:21 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
         * src/Application/DecoderConnection.cpp:
         avoid deleting cout and cerr when used as an echo file.
 
