@@ -90,7 +90,16 @@ SegmentBody::addLengthInstruction(FieldInstructionPtr & field)
   {
     throw TemplateDefinitionError("Only one <length> element may appear in context.");
   }
-  field->setPresence(mandatoryLength_);
+
+  // Some non-standard implementatons of FAST put the presence="optional" attribute on the
+  // length element rather than the sequence element.
+  // This if accomodates those implemntations by "AND"ing together the mandatory flags so
+  // the length field is optional if it is set so explicitly (non-standard) or if it is
+  // included in an optional sequence (standard)
+  if(field->isMandatory())
+  {
+    field->setPresence(mandatoryLength_);
+  }
   lengthInstruction_ = field;
 }
 

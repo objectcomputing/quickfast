@@ -1,3 +1,30 @@
+Tue Apr  6 16:54:38 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Application/DecoderConfiguration.h:
+        * src/Application/DecoderConnection.cpp:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/SegmentBody.cpp:
+        * src/Codecs/XMLTemplateParser.h:
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+
+        Add support for nonstandard usage by Shanghai Exchange:
+        They encode:
+           <sequence name="Abc" presence="optional>
+             <length name="NoAbc/>
+        As
+           <sequence name="Abc">
+              <length name="NoAbc presence="optional">
+
+        This patch assigns numbers to nonstandard FAST features
+                NONSTANDARD_PresenceOnLengthInstruction = 1
+        and a setNonstandard(feature) method on the template parser
+        to enable support for the feature.
+
+        InterpretApplication now has a new parameter:
+          -nonstandard n
+        to use/test this capability.
+
 Mon Apr  5 22:55:28 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Common/Version.h:

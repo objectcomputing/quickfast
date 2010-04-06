@@ -59,10 +59,13 @@ namespace
   public:
     TemplateBuilder(
       TemplateRegistryPtr registry,
-      std::ostream * out
+      std::ostream * out,
+      unsigned long nonstandard
       )
       : registry_(registry)
       , out_(out)
+      , nonstandard_(nonstandard)
+
     {
     }
 
@@ -381,6 +384,7 @@ namespace
     typedef std::stack<StackEntry> SchemaStack ;
     SchemaStack schemaElements_;
     std::ostream * out_;
+    unsigned long nonstandard_;
   };
 }
 
@@ -893,6 +897,16 @@ TemplateBuilder::parseLength(const std::string & tag, const AttributeMap& attrib
   {
     field->setId(id);
   }
+  if(nonstandard_ & XMLTemplateParser::NONSTANDARD_PresenceOnLengthInstruction)
+  {
+    std::string presence;
+    bool mandatory = true;
+    if(getOptionalAttribute(attributes, "presence", presence))
+    {
+      mandatory = presence == "mandatory";
+      field->setPresence(mandatory);
+    }
+  }
   schemaElements_.top().second->addLengthInstruction(field);
   // Is this push necessary?
   schemaElements_.push(StackEntry(tag, field));
@@ -1023,6 +1037,7 @@ TemplateBuilder::parseOp(const std::string & tag, const AttributeMap& attributes
 
 XMLTemplateParser::XMLTemplateParser()
 : out_(0)
+, nonstandard_(0)
 {
   // This can throw an XMLException
   XMLPlatformUtils::Initialize();
@@ -1047,7 +1062,7 @@ XMLTemplateParser::parse(
     new TemplateRegistry
     );
 
-  TemplateBuilder templateBuilder(templateRegistry, out_);
+  TemplateBuilder templateBuilder(templateRegistry, out_, nonstandard_);
   boost::shared_ptr<SAX2XMLReader> reader(XMLReaderFactory::createXMLReader());
   reader->setContentHandler(&templateBuilder);
   reader->setErrorHandler(&templateBuilder);
@@ -1085,3 +1100,8 @@ XMLTemplateParser::setVerboseOutput(std::ostream & out)
   out_ = &out;
 }
 
+void
+XMLTemplateParser::setNonstandard(unsigned long nonstandard)
+{
+  nonstandard_ = nonstandard;
+}

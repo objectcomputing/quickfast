@@ -134,6 +134,7 @@ DecoderConnection::configure(
   }
   Codecs::XMLTemplateParser parser;
   parser.setVerboseOutput(*verboseFile_);
+  parser.setNonstandard(configuration.nonstandard());
 
   registry_ = parser.parse(templates);
 

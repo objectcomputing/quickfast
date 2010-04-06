@@ -35,6 +35,20 @@ void
 FieldInstructionSequence::finalize(TemplateRegistry & templateRegistry)
 {
   segment_->finalize(templateRegistry);
+  // Some non-standard implementatons of FAST put the presence="optional" attribute on the
+  // length element rather than the sequence element.
+  // This code promotes the "optional" flag from the length instruction
+  // to the sequence instruction where it belongs.
+  // In standards compliant templates the length instruction will always be mandatory
+  // so this code will have no effect.
+  FieldInstructionCPtr lengthPtr;
+  if(segment_->getLengthInstruction(lengthPtr))
+  {
+    if(!lengthPtr->isMandatory())
+    {
+      setPresence(false);
+    }
+  }
   FieldInstruction::finalize(templateRegistry);
 }
 

@@ -119,8 +119,7 @@ namespace QuickFAST
     class QuickFAST_Export XMLTemplateParser
     {
     public:
-      XMLTemplateParser(
-        );
+      XMLTemplateParser();
       ~XMLTemplateParser();
 
       /// @brief Parse XML data from an input stream
@@ -134,8 +133,21 @@ namespace QuickFAST
       /// @brief enable verbosity and give it a destination
       /// @param out the stream to which diagnostic info should be written
       void setVerboseOutput(std::ostream & out);
+
+      /// @brief Assign bits to non-standard features.
+      enum NonstandardFeatures
+      {
+        NONSTANDARD_PresenceOnLengthInstruction = 1
+      };
+
+      /// @brief Enable nonstandard behavior.
+      ///
+      /// Some non-standard implementatons of FAST do not comply with the Specification
+      /// @param nonstandard is a bitwise OR of the nonstandard featurse that should be allowed
+      void setNonstandard(unsigned long nonstandard);
     private:
       std::ostream * out_;
+      unsigned long nonstandard_;
     };
   }
 }

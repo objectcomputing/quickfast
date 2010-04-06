@@ -104,6 +104,9 @@ namespace QuickFAST{
       /// bufferCount_ * bufferSize_ must equal or exceed maximum message size.
       size_t bufferCount_;
 
+      /// @brief Allow nonstandard presence attribute on length instruction
+      /// If true, allow presence= attribute on sequence length instruction
+      unsigned long nonstandard_;
     public:
       /// @brief Iniitalize to defaults
       DecoderConfiguration()
@@ -298,6 +301,12 @@ namespace QuickFAST{
         return bufferCount_;
       }
 
+      /// @brief Support (nonstandard) presence attribute on length instruction
+      unsigned long nonstandard() const
+      {
+        return nonstandard_;
+      }
+
       /// @brief Process the first "head" messages then stop.
       void setHead(size_t head)
       {
@@ -463,6 +472,14 @@ namespace QuickFAST{
       void setBufferCount(size_t bufferCount)
       {
         bufferCount_ = bufferCount;
+      }
+
+      /// @brief Support nonstandard FAST featurs
+      /// @param nonstandard is an 'or' of the nonstandard features that will be allowed
+      ///      1:  if the presence attribute is allowed on length instructoin
+      void setNonstandard(unsigned long nonstandard)
+      {
+        nonstandard_ = nonstandard;
       }
     };
   }

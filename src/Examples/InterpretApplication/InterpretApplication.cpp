@@ -252,6 +252,11 @@ InterpretApplication::parseSingleArg(int argc, char * argv[])
       configuration_.setBufferCount(boost::lexical_cast<size_t>(argv[1]));
       consumed = 2;
     }
+    else if(opt == "-nonstandard" && argc > 1)
+    {
+      configuration_.setNonstandard(boost::lexical_cast<unsigned long>(argv[1]));
+      consumed = 2;
+    }
   }
   catch (std::exception & ex)
   {
@@ -318,6 +323,9 @@ InterpretApplication::usage(std::ostream & out) const
   out << "                           block size." << std::endl;
   out << "  -hsuffix n             : 'n' bytes (fixed) or fields (FAST) follow" << std::endl;
   out << "                           block size." << std::endl;
+  out << std::endl;
+  out << "  -nonstandard n       : enable nonstandard features (or bits together)" << std::endl;
+  out << "                         : 1 is allow presence attribute on length element (Shanghai Exchange)" << std::endl;
   out << std::endl;
   out << "  -buffersize size     : Size of communication buffers." << std::endl;
   out << "                         For \"-datagram\" largest expected message." << std::endl;
