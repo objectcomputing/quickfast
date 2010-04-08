@@ -91,7 +91,7 @@ FieldInstructionStaticTemplateRef::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::MessageAccessor & fieldSet) const
+  const Messages::MessageAccessor & accessor) const
 {
   // static templateRef
   // static
@@ -104,7 +104,7 @@ FieldInstructionStaticTemplateRef::encodeNop(
   // retrieve the field corresponding to this templateRef
   // which if it exists should be a FieldGroup
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_->name(), field))
+  if(accessor.getField(identity_->name(), field))
   {
     Messages::GroupCPtr group = field->toGroup();
     encoder.encodeSegmentBody(
@@ -119,7 +119,7 @@ FieldInstructionStaticTemplateRef::encodeNop(
       destination,
       pmap,
       target,
-      fieldSet);
+      accessor);
   }
 }
 
@@ -163,7 +163,7 @@ FieldInstructionDynamicTemplateRef::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::MessageAccessor & fieldSet) const
+  const Messages::MessageAccessor & accessor) const
 {
   encoder.reportFatal("[ERR I1]", "Encoding dynamic templates is not supported.");
 }

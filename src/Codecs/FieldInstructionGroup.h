@@ -51,13 +51,13 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       virtual void encodeNop(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       virtual void indexDictionaries(
         DictionaryIndexer & indexer,

@@ -57,7 +57,7 @@ FieldInstructionBlob::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & /*pmap*/,
   Codecs::Decoder & decoder,
-  Messages::ValueMessageBuilder & fieldSet) const
+  Messages::ValueMessageBuilder & builder) const
 {
   PROFILE_POINT("blob::decodeNop");
   // note NOP never uses pmap.  It uses a null value instead for optional fields
@@ -67,7 +67,7 @@ FieldInstructionBlob::decodeNop(
   {
     const uchar * value = buffer.begin();
     size_t valueSize = buffer.size();
-    fieldSet.addValue(identity_, type_, value, valueSize);
+    builder.addValue(identity_, type_, value, valueSize);
   }
 }
 
@@ -76,13 +76,13 @@ FieldInstructionBlob::decodeConstant(
   Codecs::DataSource & /*source*/,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & /*decoder*/,
-  Messages::ValueMessageBuilder & fieldSet) const
+  Messages::ValueMessageBuilder & builder) const
 {
   PROFILE_POINT("blob::decodeConstant");
   if(isMandatory())
   {
     const std::string & value = fieldOp_->getValue();
-    fieldSet.addValue(
+    builder.addValue(
       identity_,
       type_,
       reinterpret_cast<const uchar *>(value.c_str()), value.size());
@@ -92,7 +92,7 @@ FieldInstructionBlob::decodeConstant(
     if(pmap.checkNextField())
     {
       const std::string & value = fieldOp_->getValue();
-      fieldSet.addValue(
+      builder.addValue(
         identity_,
         type_,
         reinterpret_cast<const uchar *>(value.c_str()), value.size());
@@ -109,7 +109,7 @@ FieldInstructionBlob::decodeDefault(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::ValueMessageBuilder & fieldSet) const
+  Messages::ValueMessageBuilder & builder) const
 {
   PROFILE_POINT("blob::decodeDefault");
   if(pmap.checkNextField())
@@ -119,7 +119,7 @@ FieldInstructionBlob::decodeDefault(
     {
       const uchar * value = buffer.begin();
       size_t valueSize = buffer.size();
-      fieldSet.addValue(
+      builder.addValue(
         identity_,
         type_,
         value,
@@ -131,7 +131,7 @@ FieldInstructionBlob::decodeDefault(
     if(fieldOp_->hasValue())
     {
       const std::string & value = fieldOp_->getValue();
-      fieldSet.addValue(
+      builder.addValue(
         identity_,
         type_,
         reinterpret_cast<const uchar *>(value.c_str()), value.size());
@@ -149,7 +149,7 @@ FieldInstructionBlob::decodeCopy(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::ValueMessageBuilder & fieldSet) const
+  Messages::ValueMessageBuilder & builder) const
 {
   PROFILE_POINT("blob::decodeCopy");
   if(pmap.checkNextField())
@@ -160,7 +160,7 @@ FieldInstructionBlob::decodeCopy(
   {
     const uchar * value = buffer.begin();
     size_t valueSize = buffer.size();
-      fieldSet.addValue(
+      builder.addValue(
         identity_,
         type_,
         value,
@@ -175,12 +175,12 @@ FieldInstructionBlob::decodeCopy(
     Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, value, valueSize);
     if(previousStatus == Context::OK_VALUE)
     {
-       fieldSet.addValue(identity_, type_, value, valueSize);
+       builder.addValue(identity_, type_, value, valueSize);
     }
     else if(fieldOp_->hasValue())
     {
       const std::string & initialValue = fieldOp_->getValue();
-      fieldSet.addValue(
+      builder.addValue(
         identity_,
         type_,
         reinterpret_cast<const uchar *>(initialValue.c_str()),
@@ -205,7 +205,7 @@ FieldInstructionBlob::decodeDelta(
   Codecs::DataSource & source,
   Codecs::PresenceMap & /*pmap*/,
   Codecs::Decoder & decoder,
-  Messages::ValueMessageBuilder & fieldSet) const
+  Messages::ValueMessageBuilder & builder) const
 {
   PROFILE_POINT("blob::decodeDelta");
   int32 deltaLength;
@@ -252,7 +252,7 @@ FieldInstructionBlob::decodeDelta(
       deltaLength = QuickFAST::int32(previousLength);
     }
     std::string value = deltaValue + previousValue.substr(deltaLength);
-    fieldSet.addValue(
+    builder.addValue(
       identity_,
       type_,
       reinterpret_cast<const uchar *>(value.c_str()),
@@ -272,7 +272,7 @@ FieldInstructionBlob::decodeDelta(
     }
 
     std::string value = previousValue.substr(0, previousLength - deltaLength) + deltaValue;
-    fieldSet.addValue(
+    builder.addValue(
       identity_,
       type_,
       reinterpret_cast<const uchar *>(value.c_str()),
@@ -286,7 +286,7 @@ FieldInstructionBlob::decodeTail(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::ValueMessageBuilder & fieldSet) const
+  Messages::ValueMessageBuilder & builder) const
 {
   PROFILE_POINT("blob::decodeTail");
   if(pmap.checkNextField())
@@ -314,7 +314,7 @@ FieldInstructionBlob::decodeTail(
         tailLength = previousLength;
       }
       std::string value(previousValue.substr(0, previousLength - tailLength) + tailValue);
-      fieldSet.addValue(
+      builder.addValue(
         identity_,
         type_,
         reinterpret_cast<const uchar *>(value.c_str()),
@@ -333,7 +333,7 @@ FieldInstructionBlob::decodeTail(
     if(previousStatus == Context::OK_VALUE)
     {
 
-      fieldSet.addValue(
+      builder.addValue(
         identity_,
         type_,
         reinterpret_cast<const uchar *>(previousValue.c_str()),
@@ -341,7 +341,7 @@ FieldInstructionBlob::decodeTail(
     }
     else if(fieldOp_->hasValue())
     {
-      fieldSet.addValue(identity_, type_, reinterpret_cast<const uchar *>(fieldOp_->getValue().c_str()), fieldOp_->getValue().size());
+      builder.addValue(identity_, type_, reinterpret_cast<const uchar *>(fieldOp_->getValue().c_str()), fieldOp_->getValue().size());
       fieldOp_->setDictionaryValue(decoder, fieldOp_->getValue());
     }
     else
@@ -383,11 +383,11 @@ FieldInstructionBlob::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & /*pmap*/,
   Codecs::Encoder & encoder,
-  const Messages::MessageAccessor & fieldSet) const
+  const Messages::MessageAccessor & accessor) const
 {
     // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_->name(), field))
+  if(accessor.getField(identity_->name(), field))
   {
     std::string value = field->toString();
     if(!isMandatory())
@@ -399,7 +399,7 @@ FieldInstructionBlob::encodeNop(
       encodeBlob(destination, encoder.getWorkingBuffer(), value);
     }
   }
-  else // not defined in fieldset
+  else // not defined in accessor
   {
     if(isMandatory())
     {
@@ -414,11 +414,11 @@ FieldInstructionBlob::encodeConstant(
   Codecs::DataDestination & /*destination*/,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::MessageAccessor & fieldSet) const
+  const Messages::MessageAccessor & accessor) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_->name(), field))
+  if(accessor.getField(identity_->name(), field))
   {
     const std::string & value = field->toString();
     const std::string & constant = initialValue_->toString();
@@ -432,7 +432,7 @@ FieldInstructionBlob::encodeConstant(
       pmap.setNextField(true);
     }
   }
-  else // not defined in fieldset
+  else // not defined in accessor
   {
     if(isMandatory())
     {
@@ -448,11 +448,11 @@ FieldInstructionBlob::encodeDefault(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::MessageAccessor & fieldSet) const
+  const Messages::MessageAccessor & accessor) const
 {
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_->name(), field))
+  if(accessor.getField(identity_->name(), field))
   {
     std::string value = field->toString();
     if(fieldOp_->hasValue() &&
@@ -473,7 +473,7 @@ FieldInstructionBlob::encodeDefault(
       }
     }
   }
-  else // not defined in fieldset
+  else // not defined in accessor
   {
     if(isMandatory())
     {
@@ -497,7 +497,7 @@ FieldInstructionBlob::encodeCopy(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::MessageAccessor & fieldSet) const
+  const Messages::MessageAccessor & accessor) const
 {
   // Retrieve information from the dictionary
   std::string previousValue;
@@ -513,7 +513,7 @@ FieldInstructionBlob::encodeCopy(
 
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_->name(), field))
+  if(accessor.getField(identity_->name(), field))
   {
     std::string value = field->toString();
     if(previousStatus == Context::OK_VALUE && previousValue == value)
@@ -534,7 +534,7 @@ FieldInstructionBlob::encodeCopy(
       fieldOp_->setDictionaryValue(encoder, value);
     }
   }
-  else // not defined in fieldset
+  else // not defined in accessor
   {
     if(isMandatory())
     {
@@ -565,7 +565,7 @@ FieldInstructionBlob::encodeDelta(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & /*pmap*/,
   Codecs::Encoder & encoder,
-  const Messages::MessageAccessor & fieldSet) const
+  const Messages::MessageAccessor & accessor) const
 {
   // get information from the dictionary
   std::string previousValue;
@@ -583,7 +583,7 @@ FieldInstructionBlob::encodeDelta(
 
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_->name(), field))
+  if(accessor.getField(identity_->name(), field))
   {
     std::string value = field->toString();
     size_t prefix = longestMatchingPrefix(previousValue, value);
@@ -615,7 +615,7 @@ FieldInstructionBlob::encodeDelta(
     }
 
   }
-  else // not defined in fieldset
+  else // not defined in accessor
   {
     if(isMandatory())
     {
@@ -630,7 +630,7 @@ FieldInstructionBlob::encodeTail(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::MessageAccessor & fieldSet) const
+  const Messages::MessageAccessor & accessor) const
 {
   // get information from the dictionary
   std::string previousValue;
@@ -648,7 +648,7 @@ FieldInstructionBlob::encodeTail(
 
   // get the value from the application data
   Messages::FieldCPtr field;
-  if(fieldSet.getField(identity_->name(), field))
+  if(accessor.getField(identity_->name(), field))
   {
     std::string value = field->toString();
     size_t prefix = longestMatchingPrefix(previousValue, value);
@@ -674,7 +674,7 @@ FieldInstructionBlob::encodeTail(
       fieldOp_->setDictionaryValue(encoder, value);
     }
   }
-  else // not defined in fieldset
+  else // not defined in accessor
   {
     if(isMandatory())
     {

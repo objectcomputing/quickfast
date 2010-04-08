@@ -62,85 +62,85 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       virtual void decodeConstant(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       virtual void decodeDefault(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       virtual void decodeCopy(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       virtual void decodeCopy(
         Codecs::DataSource & source,
         bool pmapValue,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       virtual void decodeDelta(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       virtual void decodeIncrement(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       virtual void decodeIncrement(
         Codecs::DataSource & source,
         bool pmapValue,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       virtual void encodeNop(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       virtual void encodeConstant(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       virtual void encodeDefault(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       virtual void encodeCopy(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       virtual void encodeDelta(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       virtual void encodeIncrement(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
     private:
       FieldInstructionInteger(const FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED> &);
@@ -218,7 +218,7 @@ namespace QuickFAST{
       Codecs::DataSource & source,
       Codecs::PresenceMap & /*pmap*/,
       Codecs::Decoder & decoder,
-      Messages::ValueMessageBuilder & fieldSet) const
+      Messages::ValueMessageBuilder & builder) const
     {
       PROFILE_POINT("int::decodeNop");
 
@@ -235,7 +235,7 @@ namespace QuickFAST{
       }
       if(isMandatory())
       {
-        fieldSet.addValue(
+        builder.addValue(
           identity_,
           VALUE_TYPE,
           value);
@@ -245,7 +245,7 @@ namespace QuickFAST{
         // not mandatory means it's nullable
         if(!checkNullInteger(value))
         {
-          fieldSet.addValue(
+          builder.addValue(
             identity_,
             VALUE_TYPE,
             value);
@@ -260,7 +260,7 @@ namespace QuickFAST{
       Codecs::DataSource & /*source*/,
       Codecs::PresenceMap & pmap,
       Codecs::Decoder & /*decoder*/,
-      Messages::ValueMessageBuilder & fieldSet) const
+      Messages::ValueMessageBuilder & builder) const
     {
       PROFILE_POINT("int::decodeConstant");
       if(!isMandatory() && !pmap.checkNextField())
@@ -269,7 +269,7 @@ namespace QuickFAST{
       }
       else
       {
-        fieldSet.addValue(
+        builder.addValue(
           identity_,
           VALUE_TYPE,
           typedValue_);
@@ -283,9 +283,9 @@ namespace QuickFAST{
       Codecs::DataSource & source,
       Codecs::PresenceMap & pmap,
       Codecs::Decoder & decoder,
-      Messages::ValueMessageBuilder & fieldSet) const
+      Messages::ValueMessageBuilder & builder) const
     {
-      decodeCopy(source, pmap.checkNextField(), decoder, fieldSet);
+      decodeCopy(source, pmap.checkNextField(), decoder, builder);
     }
 
     template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
@@ -295,7 +295,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         bool pmapValue,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const
+        Messages::ValueMessageBuilder & builder) const
     {
       PROFILE_POINT("int::decodeCopy");
       if(pmapValue)
@@ -313,7 +313,7 @@ namespace QuickFAST{
 
         if(isMandatory())
         {
-          fieldSet.addValue(
+          builder.addValue(
             identity_,
             VALUE_TYPE,
             value);
@@ -328,7 +328,7 @@ namespace QuickFAST{
           }
           else
           {
-            fieldSet.addValue(
+            builder.addValue(
               identity_,
               VALUE_TYPE,
               value);
@@ -343,7 +343,7 @@ namespace QuickFAST{
         Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, previousValue);
         if(previousStatus == Context::OK_VALUE)
         {
-          fieldSet.addValue(
+          builder.addValue(
             identity_,
             VALUE_TYPE,
             previousValue);
@@ -354,7 +354,7 @@ namespace QuickFAST{
           // not a problem..  use initial value if it's available
           if(fieldOp_->hasValue())
           {
-            fieldSet.addValue(
+            builder.addValue(
               identity_,
               VALUE_TYPE,
               typedValue_);
@@ -368,7 +368,7 @@ namespace QuickFAST{
                 "[ERR D5]",
                 "Copy operator missing mandatory integer field/no initial value",
                 *identity_);
-              fieldSet.addValue(
+              builder.addValue(
                 identity_,
                 VALUE_TYPE,
                 INTEGER_TYPE(0));
@@ -386,7 +386,7 @@ namespace QuickFAST{
               "[ERR D5]",
               "Copy operator mandatory integer field, but previous value was NULL",
               *identity_);
-            fieldSet.addValue(
+            builder.addValue(
               identity_,
               VALUE_TYPE,
               INTEGER_TYPE(0));
@@ -403,7 +403,7 @@ namespace QuickFAST{
       Codecs::DataSource & source,
       Codecs::PresenceMap & pmap,
       Codecs::Decoder & decoder,
-      Messages::ValueMessageBuilder & fieldSet) const
+      Messages::ValueMessageBuilder & builder) const
     {
       PROFILE_POINT("int::decodeDefault");
       if(pmap.checkNextField())
@@ -420,7 +420,7 @@ namespace QuickFAST{
         }
         if(isMandatory())
         {
-          fieldSet.addValue(
+          builder.addValue(
             identity_,
             VALUE_TYPE,
             value);
@@ -430,7 +430,7 @@ namespace QuickFAST{
           if(!checkNullInteger(value))
           {
             PROFILE_POINT("int::decodeDefault:,addexplicit");
-            fieldSet.addValue(
+            builder.addValue(
               identity_,
               VALUE_TYPE,
               value);
@@ -443,7 +443,7 @@ namespace QuickFAST{
         if(fieldOp_->hasValue())
         {
           PROFILE_POINT("int::decodeDefault:adddefault");
-          fieldSet.addValue(
+          builder.addValue(
             identity_,
             VALUE_TYPE,
             typedValue_);
@@ -462,7 +462,7 @@ namespace QuickFAST{
       Codecs::DataSource & source,
       Codecs::PresenceMap & /*pmap*/,
       Codecs::Decoder & decoder,
-      Messages::ValueMessageBuilder & fieldSet) const
+      Messages::ValueMessageBuilder & builder) const
     {
       PROFILE_POINT("int::decodeDelta");
       int64 delta;
@@ -486,7 +486,7 @@ namespace QuickFAST{
       // Apply delta
       value = INTEGER_TYPE(value + delta);
       // Save the results
-      fieldSet.addValue(
+      builder.addValue(
         identity_,
         VALUE_TYPE,
         value);
@@ -501,9 +501,9 @@ namespace QuickFAST{
       Codecs::DataSource & source,
       Codecs::PresenceMap & pmap,
       Codecs::Decoder & decoder,
-      Messages::ValueMessageBuilder & fieldSet) const
+      Messages::ValueMessageBuilder & builder) const
     {
-      decodeIncrement(source, pmap.checkNextField(), decoder, fieldSet);
+      decodeIncrement(source, pmap.checkNextField(), decoder, builder);
     }
 
     template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
@@ -513,7 +513,7 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         bool pmapValue,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const
+        Messages::ValueMessageBuilder & builder) const
     {
       PROFILE_POINT("int::decodeIncrement");
       if(pmapValue)
@@ -530,7 +530,7 @@ namespace QuickFAST{
         }
         if(isMandatory())
         {
-          fieldSet.addValue(
+          builder.addValue(
             identity_,
             VALUE_TYPE,
             value);
@@ -546,7 +546,7 @@ namespace QuickFAST{
           }
           else
           {
-            fieldSet.addValue(
+            builder.addValue(
               identity_,
               VALUE_TYPE,
               value);
@@ -596,7 +596,7 @@ namespace QuickFAST{
             return;
           }
         }
-        fieldSet.addValue(
+        builder.addValue(
           identity_,
           VALUE_TYPE,
           value);
@@ -611,11 +611,11 @@ namespace QuickFAST{
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & /*pmap*/,
       Codecs::Encoder & encoder,
-      const Messages::MessageAccessor & fieldSet) const
+      const Messages::MessageAccessor & accessor) const
     {
       // get the value from the application data
       Messages::FieldCPtr field;
-      if(fieldSet.getField(identity_->name(), field))
+      if(accessor.getField(identity_->name(), field))
       {
         INTEGER_TYPE value;
         field->getValue(value);
@@ -665,11 +665,11 @@ namespace QuickFAST{
       Codecs::DataDestination & /*destination*/,
       Codecs::PresenceMap & pmap,
       Codecs::Encoder & encoder,
-      const Messages::MessageAccessor & fieldSet) const
+      const Messages::MessageAccessor & accessor) const
     {
       // get the value from the application data
       Messages::FieldCPtr field;
-      if(fieldSet.getField(identity_->name(), field))
+      if(accessor.getField(identity_->name(), field))
       {
         INTEGER_TYPE value;
         field->getValue(value);
@@ -700,11 +700,11 @@ namespace QuickFAST{
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & pmap,
       Codecs::Encoder & encoder,
-      const Messages::MessageAccessor & fieldSet) const
+      const Messages::MessageAccessor & accessor) const
     {
       // get the value from the application data
       Messages::FieldCPtr field;
-      if(fieldSet.getField(identity_->name(), field))
+      if(accessor.getField(identity_->name(), field))
       {
         INTEGER_TYPE value;
         field->getValue(value);
@@ -759,7 +759,7 @@ namespace QuickFAST{
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & pmap,
       Codecs::Encoder & encoder,
-      const Messages::MessageAccessor & fieldSet) const
+      const Messages::MessageAccessor & accessor) const
     {
       // get previous value from dictionary
       INTEGER_TYPE previousValue = 0;
@@ -772,7 +772,7 @@ namespace QuickFAST{
 
       // get the value from the application data
       Messages::FieldCPtr field;
-      if(fieldSet.getField(identity_->name(), field))
+      if(accessor.getField(identity_->name(), field))
       {
         INTEGER_TYPE value;
         field->getValue(value);
@@ -839,7 +839,7 @@ namespace QuickFAST{
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & /*pmap*/,
       Codecs::Encoder & encoder,
-      const Messages::MessageAccessor & fieldSet) const
+      const Messages::MessageAccessor & accessor) const
     {
       // get previous value from dictionary
       INTEGER_TYPE previousValue = 0;
@@ -852,7 +852,7 @@ namespace QuickFAST{
 
       // get the value from the application data
       Messages::FieldCPtr field;
-      if(fieldSet.getField(identity_->name(), field))
+      if(accessor.getField(identity_->name(), field))
       {
         INTEGER_TYPE value;
         field->getValue(value);
@@ -892,7 +892,7 @@ namespace QuickFAST{
       Codecs::DataDestination & destination,
       Codecs::PresenceMap & pmap,
       Codecs::Encoder & encoder,
-      const Messages::MessageAccessor & fieldSet) const
+      const Messages::MessageAccessor & accessor) const
     {
       // get previous value from dictionary
       INTEGER_TYPE previousValue = 0;
@@ -908,7 +908,7 @@ namespace QuickFAST{
 
       // get the value from the application data
       Messages::FieldCPtr field;
-      if(fieldSet.getField(identity_->name(), field))
+      if(accessor.getField(identity_->name(), field))
       {
         INTEGER_TYPE value;
         field->getValue(value);

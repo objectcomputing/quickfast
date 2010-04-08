@@ -31,73 +31,73 @@ namespace QuickFAST{
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       virtual void decodeConstant(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       virtual void decodeDefault(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       virtual void decodeCopy(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       virtual void decodeDelta(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       virtual void decodeTail(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       virtual void encodeNop(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       virtual void encodeConstant(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       virtual void encodeDefault(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       virtual void encodeCopy(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       virtual void encodeDelta(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       virtual void encodeTail(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
     private:
       /// @brief helper decoder.

@@ -57,7 +57,7 @@ FieldInstructionSequence::decodeNop(
   Codecs::DataSource & source,
   Codecs::PresenceMap & pmap,
   Codecs::Decoder & decoder,
-  Messages::ValueMessageBuilder & messageBuilder) const
+  Messages::ValueMessageBuilder & builder) const
 {
   if(!segment_)
   {
@@ -81,7 +81,7 @@ FieldInstructionSequence::decodeNop(
   {
     length = lengthSet.value();
 
-    Messages::ValueMessageBuilder & sequenceBuilder = messageBuilder.startSequence(
+    Messages::ValueMessageBuilder & sequenceBuilder = builder.startSequence(
       identity_,
       segment_->getApplicationType(),
       segment_->getApplicationTypeNamespace(),
@@ -106,7 +106,7 @@ FieldInstructionSequence::decodeNop(
       decoder.decodeGroup(source, segment_, entrySet);
       sequenceBuilder.endSequenceEntry(entrySet);
     }
-    messageBuilder.endSequence(identity_, sequenceBuilder);
+    builder.endSequence(identity_, sequenceBuilder);
   }
 }
 
@@ -115,7 +115,7 @@ FieldInstructionSequence::encodeNop(
   Codecs::DataDestination & destination,
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
-  const Messages::MessageAccessor & messageBuilder) const
+  const Messages::MessageAccessor & accessor) const
 {
   if(!segment_)
   {
@@ -124,7 +124,7 @@ FieldInstructionSequence::encodeNop(
 
   // retrieve the field corresponding to this sequence
   Messages::FieldCPtr field;
-  if(messageBuilder.getField(identity_->name(), field))
+  if(accessor.getField(identity_->name(), field))
   {
     Messages::SequenceCPtr sequence = field->toSequence();
     size_t length = sequence->size();

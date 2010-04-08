@@ -201,14 +201,14 @@ namespace QuickFAST{
       /// @param[in] source supplies the data
       /// @param[in] pmap identifies fields present in the stream
       /// @param decoder provides context for decoding
-      /// @param[out] fieldSet receives the decoded fields
+      /// @param[out] builder receives the decoded fields
       void decode(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet)const
+        Messages::ValueMessageBuilder & builder)const
       {
-        fieldOp_->decode(*this, source, pmap, decoder, fieldSet);
+        fieldOp_->decode(*this, source, pmap, decoder, builder);
       }
 
       /// @brief Decode the field from a data source.
@@ -216,14 +216,14 @@ namespace QuickFAST{
       /// @param destination receives the encoded data
       /// @param pmap is set to indicate which fields are explicitly represented in the encoded data stream
       /// @param encoder provides the context for encoding
-      /// @param fieldSet supplies the data to be encoded
+      /// @param accessor supplies the data to be encoded
       void encode(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet)const
+        const Messages::MessageAccessor & accessor)const
       {
-        return fieldOp_->encode(*this, destination, pmap, encoder, fieldSet);
+        return fieldOp_->encode(*this, destination, pmap, encoder, accessor);
       }
 
       /// Set default value based on operator type (dispatch via FieldOp)
@@ -249,48 +249,48 @@ namespace QuickFAST{
       /// @param[in] source for the FAST data
       /// @param[in] pmap indicating field presence
       /// @param[in] decoder driving this process
-      /// @param[out] fieldSet
+      /// @param[out] builder
       virtual void decodeNop(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const = 0;
+        Messages::ValueMessageBuilder & builder) const = 0;
 
       /// @brief Decode when &lt;constant> operation is specified.
       /// @see decode()
       /// @param[in] source for the FAST data
       /// @param[in] pmap indicating field presence
       /// @param[in] decoder driving this process
-      /// @param[out] fieldSet
+      /// @param[out] builder
       virtual void decodeConstant(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       /// @brief Decode when &lt;default> operation is specified.
       /// @see decode()
       /// @param[in] source for the FAST data
       /// @param[in] pmap indicating field presence
       /// @param[in] decoder driving this process
-      /// @param[out] fieldSet
+      /// @param[out] builder
       virtual void decodeDefault(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       /// @brief Decode when &lt;copy> operation is specified.
       /// @see decode()
       /// @param[in] source for the FAST data
       /// @param[in] pmap indicating field presence
       /// @param[in] decoder driving this process
-      /// @param[out] fieldSet
+      /// @param[out] builder
       virtual void decodeCopy(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       /// @brief Decode when &lt;copy> operation is specified using specific pmap bit.
       ///
@@ -299,24 +299,24 @@ namespace QuickFAST{
       /// @param[in] source for the FAST data
       /// @param[in] pmapValue prefetched to  indicate field presence
       /// @param[in] decoder driving this process
-      /// @param[out] fieldSet
+      /// @param[out] builder
       virtual void decodeCopy(
         Codecs::DataSource & source,
         bool pmapValue,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       /// @brief Decode when &lt;delta> operation is specified.
       /// @see decode()
       /// @param[in] source for the FAST data
       /// @param[in] pmap indicating field presence
       /// @param[in] decoder driving this process
-      /// @param[out] fieldSet
+      /// @param[out] builder
       virtual void decodeDelta(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       /// @brief Decode when &lt;increment> operation is specified.
       /// @see decode()
@@ -325,12 +325,12 @@ namespace QuickFAST{
       /// @param[in] source for the FAST data
       /// @param[in] pmap indicating field presence
       /// @param[in] decoder driving this process
-      /// @param[out] fieldSet
+      /// @param[out] builder
       virtual void decodeIncrement(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       /// @brief Decode when &lt;increment> operation is specified.
       /// @see decode()
@@ -339,12 +339,12 @@ namespace QuickFAST{
       /// @param[in] source for the FAST data
       /// @param[in] pmapValue prefetched to  indicate field presence
       /// @param[in] decoder driving this process
-      /// @param[out] fieldSet
+      /// @param[out] builder
       virtual void decodeIncrement(
         Codecs::DataSource & source,
         bool pmapValue,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       /// @brief Decode when &lt;tail> operation is specified.
       /// @see decode()
@@ -353,12 +353,12 @@ namespace QuickFAST{
       /// @param[in] source for the FAST data
       /// @param[in] pmap indicating field presence
       /// @param[in] decoder driving this process
-      /// @param[out] fieldSet
+      /// @param[out] builder
       virtual void decodeTail(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
-        Messages::ValueMessageBuilder & fieldSet) const;
+        Messages::ValueMessageBuilder & builder) const;
 
       ///////////////////
       // Encoding support
@@ -368,60 +368,60 @@ namespace QuickFAST{
       /// @param destination
       /// @param pmap for fields being encoded
       /// @param encoder driving the encoding process
-      /// @param fieldSet
+      /// @param accessor
       virtual void encodeNop(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const = 0;
+        const Messages::MessageAccessor & accessor) const = 0;
 
       /// @brief Encode when &lt;constant> operation is specified.
       /// @see encode()
       /// @param destination
       /// @param pmap for fields being encoded
       /// @param encoder driving the encoding process
-      /// @param fieldSet
+      /// @param accessor
       virtual void encodeConstant(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       /// @brief Encode when &lt;default> operation is specified.
       /// @see encode()
       /// @param destination
       /// @param pmap for fields being encoded
       /// @param encoder driving the encoding process
-      /// @param fieldSet
+      /// @param accessor
       virtual void encodeDefault(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       /// @brief Encode when &lt;copy> operation is specified.
       /// @see encode()
       /// @param destination
       /// @param pmap for fields being encoded
       /// @param encoder driving the encoding process
-      /// @param fieldSet
+      /// @param accessor
       virtual void encodeCopy(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       /// @brief Encode when &lt;delta> operation is specified.
       /// @see encode()
       /// @param destination
       /// @param pmap for fields being encoded
       /// @param encoder driving the encoding process
-      /// @param fieldSet
+      /// @param accessor
       virtual void encodeDelta(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       /// @brief Encode when &lt;increment> operation is specified.
       /// @see encode()
@@ -429,12 +429,12 @@ namespace QuickFAST{
       /// @param destination
       /// @param pmap for fields being encoded
       /// @param encoder driving the encoding process
-      /// @param fieldSet
+      /// @param accessor
       virtual void encodeIncrement(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       /// @brief Encode when &lt;tail> operation is specified.
       /// @see encode()
@@ -442,12 +442,12 @@ namespace QuickFAST{
       /// @param destination
       /// @param pmap for fields being encoded
       /// @param encoder driving the encoding process
-      /// @param fieldSet
+      /// @param accessor
       virtual void encodeTail(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
-        const Messages::MessageAccessor & fieldSet) const;
+        const Messages::MessageAccessor & accessor) const;
 
       /////////////////////////
       // Basic Decoding methods

@@ -1,3 +1,20 @@
+Thu Apr  8 22:00:49 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstructionAscii.h:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.h:
+        * src/Codecs/FieldInstructionGroup.h:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionSequence.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        Cosmetics.  Cleaning up parameter names to match
+        actual data types (which changed long ago.)
+
 Tue Apr  6 16:54:38 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Application/DecoderConfiguration.h:
