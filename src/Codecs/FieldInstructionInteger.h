@@ -818,7 +818,7 @@ namespace QuickFAST{
         {
           // Missing optional field.  If we have a previous, non-null value
           // we need to explicitly null it out.  Otherwise just don't send it.
-          if(previousStatus != Context::NULL_VALUE && previousStatus != Context::UNDEFINED_VALUE)
+          if(previousStatus != Context::NULL_VALUE)
           {
             pmap.setNextField(true);// value in stream
             destination.putByte(nullInteger);

@@ -522,7 +522,7 @@ FieldInstructionAscii::encodeCopy(
     {
       // Missing optional field.  If we have a previous, non-null value
       // we need to explicitly null it out.  Otherwise just don't send it.
-      if(previousStatus != Context::NULL_VALUE && previousStatus != Context::UNDEFINED_VALUE)
+      if(previousStatus != Context::NULL_VALUE)
       {
         // we have to null the previous value to avoid copy
         pmap.setNextField(true);// value in stream
