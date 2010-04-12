@@ -1,3 +1,9 @@
+Mon Apr 12 21:11:14 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Examples/TutorialApplication/TutorialApplication.cpp:
+        Issue # 44.  Error from XML parser because Xerces expects
+        the file to be open in binary mode on Windows.
+
 Thu Apr  8 22:00:49 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstruction.h:

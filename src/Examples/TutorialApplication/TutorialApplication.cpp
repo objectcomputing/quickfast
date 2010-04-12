@@ -62,7 +62,7 @@ TutorialApplication::run()
   {
     ////////////////////////////////////////////////
     // Open files first to be sure they are present.
-    std::ifstream templates(templateFileName_.c_str());
+    std::ifstream templates(templateFileName_.c_str(), binaryMode | std::ios::in);
     if(!templates.good())
     {
       result = -1;
@@ -71,7 +71,7 @@ TutorialApplication::run()
         << std::endl;
     }
 
-    std::ifstream fastFile(fastFileName_.c_str(), binaryMode);
+    std::ifstream fastFile(fastFileName_.c_str(), binaryMode | std::ios::in);
     if(!fastFile.good())
     {
       result = -1;
