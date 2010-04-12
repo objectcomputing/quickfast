@@ -475,16 +475,14 @@ FieldInstructionAscii::encodeCopy(
   Codecs::PresenceMap & pmap,
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & accessor) const
-{  // Retrieve information from the dictionary
+{
+  // Retrieve information from the dictionary
   std::string previousValue;
   Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
-  if(previousStatus == Context::UNDEFINED_VALUE)
+  if(previousStatus == Context::UNDEFINED_VALUE && fieldOp_->hasValue())
   {
-    if(fieldOp_->hasValue())
-    {
-      previousValue = fieldOp_->getValue();
-      fieldOp_->setDictionaryValue(encoder, previousValue);
-    }
+    previousValue = fieldOp_->getValue();
+    fieldOp_->setDictionaryValue(encoder, previousValue);
   }
 
   // get the value from the application data
@@ -492,6 +490,7 @@ FieldInstructionAscii::encodeCopy(
   if(accessor.getField(identity_->name(), field))
   {
     std::string value = field->toString();
+
     if(previousStatus == Context::OK_VALUE && previousValue == value)
     {
       pmap.setNextField(false); // not in stream, use copy
@@ -514,24 +513,26 @@ FieldInstructionAscii::encodeCopy(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      encoder.reportFatal("[ERR U01]", "Missing mandatory ascii field.", *identity_);
       // if reportFatal returns we're being lax about the rules
       // let the copy happen.
       pmap.setNextField(false);
     }
-    if(previousStatus == Context::OK_VALUE)
-    {
-      // we have to null the previous value to avoid copy
-      pmap.setNextField(true);// value in stream
-      destination.putByte(nullAscii);
-    }
     else
     {
-      pmap.setNextField(false);
-    }
-    if(previousStatus != Context::NULL_VALUE)
-    {
-      fieldOp_->setDictionaryValueNull(encoder);
+      // Missing optional field.  If we have a previous, non-null value
+      // we need to explicitly null it out.  Otherwise just don't send it.
+      if(previousStatus != Context::NULL_VALUE && previousStatus != Context::UNDEFINED_VALUE)
+      {
+        // we have to null the previous value to avoid copy
+        pmap.setNextField(true);// value in stream
+        destination.putByte(nullAscii);
+        fieldOp_->setDictionaryValueNull(encoder);
+      }
+      else
+      {
+        pmap.setNextField(false);
+      }
     }
   }
 }

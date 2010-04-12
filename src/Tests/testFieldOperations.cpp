@@ -2130,7 +2130,7 @@ TestRequestID   --       NULL  --      0      --
   BOOST_CHECK(!source.getByte(byte));
 
   // Now reencode the data
-  Codecs::PresenceMap pmapResult(4);
+  Codecs::PresenceMap pmapResult(6);
   Codecs::DataDestinationString destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);

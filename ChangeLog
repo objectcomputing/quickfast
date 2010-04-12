@@ -1,3 +1,13 @@
+Mon Apr 12 22:31:21 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Tests/testFieldOperations.cpp:
+        Issue #43.  Ascii string encodeCopy optional, no initial value not handled
+        correctly.
+        Unit test test_issue_38 finds it.
+        This checkin fixes it.
+
 Mon Apr 12 21:11:14 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Examples/TutorialApplication/TutorialApplication.cpp:
