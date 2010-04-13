@@ -764,10 +764,21 @@ namespace QuickFAST{
       // get previous value from dictionary
       INTEGER_TYPE previousValue = 0;
       Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
-      if(previousStatus == Context::UNDEFINED_VALUE && fieldOp_->hasValue())
+      if(previousStatus == Context::UNDEFINED_VALUE)
       {
-        previousValue = typedValue_;
-        fieldOp_->setDictionaryValue(encoder, typedValue_);
+        if(fieldOp_->hasValue())
+        {
+          previousValue = typedValue_;
+          fieldOp_->setDictionaryValue(encoder, typedValue_);
+          // pretend we got the data from the dictionary
+          previousStatus = Context::OK_VALUE;
+        }
+        else
+        {
+          // pretend we got a null from the dictionary
+          fieldOp_->setDictionaryValueNull(encoder);
+          previousStatus = Context::NULL_VALUE;
+        }
       }
 
       // get the value from the application data
@@ -805,7 +816,7 @@ namespace QuickFAST{
           fieldOp_->setDictionaryValue(encoder, value);
         }
       }
-      else // not defined in fieldset
+      else // not defined by accessor
       {
         if(isMandatory())
         {

@@ -508,6 +508,14 @@ FieldInstructionBlob::encodeCopy(
     {
       previousValue = fieldOp_->getValue();
       fieldOp_->setDictionaryValue(encoder, previousValue);
+      // pretend we got the data from the dictionary
+      previousStatus = Context::OK_VALUE;
+    }
+    else
+    {
+      // pretend we got a null from the dictionary
+      fieldOp_->setDictionaryValueNull(encoder);
+      previousStatus = Context::NULL_VALUE;
     }
   }
 
@@ -543,19 +551,18 @@ FieldInstructionBlob::encodeCopy(
       // let the copy happen.
       pmap.setNextField(false);
     }
-    if(previousStatus == Context::OK_VALUE)
-    {
-      // we have to null the previous value to avoid copy
-      pmap.setNextField(true);// value in stream
-      destination.putByte(nullBlob);
-    }
     else
     {
-      pmap.setNextField(false);
-    }
-    if(previousStatus != Context::NULL_VALUE)
-    {
-      fieldOp_->setDictionaryValueNull(encoder);
+      if(previousStatus != Context::NULL_VALUE)
+      {
+        // we have to null the previous value to avoid copy
+        pmap.setNextField(true);// value in stream
+        destination.putByte(nullBlob);
+      }
+      else
+      {
+        pmap.setNextField(false);
+      }
     }
   }
 }

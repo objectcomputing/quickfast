@@ -151,3 +151,17 @@ TemplateRegistry::findNamedTemplate(
   }
   return found;
 }
+
+void
+TemplateRegistry::display(std::ostream & output, size_t indent) const
+{
+  std::string indentString(indent, ' ');
+  output << std::endl << indentString << "<templates";
+  int todo_display_attributes;
+  output << ">";
+  for(size_t nTemplate = 0; nTemplate < mutableTemplates_.size(); ++nTemplate)
+  {
+    mutableTemplates_[nTemplate]->display(output, indent + 2);
+  }
+  output << std::endl << indentString << "</templates>";
+}

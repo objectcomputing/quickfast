@@ -97,6 +97,8 @@ namespace QuickFAST{
         return id_;
       }
 
+      void display(std::ostream & output)const;
+
     private:
       void qualifyName()
       {

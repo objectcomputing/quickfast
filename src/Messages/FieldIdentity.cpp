@@ -33,3 +33,17 @@ FieldIdentity::freeFieldIdentity()const
   delete this;
 }
 
+void
+FieldIdentity::display(std::ostream & output)const
+{
+  output << "name=\"" << localName_;
+  if(!fieldNamespace_.empty())
+  {
+    output << "\" ns=\"" << fieldNamespace_;
+  }
+  if(!id_.empty())
+  {
+    output << "\" id=\"" << id_;
+  }
+  output << '"';
+}

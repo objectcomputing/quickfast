@@ -508,3 +508,25 @@ FieldInstruction::getSegmentBody(SegmentBodyPtr & /*segment*/) const
 {
   return false;
 }
+
+void
+FieldInstruction::display(std::ostream & output, size_t indent) const
+{
+  int todo_the_next_step;
+  std::string indentString(indent, ' ');
+  output << std::endl << indentString << "<field";
+  identity_->display(output);
+  if(!isMandatory())
+  {
+    output << " presence=\"optional\"";
+  }
+  if(ignoreOverflow_)
+  {
+    output << " ignoreOverflow=\"Y\"";
+  }
+  output << '>';
+  output << std::endl << indentString << "  <!-- presence map bits = " << presenceMapBitsUsed_<< "  -->";
+  output << std::endl << indentString << "  <field_op_goes_here>";
+  output << std::endl << indentString << "</field> <!-- " << identity_->getLocalName() << "-->";
+}
+

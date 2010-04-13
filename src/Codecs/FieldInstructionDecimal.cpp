@@ -358,7 +358,7 @@ FieldInstructionDecimal::encodeNop(
       }
     }
   }
-  else // not defined in fieldset
+  else // not defined by accessor
   {
     if(isMandatory())
     {
@@ -402,7 +402,7 @@ FieldInstructionDecimal::encodeConstant(
       pmap.setNextField(true);
     }
   }
-  else // not defined in fieldset
+  else // not defined by accessor
   {
     if(isMandatory())
     {
@@ -443,7 +443,7 @@ FieldInstructionDecimal::encodeDefault(
       }
     }
   }
-  else // not defined in fieldset
+  else // not defined by accessor
   {
     if(isMandatory())
     {
@@ -479,6 +479,14 @@ FieldInstructionDecimal::encodeCopy(
     {
       previousValue = typedValue_;
       fieldOp_->setDictionaryValue(encoder, previousValue);
+      // pretend we got the data from the dictionary
+      previousStatus = Context::OK_VALUE;
+    }
+    else
+    {
+      // pretend we got a null from the dictionary
+      fieldOp_->setDictionaryValueNull(encoder);
+      previousStatus = Context::NULL_VALUE;
     }
   }
 
@@ -506,19 +514,19 @@ FieldInstructionDecimal::encodeCopy(
       fieldOp_->setDictionaryValue(encoder, value);
     }
   }
-  else // not defined in fieldset
+  else // not defined by accessor
   {
     if(isMandatory())
     {
       encoder.reportFatal("[ERR U01]", "Missing mandatory decimal field.", *identity_);
       // if reportFatal returns we're being lax about encoding rules
-      // send a dummy value
-      destination.putByte(zeroIntegerNonnullable);//exponent
-      destination.putByte(zeroIntegerNonnullable);//mantissa
-      fieldOp_->setDictionaryValueNull(encoder);
+      // let the copy happen.
+      pmap.setNextField(false);
     }
     else
     {
+      // Missing optional field.  If we have a previous, non-null value
+      // we need to explicitly null it out.  Otherwise just don't send it.
       if(previousValue != Context::NULL_VALUE)
       {
         pmap.setNextField(true);// value in stream
@@ -576,7 +584,7 @@ FieldInstructionDecimal::encodeDelta(
       fieldOp_->setDictionaryValue(encoder, value);
     }
   }
-  else // not defined in fieldset
+  else // not defined by accessor
   {
     if(isMandatory())
     {

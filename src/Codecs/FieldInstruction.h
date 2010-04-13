@@ -600,6 +600,12 @@ namespace QuickFAST{
         return presenceMapBitsUsed_;
       }
 
+      /// @brief Write the fieldInstruction in human readable form.
+      ///
+      /// @param output is the stream to which the display will be written
+      /// @param indent is the number of spaces to appear at the beginning of each line.
+      virtual void display(std::ostream & output, size_t indent = 0) const;
+
     private:
       /// @brief Interpret initial or default value attribute.
       /// @param value for this instruction as specified in XML

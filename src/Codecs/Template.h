@@ -136,6 +136,12 @@ namespace QuickFAST{
         const std::string & templateName,
         const std::string &templateNamespace);
 
+      /// @brief Write the template in human readable form.
+      ///
+      /// @param output is the stream to which the display will be written
+      /// @param indent is the number of spaces to appear at the beginning of each line.
+      void display(std::ostream & output, size_t indent = 0) const;
+
     private:
       uint32 templateId_;
       std::string templateName_;

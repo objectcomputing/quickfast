@@ -1,3 +1,29 @@
+Tue Apr 13 21:02:51 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        One more pass at Issue #43.  The case of an optional field with no default value
+        was still not being handled correctly.  Apply the fix to Blobs and Decimals, too.
+
+        * src/Tests/testFieldOperations.cpp:
+        Tests for Issue #43.  Currently integers and Ascii strings are tested.  It would be
+        worthwhile to have similar tests for Decimals and Blobs.
+
+        * src/Codecs/SegmentBody.h:
+        * src/Codecs/SegmentBody.cpp:
+        * src/Codecs/Template.h:
+        * src/Codecs/Template.cpp:
+        * src/Codecs/TemplateRegistry.h:
+        * src/Codecs/TemplateRegistry.cpp:
+        * src/Messages/FieldIdentity.h:
+        * src/Messages/FieldIdentity.cpp:
+        Add a display() method to template components to allow dumping
+        of the decoded templates for verification/debugging purposes.
+
 Mon Apr 12 23:49:19 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstructionAscii.cpp:

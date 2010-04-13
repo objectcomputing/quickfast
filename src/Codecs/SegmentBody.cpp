@@ -194,3 +194,34 @@ SegmentBody::indexDictionaries(
     (*it)->indexDictionaries(indexer, name, type, typeNs);
   }
 }
+
+void
+SegmentBody::display(std::ostream & output, size_t indent) const
+{
+  /// parent class will display the opening element tag including dictionary attribute
+  std::string indentString(indent, ' ');
+  if(!applicationType_.empty())
+  {
+    output << std::endl << indentString << "<typeref name=\"" << applicationType_;
+    if(!applicationNamespace_.empty())
+    {
+      output << "ns=\"" << applicationNamespace_;
+    }
+    output << ">\"";
+  }
+  output << std::endl << indentString << "<!--";
+  if(! isFinalized_)
+  {
+    output << std::endl << indentString << "  NOT FINALIZED!";
+  }
+  output << std::endl << indentString << "  presence map bits = " << presenceMapBits_;
+  output << std::endl << indentString << "  field count = " << fieldCount_;
+  output << std::endl << indentString << "-->";
+
+  for (size_t nField = 0; nField < fieldCount_; ++nField)
+  {
+    instructions_[nField]->display(output, indent + 2);
+  }
+  /// parent class will display the closing element tag
+}
+

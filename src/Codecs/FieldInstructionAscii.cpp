@@ -479,10 +479,21 @@ FieldInstructionAscii::encodeCopy(
   // Retrieve information from the dictionary
   std::string previousValue;
   Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(encoder, previousValue);
-  if(previousStatus == Context::UNDEFINED_VALUE && fieldOp_->hasValue())
+  if(previousStatus == Context::UNDEFINED_VALUE)
   {
-    previousValue = fieldOp_->getValue();
-    fieldOp_->setDictionaryValue(encoder, previousValue);
+    if(fieldOp_->hasValue())
+    {
+      previousValue = fieldOp_->getValue();
+      fieldOp_->setDictionaryValue(encoder, previousValue);
+      // pretend we got the data from the dictionary
+      previousStatus = Context::OK_VALUE;
+    }
+    else
+    {
+      // pretend we got a null from the dictionary
+      fieldOp_->setDictionaryValueNull(encoder);
+      previousStatus = Context::NULL_VALUE;
+    }
   }
 
   // get the value from the application data
@@ -509,7 +520,7 @@ FieldInstructionAscii::encodeCopy(
       fieldOp_->setDictionaryValue(encoder, value);
     }
   }
-  else // not defined in accessor
+  else // not defined by accessor
   {
     if(isMandatory())
     {
@@ -524,7 +535,6 @@ FieldInstructionAscii::encodeCopy(
       // we need to explicitly null it out.  Otherwise just don't send it.
       if(previousStatus != Context::NULL_VALUE)
       {
-        // we have to null the previous value to avoid copy
         pmap.setNextField(true);// value in stream
         destination.putByte(nullAscii);
         fieldOp_->setDictionaryValueNull(encoder);
