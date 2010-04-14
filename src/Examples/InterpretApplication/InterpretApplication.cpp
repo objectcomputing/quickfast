@@ -367,7 +367,7 @@ InterpretApplication::run()
   {
     MessageInterpreter handler(std::cout);
     Codecs::GenericMessageBuilder builder(handler);
-      connection_.configure(builder, configuration_);
+    connection_.configure(builder, configuration_);
 
     if(bufferFilename_.empty())
     {

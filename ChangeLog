@@ -1,3 +1,19 @@
+Wed Apr 14 19:43:47 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Application/DecoderConfiguration.h:
+        The nonstandard_ member variable was not initialized
+
+        * src/Application/DecoderConnection.cpp:
+         Decoder Connection was not opening the XML file in binary mode on Windows
+
+        * src/Common/Decimal.cpp:
+        Decimal formatting using boost lexical cast was producing sloppy results
+         i.e. 3.99999999999999 rather than 4.0
+        I hand coded a formatter that produces a string that exactly represents the decimal value.
+
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+        Cosmetic: Fix a line that was indented incorrectly.
+
 Wed Apr 14 18:15:30 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Application/DecoderConnection.cpp:

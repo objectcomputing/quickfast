@@ -130,6 +130,7 @@ namespace QuickFAST{
         , listenInterfaceIP_("0.0.0.0")
         , bufferSize_(1400)
         , bufferCount_(2)
+        , nonstandard_(0)
       {
       }
 

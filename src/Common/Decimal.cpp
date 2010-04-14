@@ -4,6 +4,7 @@
 #include <Common/QuickFASTPch.h>
 #include "Decimal.h"
 #include <Common/Exceptions.h>
+#include <Common/WorkingBuffer.h>
 #include <boost/algorithm/string/trim.hpp>
 
 using namespace ::QuickFAST;
@@ -110,11 +111,53 @@ Decimal::getExponent() const
   return exponent_;
 }
 
-
 void
 Decimal::toString(std::string & value)const
 {
+#if 1
+  WorkingBuffer buffer;
+  buffer.clear(true, 20);
+  bool negative = false;
+  int64 m = mantissa_;
+  if(m < 0)
+  {
+    negative = true;
+    m = -m;
+  }
+  short e = exponent_;
+  if(e >= 0)
+  {
+    // No trailing decimal buffer.push(unsigned char('.'));
+    while(e > 0)
+    {
+      buffer.push(unsigned char('0'));
+      e -= 1;
+    }
+  }
+  bool none = true;
+  while(m != 0 || e < 0 || none)
+  {
+    none = false;
+    char c = (m % 10) + '0';
+    buffer.push(unsigned char(c));
+    if(e < 0)
+    {
+      e += 1;
+      if(e == 0)
+      {
+        buffer.push(unsigned char('.'));
+      }
+    }
+    m /= 10;
+  }
+  if(negative)
+  {
+    buffer.push(unsigned char('-'));
+  }
+  value = std::string((const char *)buffer.begin(), buffer.end()-buffer.begin());
+#else
   value = boost::lexical_cast<std::string>(double(*this));
+#endif
 }
 
 Decimal &
