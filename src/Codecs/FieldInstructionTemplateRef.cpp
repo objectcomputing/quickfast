@@ -137,6 +137,13 @@ FieldInstructionStaticTemplateRef::fieldCount(const SegmentBody & parent)const
   return 1;
 }
 
+ValueType::Type
+FieldInstructionStaticTemplateRef::fieldInstructionType()const
+{
+  return ValueType::TEMPLATEREF;
+}
+
+
 /////////////////////////////////////
 // FieldInstructionDynamicTemplateRef
 FieldInstructionDynamicTemplateRef::FieldInstructionDynamicTemplateRef()
@@ -180,4 +187,10 @@ FieldInstructionDynamicTemplateRef::fieldCount(const SegmentBody & parent)const
   // TODO: Someday we should actually check the target template, but that's
   // not doable right now.
   return 1;
+}
+
+ValueType::Type
+FieldInstructionDynamicTemplateRef::fieldInstructionType()const
+{
+  return ValueType::TEMPLATEREF;
 }

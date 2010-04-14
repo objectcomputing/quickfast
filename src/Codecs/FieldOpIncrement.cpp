@@ -55,3 +55,8 @@ FieldOpIncrement::setDefaultValue(
   return instruction.setDefaultValueIncrement();
 }
 
+FieldOp::OpType
+FieldOpIncrement::opType()const
+{
+  return FieldOp::INCREMENT;
+}

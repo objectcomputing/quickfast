@@ -18,7 +18,7 @@ ValueType::typeName(ValueType::Type type)
     }
   case UINT8:
     {
-      static const std::string name("uint8");
+      static const std::string name("uInt8");
       return name;
     }
   case INT16:
@@ -28,7 +28,7 @@ ValueType::typeName(ValueType::Type type)
     }
   case UINT16:
     {
-      static const std::string name("uint16");
+      static const std::string name("uInt16");
       return name;
     }
   case INT32:
@@ -38,7 +38,7 @@ ValueType::typeName(ValueType::Type type)
     }
   case UINT32:
     {
-      static const std::string name("uint32");
+      static const std::string name("uInt32");
       return name;
     }
   case INT64:
@@ -48,12 +48,22 @@ ValueType::typeName(ValueType::Type type)
     }
   case UINT64:
     {
-      static const std::string name("uint64");
+      static const std::string name("uInt64");
       return name;
     }
   case DECIMAL:
     {
       static const std::string name("decimal");
+      return name;
+    }
+  case EXPONENT:
+    {
+      static const std::string name("exponent");
+      return name;
+    }
+  case MANTISSA:
+    {
+      static const std::string name("mantissa");
       return name;
     }
   case ASCII:
@@ -68,7 +78,7 @@ ValueType::typeName(ValueType::Type type)
     }
   case BYTEVECTOR:
     {
-      static const std::string name("bytevector");
+      static const std::string name("byteVector");
       return name;
     }
   case SEQUENCE:
@@ -76,11 +86,28 @@ ValueType::typeName(ValueType::Type type)
       static const std::string name("sequence");
       return name;
     }
+  case LENGTH:
+    {
+      static const std::string name("length");
+      return name;
+    }
   case GROUP:
     {
       static const std::string name("group");
       return name;
     }
+  case TEMPLATEREF:
+    {
+      static const std::string name("templateRef");
+      return name;
+    }
+
+  case TYPEREF:
+    {
+      static const std::string name("typeRef");
+      return name;
+    }
+
   default:
     {
       static const std::string name("Unknown");

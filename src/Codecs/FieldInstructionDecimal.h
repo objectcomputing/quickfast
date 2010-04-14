@@ -154,6 +154,8 @@ namespace QuickFAST{
         const std::string & typeNamespace);
 
       virtual void finalize(TemplateRegistry & registry);
+      virtual ValueType::Type fieldInstructionType()const;
+      virtual void displayBody(std::ostream & output, size_t indent)const;
 
     private:
       void encodeDecimal(

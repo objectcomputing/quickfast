@@ -606,11 +606,18 @@ namespace QuickFAST{
       /// @param indent is the number of spaces to appear at the beginning of each line.
       virtual void display(std::ostream & output, size_t indent = 0) const;
 
+      /// @brief identify this field instructoin
+      ///
+      /// a touch of manual RTTI
+      virtual ValueType::Type fieldInstructionType()const = 0;
+
+      /// @brief display the body of compound field instructions (Groups and Sequences)
+      virtual void displayBody(std::ostream & output, size_t indent)const;
+
     private:
       /// @brief Interpret initial or default value attribute.
       /// @param value for this instruction as specified in XML
       virtual void interpretValue(const std::string & value) = 0;
-
 
     private:
       FieldInstruction(const FieldInstruction &);

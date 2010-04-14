@@ -32,6 +32,8 @@ namespace QuickFAST{
         const Messages::MessageAccessor & fieldSet) const;
       virtual void setDefaultValue(
         Codecs::FieldInstruction & instruction) const;
+
+      virtual OpType opType()const;
     };
 
     inline
@@ -47,6 +49,12 @@ namespace QuickFAST{
       return false;
     }
 
+    inline
+    FieldOp::OpType
+    FieldOpNop::opType()const
+    {
+      return NOP;
+    }
 
     inline
     void

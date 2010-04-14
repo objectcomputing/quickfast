@@ -48,3 +48,8 @@ FieldOpTail::setDefaultValue(
   instruction.setDefaultValueTail();
 }
 
+FieldOp::OpType
+FieldOpTail::opType()const
+{
+  return FieldOp::TAIL;
+}

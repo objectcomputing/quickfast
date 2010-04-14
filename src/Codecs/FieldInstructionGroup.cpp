@@ -32,6 +32,11 @@ FieldInstructionGroup::finalize(TemplateRegistry & templateRegistry)
 {
   segmentBody_->finalize(templateRegistry);
   FieldInstruction::finalize(templateRegistry);
+  // even though the field op is a NOP, an optional group uses a pmap bit
+  if(!isMandatory())
+  {
+    presenceMapBitsUsed_ = 1;
+  }
 }
 
 void
@@ -135,18 +140,6 @@ FieldInstructionGroup::encodeNop(
   }
 }
 
-#if 0
-size_t
-FieldInstructionGroup::presenceMapBitsRequired() const
-{
-  if(bool(segmentBody_) && segmentBody_->presenceMapBitCount() > 0)
-  {
-    return 1;
-  }
-  return 0;
-}
-#endif
-
 void
 FieldInstructionGroup::interpretValue(const std::string & /*value*/)
 {
@@ -179,3 +172,14 @@ FieldInstructionGroup::indexDictionaries(
   }
 }
 
+ValueType::Type
+FieldInstructionGroup::fieldInstructionType()const
+{
+  return ValueType::GROUP;
+}
+
+void
+FieldInstructionGroup::displayBody(std::ostream & output, size_t indent)const
+{
+  segmentBody_->display(output, indent);
+}

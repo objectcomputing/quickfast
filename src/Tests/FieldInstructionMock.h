@@ -271,7 +271,10 @@ namespace QuickFAST{
         return result;
       }
 
-
+      virtual ValueType::Type fieldInstructionType()const
+      {
+        return ValueType::UNDEFINED;
+      }
 
       bool isClear() const
       {

@@ -49,3 +49,8 @@ FieldOpDefault::setDefaultValue(
   return instruction.setDefaultValueDefault();
 }
 
+FieldOp::OpType
+FieldOpDefault::opType()const
+{
+  return FieldOp::DEFAULT;
+}

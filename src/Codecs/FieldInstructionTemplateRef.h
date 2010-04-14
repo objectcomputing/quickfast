@@ -41,6 +41,7 @@ namespace QuickFAST{
         Codecs::Encoder & encoder,
         const Messages::MessageAccessor & accessor) const;
 
+      virtual ValueType::Type fieldInstructionType()const;
     private:
       void interpretValue(const std::string & value);
 
@@ -73,6 +74,7 @@ namespace QuickFAST{
         Codecs::Encoder & encoder,
         const Messages::MessageAccessor & accessor) const;
 
+      virtual ValueType::Type fieldInstructionType()const;
 
     private:
       void interpretValue(const std::string & value);

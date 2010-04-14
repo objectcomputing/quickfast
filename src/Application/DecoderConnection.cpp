@@ -138,6 +138,11 @@ DecoderConnection::configure(
 
   registry_ = parser.parse(templates);
 
+  if((configuration.nonstandard() & 4) != 0)
+  {
+    registry_->display(std::cout, 0);
+  }
+
   switch(configuration.headerType())
   {
   case Application::DecoderConfiguration::NO_HEADER:

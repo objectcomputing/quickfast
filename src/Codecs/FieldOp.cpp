@@ -52,3 +52,50 @@ FieldOp::indexDictionaries(
   }
 }
 
+const std::string &
+FieldOp::opName(OpType type)
+{
+  switch(type)
+  {
+  case NOP:
+    {
+      static const std::string nop("nop");
+      return nop;
+    }
+  case CONSTANT:
+    {
+      static const std::string constant("constant");
+      return constant;
+    }
+  case DEFAULT:
+    {
+      static const std::string defaultname("default");
+      return defaultname;
+    }
+  case COPY:
+    {
+      static const std::string copy("copy");
+      return copy;
+    }
+  case DELTA:
+    {
+      static const std::string delta("delta");
+      return delta;
+    }
+  case INCREMENT:
+    {
+      static const std::string increment("increment");
+      return increment;
+    }
+  case TAIL:
+    {
+      static const std::string tail("tail");
+      return tail;
+    }
+  case UNKNOWN:
+  default:
+    break;
+  }
+  static const std::string unknown("UNKNOWN");
+  return unknown;
+}

@@ -54,3 +54,9 @@ FieldOpCopy::setDefaultValue(
 {
   return instruction.setDefaultValueCopy();
 }
+
+FieldOp::OpType
+FieldOpCopy::opType()const
+{
+  return FieldOp::COPY;
+}

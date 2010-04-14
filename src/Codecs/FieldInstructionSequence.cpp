@@ -203,3 +203,15 @@ FieldInstructionSequence::indexDictionaries(
   segment_->indexDictionaries(indexer, dictionaryName,typeName, typeNamespace);
 }
 
+ValueType::Type
+FieldInstructionSequence::fieldInstructionType()const
+{
+  return ValueType::SEQUENCE;
+}
+
+void
+FieldInstructionSequence::displayBody(std::ostream & output, size_t indent)const
+{
+  std::string indentString(indent, ' ');
+  segment_->display(output, indent);
+}

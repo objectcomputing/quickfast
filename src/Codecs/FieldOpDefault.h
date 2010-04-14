@@ -32,6 +32,8 @@ namespace QuickFAST{
 
       virtual void setDefaultValue(
         Codecs::FieldInstruction & instruction) const;
+
+      virtual OpType opType()const;
     };
   }
 }

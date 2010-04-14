@@ -72,7 +72,8 @@ namespace QuickFAST{
         segment = segmentBody_;
         return bool(segmentBody_);
       }
-
+      virtual ValueType::Type fieldInstructionType()const;
+      virtual void displayBody(std::ostream & output, size_t indent)const;
 
     private:
       void interpretValue(const std::string & value);

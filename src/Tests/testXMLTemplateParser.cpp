@@ -236,8 +236,136 @@ BOOST_AUTO_TEST_CASE(testXMLTemplateParser3)
   fieldOp = instruction->getFieldOp();
   BOOST_CHECK(!fieldOp->usesPresenceMap(true));
   BOOST_CHECK_EQUAL(instruction->getPresenceMapBitsUsed(), 0);
-
 }
 
+const char GroupSequencePMAPXML[] =
+"\
+<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\
+<templates xmlns=\"http://www.fixprotocol.org/ns/fast/td/1.1\">\n\
+  <template name=\"GroupPMAPTest\" id=\"9998\">\n\
+    <group name=\"noMapNoBit\">\n\
+      <int32 name=\"one\"/>\n\
+    </group>\n\
+    <group name=\"BitNoMap\" presence=\"optional\">\n\
+      <int32 name=\"two\"/>\n\
+    </group>\n\
+    <group name=\"MapNoBit\">\n\
+      <int32 name=\"three\">\n\
+        <default value=\"1\"/>\n\
+      </int32>\n\
+    </group>\n\
+    <group name=\"BitAndMap\" presence=\"optional\">\n\
+      <int32 name=\"four\">\n\
+        <default value=\"1\"/>\n\
+      </int32>\n\
+    </group>\n\
+  </template>\n\
+  <template name=\"SequencePMAPTest\" id=\"9997\">\n\
+    <sequence name=\"noMapNoBit\">\n\
+      <length name=\"NoNoMapNoBit\"/>\n\
+      <int32 name=\"one\"/>\n\
+    </sequence>\n\
+    <sequence name=\"BitNoMap\" presence=\"optional\">\n\
+      <length name=\"NoNoMapNoBit\"><copy value=\"0\"/></length>\n\
+      <int32 name=\"two\"/>\n\
+    </sequence>\n\
+    <sequence name=\"MapNoBit\">\n\
+      <length name=\"NoNoMapNoBit\"/>\n\
+      <int32 name=\"three\">\n\
+        <default value=\"1\"/>\n\
+      </int32>\n\
+    </sequence>\n\
+    <sequence name=\"BitAndMap\" presence=\"optional\">\n\
+      <length name=\"NoNoMapNoBit\"><copy value=\"0\"/></length>\n\
+      <int32 name=\"four\">\n\
+        <default value=\"1\"/>\n\
+      </int32>\n\
+    </sequence>\n\
+    <sequence name=\"anotherBitNoMap\">\n\
+      <length name=\"NoAnotherBitNoMap\"><copy value=\"0\"/></length>\n\
+      <int32 name=\"five\"/>\n\
+    </sequence>\n\
+  </template>\n\
+</templates>\n\
+";
 
+BOOST_AUTO_TEST_CASE(testGroupsAndSequencesVsPMAP)
+{
+  BOOST_CHECKPOINT("Start testXMLTemplateParser");
+  Codecs::XMLTemplateParser parser;
+  std::stringstream xmlin(GroupSequencePMAPXML);
 
+  Codecs::TemplateRegistryPtr templateRegistry =
+    parser.parse(xmlin);
+
+  BOOST_REQUIRE(templateRegistry);
+
+  /////////
+  // Groups
+  Codecs::TemplateCPtr template9998;
+  BOOST_REQUIRE(templateRegistry->getTemplate(9998, template9998));
+  BOOST_CHECK_EQUAL(template9998->presenceMapBitCount(), 3);
+
+  // noMapNoBit
+  Codecs::FieldInstructionCPtr instruction;
+  BOOST_REQUIRE(template9998->getInstruction(0, instruction));
+  BOOST_CHECK_EQUAL(instruction->getPresenceMapBitsUsed(), 0);
+  Codecs::SegmentBodyPtr segment;
+  BOOST_REQUIRE(instruction->getSegmentBody(segment));
+  BOOST_CHECK_EQUAL(segment->presenceMapBitCount(), 0);
+
+  // BitNoMap
+  BOOST_REQUIRE(template9998->getInstruction(1, instruction));
+  BOOST_CHECK_EQUAL(instruction->getPresenceMapBitsUsed(), 1);
+  BOOST_REQUIRE(instruction->getSegmentBody(segment));
+  BOOST_CHECK_EQUAL(segment->presenceMapBitCount(), 0);
+
+  // MapNoBit
+  BOOST_REQUIRE(template9998->getInstruction(2, instruction));
+  BOOST_CHECK_EQUAL(instruction->getPresenceMapBitsUsed(), 0);
+  BOOST_REQUIRE(instruction->getSegmentBody(segment));
+  BOOST_CHECK_EQUAL(segment->presenceMapBitCount(), 1);
+
+  // BitAndMap
+  BOOST_REQUIRE(template9998->getInstruction(3, instruction));
+  BOOST_CHECK_EQUAL(instruction->getPresenceMapBitsUsed(), 1);
+  BOOST_REQUIRE(instruction->getSegmentBody(segment));
+  BOOST_CHECK_EQUAL(segment->presenceMapBitCount(), 1);
+
+  ////////////
+  // Sequences
+
+  Codecs::TemplateCPtr template9997;
+  BOOST_REQUIRE(templateRegistry->getTemplate(9997, template9997));
+  BOOST_CHECK_EQUAL(template9997->presenceMapBitCount(), 4);
+
+  // noMapNoBit
+  BOOST_REQUIRE(template9997->getInstruction(0, instruction));
+  BOOST_CHECK_EQUAL(instruction->getPresenceMapBitsUsed(), 0);
+  BOOST_REQUIRE(instruction->getSegmentBody(segment));
+  BOOST_CHECK_EQUAL(segment->presenceMapBitCount(), 0);
+
+  // BitNoMap
+  BOOST_REQUIRE(template9997->getInstruction(1, instruction));
+  BOOST_CHECK_EQUAL(instruction->getPresenceMapBitsUsed(), 1);
+  BOOST_REQUIRE(instruction->getSegmentBody(segment));
+  BOOST_CHECK_EQUAL(segment->presenceMapBitCount(), 0);
+
+  // MapNoBit
+  BOOST_REQUIRE(template9997->getInstruction(2, instruction));
+  BOOST_CHECK_EQUAL(instruction->getPresenceMapBitsUsed(), 0);
+  BOOST_REQUIRE(instruction->getSegmentBody(segment));
+  BOOST_CHECK_EQUAL(segment->presenceMapBitCount(), 1);
+
+  // BitAndMap
+  BOOST_REQUIRE(template9997->getInstruction(3, instruction));
+  BOOST_CHECK_EQUAL(instruction->getPresenceMapBitsUsed(), 1);
+  BOOST_REQUIRE(instruction->getSegmentBody(segment));
+  BOOST_CHECK_EQUAL(segment->presenceMapBitCount(), 1);
+
+  // anotherBitNoMap
+  BOOST_REQUIRE(template9997->getInstruction(4, instruction));
+  BOOST_CHECK_EQUAL(instruction->getPresenceMapBitsUsed(), 1);
+  BOOST_REQUIRE(instruction->getSegmentBody(segment));
+  BOOST_CHECK_EQUAL(segment->presenceMapBitCount(), 0);
+}

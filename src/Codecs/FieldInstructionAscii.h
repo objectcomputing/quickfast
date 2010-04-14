@@ -114,6 +114,9 @@ namespace QuickFAST{
         WorkingBuffer & buffer) const;
 
       void interpretValue(const std::string & value);
+
+      virtual ValueType::Type fieldInstructionType() const;
+
     private:
       Messages::FieldCPtr initialValue_;
 

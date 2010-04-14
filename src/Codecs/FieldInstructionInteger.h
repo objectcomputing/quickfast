@@ -142,6 +142,8 @@ namespace QuickFAST{
         Codecs::Encoder & encoder,
         const Messages::MessageAccessor & accessor) const;
 
+      virtual ValueType::Type fieldInstructionType()const;
+
     private:
       FieldInstructionInteger(const FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED> &);
       FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED> & operator=(const FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED> &);
@@ -978,6 +980,15 @@ namespace QuickFAST{
         }
       }
     }
+
+    template<typename INTEGER_TYPE, ValueType::Type VALUE_TYPE, bool SIGNED>
+    ValueType::Type
+    FieldInstructionInteger<INTEGER_TYPE, VALUE_TYPE, SIGNED>::
+    fieldInstructionType()const
+    {
+      return VALUE_TYPE;
+    }
+
   }
 }
 #endif // FIELDINSTRUCTIONINTEGER_H

@@ -207,6 +207,8 @@ ImplField::asString()
     case ValueType::INT16:
     case ValueType::INT32:
     case ValueType::INT64:
+    case ValueType::MANTISSA:
+    case ValueType::EXPONENT:
       {
         std::stringstream v;
         v << signedInteger_;
@@ -218,6 +220,7 @@ ImplField::asString()
     case ValueType::UINT16:
     case ValueType::UINT32:
     case ValueType::UINT64:
+    case ValueType::LENGTH:
       {
         std::stringstream v;
         v << unsignedInteger_;

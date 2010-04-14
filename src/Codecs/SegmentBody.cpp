@@ -86,7 +86,7 @@ SegmentBody::addLengthInstruction(FieldInstructionPtr & field)
   {
     throw TemplateDefinitionError("<length> element must be first in context.");
   }
-  if(this->lengthInstruction_)
+  if(bool(lengthInstruction_))
   {
     throw TemplateDefinitionError("Only one <length> element may appear in context.");
   }
@@ -210,13 +210,19 @@ SegmentBody::display(std::ostream & output, size_t indent) const
     output << ">\"";
   }
   output << std::endl << indentString << "<!--";
+  output << " field count = " << fieldCount_;
+  output << " presence map size = " << presenceMapBits_;
   if(! isFinalized_)
   {
-    output << std::endl << indentString << "  NOT FINALIZED!";
+    output << "  WARNING: NOT FINALIZED!";
   }
-  output << std::endl << indentString << "  presence map bits = " << presenceMapBits_;
-  output << std::endl << indentString << "  field count = " << fieldCount_;
-  output << std::endl << indentString << "-->";
+
+  output << "-->";
+
+  if(bool(lengthInstruction_))
+  {
+    lengthInstruction_->display(output, indent + 2);
+  }
 
   for (size_t nField = 0; nField < fieldCount_; ++nField)
   {

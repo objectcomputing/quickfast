@@ -1,3 +1,69 @@
+Wed Apr 14 18:15:30 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Application/DecoderConnection.cpp:
+
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.h:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.h:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionExponent.h:
+        * src/Codecs/FieldInstructionGroup.h:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionMantissa.h:
+        * src/Codecs/FieldInstructionSequence.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/FieldInstructionUInt32.h:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FieldOp.cpp:
+        * src/Codecs/FieldOpConstant.h:
+        * src/Codecs/FieldOpConstant.cpp:
+        * src/Codecs/FieldOpCopy.h:
+        * src/Codecs/FieldOpCopy.cpp:
+        * src/Codecs/FieldOpDefault.h:
+        * src/Codecs/FieldOpDefault.cpp:
+        * src/Codecs/FieldOpDelta.h:
+        * src/Codecs/FieldOpDelta.cpp:
+        * src/Codecs/FieldOpIncrement.h:
+        * src/Codecs/FieldOpIncrement.cpp:
+        * src/Codecs/FieldOpNop.h:
+        * src/Codecs/FieldOpTail.h:
+        * src/Codecs/FieldOpTail.cpp:
+        * src/Codecs/SegmentBody.h:
+        * src/Codecs/SegmentBody.cpp:
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/Common/Types.h:
+        * src/Common/Types.cpp:
+        * src/DotNet/ImplField.cpp:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Messages/FieldIdentity.cpp:
+        * src/Tests/FieldInstructionMock.h:
+        * src/Tests/testFieldInstructions.cpp:
+        * src/Tests/testXMLTemplateParser.cpp:
+
+        Issue#42 pointed out a problem with the way the presence map interacted
+        with groups.  There are three parts to this checkin:
+         1) Add a display(ostream, indent) method to the various components of
+            an in-memory template/template registry.  This allows the contents
+            of the registry to be dumped after the XML file is compiled.  The
+            dump includes information about PMAP usage that was used to
+            diagnose this problem.
+         2) Add a new unit test in testXMLTemplateParser: testGroupsAndSequencesVsPMAP.
+            This test detected the problem and verfied that it was fixed.
+            Also correct an incorrect test in testFieldInstructions which
+            was triggered by the fix.
+         3) Fix the problem (the change is in in FieldInstructionGroup)
+
+        * Output/TestData:
+        This was used by the old .NET tests which are gone.  We need new tests,
+        but when they happen they won't read templates from a file.
+
 Tue Apr 13 21:02:51 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstruction.h:

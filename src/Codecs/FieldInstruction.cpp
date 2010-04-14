@@ -73,8 +73,9 @@ FieldInstruction::setFieldOp(FieldOpPtr fieldOp)
 FieldOpCPtr
 FieldInstruction::getFieldOp() const
 {
-  if (boost::dynamic_pointer_cast<const FieldOpNop>(fieldOp_))
+  if (fieldOp_->opType() == FieldOp::NOP)
   {
+    // For sequences, use the field op associated with the length.
     SegmentBodyPtr segment;
     if(getSegmentBody(segment))
     {
@@ -512,9 +513,11 @@ FieldInstruction::getSegmentBody(SegmentBodyPtr & /*segment*/) const
 void
 FieldInstruction::display(std::ostream & output, size_t indent) const
 {
-  int todo_the_next_step;
   std::string indentString(indent, ' ');
-  output << std::endl << indentString << "<field";
+
+  std::string elementName = ValueType::typeName(fieldInstructionType());
+
+  output << std::endl << indentString << "<" << elementName;
   identity_->display(output);
   if(!isMandatory())
   {
@@ -526,7 +529,25 @@ FieldInstruction::display(std::ostream & output, size_t indent) const
   }
   output << '>';
   output << std::endl << indentString << "  <!-- presence map bits = " << presenceMapBitsUsed_<< "  -->";
-  output << std::endl << indentString << "  <field_op_goes_here>";
-  output << std::endl << indentString << "</field> <!-- " << identity_->getLocalName() << "-->";
+  FieldOp::OpType opType = fieldOp_->opType();
+  if(opType != FieldOp::NOP)
+  {
+    const std::string & opName = FieldOp::opName(opType);
+    output << std::endl << indentString << "  <" <<  opName;
+    if(!fieldOp_->getValue().empty())
+    {
+      output << " value=\"" << fieldOp_->getValue() << "\"";
+    }
+    output << "/>";
+  }
+  displayBody(output, indent + 2);
+  output << std::endl << indentString << "</" << elementName << "><!-- " << identity_->getLocalName() << "-->";
 }
+
+void
+FieldInstruction::displayBody(std::ostream & output, size_t indent)const
+{
+  // most field instructions have no body.
+}
+
 

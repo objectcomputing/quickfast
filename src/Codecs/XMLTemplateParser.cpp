@@ -891,7 +891,7 @@ TemplateBuilder::parseLength(const std::string & tag, const AttributeMap& attrib
   std::string name = getRequiredAttribute(attributes, "name");
   std::string ns;
   getOptionalAttribute(attributes, "ns", ns);
-  FieldInstructionPtr field(new FieldInstructionUInt32(name, ns));
+  FieldInstructionPtr field(new FieldInstructionLength(name, ns));
   std::string id;
   if(getOptionalAttribute(attributes, "id", id))
   {

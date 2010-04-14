@@ -104,6 +104,8 @@ namespace QuickFAST{
         Codecs::Encoder & encoder,
         const Messages::MessageAccessor & accessor) const;
 
+      virtual ValueType::Type fieldInstructionType()const;
+
     protected:
       /// @brief create a populated field of the appropriate type
       /// @param buffer points to the data

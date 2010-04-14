@@ -674,3 +674,9 @@ FieldInstructionAscii::interpretValue(const std::string & value)
 {
   initialValue_ = Messages::FieldAscii::create(value);
 }
+
+ValueType::Type
+FieldInstructionAscii::fieldInstructionType()const
+{
+  return ValueType::ASCII;
+}

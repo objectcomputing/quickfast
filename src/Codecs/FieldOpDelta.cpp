@@ -48,3 +48,8 @@ FieldOpDelta::setDefaultValue(
 {
   return instruction.setDefaultValueDelta();
 }
+FieldOp::OpType
+FieldOpDelta::opType()const
+{
+  return FieldOp::DELTA;
+}

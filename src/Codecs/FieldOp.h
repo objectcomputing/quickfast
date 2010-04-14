@@ -34,6 +34,18 @@ namespace QuickFAST{
       : public SchemaElement
     {
     public:
+      enum OpType
+      {
+        NOP,
+        CONSTANT,
+        DEFAULT,
+        COPY,
+        DELTA,
+        INCREMENT,
+        TAIL,
+        UNKNOWN
+      };
+
       /// basic constructor
       FieldOp();
 
@@ -277,6 +289,10 @@ namespace QuickFAST{
       {
         return context.getDictionaryValue(dictionaryIndex_, value, length);
       }
+
+      virtual OpType opType()const = 0;
+
+      static const std::string & opName(OpType type);
 
     protected:
        /// Value specified by the operator associated with this instruction [as a string]

@@ -191,21 +191,22 @@ MessageInterpreter::formatGroup(const Messages::FieldCPtr & field)
       displayFieldValue(field);
     }
   }
-
 }
-
 
 void
 MessageInterpreter::displayFieldValue(const Messages::FieldCPtr & field)
 {
   switch(field->getType())
   {
+  case ValueType::EXPONENT:
   case ValueType::INT32:
     out_ << field->toInt32();
     break;
+  case ValueType::LENGTH:
   case ValueType::UINT32:
     out_ << field->toUInt32();
     break;
+  case ValueType::MANTISSA:
   case ValueType::INT64:
     out_ << field->toInt64();
     break;

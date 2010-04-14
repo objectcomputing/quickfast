@@ -155,6 +155,7 @@ namespace QuickFAST{
       /// @brief the default dictionary to be used for this set of fields
       std::string dictionaryName_;
 
+    private:
       /// @brief avoid catastrophe when template references are recursive.
       bool isFinalizing_;
 

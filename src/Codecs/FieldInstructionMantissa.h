@@ -11,7 +11,7 @@
 namespace QuickFAST{
   namespace Codecs{
     /// @brief An implementation for the &lt;mantissa> field instruction within a &lt;decimal>.
-    typedef FieldInstructionInteger<mantissa_t, ValueType::INT64, true> FieldInstructionMantissa;
+    typedef FieldInstructionInteger<mantissa_t, ValueType::MANTISSA, true> FieldInstructionMantissa;
     /// @brief a pointer to a FieldInstrucionMantissa
     typedef boost::shared_ptr<FieldInstructionMantissa> FieldInstructionMantissaPtr;
     /// @brief a const pointer to a FieldInstrucionMantissa

@@ -635,3 +635,22 @@ FieldInstructionDecimal::finalize(TemplateRegistry & templateRegistry)
     FieldInstruction::finalize(templateRegistry);
   }
 }
+
+ValueType::Type
+FieldInstructionDecimal::fieldInstructionType()const
+{
+  return ValueType::DECIMAL;
+}
+
+void
+FieldInstructionDecimal::displayBody(std::ostream & output, size_t indent)const
+{
+  if(bool(exponentInstruction_))
+  {
+    exponentInstruction_->display(output, indent);
+  }
+  if(bool(mantissaInstruction_))
+  {
+    mantissaInstruction_->display(output, indent);
+  }
+}

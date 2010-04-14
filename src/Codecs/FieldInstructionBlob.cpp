@@ -696,3 +696,9 @@ FieldInstructionBlob::interpretValue(const std::string & value)
 {
   initialValue_ = createField(value);
 }
+
+ValueType::Type
+FieldInstructionBlob::fieldInstructionType()const
+{
+  return type_;
+}

@@ -76,10 +76,10 @@ namespace
     instruction.indexDictionaries(indexer, "global", "", "");
     Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
     instruction.finalize(*registry);
-    BOOST_CHECK_EQUAL(instruction.getPresenceMapBitsUsed(), 0);
 
     if(acceptsOperator)
     {
+      BOOST_CHECK_EQUAL(instruction.getPresenceMapBitsUsed(), 0);
       FieldOpPtr fieldOp(new FieldOpNop);
       fieldOp->setKey("alternate");
       fieldOp->setDictionaryName("global");

@@ -58,17 +58,23 @@ namespace QuickFAST{
       INT64,
       UINT64,
       DECIMAL,
+      EXPONENT,
+      MANTISSA,
       ASCII,
       UTF8,
       BYTEVECTOR,
       BITMAP,   // not FAST Standard (and not properly supported, yet)
       SEQUENCE,
+      LENGTH, // Synonym for INT32 when used as a length field
       GROUP,
+      TEMPLATEREF,
+      TYPEREF,
       UNDEFINED
     };
 
     /// @brief translate a ValueType::Type to a string
     /// @param type is the type to be interpreted.
+    /// @return is the type as a string that matches the XML element name for the corresponding field instruction.
     static const std::string & typeName(Type type);
   };
 }
