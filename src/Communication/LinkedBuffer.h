@@ -226,6 +226,7 @@ namespace QuickFAST
         LinkedBuffer * result = head_.link();
         head_.link(0);
         tail_ = &head_;
+        return result;
       }
 
       /// @brief nondestructive access to the first item in the queue
