@@ -22,6 +22,11 @@ namespace QuickFAST{
         QF_LOG_INFO = 3,
         QF_LOG_VERBOSE = 4
       };
+
+      /// @brief a virtual destructor for form's sake.
+      /// No one should ever delete a pointer to a logger, but just in case:
+      virtual ~Logger(){}
+
       /// @brief Does consumer wish to see logs with the given importance level.
       /// @param level is the importance level. low numbers are more important.
       virtual bool wantLog(unsigned short level) = 0;
