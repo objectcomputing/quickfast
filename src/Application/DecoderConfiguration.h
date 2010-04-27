@@ -107,6 +107,8 @@ namespace QuickFAST{
       /// @brief Allow nonstandard presence attribute on length instruction
       /// If true, allow presence= attribute on sequence length instruction
       unsigned long nonstandard_;
+
+      size_t testSkip_;
     public:
       /// @brief Iniitalize to defaults
       DecoderConfiguration()
@@ -131,6 +133,7 @@ namespace QuickFAST{
         , bufferSize_(1400)
         , bufferCount_(2)
         , nonstandard_(0)
+        , testSkip_(0)
       {
       }
 
@@ -308,6 +311,11 @@ namespace QuickFAST{
         return nonstandard_;
       }
 
+      size_t testSkip()const
+      {
+        return testSkip_;
+      }
+
       /// @brief Process the first "head" messages then stop.
       void setHead(size_t head)
       {
@@ -481,6 +489,11 @@ namespace QuickFAST{
       void setNonstandard(unsigned long nonstandard)
       {
         nonstandard_ = nonstandard;
+      }
+
+      void setTestSkip(size_t testSkip)
+      {
+        testSkip_ = testSkip;
       }
     };
   }

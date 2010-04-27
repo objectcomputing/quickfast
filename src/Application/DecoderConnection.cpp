@@ -152,17 +152,20 @@ DecoderConnection::configure(
   {
   case Application::DecoderConfiguration::NO_HEADER:
     {
-      analyzer_.reset(new Codecs::NoHeaderAnalyzer);
+      Codecs::NoHeaderAnalyzer * analyzer = new Codecs::NoHeaderAnalyzer;
+      analyzer->setTestSkip(configuration.testSkip());
+      analyzer_.reset(analyzer);
       break;
     }
   case Application::DecoderConfiguration::FIXED_HEADER:
     {
-      analyzer_.reset(new Codecs::FixedSizeHeaderAnalyzer(
+      Codecs::FixedSizeHeaderAnalyzer * fixedSizeHeaderAnalyzer = new Codecs::FixedSizeHeaderAnalyzer(
         configuration.headerMessageSizeBytes(),
         configuration.headerBigEndian(),
         configuration.headerPrefixCount(),
-        configuration.headerSuffixCount()
-      ));
+        configuration.headerSuffixCount());
+      fixedSizeHeaderAnalyzer->setTestSkip(configuration.testSkip());
+      analyzer_.reset(fixedSizeHeaderAnalyzer);
       break;
     }
   case Application::DecoderConfiguration::FAST_HEADER:

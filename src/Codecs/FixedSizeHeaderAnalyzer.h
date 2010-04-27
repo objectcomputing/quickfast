@@ -35,6 +35,11 @@ namespace QuickFAST{
       /// @brief Typical virtual destructor
       virtual ~FixedSizeHeaderAnalyzer();
 
+      void setTestSkip(size_t testSkip)
+      {
+        testSkip_ = testSkip;
+      }
+
       ////////////////////////
       // Implement HeaderAnalyzer
       virtual bool analyzeHeader(DataSource & source, size_t & blockSize, bool & skip);
@@ -54,6 +59,9 @@ namespace QuickFAST{
       } state_;
       size_t blockSize_;
       size_t byteCount_;
+
+      size_t testSkip_;
+      size_t headersParsed_;
     };
   }
 }

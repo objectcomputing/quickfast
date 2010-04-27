@@ -115,7 +115,7 @@ Encoder::encodeSegmentBody(
   size_t instructionCount = segment->size();
   for( size_t nField = 0; nField < instructionCount; ++nField)
   {
-    PROFILE_POINT("emcode field");
+    PROFILE_POINT("encode field");
     Codecs::FieldInstructionCPtr instruction;
     if(segment->getInstruction(nField, instruction))
     {

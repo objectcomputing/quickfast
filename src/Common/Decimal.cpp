@@ -114,7 +114,13 @@ Decimal::getExponent() const
 void
 Decimal::toString(std::string & value)const
 {
-#if 1
+#if 0
+  value = boost::lexical_cast<std::string>(double(*this));
+#elif 1
+  std::stringstream str;
+  str << double(*this);
+  value = str.str();
+#else
   WorkingBuffer buffer;
   buffer.clear(true, 20);
   bool negative = false;
@@ -127,10 +133,11 @@ Decimal::toString(std::string & value)const
   short e = exponent_;
   if(e >= 0)
   {
-    // No trailing decimal buffer.push(unsigned char('.'));
+    // No trailing decimal point
+    // buffer.push((unsigned char)'.');
     while(e > 0)
     {
-      buffer.push(unsigned char('0'));
+      buffer.push((unsigned char)'0');
       e -= 1;
     }
   }
@@ -139,24 +146,27 @@ Decimal::toString(std::string & value)const
   {
     none = false;
     char c = (m % 10) + '0';
-    buffer.push(unsigned char(c));
+    m /= 10;
+    buffer.push((unsigned char)c);
     if(e < 0)
     {
       e += 1;
       if(e == 0)
       {
-        buffer.push(unsigned char('.'));
+        buffer.push((unsigned char)'.');
+        // insure at least one character to the left of the decimal point
+        if(m == 0)
+        {
+          buffer.push((unsigned char)'0');
+        }
       }
     }
-    m /= 10;
   }
   if(negative)
   {
-    buffer.push(unsigned char('-'));
+    buffer.push((unsigned char)'-');
   }
-  value = std::string((const char *)buffer.begin(), buffer.end()-buffer.begin());
-#else
-  value = boost::lexical_cast<std::string>(double(*this));
+  value.assign((const char *)buffer.begin(), buffer.end()-buffer.begin());
 #endif
 }
 

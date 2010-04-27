@@ -1,3 +1,31 @@
+Tue Apr 27 21:21:44 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Application/DecoderConfiguration.h:
+        * src/Application/DecoderConnection.cpp:
+        * src/Codecs/FixedSizeHeaderAnalyzer.h:
+        * src/Codecs/FixedSizeHeaderAnalyzer.cpp:
+        * src/Codecs/NoHeaderAnalyzer.h:
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+        Add a hook for testing the "skip this packet" feature.
+        TestSkip forces the header analyzer to
+        skip every 'n'th packet.
+
+        * src/Codecs/Encoder.cpp:
+        Fix a spelling mistake
+
+        * src/Common/Decimal.cpp:
+        Add leading zero before decimal point in toString.
+        Avoid making a temporary to return the string value.
+
+        * src/Messages/FieldSet.cpp:
+        * src/Tests/testGroupReferences.cpp:
+        * src/Tests/testRoundTripFieldOps.cpp:
+        Issue #52 heap allocation error after decoding.
+        If field set needed to grow to support additional fields
+        it grew by 50% (i.e. size = size * 2 / 3.)
+        This worked fine unless size started at 1 (oops).
+
+
 Thu Apr 22 15:11:47 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Common/Logger.h:

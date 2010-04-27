@@ -1,4 +1,4 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// Copyright (c) 2009, 2010 Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 #include <Common/QuickFASTPch.h>
@@ -80,6 +80,26 @@ namespace{
     "    <decimal name=\"field_14\" presence=\"optional\">"    // decimal optional copy
     "      <copy/>"
     "    </decimal>"
+    "  </template>"
+
+    "  <template name=\"MDAdd\" id=\"5000\">"
+    "    <uInt32 name=\"MDUpdateAction\" id=\"269\"><constant value=\"0\"/></uInt32>"
+    "    <string name=\"MDEntryID\" id=\"278\"/>"
+    "    <decimal name=\"MDEntryPx\" id=\"270\"><delta/></decimal>"
+    "    <uInt32 name=\"MDEntrySize\" id=\"271\"><copy/></uInt32>"
+    "    <string name=\"Currency\" id=\"15\" presence=\"optional\"/>"
+    "  </template>"
+    "  <template name=\"MDDel\" id=\"5001\">"
+    "    <uInt32 name=\"MDUpdateAction\" id=\"269\"><constant value=\"2\"/></uInt32>"
+    "    <string name=\"MDEntryID\" id=\"278\"/>"
+    "  </template>"
+    "  <template name=\"MarketDataSnapshot\" id=\"20\">"
+    "    <group name=\"MDUpdateAdd\" presence=\"optional\">"
+    "      <templateRef name=\"MDAdd\"/>"
+    "    </group>"
+    "    <group name=\"MDUpdateDel\" presence=\"optional\">"
+    "      <templateRef name=\"MDDel\"/>"
+    "    </group>"
     "  </template>"
     "</templates>";
 
@@ -243,4 +263,77 @@ BOOST_AUTO_TEST_CASE(testRoundTripFieldOperators)
   BOOST_CHECK(compareMessages(consumer1A.message(), consumer1B.message()));
   BOOST_CHECK(compareMessages(consumer1A.message(), consumer1C.message()));
   BOOST_CHECK(compareMessages(consumer2A.message(), consumer2B.message()));
+}
+
+BOOST_AUTO_TEST_CASE(testRoundTripOptionalTemplateRefs)
+{
+  Codecs::XMLTemplateParser parser;
+  std::stringstream templateStream(theTemplates);
+  Codecs::TemplateRegistryPtr templateRegistry =
+    parser.parse(templateStream);
+
+  Messages::FieldIdentityCPtr MDUpdateAdd = new Messages::FieldIdentity("MDUpdateAdd");
+  Messages::FieldIdentityCPtr MDUpdateDel = new Messages::FieldIdentity("MDUpdateDel");
+
+  Messages::FieldIdentityCPtr MDUpdateAction = new Messages::FieldIdentity("MDUpdateAction");
+  Messages::FieldIdentityCPtr MDEntryID = new Messages::FieldIdentity("MDEntryID");
+  Messages::FieldIdentityCPtr MDEntryPx = new Messages::FieldIdentity("MDEntryPx");
+  Messages::FieldIdentityCPtr MDEntrySize = new Messages::FieldIdentity("MDEntrySize");
+  Messages::FieldIdentityCPtr Currency = new Messages::FieldIdentity("Currency");
+
+  Messages::MessagePtr addMessage(new Messages::Message(templateRegistry->maxFieldCount()));
+  Messages::MessagePtr addFlatMessage(new Messages::Message(templateRegistry->maxFieldCount()));
+
+  Messages::GroupPtr addGroup(new Messages::Group(6));
+  addGroup->addField(MDUpdateAction, Messages::FieldUInt32::create(0));
+  addFlatMessage->addField(MDUpdateAction, Messages::FieldUInt32::create(0));
+  addGroup->addField(MDEntryID, Messages::FieldAscii::create("act1"));
+  addFlatMessage->addField(MDEntryID, Messages::FieldAscii::create("act1"));
+  addGroup->addField(MDEntryPx, Messages::FieldDecimal::create(Decimal(2,5)));
+  addFlatMessage->addField(MDEntryPx, Messages::FieldDecimal::create(Decimal(2,5)));
+  addGroup->addField(MDEntrySize, Messages::FieldUInt32::create(100));
+  addFlatMessage->addField(MDEntrySize, Messages::FieldUInt32::create(100));
+  addGroup->addField(Currency, Messages::FieldAscii::create("USD"));
+  addFlatMessage->addField(Currency, Messages::FieldAscii::create("USD"));
+  addMessage->addField(MDUpdateAdd, Messages::FieldGroup::create(addGroup));
+
+  Messages::MessagePtr delMessage(new Messages::Message(templateRegistry->maxFieldCount()));
+  Messages::MessagePtr delFlatMessage(new Messages::Message(templateRegistry->maxFieldCount()));
+
+  Messages::GroupPtr delGroup(new Messages::Group(6));
+  delGroup->addField(MDUpdateAction, Messages::FieldUInt32::create(2));
+  delFlatMessage->addField(MDUpdateAction, Messages::FieldUInt32::create(2));
+  delGroup->addField(MDEntryID, Messages::FieldAscii::create("act1"));
+  delFlatMessage->addField(MDEntryID, Messages::FieldAscii::create("act1"));
+  delMessage->addField(MDUpdateDel, Messages::FieldGroup::create(delGroup));
+
+  Codecs::Encoder encoder(templateRegistry);
+  template_id_t templId = 20; // from the XML above
+
+  BOOST_CHECKPOINT("encode addMessage");
+  Codecs::DataDestinationString addDestination;
+  encoder.encodeMessage(addDestination, templId, *addMessage);
+  const std::string & encodedAdd = addDestination.getValue();
+
+  BOOST_CHECKPOINT("encode delMessage");
+  Codecs::DataDestinationString delDestination;
+  encoder.encodeMessage(delDestination, templId, *delMessage);
+  const std::string & encodedDel = delDestination.getValue();
+
+  Codecs::Decoder decoder(templateRegistry);
+
+  BOOST_CHECKPOINT("decode addMessage");
+  Codecs::DataSourceString addSource(encodedAdd);
+  Codecs::SingleMessageConsumer consumerAdd;
+  Codecs::GenericMessageBuilder builderAdd(consumerAdd);
+  decoder.decodeMessage(addSource, builderAdd);
+
+  BOOST_CHECK(compareMessages(*addFlatMessage, consumerAdd.message()));
+  BOOST_CHECKPOINT("decode delMessage");
+  Codecs::DataSourceString delSource(encodedDel);
+  Codecs::SingleMessageConsumer consumerDel;
+  Codecs::GenericMessageBuilder builderDel(consumerDel);
+  decoder.decodeMessage(delSource, builderDel);
+
+  BOOST_CHECK(compareMessages(*delFlatMessage, consumerDel.message()));
 }

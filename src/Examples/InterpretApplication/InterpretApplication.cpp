@@ -242,6 +242,11 @@ InterpretApplication::parseSingleArg(int argc, char * argv[])
         }
       }
     }
+    else if(opt == "-testskip" && argc > 1)
+    {
+      configuration_.setTestSkip(boost::lexical_cast<size_t>(argv[1]));
+      consumed = 2;
+    }
     else if(opt == "-buffersize" && argc > 1) // size         : Size of communication buffers. For multicast largest expected message. (default " << bufferSize_ << ")" << std::endl;
     {
       configuration_.setBufferSize(boost::lexical_cast<size_t>(argv[1]));

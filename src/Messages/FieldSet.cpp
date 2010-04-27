@@ -96,8 +96,7 @@ FieldSet::addField(const FieldIdentityCPtr & identity, const FieldCPtr & value)
   if(used_ >= capacity_)
   {
     PROFILE_POINT("FieldSet::grow");
-    // todo complain.  This should not happen
-    reserve((used_ * 3) / 2);
+    reserve(((used_ + 1) * 3) / 2);
   }
   new (fields_ + used_) MessageField(identity, value);
   ++used_;

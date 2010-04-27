@@ -14,6 +14,11 @@ namespace QuickFAST{
       : public HeaderAnalyzer
     {
     public:
+      NoHeaderAnalyzer()
+        : testSkip_(0)
+        , headersParsed_(0)
+      {
+      }
       /// @brief Typical virtual destructor
       virtual ~NoHeaderAnalyzer()
       {
@@ -22,6 +27,15 @@ namespace QuickFAST{
         DataSource & source,
         size_t & blockSize,
         bool & skip);
+
+      void setTestSkip(size_t testSkip)
+      {
+        testSkip_ = testSkip;
+      }
+
+    private:
+      size_t testSkip_;
+      size_t headersParsed_;
     };
 
     inline
@@ -31,8 +45,16 @@ namespace QuickFAST{
       bool & skip)
     {
       blockSize = 0;
+      skip = false;
+      if(testSkip_ != 0 && (++headersParsed_ % testSkip_ == 0))
+      {
+        std::cout << "SKIPPING HEADER " << headersParsed_ << std::endl;
+        skip = true;
+      }
+
       return true;
     }
+
   }
 }
 #endif // NOHEADERANALYZER_H

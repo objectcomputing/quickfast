@@ -9,29 +9,6 @@
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
-#if 0
-namespace
-{
-  // A function object to test the endian-ness of the platform on which we're running
-  const union BigEndian
-  {
-  private:
-    unsigned short asShort;
-    unsigned char asBytes[sizeof(unsigned short)];
-  public:
-    BigEndian()
-      : asShort(1)
-    {
-    }
-    /// @brief Is this a big endian machine?
-    /// @returns true if this is a big endian machine
-    bool operator() ()const
-    {
-      return asBytes[0] == 0;
-    }
-  } nativeBigEndian;
-}
-#endif
 
 FixedSizeHeaderAnalyzer::FixedSizeHeaderAnalyzer(
   size_t sizeBytes,
@@ -46,6 +23,8 @@ FixedSizeHeaderAnalyzer::FixedSizeHeaderAnalyzer(
 , state_(ParsingIdle)
 , blockSize_(0)
 , byteCount_(0)
+, testSkip_(0)
+, headersParsed_(0)
 {
 }
 
@@ -130,5 +109,10 @@ FixedSizeHeaderAnalyzer::analyzeHeader(DataSource & source, size_t & blockSize, 
   blockSize = blockSize_;
   skip = false;
   state_ = ParsingIdle;
+  if(testSkip_ != 0 && (++headersParsed_ % testSkip_ == 0))
+  {
+    std::cout << "SKIPPING HEADER " << headersParsed_ << std::endl;
+    skip = true;
+  }
   return true;
 }
