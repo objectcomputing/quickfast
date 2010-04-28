@@ -22,7 +22,7 @@ Tue Apr 27 21:21:44 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * src/Tests/testRoundTripFieldOps.cpp:
         Issue #52 heap allocation error after decoding.
         If field set needed to grow to support additional fields
-        it grew by 50% (i.e. size = size * 2 / 3.)
+        it grew by 50% (i.e. size = size * 3 / 2.)
         This worked fine unless size started at 1 (oops).
 
 
