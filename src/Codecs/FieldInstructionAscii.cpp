@@ -363,17 +363,16 @@ FieldInstructionAscii::encodeNop(
   const Messages::MessageAccessor & accessor) const
 {
   // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  const StringBuffer * value;
+  if(accessor.getString(*identity_, ValueType::ASCII, value))
   {
-    std::string value = field->toAscii();
     if(!isMandatory())
     {
-      encodeNullableAscii(destination, value);
+      encodeNullableAscii(destination, *value);
     }
     else
     {
-      encodeAscii(destination, value);
+      encodeAscii(destination, *value);
     }
   }
   else // not defined in accessor
@@ -394,12 +393,11 @@ FieldInstructionAscii::encodeConstant(
   const Messages::MessageAccessor & accessor) const
 {
   // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  const StringBuffer * value;
+  if(accessor.getString(*identity_, ValueType::ASCII, value))
   {
-    const std::string & value = field->toAscii();
     const std::string & constant = initialValue_->toAscii();
-    if(value != constant)
+    if(*value != constant)
     {
       encoder.reportFatal("[ERR U10}", "Constant value does not match application data.", *identity_);
     }
@@ -428,12 +426,11 @@ FieldInstructionAscii::encodeDefault(
   const Messages::MessageAccessor & accessor) const
 {
   // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  const StringBuffer * value;
+  if(accessor.getString(*identity_, ValueType::ASCII, value))
   {
-    std::string value = field->toAscii();
     if(initialValue_->isDefined() &&
-      initialValue_->toAscii() == value)
+      initialValue_->toAscii() == *value)
     {
       pmap.setNextField(false); // not in stream. use default
     }
@@ -442,11 +439,11 @@ FieldInstructionAscii::encodeDefault(
       pmap.setNextField(true); // != default.  Send value
       if(!isMandatory())
       {
-        encodeNullableAscii(destination, value);
+        encodeNullableAscii(destination, *value);
       }
       else
       {
-        encodeAscii(destination, value);
+        encodeAscii(destination, *value);
       }
     }
   }
@@ -496,13 +493,10 @@ FieldInstructionAscii::encodeCopy(
     }
   }
 
-  // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  const StringBuffer * value;
+  if(accessor.getString(*identity_, ValueType::ASCII, value))
   {
-    std::string value = field->toString();
-
-    if(previousStatus == Context::OK_VALUE && previousValue == value)
+    if(previousStatus == Context::OK_VALUE && *value == previousValue)
     {
       pmap.setNextField(false); // not in stream, use copy
     }
@@ -511,13 +505,13 @@ FieldInstructionAscii::encodeCopy(
       pmap.setNextField(true);// value in stream
       if(!isMandatory())
       {
-        encodeNullableAscii(destination, value);
+        encodeNullableAscii(destination, *value);
       }
       else
       {
-        encodeAscii(destination, value);
+        encodeAscii(destination, *value);
       }
-      fieldOp_->setDictionaryValue(encoder, value);
+      fieldOp_->setDictionaryValue(encoder, *value);
     }
   }
   else // not defined by accessor
@@ -568,19 +562,19 @@ FieldInstructionAscii::encodeDelta(
 //      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
 
   // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  const StringBuffer * value;
+  if(accessor.getString(*identity_, ValueType::ASCII, value))
   {
-    std::string value = field->toAscii();
-    size_t prefix = longestMatchingPrefix(previousValue, value);
-    size_t suffix = longestMatchingSuffix(previousValue, value);
+    size_t prefix = longestMatchingPrefix(previousValue, *value);
+    size_t suffix = longestMatchingSuffix(previousValue, *value);
     int32 deltaCount = QuickFAST::uint32(previousValue.length() - prefix);
-    std::string deltaValue = value.substr(prefix);
+    // Performance: StringBuffer::substring
+    std::string deltaValue = static_cast<std::string>(*value).substr(prefix);
     if(prefix < suffix)
     {
       deltaCount = -int32(previousValue.length() - suffix);
       deltaCount -= 1; // allow +/- 0 values;
-      deltaValue = value.substr(0, value.length() - suffix);
+      deltaValue = static_cast<std::string>(*value).substr(0, value->length() - suffix);
     }
     if(!isMandatory() && deltaCount >= 0)
     {
@@ -595,9 +589,9 @@ FieldInstructionAscii::encodeDelta(
     encodeSignedInteger(destination, encoder.getWorkingBuffer(), deltaCount);
     encodeAscii(destination, deltaValue);
 
-    if(previousStatus != Context::OK_VALUE  || value != previousValue)
+    if(previousStatus != Context::OK_VALUE  || *value != previousValue)
     {
-      fieldOp_->setDictionaryValue(encoder, value);
+      fieldOp_->setDictionaryValue(encoder, *value);
     }
   }
   else // not defined in accessor
@@ -629,15 +623,12 @@ FieldInstructionAscii::encodeTail(
     }
   }
 
-//      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
-
   // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  const StringBuffer * value;
+  if(accessor.getString(*identity_, ValueType::ASCII, value))
   {
-    std::string value = field->toAscii();
-    size_t prefix = longestMatchingPrefix(previousValue, value);
-    std::string tailValue = value.substr(prefix);
+    size_t prefix = longestMatchingPrefix(previousValue, *value);
+    std::string tailValue = static_cast<std::string>(*value).substr(prefix);
     if(tailValue.empty())
     {
       pmap.setNextField(false);
@@ -654,9 +645,9 @@ FieldInstructionAscii::encodeTail(
         encodeAscii(destination, tailValue);
       }
     }
-    if(previousStatus != Context::OK_VALUE  || value != previousValue)
+    if(previousStatus != Context::OK_VALUE  || *value != previousValue)
     {
-      fieldOp_->setDictionaryValue(encoder, value);
+      fieldOp_->setDictionaryValue(encoder, *value);
     }
   }
   else // not defined in accessor

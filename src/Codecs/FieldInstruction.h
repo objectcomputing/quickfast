@@ -460,16 +460,22 @@ namespace QuickFAST{
       /// @param destination to which the string will be written.
       /// @param value to be written.
       static void encodeNullableAscii(DataDestination & destination, const std::string & value);
+      static void encodeNullableAscii(DataDestination & destination, const StringBuffer & value);
 
       /// @brief Encode a string.
       /// @param destination to which the string will be written.
       /// @param value to be written.
       static void encodeAscii(DataDestination & destination, const std::string & value);
+      static void encodeAscii(DataDestination & destination, const StringBuffer & value);
 
       /// @brief Helper routine to encode a blob represented as a string; into a destination
       /// @param destination to which the data will be written
       /// @param value to be written to the destination
       static void encodeBlobData(DataDestination & destination, const std::string & value);
+      /// @brief Helper routine to encode a blob represented as a string; into a destination
+      /// @param destination to which the data will be written
+      /// @param value to be written to the destination
+      static void encodeBlobData(DataDestination & destination, const StringBuffer & value);
 
       /// @brief Encode signed integer
       ///
@@ -565,6 +571,9 @@ namespace QuickFAST{
       static size_t longestMatchingPrefix(
         const std::string & previous,
         const std::string & value);
+      static size_t longestMatchingPrefix(
+        const std::string & previous,
+        const StringBuffer & value);
 
       /// @brief Helper method to find the longest match at the end of two strings
       /// @param previous one of the strings
@@ -573,6 +582,9 @@ namespace QuickFAST{
       static size_t longestMatchingSuffix(
         const std::string & previous,
         const std::string & value);
+      static size_t longestMatchingSuffix(
+        const std::string & previous,
+        const StringBuffer & value);
 
 
       /// @brief Basic decoding for ByteVectors and Utf8 strings

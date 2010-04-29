@@ -616,11 +616,28 @@ namespace QuickFAST{
       const Messages::MessageAccessor & accessor) const
     {
       // get the value from the application data
-      Messages::FieldCPtr field;
-      if(accessor.getField(identity_->name(), field))
+      INTEGER_TYPE value;
+      bool found = false;
+      if(SIGNED)
       {
-        INTEGER_TYPE value;
-        field->getValue(value);
+        int64 l64value = 0;
+        found = accessor.getSignedInteger(*identity_, VALUE_TYPE, l64value);
+        if(found)
+        {
+          value = static_cast<INTEGER_TYPE>(l64value);
+        }
+      }
+      else
+      {
+        uint64 l64value = 0;
+        found = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, l64value);
+        if(found)
+        {
+          value = static_cast<INTEGER_TYPE>(l64value);
+        }
+      }
+      if(found)
+      {
         if(!isMandatory())
         {
           // gcc produces bogus warning on the following line see GCC Bugzilla Bug 11856
@@ -669,12 +686,28 @@ namespace QuickFAST{
       Codecs::Encoder & encoder,
       const Messages::MessageAccessor & accessor) const
     {
-      // get the value from the application data
-      Messages::FieldCPtr field;
-      if(accessor.getField(identity_->name(), field))
+      INTEGER_TYPE value;
+      bool found = false;
+      if(SIGNED)
       {
-        INTEGER_TYPE value;
-        field->getValue(value);
+        int64 l64value = 0;
+        found = accessor.getSignedInteger(*identity_, VALUE_TYPE, l64value);
+        if(found)
+        {
+          value = static_cast<INTEGER_TYPE>(l64value);
+        }
+      }
+      else
+      {
+        uint64 l64value = 0;
+        found = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, l64value);
+        if(found)
+        {
+          value = static_cast<INTEGER_TYPE>(l64value);
+        }
+      }
+      if(found)
+      {
         if(value != typedValue_)
         {
           encoder.reportError("[ERR U02]", "Constant value does not match application data.", *identity_);
@@ -704,12 +737,28 @@ namespace QuickFAST{
       Codecs::Encoder & encoder,
       const Messages::MessageAccessor & accessor) const
     {
-      // get the value from the application data
-      Messages::FieldCPtr field;
-      if(accessor.getField(identity_->name(), field))
+      INTEGER_TYPE value;
+      bool found = false;
+      if(SIGNED)
       {
-        INTEGER_TYPE value;
-        field->getValue(value);
+        int64 l64value = 0;
+        found = accessor.getSignedInteger(*identity_, VALUE_TYPE, l64value);
+        if(found)
+        {
+          value = static_cast<INTEGER_TYPE>(l64value);
+        }
+      }
+      else
+      {
+        uint64 l64value = 0;
+        found = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, l64value);
+        if(found)
+        {
+          value = static_cast<INTEGER_TYPE>(l64value);
+        }
+      }
+      if(found)
+      {
         if(typedValueIsDefined_ && value == typedValue_)
         {
           pmap.setNextField(false); // not in stream. use default
@@ -783,13 +832,28 @@ namespace QuickFAST{
         }
       }
 
-      // get the value from the application data
-      Messages::FieldCPtr field;
-      if(accessor.getField(identity_->name(), field))
+      INTEGER_TYPE value;
+      bool found = false;
+      if(SIGNED)
       {
-        INTEGER_TYPE value;
-        field->getValue(value);
-
+        int64 l64value = 0;
+        found = accessor.getSignedInteger(*identity_, VALUE_TYPE, l64value);
+        if(found)
+        {
+          value = static_cast<INTEGER_TYPE>(l64value);
+        }
+      }
+      else
+      {
+        uint64 l64value = 0;
+        found = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, l64value);
+        if(found)
+        {
+          value = static_cast<INTEGER_TYPE>(l64value);
+        }
+      }
+      if(found)
+      {
         if(previousStatus == Context::OK_VALUE && previousValue == value)
         {
           pmap.setNextField(false); // not in stream, use copy
@@ -863,12 +927,28 @@ namespace QuickFAST{
         fieldOp_->setDictionaryValue(encoder, typedValue_);
       }
 
-      // get the value from the application data
-      Messages::FieldCPtr field;
-      if(accessor.getField(identity_->name(), field))
+      INTEGER_TYPE value;
+      bool found = false;
+      if(SIGNED)
       {
-        INTEGER_TYPE value;
-        field->getValue(value);
+        int64 l64value = 0;
+        found = accessor.getSignedInteger(*identity_, VALUE_TYPE, l64value);
+        if(found)
+        {
+          value = static_cast<INTEGER_TYPE>(l64value);
+        }
+      }
+      else
+      {
+        uint64 l64value = 0;
+        found = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, l64value);
+        if(found)
+        {
+          value = static_cast<INTEGER_TYPE>(l64value);
+        }
+      }
+      if(found)
+      {
         int64 deltaValue = int64(value) - int64(previousValue);
         if(!isMandatory())
         {
@@ -882,7 +962,6 @@ namespace QuickFAST{
         {
           fieldOp_->setDictionaryValue(encoder, value);
         }
-
       }
       else // not defined in fieldset
       {
@@ -919,12 +998,28 @@ namespace QuickFAST{
         previousStatus = Context::OK_VALUE;
       }
 
-      // get the value from the application data
-      Messages::FieldCPtr field;
-      if(accessor.getField(identity_->name(), field))
+      INTEGER_TYPE value;
+      bool found = false;
+      if(SIGNED)
       {
-        INTEGER_TYPE value;
-        field->getValue(value);
+        int64 l64value = 0;
+        found = accessor.getSignedInteger(*identity_, VALUE_TYPE, l64value);
+        if(found)
+        {
+          value = static_cast<INTEGER_TYPE>(l64value);
+        }
+      }
+      else
+      {
+        uint64 l64value = 0;
+        found = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, l64value);
+        if(found)
+        {
+          value = static_cast<INTEGER_TYPE>(l64value);
+        }
+      }
+      if(found)
+      {
         INTEGER_TYPE nullableValue = value;
         if(previousStatus == Context::OK_VALUE && previousValue + 1 == value)
         {

@@ -61,11 +61,11 @@ namespace
     Messages::FieldCPtr value;
 
     //<group name="Group" presence="optional">
-    BOOST_CHECK(message.getField("Group", value));
+    BOOST_REQUIRE(message.getField("Group", value));
 
-  Messages::FieldSetCPtr group = value->toGroup();
+    Messages::FieldSetCPtr group = value->toGroup();
 
-  //<uInt32 name="field1" id="A">
+    //<uInt32 name="field1" id="A">
     BOOST_CHECK(group->getField("field1", value));
     BOOST_CHECK_EQUAL(value->toUInt32(), 1);
 

@@ -137,9 +137,14 @@ namespace QuickFAST{
         Codecs::DataDestination & destination,
         Codecs::Context & context,
         WorkingBuffer & buffer,
-        const std::string & value) const;
+        const StringBuffer & value) const;
 
       /// @brief helper routine to encode a non-nullable value
+      void encodeBlob(
+        Codecs::DataDestination & destination,
+        WorkingBuffer & buffer,
+        const StringBuffer & value) const;
+
       void encodeBlob(
         Codecs::DataDestination & destination,
         WorkingBuffer & buffer,

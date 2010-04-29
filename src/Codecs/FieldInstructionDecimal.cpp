@@ -310,10 +310,9 @@ FieldInstructionDecimal::encodeNop(
   const Messages::MessageAccessor & accessor) const
 {
   // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  Decimal value;
+  if(accessor.getDecimal(*identity_, ValueType::DECIMAL, value))
   {
-    Decimal value = field->toDecimal();
     exponent_t exponent = value.getExponent();
     mantissa_t mantissa = value.getMantissa();
 
@@ -388,10 +387,9 @@ FieldInstructionDecimal::encodeConstant(
   const Messages::MessageAccessor & accessor) const
 {
   // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  Decimal value;
+  if(accessor.getDecimal(*identity_, ValueType::DECIMAL, value))
   {
-    Decimal value = field->toDecimal();
     if(value != typedValue_)
     {
       encoder.reportFatal("[ERR U10]", "Constant value does not match application data.", *identity_);
@@ -420,10 +418,9 @@ FieldInstructionDecimal::encodeDefault(
   const Messages::MessageAccessor & accessor) const
 {
   // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  Decimal value;
+  if(accessor.getDecimal(*identity_, ValueType::DECIMAL, value))
   {
-    Decimal value = field->toDecimal();
     if(typedValueIsDefined_ &&
       value == typedValue_)
     {
@@ -491,11 +488,9 @@ FieldInstructionDecimal::encodeCopy(
   }
 
   // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  Decimal value;
+  if(accessor.getDecimal(*identity_, ValueType::DECIMAL, value))
   {
-    Decimal value = field->toDecimal();
-
     if(previousStatus == Context::OK_VALUE && previousValue == value)
     {
       pmap.setNextField(false); // not in stream, use copy
@@ -561,11 +556,9 @@ FieldInstructionDecimal::encodeDelta(
   }
 
   // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  Decimal value;
+  if(accessor.getDecimal(*identity_, ValueType::DECIMAL, value))
   {
-    Decimal value = field->toDecimal();
-
     int32 exponentDelta = static_cast<int32>(value.getExponent()) - int64(previousValue.getExponent());
     if(!isMandatory())
     {

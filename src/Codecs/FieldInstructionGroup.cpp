@@ -101,14 +101,13 @@ FieldInstructionGroup::encodeNop(
     encoder.reportFatal("[ERR U08}", "Segment not defined for Group instruction.");
   }
   // retrieve the field corresponding to this group
-  Messages::FieldCPtr field;
-  if(messageAccessor.getField(identity_->name(), field))
+  const QuickFAST::Messages::MessageAccessor * group;
+  if(messageAccessor.getGroup(*identity_, group))
   {
     if(! isMandatory())
     {
       pmap.setNextField(true);
     }
-    Messages::GroupCPtr group = field->toGroup();
     encoder.encodeGroup(destination, segmentBody_, *group);
   }
   else

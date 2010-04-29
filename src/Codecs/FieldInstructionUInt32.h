@@ -13,7 +13,7 @@ namespace QuickFAST{
     /// @brief An implementation for the &lt;uint32> field instruction.
     typedef FieldInstructionInteger<uint32, ValueType::UINT32, false> FieldInstructionUInt32;
     /// @brief A special field instruction for the sequence length field
-    typedef FieldInstructionInteger<uint32, ValueType::LENGTH, true> FieldInstructionLength;
+    typedef FieldInstructionInteger<uint32, ValueType::LENGTH, false> FieldInstructionLength;
   }
 }
 #endif // FIELDINSTRUCTIONUINT32_H

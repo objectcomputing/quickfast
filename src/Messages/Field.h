@@ -278,9 +278,18 @@ namespace QuickFAST{
       /// @brief Is this field a kind of string (Ascii, Utf8, or ByteVector)?
       virtual bool isString()const;
 
+      /// @brief Is this field a kind of unsigned integer
+      virtual bool isUnsignedInteger()const;
+
+      /// @brief Is this field a kind of signed integer
+      virtual bool isSignedInteger()const;
+
       /// @brief Retrieve the field value as a string
       /// @returns the value
-      virtual const StringBuffer & toString()const;
+      const StringBuffer & toString()const;
+
+      int64 toSignedInteger()const;
+      uint64 toUnsignedInteger()const;
 
       /// @brief Retrieve the field value as a group
       /// @returns the value

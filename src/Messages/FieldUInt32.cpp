@@ -61,3 +61,9 @@ FieldUInt32::valueToStringBuffer() const
   buffer << unsignedInteger_;
   string_.assign(reinterpret_cast<const unsigned char *>(buffer.str().data()), buffer.str().size());
 }
+
+bool
+FieldUInt32::isUnsignedInteger()const
+{
+  return true;
+}

@@ -1,3 +1,47 @@
+Thu Apr 29 20:00:15 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/FieldInstructionUInt32.h:
+        * src/Messages/Field.h:
+        * src/Messages/Field.cpp:
+        * src/Messages/FieldInt16.h:
+        * src/Messages/FieldInt16.cpp:
+        * src/Messages/FieldInt32.h:
+        * src/Messages/FieldInt32.cpp:
+        * src/Messages/FieldInt64.h:
+        * src/Messages/FieldInt64.cpp:
+        * src/Messages/FieldInt8.h:
+        * src/Messages/FieldInt8.cpp:
+        * src/Messages/FieldUInt16.h:
+        * src/Messages/FieldUInt16.cpp:
+        * src/Messages/FieldUInt32.h:
+        * src/Messages/FieldUInt32.cpp:
+        * src/Messages/FieldUInt64.h:
+        * src/Messages/FieldUInt64.cpp:
+        * src/Messages/FieldUInt8.h:
+        * src/Messages/FieldUInt8.cpp:
+        * src/Messages/MessageAccessor.h:
+        * src/Messages/SpecialAccessors.h:
+        Preliminary: MessageAccessor now returns values directly
+        rather than return a field object from which values can be
+        extracted.
+
+        * src/Tests/testGroupReferences.cpp:
+        BOOST_REQUIRE to avoid using null pointer.
+
+        * src/Common/StringBuffer.h:
+        Add assignment & comparison with std::string
+        Add != operator.
+
 Tue Apr 27 21:21:44 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Application/DecoderConfiguration.h:

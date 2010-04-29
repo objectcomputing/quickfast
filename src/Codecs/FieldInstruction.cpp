@@ -400,7 +400,38 @@ FieldInstruction::encodeNullableAscii(DataDestination & destination, const std::
 }
 
 void
+FieldInstruction::encodeNullableAscii(DataDestination & destination, const StringBuffer & value)
+{
+  if(value.empty() || value[0] == '\0')
+  {
+    destination.putByte(nullableStringPreamble);
+  }
+  encodeAscii(destination, value);
+}
+
+void
 FieldInstruction::encodeAscii(DataDestination & destination, const std::string & value)
+{
+  if(value.empty())
+  {
+    destination.putByte(emptyString);
+  }
+  else
+  {
+    if (value[0] == '\0')
+    {
+      destination.putByte(leadingZeroBytePreamble);
+    }
+    for(size_t pos = 0; pos + 1 < value.size(); ++pos)
+    {
+      destination.putByte(static_cast<uchar>(value[pos]));
+    }
+    destination.putByte(value[value.size() - 1] | stopBit);
+  }
+}
+
+void
+FieldInstruction::encodeAscii(DataDestination & destination, const StringBuffer & value)
 {
   if(value.empty())
   {
@@ -422,6 +453,15 @@ FieldInstruction::encodeAscii(DataDestination & destination, const std::string &
 
 
 void
+FieldInstruction::encodeBlobData(DataDestination & destination, const StringBuffer & value)
+{
+  for(size_t pos = 0; pos < value.size(); ++pos)
+  {
+    destination.putByte(static_cast<uchar>(value[pos]));
+  }
+}
+
+void
 FieldInstruction::encodeBlobData(DataDestination & destination, const std::string & value)
 {
   for(size_t pos = 0; pos < value.size(); ++pos)
@@ -434,6 +474,22 @@ size_t
 FieldInstruction::longestMatchingPrefix(
   const std::string & previous,
   const std::string & value)
+{
+  size_t plen = previous.length();
+  size_t vlen = value.length();
+  size_t len = std::min(plen, vlen);
+  size_t result = 0;
+  while(result < len && previous[result] == value[result])
+  {
+    ++result;
+  }
+  return result;
+}
+
+size_t
+FieldInstruction::longestMatchingPrefix(
+  const std::string & previous,
+  const StringBuffer & value)
 {
   size_t plen = previous.length();
   size_t vlen = value.length();
@@ -463,7 +519,22 @@ FieldInstruction::longestMatchingSuffix(
   return result;
 }
 
-
+size_t
+FieldInstruction::longestMatchingSuffix(
+  const std::string & previous,
+  const StringBuffer & value)
+{
+  size_t ppos = previous.length();
+  size_t vpos = value.length();
+  size_t result = 0;
+  while(ppos > 0 && vpos > 0 && previous[ppos-1] == value[vpos - 1])
+  {
+    ++result;
+    --ppos;
+    --vpos;
+  }
+  return result;
+}
 
 void
 FieldInstruction::encodeUnsignedInteger(DataDestination & destination, WorkingBuffer & buffer, uint64 value)

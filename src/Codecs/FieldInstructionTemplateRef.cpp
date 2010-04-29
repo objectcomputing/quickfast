@@ -103,15 +103,14 @@ FieldInstructionStaticTemplateRef::encodeNop(
 
   // retrieve the field corresponding to this templateRef
   // which if it exists should be a FieldGroup
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  const QuickFAST::Messages::MessageAccessor * groupAccessor;
+  if(accessor.getGroup(*identity_, groupAccessor))
   {
-    Messages::GroupCPtr group = field->toGroup();
     encoder.encodeSegmentBody(
       destination,
       pmap,
       target,
-      *group);
+      *groupAccessor);
   }
   else
   {

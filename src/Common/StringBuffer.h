@@ -165,6 +165,13 @@ namespace QuickFAST
       return *this;
     }
 
+    /// @brief assign from C++ style std::string
+    StringBufferT & operator=(const std::string & rhs)
+    {
+      assign(rhs);
+      return *this;
+    }
+
     /// @brief assign a single character.
     StringBufferT& operator=(unsigned char rhs)
     {
@@ -198,6 +205,12 @@ namespace QuickFAST
     {
       return std::strcmp(
         pattern, reinterpret_cast<const char *>(data())) == 0;
+    }
+
+    template<typename RHS_TYPE>
+    bool operator != (const RHS_TYPE & rhs)const
+    {
+      return !(*this == rhs);
     }
 
     /// @brief access element of the StringBufferT (read only)
@@ -484,6 +497,12 @@ namespace QuickFAST
       std::memcpy(buffer, source, length);
       buffer[length] = 0;
       size_ = length;
+    }
+
+    /// @brief replace the current contents with data from an std::string
+    void assign(const std::string & str)
+    {
+      assign(reinterpret_cast<const unsigned char *>(str.data()), str.size());
     }
 
     /// @brief cast to a standard string.

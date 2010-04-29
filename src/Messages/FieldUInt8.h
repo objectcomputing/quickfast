@@ -37,6 +37,7 @@ namespace QuickFAST{
       // implement selected virtual methods from Field
       virtual uchar toUInt8() const;
       virtual void valueToStringBuffer()const;
+      virtual bool isUnsignedInteger()const;
     private:
       virtual void freeField()const;
     private:
