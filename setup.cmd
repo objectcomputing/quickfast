@@ -3,7 +3,6 @@ REM Setting up QuickFAST environment
 @REM QuickFAST depends on MPC V 3.6 or later. (http://www.ociweb.com/products/mpc)
 @REM QuickFAST depends on BOOST V 1.36.0 or later. (http://www.boost.org/)
 @REM QuickFAST depends on Xerces V3.0 or later. (http://xerces.apache.org/xerces-c/)
-@REM QuickFAST.net depends on nunit [details to come later]
 @REM Assumes VC9 installed in the default location (see VC_ROOT below) and VC90COMNTOOLS is set.
 
 @REM Customize this file by setting variables to suit your environment
@@ -27,13 +26,20 @@ REM END OF VALUES TO BE SET
 REM Verify setup by checking for expected files/directories
 set SETUP_CHECKING=MPC_ROOT=%MPC_ROOT%
 if not exist "%MPC_ROOT%\mpc.pl" goto setup_is_bad
+
 set SETUP_CHECKING=XERCES_ROOT=%XERCES_ROOT%
 if not exist "%XERCES_ROOT%\lib" goto setup_is_bad
-set SETUP_CHECKING=BOOST_ROOT=%BOOST_ROOT%
+
+set SETUP_CHECKING=BOOST_ROOT=%BOOST_ROOT%\lib
 if not exist "%BOOST_ROOT%\lib" goto setup_is_bad
+
+set SETUP_CHECKING=BOOST_ROOT=%BOOST_ROOT%\boost
+if not exist "%BOOST_ROOT%\boost" goto setup_is_bad
+
 set VCVER=9
 set SETUP_CHECKING=VS90COMNTOOLS=%VS90COMNTOOLS%
 if exist "%VS90COMNTOOLS%VSVARS32.BAT" goto setup_is_ok
+
 set SETUP_CHECKING=VS80COMNTOOLS=%VS80COMNTOOLS%
 if not exist "%VS80COMNTOOLS%VSVARS32.BAT" goto setup_is_bad
 set VCVER=8

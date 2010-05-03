@@ -99,6 +99,8 @@ namespace QuickFAST{
         Codecs::Encoder & encoder,
         const Messages::MessageAccessor & accessor) const;
 
+      virtual ValueType::Type fieldInstructionType() const;
+
     private:
       /// @brief helper decoder.
       /// @param source where the data comes from
@@ -115,7 +117,6 @@ namespace QuickFAST{
 
       void interpretValue(const std::string & value);
 
-      virtual ValueType::Type fieldInstructionType() const;
 
     private:
       Messages::FieldCPtr initialValue_;

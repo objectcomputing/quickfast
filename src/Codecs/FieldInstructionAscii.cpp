@@ -250,8 +250,6 @@ FieldInstructionAscii::decodeDelta(
       deltaLength = QuickFAST::int32(previousLength);
     }
     std::string value = deltaValue + previousValue.substr(deltaLength);
-    Messages::FieldCPtr field = Messages::FieldAscii::create(
-      value );
     builder.addValue(
       identity_,
       ValueType::ASCII,

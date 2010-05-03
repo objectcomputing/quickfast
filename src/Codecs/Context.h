@@ -121,7 +121,7 @@ namespace QuickFAST
       /// @param index identifies the dictionary entry corresponding to this field
       /// @param value is the new value for the dictionary entry
       template<typename VALUE_TYPE>
-      void setDictionaryValue(size_t index, const VALUE_TYPE value)
+      void setDictionaryValue(size_t index, const VALUE_TYPE & value)
       {
         if(index > indexedDictionarySize_)
         {

@@ -179,6 +179,8 @@ namespace QuickFAST{
       /// @returns true if the segment exists
       virtual bool getSegmentBody(Codecs::SegmentBodyPtr & segment) const;
 
+      virtual const Codecs::SegmentBodyPtr& getSegmentBody();
+
       /// @brief How many fields will this field instruction produce
       ///
       /// Includes merged groups and templateRefs. If not merged, then the answer is 1
