@@ -11,7 +11,7 @@
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/Encoder.h>
 #include <Codecs/Decoder.h>
-#include <Codecs/DataDestinationString.h>
+#include <Codecs/DataDestinationBuffer.h>
 #include <Codecs/DataSourceString.h>
 #include <Codecs/GenericMessageBuilder.h>
 #include <Codecs/SingleMessageConsumer.h>
@@ -500,14 +500,23 @@ namespace{
     msg.addField(identity_bytevector_tail, Messages::FieldByteVector::create(""));
 
     Codecs::Encoder encoder(templateRegistry);
-    //encoder.setVerboseOutput (std::cout);
-    Codecs::DataDestinationString destination;
+//    encoder.setVerboseOutput (std::cout);
+    Codecs::DataDestinationBuffer destination;
     template_id_t templId = 3; // from the XML file
     encoder.encodeMessage(destination, templId, msg);
-    const std::string & fastString = destination.getValue();
+    const std::string fastString = destination.toString();
+    destination.clear();
+#if 0
+    for(size_t nb = 0; nb < fastString.length(); ++ nb)
+    {
+      if(nb %16 == 0) std::cout << std::endl; else std::cout << ' ';
+      std::cout << std::hex << std::setw(2) << std::setfill('0') << (0xFF & (unsigned short) fastString[nb]) << std::dec << std::setfill(' ');
+    }
+    std::cout << std::endl;
+#endif
 
     Codecs::Decoder decoder(templateRegistry);
-    //decoder.setVerboseOutput (std::cout);
+//    decoder.setVerboseOutput (std::cout);
 
     Codecs::DataSourceString source(fastString);
     Codecs::SingleMessageConsumer consumer;
@@ -518,11 +527,20 @@ namespace{
     validateMessage1(msgOut);
 
     // wanna see it again?
+    encoder.reset();
     encoder.encodeMessage(destination, templId, msgOut);
-    const std::string reencoded = destination.getValue();
+    const std::string reencoded = destination.toString();
+    destination.clear();
+#if 0
+    for(size_t nb = 0; nb < reencoded.length(); ++ nb)
+    {
+      if(nb %16 == 0) std::cout << std::endl; else std::cout << ' ';
+      std::cout << std::hex << std::setw(2) << std::setfill('0') << (0xFF & (unsigned short) reencoded[nb]) << std::dec << std::setfill(' ');
+    }
+    std::cout << std::endl;
+#endif
 
     BOOST_CHECK(fastString == reencoded);
-
   }
 }
 

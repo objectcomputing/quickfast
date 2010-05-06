@@ -1,3 +1,52 @@
+Thu May  6 20:51:30 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/DataDestination.h:
+        * src/Codecs/DataDestinationBuffer.cpp:
+        * src/Codecs/DataDestinationString.h:
+        * src/Codecs/DataDestinationString.cpp:
+        * src/Codecs/DatadestinationBuffer.h:
+        * src/Codecs/Encoder.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Common/WorkingBuffer.h:
+        * src/Common/WorkingBuffer.cpp:
+        * src/Tests/DataDestinationMock.h:
+        * src/Tests/testBiggestValue.cpp:
+        * src/Tests/testFieldInstructions.cpp:
+        * src/Tests/testFieldOperations.cpp:
+        * src/Tests/testGroupReferences.cpp:
+        * src/Tests/testPresenceMap.cpp:
+        * src/Tests/testRoundTrip.cpp:
+        * src/Tests/testRoundTrip1.cpp:
+        * src/Tests/testRoundTripFieldOps.cpp:
+        * src/Tests/testSmallestValue.cpp:
+          Change DataDestination to allow it to be reused.
+          The clear() method will empty the destination but
+          will not release buffers.  When the destination is
+          reused, it won't need to allocate new buffers.  Also
+          the buffers will grow to the "right" size and stay
+          there. (The general approach was suggested by
+          carlosz--blame me for the specific implementation,
+          though.)
+
+          Add new DataDestination type: DataDestinationBuffer.
+          DataDestinationString was a quick/dirty implementation
+          designed to support getting the encoder working.
+
+          DataDestinationBuffer collects data into buffers
+          suitable for use with scatter/gather I/O.  It also
+          has a toString method so it duplicates the capabilities
+          of DataDestinationString.
+          IMPORTANT: The toString() method is NOT efficient.
+          It is intended for debugging/testing, not for production
+          use.
+          I switched all the tests over to using DataDestinationBuffer
+          so DataDestinationString can be retired eventually.
+
+          And while testing this, I found a problem in tail encoding
+          of missing fields for Ascii, UTF8, and ByteVector fields
+          That got fixed in this checkin, too.
+
 Wed May  5 21:01:37 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstruction.h:

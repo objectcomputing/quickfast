@@ -29,7 +29,7 @@
 #include <Codecs/FieldOpTail.h>
 #include <Codecs/DataSourceString.h>
 #include <Codecs/DataSourceStream.h>
-#include <Codecs/DataDestinationString.h>
+#include <Codecs/DataDestinationBuffer.h>
 #include <Codecs/SingleMessageConsumer.h>
 #include <Codecs/GenericMessageBuilder.h>
 #include <Codecs/Decoder.h>
@@ -269,12 +269,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_1)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -330,12 +331,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_2)
 
     // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 
@@ -392,12 +394,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_3)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -453,12 +456,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_4)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -515,12 +519,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_5)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -579,12 +584,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_6)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -639,12 +645,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1a)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -703,12 +710,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1b)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -767,12 +775,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1c)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -831,12 +840,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1d)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -895,12 +905,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2a)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -959,12 +970,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2b)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -1023,12 +1035,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2c)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -1083,12 +1096,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1a)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -1147,12 +1161,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1b)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -1212,12 +1227,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1c)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 
@@ -1277,12 +1293,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_2a)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -1341,12 +1358,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_2b)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -1400,12 +1418,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1a)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -1467,12 +1486,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1b)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -1531,12 +1551,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1c)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -1595,12 +1616,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_2a)
   BOOST_CHECK(pFieldEntry == fieldSet.end());
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -1659,12 +1681,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_2b)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -1722,12 +1745,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_1)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -1784,12 +1808,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_2)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -1846,12 +1871,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_3)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -1908,12 +1934,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_4)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -1969,12 +1996,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_5)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -2034,12 +2062,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_6)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -2104,12 +2133,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_7)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -2161,12 +2191,13 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_8)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }
@@ -2244,12 +2275,13 @@ BOOST_AUTO_TEST_CASE(test_issue_31)
 
   // Now reencode the data
   Codecs::PresenceMap pmapResult(1);
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   destination.startBuffer();
   Codecs::Encoder encoder(registry);
   field.encode(destination, pmapResult, encoder, fieldSet);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);
 }

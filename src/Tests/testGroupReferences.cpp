@@ -11,7 +11,7 @@
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/Encoder.h>
 #include <Codecs/Decoder.h>
-#include <Codecs/DataDestinationString.h>
+#include <Codecs/DataDestinationBuffer.h>
 #include <Codecs/DataSourceString.h>
 #include <Codecs/SingleMessageConsumer.h>
 #include <Codecs/GenericMessageBuilder.h>
@@ -104,10 +104,11 @@ namespace
     msg.addField( identity_group, Messages::FieldGroup::create(entry) );
 
     Codecs::Encoder encoder(templateRegistry);
-    Codecs::DataDestinationString destination;
+    Codecs::DataDestinationBuffer destination;
     template_id_t templId = 3; // from the XML file
     encoder.encodeMessage(destination, templId, msg);
-    const std::string & fastString = destination.getValue();
+    const std::string & fastString = destination.toString();
+    destination.clear();
 
     Codecs::Decoder decoder(templateRegistry);
 
@@ -120,8 +121,10 @@ namespace
     validateMessage1(msgOut);
 
     // wanna see it again?
+    encoder.reset();
     encoder.encodeMessage(destination, templId, msgOut);
-    const std::string reencoded = destination.getValue();
+    const std::string reencoded = destination.toString();
+    destination.clear();
 
     BOOST_CHECK(fastString == reencoded);
   }

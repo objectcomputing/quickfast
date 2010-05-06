@@ -11,25 +11,6 @@
 #include <Common/Types.h>
 namespace QuickFAST{
   namespace Codecs{
-    /// @brief An interface for a buffer to hold data for a DataDestination
-    class QuickFAST_Export DestinationBuffer
-    {
-    public:
-      /// @brief a typical virtual destructor.
-      virtual ~DestinationBuffer()
-      {
-      }
-
-      /// @brief Put the next byte into the buffer
-      /// @param[in] byte to put.
-      virtual void putByte(uchar byte) = 0;
-
-      /// @brief Reserve space
-      /// @param size the number of bytes expected into this buffer
-      virtual void reserve(size_t size) = 0;
-
-    };
-
     /// @brief An inteface for data destinations to be used by an Encoder.
     ///
     /// A DataDestination holds an ordered set of buffers.  Data to be sent
@@ -44,7 +25,13 @@ namespace QuickFAST{
     /// buffer when endMessage() is called.
     class QuickFAST_Export DataDestination{
     public:
+      typedef size_t BufferHandle;
+      static const size_t NotABuffer = ~0;
+
       DataDestination()
+        : used_(0)
+        , capacity_(0)
+        , active_(NotABuffer)
       {
       }
 
@@ -56,52 +43,68 @@ namespace QuickFAST{
       ///
       /// The new buffer will be selected for output automatically
       /// @returns a "handle" to the buffer to be used with selectBuffer()
-      DestinationBufferPtr startBuffer()
+      BufferHandle startBuffer()
       {
-        activeBuffer_ = allocateBuffer();
-        buffers_.push_back(activeBuffer_);
-        return activeBuffer_;
+        if(used_ == capacity_)
+        {
+          allocateBuffer();
+        }
+        assert(used_ < capacity_);
+        active_ = used_;
+        used_++;
+        return active_;
       }
 
       /// @brief Append a byte to the end of the currently selected buffer.
       /// @param byte is the datum to be appended.
       void putByte(uchar byte)
       {
-        if(!activeBuffer_)
+        if(active_ == NotABuffer)
         {
           startBuffer();
         }
-        activeBuffer_->putByte(byte);
+        putByte_i(active_, byte);
       }
 
       /// @brief Get the currently selected buffer
       /// @returns a handle to the buffer that can be used with selectBuffer()
-      const DestinationBufferPtr & getBuffer()const
+      BufferHandle getBuffer()const
       {
-        return activeBuffer_;
+        return active_;
       }
 
       /// @brief Set the target for subsequent bytes
       /// @param buffer is the handle as returned by startBuffer() or getBuffer()
-      void selectBuffer(DestinationBufferPtr buffer)
+      void selectBuffer(BufferHandle handle)
       {
-        activeBuffer_ = buffer;
+        active_ = handle;
+      }
+
+      void clear()
+      {
+        for(size_t pos = 0; pos < capacity_; ++pos)
+        {
+          clear_i(pos);
+        }
+        used_ = 0;
+        active_ = 0;
       }
 
       /// @brief Indicate the message is ready to be sent.
       virtual void endMessage() = 0;
+
     protected:
       /// @brief implementation specfic buffer allocator
       /// @returns a pointer to the newly allocated buffer
-      virtual DestinationBufferPtr allocateBuffer() = 0;
+      virtual void allocateBuffer() = 0;
+      virtual void putByte_i(BufferHandle handle, uchar byte) = 0;
+      /// @brief Clear the contents of the destination to prepare for reuse
+      virtual void clear_i(BufferHandle handle) = 0;
 
     protected:
-      /// @brief A type to store the buffers in vectors
-      typedef std::vector<DestinationBufferPtr> BufferVector;
-      /// @brief the currently defined buffers
-      BufferVector buffers_;
-      /// @brief the currently active buffer
-      DestinationBufferPtr activeBuffer_;
+      size_t used_;
+      size_t capacity_;
+      size_t active_;
     };
   }
 }

@@ -648,10 +648,16 @@ FieldInstructionBlob::encodeTail(
     {
       previousValue = fieldOp_->getValue();
       fieldOp_->setDictionaryValue(encoder, previousValue);
+      // pretend we got the data from the dictionary
+      previousStatus = Context::OK_VALUE;
+    }
+    else
+    {
+      // pretend we got a null from the dictionary
+      fieldOp_->setDictionaryValueNull(encoder);
+      previousStatus = Context::NULL_VALUE;
     }
   }
-
-//      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
 
   // get the value from the application data
   Messages::FieldCPtr field;
@@ -687,7 +693,16 @@ FieldInstructionBlob::encodeTail(
     {
       encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
-    destination.putByte(nullBlob);
+    if(previousStatus != Context::NULL_VALUE)
+    {
+      pmap.setNextField(true);
+      destination.putByte(nullAscii);
+      // note: tail operator does not null dictionary value here
+    }
+    else
+    {
+      pmap.setNextField(false);
+    }
   }
 }
 

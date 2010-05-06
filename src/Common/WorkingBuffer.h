@@ -28,6 +28,9 @@ namespace QuickFAST{
   public:
     WorkingBuffer();
     ~WorkingBuffer();
+    WorkingBuffer(const WorkingBuffer & rhs);
+    WorkingBuffer & operator =(const WorkingBuffer & rhs);
+    void swap(WorkingBuffer & rhs);
 
     /// @brief Prepare a buffer for use.
     ///
@@ -85,6 +88,7 @@ namespace QuickFAST{
 
   private:
     void grow();
+//    size_t & getWorkingBufferSize();
 
   private:
     bool reverse_;
@@ -92,7 +96,6 @@ namespace QuickFAST{
     size_t startPos_;
     size_t endPos_;
     boost::scoped_array<uchar> buffer_;
-    size_t & getWorkingBufferSize();
   };
 }
 

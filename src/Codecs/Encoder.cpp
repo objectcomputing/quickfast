@@ -49,7 +49,7 @@ Encoder::encodeSegment(
     }
 
 
-    DestinationBufferPtr header = destination.startBuffer();
+    DataDestination::BufferHandle header = destination.startBuffer();
     destination.startBuffer();
     // can we "copy" the template ID?
     if(templateId == templateId_)
@@ -88,8 +88,8 @@ Encoder::encodeGroup(
 
   // The presence map for the group will go into the current buffer
   // that will be the last thing to appear in that buffer
-  DestinationBufferPtr pmapBuffer = destination.getBuffer();
-  DestinationBufferPtr bodyBuffer = pmapBuffer;
+  DataDestination::BufferHandle pmapBuffer = destination.getBuffer();
+  DataDestination::BufferHandle bodyBuffer = pmapBuffer;
   if(presenceMapBits > 0)
   {
     bodyBuffer = destination.startBuffer();

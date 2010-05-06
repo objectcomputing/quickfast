@@ -16,9 +16,50 @@ WorkingBuffer::WorkingBuffer()
 {
 }
 
+WorkingBuffer::WorkingBuffer(const WorkingBuffer & rhs)
+: reverse_(rhs.reverse_)
+, capacity_(rhs.capacity_)
+, startPos_(rhs.startPos_)
+, endPos_(rhs.endPos_)
+, buffer_(new uchar[rhs.capacity_])
+{
+  memcpy(buffer_.get(), rhs.buffer_.get(), capacity_);
+}
+
+
 WorkingBuffer::~WorkingBuffer()
 {
 }
+
+WorkingBuffer &
+WorkingBuffer::operator =(const WorkingBuffer & rhs)
+{
+  WorkingBuffer temp(rhs);
+  this->swap(temp);
+  return *this;
+}
+
+namespace
+{
+  template<typename TYPE>
+  void swap_i(TYPE lhs, TYPE rhs)
+  {
+    TYPE temp = lhs;
+    lhs = rhs;
+    rhs = temp;
+  }
+}
+
+void
+WorkingBuffer::swap(WorkingBuffer & rhs)
+{
+  swap_i(rhs.reverse_, reverse_);
+  swap_i(rhs.capacity_, capacity_);
+  swap_i(rhs.startPos_, startPos_);
+  swap_i(rhs.endPos_, endPos_);
+  rhs.buffer_.swap(buffer_);
+}
+
 
 void
 WorkingBuffer::clear(bool reverse, size_t capacity)

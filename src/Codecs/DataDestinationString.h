@@ -9,39 +9,27 @@
 #include <Codecs/DataDestination.h>
 namespace QuickFAST{
   namespace Codecs{
-    /// @brief A data buffer that collects the output into a string.
-    class QuickFAST_Export DestinationBufferString : public DestinationBuffer
-    {
-    public:
-      /// @brief a typical virtual destructor.
-      virtual ~DestinationBufferString();
-
-      virtual void putByte(uchar byte);
-      virtual void reserve(size_t size);
-
-      /// @brief access the resulting value.
-      const std::string & value() const;
-
-    private:
-      std::string buffer_;
-
-    };
-
     /// @brief A data destination that collects the output into a string.
     class QuickFAST_Export DataDestinationString : public DataDestination
     {
+      DataDestinationString();
     public:
       /// @brief Construct an empty destination
-      DataDestinationString();
       /// @brief a typical virtual destructor.
       virtual ~DataDestinationString();
       virtual void endMessage();
       /// @brief access the data written to the destination as a string
       const std::string & getValue()const;
     protected:
-      virtual DestinationBufferPtr allocateBuffer();
+      virtual void allocateBuffer();
+      virtual void putByte(BufferHandle handle, uchar byte);
+
+      virtual void clear();
 
     private:
+      /// @brief A type to store the buffers in vectors
+      typedef std::vector<std::string> BufferVector;
+      BufferVector buffers_;
       std::string value_;
     };
   }

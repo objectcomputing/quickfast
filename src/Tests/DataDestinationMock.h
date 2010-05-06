@@ -25,12 +25,16 @@ namespace QuickFAST{
       {
       }
 
-      virtual DestinationBufferPtr allocateBuffer()
+      virtual void allocateBuffer()
       {
-        DestinationBufferPtr result;
-        return result;
+      }
+      virtual void putByte_i(BufferHandle handle, uchar byte)
+      {
       }
 
+      virtual void clear_i(BufferHandle handle)
+      {
+      }
     };
 
   }

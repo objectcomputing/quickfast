@@ -7,7 +7,7 @@
 #include <Common/Types.h>
 #include <Codecs/PresenceMap.h>
 #include <Codecs/DataSourceString.h>
-#include <Codecs/DataDestinationString.h>
+#include <Codecs/DataDestinationBuffer.h>
 
 using namespace QuickFAST;
 
@@ -118,10 +118,11 @@ BOOST_AUTO_TEST_CASE(testPmapEncoding1)
   {
     pmap.setNextField(true);
   }
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   pmap.encode(destination);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result.length(), 2);
   const char expected[] = "\x7F\xF0";
   BOOST_CHECK(result == expected);
@@ -134,10 +135,11 @@ BOOST_AUTO_TEST_CASE(testPmapEncoding2)
   {
     pmap.setNextField(false);
   }
-  Codecs::DataDestinationString destination;
+  Codecs::DataDestinationBuffer destination;
   pmap.encode(destination);
   destination.endMessage();
-  const std::string & result = destination.getValue();
+  const std::string & result = destination.toString();
+  destination.clear();
   BOOST_CHECK_EQUAL(result.length(), 1);
   const char expected[] = "\x80";
   BOOST_CHECK(result == expected);

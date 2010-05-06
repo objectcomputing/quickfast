@@ -6,27 +6,6 @@
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
 
-DestinationBufferString::~DestinationBufferString()
-{
-}
-void
-DestinationBufferString::putByte(uchar byte)
-{
-  buffer_.push_back(byte);
-}
-
-void
-DestinationBufferString::reserve(size_t size)
-{
-  buffer_.reserve(size);
-}
-
-const std::string &
-DestinationBufferString::value() const
-{
-  return buffer_;
-}
-
 DataDestinationString::DataDestinationString()
 {
 }
@@ -34,7 +13,6 @@ DataDestinationString::DataDestinationString()
 DataDestinationString::~DataDestinationString()
 {
 }
-
 
 void
 DataDestinationString::endMessage()
@@ -44,8 +22,7 @@ DataDestinationString::endMessage()
     it != buffers_.end();
     ++it)
   {
-    DestinationBufferString * dbs = static_cast<DestinationBufferString *>((*it).get());
-    value_ += dbs->value();
+    value_ += (*it);
   }
 }
 
@@ -55,10 +32,29 @@ DataDestinationString::getValue()const
   return value_;
 }
 
-DestinationBufferPtr
+void
 DataDestinationString::allocateBuffer()
 {
-  DestinationBufferPtr result(new DestinationBufferString);
-  return result;
+  std::string empty;
+  buffers_.push_back(empty);
+  capacity_ = buffers_.size();
+}
+
+void
+DataDestinationString::putByte(BufferHandle handle, uchar byte)
+{
+  buffers_[handle].push_back(byte);
+}
+
+void
+DataDestinationString::clear()
+{
+  for(BufferVector::iterator it = buffers_.begin();
+    it != buffers_.end();
+    ++it)
+  {
+    (*it).clear();
+  }
+  used_ = 0;
 }
 
