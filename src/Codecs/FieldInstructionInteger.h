@@ -196,7 +196,7 @@ namespace QuickFAST{
           typedValue_ = INTEGER_TYPE(v);
           if(v != typedValue_)
           {
-            throw QuickFAST::TemplateDefinitionError("[ERR D1] Initial value oveflow");
+            throw QuickFAST::TemplateDefinitionError("[ERR D1] Initial value overflow");
           }
           typedValueIsDefined_ = true;
         }
@@ -206,7 +206,7 @@ namespace QuickFAST{
           typedValue_ = INTEGER_TYPE(v);
           if(v != typedValue_)
           {
-            throw QuickFAST::TemplateDefinitionError("[ERR D1] Initial value oveflow");
+            throw QuickFAST::TemplateDefinitionError("[ERR D1] Initial value overflow");
           }
           typedValueIsDefined_ = true;
         }

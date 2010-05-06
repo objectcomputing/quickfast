@@ -179,6 +179,10 @@ namespace QuickFAST{
       /// @returns true if the segment exists
       virtual bool getSegmentBody(Codecs::SegmentBodyPtr & segment) const;
 
+      /// @brief Alternative access to the segment body.
+      /// @returns the segment body pointer.
+      /// @throws templateDefinitionError if segment body is not defined
+      /// @todo: Unused -- is this necessary?
       virtual const Codecs::SegmentBodyPtr& getSegmentBody();
 
       /// @brief How many fields will this field instruction produce
@@ -743,7 +747,7 @@ namespace QuickFAST{
       // Assume an 8 bit byte;
       // Check the seven data bitsbit to make sure no significant
       // information is lost.
-      unsigned short shift = sizeof(UnsignedIntType) * byteSize - dataShift;
+      unsigned short shift = ((sizeof(UnsignedIntType) * byteSize) / dataShift) * dataShift;
       UnsignedIntType overflowMask(UnsignedIntType(-1) << shift);
       UnsignedIntType overflowCheck(value << shift);
 

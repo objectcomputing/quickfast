@@ -358,6 +358,7 @@ FieldInstruction::setDefaultValueTail()
 {
 }
 
+#if 0 // Unrolled version is about 15% faster
 namespace
 {
   void
@@ -387,19 +388,21 @@ namespace
 }
 
 void
-FieldInstruction::encodeSignedInteger(DataDestination & destination, WorkingBuffer & buffer, int64 value)
+FieldInstruction::encodeSignedInteger1(DataDestination & destination, WorkingBuffer & buffer, int64 value)
 {
-#if 0
   encodeToWorkingBuffer(buffer, value);
   for(const uchar * it = buffer.begin();
     it != buffer.end();
     ++it)
   {
-//    destination.putByte(*it);
-    std::cout << std::hex << std::setw(2) << (unsigned short)(*it) << std::dec << ' ';
+    destination.putByte(*it);
   }
-  std::cout << std::endl;
+}
+
 #else
+void
+FieldInstruction::encodeSignedInteger(DataDestination & destination, WorkingBuffer & buffer, int64 value)
+{
 //TODO Measure performance of this code
   if (value >= 0)
   {
@@ -580,8 +583,122 @@ FieldInstruction::encodeSignedInteger(DataDestination & destination, WorkingBuff
       destination.putByte((value & 0x7F)  | 0x80);  // .... .... .... ..7f
     }
   }
-#endif
 }
+#endif
+#if 0
+void
+FieldInstruction::encodeUnsignedInteger1(DataDestination & destination, WorkingBuffer & buffer, uint64 value)
+{
+  buffer.clear(true);
+  uint64 until = 0ULL;
+  uchar byte = stopBit;
+  while(value != until || byte != 0)
+  {
+    byte |= static_cast<uchar>(value & dataBits);
+    value >>= dataShift;
+    buffer.push(byte);
+    byte = 0;
+  }
+  for(const uchar * it = buffer.begin();
+    it != buffer.end();
+    ++it)
+  {
+    destination.putByte(*it);
+  }
+}
+
+
+#else
+void
+FieldInstruction::encodeUnsignedInteger(DataDestination & destination, WorkingBuffer & buffer, uint64 value)
+{
+  if (value <      0x0000000000000080ULL)
+  {
+    destination.putByte(((value & 0x7f) | 0x80));
+  }
+  else if (value < 0x0000000000004000ULL)
+  {
+    destination.putByte(((value >> 7) & 0x7F));
+    destination.putByte(((value & 0x7F) | 0x80));
+  }
+  else if (value < 0x0000000000200000ULL)
+  {
+    destination.putByte(((value >> 14) & 0x7F));
+    destination.putByte(((value >> 7) & 0x7F));
+    destination.putByte(((value & 0x7F) | 0x80));
+  }
+  else if (value < 0x0000000010000000ULL)
+  {
+    destination.putByte(((value >> 21) & 0x7F));
+    destination.putByte(((value >> 14) & 0x7F));
+    destination.putByte(((value >> 7) & 0x7F));
+    destination.putByte(((value & 0x7F) | 0x80));
+  }
+  else if (value < 0x0000000800000000ULL) // 1000 0000 0000 0000 0000 0000 0000 0000 0000
+  {
+    destination.putByte(((value >> 28) & 0x7F));
+    destination.putByte(((value >> 21) & 0x7F));
+    destination.putByte(((value >> 14) & 0x7F));
+    destination.putByte(((value >> 7) & 0x7F));
+    destination.putByte(((value & 0x7F) | 0x80));
+  }
+  else if (value < 0x0000040000000000ULL) // 100 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+  {
+    destination.putByte(((value >> 35) & 0x7F));
+    destination.putByte(((value >> 28) & 0x7F));
+    destination.putByte(((value >> 21) & 0x7F));
+    destination.putByte(((value >> 14) & 0x7F));
+    destination.putByte(((value >> 7) & 0x7F));
+    destination.putByte(((value & 0x7F) | 0x80));
+  }
+  else if (value < 0x0002000000000000ULL) //
+  {
+    destination.putByte(((value >> 42) & 0x7F));
+    destination.putByte(((value >> 35) & 0x7F));
+    destination.putByte(((value >> 28) & 0x7F));
+    destination.putByte(((value >> 21) & 0x7F));
+    destination.putByte(((value >> 14) & 0x7F));
+    destination.putByte(((value >> 7) & 0x7F));
+    destination.putByte(((value & 0x7F) | 0x80));
+  }
+  else if (value < 0x0100000000000000ULL) // 1 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+  {
+    destination.putByte(((value >> 49) & 0x7F));
+    destination.putByte(((value >> 42) & 0x7F));
+    destination.putByte(((value >> 35) & 0x7F));
+    destination.putByte(((value >> 28) & 0x7F));
+    destination.putByte(((value >> 21) & 0x7F));
+    destination.putByte(((value >> 14) & 0x7F));
+    destination.putByte(((value >> 7) & 0x7F));
+    destination.putByte(((value & 0x7F) | 0x80));
+  }
+  else if (value < 0x8000000000000000ULL) //
+ {
+    destination.putByte(((value >> 56) & 0x7F));
+    destination.putByte(((value >> 49) & 0x7F));
+    destination.putByte(((value >> 42) & 0x7F));
+    destination.putByte(((value >> 35) & 0x7F));
+    destination.putByte(((value >> 28) & 0x7F));
+    destination.putByte(((value >> 21) & 0x7F));
+    destination.putByte(((value >> 14) & 0x7F));
+    destination.putByte(((value >> 7) & 0x7F));
+    destination.putByte(((value & 0x7F) | 0x80));
+  }
+  else
+  {
+    destination.putByte(((value >> 63) & 0x7F));
+    destination.putByte(((value >> 56) & 0x7F));
+    destination.putByte(((value >> 49) & 0x7F));
+    destination.putByte(((value >> 42) & 0x7F));
+    destination.putByte(((value >> 35) & 0x7F));
+    destination.putByte(((value >> 28) & 0x7F));
+    destination.putByte(((value >> 21) & 0x7F));
+    destination.putByte(((value >> 14) & 0x7F));
+    destination.putByte(((value >> 7) & 0x7F));
+    destination.putByte(((value & 0x7F) | 0x80));
+  }
+}
+#endif
 
 void
 FieldInstruction::encodeNullableAscii(DataDestination & destination, const std::string & value)
@@ -655,96 +772,6 @@ FieldInstruction::longestMatchingSuffix(
     --vpos;
   }
   return result;
-}
-
-
-
-void
-FieldInstruction::encodeUnsignedInteger(DataDestination & destination, WorkingBuffer & buffer, uint64 value)
-{
-#if 01
-  buffer.clear(true);
-  uint64 until = 0ULL;
-  uchar byte = stopBit;
-  while(value != until || byte != 0)
-  {
-    byte |= static_cast<uchar>(value & dataBits);
-    value >>= dataShift;
-    buffer.push(byte);
-    byte = 0;
-  }
-  for(const uchar * it = buffer.begin();
-    it != buffer.end();
-    ++it)
-  {
-    destination.putByte(*it);
-  }
-
-#else
-
-//TODO Measure performance of this code
-  if (value < 0x00000080)
-  {
-    destination.putByte(((value & 0x7f) | 0x80));
-  }
-  else if (value < 0x00004000)
-  {
-    destination.putByte(((value >> 7) & 0x7F));
-    destination.putByte(((value & 0x7F) | 0x80));
-  }
-  else if (value < 0x00200000)
-  {
-    destination.putByte(((value >> 14) & 0x7F));
-    destination.putByte(((value >> 7) & 0x7F));
-    destination.putByte(((value & 0x7F) | 0x80));
-  }
-  else if (value < 0x10000000)
-  {
-    destination.putByte(((value >> 21) & 0x7F));
-    destination.putByte(((value >> 14) & 0x7F));
-    destination.putByte(((value >> 7) & 0x7F));
-    destination.putByte(((value & 0x7F) | 0x80));
-  }
-  else if (value < 0x800000000ULL)
-  {
-    destination.putByte(((value >> 35) & 0x7F));
-    destination.putByte(((value >> 21) & 0x7F));
-    destination.putByte(((value >> 28) & 0x7F));
-    destination.putByte(((value >> 14) & 0x7F));
-    destination.putByte(((value >> 7) & 0x7F));
-    destination.putByte(((value & 0x7F) | 0x80));
-  }
-  else if (value < 0x40000000000ULL)
-  {
-    destination.putByte(((value >> 35) & 0x7F));
-    destination.putByte(((value >> 28) & 0x7F));
-    destination.putByte(((value >> 21) & 0x7F));
-    destination.putByte(((value >> 14) & 0x7F));
-    destination.putByte(((value >> 7) & 0x7F));
-    destination.putByte(((value & 0x7F) | 0x80));
-  }
-  else if (value < 0x2000000000000ULL)
-  {
-    destination.putByte(((value >> 42) & 0x7F));
-    destination.putByte(((value >> 35) & 0x7F));
-    destination.putByte(((value >> 28) & 0x7F));
-    destination.putByte(((value >> 21) & 0x7F));
-    destination.putByte(((value >> 14) & 0x7F));
-    destination.putByte(((value >> 7) & 0x7F));
-    destination.putByte(((value & 0x7F) | 0x80));
-  }
-  else
-  {
-    destination.putByte(((value >> 49) & 0x7F));
-    destination.putByte(((value >> 42) & 0x7F));
-    destination.putByte(((value >> 35) & 0x7F));
-    destination.putByte(((value >> 28) & 0x7F));
-    destination.putByte(((value >> 21) & 0x7F));
-    destination.putByte(((value >> 14) & 0x7F));
-    destination.putByte(((value >> 7) & 0x7F));
-    destination.putByte(((value & 0x7F) | 0x80));
-  }
-#endif
 }
 
 void

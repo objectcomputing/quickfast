@@ -1,3 +1,17 @@
+Wed May  5 21:01:37 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+          Enable unrolled encodeUnsignedInteger
+          Relax overflow check slightly for unsigned numbers.  Bits that must be sent
+          to reach a byte boundary but which do not take part in the result will be
+          ignored.  Previously these bits had to match the high order bit.
+          For signed decoding these bits must still match the sign bit.
+
+        * src/Codecs/FieldInstructionInteger.h:
+          Spelling error in error message
+
+
 Mon May  3 15:27:40 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * setup.cmd:
