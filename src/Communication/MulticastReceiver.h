@@ -67,6 +67,18 @@ namespace QuickFAST
         socket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
         socket_.bind(endpoint_);
 
+#ifdef IPRECVSTADDR
+        boost::system::error_code err;
+        const int on = 1;
+        boost::asio::detail::socket_ops::setsockopt(
+          AF_INET,
+          1,
+          IP_RECVDSTADDR,
+          &on,
+          sizeof(on),
+          err);
+#endif
+
         if(assembler_->wantLog(Common::Logger::QF_LOG_INFO))
         {
           std::stringstream msg;
@@ -95,6 +107,15 @@ namespace QuickFAST
         catch(...)
         {
         }
+      }
+    protected:
+      virtual bool perfectFilter()
+      {
+        if(multicastGroup_ == senderEndpoint_.address()) return true;
+        std::cout << std::endl << multicastGroup_.to_string() << " != " << senderEndpoint_.address().to_string() << std::endl;
+
+        return false;
+//        return (multicastGroup_ == senderEndpoint_.address());
       }
 
     private:

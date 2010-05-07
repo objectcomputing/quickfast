@@ -10,7 +10,7 @@
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/Encoder.h>
 #include <Codecs/Decoder.h>
-#include <Codecs/DataDestinationBuffer.h>
+#include <Codecs/DataDestination.h>
 #include <Codecs/DataSourceString.h>
 #include <Codecs/SingleMessageConsumer.h>
 #include <Codecs/GenericMessageBuilder.h>
@@ -30,7 +30,6 @@
 #include <Messages/Sequence.h>
 
 #include <Common/Exceptions.h>
-
 using namespace QuickFAST;
 
 namespace{
@@ -187,34 +186,40 @@ BOOST_AUTO_TEST_CASE(testRoundTripFieldOperators)
   template_id_t templId = 1; // from the XML above
 
   BOOST_CHECKPOINT("encode msg1A");
-  Codecs::DataDestinationBuffer destination1A;
+  Codecs::DataDestination destination1A;
   encoder.encodeMessage(destination1A, templId, *msg1);
-  const std::string & fast1A = destination1A.toString();
+  std::string fast1A;
+  destination1A.toString(fast1A);
 
   BOOST_CHECKPOINT("encode msg1B");
-  Codecs::DataDestinationBuffer destination1B;
+  Codecs::DataDestination destination1B;
   encoder.encodeMessage(destination1B, templId, *msg1);
-  const std::string & fast1B = destination1B.toString();
+  std::string fast1B;
+  destination1B.toString(fast1B);
 
   BOOST_CHECKPOINT("encode msg1C");
-  Codecs::DataDestinationBuffer destination1C;
+  Codecs::DataDestination destination1C;
   encoder.encodeMessage(destination1C, templId, *msg1);
-  const std::string & fast1C = destination1C.toString();
+  std::string fast1C;
+  destination1C.toString(fast1C);
 
   BOOST_CHECKPOINT("encode msg2A");
-  Codecs::DataDestinationBuffer destination2A;
+  Codecs::DataDestination destination2A;
   encoder.encodeMessage(destination2A, templId, *msg2);
-  const std::string & fast2A = destination2A.toString();
+  std::string fast2A;
+  destination2A.toString(fast2A);
 
   BOOST_CHECKPOINT("encode msg2B");
-  Codecs::DataDestinationBuffer destination2B;
+  Codecs::DataDestination destination2B;
   encoder.encodeMessage(destination2B, templId, *msg2);
-  const std::string & fast2B = destination2B.toString();
+  std::string fast2B;
+  destination2B.toString(fast2B);
 
   BOOST_CHECKPOINT("encode msg3");
-  Codecs::DataDestinationBuffer destination3;
+  Codecs::DataDestination destination3;
   encoder.encodeMessage(destination3, templId, *msg3);
-  const std::string & fast3 = destination3.toString();
+  std::string fast3;
+  destination3.toString(fast3);
 
   Codecs::Decoder decoder(templateRegistry);
 
@@ -311,14 +316,16 @@ BOOST_AUTO_TEST_CASE(testRoundTripOptionalTemplateRefs)
   template_id_t templId = 20; // from the XML above
 
   BOOST_CHECKPOINT("encode addMessage");
-  Codecs::DataDestinationBuffer addDestination;
+  Codecs::DataDestination addDestination;
   encoder.encodeMessage(addDestination, templId, *addMessage);
-  const std::string & encodedAdd = addDestination.toString();
+  std::string encodedAdd;
+  addDestination.toString(encodedAdd);
 
   BOOST_CHECKPOINT("encode delMessage");
-  Codecs::DataDestinationBuffer delDestination;
+  Codecs::DataDestination delDestination;
   encoder.encodeMessage(delDestination, templId, *delMessage);
-  const std::string & encodedDel = delDestination.toString();
+  std::string encodedDel;
+  delDestination.toString(encodedDel);
 
   Codecs::Decoder decoder(templateRegistry);
 

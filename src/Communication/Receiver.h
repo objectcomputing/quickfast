@@ -27,6 +27,7 @@ namespace QuickFAST
         , packetsReceived_(0)
         , bytesReceived_(0)
         , errorPackets_(0)
+        , misroutedPackets_(0)
         , emptyPackets_(0)
         , packetsQueued_(0)
         , batchesProcessed_(0)
@@ -333,6 +334,15 @@ namespace QuickFAST
         return errorPackets_;
       }
 
+      /// @brief Statistic: How many packetes were delivered to the wrong address
+      ///
+      /// This compensates for a bug in Linux (the linux honcho's say it's a feature.)
+      /// @returns the number of misrouted packets.
+      size_t misroutedPackets() const
+      {
+        return misroutedPackets_;
+      }
+
       /// @brief Statistic: How many received packets were empty
       /// @returns the number of packets that were empty
       size_t emptyPackets() const
@@ -429,6 +439,8 @@ namespace QuickFAST
       size_t bytesReceived_;
       /// Packets received with errors (usually disconnect or EOF0
       size_t errorPackets_;
+      /// Packets received in error due to a linux bug.
+      size_t misroutedPackets_;
       /// Packets containing no data (usually during shutdown)
       size_t emptyPackets_;
       /// Packets containing valid data: queued to be processed

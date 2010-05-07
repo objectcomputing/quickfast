@@ -75,6 +75,10 @@ namespace QuickFAST
 
 
     protected:
+      virtual bool perfectFilter()
+      {
+        return true;
+      }
 
       /// @brief handle I/O completion from an asynchronous receiver
       ///
@@ -101,7 +105,18 @@ namespace QuickFAST
           if (!error)
           {
             // it's possible to receive empty packets.
-            if(bytesReceived > 0)
+            if(bytesReceived <= 0)
+            {
+              // empty buffer? just use it again
+              ++emptyPackets_;
+              idleBufferPool_.push(buffer);
+            }
+            else if(!perfectFilter()) // compensate for linux mishandling imperfect NIC filtering
+            {
+              ++misroutedPackets_;
+              idleBufferPool_.push(buffer);
+            }
+            else
             {
               ++packetsQueued_;
               bytesReceived_ += bytesReceived;
@@ -114,12 +129,6 @@ namespace QuickFAST
                 // accepted.  We'll service the queue after releasing the lock.
                 service = queue_.startService(lock);
               }
-            }
-            else
-            {
-              // empty buffer? just use it again
-              ++emptyPackets_;
-              idleBufferPool_.push(buffer);
             }
           }
           else

@@ -10,7 +10,7 @@
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/Encoder.h>
 #include <Codecs/Decoder.h>
-#include <Codecs/DataDestinationBuffer.h>
+#include <Codecs/DataDestination.h>
 #include <Codecs/DataSourceString.h>
 #include <Codecs/SingleMessageConsumer.h>
 #include <Codecs/GenericMessageBuilder.h>
@@ -287,10 +287,12 @@ BOOST_AUTO_TEST_CASE(testRoundTripSequenceNoPMAP)
   msg->addField(identity_MDFeedTypes, Messages::FieldSequence::create(sequence_MDFeedTypes));
 
   Codecs::Encoder encoder(templateRegistry);
-  Codecs::DataDestinationBuffer destination;
+  Codecs::DataDestination destination;
   template_id_t templId = 3; // from the XML above
   encoder.encodeMessage(destination, templId, *msg);
-  const std::string & fastString = destination.toString();
+  std::string fastString;
+  destination.toString(fastString);
+
   destination.clear();
 
   Codecs::Decoder decoder(templateRegistry);
@@ -306,7 +308,9 @@ BOOST_AUTO_TEST_CASE(testRoundTripSequenceNoPMAP)
   // wanna see it again?
   encoder.reset();
   encoder.encodeMessage(destination, templId, msgOut);
-  const std::string reencoded = destination.toString();
+  std::string reencoded;
+  destination.toString(reencoded);
+
   destination.clear();
 
   BOOST_CHECK(fastString == reencoded);

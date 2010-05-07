@@ -7,8 +7,10 @@
 #ifndef DATADESTINATION_H
 #define DATADESTINATION_H
 #include "DataDestination_fwd.h"
+#include <Messages/FieldIdentity.h>
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
+#include <Common/WorkingBuffer.h>
 namespace QuickFAST{
   namespace Codecs{
     /// @brief An inteface for data destinations to be used by an Encoder.
@@ -23,21 +25,36 @@ namespace QuickFAST{
     /// Different implementations of DataDestination may use scatter/gather I/O; may
     /// send the individual buffers separately; or may assemble them into a common
     /// buffer when endMessage() is called.
-    class QuickFAST_Export DataDestination{
+    class /*QuickFAST_Export */ DataDestination{
     public:
       typedef size_t BufferHandle;
-      static const size_t NotABuffer = ~0;
+      static const BufferHandle NotABuffer = ~0;
+
+      struct iovec
+      {
+        void * iov_base;
+        size_t iov_len;
+      };
+
+      typedef iovec * IoVecArray;
 
       DataDestination()
         : used_(0)
-        , capacity_(0)
         , active_(NotABuffer)
+        , verbose_(false)
+        , iovecCapacity_(0)
+        , iovecUsed_(0)
       {
       }
 
-      /// @brief a typical virtual destructor.
+      /// @brief Until DataDestinationString is retired, allow for inheritence.
       virtual ~DataDestination()
       {}
+
+      void setVerbose(bool verbose)
+      {
+        verbose_ = verbose;
+      }
 
       /// @brief start a new buffer at the end of the set.
       ///
@@ -45,11 +62,13 @@ namespace QuickFAST{
       /// @returns a "handle" to the buffer to be used with selectBuffer()
       BufferHandle startBuffer()
       {
-        if(used_ == capacity_)
+        if(used_ == buffers_.size())
         {
-          allocateBuffer();
+          WorkingBuffer empty;
+          empty.clear(false);
+          buffers_.push_back(empty);
         }
-        assert(used_ < capacity_);
+        assert(used_ < buffers_.size());
         active_ = used_;
         used_++;
         return active_;
@@ -63,7 +82,13 @@ namespace QuickFAST{
         {
           startBuffer();
         }
-        putByte_i(active_, byte);
+        buffers_[active_].push(byte);
+        if(verbose_)
+        {
+          std::cout << '[' << active_ << ':' << buffers_[active_].size() << ']' << std::hex << std::setw(2) << std::setfill('0') << unsigned short(byte) << std::setfill(' ') << std::dec << ' ';
+          static size_t mod = 0;
+          if(++mod % 16 == 0) std::cout << std::endl;
+        }
       }
 
       /// @brief Get the currently selected buffer
@@ -82,29 +107,85 @@ namespace QuickFAST{
 
       void clear()
       {
-        for(size_t pos = 0; pos < capacity_; ++pos)
+        for(size_t handle = 0; handle < buffers_.size(); ++handle)
         {
-          clear_i(pos);
+          buffers_[handle].clear(false);
         }
         used_ = 0;
         active_ = 0;
       }
 
+      void startMessage(template_id_t id)
+      {
+        if(verbose_)
+        {
+          std::cout << std::endl << "**BEGIN MESSAGE: " << id << std::endl;
+        }
+      }
+
+      void startField(Messages::FieldIdentityCPtr & identity)
+      {
+        if(verbose_)
+        {
+          std::cout << std::endl << "**BEGIN FIELD: " << identity->name() << '[' << identity->id() << ']' << std::endl;
+        }
+      }
+
       /// @brief Indicate the message is ready to be sent.
-      virtual void endMessage() = 0;
+      void endMessage()
+      {
+        if(verbose_)
+        {
+          std::cout << std::endl << "**END MESSAGE" << std::endl;
+        }
+      }
 
-    protected:
-      /// @brief implementation specfic buffer allocator
-      /// @returns a pointer to the newly allocated buffer
-      virtual void allocateBuffer() = 0;
-      virtual void putByte_i(BufferHandle handle, uchar byte) = 0;
-      /// @brief Clear the contents of the destination to prepare for reuse
-      virtual void clear_i(BufferHandle handle) = 0;
+      /// @brief access the data written to the destination as a string
+      void getIOVector(IoVecArray & iovector, size_t count)const
+      {
+        size_t size = buffers_.size();
+        if( size >= iovecCapacity_)
+        {
+          iovector_.reset(new iovec[size]);
+          iovecCapacity_ = size;
+        }
+        for(iovecUsed_ = 0; iovecUsed_ < size; ++iovecUsed_)
+        {
+          iovector_[iovecUsed_].iov_base = const_cast<uchar *>(buffers_[iovecUsed_].begin());
+          iovector_[iovecUsed_].iov_len = buffers_[iovecUsed_].size();
+        }
+        iovector = iovector_.get();
+        count = iovecUsed_;
+      }
 
-    protected:
+      /// @brief Convert results to string: for testing NOT production.
+      void toString(std::string & result)const
+      {
+        size_t size = 0;
+        for(size_t pos = 0; pos < buffers_.size(); ++pos)
+        {
+          size += buffers_[pos].size();
+        }
+        result.reserve(size);
+        for(size_t pos = 0; pos < buffers_.size(); ++pos)
+        {
+          result.append(reinterpret_cast<const char *>(buffers_[pos].begin()),
+            buffers_[pos].size());
+        }
+      }
+
+    private:
       size_t used_;
-      size_t capacity_;
       size_t active_;
+      bool verbose_;
+
+      /// @brief A type to store the buffers in vectors
+      typedef std::vector<WorkingBuffer> BufferVector;
+      BufferVector buffers_;
+      mutable boost::scoped_array<iovec> iovector_;
+      mutable size_t iovecCapacity_;
+      mutable size_t iovecUsed_;
+
     };
   }
 }

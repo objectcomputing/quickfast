@@ -11,7 +11,7 @@
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/Encoder.h>
 #include <Codecs/Decoder.h>
-#include <Codecs/DataDestinationBuffer.h>
+#include <Codecs/DataDestination.h>
 #include <Codecs/DataSourceString.h>
 #include <Codecs/GenericMessageBuilder.h>
 #include <Codecs/SingleMessageConsumer.h>
@@ -501,10 +501,12 @@ namespace{
 
     Codecs::Encoder encoder(templateRegistry);
 //    encoder.setVerboseOutput (std::cout);
-    Codecs::DataDestinationBuffer destination;
+    Codecs::DataDestination destination;
     template_id_t templId = 3; // from the XML file
     encoder.encodeMessage(destination, templId, msg);
-    const std::string fastString = destination.toString();
+    std::string fastString;
+    destination.toString(fastString);
+
     destination.clear();
 #if 0
     for(size_t nb = 0; nb < fastString.length(); ++ nb)
@@ -529,7 +531,9 @@ namespace{
     // wanna see it again?
     encoder.reset();
     encoder.encodeMessage(destination, templId, msgOut);
-    const std::string reencoded = destination.toString();
+    std::string reencoded;
+    destination.toString(reencoded);
+
     destination.clear();
 #if 0
     for(size_t nb = 0; nb < reencoded.length(); ++ nb)

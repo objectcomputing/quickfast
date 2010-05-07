@@ -28,8 +28,14 @@ namespace QuickFAST{
   public:
     WorkingBuffer();
     ~WorkingBuffer();
+    /// @brief Copy constructor
+    /// @param rhs The buffer to be copied.
     WorkingBuffer(const WorkingBuffer & rhs);
+    /// @brief Assignment
+    /// @param rhs The buffer to be into this.
     WorkingBuffer & operator =(const WorkingBuffer & rhs);
+    /// @brief Swap the contents of two WorkingBuffers
+    /// @param rhs receives the contents of this while this receives the contents of rhs.
     void swap(WorkingBuffer & rhs);
 
     /// @brief Prepare a buffer for use.

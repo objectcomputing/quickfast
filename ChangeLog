@@ -1,3 +1,39 @@
+Fri May  7 15:30:45 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/DataDestination.h:
+        * src/Codecs/DataDestinationString.h:
+        * src/Common/WorkingBuffer.h:
+        * src/Communication/AsynchReceiver.h:
+        * src/Communication/MulticastReceiver.h:
+        * src/Communication/Receiver.h:
+        * src/Tests/testBiggestValue.cpp:
+        * src/Tests/testFieldInstructions.cpp:
+        * src/Tests/testFieldOperations.cpp:
+        * src/Tests/testGroupReferences.cpp:
+        * src/Tests/testPresenceMap.cpp:
+        * src/Tests/testRoundTrip.cpp:
+        * src/Tests/testRoundTrip1.cpp:
+        * src/Tests/testRoundTripFieldOps.cpp:
+        * src/Tests/testSmallestValue.cpp:
+          The previous change to DataDestination rendered
+          DataDestinationString redundant.   Since
+          DataDestinationBuffer is new, I simply promoted
+          its functionality into DataDestination.  For backward
+          compatibility DataDestinationString::toValue has been
+          replaced by a thunk that forwards the toString method
+          to DataDestination.
+
+          To support some semblence of efficiency the signature
+          of toString has been changed to accept reference to
+          a string in which to return the results.
+
+        * src/Codecs/DataDestinationBuffer.h:
+        * src/Codecs/DataDestinationBuffer.cpp:
+        * src/Codecs/DataDestinationString.cpp:
+        * src/Tests/DataDestinationMock.h:
+
+          Removed these files.
+
 Thu May  6 20:51:30 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/DataDestination.h:
