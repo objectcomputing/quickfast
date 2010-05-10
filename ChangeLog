@@ -1,3 +1,13 @@
+Mon May 10 15:20:38 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * QuickFAST.features:
+          Turn the .NET build back off by default because the doc
+          says it defaults to off.
+        * m.cmd:
+          Add option to expand environment variables into the solution
+          and project files because not everyone runs Visual Studio from
+          the command line.
+
 Fri May  7 15:30:45 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/DataDestination.h:

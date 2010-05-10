@@ -7,14 +7,11 @@ boost=1
 
 // Build .NET library
 //    To enable .NET build, change the following from '0' to '1'
-dotnet=1
+dotnet=0
 
 // Build .NET examples
-dotnetapp=1
-
-// Build NUNIT based .NET tests
-//    If nUnit is installed, change the following from '0' to '1'
-nunit=0
+//    To enable .NET Example programs, change the following from '0' to '1'
+dotnetapp=0
 
 // Build ARCA support library
 //    If ARCA support is present (separate project) change the following
