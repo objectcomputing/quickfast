@@ -1,3 +1,12 @@
+Mon May 10 18:25:55 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * .:
+        * src/Examples/MulticastInterpreter:
+        * src/Messages/MessageAccessor.h:
+        * src/Codecs/DataDestinationString.cpp:
+        * src/Tests/DataDestinationMock.h:
+        Merge recent changes from trunk into ValueBasedEncoding
+
 Thu Apr 29 20:00:15 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstruction.h:
