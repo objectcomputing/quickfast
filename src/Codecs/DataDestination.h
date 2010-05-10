@@ -41,7 +41,7 @@ namespace QuickFAST{
       DataDestination()
         : used_(0)
         , active_(NotABuffer)
-        , verbose_(false)
+        , verboseOut_(0)
         , iovecCapacity_(0)
         , iovecUsed_(0)
       {
@@ -51,9 +51,13 @@ namespace QuickFAST{
       virtual ~DataDestination()
       {}
 
-      void setVerbose(bool verbose)
+      void setVerbose(std::ostream & verbose)
       {
-        verbose_ = verbose;
+        verboseOut_ = & verbose;
+      }
+      void disableVerbose()
+      {
+        verboseOut_ = 0;
       }
 
       /// @brief start a new buffer at the end of the set.
@@ -83,11 +87,15 @@ namespace QuickFAST{
           startBuffer();
         }
         buffers_[active_].push(byte);
-        if(verbose_)
+        if(verboseOut_)
         {
-          std::cout << '[' << active_ << ':' << buffers_[active_].size() << ']' << std::hex << std::setw(2) << std::setfill('0') << unsigned short(byte) << std::setfill(' ') << std::dec << ' ';
-          static size_t mod = 0;
-          if(++mod % 16 == 0) std::cout << std::endl;
+          (*verboseOut_)
+            << '[' << active_ << ':' << buffers_[active_].size() << ']'
+            << std::hex << std::setw(2) << std::setfill('0')
+            << static_cast<unsigned short>(byte)
+            << std::setfill(' ') << std::dec << ' ';
+          static size_t mod = 0; // keep the lines from getting too long
+          if(++mod % 16 == 0) (*verboseOut_) << std::endl;
         }
       }
 
@@ -117,26 +125,26 @@ namespace QuickFAST{
 
       void startMessage(template_id_t id)
       {
-        if(verbose_)
+        if(verboseOut_)
         {
-          std::cout << std::endl << "**BEGIN MESSAGE: " << id << std::endl;
+          (*verboseOut_) << std::endl << "**BEGIN MESSAGE: " << id << std::endl;
         }
       }
 
-      void startField(Messages::FieldIdentityCPtr & identity)
+      void startField(const Messages::FieldIdentity & identity)
       {
-        if(verbose_)
+        if(verboseOut_)
         {
-          std::cout << std::endl << "**BEGIN FIELD: " << identity->name() << '[' << identity->id() << ']' << std::endl;
+          (*verboseOut_) << std::endl << "**BEGIN FIELD: " << identity.name() << '[' << identity.id() << ']' << std::endl;
         }
       }
 
       /// @brief Indicate the message is ready to be sent.
       void endMessage()
       {
-        if(verbose_)
+        if(verboseOut_)
         {
-          std::cout << std::endl << "**END MESSAGE" << std::endl;
+          (*verboseOut_) << std::endl << "**END MESSAGE" << std::endl;
         }
       }
 
@@ -177,7 +185,7 @@ namespace QuickFAST{
     private:
       size_t used_;
       size_t active_;
-      bool verbose_;
+      std::ostream * verboseOut_;
 
       /// @brief A type to store the buffers in vectors
       typedef std::vector<WorkingBuffer> BufferVector;

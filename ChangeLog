@@ -1,3 +1,11 @@
+Mon May 10 15:59:03 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/DataDestination.h:
+        * src/Codecs/Encoder.cpp:
+          Linux build error in verbose code.
+          While I'm in there, change verbose to use an ostream
+          rather than just a bool to all redirected output.
+
 Mon May 10 15:20:38 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * QuickFAST.features:

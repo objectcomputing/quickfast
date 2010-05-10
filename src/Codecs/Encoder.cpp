@@ -24,6 +24,7 @@ Encoder::encodeMessage(
   template_id_t templateId,
   const Messages::MessageAccessor & message)
 {
+  destination.startMessage(templateId);
   encodeSegment(destination, templateId, message);
   destination.endMessage();
 }
@@ -43,11 +44,6 @@ Encoder::encodeSegment(
     }
 
     Codecs::PresenceMap pmap(templatePtr->presenceMapBitCount());
-    if(this->verboseOut_)
-    {
-      pmap.setVerbose(verboseOut_);
-    }
-
 
     DataDestination::BufferHandle header = destination.startBuffer();
     destination.startBuffer();
@@ -65,6 +61,8 @@ Encoder::encodeSegment(
 
     encodeSegmentBody(destination, pmap, templatePtr, fieldSet);
     destination.selectBuffer(header);
+    static Messages::FieldIdentity pmapIdentity("PMAP", "Message");
+    destination.startField(pmapIdentity);
     pmap.encode(destination);
   }
   else
@@ -81,10 +79,6 @@ Encoder::encodeGroup(
 {
   size_t presenceMapBits = group->presenceMapBitCount();
   Codecs::PresenceMap pmap(presenceMapBits);
-  if(this->verboseOut_)
-  {
-    pmap.setVerbose(verboseOut_);
-  }
 
   // The presence map for the group will go into the current buffer
   // that will be the last thing to appear in that buffer
@@ -98,6 +92,8 @@ Encoder::encodeGroup(
   if(presenceMapBits > 0)
   {
     destination.selectBuffer(pmapBuffer);
+    static Messages::FieldIdentity pmapIdentity("PMAP", "Group");
+    destination.startField(pmapIdentity);
     pmap.encode(destination);
   }
   // and just continue working in the buffer where we built the group body
@@ -119,10 +115,7 @@ Encoder::encodeSegmentBody(
     Codecs::FieldInstructionCPtr instruction;
     if(segment->getInstruction(nField, instruction))
     {
-      if(verboseOut_)
-      {
-        (*verboseOut_) << "Encode instruction[" <<nField << "]: " << instruction->getIdentity()->name() << std::endl;
-      }
+      destination.startField(*(instruction->getIdentity()));
       instruction->encode(destination, pmap, *this, fieldSet);
     }
   }
