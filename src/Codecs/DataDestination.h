@@ -30,26 +30,17 @@ namespace QuickFAST{
       typedef size_t BufferHandle;
       static const BufferHandle NotABuffer = ~0;
 
-      struct iovec
-      {
-        void * iov_base;
-        size_t iov_len;
-      };
-
-      typedef iovec * IoVecArray;
-
       DataDestination()
         : used_(0)
         , active_(NotABuffer)
         , verboseOut_(0)
-        , iovecCapacity_(0)
-        , iovecUsed_(0)
       {
       }
 
       /// @brief Until DataDestinationString is retired, allow for inheritence.
       virtual ~DataDestination()
-      {}
+      {
+      }
 
       void setVerbose(std::ostream & verbose)
       {
@@ -69,12 +60,11 @@ namespace QuickFAST{
         if(used_ == buffers_.size())
         {
           WorkingBuffer empty;
-          empty.clear(false);
           buffers_.push_back(empty);
         }
         assert(used_ < buffers_.size());
-        active_ = used_;
-        used_++;
+        active_ = used_++;
+        buffers_[active_].clear(false);
         return active_;
       }
 
@@ -120,7 +110,7 @@ namespace QuickFAST{
           buffers_[handle].clear(false);
         }
         used_ = 0;
-        active_ = 0;
+        active_ = NotABuffer;
       }
 
       void startMessage(template_id_t id)
@@ -148,25 +138,10 @@ namespace QuickFAST{
         }
       }
 
-      /// @brief access the data written to the destination as a string
-      void getIOVector(IoVecArray & iovector, size_t count)const
-      {
-        size_t size = buffers_.size();
-        if( size >= iovecCapacity_)
-        {
-          iovector_.reset(new iovec[size]);
-          iovecCapacity_ = size;
-        }
-        for(iovecUsed_ = 0; iovecUsed_ < size; ++iovecUsed_)
-        {
-          iovector_[iovecUsed_].iov_base = const_cast<uchar *>(buffers_[iovecUsed_].begin());
-          iovector_[iovecUsed_].iov_len = buffers_[iovecUsed_].size();
-        }
-        iovector = iovector_.get();
-        count = iovecUsed_;
-      }
-
-      /// @brief Convert results to string: for testing NOT production.
+      /// @brief Convert results to string.
+      ///
+      /// For best performance, use toWorkingBuffer rather than this method.
+      /// @param result is the Strubg into which the data will be copied.
       void toString(std::string & result)const
       {
         size_t size = 0;
@@ -174,11 +149,29 @@ namespace QuickFAST{
         {
           size += buffers_[pos].size();
         }
+        result.clear();
         result.reserve(size);
         for(size_t pos = 0; pos < buffers_.size(); ++pos)
         {
           result.append(reinterpret_cast<const char *>(buffers_[pos].begin()),
             buffers_[pos].size());
+        }
+      }
+
+      /// @brief return the accumulated data in a single buffer
+      ///
+      /// @param result is the WorkingBuffer into which the data will be copied.
+      void toWorkingBuffer(WorkingBuffer & result) const
+      {
+        size_t size = 0;
+        for(size_t pos = 0; pos < buffers_.size(); ++pos)
+        {
+          size += buffers_[pos].size();
+        }
+        result.clear(false, size);
+        for(size_t pos = 0; pos < buffers_.size(); ++pos)
+        {
+          result.append(buffers_[pos]);
         }
       }
 
@@ -190,10 +183,6 @@ namespace QuickFAST{
       /// @brief A type to store the buffers in vectors
       typedef std::vector<WorkingBuffer> BufferVector;
       BufferVector buffers_;
-      mutable boost::scoped_array<iovec> iovector_;
-      mutable size_t iovecCapacity_;
-      mutable size_t iovecUsed_;
-
     };
   }
 }

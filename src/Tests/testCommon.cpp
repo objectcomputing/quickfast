@@ -9,6 +9,7 @@
 
 #include <Communication/LinkedBuffer.h>
 #include <Common/StringBuffer.h>
+#include <Common/WorkingBuffer.h>
 #include <Common/Exceptions.h>
 
 using namespace QuickFAST;
@@ -373,4 +374,59 @@ BOOST_AUTO_TEST_CASE(TestStringBuffer)
   s2 += "?";
   BOOST_CHECK(s2.capacity() > capacity);
   BOOST_CHECK(s2.growCount() == 2);
+}
+
+BOOST_AUTO_TEST_CASE(TestWorkingBuffer)
+{
+  WorkingBuffer a;
+  a.clear(false, 1);
+  a.push('a');
+  WorkingBuffer b;
+  b.clear(false, 1);
+  b.push('b');
+  WorkingBuffer ab;
+  ab.clear(false, a.size() + b.size());
+  size_t abCapacity = ab.capacity();
+  ab.append(a);
+  ab.append(b);
+  BOOST_CHECK(ab.size() ==  a.size() + b.size());
+  BOOST_CHECK(ab.capacity() == abCapacity); // should not have forced a grow
+  BOOST_CHECK(0 == std::strncmp("ab", reinterpret_cast<const char *>(ab.begin()), ab.size()));
+
+  WorkingBuffer ba;
+  ba.clear(true, a.size() + b.size());
+  size_t baCapacity = ab.capacity();
+  ba.append(a);
+  ba.append(b);
+  BOOST_CHECK(ba.size() ==  a.size() + b.size());
+  BOOST_CHECK(ba.capacity() == baCapacity); // should not have forced a grow
+  BOOST_CHECK(0 == std::strncmp("ba", reinterpret_cast<const char *>(ba.begin()), ba.size()));
+
+  WorkingBuffer abc;
+  size_t abcCap = abc.capacity();
+  size_t abcHalf = abcCap / 2;
+  std::string abcStr;
+  abcStr.reserve(abcCap * 2);
+  for(size_t n = 0; n < abcHalf; ++n)
+  {
+    abc.push('a' + n);
+    abcStr += 'a' + n;
+  }
+  BOOST_CHECK_EQUAL(abc.size(), abcHalf);
+  BOOST_CHECK_EQUAL(abc.capacity(), abcCap); // no grow so far
+  BOOST_CHECK(0 == std::strncmp(abcStr.data(), reinterpret_cast<const char *>(abc.begin()), abcHalf));
+  abc.append(abc); // also tests append-to-self
+  abcStr += abcStr;
+  BOOST_CHECK(abc.size() == abcHalf * 2);
+  BOOST_CHECK(abc.capacity() == abcCap); // no grow so far
+  BOOST_CHECK(0 == std::strncmp(abcStr.data(), reinterpret_cast<const char *>(abc.begin()), abcHalf * 2));
+
+  abc.append(abc); // This one should force a grow
+  abcStr += abcStr;
+  BOOST_CHECK(abc.size() == abcHalf * 4);
+  BOOST_CHECK(abc.capacity() > abcCap); // now we should have grown
+  BOOST_CHECK(0 == std::strncmp(abcStr.data(), reinterpret_cast<const char *>(abc.begin()), abcHalf * 4));
+
+
+  // TODO: This is a start, but we could use a lot more testing here.
 }

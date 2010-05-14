@@ -1,3 +1,19 @@
+Fri May 14 16:09:19 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/DataDestination.h:
+        * src/Common/WorkingBuffer.h:
+        * src/Common/WorkingBuffer.cpp:
+        * src/Tests/testCommon.cpp:
+          Remove DataDestination IOVec support -- I'll try again later
+          Add DataDestination::toWorkingBuffer() -- preferred way to
+          get contiguous data
+          Add WorkingBuffer::append() and WorkingBuffer::toString()
+          Unit tests for WorkingBuffer (needs more!)
+
+        * src/Tests/testGroupReferences.cpp:
+          Fix formatting
+          Switch to BOOST_REQUIRE to avoid a seg fault after failure
+
 Mon May 10 20:28:47 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * m.cmd:

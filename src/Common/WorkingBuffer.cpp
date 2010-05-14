@@ -121,8 +121,13 @@ WorkingBuffer::push(uchar byte)
 void
 WorkingBuffer::grow()
 {
+  grow(capacity_ * 3 / 2); // todo: parameterize growth rate?
+}
+
+void
+WorkingBuffer::grow(size_t newCapacity)
+{
   size_t oldCapacity = capacity_;
-  size_t newCapacity = capacity_ * 3 / 2; // todo: parameterize?
   if(newCapacity == 0)
   {
     newCapacity = initialCapacity;
@@ -133,9 +138,42 @@ WorkingBuffer::grow()
   {
     delta = newCapacity - oldCapacity;
   }
-  std::copy(buffer_.get(), buffer_.get()+capacity_, newBuffer.get() + delta);
+  std::memcpy(newBuffer.get() + delta, buffer_.get(), capacity_);
   buffer_.swap(newBuffer);
   startPos_ += delta;
   endPos_ += delta;
   capacity_ = newCapacity;
+}
+
+
+void
+WorkingBuffer::append(const WorkingBuffer & rhs)
+{
+  size_t bytesToAppend = rhs.size();
+  if(reverse_)
+  {
+    if(startPos_ < bytesToAppend)
+    {
+      grow(size() + bytesToAppend);
+    }
+    std::memcpy(buffer_.get() + startPos_ - bytesToAppend, rhs.buffer_.get() + rhs.startPos_, bytesToAppend);
+    startPos_ -= bytesToAppend;
+  }
+  else
+  {
+    if(endPos_ + bytesToAppend > capacity_)
+    {
+      grow(size() + bytesToAppend);
+    }
+    std::memcpy(buffer_.get() + endPos_, rhs.buffer_.get() + rhs.startPos_, bytesToAppend);
+    endPos_ += bytesToAppend;
+  }
+}
+
+void
+WorkingBuffer::toString(std::string & result) const
+{
+  result.clear();
+  result.reserve(size());
+  result.append(reinterpret_cast<const char *>(buffer_.get()) + startPos_, size());
 }

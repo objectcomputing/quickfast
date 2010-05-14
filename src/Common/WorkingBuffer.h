@@ -92,9 +92,20 @@ namespace QuickFAST{
       return capacity_;
     }
 
+    ///@brief Apeend one working buffer to another
+    ///
+    /// if reverse append to the front of this buffer else append to the back
+    /// If the values of "reverse" differ, the results may not be as expected.
+    ///
+    /// @param rhs the buffer to be appended
+    void append(const WorkingBuffer & rhs);
+
+    /// @brief A convenience method: copy contents to a std::string
+    void toString(std::string & result) const;
+
   private:
     void grow();
-//    size_t & getWorkingBufferSize();
+    void grow(size_t newCapacity);
 
   private:
     bool reverse_;
