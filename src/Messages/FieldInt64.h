@@ -38,6 +38,7 @@ namespace QuickFAST{
       // implement selected virtual methods from Field
       virtual int64 toInt64() const;
       virtual void valueToStringBuffer()const;
+      virtual bool isSignedInteger()const;
     private:
     };
   }

@@ -50,7 +50,6 @@ namespace QuickFAST{
       // implement selected virtual methods from Field
       virtual const StringBuffer & toUtf8() const;
       virtual bool isString() const;
-      virtual const StringBuffer & toString() const;
     private:
       // temporary during transition to new field implementation
       std::string cachedValue_;

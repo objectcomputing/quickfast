@@ -47,7 +47,6 @@ namespace QuickFAST{
       // implement selected virtual methods from Field
       virtual const StringBuffer & toByteVector() const;
       virtual bool isString() const;
-      virtual const StringBuffer & toString() const;
     private:
 //      std::string value_;
     };

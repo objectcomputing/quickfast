@@ -276,11 +276,28 @@ namespace QuickFAST{
       virtual const BitMap & toBitMap() const;
 
       /// @brief Is this field a kind of string (Ascii, Utf8, or ByteVector)?
+      /// @returns true if this is a string
       virtual bool isString()const;
+
+      /// @brief Is this field a kind of unsigned integer
+      /// @returns true if this is an unsigned integer
+      virtual bool isUnsignedInteger()const;
+
+      /// @brief Is this field a kind of signed integer
+      /// @returns true if this is a signed integer
+      virtual bool isSignedInteger()const;
 
       /// @brief Retrieve the field value as a string
       /// @returns the value
-      virtual const StringBuffer & toString()const;
+      const StringBuffer & toString()const;
+
+      /// @brief Retrieve the field value as a signed integer
+      /// @returns the value
+      int64 toSignedInteger()const;
+
+      /// @brief Retrieve the field value as an unsigned integer
+      /// @returns the value
+      uint64 toUnsignedInteger()const;
 
       /// @brief Retrieve the field value as a group
       /// @returns the value

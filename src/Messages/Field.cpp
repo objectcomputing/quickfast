@@ -116,12 +116,51 @@ Field::isString()const
   return false;
 }
 
+bool
+Field::isUnsignedInteger()const
+{
+  return false;
+}
+
+bool
+Field::isSignedInteger()const
+{
+  return false;
+}
+
 const StringBuffer &
 Field::toString()const
 {
-  UnsupportedConversion ex(ValueType::typeName(getType()), "String");
-  throw ex;
+  if(!valid_ || !isString())
+  {
+    UnsupportedConversion ex(ValueType::typeName(getType()), "String");
+    throw ex;
+  }
+  return string_;
 }
+
+uint64
+Field::toUnsignedInteger() const
+{
+  if(!valid_ || !isUnsignedInteger())
+  {
+    UnsupportedConversion ex(ValueType::typeName(getType()), "Unsigned Integer");
+    throw ex;
+  }
+  return unsignedInteger_;
+}
+
+int64
+Field::toSignedInteger() const
+{
+  if(!valid_ || !isSignedInteger())
+  {
+    UnsupportedConversion ex(ValueType::typeName(getType()), "Signed Integer");
+    throw ex;
+  }
+  return signedInteger_;
+}
+
 
 const Decimal
 Field::toDecimal() const

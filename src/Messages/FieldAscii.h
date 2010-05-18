@@ -46,7 +46,6 @@ namespace QuickFAST{
       // implement selected virtual methods from Field
       virtual bool isString() const;
       virtual const StringBuffer & toAscii() const;
-      virtual const StringBuffer & toString() const;
     private:
     };
   }

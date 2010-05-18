@@ -46,7 +46,6 @@ namespace QuickFAST{
       virtual const StringBuffer & toAscii() const;
       virtual const StringBuffer & toUtf8() const;
       virtual const StringBuffer & toByteVector() const;
-      virtual const StringBuffer & toString() const;
     private:
     };
   }

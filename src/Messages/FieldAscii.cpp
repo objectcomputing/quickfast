@@ -36,16 +36,6 @@ FieldAscii::isString() const
 }
 
 const StringBuffer &
-FieldAscii::toString() const
-{
-  if(!valid_)
-  {
-    throw FieldNotPresent("Field not present");
-  }
-  return string_;
-}
-
-const StringBuffer &
 FieldAscii::toAscii() const
 {
   return toString();

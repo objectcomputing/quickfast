@@ -79,20 +79,28 @@ MessagePerPacketAssembler::consumeBuffer(const unsigned char * buffer, size_t si
     bool skipBlock = false;
     if(!headerAnalyzer_.analyzeHeader(*this, blockSize, skipBlock))
     {
+      // header must be complete in one packet
       builder_.reportDecodingError("Invalid header in packet.  Ignoring packet.");
-      return true;
+      position_ = size_;
     }
-    if(!skipBlock)
+    else
     {
-      // note we apply reset at the packet level. If there are multiple messages per packet
-      // the decoder is NOT reset for each one.
-      if(reset_)
+      if(skipBlock)
       {
-        decoder_.reset();
+        position_ = size_;
       }
-      while(bytesAvailable() > 0)
+      else
       {
-        decoder_.decodeMessage(*this, builder_);
+        // note we apply reset at the packet level. If there are multiple messages per packet
+        // the decoder is NOT reset for each one.
+        if(reset_)
+        {
+          decoder_.reset();
+        }
+        while(bytesAvailable() > 0)
+        {
+          decoder_.decodeMessage(*this, builder_);
+        }
       }
     }
   }

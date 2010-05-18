@@ -39,16 +39,6 @@ FieldUtf8::isString() const
 }
 
 const StringBuffer &
-FieldUtf8::toString() const
-{
-  if(!valid_)
-  {
-    FieldNotPresent ex("Field not present");
-  }
-  return string_;
-}
-
-const StringBuffer &
 FieldUtf8::toUtf8() const
 {
   return toString();

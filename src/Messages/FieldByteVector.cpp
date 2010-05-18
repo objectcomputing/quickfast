@@ -47,16 +47,6 @@ FieldByteVector::toByteVector() const
 }
 
 
-const StringBuffer &
-FieldByteVector::toString() const
-{
-  if(!valid_)
-  {
-    FieldNotPresent ex("Field not present");
-  }
-  return string_;
-}
-
 FieldCPtr
 FieldByteVector::create(const std::string & value)
 {

@@ -52,3 +52,9 @@ FieldInt8::valueToStringBuffer() const
   buffer << signedInteger_;
   string_.assign(reinterpret_cast<const unsigned char *>(buffer.str().data()), buffer.str().size());
 }
+
+bool
+FieldInt8::isSignedInteger()const
+{
+  return true;
+}
