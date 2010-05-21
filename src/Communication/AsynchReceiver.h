@@ -75,10 +75,6 @@ namespace QuickFAST
 
 
     protected:
-      virtual bool perfectFilter()
-      {
-        return true;
-      }
 
       /// @brief handle I/O completion from an asynchronous receiver
       ///
@@ -111,9 +107,10 @@ namespace QuickFAST
               ++emptyPackets_;
               idleBufferPool_.push(buffer);
             }
-            else if(!perfectFilter()) // compensate for linux mishandling imperfect NIC filtering
+            else if(paused_)
             {
-              ++misroutedPackets_;
+              // We're paused.  Ignore incoming packets
+              ++pausedPackets_;
               idleBufferPool_.push(buffer);
             }
             else
@@ -133,13 +130,17 @@ namespace QuickFAST
           }
           else
           {
-            ++errorPackets_;
             // after an error, recover the buffer
             idleBufferPool_.push(buffer);
-            // and let the consumer decide what to do
-            if(!assembler_->reportCommunicationError(error.message()))
+            // ignore errors during state transitions
+            if(!paused_ && !stopping_)
             {
-              stop();
+              ++errorPackets_;
+              // and let the consumer decide what to do
+              if(!assembler_->reportCommunicationError(error.message()))
+              {
+                stop();
+              }
             }
           }
           // if possible fill another buffer while we process this one

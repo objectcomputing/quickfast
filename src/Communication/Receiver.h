@@ -21,13 +21,14 @@ namespace QuickFAST
     public:
       Receiver()
         : bufferSize_(1400)
+        , paused_(false)
         , stopping_(false)
         , readInProgress_(false)
         , noBufferAvailable_(0)
         , packetsReceived_(0)
         , bytesReceived_(0)
         , errorPackets_(0)
-        , misroutedPackets_(0)
+        , pausedPackets_(0)
         , emptyPackets_(0)
         , packetsQueued_(0)
         , batchesProcessed_(0)
@@ -108,6 +109,18 @@ namespace QuickFAST
         stopping_ = true;
       }
 
+      /// @brief Ignore incoming packets until resume()
+      virtual void pause()
+      {
+        paused_ = true;
+      }
+
+      /// @brief Resume handling incoming packets after pause()
+      virtual void resume()
+      {
+        paused_ = false;
+      }
+
       /// @brief Special method for BUFFER_RECEIVER
       ///
       /// Process data from an external buffer;
@@ -148,7 +161,7 @@ namespace QuickFAST
       ///          during a call from this Receiver
       /// @param wait if true, will wait until a buffer is available
       ///        or the service is stopped)
-      /// @return true pointer to the buffer or zero
+      /// @return pointer to the buffer or zero
       virtual LinkedBuffer * getBuffer(bool wait)
       {
         LinkedBuffer *next = queue_.serviceNext();
@@ -334,13 +347,12 @@ namespace QuickFAST
         return errorPackets_;
       }
 
-      /// @brief Statistic: How many packetes were delivered to the wrong address
+      /// @brief Statistic: How many packetes were ignored because this connection was paused
       ///
-      /// This compensates for a bug in Linux (the linux honcho's say it's a feature.)
-      /// @returns the number of misrouted packets.
-      size_t misroutedPackets() const
+      /// @returns the number of paused packets.
+      size_t pausedPackets() const
       {
-        return misroutedPackets_;
+        return pausedPackets_;
       }
 
       /// @brief Statistic: How many received packets were empty
@@ -423,6 +435,9 @@ namespace QuickFAST
       /// @brief All buffers have the same size
       size_t bufferSize_;
 
+      /// @brief temporarily ignore incoming packets
+      bool paused_;
+
       /// @brief True when we're trying to shut down
       bool stopping_;
 
@@ -440,7 +455,7 @@ namespace QuickFAST
       /// Packets received with errors (usually disconnect or EOF0
       size_t errorPackets_;
       /// Packets received in error due to a linux bug.
-      size_t misroutedPackets_;
+      size_t pausedPackets_;
       /// Packets containing no data (usually during shutdown)
       size_t emptyPackets_;
       /// Packets containing valid data: queued to be processed

@@ -68,26 +68,40 @@ MessagePerPacketAssembler::consumeBuffer(const unsigned char * buffer, size_t si
   if(builder_.wantLog(Common::Logger::QF_LOG_VERBOSE))
   {
     std::stringstream message;
-    message << "Received[" << messageCount_ << "]: " << size << " bytes";
+    message << "Received[" << messageCount_ << "]: " << size << " bytes" << std::endl;
+    for(size_t i = 0; i < size; ++i)
+    {
+      message << std::hex << std::setw(2) << std::setfill('0') << (unsigned short)(buffer[i]) << std::setfill(' ') << std::dec << ' ';
+      if((i+1)% 32 == 0)
+      {
+        message << std::endl;
+      }
+    }
+    message << std::endl;
     builder_.logMessage(Common::Logger::QF_LOG_VERBOSE, message.str());
   }
   try
   {
-    buffer_ = buffer;
-    size_ = size;
+    currentBuffer_ = buffer;
+    currentSize_ = size;
     size_t blockSize = 0;
     bool skipBlock = false;
     if(!headerAnalyzer_.analyzeHeader(*this, blockSize, skipBlock))
     {
       // header must be complete in one packet
       builder_.reportDecodingError("Invalid header in packet.  Ignoring packet.");
-      position_ = size_;
+      headerAnalyzer_.reset();
+      DataSource::reset();
+      currentSize_ = 0;
+      currentBuffer_ = 0;
     }
     else
     {
       if(skipBlock)
       {
-        position_ = size_;
+        DataSource::reset();
+        currentSize_ = 0;
+        currentBuffer_ = 0;
       }
       else
       {
@@ -112,6 +126,8 @@ MessagePerPacketAssembler::consumeBuffer(const unsigned char * buffer, size_t si
   {
     result = false;
   }
+  // an aid to debugging
+  // memset(const_cast<unsigned char *>(buffer), '\xCD' , size);
   return result;
 }
 
@@ -136,10 +152,11 @@ MessagePerPacketAssembler::receiverStopped(Communication::Receiver & /*receiver*
 bool
 MessagePerPacketAssembler::getBuffer(const uchar *& buffer, size_t & size)
 {
-  bool result = size_ > 0;
-  buffer = buffer_;
-  size = size_;
-  size_ = 0;
+  bool result = currentSize_ > 0;
+  buffer = currentBuffer_;
+  currentBuffer_ = 0;
+  size = currentSize_;
+  currentSize_ = 0;
   return result;
 }
 

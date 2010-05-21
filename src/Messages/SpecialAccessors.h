@@ -8,6 +8,7 @@
 #define SPECIALACCESSORS_H
 #include <Messages/MessageAccessor.h>
 #include <Messages/MessageField.h>
+#include <Messages/Sequence.h>
 
 namespace QuickFAST
 {
@@ -20,11 +21,15 @@ namespace QuickFAST
       /////////////
       // Implement MessageAccessor
       virtual const Messages::MessageField & operator[](size_t index)const;
-      virtual bool isPresent(const std::string & name)const;
-      virtual bool getField(const std::string &name, Messages::FieldCPtr & value) const;
-      virtual bool getIdentity(const std::string &name, Messages::FieldIdentityCPtr & identity) const;
-      virtual const_iterator begin() const;
-      virtual const_iterator end() const;
+      virtual bool isPresent(const FieldIdentity & identity)const;
+      virtual bool getUnsignedInteger(const FieldIdentity & identity, ValueType::Type type, uint64 & value)const;
+      virtual bool getSignedInteger(const FieldIdentity & identity, ValueType::Type type, int64 & value)const;
+      virtual bool getDecimal(const FieldIdentity & identity, ValueType::Type type, Decimal & value)const;
+      virtual bool getString(const FieldIdentity & identity, ValueType::Type type, const StringBuffer *& value)const;
+      virtual bool getGroup(const FieldIdentity & identity, const MessageAccessor *& group)const;
+      virtual bool getSequenceLength(const FieldIdentity & identity, size_t & length)const;
+      virtual bool getSequenceEntry(const FieldIdentity & identity, size_t index, const MessageAccessor *& entry)const;
+
       virtual const std::string & getApplicationType()const;
       virtual const std::string & getApplicationTypeNs()const;
 
@@ -40,33 +45,51 @@ namespace QuickFAST
     }
 
     inline bool
-    EmptyAccessor::isPresent(const std::string & /*name*/)const
+    EmptyAccessor::isPresent(const Messages::FieldIdentity & )const
     {
       return false;
     }
 
     inline bool
-    EmptyAccessor::getField(const std::string &/*name*/, Messages::FieldCPtr & /*value*/) const
+    EmptyAccessor::getUnsignedInteger(const FieldIdentity & identity, ValueType::Type type, uint64 & value)const
     {
       return false;
     }
 
     inline bool
-    EmptyAccessor::getIdentity(const std::string &/*name*/, Messages::FieldIdentityCPtr & /*identity*/) const
+    EmptyAccessor::getSignedInteger(const FieldIdentity & identity, ValueType::Type type, int64 & value)const
     {
       return false;
     }
 
-    inline EmptyAccessor::const_iterator
-    EmptyAccessor::begin() const
+    inline bool
+    EmptyAccessor::getDecimal(const FieldIdentity & identity, ValueType::Type type, Decimal & value)const
     {
-      return 0;
+      return false;
     }
 
-    inline EmptyAccessor::const_iterator
-    EmptyAccessor::end() const
+    inline bool
+    EmptyAccessor::getString(const FieldIdentity & identity, ValueType::Type type, const StringBuffer *& value)const
     {
-      return 0;
+      return false;
+    }
+
+    inline bool
+    EmptyAccessor::getGroup(const FieldIdentity & identity, const MessageAccessor *& group)const
+    {
+      return false;
+    }
+
+    inline bool
+    EmptyAccessor::getSequenceLength(const FieldIdentity & identity, size_t & length)const
+    {
+      return false;
+    }
+
+    inline bool
+    EmptyAccessor::getSequenceEntry(const FieldIdentity & identity, size_t index, const MessageAccessor *& entry)const
+    {
+      return false;
     }
 
     inline const std::string &
@@ -94,11 +117,14 @@ namespace QuickFAST
       /////////////
       // Implement MessageAccessor
       virtual const Messages::MessageField & operator[](size_t index)const;
-      virtual bool isPresent(const std::string & name)const;
-      virtual bool getField(const std::string &name, Messages::FieldCPtr & value) const;
-      virtual bool getIdentity(const std::string &name, Messages::FieldIdentityCPtr & identity) const;
-      virtual const_iterator begin() const;
-      virtual const_iterator end() const;
+      virtual bool isPresent(const FieldIdentity & identity)const;
+      virtual bool getUnsignedInteger(const FieldIdentity & identity, ValueType::Type type, uint64 & value)const;
+      virtual bool getSignedInteger(const FieldIdentity & identity, ValueType::Type type, int64 & value)const;
+      virtual bool getDecimal(const FieldIdentity & identity, ValueType::Type type, Decimal & value)const;
+      virtual bool getString(const FieldIdentity & identity, ValueType::Type type, const StringBuffer *& value)const;
+      virtual bool getGroup(const FieldIdentity & identity, const MessageAccessor *& group)const;
+      virtual bool getSequenceLength(const FieldIdentity & identity, size_t & length)const;
+      virtual bool getSequenceEntry(const FieldIdentity & identity, size_t index, const MessageAccessor *& entry)const;
       virtual const std::string & getApplicationType()const;
       virtual const std::string & getApplicationTypeNs()const;
 
@@ -122,36 +148,88 @@ namespace QuickFAST
     }
 
     inline bool
-    SingleFieldAccessor::isPresent(const std::string & /*name*/)const
+    SingleFieldAccessor::isPresent(const FieldIdentity & identity)const
     {
-      // we could check
-      return true;
+      return identity == * messageField_.getIdentity();
+    }
+    inline bool
+    SingleFieldAccessor::getUnsignedInteger(const FieldIdentity & identity, ValueType::Type type, uint64 & value)const
+    {
+      if(messageField_.getField()->isUnsignedInteger())
+      {
+        value = messageField_.getField()->toUnsignedInteger();
+        return true;
+      }
+      return false;
     }
 
     inline bool
-    SingleFieldAccessor::getField(const std::string &/*name*/, Messages::FieldCPtr & value) const
+    SingleFieldAccessor::getSignedInteger(const FieldIdentity & identity, ValueType::Type type, int64 & value)const
     {
-      value = messageField_.getField();
-      return true;
+      if(messageField_.getField()->isSignedInteger())
+      {
+        value = messageField_.getField()->toSignedInteger();
+        return true;
+      }
+      return false;
     }
 
     inline bool
-    SingleFieldAccessor::getIdentity(const std::string &/*name*/, Messages::FieldIdentityCPtr & identity) const
+    SingleFieldAccessor::getDecimal(const FieldIdentity & identity, ValueType::Type type, Decimal & value)const
     {
-      identity = messageField_.getIdentity();
-      return true;
+      if(messageField_.getField()->getType() == ValueType::DECIMAL)
+      {
+        value = messageField_.getField()->toDecimal();
+        return true;
+      }
+      return false;
     }
 
-    inline SingleFieldAccessor::const_iterator
-    SingleFieldAccessor::begin() const
+    inline bool
+    SingleFieldAccessor::getString(const FieldIdentity & identity, ValueType::Type type, const StringBuffer *& value)const
     {
-      return &messageField_;
+      if(messageField_.getField()->isString())
+      {
+        value = & messageField_.getField()->toString();
+        return true;
+      }
+      return false;
     }
 
-    inline SingleFieldAccessor::const_iterator
-    SingleFieldAccessor::end() const
+    inline bool
+    SingleFieldAccessor::getGroup(const FieldIdentity & identity, const MessageAccessor *& group)const
     {
-      return (&messageField_) + 1;
+      if(messageField_.getField()->getType() == ValueType::GROUP)
+      {
+        const GroupCPtr & groupPtr = messageField_.getField()->toGroup();
+        group = groupPtr.get();
+        return true;
+      }
+      return false;
+    }
+
+    inline bool
+    SingleFieldAccessor::getSequenceLength(const FieldIdentity & identity, size_t & length)const
+    {
+      if(messageField_.getField()->getType() == ValueType::SEQUENCE)
+      {
+        const SequenceCPtr & sequence = messageField_.getField()->toSequence();
+        length = sequence->size();
+        return true;
+      }
+      return false;
+    }
+
+    inline bool
+    SingleFieldAccessor::getSequenceEntry(const FieldIdentity & identity, size_t index, const MessageAccessor *& entry)const
+    {
+      if(messageField_.getField()->getType() == ValueType::SEQUENCE)
+      {
+        const SequenceCPtr & sequence = messageField_.getField()->toSequence();
+        entry = (*sequence)[index].get();
+        return true;
+      }
+      return false;
     }
 
     inline const std::string &

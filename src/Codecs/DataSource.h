@@ -124,6 +124,13 @@ namespace QuickFAST{
         return echo_;
       }
 
+      void reset()
+      {
+        size_ = 0;
+        position_ = 0;
+        buffer_ = 0;
+      }
+
     protected:
       /// @brief Honor the echo parameters
       /// @param ok the result about to be returned from getByte
@@ -131,22 +138,14 @@ namespace QuickFAST{
       void doEcho(bool ok, uchar byte);
 
       /// @brief get a new buffer (releasing the old one)
-      /// This is the preferred method to override.
+      ///
       /// Free the previous buffer and start a new one.
-      /// @param[out] buffer should be set to point to a ne bufferfull of data
+      /// @param[out] buffer should be set to point to a bufferfull of data
       /// @param[out] size should be set to the size of the buffer. If return is true, size must be > 0!
       /// @returns true if more data is available;  false means EOF and stops the decoder
-      virtual bool getBuffer(const uchar *& buffer, size_t & size);
+      virtual bool getBuffer(const uchar *& buffer, size_t & size) = 0;
 
-      /// @brief Get the next byte.
-      ///
-      /// This is deprecated in favor of getBuffer. It will be removed RSN.
-      ///
-      /// @param[out] byte where to store the byte.
-      /// @returns true if successful; false if end of data
-      virtual bool readByte(uchar & byte);
-
-    protected:
+    private:
       /// current buffer being delivered to decoder
       const uchar * buffer_;
       /// size of current buffer
@@ -154,10 +153,6 @@ namespace QuickFAST{
       /// position within current buffer
       size_t position_;
 
-      /// deprecated: used only to "translate" readByte to getBuffer
-      uchar byteBuffer_;
-
-    private:
       std::ostream * echo_;
       bool verboseMessages_;
       bool verboseFields_;

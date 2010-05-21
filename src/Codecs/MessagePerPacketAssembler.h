@@ -93,8 +93,8 @@ namespace QuickFAST
       HeaderAnalyzer & headerAnalyzer_;
       Messages::ValueMessageBuilder & builder_;
 
-      const unsigned char * buffer_;
-      size_t size_;
+      const unsigned char * currentBuffer_;
+      size_t currentSize_;
 
       size_t messageCount_;
       size_t byteCount_;

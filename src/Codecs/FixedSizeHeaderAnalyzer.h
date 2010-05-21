@@ -43,6 +43,7 @@ namespace QuickFAST{
       ////////////////////////
       // Implement HeaderAnalyzer
       virtual bool analyzeHeader(DataSource & source, size_t & blockSize, bool & skip);
+      virtual void reset();
     private:
       size_t prefixBytes_;
       size_t sizeBytes_;

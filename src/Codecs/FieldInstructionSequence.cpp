@@ -122,13 +122,9 @@ FieldInstructionSequence::encodeNop(
     encoder.reportFatal("[ERR U07]", "SegmentBody not defined for Sequence instruction.");
   }
 
-  // retrieve the field corresponding to this sequence
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  size_t length = 0;
+  if(accessor.getSequenceLength(*identity_, length))
   {
-    Messages::SequenceCPtr sequence = field->toSequence();
-    size_t length = sequence->size();
-
     Messages::FieldCPtr lengthField(Messages::FieldUInt32::create(QuickFAST::uint32(length)));
 
     Codecs::FieldInstructionCPtr lengthInstruction;
@@ -147,8 +143,20 @@ FieldInstructionSequence::encodeNop(
 
     for(size_t pos = 0; pos < length; ++pos)
     {
-      encoder.encodeGroup(destination, segment_, *(*sequence)[pos]);
+      const Messages::MessageAccessor * entry;
+      if(accessor.getSequenceEntry(*identity_, pos, entry))
+      {
+        encoder.encodeGroup(destination, segment_, *entry);
+      }
+      else
+      {
+        std::stringstream msg;
+        msg << "Sequence entry " << pos << " of " << length << " missing.";
+        encoder.reportError("Uxx", msg.str(), *identity_);
+      }
+      accessor.endSequenceEntry(*identity_, pos, entry);
     }
+    accessor.endSequence(*identity_);
   }
   else
   {

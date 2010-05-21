@@ -28,6 +28,7 @@ using namespace Examples;
 // InterpretApplication
 
 InterpretApplication::InterpretApplication()
+: console_(false)
 {
 }
 
@@ -262,6 +263,11 @@ InterpretApplication::parseSingleArg(int argc, char * argv[])
       configuration_.setNonstandard(boost::lexical_cast<unsigned long>(argv[1]));
       consumed = 2;
     }
+    else if(opt == "-console")
+    {
+      console_ = true;
+      consumed = 1;
+    }
   }
   catch (std::exception & ex)
   {
@@ -374,13 +380,39 @@ InterpretApplication::run()
     Codecs::GenericMessageBuilder builder(handler);
     connection_.configure(builder, configuration_);
 
-    if(bufferFilename_.empty())
+    if(console_)
     {
-      // run the event loop in this thread.  Do not return until
-      // receiver is stopped.
-      connection_.receiver().run();
+      // start a thread to receive data, but reserve this thread for console input
+      connection_.receiver().runThreads(1, false);
+      bool more = true;
+      while(more)
+      {
+        char c;
+        std::cin >> c;
+        if(isgraph(c))
+        {
+          if(c == 'q')
+          {
+            more = false;
+            connection_.receiver().stop();
+            connection_.receiver().joinThreads();
+          }
+          else if (c == 'p')
+          {
+            connection_.receiver().pause();
+          }
+          else if( c == 'r')
+          {
+            connection_.receiver().resume();
+          }
+          else
+          {
+            std::cout << "(q)uit; (p)ause; (r)esume" << std::endl;
+          }
+        }
+      }
     }
-    else
+    else if(!bufferFilename_.empty())
     {
       std::FILE * bufferFile = std::fopen(bufferFilename_.c_str(),
 #ifdef _WIN32
@@ -401,7 +433,14 @@ InterpretApplication::run()
       std::fread(buffer.get(), 1, fileSize, bufferFile);
       connection_.receiver().receiveBuffer(buffer.get(), fileSize);
     }
+    else
+    {
+      // run the event loop in this thread.  Do not return until
+      // receiver is stopped.
+      connection_.receiver().run();
+    }
   }
+
   catch (std::exception & e)
   {
     std::cerr << e.what() << std::endl;

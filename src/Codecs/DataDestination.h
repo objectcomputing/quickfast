@@ -11,6 +11,7 @@
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
 #include <Common/WorkingBuffer.h>
+#include <boost/asio.hpp>
 namespace QuickFAST{
   namespace Codecs{
     /// @brief An inteface for data destinations to be used by an Encoder.
@@ -175,14 +176,93 @@ namespace QuickFAST{
         }
       }
 
-    private:
-      size_t used_;
-      size_t active_;
-      std::ostream * verboseOut_;
+      /// @brief Support for asio gather writes: forward iterator through buffers
+      ///
+      /// The intent is for DataDestination to conform to the ConstBufferSequence concept
+      /// defined by ASIO.  This would allow it to be passed directly to the asio::write(v)
+      /// Note the implication that if asynch writes are used the DataDestination must
+      /// remain intact until the write completes.
+      class const_iterator
+      {
+      public:
+        const_iterator(const DataDestination & destination, size_t position)
+          : destination_(destination)
+          , position_(position)
+        {
+        }
+        const const_iterator & operator ++()
+        {
+          if(position_ < destination_.size())
+          {
+            ++position_;
+          }
+          return *this;
+        }
 
+        const_iterator operator ++(int)
+        {
+          const_iterator result(*this);
+          if(position_ < destination_.size())
+          {
+            ++position_;
+          }
+          return result;
+        }
+
+        boost::asio::const_buffer operator * () const
+        {
+          const WorkingBuffer & buffer(destination_[position_]);
+          return boost::asio::const_buffer(buffer.begin(), buffer.size());
+        }
+
+        boost::asio::const_buffer operator -> () const
+        {
+          const WorkingBuffer & buffer(destination_[position_]);
+          return boost::asio::const_buffer(buffer.begin(), buffer.size());
+        }
+
+        bool operator == (const const_iterator & rhs) const
+        {
+          return position_ == rhs.position_;
+        }
+        bool operator != (const const_iterator & rhs) const
+        {
+          return position_ != rhs.position_;
+        }
+
+      private:
+        const DataDestination & destination_;
+        size_t position_;
+      };
+
+      const_iterator begin()const
+      {
+        return const_iterator(*this, 0);
+      }
+      const_iterator end() const
+      {
+        return const_iterator(*this, used_);
+      }
+      size_t size() const
+      {
+        return used_;
+      }
+      const WorkingBuffer & operator[](size_t index)const
+      {
+        return buffers_[index];
+      }
+
+    private:
+      /// @brief how many buffers contain data.
+      size_t used_;
+      /// @brief which buffer will receive pushes
+      size_t active_;
       /// @brief A type to store the buffers in vectors
       typedef std::vector<WorkingBuffer> BufferVector;
       BufferVector buffers_;
+      /// @brief Where to write noisy/debug output.
+      std::ostream * verboseOut_;
+
     };
   }
 }

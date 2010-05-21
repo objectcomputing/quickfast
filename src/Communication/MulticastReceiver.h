@@ -34,6 +34,7 @@ namespace QuickFAST
         , multicastGroup_(boost::asio::ip::address::from_string(multicastGroupIP))
         , endpoint_(listenInterface_, portNumber)
         , socket_(ioService_)
+        , joined_(false)
       {
       }
 
@@ -53,6 +54,7 @@ namespace QuickFAST
         , multicastGroup_(boost::asio::ip::address::from_string(multicastGroupIP))
         , endpoint_(listenInterface_, portNumber)
         , socket_(ioService_.ioService())
+        , joined_(false)
       {
       }
 
@@ -66,18 +68,6 @@ namespace QuickFAST
         socket_.open(endpoint_.protocol());
         socket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
         socket_.bind(endpoint_);
-
-#ifdef IPRECVSTADDR
-        boost::system::error_code err;
-        const int on = 1;
-        boost::asio::detail::socket_ops::setsockopt(
-          AF_INET,
-          1,
-          IP_RECVDSTADDR,
-          &on,
-          sizeof(on),
-          err);
-#endif
 
         if(assembler_->wantLog(Common::Logger::QF_LOG_INFO))
         {
@@ -93,29 +83,61 @@ namespace QuickFAST
           multicastGroup_.to_v4(),
           listenInterface_.to_v4());
         socket_.set_option(joinRequest);
+        joined_ = true;
         return true;
       }
 
       virtual void stop()
       {
-        AsynchReceiver::stop();
-        // attempt to cancel any receive requests in progress.
+        // stop processing buffers first
+        AsynchReceiver::pause();
+
         try
         {
+          // leave the multicast group
+          if(joined_)
+          {
+            boost::asio::ip::multicast::leave_group leaveRequest(
+              multicastGroup_.to_v4(),
+              listenInterface_.to_v4());
+            socket_.set_option(leaveRequest);
+          }
+          // attempt to cancel any receive requests in progress.
           socket_.close();
         }
         catch(...)
         {
         }
+        // and then shut everything down for good.
+        AsynchReceiver::stop();
       }
-    protected:
-      virtual bool perfectFilter()
-      {
-        if(multicastGroup_ == senderEndpoint_.address()) return true;
-        std::cout << std::endl << multicastGroup_.to_string() << " != " << senderEndpoint_.address().to_string() << std::endl;
 
-        return false;
-//        return (multicastGroup_ == senderEndpoint_.address());
+      virtual void pause()
+      {
+        // Temporarily leave the group
+        if(joined_)
+        {
+          boost::asio::ip::multicast::leave_group leaveRequest(
+            multicastGroup_.to_v4(),
+            listenInterface_.to_v4());
+          socket_.set_option(leaveRequest);
+          AsynchReceiver::pause();
+          joined_ = false;
+        }
+      }
+
+      virtual void resume()
+      {
+        AsynchReceiver::resume();
+        if(!joined_)
+        {
+          // rejoin the multicast group
+          boost::asio::ip::multicast::join_group joinRequest(
+            multicastGroup_.to_v4(),
+            listenInterface_.to_v4());
+          socket_.set_option(joinRequest);
+          joined_ = true;
+        }
       }
 
     private:
@@ -140,6 +162,7 @@ namespace QuickFAST
       boost::asio::ip::udp::endpoint endpoint_;
       boost::asio::ip::udp::endpoint senderEndpoint_;
       boost::asio::ip::udp::socket socket_;
+      bool joined_;
     };
   }
 }

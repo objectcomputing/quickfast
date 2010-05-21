@@ -88,6 +88,7 @@ namespace QuickFAST
       bool usetv64_;  // true forces 64 bit header on 32 bit platform
                       // neither usetv32_ nor usetv64_ means use native
                       // both is an (undetected) error.
+      uint32 linktype_;
       ByteSwapper swap;
       bool verbose_;
     };

@@ -45,15 +45,6 @@ DataSource::bytesAvailable()
   return size_ - position_;
 }
 
-bool
-DataSource::getBuffer(const uchar *& buffer, size_t & size)
-{
-  // for backwards compatibility
-  buffer = &byteBuffer_;
-  size_ = 1;
-  return readByte(byteBuffer_);
-}
-
 void
 DataSource::doEcho(bool ok, uchar byte)
 {
@@ -171,11 +162,4 @@ DataSource::beginField(const std::string & name)
     isPmap_ = name == "PMAP";
     (*echo_) << std::endl << "***Field: " << name << " @" << std::hex<< byteCount_ << std::dec << "***" << std::endl << "  ";
   }
-}
-
-
-bool
-DataSource::readByte(uchar & byte)
-{
-  throw UsageError("Coding error", "Derived class must override DataSource::getBuffer or DataSource::readByte.");
 }

@@ -74,6 +74,21 @@ namespace
     uint32 snaplen;	/* max length saved portion of each pkt */
     uint32 linktype;	/* data link type (LINKTYPE_*) */
   };
+  enum linkType
+  {
+    DLT_EN10MB = 1, /* Ethernet (10Mb) */
+    DLT_EN3MB = 2, /* Experimental Ethernet (3Mb) */
+    DLT_AX25 = 3, /* Amateur Radio AX.25 */
+    DLT_PRONET = 4, /* Proteon ProNET Token Ring */
+    DLT_CHAOS = 5, /* Chaos */
+    DLT_IEEE802 = 6, /* IEEE 802 Networks */
+    DLT_ARCNET = 7, /* ARCNET */
+    DLT_SLIP = 8, /* Serial Line IP */
+    DLT_PPP = 9, /* Point-to-point Protocol */
+    DLT_FDDI = 10, 	/* FDDI */
+    DLT_LINUX_SLL = 113, /* Linux cooked sockets */
+    DLT_NULL = 0 /* no link-layer encapsulation */
+  };
 
   /*
    * Generic per-packet information, as supplied by libpcap.
@@ -153,6 +168,16 @@ namespace
     uchar ether_type[2];
   };
 
+  struct linuxCookedCaptureHeader{
+    uint16 packetType;
+    uint16 linkAddressType;
+    uchar filler; // cooked Capture Headers do not get properly byte swapped (????)
+    uchar linkAddressLength;
+    uchar linkAddress[8]; // link address
+    uint16 protocol;  /* s/b 0x8 for IP */
+  };
+
+
   /* IPv4 header */
   struct ip_header{
       uchar  ver_ihl;           // Version (4 bits) + Internet header length (4 bits)
@@ -189,6 +214,7 @@ PCapReader::PCapReader()
 , ok_(false)
 , usetv32_(false)
 , usetv64_(false)
+, linktype_(DLT_NULL)
 , swap(false)
 , verbose_(false)
 {
@@ -245,6 +271,7 @@ PCapReader::rewind()
       swap.setSwap(fileHeader->magic == swappedMagic);
       assert(swap(fileHeader->magic) == nativeMagic);
     }
+    linktype_ = swap(fileHeader->linktype);
   }
   return ok_;
 }
@@ -279,6 +306,8 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
       size_t headerPos = pos_;
       size_t datalen = 0;
       bool truncate = false;
+      unsigned int dataLinkType = 0;
+
       if(usetv32_)
       {
         pcap_pkthdr32 * packetHeader = reinterpret_cast<pcap_pkthdr32 *>(buffer_.get() + pos_);
@@ -307,29 +336,73 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
       }
       else
       {
-        // skip the other headers
-        pos_ += sizeof(ethernetIIHeader);
-        datalen -= sizeof(ethernetIIHeader);
-
-        ip_header * ipHeader = reinterpret_cast<ip_header *>(buffer_.get() + pos_);
-        // IP header contains its own length expressed in 4 byte units.
-        size_t ipLen = (ipHeader->ver_ihl & 0xF) * 4;
-        pos_ += ipLen;
-        datalen -= ipLen;
-        pos_ += sizeof(udp_header);
-        datalen -= sizeof(udp_header);
-        if(datalen > 0)
+        bool found = false;
+        switch(linktype_)
         {
-          buffer = buffer_.get() + pos_;
-          size = datalen;
-          if(verbose_)
+        case DLT_EN10MB:
           {
-            std::cout << "PCapReader: " << headerPos << ": " << pos_ << ' ' << datalen
-              << "=== 0x" << std::hex  << headerPos << ": 0x" << pos_ << " 0x" << datalen << std::dec << std::endl;
+            pos_ += sizeof(ethernetIIHeader);
+            datalen -= sizeof(ethernetIIHeader);
+            found = true;
+            break;
           }
-          ok_ = true;
+        case DLT_LINUX_SLL:
+          {
+            pos_ += sizeof(linuxCookedCaptureHeader);
+            datalen -= sizeof(linuxCookedCaptureHeader);
+            found = true;
+            break;
+          }
+        default:
+          {
+            // HACK!look for the IP protocol flag to mark the end of the the link layer header
+            static unsigned short IPProtocol = 0x0008;
+            while(!found && datalen > 2)
+            {
+              unsigned short protocol = *(unsigned short *)(buffer_.get() + pos_);
+              if(swap(protocol) == IPProtocol)
+              {
+                found = true;
+                pos_ += 2;
+                datalen -= 2;
+              }
+              else
+              {
+                pos_ += 1;
+                datalen -= 1;
+              }
+            }
+            break;
+          }
         }
-        pos_ += datalen;
+        if(found)
+        {
+          ip_header * ipHeader = reinterpret_cast<ip_header *>(buffer_.get() + pos_);
+          // IP header contains its own length expressed in 4 byte units.
+          size_t ipLen = (ipHeader->ver_ihl & 0xF) * 4;
+          pos_ += ipLen;
+          datalen -= ipLen;
+          pos_ += sizeof(udp_header);
+          datalen -= sizeof(udp_header);
+          if(datalen > 0)
+          {
+            buffer = buffer_.get() + pos_;
+            size = datalen;
+            if(verbose_)
+            {
+              std::cout << "PCapReader: " << headerPos << ": " << pos_ << ' ' << datalen
+                << "=== 0x" << std::hex  << headerPos << ": 0x" << pos_ << " 0x" << datalen << std::dec << std::endl;
+            }
+            ok_ = true;
+          }
+          pos_ += datalen;
+        }
+        else
+        {
+          pos_ += datalen;
+          skipped += 1;
+        }
+
       }
     }
     if(skipped != 0)

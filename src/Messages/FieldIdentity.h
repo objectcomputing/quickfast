@@ -99,6 +99,20 @@ namespace QuickFAST{
 
       void display(std::ostream & output)const;
 
+      bool operator == (const FieldIdentity & rhs) const
+      {
+        return(
+          (fieldNamespace_ == rhs.fieldNamespace_) &&
+          (fullName_ == rhs.fullName_) &&
+          (id_ == rhs.id_));
+      }
+
+      bool operator != (const FieldIdentity & rhs) const
+      {
+        return ! this->operator==(rhs);
+      }
+
+
     private:
       void qualifyName()
       {

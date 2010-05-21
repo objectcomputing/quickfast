@@ -1,3 +1,61 @@
+Fri May 21 18:37:24 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/DataDestination.h:
+        Add support for asio gather writes
+
+        * src/Codecs/DataSource.h:
+        * src/Codecs/DataSource.cpp:
+        Remove deprecated methods
+
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FieldInstructionSequence.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/FieldInstructionUInt32.h:
+        * src/Messages/FieldIdentity.h:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/MessageAccessor.h:
+        * src/Messages/SpecialAccessors.h:
+        Switch to retrieving application data by specific value
+        rather than by generic field.
+
+        * src/Codecs/FixedSizeHeaderAnalyzer.h:
+        * src/Codecs/FixedSizeHeaderAnalyzer.cpp:
+        * src/Codecs/HeaderAnalyzer.h:
+        Add the ability to reset the analyzer in case
+        something happens while processing the header.
+
+        * src/Codecs/MessagePerPacketAssembler.h:
+        * src/Codecs/MessagePerPacketAssembler.cpp:
+        Rename buffer_ and size_ to avoid name conflicts
+        with DataSource base class.
+        Add additional debug info when verbose is turned on.
+        Reset the HeaderAnalyzer when appropriate.
+
+        * src/Communication/AsynchReceiver.h:
+        * src/Communication/MulticastReceiver.h:
+        * src/Communication/Receiver.h:
+        Remove perfect filter.  It didn't solve the problem.
+        Add support for pausing and resuming a multicast receiver.
+
+        * src/Communication/PCapReader.h:
+        * src/Communication/PCapReader.cpp:
+        Add support for "Linux cooked" headers in pcap file.
+
+
+        * src/Examples/InterpretApplication/InterpretApplication.h:
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+        Add console "commands"  (p)ause; (r)esume; (q)uit.
+        Enable with the -console option.
+        to use: type the letter, hit Enter
+
 Tue May 18 13:20:47 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MessagePerPacketAssembler.cpp:

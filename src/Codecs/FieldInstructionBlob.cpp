@@ -359,7 +359,7 @@ FieldInstructionBlob::encodeNullableBlob(
   Codecs::DataDestination & destination,
   Codecs::Context & /*context*/,
   WorkingBuffer & buffer,
-  const std::string & value) const
+  const StringBuffer & value) const
 {
     uint32 length = QuickFAST::uint32(value.length());
     length += 1;
@@ -371,7 +371,7 @@ void
 FieldInstructionBlob::encodeBlob(
   Codecs::DataDestination & destination,
   WorkingBuffer & buffer,
-  const std::string & value) const
+  const StringBuffer & value) const
 {
     uint32 length = QuickFAST::uint32(value.length());
     encodeUnsignedInteger(destination, buffer, length);
@@ -386,17 +386,16 @@ FieldInstructionBlob::encodeNop(
   const Messages::MessageAccessor & accessor) const
 {
     // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  const StringBuffer * value;
+  if(accessor.getString(*identity_, type_, value))
   {
-    std::string value = field->toString();
     if(!isMandatory())
     {
-      encodeNullableBlob(destination, encoder, encoder.getWorkingBuffer(), value);
+      encodeNullableBlob(destination, encoder, encoder.getWorkingBuffer(), *value);
     }
     else
     {
-      encodeBlob(destination, encoder.getWorkingBuffer(), value);
+      encodeBlob(destination, encoder.getWorkingBuffer(), *value);
     }
   }
   else // not defined in accessor
@@ -417,12 +416,11 @@ FieldInstructionBlob::encodeConstant(
   const Messages::MessageAccessor & accessor) const
 {
   // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  const StringBuffer * value;
+  if(accessor.getString(*identity_, type_, value))
   {
-    const std::string & value = field->toString();
     const std::string & constant = initialValue_->toString();
-    if(value != constant)
+    if(*value != constant)
     {
       encoder.reportFatal("[ERR U10]", "Constant value does not match application data.", *identity_);
     }
@@ -450,13 +448,11 @@ FieldInstructionBlob::encodeDefault(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & accessor) const
 {
-  // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  const StringBuffer * value;
+  if(accessor.getString(*identity_, type_, value))
   {
-    std::string value = field->toString();
     if(fieldOp_->hasValue() &&
-      initialValue_->toString() == value)
+      *value == initialValue_->toString())
     {
       pmap.setNextField(false); // not in stream. use default
     }
@@ -465,11 +461,11 @@ FieldInstructionBlob::encodeDefault(
       pmap.setNextField(true); // != default.  Send value
       if(!isMandatory())
       {
-        encodeNullableBlob(destination, encoder, encoder.getWorkingBuffer(), value);
+        encodeNullableBlob(destination, encoder, encoder.getWorkingBuffer(), *value);
       }
       else
       {
-        encodeBlob(destination,  encoder.getWorkingBuffer(), value);
+        encodeBlob(destination,  encoder.getWorkingBuffer(), *value);
       }
     }
   }
@@ -519,12 +515,10 @@ FieldInstructionBlob::encodeCopy(
     }
   }
 
-  // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  const StringBuffer * value;
+  if(accessor.getString(*identity_, type_, value))
   {
-    std::string value = field->toString();
-    if(previousStatus == Context::OK_VALUE && previousValue == value)
+    if(previousStatus == Context::OK_VALUE && *value == previousValue)
     {
       pmap.setNextField(false); // not in stream, use copy
     }
@@ -533,13 +527,13 @@ FieldInstructionBlob::encodeCopy(
       pmap.setNextField(true);// value in stream
       if(!isMandatory())
       {
-        encodeNullableBlob(destination, encoder, encoder.getWorkingBuffer(), value);
+        encodeNullableBlob(destination, encoder, encoder.getWorkingBuffer(), *value);
       }
       else
       {
-        encodeBlob(destination, encoder.getWorkingBuffer(), value);
+        encodeBlob(destination, encoder.getWorkingBuffer(), *value);
       }
-      fieldOp_->setDictionaryValue(encoder, value);
+      fieldOp_->setDictionaryValue(encoder, *value);
     }
   }
   else // not defined in accessor
@@ -586,22 +580,19 @@ FieldInstructionBlob::encodeDelta(
     }
   }
 
-//      encoder.reportFatal("[ERR D4]", "Previous value type mismatch.", *identity_);
-
-  // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  const StringBuffer * value;
+  if(accessor.getString(*identity_, type_, value))
   {
-    std::string value = field->toString();
-    size_t prefix = longestMatchingPrefix(previousValue, value);
-    size_t suffix = longestMatchingSuffix(previousValue, value);
+    size_t prefix = longestMatchingPrefix(previousValue, *value);
+    size_t suffix = longestMatchingSuffix(previousValue, *value);
     int32 deltaCount = QuickFAST::uint32(previousValue.length() - prefix);
-    std::string deltaValue = value.substr(prefix);
+    // Performance: add substr to StringBuffer
+    std::string deltaValue = static_cast<std::string>(*value).substr(prefix);
     if(prefix < suffix)
     {
       deltaCount = -int32(previousValue.length() - suffix);
       deltaCount -= 1; // allow +/- 0 values;
-      deltaValue = value.substr(0, value.length() - suffix);
+      deltaValue = static_cast<std::string>(*value).substr(0, value->length() - suffix);
     }
     if(!isMandatory() && deltaCount >= 0)
     {
@@ -616,9 +607,9 @@ FieldInstructionBlob::encodeDelta(
     encodeSignedInteger(destination, encoder.getWorkingBuffer(), deltaCount);
     encodeBlob(destination, encoder.getWorkingBuffer(), deltaValue);
 
-    if(previousStatus != Context::OK_VALUE  || value != previousValue)
+    if(previousStatus != Context::OK_VALUE  || *value != previousValue)
     {
-      fieldOp_->setDictionaryValue(encoder, value);
+      fieldOp_->setDictionaryValue(encoder, *value);
     }
 
   }
@@ -659,13 +650,12 @@ FieldInstructionBlob::encodeTail(
     }
   }
 
-  // get the value from the application data
-  Messages::FieldCPtr field;
-  if(accessor.getField(identity_->name(), field))
+  const StringBuffer * value;
+  if(accessor.getString(*identity_, type_, value))
   {
-    std::string value = field->toString();
-    size_t prefix = longestMatchingPrefix(previousValue, value);
-    std::string tailValue = value.substr(prefix);
+    size_t prefix = longestMatchingPrefix(previousValue, *value);
+    // performance: add substr method to StringBuffer
+    std::string tailValue = static_cast<std::string>(*value).substr(prefix);
     if(tailValue.empty())
     {
       pmap.setNextField(false);
@@ -682,9 +672,9 @@ FieldInstructionBlob::encodeTail(
         encodeBlob(destination, encoder.getWorkingBuffer(), tailValue);
       }
     }
-    if(previousStatus != Context::OK_VALUE  || value != previousValue)
+    if(previousStatus != Context::OK_VALUE  || *value != previousValue)
     {
-      fieldOp_->setDictionaryValue(encoder, value);
+      fieldOp_->setDictionaryValue(encoder, *value);
     }
   }
   else // not defined in accessor

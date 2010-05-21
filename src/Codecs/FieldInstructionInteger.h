@@ -616,11 +616,23 @@ namespace QuickFAST{
       const Messages::MessageAccessor & accessor) const
     {
       // get the value from the application data
-      Messages::FieldCPtr field;
-      if(accessor.getField(identity_->name(), field))
+      INTEGER_TYPE value = 0;
+      bool present = 0;
+      if(SIGNED)
       {
-        INTEGER_TYPE value;
-        field->getValue(value);
+        int64 value64;
+        present = accessor.getSignedInteger(*identity_, VALUE_TYPE, value64);
+        value = static_cast<INTEGER_TYPE>(value64);
+      }
+      else
+      {
+        uint64 value64;
+        present = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, value64);
+        value = static_cast<INTEGER_TYPE>(value64);
+      }
+
+      if(present)
+      {
         if(!isMandatory())
         {
           // gcc produces bogus warning on the following line see GCC Bugzilla Bug 11856
@@ -670,11 +682,23 @@ namespace QuickFAST{
       const Messages::MessageAccessor & accessor) const
     {
       // get the value from the application data
-      Messages::FieldCPtr field;
-      if(accessor.getField(identity_->name(), field))
+      INTEGER_TYPE value = 0;
+      bool present = 0;
+      if(SIGNED)
       {
-        INTEGER_TYPE value;
-        field->getValue(value);
+        int64 value64;
+        present = accessor.getSignedInteger(*identity_, VALUE_TYPE, value64);
+        value = static_cast<INTEGER_TYPE>(value64);
+      }
+      else
+      {
+        uint64 value64;
+        present = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, value64);
+        value = static_cast<INTEGER_TYPE>(value64);
+      }
+
+      if(present)
+      {
         if(value != typedValue_)
         {
           encoder.reportError("[ERR U02]", "Constant value does not match application data.", *identity_);
@@ -705,11 +729,23 @@ namespace QuickFAST{
       const Messages::MessageAccessor & accessor) const
     {
       // get the value from the application data
-      Messages::FieldCPtr field;
-      if(accessor.getField(identity_->name(), field))
+      INTEGER_TYPE value = 0;
+      bool present = 0;
+      if(SIGNED)
       {
-        INTEGER_TYPE value;
-        field->getValue(value);
+        int64 value64;
+        present = accessor.getSignedInteger(*identity_, VALUE_TYPE, value64);
+        value = static_cast<INTEGER_TYPE>(value64);
+      }
+      else
+      {
+        uint64 value64;
+        present = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, value64);
+        value = static_cast<INTEGER_TYPE>(value64);
+      }
+
+      if(present)
+      {
         if(typedValueIsDefined_ && value == typedValue_)
         {
           pmap.setNextField(false); // not in stream. use default
@@ -784,12 +820,23 @@ namespace QuickFAST{
       }
 
       // get the value from the application data
-      Messages::FieldCPtr field;
-      if(accessor.getField(identity_->name(), field))
+      INTEGER_TYPE value = 0;
+      bool present = 0;
+      if(SIGNED)
       {
-        INTEGER_TYPE value;
-        field->getValue(value);
+        int64 value64;
+        present = accessor.getSignedInteger(*identity_, VALUE_TYPE, value64);
+        value = static_cast<INTEGER_TYPE>(value64);
+      }
+      else
+      {
+        uint64 value64;
+        present = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, value64);
+        value = static_cast<INTEGER_TYPE>(value64);
+      }
 
+      if(present)
+      {
         if(previousStatus == Context::OK_VALUE && previousValue == value)
         {
           pmap.setNextField(false); // not in stream, use copy
@@ -864,11 +911,23 @@ namespace QuickFAST{
       }
 
       // get the value from the application data
-      Messages::FieldCPtr field;
-      if(accessor.getField(identity_->name(), field))
+      INTEGER_TYPE value = 0;
+      bool present = 0;
+      if(SIGNED)
       {
-        INTEGER_TYPE value;
-        field->getValue(value);
+        int64 value64;
+        present = accessor.getSignedInteger(*identity_, VALUE_TYPE, value64);
+        value = static_cast<INTEGER_TYPE>(value64);
+      }
+      else
+      {
+        uint64 value64;
+        present = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, value64);
+        value = static_cast<INTEGER_TYPE>(value64);
+      }
+
+      if(present)
+      {
         int64 deltaValue = int64(value) - int64(previousValue);
         if(!isMandatory())
         {
@@ -920,11 +979,23 @@ namespace QuickFAST{
       }
 
       // get the value from the application data
-      Messages::FieldCPtr field;
-      if(accessor.getField(identity_->name(), field))
+      INTEGER_TYPE value = 0;
+      bool present = 0;
+      if(SIGNED)
       {
-        INTEGER_TYPE value;
-        field->getValue(value);
+        int64 value64;
+        present = accessor.getSignedInteger(*identity_, VALUE_TYPE, value64);
+        value = static_cast<INTEGER_TYPE>(value64);
+      }
+      else
+      {
+        uint64 value64;
+        present = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, value64);
+        value = static_cast<INTEGER_TYPE>(value64);
+      }
+
+      if(present)
+      {
         INTEGER_TYPE nullableValue = value;
         if(previousStatus == Context::OK_VALUE && previousValue + 1 == value)
         {

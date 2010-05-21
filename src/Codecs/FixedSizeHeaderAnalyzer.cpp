@@ -35,15 +35,18 @@ FixedSizeHeaderAnalyzer::~FixedSizeHeaderAnalyzer()
 bool
 FixedSizeHeaderAnalyzer::analyzeHeader(DataSource & source, size_t & blockSize, bool & skip)
 {
+  skip = false;
+  blockSize = 0;
   while(state_ != ParsingComplete)
   {
     switch(state_)
     {
     case ParsingIdle:
       {
+        source.beginField("FIXED_SIZE_HEADER");
         state_ = ParsingPrefix;
         byteCount_ = 0;
-//        break;
+        break;
       }
     case ParsingPrefix:
       {
@@ -59,7 +62,7 @@ FixedSizeHeaderAnalyzer::analyzeHeader(DataSource & source, size_t & blockSize, 
         state_ = ParsingBlockSize;
         byteCount_ = 0;
         blockSize_ = 0;
-//        break;
+        break;
       }
     case ParsingBlockSize:
       {
@@ -84,7 +87,7 @@ FixedSizeHeaderAnalyzer::analyzeHeader(DataSource & source, size_t & blockSize, 
         state_ = ParsingSuffix;
         byteCount_ = 0;
 
-//        break;
+        break;
       }
     case ParsingSuffix:
       {
@@ -106,13 +109,22 @@ FixedSizeHeaderAnalyzer::analyzeHeader(DataSource & source, size_t & blockSize, 
       }
     }
   }
-  blockSize = blockSize_;
-  skip = false;
   state_ = ParsingIdle;
+  blockSize = blockSize_;
+  blockSize_ = 0;
+  byteCount_ = 0;
   if(testSkip_ != 0 && (++headersParsed_ % testSkip_ == 0))
   {
-    std::cout << "SKIPPING HEADER " << headersParsed_ << std::endl;
+    std::cout << std::endl << "SKIPPING HEADER " << headersParsed_ << std::endl;
     skip = true;
   }
   return true;
+}
+
+void
+FixedSizeHeaderAnalyzer::reset()
+{
+  state_ = ParsingIdle;
+  blockSize_ = 0;
+  byteCount_ = 0;
 }

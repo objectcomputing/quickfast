@@ -54,6 +54,7 @@ namespace QuickFAST{
       Application::DecoderConfiguration configuration_;
       Application::DecoderConnection connection_;
       std::string bufferFilename_;
+      bool console_;
     };
   }
 }

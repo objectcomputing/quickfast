@@ -54,11 +54,20 @@ namespace QuickFAST{
       /// @param index 0 <= index < size()
       const MessageField & operator[](size_t index)const;
 
-      /// @brief Is the specified field present in this set?
-      /// @param name Identifies the field.
-      /// @returns true if the field is present.  Returns false if the field is
-      /// unknown or doesn't currently have a value in this set.
-      bool isPresent(const std::string & name)const;
+      /////////////////////////////////////
+      /// Implement MessageAccessor methods
+      virtual bool isPresent(const FieldIdentity & identity)const;
+      virtual bool getUnsignedInteger(const FieldIdentity & identity, ValueType::Type type, uint64 & value)const;
+      virtual bool getSignedInteger(const FieldIdentity & identity, ValueType::Type type, int64 & value)const;
+      virtual bool getDecimal(const FieldIdentity & identity, ValueType::Type type, Decimal & value)const;
+      virtual bool getString(const FieldIdentity & identity, ValueType::Type type, const StringBuffer *& value)const;
+      virtual bool getGroup(const FieldIdentity & identity, const MessageAccessor *& group)const;
+      virtual void endGroup(const FieldIdentity & identity, const MessageAccessor * group)const;
+      virtual bool getSequenceLength(const FieldIdentity & identity, size_t & length)const;
+      virtual bool getSequenceEntry(const FieldIdentity & identity, size_t index, const MessageAccessor *& entry)const;
+      virtual void endSequenceEntry(const FieldIdentity & identity, size_t index, const MessageAccessor * entry)const;
+      virtual void endSequence(const FieldIdentity & identity)const;
+
 
       /// @brief Add a field to the set.
       ///
@@ -73,12 +82,13 @@ namespace QuickFAST{
       /// @param[out] value is the value that was found.
       /// @returns true if the field was found and has a value;
       bool getField(const std::string &name, FieldCPtr & value) const;
+      bool getField(const Messages::FieldIdentity & identity, FieldCPtr & value) const;
 
       /// @brief Get the identity information for the specified field
       /// @param[in] name identifies the desired field
       /// @param[out] identity is the information for the field that was found
       /// @returns true if the field was found
-      bool getIdentity(const std::string &name, FieldIdentityCPtr & identity) const;
+//      bool getIdentity(const std::string &name, FieldIdentityCPtr & identity) const;
 
       /// @brief support iterating through Fields in this FieldSet.
       const_iterator begin() const

@@ -77,11 +77,11 @@ FieldSet::operator[](size_t index)const
 }
 
 bool
-FieldSet::isPresent(const std::string & name) const
+FieldSet::isPresent(const FieldIdentity & identity) const
 {
   for(size_t index = 0; index < used_; ++index)
   {
-    if(name == fields_[index].name())
+    if(identity == *(fields_[index].getIdentity()))
     {
       return fields_[index].getField()->isDefined();
     }
@@ -103,9 +103,8 @@ FieldSet::addField(const FieldIdentityCPtr & identity, const FieldCPtr & value)
 }
 
 bool
-FieldSet::getField(const std::string &name, FieldCPtr & value) const
+FieldSet::getField(const std::string & name, FieldCPtr & value) const
 {
-  PROFILE_POINT("FieldSet::getField");
   for(size_t index = 0; index < used_; ++index)
   {
     if(name == fields_[index].name())
@@ -118,17 +117,10 @@ FieldSet::getField(const std::string &name, FieldCPtr & value) const
 }
 
 bool
-FieldSet::getIdentity(const std::string &name, FieldIdentityCPtr & identity) const
+FieldSet::getField(const Messages::FieldIdentity & identity, FieldCPtr & value) const
 {
-  for(size_t index = 0; index < used_; ++index)
-  {
-    if(name == fields_[index].name())
-    {
-      identity = fields_[index].getIdentity();
-      return true;
-    }
-  }
-  return false;
+  PROFILE_POINT("FieldSet::getField");
+  return getField(identity.name(), value);
 }
 
 void
@@ -179,3 +171,108 @@ FieldSet::equals (const FieldSet & rhs, std::ostream & reason) const
   return true;
 }
 
+
+bool
+FieldSet::getUnsignedInteger(const FieldIdentity & identity, ValueType::Type type, uint64 & value)const
+{
+  FieldCPtr field;
+  bool result = getField(identity, field);
+  if(result)
+  {
+    value = field->toUnsignedInteger();
+  }
+  return result;
+}
+
+bool
+FieldSet::getSignedInteger(const FieldIdentity & identity, ValueType::Type type, int64 & value)const
+{
+  FieldCPtr field;
+  bool result = getField(identity, field);
+  if(result)
+  {
+    value = field->toSignedInteger();
+  }
+  return result;
+}
+
+bool
+FieldSet::getDecimal(const FieldIdentity & identity,ValueType::Type type, Decimal & value)const
+{
+  FieldCPtr field;
+  bool result = getField(identity, field);
+  if(result)
+  {
+    value = field->toDecimal();
+  }
+  return result;
+}
+
+bool
+FieldSet::getString(const FieldIdentity & identity,ValueType::Type type, const StringBuffer *& value)const
+{
+  FieldCPtr field;
+  bool result = getField(identity, field);
+  if(result)
+  {
+    value = & field->toString();
+  }
+
+  return result;
+}
+
+bool
+FieldSet::getGroup(const FieldIdentity & identity, const MessageAccessor *& groupAccessor)const
+{
+  FieldCPtr field;
+  bool result = getField(identity, field);
+  if(result)
+  {
+    const GroupCPtr & group = field->toGroup();
+    groupAccessor = group.get();
+  }
+  return result;
+}
+
+void
+FieldSet::endGroup(const FieldIdentity & identity, const MessageAccessor * groupAccessor)const
+{
+}
+
+bool
+FieldSet::getSequenceLength(
+  const FieldIdentity & identity,
+  size_t & length)const
+{
+  FieldCPtr field;
+  bool result = getField(identity, field);
+  if(result)
+  {
+    const SequenceCPtr & sequence = field->toSequence();
+    length = sequence->size();
+  }
+  return result;
+}
+
+bool
+FieldSet::getSequenceEntry(const FieldIdentity & identity, size_t index, const MessageAccessor *& entryAccessor)const
+{
+  FieldCPtr field;
+  bool result = getField(identity, field);
+  if(result)
+  {
+    const SequenceCPtr & sequence = field->toSequence();
+    entryAccessor = (*sequence)[index].get();
+  }
+  return result;
+}
+
+void
+FieldSet::endSequenceEntry(const FieldIdentity & identity, size_t index, const MessageAccessor * entryAccessor)const
+{
+}
+
+void
+FieldSet::endSequence(const FieldIdentity & identity)const
+{
+}

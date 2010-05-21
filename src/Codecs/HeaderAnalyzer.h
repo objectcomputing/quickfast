@@ -15,7 +15,9 @@ namespace QuickFAST{
     {
     public:
       /// @brief Typical virtual destructor
-      virtual ~HeaderAnalyzer(){}
+      virtual ~HeaderAnalyzer()
+      {
+      }
 
       /// @brief Analyze the header.
       ///
@@ -44,6 +46,10 @@ namespace QuickFAST{
       /// @param[out] skip true if this message should ignored if possible.
       /// @returns true if header is complete; false if more data is needed
       virtual bool analyzeHeader(DataSource & source, size_t & blockSize, bool & skip) = 0;
+      /// @brief reset the header analyzer -- called when something went wrong while analyzing previous header
+      virtual void reset()
+      {
+      }
     };
   }
 }

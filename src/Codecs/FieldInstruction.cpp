@@ -701,7 +701,7 @@ FieldInstruction::encodeUnsignedInteger(DataDestination & destination, WorkingBu
 #endif
 
 void
-FieldInstruction::encodeNullableAscii(DataDestination & destination, const std::string & value)
+FieldInstruction::encodeNullableAscii(DataDestination & destination, const StringBuffer & value)
 {
   if(value.empty() || value[0] == '\0')
   {
@@ -711,7 +711,7 @@ FieldInstruction::encodeNullableAscii(DataDestination & destination, const std::
 }
 
 void
-FieldInstruction::encodeAscii(DataDestination & destination, const std::string & value)
+FieldInstruction::encodeAscii(DataDestination & destination, const StringBuffer & value)
 {
   if(value.empty())
   {
@@ -733,7 +733,7 @@ FieldInstruction::encodeAscii(DataDestination & destination, const std::string &
 
 
 void
-FieldInstruction::encodeBlobData(DataDestination & destination, const std::string & value)
+FieldInstruction::encodeBlobData(DataDestination & destination, const StringBuffer & value)
 {
   for(size_t pos = 0; pos < value.size(); ++pos)
   {
