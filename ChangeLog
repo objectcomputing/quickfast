@@ -1,3 +1,22 @@
+Tue May 25 18:51:22 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/XMLTemplateParser.cpp:
+          Use XMLString::release to release Xerces-allocated strings.
+
+        * src/Examples/Examples/ValueToFix.h:
+        * src/Examples/Examples/ValueToFix.cpp:
+          New ValueMessageBuilder that writes a FIX data file.
+
+        * src/Examples/InterpretApplication/InterpretApplication.h:
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+          -ofix option uses ValueToFix (i.e. interprets the messages as FIX messages)
+          -console enables console commands:  <q>uit <p>ause and <r>esume
+
+        * src/Messages/ValueMessageBuilder.h:
+        * src/Messages/ValueMessageBuilder_fwd.h:
+          Fix minor whitespace formatting issue.
+          Declare smart pointer to ValueMessageBuilder for occasional use.
+
 Fri May 21 20:44:05 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Messages/MessageAccessor.cpp:

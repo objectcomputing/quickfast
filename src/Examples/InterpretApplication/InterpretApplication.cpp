@@ -20,6 +20,7 @@
 #include <Communication/PCapFileReceiver.h>
 
 #include <Examples/MessageInterpreter.h>
+#include <Examples/ValueToFix.h>
 
 using namespace QuickFAST;
 using namespace Examples;
@@ -29,6 +30,7 @@ using namespace Examples;
 
 InterpretApplication::InterpretApplication()
 : console_(false)
+, fixOutput_(false)
 {
 }
 
@@ -263,6 +265,11 @@ InterpretApplication::parseSingleArg(int argc, char * argv[])
       configuration_.setNonstandard(boost::lexical_cast<unsigned long>(argv[1]));
       consumed = 2;
     }
+    else if(opt == "-ofix")
+    {
+      fixOutput_ = true;
+      consumed = 1;
+    }
     else if(opt == "-console")
     {
       console_ = true;
@@ -291,12 +298,14 @@ InterpretApplication::usage(std::ostream & out) const
   out << "                         (cout for standard out;" << std::endl;
   out << "                         cerr for standard error)." << std::endl;
   out << std::endl;
-  out << "  -e file              : Echo input to file:" << std::endl;
-  out << "    -ehex                : Echo as hexadecimal (default)." << std::endl;
-  out << "    -eraw                : Echo as raw binary data." << std::endl;
-  out << "    -enone               : Do not echo data (boundaries only)." << std::endl;
-  out << "    -em / -em-           : Echo message boundaries on/off. (default on)" << std::endl;
-  out << "    -ef / -ef-           : Echo field boundaries on/off (default off)" << std::endl;
+  out << "  -console             : While running, listen for single character commands from the console." << std::endl;
+  out << "                         Currently defined commands are:" << std::endl;
+  out << "                          <q>uit.    : exit the program." << std::endl;
+  out << "                          <p>ause.   : temporarily unsubscribe from the multicast feed" << std::endl;
+  out << "                          <r>esume.  : resubscribe after a pause." << std::endl;
+  out << "                         Note that you must hit ENTER before the command will be recognized." << std::endl;
+  out << std::endl;
+  out << "  -ofix                : Write the output as newline separated FIX records." << std::endl;
   out << std::endl;
   out << "  -file file           : Input from raw FAST message file." << std::endl;
   out << "  -buffer file         : Input from raw FAST message file into a buffer; decode from buffer." << std::endl;
@@ -335,15 +344,22 @@ InterpretApplication::usage(std::ostream & out) const
   out << "  -hsuffix n             : 'n' bytes (fixed) or fields (FAST) follow" << std::endl;
   out << "                           block size." << std::endl;
   out << std::endl;
-  out << "  -nonstandard n       : enable nonstandard features (or bits together)" << std::endl;
-  out << "                         : 1 is allow presence attribute on length element (Shanghai Exchange)" << std::endl;
-  out << std::endl;
   out << "  -buffersize size     : Size of communication buffers." << std::endl;
   out << "                         For \"-datagram\" largest expected message." << std::endl;
   out << "                         (default " << configuration_.bufferSize() << ")." << std::endl;
   out << "  -buffers count       : Number of buffers. (default " << configuration_.bufferCount() << ")." << std::endl;
   out << "                         For \"-streaming block\" buffersize * buffers must" << std::endl;
   out << "                         exceed largest expected message." << std::endl;
+  out << std::endl;
+  out << "  -e file              : Echo input to file:" << std::endl;
+  out << "    -ehex                : Echo as hexadecimal (default)." << std::endl;
+  out << "    -eraw                : Echo as raw binary data." << std::endl;
+  out << "    -enone               : Do not echo data (boundaries only)." << std::endl;
+  out << "    -em / -em-           : Echo message boundaries on/off. (default on)" << std::endl;
+  out << "    -ef / -ef-           : Echo field boundaries on/off (default off)" << std::endl;
+  out << std::endl;
+  out << "  -nonstandard n       : enable nonstandard features (or bits together)" << std::endl;
+  out << "                         : 1 is allow presence attribute on length element (Shanghai Exchange)" << std::endl;
 }
 
 bool
@@ -376,9 +392,20 @@ InterpretApplication::run()
   int result = 0;
   try
   {
+
     MessageInterpreter handler(std::cout);
-    Codecs::GenericMessageBuilder builder(handler);
-    connection_.configure(builder, configuration_);
+    Messages::ValueMessageBuilderPtr builder;
+    if(fixOutput_)
+    {
+      builder.reset(new ValueToFix(std::cout));
+    }
+    else
+    {
+      builder.reset(new Codecs::GenericMessageBuilder(handler));
+    }
+
+
+    connection_.configure(*builder, configuration_);
 
     if(console_)
     {

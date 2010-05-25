@@ -10,15 +10,6 @@
 #include <Communication/Receiver_fwd.h>
 #include <Application/DecoderConfiguration.h>
 #include <Application/DecoderConnection.h>
-#include <Messages/ValueMessageBuilder.h>
-
-#if 0
-#include <Common/Exceptions.h>
-#include <Codecs/TemplateRegistry_fwd.h>
-#include <Codecs/HeaderAnalyzer_fwd.h>
-#include <Communication/Assembler_fwd.h>
-#include <Communication/Receiver_fwd.h>
-#endif
 
 namespace QuickFAST{
   namespace Examples{
@@ -55,6 +46,7 @@ namespace QuickFAST{
       Application::DecoderConnection connection_;
       std::string bufferFilename_;
       bool console_;
+      bool fixOutput_;
     };
   }
 }

@@ -173,7 +173,7 @@ namespace QuickFAST{
         FieldIdentityCPtr & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
-        size_t size)  = 0;
+        size_t size) = 0;
 
       /// @brief Complete the group
       ///

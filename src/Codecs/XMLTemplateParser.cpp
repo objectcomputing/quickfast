@@ -53,8 +53,24 @@ namespace
     : public DefaultHandler
   {
   public:
-    /// An easier-to-access version of the XML attributes
+    /// @brief An easier-to-access version of the XML attributes
     typedef std::map<std::string, std::string> AttributeMap;
+
+    /// @brief Be sure the correct memory allocator is used to free Xerces allocated strings.
+    ///
+    /// Note that I couldn't figure out how to used boost::bind for this because Xerces
+    /// requires an extra level of indirection to the release argument.
+    /// If, as I suspect, Xerces uses this to zero out the pointer, they will be clearing a
+    /// temporary object.  No big deal, just thought I'd mention it.
+    class XMLStringReleaser
+    {
+    public:
+      void operator()(char * buffer)
+      {
+        XMLString::release(&buffer);
+      }
+    };
+
 
   public:
     TemplateBuilder(
@@ -76,9 +92,11 @@ namespace
     {
       for (size_t index = 0; index < attributes.getLength(); ++index)
       {
-        boost::scoped_array<char> nameRaw(XMLString::transcode(attributes.getQName(index)));
+        boost::shared_array<char> nameRaw(XMLString::transcode(attributes.getQName(index)),
+          XMLStringReleaser());
         std::string name(nameRaw.get());
-        boost::scoped_array<char> valueRaw(XMLString::transcode(attributes.getValue(index)));
+        boost::shared_array<char> valueRaw(XMLString::transcode(attributes.getValue(index)),
+          XMLStringReleaser());
         std::string value(valueRaw.get());
         attrs[name] = value;
       }
@@ -105,7 +123,8 @@ namespace
       makeAttrs(attributes, attributeMap);
 
       // then switch on element tag
-      boost::scoped_array<char> tagRaw(XMLString::transcode(localname));
+      boost::shared_array<char> tagRaw(XMLString::transcode(localname),
+          XMLStringReleaser());
       std::string tag(tagRaw.get());
       if(out_)
       {
@@ -240,7 +259,8 @@ namespace
       const XMLCh* const qname
       )
     {
-      boost::scoped_array<char> tagRaw(XMLString::transcode(localname));
+      boost::shared_array<char> tagRaw(XMLString::transcode(localname),
+          XMLStringReleaser());
       std::string tag(tagRaw.get());
 
       // Don't pop <templates>.  It's optional and has been forcibly pushed
@@ -288,7 +308,8 @@ namespace
       )
     {
       std::stringstream msg;
-      boost::scoped_array<char> msgRaw(XMLString::transcode(exc.getMessage()));
+      boost::shared_array<char> msgRaw(XMLString::transcode(exc.getMessage()),
+          XMLStringReleaser());
       msg << "[ERR S1] Template file warning at line " << exc.getLineNumber()
           << " column " << exc.getColumnNumber()
           << ": " << msgRaw.get();
@@ -300,7 +321,8 @@ namespace
       )
     {
       std::stringstream msg;
-      boost::scoped_array<char> msgRaw(XMLString::transcode(exc.getMessage()));
+      boost::shared_array<char> msgRaw(XMLString::transcode(exc.getMessage()),
+          XMLStringReleaser());
       msg << "[ERR S1] Template file error at line " << exc.getLineNumber()
           << " column " << exc.getColumnNumber()
           << ": " << msgRaw.get();
@@ -312,7 +334,8 @@ namespace
       )
     {
       std::stringstream msg;
-      boost::scoped_array<char> msgRaw(XMLString::transcode(exc.getMessage()));
+      boost::shared_array<char> msgRaw(XMLString::transcode(exc.getMessage()),
+          XMLStringReleaser());
       msg << "[ERR S1] Template file fatal error at line " << exc.getLineNumber()
           << " column " << exc.getColumnNumber()
           << ": " << msgRaw.get();
