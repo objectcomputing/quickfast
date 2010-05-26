@@ -124,6 +124,7 @@ namespace QuickFAST{
         return echo_;
       }
 
+      /// @brief Discard any remaining contents and prepare for new data.
       void reset()
       {
         size_ = 0;

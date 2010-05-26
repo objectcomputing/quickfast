@@ -23,18 +23,18 @@ namespace QuickFAST
       /// @brief Virtual destructor
       virtual ~MessageAccessor();
 
-      /// @brief pick template to use for encoding next message
-      ///
-      /// @param[out] tid is the template chosen.
-      /// @returns false if no more data to encode.
-      /// Future development
+      // @brief pick template to use for encoding next message
+      //
+      // @param[out] tid is the template chosen.
+      // @returns false if no more data to encode.
+      // Future development
 //      virtual bool pickTemplate(template_id_t & tid) = 0;
 
 
       /// @brief Is the specified field present in this set?
-      /// @param name Identifies the field.
-      /// @returns true if the field is present.  Returns false if the field is
-      /// unknown or doesn't currently have a value in this set.
+      /// @param identity Identifies the field.
+      /// @returns true if the field is present; false if the field is
+      ///               unknown or doesn't currently have a value in this set.
       virtual bool isPresent(const FieldIdentity & identity)const = 0;
 
       /// @brief Get a field from the application record.
@@ -91,17 +91,19 @@ namespace QuickFAST
       /// @param[out] entry is set to point to the object that accesses the entry's data
       /// @returns true unless something is broken in the seequence (or the index is > length)
       virtual bool getSequenceEntry(const FieldIdentity & identity, size_t index, const MessageAccessor *& entry)const = 0;
+
       /// @brief Finish decoding a sequence entry
       ///
       /// Not pure because a common case is to ignore this.
       /// @param identity echos the corresponding parameter to getSequenceEntry()
-      /// @param group echos the corresponding result of the call to getSequenceEntry()
+      /// @param index echos the corresponding parameter to getSequenceEntry();
+      /// @param entry is the result returned by to getSequenceEntry()
       virtual void endSequenceEntry(const FieldIdentity & identity, size_t index, const MessageAccessor * entry)const;
 
       /// @brief Finish accessing a sequence
       ///
       /// Not pure because a common case is to ignore this.
-      /// @param identify echos the corersponding parameter to getSequenceLength
+      /// @param identity echos the corersponding parameter to getSequenceLength
       virtual void endSequence(const FieldIdentity & identity)const;
 
       /// @brief get the application type associated with

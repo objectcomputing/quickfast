@@ -20,7 +20,6 @@ namespace QuickFAST
     {
       /////////////
       // Implement MessageAccessor
-      virtual const Messages::MessageField & operator[](size_t index)const;
       virtual bool isPresent(const FieldIdentity & identity)const;
       virtual bool getUnsignedInteger(const FieldIdentity & identity, ValueType::Type type, uint64 & value)const;
       virtual bool getSignedInteger(const FieldIdentity & identity, ValueType::Type type, int64 & value)const;
@@ -37,12 +36,6 @@ namespace QuickFAST
       std::string nada_;
 
     };
-
-    inline const Messages::MessageField &
-    EmptyAccessor::operator[](size_t /*index*/)const
-    {
-      throw EncodingError("Indexing empty message.");
-    }
 
     inline bool
     EmptyAccessor::isPresent(const Messages::FieldIdentity & )const
@@ -116,7 +109,6 @@ namespace QuickFAST
 
       /////////////
       // Implement MessageAccessor
-      virtual const Messages::MessageField & operator[](size_t index)const;
       virtual bool isPresent(const FieldIdentity & identity)const;
       virtual bool getUnsignedInteger(const FieldIdentity & identity, ValueType::Type type, uint64 & value)const;
       virtual bool getSignedInteger(const FieldIdentity & identity, ValueType::Type type, int64 & value)const;
@@ -139,12 +131,6 @@ namespace QuickFAST
         const Messages::FieldCPtr & field)
       : messageField_(identity, field)
     {
-    }
-
-    inline const Messages::MessageField &
-    SingleFieldAccessor::operator[](size_t /*index*/)const
-    {
-      return messageField_;
     }
 
     inline bool
@@ -243,7 +229,6 @@ namespace QuickFAST
     {
       return nada_;
     }
-
   }
 }
 #endif // SPECIALACCESSORS_H

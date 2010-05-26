@@ -38,13 +38,13 @@ namespace QuickFAST{
       virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uchar value);
       virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value);
       virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length);
-      virtual ValueMessageBuilder & startMessage(
+      virtual Messages::ValueMessageBuilder & startMessage(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
-      virtual bool endMessage(ValueMessageBuilder & messageBuilder);
-      virtual bool ignoreMessage(ValueMessageBuilder & messageBuilder);
-      virtual ValueMessageBuilder & startSequence(
+      virtual bool endMessage(Messages::ValueMessageBuilder & messageBuilder);
+      virtual bool ignoreMessage(Messages::ValueMessageBuilder & messageBuilder);
+      virtual Messages::ValueMessageBuilder & startSequence(
         Messages::FieldIdentityCPtr & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
@@ -53,20 +53,20 @@ namespace QuickFAST{
         size_t length);
       virtual void endSequence(
         Messages::FieldIdentityCPtr & identity,
-        ValueMessageBuilder & sequenceBuilder);
-      virtual ValueMessageBuilder & startSequenceEntry(
+        Messages::ValueMessageBuilder & sequenceBuilder);
+      virtual Messages::ValueMessageBuilder & startSequenceEntry(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size) ;
-      virtual void endSequenceEntry(ValueMessageBuilder & entry);
-      virtual ValueMessageBuilder & startGroup(
+      virtual void endSequenceEntry(Messages::ValueMessageBuilder & entry);
+      virtual Messages::ValueMessageBuilder & startGroup(
         Messages::FieldIdentityCPtr & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size);
       virtual void endGroup(
         Messages::FieldIdentityCPtr & identity,
-        ValueMessageBuilder & groupBuilder);
+        Messages::ValueMessageBuilder & groupBuilder);
 
       ///////////////////
       // Implement Logger

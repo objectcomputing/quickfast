@@ -81,14 +81,16 @@ namespace QuickFAST{
       /// @param[in] name Identifies the desired field
       /// @param[out] value is the value that was found.
       /// @returns true if the field was found and has a value;
-      bool getField(const std::string &name, FieldCPtr & value) const;
-      bool getField(const Messages::FieldIdentity & identity, FieldCPtr & value) const;
+      bool getField(const std::string &name, FieldCPtr & value) const
+      {
+        return getField(Messages::FieldIdentity(name), value) ;
+      }
 
-      /// @brief Get the identity information for the specified field
-      /// @param[in] name identifies the desired field
-      /// @param[out] identity is the information for the field that was found
-      /// @returns true if the field was found
-//      bool getIdentity(const std::string &name, FieldIdentityCPtr & identity) const;
+      /// @brief Get the value of the specified field.
+      /// @param[in] identity Identifies the desired field
+      /// @param[out] value is the value that was found.
+      /// @returns true if the field was found and has a value;
+      bool getField(const Messages::FieldIdentity & identity, FieldCPtr & value) const;
 
       /// @brief support iterating through Fields in this FieldSet.
       const_iterator begin() const

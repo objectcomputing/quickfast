@@ -1,3 +1,26 @@
+Wed May 26 15:13:49 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/DataDestination.h:
+        * src/Codecs/DataSource.h:
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/FixedSizeHeaderAnalyzer.h:
+        * src/Codecs/NoHeaderAnalyzer.h:
+        * src/Examples/Examples/ValueToFix.h:
+        * src/Messages/FieldIdentity.h:
+        * src/Messages/FieldSet.h:
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/MessageAccessor.h:
+        * src/Messages/SpecialAccessors.h:
+        * src/Tests/testBiggestValue.cpp:
+        Update Doxygen comments to track recent changes.
+        Remove the getField by name method from field set.  Getting
+        a field from a field set now always requires a FieldIdentity.
+        Change the constructor for a FieldIdentity to includde ID.
+        Change the equality operator for FieldIdentity so the ID
+        is only compared if it is specified in both of the identities
+        being compared.  -- Matching names are good enough if the
+        id is not available.
+
 Tue May 25 18:51:22 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/XMLTemplateParser.cpp:

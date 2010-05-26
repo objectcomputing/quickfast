@@ -28,7 +28,9 @@ namespace QuickFAST{
     /// buffer when endMessage() is called.
     class /*QuickFAST_Export */ DataDestination{
     public:
+      /// @brief a type for an opaque handle to a buffer within the DataDestination
       typedef size_t BufferHandle;
+      /// @brief special handle for a buffer that doesn't exist
       static const BufferHandle NotABuffer = ~0;
 
       DataDestination()
@@ -43,10 +45,15 @@ namespace QuickFAST{
       {
       }
 
+      /// @brief Enable verbose output as information is added to the data destination
+      ///
+      /// @param verbose is the stream where the verbose/debug output will be written.
       void setVerbose(std::ostream & verbose)
       {
         verboseOut_ = & verbose;
       }
+
+      /// @brief Turn verbose output off.
       void disableVerbose()
       {
         verboseOut_ = 0;
@@ -98,12 +105,13 @@ namespace QuickFAST{
       }
 
       /// @brief Set the target for subsequent bytes
-      /// @param buffer is the handle as returned by startBuffer() or getBuffer()
+      /// @param handle is the handle as returned by startBuffer() or getBuffer()
       void selectBuffer(BufferHandle handle)
       {
         active_ = handle;
       }
 
+      /// @brief Discard all buffered data.  Ready to start a new encoding cycle.
       void clear()
       {
         for(size_t handle = 0; handle < buffers_.size(); ++handle)
@@ -114,6 +122,8 @@ namespace QuickFAST{
         active_ = NotABuffer;
       }
 
+      /// @brief Notificaiton that we're starting a new message
+      /// @param id identifies the template that will be used.
       void startMessage(template_id_t id)
       {
         if(verboseOut_)
@@ -122,6 +132,8 @@ namespace QuickFAST{
         }
       }
 
+      /// @brief Notification that we're starting a new field.
+      /// @param identity identifies the field.
       void startField(const Messages::FieldIdentity & identity)
       {
         if(verboseOut_)
@@ -141,7 +153,8 @@ namespace QuickFAST{
 
       /// @brief Convert results to string.
       ///
-      /// For best performance, use toWorkingBuffer rather than this method.
+      /// For best performance, use toWorkingBuffer rather than this method
+      /// or else use gather/write treating this object as an asio::ConstBufferSequence
       /// @param result is the Strubg into which the data will be copied.
       void toString(std::string & result)const
       {
@@ -178,18 +191,23 @@ namespace QuickFAST{
 
       /// @brief Support for asio gather writes: forward iterator through buffers
       ///
-      /// The intent is for DataDestination to conform to the ConstBufferSequence concept
-      /// defined by ASIO.  This would allow it to be passed directly to the asio::write(v)
+      /// The intent is for DataDestination to conform to the asio::ConstBufferSequence concept.
+      /// This would allow it to be passed directly to the asio::write(v)
       /// Note the implication that if asynch writes are used the DataDestination must
       /// remain intact until the write completes.
       class const_iterator
       {
       public:
+        /// @brief construct an iterator pointing into a DataDestinatoin
+        /// @param destination is the buffer-container
+        /// @param position is the starting position for the iterator.
         const_iterator(const DataDestination & destination, size_t position)
           : destination_(destination)
           , position_(position)
         {
         }
+
+        /// @brief Point iterator to next buffer (preincrement)
         const const_iterator & operator ++()
         {
           if(position_ < destination_.size())
@@ -199,6 +217,7 @@ namespace QuickFAST{
           return *this;
         }
 
+        /// @brief Point iterator to next buffer (postincrement)
         const_iterator operator ++(int)
         {
           const_iterator result(*this);
@@ -209,22 +228,29 @@ namespace QuickFAST{
           return result;
         }
 
+        /// @brief dereference the iterator to find the actual buffer
         boost::asio::const_buffer operator * () const
         {
           const WorkingBuffer & buffer(destination_[position_]);
           return boost::asio::const_buffer(buffer.begin(), buffer.size());
         }
 
+        /// @brief dereference the iterator to find the actual buffer
         boost::asio::const_buffer operator -> () const
         {
           const WorkingBuffer & buffer(destination_[position_]);
           return boost::asio::const_buffer(buffer.begin(), buffer.size());
         }
 
+        /// @brief compare iterators.
+        /// @param rhs is the iterator to which this should be compared.
         bool operator == (const const_iterator & rhs) const
         {
           return position_ == rhs.position_;
         }
+
+        /// @brief compare iterators.
+        /// @param rhs is the iterator to which this should be compared.
         bool operator != (const const_iterator & rhs) const
         {
           return position_ != rhs.position_;
@@ -235,18 +261,26 @@ namespace QuickFAST{
         size_t position_;
       };
 
+      /// @brief return iterator pointing to the first buffer.
       const_iterator begin()const
       {
         return const_iterator(*this, 0);
       }
+
+      /// @brief return iterator pointing past the last buffer
       const_iterator end() const
       {
         return const_iterator(*this, used_);
       }
+
+      /// @brief return a count of the buffers containing data
       size_t size() const
       {
         return used_;
       }
+
+      /// @brief indexed access to a buffer in the set.
+      /// @param index should be < size()
       const WorkingBuffer & operator[](size_t index)const
       {
         return buffers_[index];

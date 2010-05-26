@@ -28,6 +28,8 @@ namespace QuickFAST{
         size_t & blockSize,
         bool & skip);
 
+      /// @brief For debuging.  Force this to skip every "testSkip"th record.
+      /// @param testSkip is how often to skip a record.  Zero means never skip.
       void setTestSkip(size_t testSkip)
       {
         testSkip_ = testSkip;

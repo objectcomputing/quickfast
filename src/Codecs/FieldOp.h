@@ -34,6 +34,7 @@ namespace QuickFAST{
       : public SchemaElement
     {
     public:
+      /// @brief identifies operation type (machine readable)
       enum OpType
       {
         NOP,
@@ -290,8 +291,10 @@ namespace QuickFAST{
         return context.getDictionaryValue(dictionaryIndex_, value, length);
       }
 
+      /// @brief Return the FieldOp type of this field
       virtual OpType opType()const = 0;
 
+      /// @brief Translate a FieldOp type to a name.
       static const std::string & opName(OpType type);
 
     protected:

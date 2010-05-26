@@ -21,12 +21,15 @@ namespace QuickFAST{
       /// @brief Construct the FieldIdentity
       /// @param name the localname for the field
       /// @param fieldNamespace the namespace in which the localname is defined
+      /// @param id the optional field ID for this field.
       explicit FieldIdentity(
         const std::string & name,
-        const std::string & fieldNamespace = "")
+        const std::string & fieldNamespace = "",
+        const field_id_t & id = "")
         : localName_(name)
         , fieldNamespace_(fieldNamespace)
         , refcount_(0)
+        , id_(id)
       {
         qualifyName();
       }
@@ -97,21 +100,29 @@ namespace QuickFAST{
         return id_;
       }
 
+      ///@brief Debug: Display the identity on the given output stream.
+      /// @param output is where to write the human-readable representation of the identity.
       void display(std::ostream & output)const;
 
+      /// @brief Compare identities
+      ///
+      /// Equality means names, namespaces, and possibly ids are equal.
+      /// ids are considered only if both are specified.
+      /// @param rhs is the identity to be compared to this.
       bool operator == (const FieldIdentity & rhs) const
       {
         return(
           (fieldNamespace_ == rhs.fieldNamespace_) &&
           (fullName_ == rhs.fullName_) &&
-          (id_ == rhs.id_));
+          (id_.empty() || rhs.id_.empty() || id_ == rhs.id_));
       }
 
+      /// @brief Compare identities
+      /// @param rhs is the identity to be compared to this.
       bool operator != (const FieldIdentity & rhs) const
       {
         return ! this->operator==(rhs);
       }
-
 
     private:
       void qualifyName()
