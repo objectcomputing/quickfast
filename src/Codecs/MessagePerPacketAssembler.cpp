@@ -37,17 +37,12 @@ MessagePerPacketAssembler::serviceQueue(Communication::Receiver & receiver)
   {
     try
     {
-      if(!consumeBuffer(buffer->get(), buffer->used()))
-      {
-        result = false;
-      }
+      result = consumeBuffer(buffer->get(), buffer->used());
     }
     catch(const std::exception &ex)
     {
-      if(!reportDecodingError(ex.what()))
-      {
-        result = false;
-      }
+      result = reportDecodingError(ex.what());
+      reset();
     }
     receiver.releaseBuffer(buffer);
     buffer = 0;
@@ -121,6 +116,8 @@ MessagePerPacketAssembler::consumeBuffer(const unsigned char * buffer, size_t si
   catch (const std::exception &ex)
   {
     result = builder_.reportDecodingError(ex.what());
+    reset();
+
   }
   if(result && messageCount_ > messageLimit_ && messageLimit_ != 0)
   {

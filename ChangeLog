@@ -1,3 +1,10 @@
+Thu May 27 15:31:03 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/MessagePerPacketAssembler.cpp:
+        Resset the DataSource after decoding errors so the decoder
+        will skip to the beginning of the next packet.
+        Issue # 55
+
 Wed May 26 15:13:49 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/DataDestination.h:
