@@ -1,3 +1,31 @@
+Wed Jun  2 15:49:44 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/DataDestination.h:
+        * src/Codecs/Encoder.cpp:
+        * src/Codecs/FieldInstructionAscii.cpp:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/PresenceMap.cpp:
+        * src/Common/QuickFAST_Export.h:
+        * src/Common/WorkingBuffer.h:
+        * src/Common/WorkingBuffer.cpp:
+        * src/Examples/Examples/MessageInterpreter.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+          Add quite a bit of additional debugging information to verbose displays.
+          All of which was necessary in order to diagnose the problem
+          reported in Issue 56.
+          Issue 56 turned out to be a buffer management problem during
+          encoding nested groups.  The encoder ended up encoding into the
+          wrong partial buffer after returning from nested groups.
+
+        * src/Messages/MessageFormatter.h:
+        * src/Messages/MessageFormatter.cpp:
+          Extract message formatting into separate class
+          to make generating debug/diagnostics messages easier.
+
+        * src/Tests/testGroupReferences1.cpp:
+          The test included as part of Issue #56 turned into a new unit test.
+          Note that it differs quite a bit from the original submission.
+
 Thu May 27 15:31:03 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/MessagePerPacketAssembler.cpp:

@@ -61,6 +61,7 @@ FieldInstructionGroup::decodeNop(
     }
     if(messageBuilder.getApplicationType() != segmentBody_->getApplicationType())
     {
+//      std::cout << "Decoding group into new segment: " << segmentBody_->getApplicationType() << std::endl;
       Messages::ValueMessageBuilder & groupBuilder(
         messageBuilder.startGroup(
           identity_,
@@ -75,6 +76,7 @@ FieldInstructionGroup::decodeNop(
     }
     else
     {
+//      std::cout << "Folding group into parent segment: " << segmentBody_->getApplicationType() << std::endl;
       // Because the application types match,
       // the group fields are decoded directly into to the current
       // field set.  As a result the group "disappears" completely

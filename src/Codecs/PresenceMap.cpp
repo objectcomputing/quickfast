@@ -128,13 +128,13 @@ PresenceMap::encode(DataDestination & destination)
   }
   if(vout_)
   {
-    (*vout_) << "pmap["  <<  byteCapacity_ << "]->" << std::hex;
-    for(size_t pos = 0; pos < byteCapacity_; ++pos)
+    (*vout_) << "pmap["  <<  bpos << "]->" << std::hex;
+    for(size_t pos = 0; pos <= bpos; ++pos)
     {
       (*vout_) << ' ' << std::setw(2) << static_cast<unsigned short>(bits_[pos]);
     }
     (*vout_) << " = ";
-    for(size_t pos = 0; pos < byteCapacity_; ++pos)
+    for(size_t pos = 0; pos <= bpos; ++pos)
     {
       uchar byte = bits_[pos];
       for(uchar mask = startByteMask; mask != 0; mask >>= 1)

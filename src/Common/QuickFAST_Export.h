@@ -13,7 +13,7 @@
 // While building the QUICKFAST_ library: #define QUICKFAST_BUILD_DLL
 //   Default is to export symbols from a pre-built QUICKFAST DLL
 //
-// Within QUICKFAST use the QUICKFAST_Export macro where a __declspec is needed.
+// Within QUICKFAST use the QuickFAST_Export macro where a __declspec is needed.
 
 #if defined (_WIN32)
 

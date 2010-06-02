@@ -177,3 +177,39 @@ WorkingBuffer::toString(std::string & result) const
   result.reserve(size());
   result.append(reinterpret_cast<const char *>(buffer_.get()) + startPos_, size());
 }
+
+void
+WorkingBuffer::hexDisplay(std::ostream & out, size_t wrap) const
+{
+  const unsigned char * ptr = buffer_.get() + startPos_;
+  size_t size = endPos_ - startPos_;
+  out << std::hex << std::setfill('0');
+  size_t pos = 0;
+  while(pos < size)
+  {
+    out << std::setw(2) << (unsigned short)(ptr[pos]);
+    ++pos;
+    if(pos < size)
+    {
+      if(wrap != 0 && pos % wrap == 0)
+      {
+        out << std::endl;
+      }
+      else
+      {
+        out << ' ';
+      }
+    }
+  }
+  out << std::setfill(' ') << std::dec << std::endl;
+}
+
+bool
+WorkingBuffer::operator ==(const WorkingBuffer & rhs) const
+{
+  if(size() != rhs.size())
+  {
+    return false;
+  }
+  return 0 == memcmp(buffer_.get(), rhs.buffer_.get(), size());
+}

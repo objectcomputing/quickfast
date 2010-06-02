@@ -7,9 +7,7 @@
 #ifndef MESSAGEINTERPRETER_H
 #define MESSAGEINTERPRETER_H
 #include <Codecs/MessageConsumer.h>
-#include <Messages/Message.h>
-#include <Messages/FieldIdentity.h>
-#include <Messages/Message_fwd.h>
+#include <Messages/MessageFormatter.h>
 
 namespace QuickFAST{
   namespace Examples{
@@ -38,17 +36,7 @@ namespace QuickFAST{
       virtual void decodingStopped();
 
     private:
-      void formatMessage(const Messages::Message & message);
-      void formatSequence(
-        const Messages::FieldIdentityCPtr & identity,
-        const Messages::FieldCPtr & field);
-      void formatGroup(const Messages::FieldCPtr & field);
-
-      void displayFieldValue(const Messages::FieldCPtr & field);
-
-    private:
-      void newline();
-    private:
+      Messages::MessageFormatter formatter_;
       std::ostream & out_;
       size_t indent_;
       size_t recordCount_;

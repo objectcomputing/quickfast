@@ -103,6 +103,15 @@ namespace QuickFAST{
     /// @brief A convenience method: copy contents to a std::string
     void toString(std::string & result) const;
 
+    /// @brief Display the contents of the working buffer in hex
+    ///
+    /// The display always ends with a newline.
+    /// @param out is the destination to which the display will be written.
+    /// @param wrap is how many bytes to display per line.  Zero means no wrapping
+    void hexDisplay(std::ostream & out, size_t wrap = 16) const;
+
+    bool operator ==(const WorkingBuffer & rhs) const;
+
   private:
     void grow();
     void grow(size_t newCapacity);

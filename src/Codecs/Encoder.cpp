@@ -64,6 +64,7 @@ Encoder::encodeSegment(
     static Messages::FieldIdentity pmapIdentity("PMAP", "Message");
     destination.startField(pmapIdentity);
     pmap.encode(destination);
+    destination.endField(pmapIdentity);
   }
   else
   {
@@ -79,6 +80,7 @@ Encoder::encodeGroup(
 {
   size_t presenceMapBits = group->presenceMapBitCount();
   Codecs::PresenceMap pmap(presenceMapBits);
+  pmap.setVerbose(this->verboseOut_);
 
   // The presence map for the group will go into the current buffer
   // that will be the last thing to appear in that buffer
@@ -89,12 +91,15 @@ Encoder::encodeGroup(
     bodyBuffer = destination.startBuffer();
   }
   encodeSegmentBody(destination, pmap, group, fieldSet);
+  // remember the buffer we're presently working on
+  bodyBuffer = destination.getBuffer();
   if(presenceMapBits > 0)
   {
     destination.selectBuffer(pmapBuffer);
     static Messages::FieldIdentity pmapIdentity("PMAP", "Group");
     destination.startField(pmapIdentity);
     pmap.encode(destination);
+    destination.endField(pmapIdentity);
   }
   // and just continue working in the buffer where we built the group body
   destination.selectBuffer(bodyBuffer);
@@ -117,6 +122,7 @@ Encoder::encodeSegmentBody(
     {
       destination.startField(*(instruction->getIdentity()));
       instruction->encode(destination, pmap, *this, fieldSet);
+      destination.endField(*(instruction->getIdentity()));
     }
   }
 }

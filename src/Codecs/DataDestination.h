@@ -142,6 +142,14 @@ namespace QuickFAST{
         }
       }
 
+      void endField(const Messages::FieldIdentity & identity)
+      {
+        if(verboseOut_)
+        {
+          (*verboseOut_) << std::endl << "**END FIELD: " << identity.name() << '[' << identity.id() << ']' << std::endl;
+        }
+      }
+
       /// @brief Indicate the message is ready to be sent.
       void endMessage()
       {

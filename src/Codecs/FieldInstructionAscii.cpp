@@ -427,37 +427,45 @@ FieldInstructionAscii::encodeDefault(
   const StringBuffer * value;
   if(accessor.getString(*identity_, ValueType::ASCII, value))
   {
+//    std::cout << "EncodeAsciiDefault: in record: \"" << value->c_str() << "\"" << std::endl;
     if(initialValue_->isDefined() &&
       initialValue_->toAscii() == *value)
     {
+//      std::cout << "  ... matches default. Set PMAP false." << std::endl;
       pmap.setNextField(false); // not in stream. use default
     }
     else
     {
+//      std::cout << "  ... does not match default. Set PMAP true" << std::endl;
       pmap.setNextField(true); // != default.  Send value
       if(!isMandatory())
       {
+//        std::cout << "   and send nullable value" << std::endl;
         encodeNullableAscii(destination, *value);
       }
       else
       {
+//        std::cout << "   and send normal value" << std::endl;
         encodeAscii(destination, *value);
       }
     }
   }
   else // not defined in accessor
   {
+//    std::cout << "EncodeAsciiDefault: NOT in record:" << std::endl;
     if(isMandatory())
     {
       encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
     }
     if(fieldOp_->hasValue())
     {
+//      std::cout << "          Send a NULL to override default value." << std::endl;
       pmap.setNextField(true);
       destination.putByte(nullAscii);
     }
     else
     {
+//      std::cout << "       No default value so clear pmap meaning field does not exist." << std::endl;
       pmap.setNextField(false);
     }
   }
