@@ -1,3 +1,8 @@
+Fri Jun 11 17:37:28 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Messages/MessageFormatter.h:
+        Include file name capitalization error.
+
 Fri Jun 11 15:45:55 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/FieldInstruction.h:
