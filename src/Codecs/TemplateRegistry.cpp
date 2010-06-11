@@ -163,5 +163,5 @@ TemplateRegistry::display(std::ostream & output, size_t indent) const
   {
     mutableTemplates_[nTemplate]->display(output, indent + 2);
   }
-  output << std::endl << indentString << "</templates>";
+  output << std::endl << indentString << "</templates>" << std::endl;
 }

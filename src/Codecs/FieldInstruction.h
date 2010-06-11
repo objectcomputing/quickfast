@@ -598,7 +598,10 @@ namespace QuickFAST{
         size_t length);
 
       /// @brief do final processing of this field instruction after parsing entire template set.
-      void finalize(Codecs::TemplateRegistry & registry);
+      virtual void finalize(Codecs::TemplateRegistry & registry);
+
+      /// @brief Help preserve sanity during finalize.  Identify "include" instructions.
+      virtual bool isPossiblyRecursive() const;
 
       /// @brief how many presence map bits are used by this field instruction?
       size_t getPresenceMapBitsUsed() const

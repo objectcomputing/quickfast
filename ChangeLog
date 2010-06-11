@@ -1,3 +1,40 @@
+Fri Jun 11 15:45:55 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+        * src/Codecs/SegmentBody.cpp:
+          Improve handling of recursive templateRefs.
+          This addresses Issue #57.  The new testSequences
+          was the test that revealed this problem (thanks Matt).
+
+          There are still possible pathological cases but they
+          are much less likely to be used.
+
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/Codecs/TemplateRegistry.cpp:
+          Improve formatting of verbose output to make the results more
+          like legal XML.
+
+        * src/Messages/MessageFormatter.cpp:
+          Changes to make displays of complex messages more readable.
+
+        * src/Codecs/FieldInstructionGroup.cpp:
+          Change handling of groups to make merging group fields
+          into the parent segment more under the control of the
+          application.   This addresses a problem that showed
+          up trying to write a round-trip test. If the group was
+          merged by the decoder, then the generic accessor used
+          by the encoder couldn't find it because it no longer
+          existed as a group.  Hence the round-trip would not
+          accurately reproduce the original input.
+
+        * src/Tests/testFieldInstructions.cpp:
+        * src/Tests/testGroupReferences1.cpp:
+        * src/Tests/testSequences.cpp:
+          New or Improved tests for the above.
+
 Wed Jun  2 15:49:44 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/DataDestination.h:

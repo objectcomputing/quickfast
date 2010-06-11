@@ -47,6 +47,7 @@ MessageFormatter::formatMessage(const Messages::Message & message)
       displayFieldValue(field);
     }
   }
+  newline();
 }
 void
 MessageFormatter::newline()
@@ -66,7 +67,7 @@ MessageFormatter::formatSequence(
 
   const Messages::FieldIdentityCPtr lengthIdentity = sequence->getLengthIdentity();
 
-  out_ << "Sequence: " << lengthIdentity->name() << '[' << lengthIdentity->id() << ']' << " = " << count;
+  out_ << "Sequence: " << lengthIdentity->name() << '[' << lengthIdentity->id() << ']' << " = " << count << " {";
 
   size_t entryCount = 0;
   ++indent_;
@@ -101,6 +102,8 @@ MessageFormatter::formatSequence(
       }
     }
   }
+  newline();
+  out_ << '}';
   --indent_;
   newline();
 }
@@ -114,7 +117,7 @@ MessageFormatter::formatGroup(
   newline();
   out_ << ' ' << identity->name() << '[' << identity->id() << "] Group {"
     << group->getApplicationTypeNs() << ':' << group->getApplicationType()
-    << "}=";
+    << "}= {";
   ++indent_;
   newline();
 
@@ -139,7 +142,10 @@ MessageFormatter::formatGroup(
       displayFieldValue(field);
     }
   }
+  newline();
+  out_ << '}';
   --indent_;
+  newline();
 }
 
 void

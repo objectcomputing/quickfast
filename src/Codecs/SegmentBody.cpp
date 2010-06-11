@@ -58,18 +58,33 @@ SegmentBody::finalize(TemplateRegistry & templateRegistry)
   {
     lengthInstruction_->finalize(templateRegistry);
   }
-  for (size_t pos = 0; pos < mutableInstructions_.size(); ++pos)
-  {
-    mutableInstructions_[pos]->finalize(templateRegistry);
-  }
-
   presenceMapBits_ = initialPresenceMapBits_;
   fieldCount_ = 0;
+
+  // Process everything except templateRef fields first.  That
+  // makes presenceMapBits_ as accurate as possible without dealing
+  // with possible recursive use of the templates.
+  // This two pass approach handles all but the most pathological of
+  // recursive cases.
   for (size_t pos = 0; pos < instructions_.size(); ++pos)
   {
-    size_t used = instructions_[pos]->getPresenceMapBitsUsed();
-    presenceMapBits_ += used;
-    fieldCount_ += instructions_[pos]->fieldCount(*this);
+    if(! mutableInstructions_[pos]->isPossiblyRecursive())
+    {
+      mutableInstructions_[pos]->finalize(templateRegistry);
+      presenceMapBits_ += mutableInstructions_[pos]->getPresenceMapBitsUsed();
+      fieldCount_ += instructions_[pos]->fieldCount(*this);
+    }
+  }
+
+  // Now complete the process by processing the templateRef instructions.
+  for (size_t pos = 0; pos < instructions_.size(); ++pos)
+  {
+    if(mutableInstructions_[pos]->isPossiblyRecursive())
+    {
+      mutableInstructions_[pos]->finalize(templateRegistry);
+      presenceMapBits_ += mutableInstructions_[pos]->getPresenceMapBitsUsed();
+      fieldCount_ += instructions_[pos]->fieldCount(*this);
+    }
   }
   isFinalizing_ = false;
   isFinalized_ = true;
@@ -207,7 +222,7 @@ SegmentBody::display(std::ostream & output, size_t indent) const
     {
       output << "ns=\"" << applicationNamespace_;
     }
-    output << ">\"";
+    output << "\">";
   }
   output << std::endl << indentString << "<!--";
   output << " field count = " << fieldCount_;

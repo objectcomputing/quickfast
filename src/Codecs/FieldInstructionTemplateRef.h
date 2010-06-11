@@ -26,22 +26,23 @@ namespace QuickFAST{
       /// @brief a typical virtual destructor.
       virtual ~FieldInstructionStaticTemplateRef();
 
+      ///////////////////////////////////////
+      /// Implement FieldInstruction methods
       virtual void finalize(TemplateRegistry & templateRegistry);
+      virtual bool isPossiblyRecursive() const;
       virtual size_t fieldCount(const SegmentBody & parent)const;
-
       virtual void decodeNop(
         Codecs::DataSource & source,
         Codecs::PresenceMap & pmap,
         Codecs::Decoder & decoder,
         Messages::ValueMessageBuilder & builder) const;
-
       virtual void encodeNop(
         Codecs::DataDestination & destination,
         Codecs::PresenceMap & pmap,
         Codecs::Encoder & encoder,
         const Messages::MessageAccessor & accessor) const;
-
       virtual ValueType::Type fieldInstructionType()const;
+
     private:
       void interpretValue(const std::string & value);
 

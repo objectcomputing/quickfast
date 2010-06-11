@@ -36,8 +36,8 @@
 #include <Codecs/TemplateRegistry.h>
 #include <Codecs/DictionaryIndexer.h>
 
-
 #include <Messages/FieldSet.h>
+#include <Messages/MessageFormatter.h>
 
 using namespace QuickFAST;
 
@@ -2271,6 +2271,7 @@ BOOST_AUTO_TEST_CASE(test_issue_31)
   Codecs::SegmentBodyPtr segmentBody(new Codecs::SegmentBody);
   Codecs::FieldInstructionPtr decFieldPtr(decField);
   segmentBody->addInstruction(decFieldPtr);
+  segmentBody->setApplicationType("a", "");
 
   Codecs::FieldInstructionGroup field("Group", "");
   field.setSegmentBody(segmentBody);
@@ -2284,7 +2285,7 @@ BOOST_AUTO_TEST_CASE(test_issue_31)
 
   Codecs::SingleMessageConsumer consumer;
   Codecs::GenericMessageBuilder builder(consumer);
-  builder.startMessage("", "", 10);
+  builder.startMessage("b", "", 10);
 
   field.decode(source, pmap, decoder, builder);
   BOOST_REQUIRE(builder.endMessage(builder));
@@ -2292,15 +2293,27 @@ BOOST_AUTO_TEST_CASE(test_issue_31)
   // Was all input consumed?
   uchar byte;
   BOOST_CHECK(!source.getByte(byte));
-
   // should generate 1 field
   Messages::Message & fieldSet = consumer.message();
+#if 0
+  std::cout << std::endl;
+  Messages::MessageFormatter formatter(std::cout);
+  formatter.formatMessage(fieldSet);
+  std::cout << std::endl;
+#endif
+
   BOOST_CHECK_EQUAL(fieldSet.size(), 1);
   Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
   BOOST_CHECK(pFieldEntry != fieldSet.end());
-  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::GROUP));
+  Messages::FieldSetCPtr group = pFieldEntry->getField()->toGroup();
+  BOOST_REQUIRE(bool(group));
+  Messages::FieldSet::const_iterator pGroupEntry = group->begin();
+  BOOST_CHECK(pGroupEntry->getField()->isType(ValueType::DECIMAL));
   Decimal expected(942755, -2);
-  BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expected);
+  BOOST_CHECK(pGroupEntry->getField()->toDecimal() == expected);
+  ++pGroupEntry;
+  BOOST_CHECK(pGroupEntry == group->end());
   ++pFieldEntry;
   BOOST_CHECK(pFieldEntry == fieldSet.end());
 
@@ -2313,6 +2326,10 @@ BOOST_AUTO_TEST_CASE(test_issue_31)
   destination.endMessage();
   std::string result;
   destination.toString(result);
+  WorkingBuffer resultBuffer;
+  destination.toWorkingBuffer(resultBuffer);
+//  resultBuffer.hexDisplay(std::cout);
+//  std::cout << std::endl;
   destination.clear();
   BOOST_CHECK_EQUAL(result, testString);
   BOOST_CHECK(pmap == pmapResult);

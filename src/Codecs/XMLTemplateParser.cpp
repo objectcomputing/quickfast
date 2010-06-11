@@ -133,7 +133,7 @@ namespace
           it != attributeMap.end();
           ++it)
         {
-          *out_ << ' ' << it->first << '=' << it->second;
+          *out_ << ' ' << it->first << "=\"" << it->second << "\"";
         }
         *out_ << '>' << std::endl;
       }

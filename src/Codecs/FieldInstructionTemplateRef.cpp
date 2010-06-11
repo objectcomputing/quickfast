@@ -29,6 +29,13 @@ FieldInstructionStaticTemplateRef::~FieldInstructionStaticTemplateRef()
 {
 }
 
+
+bool
+FieldInstructionStaticTemplateRef::isPossiblyRecursive() const
+{
+  return true;
+}
+
 void
 FieldInstructionStaticTemplateRef::finalize(TemplateRegistry & templateRegistry)
 {

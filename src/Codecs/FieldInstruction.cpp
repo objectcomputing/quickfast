@@ -48,6 +48,12 @@ FieldInstruction::finalize(Codecs::TemplateRegistry & /*registry*/)
   }
 }
 
+bool
+FieldInstruction::isPossiblyRecursive() const
+{
+  return false;
+}
+
 void
 FieldInstruction::setPresence(bool mandatory)
 {

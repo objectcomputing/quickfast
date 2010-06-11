@@ -103,6 +103,8 @@ FieldInstructionGroup::encodeNop(
     encoder.reportFatal("[ERR U08}", "Segment not defined for Group instruction.");
   }
   // retrieve the field corresponding to this group
+  // Note that applications may support merging groups
+  // by returning true from getGroup but using the same accessor.
   const Messages::MessageAccessor * group;
   if(messageAccessor.getGroup(*identity_, group))
   {
@@ -115,28 +117,13 @@ FieldInstructionGroup::encodeNop(
   }
   else
   {
-    // field does not appear in application message.
-    // There are two possibilites:
-    //   1) this group (mandatory or optional) has the same application type
-    //      as the enclosing segment, and has therefore been merged into that segment.
-    //   2) this is an optional group that isn't present.
-    if(messageAccessor.getApplicationType() == getApplicationType())
+    if(isMandatory())
     {
-      // possiblity #1: encode this group using the original messageAccessor
-      if(!isMandatory())
-      {
-        pmap.setNextField(true);
-      }
+      encoder.reportFatal("[ERR U01]", "Missing mandatory group.");
       encoder.encodeGroup(destination, segmentBody_, messageAccessor);
     }
     else
     {
-      // possibility #2: option group not present.
-      if(isMandatory())
-      {
-        encoder.reportFatal("[ERR U01]", "Missing mandatory group.");
-      }
-      // let our counterparty know it's just not there.
       pmap.setNextField(false);
     }
   }
