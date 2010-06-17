@@ -97,6 +97,12 @@ namespace QuickFAST
         catch(...){}
       }
 
+      /// Provide direct access to the internal asio socket.
+      boost::asio::ip::tcp::socket & socket()
+      {
+        return socket_;
+      }
+
     private:
 
       bool fillBuffer(LinkedBuffer * buffer, boost::mutex::scoped_lock& lock)

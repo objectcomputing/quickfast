@@ -1,3 +1,12 @@
+Thu Jun 17 15:09:43 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Communication/MulticastReceiver.h:
+        * src/Communication/TCPReceiver.h:
+          Provide direct access to the sockets inside the *Receivers
+          for special purpose needs.  Until the encoder work is complete
+          this can be used to send to the TCP counterpary.  The multicast
+          method is there only for completeness.
+
 Fri Jun 11 17:37:28 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Messages/MessageFormatter.h:
