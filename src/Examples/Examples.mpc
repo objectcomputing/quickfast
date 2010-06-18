@@ -4,15 +4,6 @@
 
 //////////////////////////////
 // Build the QuickFAST Examples
-project(InterpretFAST) : QuickFASTExample {
-  exename = InterpretFAST
-  Source_Files {
-    InterpretFAST
-  }
-  Header_Files {
-    InterpretFAST
-  }
-}
 
 project(InterpretApplication) : QuickFASTExample {
   exename = InterpretApplication
@@ -71,16 +62,6 @@ project(PCapToMulticast) : QuickFASTExample {
   }
   Header_Files {
     PCapToMulticast
-  }
-}
-
-project(MulticastInterpreter) : QuickFASTExample {
-  exename = MulticastInterpreter
-  Source_Files {
-    MulticastInterpreter
-  }
-  Header_Files {
-    MulticastInterpreter
   }
 }
 

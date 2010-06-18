@@ -1,3 +1,36 @@
+Fri Jun 18 14:22:29 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Application/DecoderConnection.cpp:
+        * src/Codecs/XMLTemplateParser.h:
+          Move #include to reduce compile-time coupling.
+
+        * src/Examples/Examples.mpc:
+        * src/Examples/InterpretFAST:
+        * src/Examples/InterpretFAST/InterpretFAST.h:
+        * src/Examples/InterpretFAST/InterpretFAST.cpp:
+        * src/Examples/InterpretFAST/main.cpp:
+        * src/Examples/MulticastInterpreter:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.h:
+        * src/Examples/MulticastInterpreter/MulticastInterpreter.cpp:
+        * src/Examples/MulticastInterpreter/main.cpp:
+
+          Removed InterpretFAST and MulticastInterpreter.  The
+          InterpretApplication provides all capabilities from these
+          programs (and much more).
+          Some command line options need to be changed to use
+          InterpretApplication rather than InterpretFAST and MulicastInterpreter:
+            Replace            with
+            -f filename        -file filename
+            -o output_file     >>output_file
+            -head count        -limit count
+            -r                 -reset
+            -s                 -strict
+            -vp, -vd, -vx      -vo filename
+            -b size            -buffersize size
+            -# count           -buffers count
+            -l ip              -mlisten ip
+            -m ip -p port      -multicast ip:port
+
 Thu Jun 17 15:09:43 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Communication/MulticastReceiver.h:

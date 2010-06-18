@@ -10,6 +10,7 @@
 #include <Codecs/NoHeaderAnalyzer.h>
 #include <Codecs/FixedSizeHeaderAnalyzer.h>
 #include <Codecs/FastEncodedHeaderAnalyzer.h>
+#include <Codecs/TemplateRegistry.h>
 
 #include <Communication/MulticastReceiver.h>
 #include <Communication/TCPReceiver.h>
