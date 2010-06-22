@@ -16,7 +16,9 @@ FileToTCP::FileToTCP()
 : portNumber_(9876)
 , bufferSize_(1024)
 , sendCount_(0)
+, inFile_(0)
 , verbose_(false)
+, hack_(false)
 {
 }
 
@@ -54,6 +56,11 @@ FileToTCP::parseSingleArg(int argc, char * argv[])
       sendCount_ = boost::lexical_cast<size_t>(argv[1]);
       consumed = 2;
     }
+    else if(opt == "-hack")
+    {
+      hack_ = true;
+      consumed = 1;
+    }
   }
   catch (std::exception & ex)
   {
@@ -69,9 +76,7 @@ FileToTCP::usage(std::ostream & out) const
   out << "  -f file     : File to send (required)" << std::endl;
   out << "  -c count    : How many time to deliver the file" << std::endl;
   out << "                (default 0 means forever.)" << std::endl;
-  out << "  -l port     : Listen on the supplied port number (default 9876)" << std::endl;
-  out << "  -b size     : Buffer size to send (default 1024)" << std::endl;
-  out << "  -v          : Noise to the console while it runs" << std::endl;
+  out << "  -p port     : Listen on the supplied port number (default 9876)" << std::endl;
 }
 
 bool
@@ -126,6 +131,16 @@ FileToTCP::run()
       {
         std::cout << "Accepting" << std::endl;
       }
+      if(hack_)
+      {
+        while(stream.good())
+        {
+          char c;
+          c = stream.get();
+          std::cout << c << std::flush;
+        }
+        return 0;
+      }
       fseek(inFile_, 0, SEEK_SET);
       char * buffer = new char[bufferSize_];
       while(!feof(inFile_))
@@ -147,7 +162,6 @@ FileToTCP::run()
         {
           break;
         }
-
       }
 #ifdef _WIN32
       // On WIN32 if sender closes the socket before a localhost receiver

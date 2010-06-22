@@ -48,12 +48,12 @@ namespace QuickFAST{
       size_t bufferSize_;
       std::string fileName_;
       size_t sendCount_;
+      FILE * inFile_;
       bool verbose_;
+      bool hack_;
 
       boost::asio::io_service io_service_;
       CommandArgParser commandArgParser_;
-      FILE * inFile_;
-
     };
   }
 }

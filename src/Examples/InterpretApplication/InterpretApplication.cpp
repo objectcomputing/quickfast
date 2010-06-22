@@ -22,6 +22,10 @@
 #include <Examples/MessageInterpreter.h>
 #include <Examples/ValueToFix.h>
 
+#if 1 // testing
+#include <Codecs/DataDestination.h>
+#endif
+
 using namespace QuickFAST;
 using namespace Examples;
 
@@ -431,6 +435,32 @@ InterpretApplication::run()
           else if( c == 'r')
           {
             connection_.receiver().resume();
+          }
+          else if(c == 'h')
+          {
+            // this is simply a test of the ability to send replies to
+            // a tcp receiver.  As a sidelight it tests the gather-IO capability
+            // of DataDestination.
+            Codecs::DataDestination destination;
+            Codecs::DataDestination::BufferHandle b1 = destination.startBuffer();
+            destination.startBuffer();
+            destination.putByte(',');
+            destination.putByte(' ');
+            destination.putByte('W');
+            destination.putByte('o');
+            destination.putByte('r');
+            destination.putByte('l');
+            destination.putByte('d');
+            destination.putByte('!');
+
+            destination.selectBuffer(b1);
+            destination.putByte('H');
+            destination.putByte('e');
+            destination.putByte('l');
+            destination.putByte('l');
+            destination.putByte('o');
+            Communication::TCPReceiver & tcp(dynamic_cast<Communication::TCPReceiver &>(connection_.receiver()));
+            tcp.send(destination);
           }
           else
           {

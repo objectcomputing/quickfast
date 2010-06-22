@@ -63,11 +63,13 @@ namespace QuickFAST
         // then iterate thru the collection until we find one that works.
         boost::system::error_code error;
         boost::asio::ip::tcp::resolver::iterator endIterator;
-        while(error && iterator != endIterator)
+        bool connected = false;
+        while(!connected && iterator != endIterator)
         {
           socket_.connect(*iterator, error);
+          connected = !error;
         }
-        if(error)
+        if(!connected)
         {
           ok = false;
           std::stringstream msg;
@@ -101,6 +103,77 @@ namespace QuickFAST
       boost::asio::ip::tcp::socket & socket()
       {
         return socket_;
+      }
+
+      /// @brief send data to the socket (synchronous)
+      ///
+      /// Hint: DataDestination makes a good ConstBufferSequence
+      /// @param buffers the source of the data.
+      /// @returns the number of bytes transmitted.
+      template<typename ConstBufferSequence>
+      std::size_t send(const ConstBufferSequence & buffers)
+      {
+        return socket_.send(buffers);
+      }
+
+      /// @brief send data to the socket (synchronous)
+      ///
+      /// Hint: DataDestination makes a good ConstBufferSequence
+      /// @param buffers the source of the data.
+      /// @param flags see boost documentation for flags available
+      /// @returns the number of bytes transmitted.
+      template<typename ConstBufferSequence>
+      std::size_t send(
+        const ConstBufferSequence & buffers,
+        boost::asio::ip::tcp::socket::message_flags flags)
+      {
+        return socket_.send(buffers, flags);
+      }
+
+      /// @brief send data to the socket (synchronous)
+      ///
+      /// Hint: DataDestination makes a good ConstBufferSequence
+      /// @param buffers the source of the data.
+      /// @param flags see boost documentation for flags available
+      /// @param[out] ec set to the error if any.
+      /// @returns the number of bytes transmitted.
+      template<typename ConstBufferSequence>
+      std::size_t send(
+        const ConstBufferSequence & buffers,
+        boost::asio::ip::tcp::socket::message_flags flags,
+        boost::system::error_code & ec)
+      {
+        return socket_.send(buffers, flags, ec);
+      }
+
+      /// @brief send data to the socket (asynchronous)
+      ///
+      /// Hint: DataDestination makes a good ConstBufferSequence
+      /// Important: ConstBufferSequence must not be changed until the send completes.
+      /// @param buffers the source of the data.
+      /// @param handler is called on I/O completion
+      template<typename ConstBufferSequence, typename WriteHandler>
+      void asyncSend(
+        const ConstBufferSequence & buffers,
+        WriteHandler handler)
+      {
+        socket_.async_send(buffers, WriteHandler handler);
+      }
+
+      /// @brief send data to the socket (asynchronous)
+      ///
+      /// Hint: DataDestination makes a good ConstBufferSequence
+      /// Important: ConstBufferSequence must not be changed until the send completes.
+      /// @param buffers the source of the data.
+      /// @param flags see boost documentation for flags available
+      /// @param handler is called on I/O completion
+      template<typename ConstBufferSequence, typename WriteHandler>
+      void asyncSend(
+        const ConstBufferSequence & buffers,
+        boost::asio::ip::tcp::socket::message_flags flags,
+        WriteHandler handler)
+      {
+        socket_.async_send(buffers, flags, handler);
       }
 
     private:

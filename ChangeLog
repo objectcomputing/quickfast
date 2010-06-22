@@ -1,3 +1,26 @@
+Tue Jun 22 14:18:32 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/DataDestination.h:
+          getBuffer returns a valid handle even before the DataDestination
+          is used.
+
+        * src/Communication/TCPReceiver.h:
+          Fix an initialization problem.
+          Add methods to send data back to the counterparty via the TCP socket.
+          In particular you can pass a DataDestination containing
+          encoded data to the send() method and it will be sent to the socket.
+
+        * src/Examples/FileToTCP/FileToTCP.h:
+        * src/Examples/FileToTCP/FileToTCP.cpp:
+          Temporary: add a '-hack" option that simply listens and echo's
+          any response from the sender.  This really should be a separate
+          program.
+
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+          Temporary: add a console command 'h' that sends "Hello, World!"
+          back thru the TCPReceiver.  Throws and exception if not configured
+          for TCP.
+
 Fri Jun 18 14:22:29 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Application/DecoderConnection.cpp:

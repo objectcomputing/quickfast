@@ -82,7 +82,7 @@ namespace QuickFAST{
       {
         if(active_ == NotABuffer)
         {
-          startBuffer();
+          (void)startBuffer();
         }
         buffers_[active_].push(byte);
         if(verboseOut_)
@@ -101,6 +101,10 @@ namespace QuickFAST{
       /// @returns a handle to the buffer that can be used with selectBuffer()
       BufferHandle getBuffer()const
       {
+        if(active_ == NotABuffer)
+        {
+          (void) const_cast<DataDestination *>(this)->startBuffer();
+        }
         return active_;
       }
 
