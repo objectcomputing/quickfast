@@ -69,13 +69,18 @@ namespace QuickFAST{
     Decimal& operator/=(const Decimal & rhs);
 
     /// @brief force normalization
-    void normalize();
+    ///
+    /// @param fixOverflow if true throw if normalization fails else fix it leaving the number denormalized
+    void normalize(bool strict = true);
 
     /// @brief denormalize to achieve a specific exponent
     void denormalize(exponent_t exponent);
 
     /// @brief Nothrow; no allocate; constant time swap values.
     void swap(Decimal & rhs);
+
+  private:
+    void maximizeMantissa();
 
   private:
     mantissa_t mantissa_;

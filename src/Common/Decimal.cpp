@@ -190,7 +190,7 @@ Decimal::swap(Decimal & rhs)
 }
 
 void
-Decimal::normalize()
+Decimal::normalize(bool strict /*= true*/)
 {
   while(mantissa_ != 0 && mantissa_ % 10 == 0 && exponent_ < 64)
   {
@@ -199,22 +199,48 @@ Decimal::normalize()
   }
   if(exponent_ > 64)
   {
-    throw OverflowError("[ERR R1]Decimal Exponent overflow.");
+    if(strict)
+    {
+      throw OverflowError("[ERR R1]Decimal Exponent overflow.");
+    }
+    while(exponent_ > 64)
+    {
+      mantissa_ *= 10;
+      exponent_ -= 1;
+    }
   }
   if(exponent_ < -64)
   {
-    throw OverflowError("[ERR R1]Decimal Exponent undeflow.");
+    if(strict)
+    {
+      throw OverflowError("[ERR R1]Decimal Exponent undeflow.");
+    }
+    while(exponent_ < -64)
+    {
+      mantissa_ /= 10;
+      exponent_ += 1;
+    }
   }
 }
 
 void
 Decimal::denormalize(exponent_t exponent)
 {
-  while(exponent_ > exponent)
+  while(exponent_ > exponent && mantissa_ < (LLONG_MAX/10))
   {
     exponent_ -= 1;
     mantissa_ *= 10;
     // todo check mantissa overflow
+  }
+}
+void
+Decimal::maximizeMantissa()
+{
+  // this could be considerably faster!
+  while(exponent_ > SCHAR_MIN && mantissa_ < (LLONG_MAX/10))
+  {
+    exponent_ -= 1;
+    mantissa_ *= 10;
   }
 }
 
@@ -251,7 +277,7 @@ Decimal::operator double()const
 Decimal &
 Decimal::operator+=(const Decimal & rhs)
 {
-  if(rhs.exponent_ > exponent_)
+  if(rhs.exponent_ < exponent_)
   {
     Decimal temp(*this);
     temp.denormalize(rhs.exponent_);
@@ -274,7 +300,7 @@ Decimal::operator+=(const Decimal & rhs)
 Decimal &
 Decimal::operator-=(const Decimal & rhs)
 {
-  if(rhs.exponent_ > exponent_)
+  if(rhs.exponent_ < exponent_)
   {
     Decimal temp(*this);
     temp.denormalize(rhs.exponent_);
@@ -286,7 +312,7 @@ Decimal::operator-=(const Decimal & rhs)
   {
     Decimal temp(rhs);
     temp.denormalize(exponent_);
-    temp.mantissa_ += mantissa_;
+    temp.mantissa_ = mantissa_ - temp.mantissa_;
     temp.normalize();
     swap(temp);
   }
@@ -308,9 +334,10 @@ Decimal&
 Decimal::operator/=(const Decimal & rhs)
 {
   Decimal temp(*this);
+  temp.maximizeMantissa();
   temp.exponent_ -= rhs.exponent_;
   temp.mantissa_ /= rhs.mantissa_;
-  temp.normalize();
+  temp.normalize(false);
   swap(temp);
   return *this;
 }

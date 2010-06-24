@@ -11,6 +11,7 @@
 #include <Common/StringBuffer.h>
 #include <Common/WorkingBuffer.h>
 #include <Common/Exceptions.h>
+#include <Common/Decimal.h>
 
 using namespace QuickFAST;
 BOOST_AUTO_TEST_CASE(TestLinkedBuffer)
@@ -429,4 +430,71 @@ BOOST_AUTO_TEST_CASE(TestWorkingBuffer)
 
 
   // TODO: This is a start, but we could use a lot more testing here.
+}
+
+BOOST_AUTO_TEST_CASE(TestDecimal)
+{
+  // Test basic decimal arithmetic
+
+  Decimal zero(0,0);
+  Decimal one(1,0);
+  Decimal ten(10,0);
+  Decimal hundred(1,2);
+
+  Decimal a(zero);
+  a += one;
+  BOOST_CHECK_EQUAL(a, one);
+  a += one;
+  a += one;
+  a += one;
+  a += one;
+  a += one;
+  a += one;
+  a += one;
+  a += one;
+  a += one;
+  BOOST_CHECK_EQUAL(a, ten);
+  a /= ten;
+  a -= one;
+  BOOST_CHECK_EQUAL(a, zero);
+  a = hundred;
+  a -= ten;
+  a -= ten;
+  a -= ten;
+  a -= ten;
+  a -= ten;
+  a -= ten;
+  a -= ten;
+  a -= ten;
+  a -= ten;
+  a -= ten;
+  BOOST_CHECK_EQUAL(a, zero);
+
+  a = one;
+  a /= ten;
+  a /= ten;
+  a /= ten;
+  a /= ten;
+  a /= ten;
+  a /= ten;
+  a /= ten;
+  a /= ten;
+  a /= ten;
+  a /= ten;
+  a *= hundred;
+  a *= hundred;
+  a *= hundred;
+  a *= hundred;
+  a *= hundred;
+  BOOST_CHECK_EQUAL(a, one);
+
+  Decimal b(0,0);
+  Decimal c(123,0);
+  Decimal d(456,0);
+  b += c;
+  b += d;
+  b -= d;
+  BOOST_CHECK_EQUAL(b,c);
+
+
 }

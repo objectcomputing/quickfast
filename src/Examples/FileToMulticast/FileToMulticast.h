@@ -5,7 +5,8 @@
 #ifndef FILETOMULTICAST_H
 #define FILETOMULTICAST_H
 #include <Examples/CommandArgParser.h>
-#include <boost/asio.hpp>
+#include <Communication/AsioService.h>
+#include <Communication/MulticastSender_fwd.h>
 #include <stdio.h>
 
 namespace QuickFAST{
@@ -58,10 +59,7 @@ namespace QuickFAST{
       bool pauseEveryMessage_;
       bool verbose_;
 
-      boost::asio::io_service ioService_;
-      boost::asio::ip::address multicastAddress_;
-      boost::asio::ip::udp::endpoint endpoint_;
-      boost::asio::ip::udp::socket socket_;
+      Communication::AsioService ioService_;
       boost::asio::strand strand_;
       boost::asio::deadline_timer timer_;
 
@@ -77,6 +75,7 @@ namespace QuickFAST{
       size_t nPass_;
       size_t nMsg_;
       size_t totalMessageCount_;
+      Communication::MulticastSenderPtr sender_;
     };
   }
 }

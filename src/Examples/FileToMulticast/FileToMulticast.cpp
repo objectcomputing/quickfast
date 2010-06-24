@@ -4,6 +4,7 @@
 //
 #include <Examples/ExamplesPch.h>
 #include "FileToMulticast.h"
+#include <Communication/MulticastSender.h>
 #include <Examples/StopWatch.h>
 using namespace QuickFAST;
 using namespace Examples;
@@ -26,7 +27,6 @@ FileToMulticast::FileToMulticast()
 , pauseEveryMessage_(false)
 , verbose_(false)
 , dataFile_(0)
-, socket_(ioService_)
 , strand_(ioService_)
 , timer_(ioService_)
 , bufferSize_(0)
@@ -169,10 +169,7 @@ FileToMulticast::applyArgs()
 
     ok = ok && parseIndexFile();
 
-    multicastAddress_ = boost::asio::ip::address::from_string(sendAddress_);
-    endpoint_ = boost::asio::ip::udp::endpoint(multicastAddress_, portNumber_);
-//    socket_ = new boost::asio::ip::udp::socket(ioService_, endpoint_.protocol());
-    socket_.open(endpoint_.protocol());
+    sender_.reset(new Communication::MulticastSender(ioService_, sendAddress_, portNumber_));
   }
   catch (std::exception& e)
   {
@@ -256,6 +253,7 @@ FileToMulticast::run()
 {
   try
   {
+    sender_->initializeSender();
     if(verbose_)
     {
       std::cout << "Sending " << messageIndex_.size() << " messages. "
@@ -315,7 +313,7 @@ FileToMulticast::sendBurst()
         nPass_ += 1;
         if(nPass_ >= sendCount_ && sendCount_ != 0)
         {
-          ioService_.stop();
+          ioService_.stopService();
           return;
         }
         if(verbose_)
@@ -348,13 +346,13 @@ FileToMulticast::sendBurst()
       assert(messageLength <= bufferSize_);
       size_t bytesRead = fread(buffer_.get(), 1, messageLength, dataFile_);
       assert (bytesRead == messageLength);
-      socket_.send_to(boost::asio::buffer(buffer_.get(), messageLength), endpoint_);
+      sender_->send(boost::asio::buffer(buffer_.get(), messageLength));
     }
   }
   catch (std::exception& e)
   {
     std::cerr << e.what() << std::endl;
-    ioService_.stop();
+    ioService_.stopService();
   }
 }
 
