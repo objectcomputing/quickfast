@@ -681,41 +681,39 @@ namespace QuickFAST{
       Codecs::Encoder & encoder,
       const Messages::MessageAccessor & accessor) const
     {
-      // get the value from the application data
-      INTEGER_TYPE value = 0;
-      bool present = 0;
-      if(SIGNED)
+      // there's nothing much to do about a mandatory constant field
+      // and no sense bugging the application to provide the constant
+      // value.
+      if(!isMandatory())
       {
-        int64 value64;
-        present = accessor.getSignedInteger(*identity_, VALUE_TYPE, value64);
-        value = static_cast<INTEGER_TYPE>(value64);
-      }
-      else
-      {
-        uint64 value64;
-        present = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, value64);
-        value = static_cast<INTEGER_TYPE>(value64);
-      }
-
-      if(present)
-      {
-        if(value != typedValue_)
+        // get the value from the application data
+        INTEGER_TYPE value = 0;
+        bool present = 0;
+        if(SIGNED)
         {
-          encoder.reportError("[ERR U02]", "Constant value does not match application data.", *identity_);
+          int64 value64;
+          present = accessor.getSignedInteger(*identity_, VALUE_TYPE, value64);
+          value = static_cast<INTEGER_TYPE>(value64);
+        }
+        else
+        {
+          uint64 value64;
+          present = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, value64);
+          value = static_cast<INTEGER_TYPE>(value64);
         }
 
-        if(!isMandatory())
+        if(present)
         {
+          if(value != typedValue_)
+          {
+            encoder.reportError("[ERR U02]", "Constant value does not match application data.", *identity_);
+          }
           pmap.setNextField(true);
         }
-      }
-      else // not defined in fieldset
-      {
-        if(isMandatory())
+        else // not defined in fieldset
         {
-          encoder.reportError("[ERR U01]", "Missing mandatory field.", *identity_);
+          pmap.setNextField(false);
         }
-        pmap.setNextField(false);
       }
     }
 

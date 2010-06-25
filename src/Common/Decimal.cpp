@@ -251,9 +251,22 @@ Decimal::operator<(const Decimal & rhs) const
   {
     return mantissa_ < rhs.mantissa_;
   }
-  // at this point comparison is iffy, converting to double doesn't
-  // hurt
-  return (double) *this == (double)rhs;
+
+  if(rhs.exponent_ < exponent_)
+  {
+    Decimal temp(*this);
+    temp.denormalize(rhs.exponent_);
+    return temp.mantissa_ < rhs.mantissa_;
+  }
+  else
+  {
+    Decimal temp(rhs);
+    temp.denormalize(exponent_);
+    return mantissa_ < temp.mantissa_;
+  }
+//  // at this point comparison is iffy, converting to double doesn't
+//  // hurt
+//  return (double) *this < (double)rhs;
 
 }
 
@@ -264,9 +277,22 @@ Decimal::operator==(const Decimal & rhs) const
   {
     return mantissa_ == rhs.mantissa_;
   }
-  // at this point equality is iffy, converting to double doesn't
-  // hurt
-  return (double) *this == (double)rhs;
+
+  if(rhs.exponent_ < exponent_)
+  {
+    Decimal temp(*this);
+    temp.denormalize(rhs.exponent_);
+    return temp.mantissa_ == rhs.mantissa_;
+  }
+  else
+  {
+    Decimal temp(rhs);
+    temp.denormalize(exponent_);
+    return mantissa_== temp.mantissa_;
+  }
+//  // at this point equality is iffy, converting to double doesn't
+//  // hurt
+//  return (double) *this == (double)rhs;
 }
 
 Decimal::operator double()const

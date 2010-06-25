@@ -415,28 +415,23 @@ FieldInstructionBlob::encodeConstant(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & accessor) const
 {
-  // get the value from the application data
-  const StringBuffer * value;
-  if(accessor.getString(*identity_, type_, value))
+  if(!isMandatory())
   {
-    const std::string & constant = initialValue_->toString();
-    if(*value != constant)
+    // get the value from the application data
+    const StringBuffer * value;
+    if(accessor.getString(*identity_, type_, value))
     {
-      encoder.reportFatal("[ERR U10]", "Constant value does not match application data.", *identity_);
-    }
-
-    if(!isMandatory())
-    {
+      const std::string & constant = initialValue_->toString();
+      if(*value != constant)
+      {
+        encoder.reportFatal("[ERR U10]", "Constant value does not match application data.", *identity_);
+      }
       pmap.setNextField(true);
     }
-  }
-  else // not defined in accessor
-  {
-    if(isMandatory())
+    else // not defined in accessor
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      pmap.setNextField(false);
     }
-    pmap.setNextField(false);
   }
 }
 

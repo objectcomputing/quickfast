@@ -496,5 +496,11 @@ BOOST_AUTO_TEST_CASE(TestDecimal)
   b -= d;
   BOOST_CHECK_EQUAL(b,c);
 
+  Decimal f(2095, -2);
+  Decimal g(2000, -2);
+  BOOST_CHECK_GT(f, g);
+  f.normalize();
+  g.normalize();
+  BOOST_CHECK_GT(f, g);
 
 }

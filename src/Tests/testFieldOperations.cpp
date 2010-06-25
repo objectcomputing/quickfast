@@ -219,13 +219,15 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_1_1)
   BOOST_CHECK(pmap == pmapResult);
 
   // check the error condition: constant value doesn't match
-  Messages::FieldSet fieldSet2(10);
-  Messages::FieldCPtr dataField = Messages::FieldUInt32::create(99);
-  fieldSet2.addField(field.getIdentity(), dataField);
-  BOOST_CHECK_THROW(field.encode(destination, pmapResult, encoder, fieldSet2), EncodingError);
+  // Note: removed the checks for mandatory constant fields.  It added busywork for the application
+  //       without adding value.
+  // Messages::FieldSet fieldSet2(10);
+  // Messages::FieldCPtr dataField = Messages::FieldUInt32::create(99);
+  // fieldSet2.addField(field.getIdentity(), dataField);
+  // BOOST_CHECK_THROW(field.encode(destination, pmapResult, encoder, fieldSet2), EncodingError);
   // check the error condition: missing mandatory field
-  Messages::FieldSet fieldSet3(10);
-  BOOST_CHECK_THROW(field.encode(destination, pmapResult, encoder, fieldSet3), EncodingError);
+  // Messages::FieldSet fieldSet3(10);
+  // BOOST_CHECK_THROW(field.encode(destination, pmapResult, encoder, fieldSet3), EncodingError);
 }
 
 BOOST_AUTO_TEST_CASE(testAppendix_3_2_1_2)

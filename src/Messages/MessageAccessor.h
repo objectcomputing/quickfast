@@ -18,7 +18,7 @@ namespace QuickFAST
     class QuickFAST_Export MessageAccessor
     {
     public:
-      MessageAccessor();
+      explicit MessageAccessor(template_id_t tid = template_id_t(-1));
 
       /// @brief Virtual destructor
       virtual ~MessageAccessor();
@@ -27,8 +27,7 @@ namespace QuickFAST
       //
       // @param[out] tid is the template chosen.
       // @returns false if no more data to encode.
-      // Future development
-//      virtual bool pickTemplate(template_id_t & tid) = 0;
+      virtual bool pickTemplate(template_id_t & tid);
 
 
       /// @brief Is the specified field present in this set?
@@ -114,27 +113,7 @@ namespace QuickFAST
       virtual const std::string & getApplicationTypeNs()const = 0;
 
     private:
-      /// @brief Is this field present
-      /// backwards compatibility only.  Derived classes should implement "isPresent(FieldIdentity)"
-      /// @deprecated
-//      virtual bool isPresent(const std::string & name)const;
-
-      /// @brief Get the value of the specified field.
-      /// backwards compatibility only.  Derived classes should implement "get[datatype]((FieldIdentity..."
-      /// @param[in] name Identifies the desired field
-      /// @param[out] value is the value that was found.
-      /// @returns true if the field was found and has a value;
-      /// @deprecated
-//      virtual bool getField(const std::string & name, FieldCPtr & value) const;
-      /// @brief Get the value of the specified field.
-      /// backwards compatibility only.  Derived classes should implement "get[datatype]((FieldIdentity..."
-      /// @param[in] identity Identifies the desired field
-      /// @param[out] value is the value that was found.
-      /// @returns true if the field was found and has a value;
-      /// @deprecated
-//      virtual bool getField(const FieldIdentity & identity, FieldCPtr & value) const;
-    private:
-//      mutable bool recursive_; /// temporary during transition
+      template_id_t & tid_;
     };
   }
 }

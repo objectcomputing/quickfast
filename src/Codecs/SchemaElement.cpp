@@ -4,6 +4,7 @@
 #include <Common/QuickFASTPch.h>
 #include "SchemaElement.h"
 #include <Common/Exceptions.h>
+#include <Codecs/FieldOp.h>
 using namespace QuickFAST;
 using namespace QuickFAST::Codecs;
 
@@ -27,7 +28,9 @@ SchemaElement::setApplicationType(const std::string & /*type*/, const std::strin
 void
 SchemaElement::setFieldOp(FieldOpPtr fieldOp)
 {
-  throw TemplateDefinitionError("Field operation not allowed in this context.");
+  std::stringstream msg;
+  msg << "Field operation <" << fieldOp->opName(fieldOp->opType()) << "> not allowed in this context.";
+  throw TemplateDefinitionError(msg.str());
 }
 void
 SchemaElement::addLengthInstruction(FieldInstructionPtr & /*field*/)

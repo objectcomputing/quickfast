@@ -294,6 +294,12 @@ namespace QuickFAST{
       /// @brief Return the FieldOp type of this field
       virtual OpType opType()const = 0;
 
+      /// @brief Translate the op type of *this
+      const std::string & opName()const
+      {
+        return opName(opType());
+      }
+
       /// @brief Translate a FieldOp type to a name.
       static const std::string & opName(OpType type);
 

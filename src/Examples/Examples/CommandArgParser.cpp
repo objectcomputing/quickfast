@@ -72,9 +72,9 @@ CommandArgParser::usage(std::ostream & out) const
     ++it)
   {
     (*it)->usage(out);
-    out << "  -V: Display version information and exit." << std::endl;
-    out << "  -?: Display this information and exit" << std::endl;
   }
+  out << "  -V: Display version information and exit." << std::endl;
+  out << "  -?: Display this information and exit" << std::endl;
 }
 
 bool

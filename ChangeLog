@@ -1,3 +1,38 @@
+Fri Jun 25 18:31:09 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Encoder.h:
+        * src/Codecs/Encoder.cpp:
+        * src/Messages/MessageAccessor.h:
+        * src/Messages/MessageAccessor.cpp:
+          Add new method, Encoder::encodeMessages() asks the accessor
+          for a template ID for the message and continues to encode
+          as long as the accessor returns an ID.
+
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Tests/testFieldOperations.cpp:
+          When encoding mandatory constant values don't retrieve
+          them from the accessor. Just assume they are there and
+          have the correct value.  Cuts down on application developer's
+          useless busywork.
+          Disable the test that expected an exception when a mandatory
+          constant field had the wrong value.
+
+        * src/Codecs/FieldOp.h:
+        * src/Codecs/SchemaElement.cpp:
+          Add the name of the operation to the "...not allowed in this
+          context" message
+
+        * src/Common/Decimal.cpp:
+        * src/Tests/testCommon.cpp:
+          Fix a problem comparing Decimals with differing exponents.
+          Unit test to catch it.
+
+        * src/Examples/Examples/CommandArgParser.cpp:
+          The -V and -? options were appearing multiple times when there
+          were multiple commmand argument handlers.
+
 Thu Jun 24 19:47:45 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Common/Decimal.h:

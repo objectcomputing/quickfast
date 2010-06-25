@@ -9,12 +9,26 @@
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Messages;
 
-MessageAccessor::MessageAccessor()
+MessageAccessor::MessageAccessor(template_id_t tid)
+: tid_(tid)
 {
 }
 MessageAccessor::~MessageAccessor()
 {
 }
+
+bool
+MessageAccessor::pickTemplate(template_id_t & tid)
+{
+  if(tid_ == template_id_t(-1))
+  {
+    return false;
+  }
+  tid = tid_;
+  tid_ = template_id_t(-1);
+  return true;
+}
+
 
 void
 MessageAccessor::endGroup(const FieldIdentity & identity, const MessageAccessor * groupAccessor)const

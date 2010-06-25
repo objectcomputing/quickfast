@@ -19,13 +19,25 @@ Encoder::Encoder(Codecs::TemplateRegistryPtr registry)
 }
 
 void
+Encoder::encodeMessages(
+  DataDestination & destination,
+  Messages::MessageAccessor & accessor)
+{
+  template_id_t templateId;
+  while(accessor.pickTemplate(templateId))
+  {
+    encodeMessage(destination, templateId, accessor);
+  }
+}
+
+void
 Encoder::encodeMessage(
   DataDestination & destination,
   template_id_t templateId,
-  const Messages::MessageAccessor & message)
+  const Messages::MessageAccessor & accessor)
 {
   destination.startMessage(templateId);
-  encodeSegment(destination, templateId, message);
+  encodeSegment(destination, templateId, accessor);
   destination.endMessage();
 }
 
@@ -33,7 +45,7 @@ void
 Encoder::encodeSegment(
   DataDestination & destination,
   template_id_t templateId,
-  const Messages::MessageAccessor & fieldSet)
+  const Messages::MessageAccessor & accessor)
 {
   Codecs::TemplateCPtr templatePtr;
   if(getTemplateRegistry()->getTemplate(templateId, templatePtr))
@@ -59,7 +71,7 @@ Encoder::encodeSegment(
       templateId_ = templateId;
     }
 
-    encodeSegmentBody(destination, pmap, templatePtr, fieldSet);
+    encodeSegmentBody(destination, pmap, templatePtr, accessor);
     destination.selectBuffer(header);
     static Messages::FieldIdentity pmapIdentity("PMAP", "Message");
     destination.startField(pmapIdentity);
@@ -76,7 +88,7 @@ void
 Encoder::encodeGroup(
   DataDestination & destination,
   const Codecs::SegmentBodyPtr & group,
-  const Messages::MessageAccessor & fieldSet)
+  const Messages::MessageAccessor & accessor)
 {
   size_t presenceMapBits = group->presenceMapBitCount();
   Codecs::PresenceMap pmap(presenceMapBits);
@@ -90,7 +102,7 @@ Encoder::encodeGroup(
   {
     bodyBuffer = destination.startBuffer();
   }
-  encodeSegmentBody(destination, pmap, group, fieldSet);
+  encodeSegmentBody(destination, pmap, group, accessor);
   // remember the buffer we're presently working on
   bodyBuffer = destination.getBuffer();
   if(presenceMapBits > 0)
@@ -111,7 +123,7 @@ Encoder::encodeSegmentBody(
   DataDestination & destination,
   Codecs::PresenceMap & pmap,
   const Codecs::SegmentBodyCPtr & segment,
-  const Messages::MessageAccessor & fieldSet)
+  const Messages::MessageAccessor & accessor)
 {
   size_t instructionCount = segment->size();
   for( size_t nField = 0; nField < instructionCount; ++nField)
@@ -121,7 +133,7 @@ Encoder::encodeSegmentBody(
     if(segment->getInstruction(nField, instruction))
     {
       destination.startField(*(instruction->getIdentity()));
-      instruction->encode(destination, pmap, *this, fieldSet);
+      instruction->encode(destination, pmap, *this, accessor);
       destination.endField(*(instruction->getIdentity()));
     }
   }

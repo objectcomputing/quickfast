@@ -386,27 +386,23 @@ FieldInstructionDecimal::encodeConstant(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & accessor) const
 {
-  // get the value from the application data
-  Decimal value;
-  if(accessor.getDecimal(*identity_, ValueType::DECIMAL, value))
+  if(!isMandatory())
   {
-    if(value != typedValue_)
+    // get the value from the application data
+    Decimal value;
+    if(accessor.getDecimal(*identity_, ValueType::DECIMAL, value))
     {
-      encoder.reportFatal("[ERR U10]", "Constant value does not match application data.", *identity_);
-    }
+      if(value != typedValue_)
+      {
+        encoder.reportFatal("[ERR U10]", "Constant value does not match application data.", *identity_);
+      }
 
-    if(!isMandatory())
-    {
       pmap.setNextField(true);
     }
-  }
-  else // not defined by accessor
-  {
-    if(isMandatory())
+    else // not defined by accessor
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      pmap.setNextField(false);
     }
-    pmap.setNextField(false);
   }
 }
 
