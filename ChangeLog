@@ -1,3 +1,13 @@
+Wed Jun 30 15:12:25 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * src/Communication/TCPReceiver.h:
+          Fix linux build error (gcc caught it, VC ignored it.)
+
+        * src/Codecs/Encoder_fwd.h:
+          Declare a shared pointer to an Encoder
+
+        * src/Codecs/FieldInstructionAscii.cpp:
+          Do not retrieve data for required, constant fields.
+
 Fri Jun 25 18:31:09 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Encoder.h:
