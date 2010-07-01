@@ -23,6 +23,19 @@ FieldIdentity::FieldIdentity()
   qualifyName();
 }
 
+FieldIdentity::FieldIdentity(
+  const std::string & name,
+  const std::string & fieldNamespace /* = ""*/,
+  const field_id_t & id /* = ""*/)
+  : localName_(name)
+  , fieldNamespace_(fieldNamespace)
+  , id_(id)
+  , refcount_(0)
+{
+  qualifyName();
+}
+
+
 FieldIdentity::~FieldIdentity()
 {
 }

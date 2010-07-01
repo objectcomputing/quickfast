@@ -25,14 +25,7 @@ namespace QuickFAST{
       explicit FieldIdentity(
         const std::string & name,
         const std::string & fieldNamespace = "",
-        const field_id_t & id = "")
-        : localName_(name)
-        , fieldNamespace_(fieldNamespace)
-        , refcount_(0)
-        , id_(id)
-      {
-        qualifyName();
-      }
+        const field_id_t & id = "");
 
       /// @brief Construct an anonomous FieldIdentity
       FieldIdentity();

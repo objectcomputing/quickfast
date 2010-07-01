@@ -18,6 +18,14 @@ namespace QuickFAST
   /// the INTERNAL_CAPACITY parameter does that.
   /// We also want to know how many heap allocations were required.
   /// The growCount() method provides that information.
+  ///
+  /// Secondary usage.  In addition to it's std::string like behavior, a StringBufferT
+  /// can also be used as a "facade" for a real std::string.  This is not intended as
+  /// a general purpose solution but rather as a crutch to help the MessageAccessor return
+  /// a const reference to an StringBuffer when what it really has is an std::string.
+  /// To use the StringBuffer this way, use the constructor that takes const std::string *
+  /// [note the pointer, not the reference].  The pointed to string must continue to exist
+  /// linger than the StringBufferT does, or BAD THINGS[tm] happen.
   template<size_t INTERNAL_CAPACITY = 48>
   class StringBufferT
   {
@@ -30,6 +38,7 @@ namespace QuickFAST
       , size_(0)
       , capacity_(INTERNAL_CAPACITY)
       , growCount_(0)
+      , delegateString_(0)
     {
       internalBuffer_[0] = 0;
     }
@@ -40,6 +49,7 @@ namespace QuickFAST
       , size_(0)
       , capacity_(INTERNAL_CAPACITY)
       , growCount_(0)
+      , delegateString_(0)
     {
       assign(rhs.getBuffer(), rhs.size());
     }
@@ -50,6 +60,7 @@ namespace QuickFAST
       , size_(0)
       , capacity_(INTERNAL_CAPACITY)
       , growCount_(0)
+      , delegateString_(0)
     {
       assign(reinterpret_cast<const unsigned char *>(rhs.data()), rhs.size());
     }
@@ -68,6 +79,7 @@ namespace QuickFAST
       , size_(0)
       , capacity_(INTERNAL_CAPACITY)
       , growCount_(0)
+      , delegateString_(0)
     {
       if(pos > rhs.size())
       {
@@ -87,6 +99,7 @@ namespace QuickFAST
       , size_(0)
       , capacity_(INTERNAL_CAPACITY)
       , growCount_(0)
+      , delegateString_(0)
     {
       assign(rhs, std::strlen(reinterpret_cast<char *>(rhs)));
     }
@@ -97,6 +110,7 @@ namespace QuickFAST
       , size_(0)
       , capacity_(INTERNAL_CAPACITY)
       , growCount_(0)
+      , delegateString_(0)
     {
       assign(
         reinterpret_cast<const unsigned char *>(rhs),
@@ -111,6 +125,7 @@ namespace QuickFAST
       , size_(0)
       , capacity_(INTERNAL_CAPACITY)
       , growCount_(0)
+      , delegateString_(0)
     {
       assign(rhs, length);
     }
@@ -121,6 +136,7 @@ namespace QuickFAST
       , size_(0)
       , capacity_(INTERNAL_CAPACITY)
       , growCount_(0)
+      , delegateString_(0)
     {
       reserve(length);
       unsigned char * buffer = getBuffer();
@@ -128,6 +144,22 @@ namespace QuickFAST
       buffer[length] = 0;
       size_ = length;
     }
+
+    /// @brief Special consructor to wrap a StringBufferT around a "real" std::string
+    ///
+    /// Not intended for general purpose use. I was solving a particular problem.
+    /// @param delegateString points to the real string to be wrapped.
+    ///        It must exist longer than the StringBufferT.
+    StringBufferT(const std::string * delegateString)
+      : heapBuffer_(0)
+      , size_(0)
+      , capacity_(0)
+      , growCount_(0)
+      , delegateString_(delegateString)
+    {
+    }
+
+
 
     /// @brief destructor
     ~StringBufferT()
@@ -138,14 +170,17 @@ namespace QuickFAST
     /// @brief change the actual size of the StringBufferT, shrinking or filling it as necessary
     void resize(size_t length, unsigned char fill = 0)
     {
-      if (size() < length)
+      if(delegateString_ != 0)
       {
-        append(length - size(), fill);
-      }
-      else if (size() > length)
-      {
-        getBuffer()[length] = 0;
-        size_ = length;
+        if (size() < length)
+        {
+          append(length - size(), fill);
+        }
+        else if (size() > length)
+        {
+          getBuffer()[length] = 0;
+          size_ = length;
+        }
       }
     }
 
@@ -346,8 +381,6 @@ namespace QuickFAST
       return *this;
     }
 
-
-
     /// @brief extend and fill the StringBufferT with the given character
     StringBufferT& append(
       size_t length,
@@ -365,8 +398,6 @@ namespace QuickFAST
       return *this;
     }
 
-
-
     /// @brief test for empty StringBufferT
     bool empty() const
     {
@@ -377,6 +408,7 @@ namespace QuickFAST
     void erase()
     {
       size_ = 0;
+      delegateString_ = 0;
     }
 
     /// @brief discard contents, thereby making this an empty StringBufferT.
@@ -387,9 +419,8 @@ namespace QuickFAST
       capacity_ = INTERNAL_CAPACITY;
       internalBuffer_[0] = 0;
       size_ = 0;
+      delegateString_ = 0;
     }
-
-
 
     /// @brief swap the contents of two StringBuffers
     void swap(StringBufferT& rhs)
@@ -404,16 +435,21 @@ namespace QuickFAST
           std::memcpy(internalBuffer_, rhs.internalBuffer_, sizeof(internalBuffer_));
           std::memcpy(rhs.internalBuffer_, origStackBuf, sizeof(internalBuffer_));
         }
-        swap(heapBuffer_, rhs.heapBuffer_);
-        swap(size_, rhs.size_);
-        swap(capacity_, rhs.capacity_);
-        swap(growCount_, rhs.growCount_);
+        std::swap(heapBuffer_, rhs.heapBuffer_);
+        std::swap(size_, rhs.size_);
+        std::swap(capacity_, rhs.capacity_);
+        std::swap(growCount_, rhs.growCount_);
+        std::swap(delegateString_, rhs.delegateString_);
       }
     }
 
     /// @brief how much space is used
     size_t size() const
     {
+      if(delegateString_)
+      {
+        return delegateString_->size();
+      }
       return size_;
     }
 
@@ -445,6 +481,10 @@ namespace QuickFAST
     /// @brief be sure the StringBufferT can hold at least "needed" bytes.
     void reserve(size_t needed)
     {
+      if(delegateString_)
+      {
+        throw std::logic_error("StringBufferT cannot grow delegated string.");
+      }
       if (capacity() < needed)
       {
         // Note: the following line determines the growth factor for the external buffer
@@ -504,35 +544,30 @@ namespace QuickFAST
     /// @brief find the buffer that's presently in use; const version
     const unsigned char * getBuffer() const
     {
-      if (heapBuffer_ == 0)
+      if (heapBuffer_ != 0)
       {
-        return internalBuffer_;
+        return heapBuffer_;
       }
-      return heapBuffer_;
+      else if(delegateString_ != 0)
+      {
+        return reinterpret_cast<const unsigned char *>(delegateString_->c_str());
+      }
+      return internalBuffer_;
     }
 
 
     /// @brief find the buffer that's presently in use; mutable version
     unsigned char * getBuffer()
     {
-      if (heapBuffer_ == 0)
+      if (heapBuffer_ != 0)
       {
-        return internalBuffer_;
+        return heapBuffer_;
       }
-      return heapBuffer_;
-    }
-
-    void swap(size_t & left, size_t & right)
-    {
-      size_t temp = left;
-      left = right;
-      right = temp;
-    }
-    void swap(unsigned char *& left, unsigned char *& right)
-    {
-      unsigned char * temp = left;
-      left = right;
-      right = temp;
+      else if(delegateString_ != 0)
+      {
+        throw std::logic_error("StringBufferT: Cannot write to delegated string.");
+      }
+      return internalBuffer_;
     }
 
   private:
@@ -541,6 +576,8 @@ namespace QuickFAST
     size_t size_;
     size_t capacity_;
     size_t growCount_;
+
+    const std::string * delegateString_;
   };
 
   ///@brief typedef the most common use of StringBufferT

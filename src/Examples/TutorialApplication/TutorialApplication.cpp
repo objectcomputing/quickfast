@@ -18,11 +18,11 @@ using namespace Examples;
 namespace
 {
   // On Windows we need to open a FAST data file in binary mode to avoid translation of end of line characters.
-  // Other platforms do not have this requirement so we make binaryMode a "nop" for them.
+  // Other platforms do not have this requirement so we make openMode a "nop" for them.
 #ifdef _WIN32
-  const std::ios::openmode binaryMode = std::ios::binary;
+  const std::ios::openmode openMode = std::ios::binary | std::ios::in;
 #else
-  const std::ios::openmode binaryMode = static_cast<std::ios::openmode>(0);
+  const std::ios::openmode openMode = std::ios::in;
 #endif
 }
 
@@ -62,7 +62,7 @@ TutorialApplication::run()
   {
     ////////////////////////////////////////////////
     // Open files first to be sure they are present.
-    std::ifstream templates(templateFileName_.c_str(), binaryMode | std::ios::in);
+    std::ifstream templates(templateFileName_.c_str(), openMode;
     if(!templates.good())
     {
       result = -1;
@@ -71,7 +71,7 @@ TutorialApplication::run()
         << std::endl;
     }
 
-    std::ifstream fastFile(fastFileName_.c_str(), binaryMode | std::ios::in);
+    std::ifstream fastFile(fastFileName_.c_str(), openMode);
     if(!fastFile.good())
     {
       result = -1;
