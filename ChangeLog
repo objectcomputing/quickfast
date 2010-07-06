@@ -1,3 +1,13 @@
+Tue Jul  6 14:59:52 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Application/QuickFAST.h:
+          New file for use by QuickFAST-based applications.
+          Documentation will follow.
+
+        * src/Communication/MulticastSender.h:
+        * src/Examples/TutorialApplication/TutorialApplication.cpp:
+          Syntax errors in prevous check in.
+
 Thu Jul  1 14:22:28 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Common/StringBuffer.h:

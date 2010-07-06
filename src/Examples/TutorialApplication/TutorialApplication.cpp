@@ -62,7 +62,7 @@ TutorialApplication::run()
   {
     ////////////////////////////////////////////////
     // Open files first to be sure they are present.
-    std::ifstream templates(templateFileName_.c_str(), openMode;
+    std::ifstream templates(templateFileName_.c_str(), openMode);
     if(!templates.good())
     {
       result = -1;

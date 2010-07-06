@@ -109,7 +109,7 @@ namespace QuickFAST
         const ConstBufferSequence & buffers,
         WriteHandler handler)
       {
-        socket_.async_send_to(buffers, WriteHandler handler, endpoint_);
+        socket_.async_send_to(buffers, handler, endpoint_);
       }
 
       /// @brief send data to the socket (asynchronous)
