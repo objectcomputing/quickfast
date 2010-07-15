@@ -33,25 +33,25 @@ namespace QuickFAST{
 
       /// @brief report an "interesting" event
       /// @param level is the importance level. low numbers are more important.
-      /// @param logMessage describes the event
+      /// @param message describes the event
       /// @returns true if decoding should continue; false to stop decoding
-      virtual bool logMessage(unsigned short level, const std::string & logMessage) = 0;
+      virtual bool logMessage(unsigned short level, const std::string & message) = 0;
 
       /// @brief Report an error during the decoding process
       ///
       /// The message consumer should return false unless a recovery mechanism
       /// exists to resynchronize decoding with the input stream.
-      /// @param errorMessage describes the error
+      /// @param message describes the error
       /// @returns true if decoding should continue; false to stop decoding
-      virtual bool reportDecodingError(const std::string & errorMessage) = 0;
+      virtual bool reportDecodingError(const std::string & message) = 0;
 
       /// @brief Report a communication error
       ///
       /// Although a true return will attempt to continue, there is no guarantee
       /// that recovery is possible.
-      /// @param errorMessage describes the error
+      /// @param message describes the error
       /// @returns true if decoding should continue; false to stop decoding
-      virtual bool reportCommunicationError(const std::string & errorMessage) = 0;
+      virtual bool reportCommunicationError(const std::string & message) = 0;
 
     };
   }

@@ -68,6 +68,7 @@ namespace QuickFAST
         {
           socket_.connect(*iterator, error);
           connected = !error;
+          ++iterator;
         }
         if(!connected)
         {
