@@ -1,3 +1,11 @@
+Tue Aug 10 21:34:30 UTC 2010  Adam Mitz  <mitza@ociweb.com>
+
+        * QuickFASTApplication.mpb:
+        * QuickFASTExeOut.mpb:
+        * src/QuickFAST.mpc:
+          Visual Studio 2010 changes: replaced "specific(vc8,vc9)" with
+          "specific(prop:microsoft)".
+
 Tue Aug 10 16:14:48 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/DataSourceBlockedStream.cpp:
