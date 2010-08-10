@@ -51,7 +51,7 @@ namespace QuickFAST
         if(!stopping_ && stream_.good() && !stream_.eof())
         {
           stream_.read(reinterpret_cast<char *>(buffer->get()), buffer->capacity());
-          size_t size = stream_.gcount();
+          size_t size = (size_t) stream_.gcount();
           if(acceptFullBuffer(buffer, size, lock))
           {
             needService_ = true;

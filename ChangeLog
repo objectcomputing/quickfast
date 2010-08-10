@@ -1,3 +1,15 @@
+Tue Aug 10 16:14:48 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/DataSourceBlockedStream.cpp:
+        * src/Codecs/DataSourceBufferedBlockedStream.cpp:
+        * src/Codecs/DataSourceBufferedStream.cpp:
+        * src/Codecs/DataSourceStream.cpp:
+        * src/Common/Types.h:
+        * src/Communication/RawFileReceiver.h:
+          Visual Studio 2010 has introduce new data types to represent position in file and
+          size of file.   This adds casts of these types into size_t.  Note if you are using
+          test data files larger than 4Gb you are out of luck.
+
 Thu Jul 15 18:52:17 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * src/Common/Logger.h:
         Cosmetic: change parameter names.

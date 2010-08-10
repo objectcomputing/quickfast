@@ -12,7 +12,7 @@ DataSourceBufferedStream::DataSourceBufferedStream(std::istream & stream)
 , end_(0)
 {
   stream.seekg(0,std::ios::end);
-  end_ = stream.tellg();
+  end_ =  (size_t) stream.tellg();
   stream.seekg(0,std::ios::beg);
   buffer_.reset(new unsigned char[end_]);
   stream.read(reinterpret_cast<char *>(buffer_.get()), end_);

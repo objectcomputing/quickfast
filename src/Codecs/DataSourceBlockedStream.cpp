@@ -48,7 +48,7 @@ DataSourceBlockedStream::getBuffer(const uchar *& buffer, size_t & size)
     return false;
   }
   stream_.read(reinterpret_cast<char *>(buffer_.get()), blockSize);
-  size = stream_.gcount();
+  size = (size_t)stream_.gcount();
   buffer = buffer_.get();
   return true;
 }

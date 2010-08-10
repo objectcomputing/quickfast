@@ -13,7 +13,7 @@ DataSourceStream::DataSourceStream(std::istream & stream, size_t bufferSize)
 , capacity_(bufferSize)
 {
   stream.seekg(0,std::ios::end);
-  end_ = stream.tellg();
+  end_ = (size_t)stream.tellg();
   stream.seekg(0,std::ios::beg);
   if(capacity_ > end_)
   {
@@ -34,7 +34,7 @@ DataSourceStream::getBuffer(const uchar *& buffer, size_t & size)
   {
     buffer = buffer_.get();
     stream_.read(reinterpret_cast<char *>(buffer_.get()), capacity_);
-    size = stream_.gcount();
+    size = (size_t)stream_.gcount();
     pos_ += size;
   }
   return size > 0;

@@ -13,7 +13,7 @@ DataSourceBufferedBlockedStream::DataSourceBufferedBlockedStream(std::istream & 
 , blockRemaining_(0)
 {
   stream.seekg(0,std::ios::end);
-  bufferCapacity_ = stream.tellg();
+  bufferCapacity_ = (size_t) stream.tellg();
   stream.seekg(0,std::ios::beg);
   buffer_.reset(new unsigned char[bufferCapacity_]);
   stream.read(reinterpret_cast<char *>(buffer_.get()), bufferCapacity_);

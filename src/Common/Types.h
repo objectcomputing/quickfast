@@ -8,6 +8,8 @@
 #define TYPES_H
 #include <Common/QuickFAST_Export.h>
 
+typedef std::streamsize streamsize_t;
+
 namespace QuickFAST{
   /// @brief Unsigned character. AKA: a byte
   typedef unsigned char uchar;
