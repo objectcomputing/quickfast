@@ -1,3 +1,17 @@
+Wed Aug 11 14:32:38 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Tests/testFieldInstructions.cpp:
+        * src/Tests/testFieldOperations.cpp:
+          "using namespace" should not appear in header file.
+          Remove it and repair the code that inadvertently depended on it.
+          Issue #58
+
+        * src/QuickFAST.mpc:
+          Difference between project name and target name confused MPC in VC10.
+          The MPC problem will be fixed, but for now, just use the same name for both.
+
 Tue Aug 10 21:34:30 UTC 2010  Adam Mitz  <mitza@ociweb.com>
 
         * QuickFASTApplication.mpb:

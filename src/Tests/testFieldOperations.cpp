@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(testFieldOperationDispatch)
   // right place.
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create an "empty" presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -166,12 +166,12 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_1_1)
   const char testData[] = "";
   Codecs::DataSourceString source(testData);
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
 
   Codecs::PresenceMap pmap(1);
   Codecs::FieldInstructionUInt32 field("Flag", "");
   field.setPresence(true);
-  FieldOpPtr fieldOp(new Codecs::FieldOpConstant);
+  Codecs::FieldOpPtr fieldOp(new Codecs::FieldOpConstant);
   fieldOp->setValue("0");
   field.setFieldOp(fieldOp);
   field.indexDictionaries(indexer, "global", "", "");
@@ -240,7 +240,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_1_2)
   const char testData[] = "";
   Codecs::DataSourceString source(testData);
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   Codecs::PresenceMap pmap(2);
   pmap.setNextField(true);
   pmap.setNextField(false);
@@ -248,7 +248,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_1_2)
 
   Codecs::FieldInstructionInt32 field("Flag", "");
   field.setPresence(false);
-  FieldOpPtr fieldOp(new Codecs::FieldOpConstant);
+  Codecs::FieldOpPtr fieldOp(new Codecs::FieldOpConstant);
   fieldOp->setValue("0");
   field.setFieldOp(fieldOp);
   field.indexDictionaries(indexer, "global", "", "");
@@ -318,7 +318,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_2_1)
   const char testData[] = "\x81";
   Codecs::DataSourceString source(testData);
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   Codecs::PresenceMap pmap(2);
   pmap.setNextField(false);
   pmap.setNextField(true);
@@ -326,7 +326,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_2_1)
 
   Codecs::FieldInstructionInt32 field("Flag", "");
   field.setPresence(true);
-  FieldOpPtr fieldOp(new Codecs::FieldOpDefault);
+  Codecs::FieldOpPtr fieldOp(new Codecs::FieldOpDefault);
   fieldOp->setValue("0");
   field.setFieldOp(fieldOp);
   field.indexDictionaries(indexer, "global", "", "");
@@ -400,14 +400,14 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_2_2)
   const char testData[] = "";
   Codecs::DataSourceString source(testData);
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   Codecs::PresenceMap pmap(1);
   pmap.setNextField(false);
   pmap.rewind();
 
   Codecs::FieldInstructionInt32 field("Flag", "");
   field.setPresence(false);
-  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpDefault));
+  field.setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpDefault));
   field.indexDictionaries(indexer, "global", "", "");
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   // verify 1 presence map bit needed
@@ -460,7 +460,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_3_1)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(3);
   pmap.setNextField(true);
@@ -470,7 +470,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_3_1)
 
   Codecs::FieldInstructionAscii field("Flag", "");
   field.setPresence(true);
-  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpCopy));
+  field.setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpCopy));
   field.indexDictionaries(indexer, "global", "", "");
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
 
@@ -573,7 +573,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_3_2)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(3);
 // original, incorrect (see above)  pmap.setNextField(true);
@@ -584,7 +584,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_3_2)
 
   Codecs::FieldInstructionAscii field("Flag", "");
   field.setPresence(false);
-  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpCopy));
+  field.setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpCopy));
   field.indexDictionaries(indexer, "global", "", "");
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   field.finalize(*registry);
@@ -660,7 +660,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_4_1)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(4);
   pmap.setNextField(false);
@@ -671,7 +671,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_4_1)
 
   Codecs::FieldInstructionUInt32 field("Flag", "");
   field.setPresence(true);
-  FieldOpPtr fieldOp(new Codecs::FieldOpIncrement);
+  Codecs::FieldOpPtr fieldOp(new Codecs::FieldOpIncrement);
   fieldOp->setValue("1");
   field.setFieldOp(fieldOp);
   field.indexDictionaries(indexer, "global", "", "");
@@ -769,13 +769,13 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_1)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(1);
 
   Codecs::FieldInstructionUInt32 field("Price", "");
   field.setPresence(true);
-  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpDelta));
+  field.setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpDelta));
   field.indexDictionaries(indexer, "global", "", "");
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   field.finalize(*registry);
@@ -872,13 +872,13 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_2)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(1);
 
   Codecs::FieldInstructionDecimal field("Price", "");
   field.setPresence(true);
-  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpDelta));
+  field.setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpDelta));
   field.indexDictionaries(indexer, "global", "", "");
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   field.finalize(*registry);
@@ -965,13 +965,13 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_3)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(1);
 
   Codecs::FieldInstructionDecimal field("Price", "");
   field.setPresence(true);
-  FieldOpPtr fieldOp(new Codecs::FieldOpDelta);
+  Codecs::FieldOpPtr fieldOp(new Codecs::FieldOpDelta);
   fieldOp->setValue("12000");
   field.setFieldOp(fieldOp);
   field.indexDictionaries(indexer, "global", "", "");
@@ -1062,13 +1062,13 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_5_4)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(1);
 
   Codecs::FieldInstructionAscii field("Security", "");
   field.setPresence(true);
-  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpDelta));
+  field.setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpDelta));
   field.indexDictionaries(indexer, "global", "", "");
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   field.finalize(*registry);
@@ -1165,7 +1165,7 @@ BOOST_AUTO_TEST_CASE(testAsciiTailMandatory)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(3);
   pmap.setNextField(true);
@@ -1175,7 +1175,7 @@ BOOST_AUTO_TEST_CASE(testAsciiTailMandatory)
 
   Codecs::FieldInstructionAscii field("Security", "");
   field.setPresence(true);
-  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpTail));
+  field.setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpTail));
   field.indexDictionaries(indexer, "global", "", "");
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   field.finalize(*registry);
@@ -1272,7 +1272,7 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_6) // SPEC ERROR: _3 s/b _1
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(5);
   pmap.setNextField(true);
@@ -1285,11 +1285,11 @@ BOOST_AUTO_TEST_CASE(testAppendix_3_2_6) // SPEC ERROR: _3 s/b _1
   Codecs::FieldInstructionDecimal field("Value", "");
   field.setPresence(false);
 
-  Codecs::FieldInstructionExponentPtr exponent(new FieldInstructionExponent("value|exponent", ""));
+  Codecs::FieldInstructionExponentPtr exponent(new Codecs::FieldInstructionExponent("value|exponent", ""));
   exponent->setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpCopy));
   field.setExponentInstruction(exponent);
 
-  Codecs::FieldInstructionMantissaPtr mantissa(new FieldInstructionMantissa("value|mantissa", ""));
+  Codecs::FieldInstructionMantissaPtr mantissa(new Codecs::FieldInstructionMantissa("value|mantissa", ""));
   mantissa->setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpCopy));
   field.setMantissaInstruction(mantissa);
   field.indexDictionaries(indexer, "global", "", "");
@@ -1370,7 +1370,7 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Copy_Mandatory)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(3);
   pmap.setNextField(true);
@@ -1380,7 +1380,7 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Copy_Mandatory)
 
   Codecs::FieldInstructionUtf8 field("Flag", "");
   field.setPresence(true);
-  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpCopy));
+  field.setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpCopy));
   field.indexDictionaries(indexer, "global", "", "");
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   field.finalize(*registry);
@@ -1483,7 +1483,7 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Copy_optional)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(3);
 // Original, incorrect (see above)  pmap.setNextField(true);
@@ -1494,7 +1494,7 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Copy_optional)
 
   Codecs::FieldInstructionUtf8 field("Flag", "");
   field.setPresence(false);
-  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpCopy));
+  field.setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpCopy));
   field.indexDictionaries(indexer, "global", "", "");
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   field.finalize(*registry);
@@ -1573,13 +1573,13 @@ BOOST_AUTO_TEST_CASE(test_Utf8_Delta_Mandatory)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(1);
 
   Codecs::FieldInstructionUtf8 field("Security", "");
   field.setPresence(true);
-  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpDelta));
+  field.setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpDelta));
   field.indexDictionaries(indexer, "global", "", "");
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   field.finalize(*registry);
@@ -1676,7 +1676,7 @@ BOOST_AUTO_TEST_CASE(testUtf8_Tail_Mandatory)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // prepare the presence map.
   Codecs::PresenceMap pmap(3);
   pmap.setNextField(true);
@@ -1686,7 +1686,7 @@ BOOST_AUTO_TEST_CASE(testUtf8_Tail_Mandatory)
 
   Codecs::FieldInstructionUtf8 field("Security", "");
   field.setPresence(true);
-  field.setFieldOp(FieldOpPtr(new Codecs::FieldOpTail));
+  field.setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpTail));
   field.indexDictionaries(indexer, "global", "", "");
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
   field.finalize(*registry);
@@ -1769,7 +1769,7 @@ BOOST_AUTO_TEST_CASE(test_issue_30)
   const char testData[] = "\x82\x80\x81";
   Codecs::DataSourceString source(testData);
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   Codecs::PresenceMap pmap(3);
   pmap.setNextField(true);
   pmap.setNextField(true);
@@ -1779,7 +1779,7 @@ BOOST_AUTO_TEST_CASE(test_issue_30)
   Codecs::FieldInstructionUInt32 field("NAME","");
   field.setPresence(false);
 
-  FieldOpPtr fieldOp(new Codecs::FieldOpCopy);
+  Codecs::FieldOpPtr fieldOp(new Codecs::FieldOpCopy);
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,1,indexer.size()));
   field.finalize(*registry);
 
@@ -1859,7 +1859,7 @@ BOOST_AUTO_TEST_CASE(test_issue_36)
   const char testData[] = "\x81\x85";
   Codecs::DataSourceString source(testData);
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   Codecs::PresenceMap pmap(4);
   pmap.setNextField(true);
   pmap.setNextField(false);
@@ -1870,7 +1870,7 @@ BOOST_AUTO_TEST_CASE(test_issue_36)
   Codecs::FieldInstructionUInt64 field("MsgSeqNum","");
   field.setPresence(true);
 
-  FieldOpPtr fieldOp(new Codecs::FieldOpIncrement);
+  Codecs::FieldOpPtr fieldOp(new Codecs::FieldOpIncrement);
   field.setFieldOp(fieldOp);
   field.indexDictionaries(indexer, "global", "", "");
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,1,indexer.size()));
@@ -1970,7 +1970,7 @@ BOOST_AUTO_TEST_CASE(test_swxess_mdpricelevel_problem)
   const char testData[] = "\x80";
   Codecs::DataSourceString source(testData);
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   Codecs::PresenceMap pmap(2);
   pmap.setNextField(true);
   pmap.setNextField(false);
@@ -1979,7 +1979,7 @@ BOOST_AUTO_TEST_CASE(test_swxess_mdpricelevel_problem)
   Codecs::FieldInstructionUInt64 field("MDPriceLevel","");
   field.setPresence(false);
 
-  FieldOpPtr fieldOp(new Codecs::FieldOpIncrement);
+  Codecs::FieldOpPtr fieldOp(new Codecs::FieldOpIncrement);
   field.setFieldOp(fieldOp);
   fieldOp->setValue("1");
   field.indexDictionaries(indexer, "global", "", "");
@@ -2047,7 +2047,7 @@ TestRequestID   --       NULL  --      0      --
   const char testData[] = "\x49\xC4\x4a\xC4\x80";
   Codecs::DataSourceString source(testData);
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   Codecs::PresenceMap pmap(6);
   pmap.setNextField(false);
   pmap.setNextField(true);
@@ -2060,7 +2060,7 @@ TestRequestID   --       NULL  --      0      --
   Codecs::FieldInstructionAscii field("TestRequestId","");
   field.setPresence(false);
 
-  FieldOpPtr fieldOp(new Codecs::FieldOpCopy);
+  Codecs::FieldOpPtr fieldOp(new Codecs::FieldOpCopy);
   field.setFieldOp(fieldOp);
   field.indexDictionaries(indexer, "global", "", "");
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(4,1,indexer.size()));
@@ -2182,7 +2182,7 @@ OptionalNumberCopy   --       NULL  --      0      --
   const char testData[] = "\x8B\x95\x80";
   Codecs::DataSourceString source(testData);
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   Codecs::PresenceMap pmap(6);
   pmap.setNextField(false);
   pmap.setNextField(true);
@@ -2195,7 +2195,7 @@ OptionalNumberCopy   --       NULL  --      0      --
   Codecs::FieldInstructionInt32 field("OptionalNumberCopy","");
   field.setPresence(false);
 
-  FieldOpPtr fieldOp(new Codecs::FieldOpCopy);
+  Codecs::FieldOpPtr fieldOp(new Codecs::FieldOpCopy);
   field.setFieldOp(fieldOp);
   field.indexDictionaries(indexer, "global", "", "");
   Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(4,1,indexer.size()));
@@ -2315,7 +2315,7 @@ MDEntryType     "2"      "2"   --      0      --
   const char testData[] = "\xB3";
   Codecs::DataSourceString source(testData);
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   Codecs::PresenceMap pmap(3);
   pmap.setNextField(false);
   pmap.setNextField(true);
@@ -2324,7 +2324,7 @@ MDEntryType     "2"      "2"   --      0      --
 
   Codecs::FieldInstructionAscii field("MDEntryType","");
   field.setPresence(true);
-  FieldOpPtr fieldOp(new Codecs::FieldOpDefault);
+  Codecs::FieldOpPtr fieldOp(new Codecs::FieldOpDefault);
   fieldOp->setValue("2");
   field.setFieldOp(fieldOp);
 
@@ -2413,7 +2413,7 @@ Flag    126    1     126+1   1     FF
   const char testData[] = "\x80\x83\xFF";
   Codecs::DataSourceString source(testData);
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   Codecs::PresenceMap pmap(4);
   pmap.setNextField(true);
   pmap.setNextField(false);
@@ -2424,7 +2424,7 @@ Flag    126    1     126+1   1     FF
   Codecs::FieldInstructionUInt32 field("Flag", "");
   field.setPresence(false);
 
-  FieldOpPtr fieldOp(new Codecs::FieldOpDefault);
+  Codecs::FieldOpPtr fieldOp(new Codecs::FieldOpDefault);
   fieldOp->setValue("1");
   field.setFieldOp(fieldOp);
   field.indexDictionaries(indexer, "global", "", "");
@@ -2523,7 +2523,7 @@ Flag    -1     1     -1      1     FF
   const char testData[] = "\x80\x83\xFF";
   Codecs::DataSourceString source(testData);
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   Codecs::PresenceMap pmap(4);
   pmap.setNextField(true);
   pmap.setNextField(false);
@@ -2534,7 +2534,7 @@ Flag    -1     1     -1      1     FF
   Codecs::FieldInstructionInt32 field("Flag", "");
   field.setPresence(false);
 
-  FieldOpPtr fieldOp(new Codecs::FieldOpDefault);
+  Codecs::FieldOpPtr fieldOp(new Codecs::FieldOpDefault);
   fieldOp->setValue("1");
   field.setFieldOp(fieldOp);
   field.indexDictionaries(indexer, "global", "", "");

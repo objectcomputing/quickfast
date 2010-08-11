@@ -17,9 +17,6 @@
 
 #include <Common/Profiler.h>
 
-using namespace QuickFAST;
-using namespace QuickFAST::Codecs;
-
 namespace QuickFAST{
   namespace Codecs{
 

@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(theFirstTest)
 namespace
 {
   void testFieldInstructionBaseClass(
-    FieldInstruction & instruction,
+    Codecs::FieldInstruction & instruction,
     size_t expectPresenceMapBits,
     bool acceptsOperator = true,
     bool hasName = true)
@@ -72,7 +72,7 @@ namespace
       BOOST_CHECK_EQUAL(identity->name(), "NS::Name");
     }
 
-    DictionaryIndexer indexer;
+    Codecs::DictionaryIndexer indexer;
     instruction.indexDictionaries(indexer, "global", "", "");
     Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
     instruction.finalize(*registry);
@@ -80,21 +80,21 @@ namespace
     if(acceptsOperator)
     {
       BOOST_CHECK_EQUAL(instruction.getPresenceMapBitsUsed(), 0);
-      FieldOpPtr fieldOp(new FieldOpNop);
+      Codecs::FieldOpPtr fieldOp(new Codecs::FieldOpNop);
       fieldOp->setKey("alternate");
       fieldOp->setDictionaryName("global");
       instruction.setFieldOp(fieldOp);
 
-      instruction.setFieldOp(FieldOpPtr(new FieldOpConstant));
+      instruction.setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpConstant));
       instruction.finalize(*registry);
       BOOST_CHECK_EQUAL(instruction.getPresenceMapBitsUsed(), expectPresenceMapBits);
-      instruction.setFieldOp(FieldOpPtr(new FieldOpCopy));
+      instruction.setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpCopy));
       instruction.finalize(*registry);
       BOOST_CHECK_EQUAL(instruction.getPresenceMapBitsUsed(), expectPresenceMapBits);
-      instruction.setFieldOp(FieldOpPtr(new FieldOpDefault));
+      instruction.setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpDefault));
       instruction.finalize(*registry);
       BOOST_CHECK_EQUAL(instruction.getPresenceMapBitsUsed(), expectPresenceMapBits);
-      instruction.setFieldOp(FieldOpPtr(new FieldOpDelta));
+      instruction.setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpDelta));
       instruction.finalize(*registry);
       BOOST_CHECK_EQUAL(instruction.getPresenceMapBitsUsed(), 0);
     }
@@ -230,7 +230,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_1)
   Codecs::DataSourceStream source(sourceStream);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -294,7 +294,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_2)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -358,7 +358,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_3)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -421,7 +421,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_4)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -485,7 +485,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_5)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -551,7 +551,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_1_6)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -617,7 +617,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1a)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -679,7 +679,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1b)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -745,7 +745,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1c)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -811,7 +811,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_1d)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -877,7 +877,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2a)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -943,7 +943,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2b)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -1009,7 +1009,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_2_2c)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -1075,7 +1075,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1a)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -1137,7 +1137,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1b)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -1203,7 +1203,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_1c)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -1271,7 +1271,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_2a)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -1337,7 +1337,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_3_2b)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -1403,7 +1403,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1a)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -1465,7 +1465,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1b)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -1533,7 +1533,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_1c)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -1599,7 +1599,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_2a)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -1665,7 +1665,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_4_2b)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -1731,7 +1731,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_1)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -1796,7 +1796,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_2)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -1860,7 +1860,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_3)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -1924,7 +1924,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_4)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -1988,7 +1988,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_5)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -2051,7 +2051,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_6)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
   pmap.setNextField(true);
@@ -2116,7 +2116,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_7)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
   pmap.setNextField(true);
@@ -2125,11 +2125,11 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_7)
   Codecs::FieldInstructionDecimal field("Value", "");
   field.setPresence(false);
 
-  Codecs::FieldInstructionExponentPtr exponent(new FieldInstructionExponent("value|exponent", ""));
+  Codecs::FieldInstructionExponentPtr exponent(new Codecs::FieldInstructionExponent("value|exponent", ""));
   exponent->setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpCopy));
   field.setExponentInstruction(exponent);
 
-  Codecs::FieldInstructionMantissaPtr mantissa(new FieldInstructionMantissa("value|mantissa", ""));
+  Codecs::FieldInstructionMantissaPtr mantissa(new Codecs::FieldInstructionMantissa("value|mantissa", ""));
   mantissa->setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpDelta));
   field.setMantissaInstruction(mantissa);
   field.indexDictionaries(indexer, "global", "", "");
@@ -2186,7 +2186,7 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_8)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
 
@@ -2252,7 +2252,7 @@ BOOST_AUTO_TEST_CASE(test_issue_31)
   Codecs::DataSourceString source(testString);
 
   // create a dictionary indexer
-  DictionaryIndexer indexer;
+  Codecs::DictionaryIndexer indexer;
   // create a presence map.
   Codecs::PresenceMap pmap(1);
   pmap.setNextField(true);
@@ -2260,11 +2260,11 @@ BOOST_AUTO_TEST_CASE(test_issue_31)
 
   Codecs::FieldInstructionDecimal * decField = new Codecs::FieldInstructionDecimal("Value", "");
 
-  Codecs::FieldInstructionExponentPtr exponent(new FieldInstructionExponent("value|exponent", ""));
+  Codecs::FieldInstructionExponentPtr exponent(new Codecs::FieldInstructionExponent("value|exponent", ""));
   exponent->setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpCopy));
   decField->setExponentInstruction(exponent);
 
-  Codecs::FieldInstructionMantissaPtr mantissa(new FieldInstructionMantissa("value|mantissa", ""));
+  Codecs::FieldInstructionMantissaPtr mantissa(new Codecs::FieldInstructionMantissa("value|mantissa", ""));
   mantissa->setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpDelta));
   decField->setMantissaInstruction(mantissa);
 
