@@ -2,8 +2,9 @@ REM Setting up QuickFAST environment
 
 @REM QuickFAST depends on MPC V 3.6 or later. (http://www.ociweb.com/products/mpc)
 @REM QuickFAST depends on BOOST V 1.36.0 or later. (http://www.boost.org/)
+@REM           Visual Studio 2010 requires BOOST V 1.43.0 or later
 @REM QuickFAST depends on Xerces V3.0 or later. (http://xerces.apache.org/xerces-c/)
-@REM Assumes VC9 installed in the default location (see VC_ROOT below) and VC90COMNTOOLS is set.
+@REM Assumes VC8, VC9, or VC10 installed in the default location (see VC_ROOT below) and VC90COMNTOOLS is set.
 
 @REM Customize this file by setting variables to suit your environment
 @REM Also you should customize QuickFAST.features to enable particular features on your system.
@@ -19,8 +20,8 @@ REM SET THE FOLLOWING VALUES HERE OR IN YOUR ENVIRONMENT
 if "a" == "a%MPC_ROOT%" set MPC_ROOT=c:\MPC
 if "a" == "a%XERCES_ROOT%" set XERCES_ROOT=C:\Progs\xerces-c-3.0.1-x86-windows-vc-9.0
 if "a" == "a%XERCES_LIBNAME%" set XERCES_LIBNAME=xerces-c_3
-if "a" == "a%BOOST_VERSION%" set BOOST_VERSION=boost_1_36_0
-if "a" == "a%BOOST_ROOT%" set BOOST_ROOT=c:\boost\%BOOST_VERSION%
+if "a" == "a%BOOST_VERSION%" set BOOST_VERSION=boost_1_43_0
+set BOOST_ROOT=c:\boost\%BOOST_VERSION%
 REM END OF VALUES TO BE SET
 
 REM Verify setup by checking for expected files/directories
@@ -36,14 +37,16 @@ if not exist "%BOOST_ROOT%\lib" goto setup_is_bad
 set SETUP_CHECKING=BOOST_ROOT=%BOOST_ROOT%\boost
 if not exist "%BOOST_ROOT%\boost" goto setup_is_bad
 
+set SETUP_CHECKING=Setup checking visual studio common tools
+set VCVER=10
+if exist "%VS100COMNTOOLS%vsvars32.bat" goto setup_is_ok
+
 set VCVER=9
-set SETUP_CHECKING=VS90COMNTOOLS=%VS90COMNTOOLS%
 if exist "%VS90COMNTOOLS%VSVARS32.BAT" goto setup_is_ok
 
 set SETUP_CHECKING=VS80COMNTOOLS=%VS80COMNTOOLS%
 if not exist "%VS80COMNTOOLS%VSVARS32.BAT" goto setup_is_bad
 set VCVER=8
-set SETUP_CHECKING=
 goto setup_is_ok
 
 :setup_is_bad
@@ -52,11 +55,15 @@ ECHO Edit the setup.cmd file or change environment variables
 goto end
 
 :setup_is_ok
+set SETUP_CHECKING=
 set XERCES_LIBPATH=%XERCES_ROOT%\lib
 set XERCES_INCLUDE=%XERCES_ROOT%\include
 set QUICKFAST_ROOT=%CD%
 
-if %VCVER%==9 (
+if %VCVER%==10 (
+  set VC_ROOT=C:\Program Files\Microsoft Visual Studio 10.0\VC\bin
+  @call "%VS100COMNTOOLS%VSVARS32.BAT" >nul
+) else if %VCVER%==9 (
   set VC_ROOT=C:\Program Files\Microsoft Visual Studio 9.0\VC\bin
   @call "%VS90COMNTOOLS%VSVARS32.BAT" >nul
 ) else (
