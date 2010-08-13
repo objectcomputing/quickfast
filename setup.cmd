@@ -1,3 +1,7 @@
+@REM Copyright (c) 2009, 2010 Object Computing, Inc.
+@REM All rights reserved.
+@REM See the file license.txt for licensing information.
+
 REM Setting up QuickFAST environment
 
 @REM QuickFAST depends on MPC V 3.6 or later. (http://www.ociweb.com/products/mpc)
@@ -77,7 +81,6 @@ if %VCVER%==10 (
 set RELEASE_PATH=%QUICKFAST_ROOT%\bin;%QUICKFAST_ROOT%\Output\Release;%MPC_ROOT%;%BOOST_ROOT%\lib;%QUICKFAST_ROOT%\lib;%XERCES_ROOT%\bin;%BASE_PATH%
 set DEBUG_PATH=%QUICKFAST_ROOT%\bin;%QUICKFAST_ROOT%\Output\Debug;%MPC_ROOT%;%BOOST_ROOT%\lib;%QUICKFAST_ROOT%\lib;%XERCES_ROOT%\bin;%BASE_PATH%
 set PATH=%DEBUG_PATH%
-set INCLUDE=%BOOST_ROOT%;%XERCES_ROOT%\include;%BASE_INCLUDE%
 set INCLUDE=%BOOST_ROOT%;%XERCES_ROOT%\include;%BASE_INCLUDE%
 
 title QuickFAST
