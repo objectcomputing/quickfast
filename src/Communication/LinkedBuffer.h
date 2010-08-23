@@ -290,6 +290,7 @@ namespace QuickFAST
       bool push(LinkedBuffer * buffer, boost::mutex::scoped_lock &)
       {
         incoming_.push(buffer);
+        condition_.notify_one();
         return !busy_;
       }
 
@@ -396,7 +397,7 @@ namespace QuickFAST
       /// The unused scoped lock parameter indicates this method should be protected.
       ///
       /// @param f is the function to apply
-      void applyx(boost::function<void (LinkedBuffer *)> f, boost::mutex::scoped_lock &)
+      void apply(boost::function<void (LinkedBuffer *)> f, boost::mutex::scoped_lock &)
       {
         LinkedBuffer * buffer = outgoing_.begin();
         while(buffer != 0)
