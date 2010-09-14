@@ -2102,6 +2102,73 @@ BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_6)
   BOOST_CHECK(pmap == pmapResult);
 }
 
+BOOST_AUTO_TEST_CASE(test_OptionalDecimalZeroExponent)
+{
+//Decimal Example – Optional Positive Decimal with single field operator
+//<decimal id="1" presence="optional" name="Value"> <copy/> </decimal>
+//Input Value  .942755
+//Decomposed Input Value 942755 * 10 ^ 0
+//        Exponent    Mantissa
+//        0           942755
+//FAST
+// Hex    0x81        0x39 0x45 0xA3
+// Binary 1000 0001   00111001 01000101 10100011
+  const char testData[] = "\x81\x39\x45\xA3";
+  std::string testString(testData, sizeof(testData)-1);
+  Codecs::DataSourceString source(testString);
+
+  // create a dictionary indexer
+  Codecs::DictionaryIndexer indexer;
+  // create a presence map.
+  Codecs::PresenceMap pmap(1);
+  pmap.setNextField(true);
+  pmap.rewind();
+
+  Codecs::FieldInstructionDecimal field("Value", "");
+  field.setPresence(false);
+  field.setFieldOp(Codecs::FieldOpPtr(new Codecs::FieldOpCopy));
+  field.indexDictionaries(indexer, "global","", "");
+
+  // We neeed the helper routines in the decoder
+  Codecs::TemplateRegistryPtr registry(new Codecs::TemplateRegistry(3,3,indexer.size()));
+  Codecs::Decoder decoder(registry);
+
+  Codecs::SingleMessageConsumer consumer;
+  Codecs::GenericMessageBuilder builder(consumer);
+  builder.startMessage("UNIT_TEST", "", 10);
+
+  field.decode(source, pmap, decoder, builder);
+  BOOST_REQUIRE(builder.endMessage(builder));
+
+  // Was all input consumed?
+  uchar byte;
+  BOOST_CHECK(!source.getByte(byte));
+
+  // should generate 1 field
+  Messages::Message & fieldSet = consumer.message();
+  BOOST_CHECK_EQUAL(fieldSet.size(), 1);
+  Messages::FieldSet::const_iterator pFieldEntry = fieldSet.begin();
+  BOOST_CHECK(pFieldEntry != fieldSet.end());
+  BOOST_CHECK(pFieldEntry->getField()->isType(ValueType::DECIMAL));
+  Decimal expected(942755, 0);
+  BOOST_CHECK(pFieldEntry->getField()->toDecimal() == expected);
+  ++pFieldEntry;
+  BOOST_CHECK(pFieldEntry == fieldSet.end());
+
+  // Now reencode the data
+  Codecs::PresenceMap pmapResult(1);
+  Codecs::DataDestination destination;
+  destination.startBuffer();
+  Codecs::Encoder encoder(registry);
+  field.encode(destination, pmapResult, encoder, fieldSet);
+  destination.endMessage();
+  std::string result;
+  destination.toString(result);
+  destination.clear();
+  BOOST_CHECK_EQUAL(result, testString);
+  BOOST_CHECK(pmap == pmapResult);
+}
+
 BOOST_AUTO_TEST_CASE(test_Spec_1x1_Appendix3_1_5_7)
 {
 //Decimal Example – Optional Positive Decimal with individual field operators
