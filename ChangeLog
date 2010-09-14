@@ -1,3 +1,9 @@
+Tue Sep 14 14:56:13 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * src/Application/DecoderConnection.cpp:
+          Use the binary mode symbolic constant rather than #ifdef _WIN32
+        * src/Codecs/FieldInstructionDecimal.cpp:
+          Error in Decimal decoding for nullable filed with exponent of zero
+
 Mon Aug 23 14:40:01 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
 

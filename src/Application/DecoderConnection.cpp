@@ -126,10 +126,7 @@ DecoderConnection::configure(
   }
 
   std::ifstream templates(configuration.templateFileName().c_str(),
-    std::ios::in
-#ifdef _WIN32
-    | std::ios::binary
-#endif
+    std::ios::in | binaryMode
     );
   if(!templates.good())
   {

@@ -284,7 +284,7 @@ FieldInstructionDecimal::encodeNullableDecimal(
   exponent_t exponent,
   mantissa_t mantissa) const
 {
-  if(exponent > 0)
+  if(exponent >= 0)
   {
     exponent += 1;
   }
