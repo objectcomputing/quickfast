@@ -21,6 +21,12 @@ namespace QuickFASTDotNet
                 Console.WriteLine("  -r          : Toggle 'reset decoder on every message' (default false).");
                 Console.WriteLine("  -s          : Toggle 'strict decoding rules' (default true).");
                 Console.WriteLine("  -vx         : Toggle 'noisy execution progress' (default false).");
+                Console.WriteLine("  -e file     : Echo input to file.");
+                Console.WriteLine("  -ef         : Echo field names.");
+                Console.WriteLine("  -em         : Echo Message Boundaries.");
+                Console.WriteLine("  -ex         : Echo as hex (default).");
+                Console.WriteLine("  -er         : Echo as raw data.");
+                Console.WriteLine("  -silent     : Don't display data.");
             }
 
             public bool init(ref string[] args)
@@ -28,6 +34,7 @@ namespace QuickFASTDotNet
                 bool readTemplateName = false;
                 bool readSourceName = false;
                 bool readBufferedFileName = false;
+                bool readEchoFileName = false;
                 bool ok = true;
 
                 foreach (string opt in args)
@@ -50,6 +57,11 @@ namespace QuickFASTDotNet
                         decoder_.ReceiverType = QuickFAST.DotNet.DNDecoderConnection.ReceiverTypes.BUFFER_RECEIVER;
                         decoder_.HeaderType = QuickFAST.DotNet.DNDecoderConnection.HeaderTypes.NO_HEADER;
                         readBufferedFileName = false;
+                    }
+                    else if (readEchoFileName)
+                    {
+                        decoder_.EchoFileName = opt;
+                        readEchoFileName = false;
                     }
                     else if (opt == "-b")
                     {
@@ -75,10 +87,36 @@ namespace QuickFASTDotNet
                     {
                         ok = false;
                     }
+                    else if (opt == "-e")
+                    {
+                        readEchoFileName = true;
+                    }
+                    else if (opt == "-em")
+                    {
+                        decoder_.EchoMessage = true;
+                    }
+                    else if (opt == "-ef")
+                    {
+                        decoder_.EchoField = true;
+                    }
+                    else if (opt == "-ex")
+                    {
+                        decoder_.EchoType = QuickFAST.DotNet.DNDecoderConnection.EchoTypes.ECHO_HEX;
+                    }
+                    else if (opt == "-er")
+                    {
+                        decoder_.EchoType = QuickFAST.DotNet.DNDecoderConnection.EchoTypes.ECHO_RAW;
+                    }
                     else if (opt == "-vx")
                     {
                         decoder_.VerboseFileName = "cout";
                     }
+
+                    else if (opt == "-silent")
+                    {
+                        interpreter_.Silent = true;
+                    }
+
                     else
                     {
                         Console.Error.WriteLine("Unknown Option: {0}", opt);

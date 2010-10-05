@@ -34,7 +34,7 @@ DataSourceBufferedBlockedStream::getBuffer(const uchar *& buffer, size_t & size)
   size_t blockSize = 0;
   uchar b = 0;
   b = buffer_.get()[bufferPosition_++];
-  while((b & stopBit) == 0 && bufferPosition_ >= bufferCapacity_)
+  while((b & stopBit) == 0 && bufferPosition_ < bufferCapacity_)
   {
     // todo: overflow check
     blockSize <<= dataShift;

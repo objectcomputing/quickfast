@@ -35,6 +35,8 @@ using namespace Examples;
 InterpretApplication::InterpretApplication()
 : console_(false)
 , fixOutput_(false)
+, threads_(1)
+, silent_(false)
 {
 }
 
@@ -182,6 +184,11 @@ InterpretApplication::parseSingleArg(int argc, char * argv[])
       }
       consumed = 2;
     }
+    else if(opt == "-threads" && argc > 1)
+    {
+      threads_ = boost::lexical_cast<size_t>(argv[1]);
+      consumed = 2;
+    }
     else if(opt == "-streaming" )
     {
       configuration_.setAssemblerType(Application::DecoderConfiguration::STREAMING_ASSEMBLER);
@@ -279,6 +286,11 @@ InterpretApplication::parseSingleArg(int argc, char * argv[])
       console_ = true;
       consumed = 1;
     }
+    else if(opt == "-silent")
+    {
+      silent_ = true;
+      consumed = 1;
+    }
   }
   catch (std::exception & ex)
   {
@@ -326,6 +338,10 @@ InterpretApplication::usage(std::ostream & out) const
   out << "                           0.0.0.0 means pick any NIC." << std::endl;
   out << "  -tcp host:port       : Input from TCP/IP.  Connect to \"host\" name or" << std::endl;
   out << "                         dotted IP on named or numbered port." << std::endl;
+  out << std::endl;
+  out << "  -threads n           : Number of threads to service incoming messages." << std::endl;
+  out << "                         Valid for multicast or tcp" << std::endl;
+  out << "                         Must be >= 1.   Default is 1." << std::endl;
   out << std::endl;
   out << "  -streaming [no]block : Message boundaries do not match packet" << std::endl;
   out << "                         boundaries (default if TCP/IP or raw file)." << std::endl;
@@ -397,7 +413,7 @@ InterpretApplication::run()
   try
   {
 
-    MessageInterpreter handler(std::cout);
+    MessageInterpreter handler(std::cout, silent_);
     Messages::ValueMessageBuilderPtr builder;
     if(fixOutput_)
     {
@@ -413,8 +429,8 @@ InterpretApplication::run()
 
     if(console_)
     {
-      // start a thread to receive data, but reserve this thread for console input
-      connection_.receiver().runThreads(1, false);
+      // start threads to receive data, but reserve this thread for console input
+      connection_.receiver().runThreads(threads_, false);
       bool more = true;
       while(more)
       {
@@ -494,7 +510,7 @@ InterpretApplication::run()
     {
       // run the event loop in this thread.  Do not return until
       // receiver is stopped.
-      connection_.receiver().run();
+      connection_.receiver().runThreads(threads_ - 1, true);
     }
   }
 

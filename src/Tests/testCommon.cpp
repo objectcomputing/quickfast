@@ -410,8 +410,8 @@ BOOST_AUTO_TEST_CASE(TestWorkingBuffer)
   abcStr.reserve(abcCap * 2);
   for(size_t n = 0; n < abcHalf; ++n)
   {
-    abc.push('a' + n);
-    abcStr += 'a' + n;
+    abc.push(uchar('a' + n));
+    abcStr += uchar('a' + n);
   }
   BOOST_CHECK_EQUAL(abc.size(), abcHalf);
   BOOST_CHECK_EQUAL(abc.capacity(), abcCap); // no grow so far

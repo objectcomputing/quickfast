@@ -239,7 +239,7 @@ SegmentBody::display(std::ostream & output, size_t indent) const
     lengthInstruction_->display(output, indent + 2);
   }
 
-  for (size_t nField = 0; nField < fieldCount_; ++nField)
+  for (size_t nField = 0; nField < instructions_.size(); ++nField)
   {
     instructions_[nField]->display(output, indent + 2);
   }

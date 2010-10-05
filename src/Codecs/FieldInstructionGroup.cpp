@@ -59,7 +59,7 @@ FieldInstructionGroup::decodeNop(
     {
       decoder.reportFatal("[ERR U08}", "Segment not defined for Group instruction.");
     }
-    if(messageBuilder.getApplicationType() != segmentBody_->getApplicationType())
+    if(!segmentBody_->getApplicationType().empty() && messageBuilder.getApplicationType() != segmentBody_->getApplicationType())
     {
 //      std::cout << "Decoding group into new segment: " << segmentBody_->getApplicationType() << std::endl;
       Messages::ValueMessageBuilder & groupBuilder(
@@ -138,7 +138,7 @@ FieldInstructionGroup::interpretValue(const std::string & /*value*/)
 size_t
 FieldInstructionGroup::fieldCount(const SegmentBody & parent)const
 {
-  if(parent.getApplicationType() == segmentBody_->getApplicationType())
+  if(segmentBody_->getApplicationType().empty() || parent.getApplicationType() == segmentBody_->getApplicationType())
   {
     return segmentBody_->fieldCount();
   }

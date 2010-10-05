@@ -47,6 +47,8 @@ namespace QuickFAST{
       std::string bufferFilename_;
       bool console_;
       bool fixOutput_;
+      size_t threads_;
+      bool silent_;
     };
   }
 }

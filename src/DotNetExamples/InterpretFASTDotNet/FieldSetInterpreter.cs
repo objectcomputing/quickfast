@@ -13,7 +13,10 @@ namespace QuickFASTDotNet
 
             public void interpret(QuickFAST.DotNet.DNFieldSet fieldSet)
             {
-                formatFieldSet(fieldSet);
+                if (!silent_)
+                {
+                    formatFieldSet(fieldSet);
+                }
             }
 
             public void formatFieldSet(QuickFAST.DotNet.DNFieldSet fieldSet)
@@ -65,11 +68,9 @@ namespace QuickFASTDotNet
                 indent_ += "  ";
                 int nEntry = 0;
                 foreach (DNFieldSet entry in sequence)
-//                for (int nEntry = 0; nEntry < size; ++nEntry)
                 {
                     Console.WriteLine();
                     Console.Write("{0}[{1}]: ", indent_, nEntry++);
-//                    DNFieldSet entry = sequence.entry(nEntry);
                     formatFieldSet(entry);
                 }
                 indent_ = saveIndent;
@@ -87,6 +88,12 @@ namespace QuickFASTDotNet
                 formatFieldSet(group);
                 indent_ = saveIndent;
             }
+            public bool Silent
+            {
+                get { return silent_; }
+                set { silent_ = value; }
+            }
+            private bool silent_ = false;
         };
     }
 }

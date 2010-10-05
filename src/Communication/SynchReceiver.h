@@ -151,6 +151,11 @@ namespace QuickFAST
           thread_.reset();
         }
       }
+      virtual bool waitBuffer()
+      {
+        // if it's going to be there, it's there.
+        return true;
+      }
 
     private:
       boost::scoped_ptr<boost::thread> thread_;

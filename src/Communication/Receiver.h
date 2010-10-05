@@ -156,6 +156,8 @@ namespace QuickFAST
       /////////////////////////////
       // Assembler support routines
 
+      virtual bool waitBuffer() = 0;
+
       /// @brief get the next buffer if possible
       /// WARNING: This should be called only by a Assembler
       ///          during a call from this Receiver

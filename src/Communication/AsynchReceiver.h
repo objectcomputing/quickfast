@@ -20,6 +20,7 @@ namespace QuickFAST
     {
     public:
       AsynchReceiver()
+        : singleThreaded_(true)
       {
       }
 
@@ -27,6 +28,7 @@ namespace QuickFAST
       /// @param ioService an ioService to be shared with other objects
       AsynchReceiver(boost::asio::io_service & ioService)
         : ioService_(ioService)
+        , singleThreaded_(true)
       {
       }
 
@@ -39,6 +41,7 @@ namespace QuickFAST
 
       virtual void runThreads(size_t threadCount = 0, bool useThisThread = true)
       {
+        singleThreaded_ = (threadCount + (useThisThread ? 1:0) <= 1);
         ioService_.runThreads(threadCount, useThisThread);
       }
 
@@ -73,6 +76,48 @@ namespace QuickFAST
         ioService_.stopService();
       }
 
+      virtual bool waitBuffer()
+      {
+        while(!stopping_)
+        {
+          if(queue_.peekOutgoing() != 0)
+          {
+            return true;
+          }
+          bool empty = false;
+          {
+            boost::mutex::scoped_lock lock(bufferMutex_);
+            idleBufferPool_.push(idleBuffers_);
+            // be sure we have a read request in progress
+            startReceive(lock);
+            // promote any ancoming messages to outgoing
+            empty = !queue_.refresh(lock, !singleThreaded_);
+          }
+          // if there is only one thread servicing the ioService
+          // and there are no buffers waiting, then let the
+          // ioService borrow this thread long enough to accept
+          // the next incoming packet of data.
+          // Note that in a multithreaded situation there is a race
+          // condition that would cause the system to go idle in
+          // run_one even though a buffer-full was waiting in the
+          // queue_.  This is highly unlikely and the "hang" would be
+          // broken upon the arrival of the next incoming packet, so
+          // I won't worry about it for now.  Especially since
+          // asio doesn't provide a usable way to handle the situation.
+          if(empty && singleThreaded_ && !stopping_)
+          {
+            ioService_.run_one();
+          }
+        }
+        return false;
+      }
+
+
+      template<typename CompletionHandler>
+      void post(CompletionHandler handler)
+      {
+        ioService_.post(handler);
+      }
 
     protected:
 
@@ -153,9 +198,11 @@ namespace QuickFAST
           service = serviceQueue();
         }
       }
+
     protected:
       /// @brief a manager for the boost::io_service object
       AsioService ioService_;
+      bool singleThreaded_;
     };
   }
 }

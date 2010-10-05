@@ -80,6 +80,12 @@ namespace QuickFAST
         return ioService_;
       }
 
+      template<typename CompletionHandler>
+      void post(CompletionHandler handler)
+      {
+        ioService_.post(handler);
+      }
+
     private:
       static boost::asio::io_service privateIoService_;
       /// Pointer to a boost thread

@@ -163,6 +163,10 @@ StreamingAssembler::getBuffer(const uchar *& buffer, size_t & size)
   }
 
   // Look for a new buffer.  If we're in the decoder, wait for it.
+  if(inDecoder_)
+  {
+    receiver_->waitBuffer();
+  }
   currentBuffer_ = receiver_->getBuffer(inDecoder_);
   if(currentBuffer_ != 0)
   {

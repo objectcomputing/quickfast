@@ -49,6 +49,8 @@ namespace QuickFAST{
     private:
       std::string templateName_;
       std::string templateNamespace_;
+      bool isFinalized_;
+      size_t fieldCount_; // how many fields are in the target template (valid after finalize has been called)
     };
 
     /// @brief Implement dynamic &lt;templateRef> field instruction.

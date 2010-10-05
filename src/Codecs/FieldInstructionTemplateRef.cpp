@@ -18,10 +18,14 @@ FieldInstructionStaticTemplateRef::FieldInstructionStaticTemplateRef(
   : FieldInstruction(name, fieldNamespace)
   , templateName_(name)
   , templateNamespace_(fieldNamespace)
+  , isFinalized_(false)
+  , fieldCount_(0)
 {
 }
 
 FieldInstructionStaticTemplateRef::FieldInstructionStaticTemplateRef()
+  : isFinalized_(false)
+  , fieldCount_(0)
 {
 }
 
@@ -49,6 +53,8 @@ FieldInstructionStaticTemplateRef::finalize(TemplateRegistry & templateRegistry)
   target->finalize(templateRegistry);
   // subtract one for the template ID
   presenceMapBitsUsed_ = target->presenceMapBitCount() - 1;
+  fieldCount_ = target->fieldCount();
+  isFinalized_ = true;
 }
 
 void
@@ -138,9 +144,11 @@ FieldInstructionStaticTemplateRef::interpretValue(const std::string & value)
 size_t
 FieldInstructionStaticTemplateRef::fieldCount(const SegmentBody & parent)const
 {
-  // TODO: Someday we should actually check the target template, but that's
-  // not doable right now.
-  return 1;
+  if(!isFinalized_)
+  {
+    throw TemplateDefinitionError("Field count requested from static template reference before it has been finalized.");
+  }
+  return fieldCount_;
 }
 
 ValueType::Type

@@ -42,7 +42,7 @@ DataSource::bytesAvailable()
     size_ = 0;
     (void)getBuffer(buffer_, size_);
   }
-  return size_ - position_;
+  return int(size_ - position_);
 }
 
 void

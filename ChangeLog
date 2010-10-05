@@ -1,3 +1,43 @@
+Tue Oct  5 15:34:40 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/DataSource.cpp:
+        * src/Tests/testCommon.cpp:
+          Avoid compiler warnings
+
+        * src/Codecs/DataSourceBufferedBlockedStream.cpp:
+          Invalid comparison operator.
+
+        * src/Codecs/FieldInstructionGroup.cpp:
+          Groups with no typeref inherit the type from their parent.  This means
+          in the decoder they are merged into the parent object (although this
+          behavior may vary in custom implementations of ValueMessageBuilder.)
+          This change reserves space for the merged fields.
+
+        * src/Codecs/FieldInstructionTemplateRef.h:
+        * src/Codecs/FieldInstructionTemplateRef.cpp:
+          Correct the calculation of the number of fields to be included
+          via a static template reference.
+
+        * src/Codecs/SegmentBody.cpp:
+          Fix an assumption that the number of field instructions in a segment
+          matched the number of fields to be including in the resulting field set.
+
+        * src/Codecs/StreamingAssembler.cpp:
+        * src/Communication/AsynchReceiver.h:
+        * src/Communication/Receiver.h:
+        * src/Communication/AsioService.h:
+        * src/Communication/SynchReceiver.h:
+          A partial workaround for a hang when a single threaded app used streaming
+          assembler and did not specify wait for complete message.
+
+        * src/DotNetExamples/InterpretFASTDotNet/FieldSetInterpreter.cs:
+        * src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.cs:
+        * src/Examples/InterpretApplication/InterpretApplication.h:
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+          Add additional options to support echoing input, and generating
+          other debugging information.
+
+          This change addresses issues #61 and #65.
+
 Tue Sep 14 15:06:01 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * src/Tests/testFieldInstructions.cpp:
          Add unit test for encoding optional decimal with zero exponent
