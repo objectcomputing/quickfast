@@ -72,11 +72,13 @@ Encoder::encodeSegment(
     }
 
     encodeSegmentBody(destination, pmap, templatePtr, accessor);
+    DataDestination::BufferHandle savedBuffer = destination.getBuffer();
     destination.selectBuffer(header);
     static Messages::FieldIdentity pmapIdentity("PMAP", "Message");
     destination.startField(pmapIdentity);
     pmap.encode(destination);
     destination.endField(pmapIdentity);
+    destination.selectBuffer(savedBuffer);
   }
   else
   {
