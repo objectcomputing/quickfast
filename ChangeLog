@@ -1,3 +1,8 @@
+Tue Oct  5 20:37:22 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * src/Tests/testNestedSequences.cpp:
+          Add new unit test for Issue #68.
+          It passes.  Issue was already fixed.
+
 Tue Oct  5 18:46:28 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/FieldInstructionBlob.h:
         * src/Codecs/FieldInstructionBlob.cpp:
