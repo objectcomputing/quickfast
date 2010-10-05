@@ -25,7 +25,8 @@
 
 // If building for .NET, must link boost threads dynamically
 #define BOOST_THREAD_USE_DLL
-#define BOOST_LIB_DIAGNOSTIC
+// This reports at compile time which boost libraries will be used
+// #define BOOST_LIB_DIAGNOSTIC
 
 #include <sstream>
 #include <string>

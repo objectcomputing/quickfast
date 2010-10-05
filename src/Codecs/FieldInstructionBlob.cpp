@@ -702,3 +702,10 @@ FieldInstructionBlob::fieldInstructionType()const
 {
   return type_;
 }
+
+void
+FieldInstructionBlob::addLengthInstruction(FieldInstructionPtr & field)
+{
+  // length instruction is legal, but has no impact on the encoding.
+  // Ignore it for now.
+}

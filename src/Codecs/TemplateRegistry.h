@@ -198,6 +198,12 @@ namespace QuickFAST{
       void display(std::ostream & output, size_t indent = 0) const;
 
     private:
+      // forbid copy constructor
+      TemplateRegistry(const TemplateRegistry &);
+      // forbid assignment
+      TemplateRegistry & operator =(const TemplateRegistry &);
+
+    private:
       TemplateIdMap templates_;
 
       TemplateNameMap namedTemplates_;

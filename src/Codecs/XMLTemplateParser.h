@@ -114,6 +114,11 @@ namespace QuickFAST
     ///   No length instruction is specified, the Sequence will automatically handle
     ///   the default length.
     ///
+    /// Multithreading Note:
+    ///   This class was designed under the assumption that it would be run once during
+    ///   initialization.  There are no guarantees that template parsing is thread-safe.
+    ///   The resulting template repository, however, can be safely shared between
+    ///   threads.
 
     class QuickFAST_Export XMLTemplateParser
     {
@@ -144,6 +149,11 @@ namespace QuickFAST
       /// Some non-standard implementatons of FAST do not comply with the Specification
       /// @param nonstandard is a bitwise OR of the nonstandard featurse that should be allowed
       void setNonstandard(unsigned long nonstandard);
+    private:
+      // forbid copy constructor
+      XMLTemplateParser(const XMLTemplateParser &);
+      // forbid assignment
+      XMLTemplateParser & operator = (const XMLTemplateParser &);
     private:
       std::ostream * out_;
       unsigned long nonstandard_;

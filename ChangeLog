@@ -1,3 +1,18 @@
+Tue Oct  5 18:46:28 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/FieldInstructionBlob.h:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionGroup.cpp:
+        * src/Codecs/SchemaElement.h:
+          Ignore <length> in <byteVector>
+
+        * src/Codecs/TemplateRegistry.h:
+        * src/Codecs/XMLTemplateParser.h:
+          Forbid copy constructor and assignment.
+
+        * src/Common/QuickFASTPch.h:
+          Turn off boost linker diagnostics
+
+
 Tue Oct  5 15:34:40 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/DataSource.cpp:
         * src/Tests/testCommon.cpp:

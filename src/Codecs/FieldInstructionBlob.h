@@ -106,6 +106,8 @@ namespace QuickFAST{
 
       virtual ValueType::Type fieldInstructionType()const;
 
+      virtual void addLengthInstruction(FieldInstructionPtr & field);
+
     protected:
       /// @brief create a populated field of the appropriate type
       /// @param buffer points to the data

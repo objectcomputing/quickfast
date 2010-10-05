@@ -62,7 +62,7 @@ namespace QuickFAST
       /// @param ns is the namespace for the type.
       virtual void setApplicationType(const std::string & type, const std::string & ns);
 
-      /// @brief Implement &lt;length> within a &lt;sequence>
+      /// @brief Implement &lt;length> within a &lt;sequence> or &lt;byteVector>
       ///
       /// @param field points to the field to be added.  The smart pointer to this
       /// field will be kept in the segment definition.
