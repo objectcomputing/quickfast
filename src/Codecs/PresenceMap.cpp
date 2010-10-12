@@ -23,6 +23,7 @@ PresenceMap::maskToBitNumber(uchar bitMask)
   return bitNumber;
 }
 
+
 PresenceMap::PresenceMap(size_t bits)
   : bitMask_(startByteMask)
   , bytePosition_(0)
@@ -39,6 +40,22 @@ PresenceMap::PresenceMap(size_t bits)
   }
   memset(bits_, 0, byteCapacity_);
 }
+
+void
+PresenceMap::decode(const unsigned char * buffer, size_t &offset)
+{
+  memset(bits_, 0, byteCapacity_);
+  uchar byte = buffer[offset++];
+  size_t pos = 0;
+  while((byte & stopBit) == 0)
+  {
+    appendByte(pos, byte);
+    byte = buffer[offset++];
+  }
+  appendByte(pos, byte);
+}
+
+
 void
 PresenceMap::setRaw(const uchar * buffer, size_t byteLength)
 {

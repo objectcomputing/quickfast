@@ -27,5 +27,9 @@ namespace QuickFAST{
   static const uchar emptyString = uchar('\x80');
   static const uchar leadingZeroBytePreamble = uchar('\0');
 
+  static const uchar ASCII_SOH = '\x01';
+  static const uchar ASCII_ETX = '\x03';
+  static const uchar ASCII_US = '\x1F';
+
 }
 #endif // CONSTANTS_H
