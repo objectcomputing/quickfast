@@ -22,10 +22,6 @@
 #include <Examples/MessageInterpreter.h>
 #include <Examples/ValueToFix.h>
 
-#if 1 // testing
-#include <Codecs/DataDestination.h>
-#endif
-
 using namespace QuickFAST;
 using namespace Examples;
 
@@ -143,12 +139,13 @@ InterpretApplication::parseSingleArg(int argc, char * argv[])
     }
     else if(opt == "pcapsource" && argc > 1)
     {
-      if(argv[1][0] == '6' && argv[1][1] == '4' &&  argv[1][1] == '\0')
+      std::string argv1(argv[1]);
+      if(argv1 == "64")
       {
         configuration_.setPcapWordSize(64);
         consumed = 2;
       }
-      else if(argv[1][0] == '3' && argv[1][1] == '2' &&  argv[1][1] == '\0')
+      else if(argv1 == "32" )
       {
         configuration_.setPcapWordSize(32);
         consumed = 2;
@@ -196,12 +193,12 @@ InterpretApplication::parseSingleArg(int argc, char * argv[])
       configuration_.setWaitForCompleteMessage(false);
       if(argc > 1)
       {
-        if(argv[1] == "block")
+        if(std::string(argv[1]) == "block")
         {
           consumed = 2;
           configuration_.setWaitForCompleteMessage(true);
         }
-        else if(argv[1] == "noblock")
+        else if(std::string(argv[1]) == "noblock")
         {
           consumed = 2;
         }
@@ -244,12 +241,12 @@ InterpretApplication::parseSingleArg(int argc, char * argv[])
       consumed = 1;
       if(argc > 1)
       {
-        if(argv[1] == "no")
+        if(std::string(argv[1]) == "no")
         {
           configuration_.setHeaderBigEndian(false);
           consumed = 2;
         }
-        else if(argv[1] == "yes")
+        else if(std::string(argv[1]) == "yes")
         {
           configuration_.setHeaderBigEndian(true);
           consumed = 2;
@@ -451,32 +448,6 @@ InterpretApplication::run()
           else if( c == 'r')
           {
             connection_.receiver().resume();
-          }
-          else if(c == 'h')
-          {
-            // this is simply a test of the ability to send replies to
-            // a tcp receiver.  As a sidelight it tests the gather-IO capability
-            // of DataDestination.
-            Codecs::DataDestination destination;
-            Codecs::DataDestination::BufferHandle b1 = destination.startBuffer();
-            destination.startBuffer();
-            destination.putByte(',');
-            destination.putByte(' ');
-            destination.putByte('W');
-            destination.putByte('o');
-            destination.putByte('r');
-            destination.putByte('l');
-            destination.putByte('d');
-            destination.putByte('!');
-
-            destination.selectBuffer(b1);
-            destination.putByte('H');
-            destination.putByte('e');
-            destination.putByte('l');
-            destination.putByte('l');
-            destination.putByte('o');
-            Communication::TCPReceiver & tcp(dynamic_cast<Communication::TCPReceiver &>(connection_.receiver()));
-            tcp.send(destination);
           }
           else
           {

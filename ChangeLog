@@ -1,3 +1,7 @@
+Wed Oct 13 20:09:11 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+          Fix an error in argument parsing.  It was comparing pointers (argv[1]) rather than strings.
+
 Tue Oct 12 19:38:57 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/PresenceMap.h:
         * src/Codecs/PresenceMap.cpp:
@@ -11,7 +15,7 @@ Tue Oct 12 19:38:57 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
 Tue Oct  5 21:12:28 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/Encoder.cpp:
-        Error in destination buffer management could leed to corrupted messages.
+        Error in destination buffer management could lead to corrupted messages.
 
 Tue Oct  5 20:37:22 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * src/Tests/testNestedSequences.cpp:
