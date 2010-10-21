@@ -4,6 +4,7 @@
 //
 #include <Common/QuickFASTPch.h>
 #include "DecoderConnection.h"
+#include <Application/DecoderConfiguration_fwd.h>
 #include <Codecs/XMLTemplateParser.h>
 #include <Codecs/MessagePerPacketAssembler.h>
 #include <Codecs/StreamingAssembler.h>
@@ -11,6 +12,7 @@
 #include <Codecs/FixedSizeHeaderAnalyzer.h>
 #include <Codecs/FastEncodedHeaderAnalyzer.h>
 #include <Codecs/TemplateRegistry.h>
+#include <Codecs/DataSource.h>
 
 #include <Communication/MulticastReceiver.h>
 #include <Communication/TCPReceiver.h>
@@ -98,7 +100,7 @@ DecoderConnection::configure(
   {
     ownEchoFile_ = true;
     std::ios::openmode mode = std::ios::out | std::ios::trunc;
-    if(configuration.echoType() == Codecs::DataSource::RAW)
+    if(configuration.echoType() == DecoderConfigurationEnums::RAW)
     {
       mode |= binaryMode;
     }
@@ -185,7 +187,11 @@ DecoderConnection::configure(
         *analyzer_,
         builder);
       assembler_.reset(pAssembler);
-      pAssembler->setEcho(*echoFile_, configuration.echoType(), configuration.echoMessage(), configuration.echoField());
+      pAssembler->setEcho(
+        *echoFile_,
+        static_cast<Codecs::DataSource::EchoType>(configuration.echoType()),
+        configuration.echoMessage(),
+        configuration.echoField());
       pAssembler->setMessageLimit(configuration.head());
       break;
     }
@@ -197,7 +203,11 @@ DecoderConnection::configure(
         builder,
         configuration.waitForCompleteMessage());
       assembler_.reset(pAssembler);
-      pAssembler->setEcho(*echoFile_, configuration.echoType(), configuration.echoMessage(), configuration.echoField());
+      pAssembler->setEcho(
+        *echoFile_,
+        static_cast<Codecs::DataSource::EchoType>(configuration.echoType()),
+        configuration.echoMessage(),
+        configuration.echoField());
       pAssembler->setMessageLimit(configuration.head());
       break;
     }
@@ -214,7 +224,11 @@ DecoderConnection::configure(
             *analyzer_,
             builder);
           assembler_.reset(pAssembler);
-          pAssembler->setEcho(*echoFile_, configuration.echoType(), configuration.echoMessage(), configuration.echoField());
+          pAssembler->setEcho(
+            *echoFile_,
+            static_cast<Codecs::DataSource::EchoType>(configuration.echoType()),
+            configuration.echoMessage(),
+            configuration.echoField());
           pAssembler->setMessageLimit(configuration.head());
           break;
         }
@@ -227,7 +241,11 @@ DecoderConnection::configure(
             builder,
             configuration.waitForCompleteMessage());
           assembler_.reset(pAssembler);
-          pAssembler->setEcho(*echoFile_, configuration.echoType(), configuration.echoMessage(), configuration.echoField());
+          pAssembler->setEcho(
+            *echoFile_,
+            static_cast<Codecs::DataSource::EchoType>(configuration.echoType()),
+            configuration.echoMessage(),
+            configuration.echoField());
           pAssembler->setMessageLimit(configuration.head());
           break;
         }

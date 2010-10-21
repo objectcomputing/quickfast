@@ -245,8 +245,6 @@ namespace QuickFASTDotNet
                 return true;
             }
 
-
-
             static int Main(string[] args)
             {
                 {

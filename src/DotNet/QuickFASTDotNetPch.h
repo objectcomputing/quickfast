@@ -41,8 +41,6 @@
 #include <boost/function.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/operators.hpp>
-#include <boost/thread.hpp>
-#include <boost/thread/mutex.hpp>
 #include <boost/cstdint.hpp>
 
 #pragma managed

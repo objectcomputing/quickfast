@@ -10,6 +10,7 @@
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
 #include <Common/StringBuffer.h>
+#include <Application/DecoderConfiguration_fwd.h>
 namespace QuickFAST{
   namespace Codecs{
     /// An inteface for data sources to be used by a Decoder.
@@ -94,9 +95,9 @@ namespace QuickFAST{
       /// @brief select mode to echo data
       enum EchoType
       {
-        RAW,    /// Binary data as read
-        HEX,    /// Two hex characters per byte
-        NONE    /// No data echoed (only field/message boundaries)
+        RAW = Application::DecoderConfigurationEnums::RAW,    /// Binary data as read
+        HEX = Application::DecoderConfigurationEnums::HEX,    /// Two hex characters per byte
+        NONE = Application::DecoderConfigurationEnums::NONE   /// No data echoed (only field/message boundaries)
       };
 
       /// @brief Control Echo for debugging/diagnostics

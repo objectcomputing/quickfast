@@ -4,7 +4,7 @@
 //
 #ifndef DECODERCONFIGURATION_H
 #define DECODERCONFIGURATION_H
-
+#include "DecoderConfiguration_fwd.h"
 #include <Codecs/DataSource.h>
 
 namespace QuickFAST{
@@ -14,26 +14,27 @@ namespace QuickFAST{
     {
       /// @brief What type of header is expected for each message.
       enum HeaderType{
-        NO_HEADER,
-        FIXED_HEADER,
-        FAST_HEADER};
+        NO_HEADER = DecoderConfigurationEnums::NO_HEADER,
+        FIXED_HEADER = DecoderConfigurationEnums::FIXED_HEADER,
+        FAST_HEADER = DecoderConfigurationEnums::FAST_HEADER
+      };
 
       /// @brief What type of assembler processes incoming buffers
       enum AssemblerType{
-        MESSAGE_PER_PACKET_ASSEMBLER,
-        STREAMING_ASSEMBLER,
-        UNSPECIFIED_ASSEMBLER
+        MESSAGE_PER_PACKET_ASSEMBLER = DecoderConfigurationEnums::MESSAGE_PER_PACKET_ASSEMBLER,
+        STREAMING_ASSEMBLER = DecoderConfigurationEnums::STREAMING_ASSEMBLER,
+        UNSPECIFIED_ASSEMBLER = DecoderConfigurationEnums::UNSPECIFIED_ASSEMBLER
       };
 
       /// @brief What type of receiver supplies incoming buffers.
       enum ReceiverType
       {
-        MULTICAST_RECEIVER,
-        TCP_RECEIVER,
-        RAWFILE_RECEIVER,
-        PCAPFILE_RECEIVER,
-        BUFFER_RECEIVER,
-        UNSPECIFIED_RECEIVER
+        MULTICAST_RECEIVER = DecoderConfigurationEnums::MULTICAST_RECEIVER,
+        TCP_RECEIVER = DecoderConfigurationEnums::TCP_RECEIVER,
+        RAWFILE_RECEIVER = DecoderConfigurationEnums::RAWFILE_RECEIVER,
+        PCAPFILE_RECEIVER = DecoderConfigurationEnums::PCAPFILE_RECEIVER,
+        BUFFER_RECEIVER = DecoderConfigurationEnums::BUFFER_RECEIVER,
+        UNSPECIFIED_RECEIVER = DecoderConfigurationEnums::UNSPECIFIED_RECEIVER
       };
 
     private:
@@ -55,7 +56,7 @@ namespace QuickFAST{
       /// @brief The name of a file to which echo output will be written
       std::string echoFileName_;
       /// @brief The type of data to be echoed (hex/raw)
-      Codecs::DataSource::EchoType echoType_;
+      Application::DecoderConfigurationEnums::EchoType echoType_;
       /// @brief Echo Message Boundaries?
       bool echoMessage_;
       /// @brief Echo Field Boundaries?
@@ -115,7 +116,7 @@ namespace QuickFAST{
         : head_(0)
         , reset_(false)
         , strict_(true)
-        , echoType_(Codecs::DataSource::HEX)
+        , echoType_(Application::DecoderConfigurationEnums::HEX)
         , echoMessage_(true)
         , echoField_(false)
         , pcapWordSize_(0)
@@ -188,7 +189,7 @@ namespace QuickFAST{
       }
 
       /// @brief The type of data to be echoed (hex/raw)
-      Codecs::DataSource::EchoType echoType()const
+      Application::DecoderConfigurationEnums::EchoType echoType()const
       {
         return echoType_;
       }
@@ -365,7 +366,13 @@ namespace QuickFAST{
       }
 
       /// @brief The type of data to be echoed (hex/raw)
-      void setEchoType(Codecs::DataSource::EchoType echoType)
+      void setEchoType(Codecs::DataSource::EchoType  echoType)
+      {
+        echoType_ = static_cast<Application::DecoderConfigurationEnums::EchoType>(echoType);
+      }
+
+      /// @brief The type of data to be echoed (hex/raw)
+      void setEchoType(Application::DecoderConfigurationEnums::EchoType  echoType)
       {
         echoType_ = echoType;
       }

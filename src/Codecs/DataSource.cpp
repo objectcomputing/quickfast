@@ -4,8 +4,8 @@
 #include <Common/QuickFASTPch.h>
 #include "DataSource.h"
 #include <Common/Exceptions.h>
-using namespace ::QuickFAST;
-using namespace ::QuickFAST::Codecs;
+using namespace QuickFAST;
+using namespace Codecs;
 
 DataSource::DataSource()
 : buffer_(0)

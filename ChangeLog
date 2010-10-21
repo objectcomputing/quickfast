@@ -1,3 +1,21 @@
+Thu Oct 21 19:10:46 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * src/Application/DNDecoderConnectionImpl.h:
+        * src/Application/DNDecoderConnectionImpl.cpp:
+        * src/Application/DNDecoderConnectionImpl_fwd.h:
+        * src/Application/DecoderConfiguration.h:
+        * src/Application/DecoderConfiguration_fwd.h:
+        * src/Application/DecoderConnection.cpp:
+        * src/Codecs/DataSource.h:
+        * src/Codecs/DataSource.cpp:
+        * src/DotNet/DNDecoderConnection.h:
+        * src/DotNet/DNDecoderConnection.cpp:
+        * src/DotNet/QuickFASTDotNetPch.h:
+        * src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.cs:
+        Conflict between boost 1.41+ and .NET:  Boost::threads is using inline assembly to implement
+        future thread synchronization.  Managed C++ hates inline assembly.
+        This changes widens the DMZ between .NET and the real world by adding an *impl layer to
+        DNDecoderConnection.
+
 Wed Oct 13 20:09:11 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * src/Examples/InterpretApplication/InterpretApplication.cpp:
           Fix an error in argument parsing.  It was comparing pointers (argv[1]) rather than strings.
