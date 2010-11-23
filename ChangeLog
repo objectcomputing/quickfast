@@ -1,3 +1,9 @@
+Tue Nov 23 19:11:31 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * src/Application/DNDecoderConnectionImpl.cpp:
+          Remove unnecessary includes
+        * src/Tests/testXMLTemplateParser.cpp:
+          Test length field instruction for byteVector - s/b ignored.
+
 Thu Oct 21 19:10:46 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * src/Application/DNDecoderConnectionImpl.h:
         * src/Application/DNDecoderConnectionImpl.cpp:

@@ -36,6 +36,10 @@ BOOST_AUTO_TEST_CASE(testXMLTemplateParser)
   myDocument << "    <uInt8 name=\"Issue22\" id=\"Issue22\">" << std::endl;
   myDocument << "      <default value=\"20\"/>" << std::endl;
   myDocument << "    </uInt8>" << std::endl;
+  myDocument << "    <byteVector name=\"byteVector\">" << std::endl;
+  myDocument << "      <length name=\"byteVectorLength\"/>" << std::endl;
+  myDocument << "    </byteVector>" << std::endl;
+
   myDocument << "  </template>" << std::endl;
   myDocument << "</templates>" << std::endl;
 

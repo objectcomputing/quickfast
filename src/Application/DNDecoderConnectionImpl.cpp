@@ -6,8 +6,6 @@
 #include "DNDecoderConnectionImpl.h"
 #include <Application/DecoderConnection.h>
 #include <Application/DecoderConfiguration.h>
-//#include <Codecs/DataSourceBuffer.h>
-//#include <Codecs/DataSourceBuffer.h>
 #include <Communication/Receiver.h>
 #include <Codecs/DataSource_fwd.h>
 #include <Application/DecoderConnection.h>
