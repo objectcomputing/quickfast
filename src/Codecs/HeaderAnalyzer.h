@@ -10,7 +10,7 @@
 #include <Codecs/DataSource_fwd.h>
 namespace QuickFAST{
   namespace Codecs{
-    /// An interface to be used to adapt to various styles of block header
+    /// An interface to be used to adapt to various styles of block or message header
     class HeaderAnalyzer
     {
     public:

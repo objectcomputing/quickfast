@@ -32,7 +32,8 @@ namespace QuickFAST
       /// @param builder receives the data from the decoder.
       MessagePerPacketAssembler(
           TemplateRegistryPtr templateRegistry,
-          HeaderAnalyzer & headerAnalyzer,
+          HeaderAnalyzer & packetHeaderAnalyzer,
+          HeaderAnalyzer & messageHeaderAnalyzer,
           Messages::ValueMessageBuilder & builder);
 
       virtual ~MessagePerPacketAssembler();
@@ -90,7 +91,8 @@ namespace QuickFAST
       MessagePerPacketAssembler();
 
     private:
-      HeaderAnalyzer & headerAnalyzer_;
+      HeaderAnalyzer & packetHeaderAnalyzer_;
+      HeaderAnalyzer & messageHeaderAnalyzer_;
       Messages::ValueMessageBuilder & builder_;
 
       const unsigned char * currentBuffer_;

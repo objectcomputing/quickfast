@@ -33,13 +33,29 @@ namespace QuickFAST{
         return registry_;
       }
 
+      /// @brief Forward compatibility
+      /// @deprecated use packetHeaderAnalyzer or messageHeaderAnalyzer
       Codecs::HeaderAnalyzer & analyzer()const
       {
-        if(!analyzer_)
+        return packetHeaderAnalyzer();
+      }
+
+      Codecs::HeaderAnalyzer & packetHeaderAnalyzer() const
+      {
+        if(!packetHeaderAnalyzer_)
         {
-          throw UsageError("Coding Error","Using DecoderConnection analyzer before it is configured.");
+          throw UsageError("Coding Error","Using DecoderConnection packet header analyzer before it is configured.");
         }
-        return *analyzer_;
+        return *packetHeaderAnalyzer_;
+      }
+
+      Codecs::HeaderAnalyzer & messageHeaderAnalyzer() const
+      {
+        if(!messageHeaderAnalyzer_)
+        {
+          throw UsageError("Coding Error","Using DecoderConnection message header analyzer before it is configured.");
+        }
+        return *messageHeaderAnalyzer_;
       }
 
       Communication::Assembler & assembler()const
@@ -70,7 +86,8 @@ namespace QuickFAST{
       bool ownVerboseFile_;
 
       Codecs::TemplateRegistryPtr registry_;
-      boost::scoped_ptr<Codecs::HeaderAnalyzer> analyzer_;
+      boost::scoped_ptr<Codecs::HeaderAnalyzer> packetHeaderAnalyzer_;
+      boost::scoped_ptr<Codecs::HeaderAnalyzer> messageHeaderAnalyzer_;
       boost::scoped_ptr<Communication::Assembler> assembler_;
       boost::scoped_ptr<Communication::Receiver> receiver_;
     };

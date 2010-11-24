@@ -104,7 +104,8 @@ MulticastDecoder::start(
   builder_ = &builder;
   assembler_.reset(new MessagePerPacketAssembler(
     templateRegistry_,
-    headerAnalyzer_,
+    packetHeaderAnalyzer_,
+    messageHeaderAnalyzer_,
     builder));
   assembler_->setMessageLimit(messageLimit_);
   assembler_->decoder().setStrict(strict_);
@@ -119,14 +120,39 @@ MulticastDecoder::start(
 void
 MulticastDecoder::start(
   Messages::ValueMessageBuilder & builder,
-  HeaderAnalyzer & headerAnalyzer,
+  HeaderAnalyzer & packetHeaderAnalyzer,
   size_t bufferSize /*=1400*/,
   size_t bufferCount /*=2*/)
 {
   builder_ = &builder;
   assembler_.reset(new MessagePerPacketAssembler(
     templateRegistry_,
-    headerAnalyzer,
+    packetHeaderAnalyzer,
+    messageHeaderAnalyzer_,
+    builder));
+  assembler_->setMessageLimit(messageLimit_);
+  assembler_->decoder().setStrict(strict_);
+  if(verboseOut_ != 0)
+  {
+    assembler_->decoder().setVerboseOutput(*verboseOut_);
+  }
+
+  receiver_.start(*assembler_, bufferSize, bufferCount);
+}
+
+void
+MulticastDecoder::start(
+  Messages::ValueMessageBuilder & builder,
+  HeaderAnalyzer & packetHeaderAnalyzer,
+  HeaderAnalyzer & messageHeaderAnalyzer,
+  size_t bufferSize /*=1400*/,
+  size_t bufferCount /*=2*/)
+{
+  builder_ = &builder;
+  assembler_.reset(new MessagePerPacketAssembler(
+    templateRegistry_,
+    packetHeaderAnalyzer,
+    messageHeaderAnalyzer,
     builder));
   assembler_->setMessageLimit(messageLimit_);
   assembler_->decoder().setStrict(strict_);

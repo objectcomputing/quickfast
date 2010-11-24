@@ -137,7 +137,7 @@ InterpretApplication::parseSingleArg(int argc, char * argv[])
       configuration_.setPcapFileName(argv[1]);
       consumed = 2;
     }
-    else if(opt == "pcapsource" && argc > 1)
+    else if(opt == "-pcapsource" && argc > 1)
     {
       std::string argv1(argv[1]);
       if(argv1 == "64")
@@ -211,44 +211,88 @@ InterpretApplication::parseSingleArg(int argc, char * argv[])
     }
     else if(opt == "-hnone" ) //              : No header
     {
-      configuration_.setHeaderType(Application::DecoderConfiguration::NO_HEADER);
+      configuration_.setMessageHeaderType(Application::DecoderConfiguration::NO_HEADER);
       consumed = 1;
     }
     else if(opt == "-hfix" && argc > 1) // n             : Header contains fixed size fields; block size field is n bytes" << std::endl;
     {
-      configuration_.setHeaderType(Application::DecoderConfiguration::FIXED_HEADER);
-      configuration_.setHeaderMessageSizeBytes(boost::lexical_cast<size_t>(argv[1]));
+      configuration_.setMessageHeaderType(Application::DecoderConfiguration::FIXED_HEADER);
+      configuration_.setMessageHeaderMessageSizeBytes(boost::lexical_cast<size_t>(argv[1]));
       consumed = 2;
     }
     else if(opt == "-hfast" ) //              : Header contains fast encoded fields" << std::endl;
     {
-      configuration_.setHeaderType(Application::DecoderConfiguration::FAST_HEADER);
+      configuration_.setMessageHeaderType(Application::DecoderConfiguration::FAST_HEADER);
       consumed = 1;
     }
     else if(opt == "-hprefix" && argc > 1) // n            : 'n' bytes (fixed) or fields (FAST) preceed block size" << std::endl;
     {
-      configuration_.setHeaderPrefixCount(boost::lexical_cast<size_t>(argv[1]));
+      configuration_.setMessageHeaderPrefixCount(boost::lexical_cast<size_t>(argv[1]));
       consumed = 2;
     }
     else if(opt == "-hsuffix" && argc > 1) // n            : 'n' bytes (fixed) or fields (FAST) follow block size" << std::endl;
     {
-      configuration_.setHeaderSuffixCount(boost::lexical_cast<size_t>(argv[1]));
+      configuration_.setMessageHeaderSuffixCount(boost::lexical_cast<size_t>(argv[1]));
       consumed = 2;
     }
     else if(opt == "-hbig" ) //                 : fixed size header is big-endian" << std::endl;
     {
-      configuration_.setHeaderBigEndian(true);
+      configuration_.setMessageHeaderBigEndian(true);
       consumed = 1;
       if(argc > 1)
       {
         if(std::string(argv[1]) == "no")
         {
-          configuration_.setHeaderBigEndian(false);
+          configuration_.setMessageHeaderBigEndian(false);
           consumed = 2;
         }
         else if(std::string(argv[1]) == "yes")
         {
-          configuration_.setHeaderBigEndian(true);
+          configuration_.setMessageHeaderBigEndian(true);
+          consumed = 2;
+        }
+      }
+    }
+    else if(opt == "-pnone" ) //              : No header
+    {
+      configuration_.setPacketHeaderType(Application::DecoderConfiguration::NO_HEADER);
+      consumed = 1;
+    }
+    else if(opt == "-pfix" && argc > 1) // n             : Header contains fixed size fields; block size field is n bytes" << std::endl;
+    {
+      configuration_.setPacketHeaderType(Application::DecoderConfiguration::FIXED_HEADER);
+      configuration_.setPacketHeaderMessageSizeBytes(boost::lexical_cast<size_t>(argv[1]));
+      consumed = 2;
+    }
+    else if(opt == "-pfast" ) //              : Header contains fast encoded fields" << std::endl;
+    {
+      configuration_.setPacketHeaderType(Application::DecoderConfiguration::FAST_HEADER);
+      consumed = 1;
+    }
+    else if(opt == "-pprefix" && argc > 1) // n            : 'n' bytes (fixed) or fields (FAST) preceed block size" << std::endl;
+    {
+      configuration_.setPacketHeaderPrefixCount(boost::lexical_cast<size_t>(argv[1]));
+      consumed = 2;
+    }
+    else if(opt == "-psuffix" && argc > 1) // n            : 'n' bytes (fixed) or fields (FAST) follow block size" << std::endl;
+    {
+      configuration_.setPacketHeaderSuffixCount(boost::lexical_cast<size_t>(argv[1]));
+      consumed = 2;
+    }
+    else if(opt == "-pbig" ) //                 : fixed size header is big-endian" << std::endl;
+    {
+      configuration_.setPacketHeaderBigEndian(true);
+      consumed = 1;
+      if(argc > 1)
+      {
+        if(std::string(argv[1]) == "no")
+        {
+          configuration_.setPacketHeaderBigEndian(false);
+          consumed = 2;
+        }
+        else if(std::string(argv[1]) == "yes")
+        {
+          configuration_.setPacketHeaderBigEndian(true);
           consumed = 2;
         }
       }
@@ -351,15 +395,27 @@ InterpretApplication::usage(std::ostream & out) const
   out << "  -datagram            : Message boundaries match packet boundaries" << std::endl;
   out << "                         (default if Multicast or PCap file)." << std::endl;
   out << std::endl;
-  out << "  -hnone               : No header(preamble) in FAST data (default)." << std::endl;
-  out << "  -hfix n              : Header contains fixed size fields;" << std::endl;
+  out << "                       MESSAGE HEADER OPTIONS" << std::endl;
+  out << "  -hnone               : No header(preamble) before each FAST message (default)." << std::endl;
+  out << "  -hfix n              : Message header contains fixed size fields;" << std::endl;
   out << "                         block size field is n bytes:" << std::endl;
-  out << "  -hbig                  : fixed size header is big-endian." << std::endl;
-  out << "  -hfast               : Header contains fast encoded fields:" << std::endl;
-  out << "  -hprefix n             : 'n' bytes (fixed) or fields (FAST) precede" << std::endl;
-  out << "                           block size." << std::endl;
-  out << "  -hsuffix n             : 'n' bytes (fixed) or fields (FAST) follow" << std::endl;
-  out << "                           block size." << std::endl;
+  out << "  -hbig                : fixed size header is big-endian." << std::endl;
+  out << "  -hfast               : Message header contains fast encoded fields:" << std::endl;
+  out << "  -hprefix n           : 'n' bytes (fixed) or fields (FAST) precede" << std::endl;
+  out << "                         block size." << std::endl;
+  out << "  -hsuffix n           : 'n' bytes (fixed) or fields (FAST) follow" << std::endl;
+  out << "                         block size." << std::endl;
+  out << std::endl;
+  out << "                       PACKET HEADER OPTIONS( -datagram only)" << std::endl;
+  out << "  -pnone               : No header(preamble) in packet (default)." << std::endl;
+  out << "  -pfix n              : Packet header contains fixed size fields;" << std::endl;
+  out << "                         block size field is n bytes:" << std::endl;
+  out << "  -pbig                : fixed size header is big-endian." << std::endl;
+  out << "  -pfast               : Packet header contains fast encoded fields:" << std::endl;
+  out << "  -pprefix n           : 'n' bytes (fixed) or fields (FAST) precede" << std::endl;
+  out << "                         block size." << std::endl;
+  out << "  -psuffix n           : 'n' bytes (fixed) or fields (FAST) follow" << std::endl;
+  out << "                         block size." << std::endl;
   out << std::endl;
   out << "  -buffersize size     : Size of communication buffers." << std::endl;
   out << "                         For \"-datagram\" largest expected message." << std::endl;

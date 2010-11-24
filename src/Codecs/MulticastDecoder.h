@@ -105,10 +105,23 @@ namespace QuickFAST{
       void start(Messages::ValueMessageBuilder & builder, size_t bufferSize=1400, size_t bufferCount=2);
       /// @brief Start the decoding process.  Returns immediately
       /// @param builder to accept the decoded output
-      /// @param header is an object to analyze the block headers (if any)
+      /// @param packetHeaderAnalyzer is an object to analyze the packet headers (if any)
       /// @param bufferSize should be >= the largest expected packet
       /// @param bufferCount is how many buffers to allocate (minimum 2 suggested)
-      void start(Messages::ValueMessageBuilder & builder, HeaderAnalyzer & header, size_t bufferSize=1400, size_t bufferCount=2);
+      void start(Messages::ValueMessageBuilder & builder, HeaderAnalyzer & packetHeaderAnalyzer, size_t bufferSize=1400, size_t bufferCount=2);
+
+      /// @brief Start the decoding process.  Returns immediately
+      /// @param builder to accept the decoded output
+      /// @param packetHeaderAnalyzer is an object to analyze the packet headers (if any)
+      /// @param messageHeaderAnalyzer is an object to analyze the message headers (if any)
+      /// @param bufferSize should be >= the largest expected packet
+      /// @param bufferCount is how many buffers to allocate (minimum 2 suggested)
+      void start(
+        Messages::ValueMessageBuilder & builder,
+        HeaderAnalyzer & packetHeaderAnalyzer,
+        HeaderAnalyzer & messageHeaderAnalyzer,
+        size_t bufferSize =1400,
+        size_t bufferCount =2);
 
       /// @brief Run the event loop to accept incoming messages
       ///
@@ -156,7 +169,8 @@ namespace QuickFAST{
 
     private:
       Communication::MulticastReceiver receiver_;
-      NoHeaderAnalyzer headerAnalyzer_;
+      NoHeaderAnalyzer packetHeaderAnalyzer_;
+      NoHeaderAnalyzer messageHeaderAnalyzer_;
       TemplateRegistryPtr templateRegistry_;
       Codecs::MessagePerPacketAssemblerPtr assembler_;
       Messages::ValueMessageBuilder * builder_;

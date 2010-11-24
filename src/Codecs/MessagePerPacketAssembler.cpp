@@ -13,10 +13,12 @@ using namespace Codecs;
 
 MessagePerPacketAssembler::MessagePerPacketAssembler(
       TemplateRegistryPtr templateRegistry,
-      HeaderAnalyzer & headerAnalyzer,
+      HeaderAnalyzer & packetHeaderAnalyzer,
+      HeaderAnalyzer & messageHeaderAnalyzer,
       Messages::ValueMessageBuilder & builder)
   : Communication::Assembler(templateRegistry, builder)
-  , headerAnalyzer_(headerAnalyzer)
+  , packetHeaderAnalyzer_(packetHeaderAnalyzer)
+  , messageHeaderAnalyzer_(messageHeaderAnalyzer)
   , builder_(builder)
   , messageCount_(0)
   , byteCount_(0)
@@ -81,11 +83,11 @@ MessagePerPacketAssembler::consumeBuffer(const unsigned char * buffer, size_t si
     currentSize_ = size;
     size_t blockSize = 0;
     bool skipBlock = false;
-    if(!headerAnalyzer_.analyzeHeader(*this, blockSize, skipBlock))
+    if(!packetHeaderAnalyzer_.analyzeHeader(*this, blockSize, skipBlock))
     {
       // header must be complete in one packet
       builder_.reportDecodingError("Invalid header in packet.  Ignoring packet.");
-      headerAnalyzer_.reset();
+      packetHeaderAnalyzer_.reset();
       DataSource::reset();
       currentSize_ = 0;
       currentBuffer_ = 0;
@@ -108,7 +110,27 @@ MessagePerPacketAssembler::consumeBuffer(const unsigned char * buffer, size_t si
         }
         while(bytesAvailable() > 0)
         {
-          decoder_.decodeMessage(*this, builder_);
+          bool skipMessage = false;
+          size_t messageSize = 0;
+          if(!messageHeaderAnalyzer_.analyzeHeader(*this, messageSize, skipMessage))
+          {
+            // header must be complete in one packet
+            builder_.reportDecodingError("Invalid message header.  Ignoring remainder of packet.");
+            messageHeaderAnalyzer_.reset();
+            DataSource::reset();
+            currentSize_ = 0;
+            currentBuffer_ = 0;
+          }
+          else if(skipMessage)
+          {
+            DataSource::reset();
+            currentSize_ = 0;
+            currentBuffer_ = 0;
+          }
+          else
+          {
+            decoder_.decodeMessage(*this, builder_);
+          }
         }
       }
     }

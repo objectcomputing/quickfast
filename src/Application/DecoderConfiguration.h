@@ -12,7 +12,7 @@ namespace QuickFAST{
     /// @brief structure to capture all the information needed to configure a DecoderConnection
     struct DecoderConfiguration
     {
-      /// @brief What type of header is expected for each message.
+      /// @brief What type of header is expected for each packet and/or message.
       enum HeaderType{
         NO_HEADER = DecoderConfigurationEnums::NO_HEADER,
         FIXED_HEADER = DecoderConfigurationEnums::FIXED_HEADER,
@@ -65,18 +65,28 @@ namespace QuickFAST{
       /// @brief What word size is used in the PCAP file.
       size_t pcapWordSize_;
 
-      /// @brief What type of header is expected for each message.
-      HeaderType headerType_;
+      /// @brief What type of header is expected for each packet
+      HeaderType packetHeaderType_;
+
+      size_t packetHeaderMessageSizeBytes_;
+      /// @brief For FIXED_HEADER, is the size field big-endian?
+      bool packetHeaderBigEndian_;
+      /// @brief For FIXED_HEADER byte count before size; for FAST_HEADER field count before size
+      size_t packetHeaderPrefixCount_;
+      /// @brief For FIXED_HEADER byte count after size; for FAST_HEADER field count after size
+      size_t packetHeaderSuffixCount_;
+
+      /// @brief What type of header is expected for each message
+      HeaderType messageHeaderType_;
+      size_t messageHeaderMessageSizeBytes_;
+      /// @brief For FIXED_HEADER, is the size field big-endian?
+      bool messageHeaderBigEndian_;
+      /// @brief For FIXED_HEADER byte count before size; for FAST_HEADER field count before size
+      size_t messageHeaderPrefixCount_;
+      /// @brief For FIXED_HEADER byte count after size; for FAST_HEADER field count after size
+      size_t messageHeaderSuffixCount_;
 
       /// @brief For FIXED_HEADER, how many bytes in the header size field.
-      size_t headerMessageSizeBytes_;
-      /// @brief For FIXED_HEADER, is the size field big-endian?
-      bool headerBigEndian_;
-      /// @brief For FIXED_HEADER byte count before size; for FAST_HEADER field count before size
-      size_t headerPrefixCount_;
-      /// @brief For FIXED_HEADER byte count after size; for FAST_HEADER field count after size
-      size_t headerSuffixCount_;
-
       /// @brief What type of assembler processes incoming buffers
       AssemblerType assemblerType_;
 
@@ -120,11 +130,11 @@ namespace QuickFAST{
         , echoMessage_(true)
         , echoField_(false)
         , pcapWordSize_(0)
-        , headerType_(NO_HEADER)
-        , headerMessageSizeBytes_(0)
-        , headerBigEndian_(true)
-        , headerPrefixCount_(0)
-        , headerSuffixCount_(0)
+        , packetHeaderType_(NO_HEADER)
+        , packetHeaderMessageSizeBytes_(0)
+        , packetHeaderBigEndian_(true)
+        , packetHeaderPrefixCount_(0)
+        , packetHeaderSuffixCount_(0)
         , assemblerType_(UNSPECIFIED_ASSEMBLER)
         , waitForCompleteMessage_(false)
         , receiverType_(UNSPECIFIED_RECEIVER)
@@ -213,35 +223,67 @@ namespace QuickFAST{
         return pcapWordSize_;
       }
 
-      /// @brief What type of header is expected for each message.
-      HeaderType headerType()const
+      /// @brief What type of header is expected for each packet
+      HeaderType packetHeaderType()const
       {
-        return headerType_;
+        return packetHeaderType_;
       }
 
       /// @brief For FIXED_HEADER, how many bytes in the header size field.
-      size_t headerMessageSizeBytes()const
+      size_t packetHeaderMessageSizeBytes()const
       {
-        return headerMessageSizeBytes_;
+        return packetHeaderMessageSizeBytes_;
       }
 
       /// @brief For FIXED_HEADER, is the size field big-endian?
-      bool headerBigEndian()const
+      bool packetHeaderBigEndian()const
       {
-        return headerBigEndian_;
+        return packetHeaderBigEndian_;
       }
 
       /// @brief For FIXED_HEADER byte count before size; for FAST_HEADER field count before size
-      size_t headerPrefixCount()const
+      size_t packetHeaderPrefixCount()const
       {
-        return headerPrefixCount_;
+        return packetHeaderPrefixCount_;
       }
 
       /// @brief For FIXED_HEADER byte count after size; for FAST_HEADER field count after size
-      size_t headerSuffixCount()const
+      size_t packetHeaderSuffixCount()const
       {
-        return headerSuffixCount_;
+        return packetHeaderSuffixCount_;
       }
+
+      /// @brief What type of header is expected for each message.
+      HeaderType messageHeaderType()const
+      {
+        return messageHeaderType_;
+      }
+
+      /// @brief For FIXED_HEADER, how many bytes in the header size field.
+      size_t messageHeaderMessageSizeBytes()const
+      {
+        return messageHeaderMessageSizeBytes_;
+      }
+
+      /// @brief For FIXED_HEADER, is the size field big-endian?
+      bool messageHeaderBigEndian()const
+      {
+        return messageHeaderBigEndian_;
+      }
+
+      /// @brief For FIXED_HEADER byte count before size; for FAST_HEADER field count before size
+      size_t messageHeaderPrefixCount()const
+      {
+        return messageHeaderPrefixCount_;
+      }
+
+      /// @brief For FIXED_HEADER byte count after size; for FAST_HEADER field count after size
+      size_t messageHeaderSuffixCount()const
+      {
+        return messageHeaderSuffixCount_;
+      }
+
+
 
       /// @brief Should StreamingAssembler wait for a complete message
       /// before decoding starts.
@@ -395,36 +437,108 @@ namespace QuickFAST{
         pcapWordSize_ = pcapWordSize;
       }
 
-      /// @brief What type of header is expected for each message.
+      ////////////////////////////////////////////
+      // HEADER BACKWARD COMPATIBILITY (DEPRECATED)
+
+      /// @brief Backward compatibility
+      /// @deprecated: user setPacketHeaderType or setMessageHeaderType
       void setHeaderType(HeaderType headerType)
       {
-        headerType_ = headerType;
+        setMessageHeaderType(headerType);
       }
-
-      /// @brief For FIXED_HEADER, how many bytes in the header size field.
+      /// @brief Backward compatibility
+      /// @deprecated: user setPacketHeaderMessageSizeBytes or setMessageHeaderMessageSizeBytes
       void setHeaderMessageSizeBytes(size_t headerMessageSizeBytes)
       {
-        headerMessageSizeBytes_ = headerMessageSizeBytes;
+        setMessageHeaderMessageSizeBytes(headerMessageSizeBytes);
       }
 
-      /// @brief For FIXED_HEADER, is the size field big-endian?
+      /// @brief Backward compatibility
+      /// @deprecated: user setPacketHeaderMessageSizeBytes or setMessageHeaderMessageSizeBytes
       void setHeaderBigEndian(bool headerBigEndian)
       {
-        headerBigEndian_ = headerBigEndian;
+        setMessageHeaderBigEndian(headerBigEndian);
       }
 
-      /// @brief For FIXED_HEADER byte count before size
-      ///        for FAST_HEADER field count before size
+      /// @brief Backward compatibility
+      /// @deprecated: user setPacketHeaderPrefixCount or setMessageHeaderPrefixCount
       void setHeaderPrefixCount(size_t headerPrefixCount)
       {
-        headerPrefixCount_ = headerPrefixCount;
+        setMessageHeaderPrefixCount(headerPrefixCount);
       }
 
-      /// @brief For FIXED_HEADER byte count after size
-      ///        for FAST_HEADER field count after size
+      /// @brief Backward compatibility
+      /// @deprecated: user setPacketHeaderSuffixCount or setMessageHeaderSuffixCount
       void setHeaderSuffixCount(size_t headerSuffixCount)
       {
-        headerSuffixCount_ = headerSuffixCount;
+        setMessageHeaderSuffixCount(headerSuffixCount);
+      }
+      // HEADER BACKWARD COMPATIBILITY (DEPRECATED)
+      ////////////////////////////////////////////
+
+
+      /// @brief What type of header is expected for each packet
+      void setPacketHeaderType(HeaderType headerType)
+      {
+        packetHeaderType_ = headerType;
+      }
+
+      /// @brief For packet FIXED_HEADER, how many bytes in the header size field.
+      void setPacketHeaderMessageSizeBytes(size_t headerMessageSizeBytes)
+      {
+        packetHeaderMessageSizeBytes_ = headerMessageSizeBytes;
+      }
+
+      /// @brief For packet FIXED_HEADER, is the size field big-endian?
+      void setPacketHeaderBigEndian(bool headerBigEndian)
+      {
+        packetHeaderBigEndian_ = headerBigEndian;
+      }
+
+      /// @brief For packet FIXED_HEADER byte count before size
+      ///        for packet FAST_HEADER field count before size
+      void setPacketHeaderPrefixCount(size_t headerPrefixCount)
+      {
+        packetHeaderPrefixCount_ = headerPrefixCount;
+      }
+
+      /// @brief For packet FIXED_HEADER byte count after size
+      ///        for packet FAST_HEADER field count after size
+      void setPacketHeaderSuffixCount(size_t headerSuffixCount)
+      {
+        packetHeaderSuffixCount_ = headerSuffixCount;
+
+      }
+      /// @brief What type of header is expected for each message.
+      void setMessageHeaderType(HeaderType headerType)
+      {
+        messageHeaderType_ = headerType;
+      }
+
+      /// @brief For message FIXED_HEADER, how many bytes in the header size field.
+      void setMessageHeaderMessageSizeBytes(size_t headerMessageSizeBytes)
+      {
+        messageHeaderMessageSizeBytes_ = headerMessageSizeBytes;
+      }
+
+      /// @brief For message FIXED_HEADER, is the size field big-endian?
+      void setMessageHeaderBigEndian(bool headerBigEndian)
+      {
+        messageHeaderBigEndian_ = headerBigEndian;
+      }
+
+      /// @brief For message FIXED_HEADER byte count before size
+      ///        for message FAST_HEADER field count before size
+      void setMessageHeaderPrefixCount(size_t headerPrefixCount)
+      {
+        messageHeaderPrefixCount_ = headerPrefixCount;
+      }
+
+      /// @brief For message FIXED_HEADER byte count after size
+      ///        for message FAST_HEADER field count after size
+      void setMessageHeaderSuffixCount(size_t headerSuffixCount)
+      {
+        messageHeaderSuffixCount_ = headerSuffixCount;
       }
 
       /// @brief Should StreamingAssembler wait for a complete message

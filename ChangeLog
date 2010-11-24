@@ -1,3 +1,21 @@
+Wed Nov 24 15:08:23 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * setup.cmd:
+          Handle "Program Files (x86)" [shudder]
+
+        * src/Application/DecoderConfiguration.h:
+        * src/Application/DecoderConnection.h:
+        * src/Application/DecoderConnection.cpp:
+        * src/Codecs/HeaderAnalyzer.h:
+        * src/Codecs/MessagePerPacketAssembler.h:
+        * src/Codecs/MessagePerPacketAssembler.cpp:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+          Support both packet headers (for UDP/MULTICAST) and message
+          headers (for everyone) independently.
+          This addresses Issue #71.
+
+
 Tue Nov 23 19:11:31 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * src/Application/DNDecoderConnectionImpl.cpp:
           Remove unnecessary includes

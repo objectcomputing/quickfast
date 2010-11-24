@@ -148,32 +148,92 @@ DecoderConnection::configure(
     registry_->display(std::cout, 0);
   }
 
-  switch(configuration.headerType())
+  switch(configuration.packetHeaderType())
   {
   case Application::DecoderConfiguration::NO_HEADER:
     {
       Codecs::NoHeaderAnalyzer * analyzer = new Codecs::NoHeaderAnalyzer;
       analyzer->setTestSkip(configuration.testSkip());
-      analyzer_.reset(analyzer);
+      packetHeaderAnalyzer_.reset(analyzer);
       break;
     }
   case Application::DecoderConfiguration::FIXED_HEADER:
     {
       Codecs::FixedSizeHeaderAnalyzer * fixedSizeHeaderAnalyzer = new Codecs::FixedSizeHeaderAnalyzer(
-        configuration.headerMessageSizeBytes(),
-        configuration.headerBigEndian(),
-        configuration.headerPrefixCount(),
-        configuration.headerSuffixCount());
+        configuration.packetHeaderMessageSizeBytes(),
+        configuration.packetHeaderBigEndian(),
+        configuration.packetHeaderPrefixCount(),
+        configuration.packetHeaderSuffixCount());
       fixedSizeHeaderAnalyzer->setTestSkip(configuration.testSkip());
-      analyzer_.reset(fixedSizeHeaderAnalyzer);
+      packetHeaderAnalyzer_.reset(fixedSizeHeaderAnalyzer);
       break;
     }
   case Application::DecoderConfiguration::FAST_HEADER:
     {
-      analyzer_.reset(new Codecs::FastEncodedHeaderAnalyzer(
-        configuration.headerPrefixCount(),
-        configuration.headerSuffixCount(),
-        configuration.headerMessageSizeBytes() != 0)); // true if header contains message size
+      packetHeaderAnalyzer_.reset(new Codecs::FastEncodedHeaderAnalyzer(
+        configuration.packetHeaderPrefixCount(),
+        configuration.packetHeaderSuffixCount(),
+        configuration.packetHeaderMessageSizeBytes() != 0)); // true if header contains message size
+      break;
+    }
+  }
+
+  switch(configuration.messageHeaderType())
+  {
+  case Application::DecoderConfiguration::NO_HEADER:
+    {
+      Codecs::NoHeaderAnalyzer * analyzer = new Codecs::NoHeaderAnalyzer;
+      analyzer->setTestSkip(configuration.testSkip());
+      messageHeaderAnalyzer_.reset(analyzer);
+      break;
+    }
+  case Application::DecoderConfiguration::FIXED_HEADER:
+    {
+      Codecs::FixedSizeHeaderAnalyzer * fixedSizeHeaderAnalyzer = new Codecs::FixedSizeHeaderAnalyzer(
+        configuration.messageHeaderMessageSizeBytes(),
+        configuration.messageHeaderBigEndian(),
+        configuration.messageHeaderPrefixCount(),
+        configuration.messageHeaderSuffixCount());
+      fixedSizeHeaderAnalyzer->setTestSkip(configuration.testSkip());
+      messageHeaderAnalyzer_.reset(fixedSizeHeaderAnalyzer);
+      break;
+    }
+  case Application::DecoderConfiguration::FAST_HEADER:
+    {
+      messageHeaderAnalyzer_.reset(new Codecs::FastEncodedHeaderAnalyzer(
+        configuration.messageHeaderPrefixCount(),
+        configuration.messageHeaderSuffixCount(),
+        configuration.messageHeaderMessageSizeBytes() != 0)); // true if header contains message size
+      break;
+    }
+  }
+
+  switch(configuration.messageHeaderType())
+  {
+  case Application::DecoderConfiguration::NO_HEADER:
+    {
+      Codecs::NoHeaderAnalyzer * analyzer = new Codecs::NoHeaderAnalyzer;
+      analyzer->setTestSkip(configuration.testSkip());
+      messageHeaderAnalyzer_.reset(analyzer);
+      break;
+    }
+  case Application::DecoderConfiguration::FIXED_HEADER:
+    {
+      Codecs::FixedSizeHeaderAnalyzer * fixedSizeHeaderAnalyzer = new Codecs::FixedSizeHeaderAnalyzer(
+        configuration.messageHeaderMessageSizeBytes(),
+        configuration.messageHeaderBigEndian(),
+        configuration.messageHeaderPrefixCount(),
+        configuration.messageHeaderSuffixCount());
+      fixedSizeHeaderAnalyzer->setTestSkip(configuration.testSkip());
+      messageHeaderAnalyzer_.reset(fixedSizeHeaderAnalyzer);
+      break;
+    }
+  case Application::DecoderConfiguration::FAST_HEADER:
+    {
+      messageHeaderAnalyzer_.reset(new Codecs::FastEncodedHeaderAnalyzer(
+        configuration.messageHeaderPrefixCount(),
+        configuration.messageHeaderSuffixCount(),
+        configuration.messageHeaderMessageSizeBytes() != 0)); // true if header contains message size
       break;
     }
   }
@@ -184,7 +244,8 @@ DecoderConnection::configure(
     {
       Codecs::MessagePerPacketAssembler * pAssembler = new Codecs::MessagePerPacketAssembler(
         registry_,
-        *analyzer_,
+        *packetHeaderAnalyzer_,
+        *messageHeaderAnalyzer_,
         builder);
       assembler_.reset(pAssembler);
       pAssembler->setEcho(
@@ -199,7 +260,7 @@ DecoderConnection::configure(
     {
       Codecs::StreamingAssembler * pAssembler = new Codecs::StreamingAssembler(
         registry_,
-        *analyzer_,
+        *messageHeaderAnalyzer_,
         builder,
         configuration.waitForCompleteMessage());
       assembler_.reset(pAssembler);
@@ -213,6 +274,7 @@ DecoderConnection::configure(
     }
   default:
     {
+      // Assembler type not specified:  Choose an appropriate default assembler
       switch(configuration.receiverType())
       {
       case Application::DecoderConfiguration::MULTICAST_RECEIVER:
@@ -221,7 +283,8 @@ DecoderConnection::configure(
         {
           Codecs::MessagePerPacketAssembler * pAssembler = new Codecs::MessagePerPacketAssembler(
             registry_,
-            *analyzer_,
+            *messageHeaderAnalyzer_,
+            *packetHeaderAnalyzer_,
             builder);
           assembler_.reset(pAssembler);
           pAssembler->setEcho(
@@ -237,7 +300,7 @@ DecoderConnection::configure(
         {
           Codecs::StreamingAssembler * pAssembler = new Codecs::StreamingAssembler(
             registry_,
-            *analyzer_,
+            *messageHeaderAnalyzer_,
             builder,
             configuration.waitForCompleteMessage());
           assembler_.reset(pAssembler);
