@@ -12,6 +12,7 @@ project(*) : boost_base, boost_filesystem, boost_system, boost_thread {
   libpaths += $(XERCES_LIBPATH)
   libs += $(XERCES_LIBNAME)
   pch_header = Common/QuickFASTPch.h
+  includes += $(BOOST_ROOT)/include
   pch_source = Common/QuickFASTPch.cpp
   Source_Files {
     Application
@@ -51,6 +52,7 @@ project(*) : boost_base, boost_filesystem, boost_system, boost_thread {
 project(*test) : boost_unit_test_framework, boost_base, boost_filesystem, boost_system, boost_thread {
   exename = QuickFASTTest
   includes += $(QUICKFAST_ROOT)/src
+  includes += $(BOOST_ROOT)/include
 
   specific(prop:microsoft) {
     Release::exeout = $(QUICKFAST_ROOT)/Output/Release
