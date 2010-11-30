@@ -19,6 +19,7 @@
 #include <Communication/RawFileReceiver.h>
 #include <Communication/PCapFileReceiver.h>
 #include <Communication/BufferReceiver.h>
+#include <Communication/AsioService.h>
 
 using namespace QuickFAST;
 using namespace Application;
@@ -329,17 +330,40 @@ DecoderConnection::configure(
   {
   case Application::DecoderConfiguration::MULTICAST_RECEIVER:
     {
-      receiver_.reset(new Communication::MulticastReceiver(
-        configuration.multicastGroupIP(),
-        configuration.listenInterfaceIP(),
-        configuration.portNumber()));
+      if(configuration.privateIOService())
+      {
+        ioService_.reset(new boost::asio::io_service);
+        receiver_.reset(new Communication::MulticastReceiver(
+          *ioService_,
+          configuration.multicastGroupIP(),
+          configuration.listenInterfaceIP(),
+          configuration.portNumber()));
+      }
+      else
+      {
+        receiver_.reset(new Communication::MulticastReceiver(
+          configuration.multicastGroupIP(),
+          configuration.listenInterfaceIP(),
+          configuration.portNumber()));
+      }
       break;
     }
   case Application::DecoderConfiguration::TCP_RECEIVER:
     {
-      receiver_.reset(new Communication::TCPReceiver(
-      configuration.hostName(),
-      configuration.portName()));
+      if(configuration.privateIOService())
+      {
+        ioService_.reset(new boost::asio::io_service);
+          *ioService_,
+          receiver_.reset(new Communication::TCPReceiver(
+          configuration.hostName(),
+          configuration.portName()));
+      }
+      else
+      {
+        receiver_.reset(new Communication::TCPReceiver(
+          configuration.hostName(),
+          configuration.portName()));
+      }
       break;
     }
   case Application::DecoderConfiguration::RAWFILE_RECEIVER:

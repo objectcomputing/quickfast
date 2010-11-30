@@ -297,6 +297,11 @@ InterpretApplication::parseSingleArg(int argc, char * argv[])
         }
       }
     }
+    else if(opt == "-privateioservice")
+    {
+      configuration_.setPrivateIOService(true);
+      consumed = 1;
+    }
     else if(opt == "-testskip" && argc > 1)
     {
       configuration_.setTestSkip(boost::lexical_cast<size_t>(argv[1]));
@@ -383,6 +388,10 @@ InterpretApplication::usage(std::ostream & out) const
   out << "  -threads n           : Number of threads to service incoming messages." << std::endl;
   out << "                         Valid for multicast or tcp" << std::endl;
   out << "                         Must be >= 1.   Default is 1." << std::endl;
+  out << "  -privateioservice    : Create a separate I/O service for the receiver." << std::endl;
+  out << "                         This doesn't do much for this program, but it helps with testing." << std::endl;
+  out << "                         The option would be used when you need multiple independent connections in the" << std::endl;
+  out << "                         same process." << std::endl;
   out << std::endl;
   out << "  -streaming [no]block : Message boundaries do not match packet" << std::endl;
   out << "                         boundaries (default if TCP/IP or raw file)." << std::endl;

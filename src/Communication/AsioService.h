@@ -4,6 +4,7 @@
 //
 #ifndef ASIOSERVICE_H
 #define ASIOSERVICE_H
+#include "AsioService_fwd.h"
 #include <Common/QuickFAST_Export.h>
 // In gcc including asio.hpp in precompiled headers causes problems
 #include <boost/asio.hpp>

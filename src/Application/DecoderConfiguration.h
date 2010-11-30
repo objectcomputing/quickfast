@@ -119,6 +119,12 @@ namespace QuickFAST{
       /// If true, allow presence= attribute on sequence length instruction
       unsigned long nonstandard_;
 
+      /// @brief Allocate a private IO Service
+      ///
+      /// This makes connections independent of each other, but may require more threads to be
+      /// allocated because connections can no longer share threads.
+      bool privateIOService_;
+
       size_t testSkip_;
     public:
       /// @brief Iniitalize to defaults
@@ -144,6 +150,7 @@ namespace QuickFAST{
         , bufferSize_(1400)
         , bufferCount_(2)
         , nonstandard_(0)
+        , privateIOService_(false)
         , testSkip_(0)
       {
       }
@@ -352,6 +359,11 @@ namespace QuickFAST{
       unsigned long nonstandard() const
       {
         return nonstandard_;
+      }
+
+      bool privateIOService() const
+      {
+        return privateIOService_;
       }
 
       size_t testSkip()const
@@ -610,6 +622,11 @@ namespace QuickFAST{
       void setNonstandard(unsigned long nonstandard)
       {
         nonstandard_ = nonstandard;
+      }
+
+      void setPrivateIOService(bool privateIOService)
+      {
+        privateIOService_ = privateIOService;
       }
 
       void setTestSkip(size_t testSkip)

@@ -1,3 +1,19 @@
+Tue Nov 30 15:23:19 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * src/Application/DecoderConfiguration.h:
+        * src/Application/DecoderConnection.h:
+        * src/Application/DecoderConnection.cpp:
+        * src/Communication/AsioService.h:
+        * src/Communication/AsioService_fwd.h
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+          Add the ability to configure a private IOService at the Application
+          level and in the InterpretApplication example program.
+          A connection with a private I/O service is independent of
+          any other connection in the process.  In particular this is needed
+          if a connection will be stopped and/or restarted while other
+          connections continue to operate.
+          The downside to this option is that independent connections cannot
+          share threads so more threads may be needed to service the connections.
+
 Wed Nov 24 15:08:23 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * setup.cmd:
           Handle "Program Files (x86)" [shudder]
