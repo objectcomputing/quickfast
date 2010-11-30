@@ -1,3 +1,19 @@
+Tue Nov 30 20:10:49 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * src/DotNetTests:
+
+        * src/DotNetTests/.svnignore:
+        * src/DotNetTests/DecimalTests.cs:
+        * src/DotNetTests/EncodeDecodeTests.cs:
+        * src/DotNetTests/FieldTests.cs:
+        * src/DotNetTests/MessageTests.cs:
+        * src/DotNetTests/PrerequisitsTests.cs:
+        * src/DotNetTests/Properties:
+
+        * src/DotNetTests/Properties/AssemblyInfo.cs:
+
+        * src/DotNetTests/QuickFASTDotNetTests.mpc:
+        Remove .NET tests.  They need to be completely rewritten.
+
 Tue Nov 30 20:07:43 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * QuickFAST.mwc:
         * QuickFastDotNetTests.nunit:
