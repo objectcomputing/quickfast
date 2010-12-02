@@ -13,7 +13,6 @@ namespace QuickFAST
   /// @brief Product information about QuickFAST
   const char QuickFAST_Product[] = "QuickFAST Version "
     "1.3 "
-    "[prerelease] "
     "\n"
     "Copyright (c) 2009, 2010 Object Computing, Inc.\n"
     "All Rights Reserved\n"

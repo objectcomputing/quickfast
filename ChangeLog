@@ -1,3 +1,9 @@
+Thu Dec  2 16:03:16 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Common/Version.h:
+          Update version number for V1.3.0 release
+
+
 Tue Nov 30 20:10:49 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * src/DotNetTests:
 
