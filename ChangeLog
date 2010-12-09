@@ -1,3 +1,21 @@
+Thu Dec  9 20:50:00 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
+        * src/Common/Version.h:
+          set preliminary 1.3.1
+
+        * src/Examples/Examples/CommandArgParser.h:
+        * src/Examples/Examples/CommandArgParser.cpp:
+          The -options command line option reads additional options from a file.
+
+        * src/Examples/Examples/ConsoleLock.h:
+        * src/Examples/Examples/ConsoleLock.cpp:
+          "Global" lock to avoid mixing console writes.
+
+        * src/Application/DecoderConfiguration.h:
+        * src/Examples/Examples/MessageInterpreter.cpp:
+        * src/Examples/InterpretApplication/InterpretApplication.h:
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+          Support multiple connections.
+
 Thu Dec  2 16:03:16 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Common/Version.h:

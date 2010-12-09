@@ -42,8 +42,27 @@ namespace QuickFAST{
 
     private:
       CommandArgParser commandArgParser_;
-      Application::DecoderConfiguration configuration_;
-      Application::DecoderConnection connection_;
+      typedef boost::shared_ptr<Application::DecoderConfiguration> ConfigurationPtr;
+      typedef std::vector<ConfigurationPtr> Configurations;
+      typedef boost::shared_ptr<Application::DecoderConnection> ConnectionPtr;
+      typedef std::vector<ConnectionPtr> Connections;
+      typedef std::vector<Messages::ValueMessageBuilderPtr> Builders;
+
+      // the currently active configuration
+      ConfigurationPtr configuration_;
+
+      // the default configuration
+      ConfigurationPtr defaultConfiguration_;
+
+      // a collection of all known configurations
+      Configurations configurations_;
+
+      // the connections corresponding to configurations_;
+      Connections connections_;
+
+      // the builders attached to the connections
+      Builders builders_;
+
       std::string bufferFilename_;
       bool console_;
       bool fixOutput_;

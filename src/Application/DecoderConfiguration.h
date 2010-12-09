@@ -37,95 +37,6 @@ namespace QuickFAST{
         UNSPECIFIED_RECEIVER = DecoderConfigurationEnums::UNSPECIFIED_RECEIVER
       };
 
-    private:
-      /// @brief Process the first "head" messages then stop.
-      size_t head_;
-      /// @brief Reset the decoder at the start of every message and/or packet
-      bool reset_;
-      /// @brief Use strict decoding rules
-      bool strict_;
-
-      /// @brief The name of the template file
-      std::string templateFileName_;
-      /// @brief The name of a data file containing Raw FAST records
-      std::string fastFileName_;
-      /// @brief The name of a file to which verbose output will be written.
-      std::string verboseFileName_;
-      /// @brief The name of a file containing PCap captured, FAST encoded records
-      std::string pcapFileName_;
-      /// @brief The name of a file to which echo output will be written
-      std::string echoFileName_;
-      /// @brief The type of data to be echoed (hex/raw)
-      Application::DecoderConfigurationEnums::EchoType echoType_;
-      /// @brief Echo Message Boundaries?
-      bool echoMessage_;
-      /// @brief Echo Field Boundaries?
-      bool echoField_;
-
-      /// @brief What word size is used in the PCAP file.
-      size_t pcapWordSize_;
-
-      /// @brief What type of header is expected for each packet
-      HeaderType packetHeaderType_;
-
-      size_t packetHeaderMessageSizeBytes_;
-      /// @brief For FIXED_HEADER, is the size field big-endian?
-      bool packetHeaderBigEndian_;
-      /// @brief For FIXED_HEADER byte count before size; for FAST_HEADER field count before size
-      size_t packetHeaderPrefixCount_;
-      /// @brief For FIXED_HEADER byte count after size; for FAST_HEADER field count after size
-      size_t packetHeaderSuffixCount_;
-
-      /// @brief What type of header is expected for each message
-      HeaderType messageHeaderType_;
-      size_t messageHeaderMessageSizeBytes_;
-      /// @brief For FIXED_HEADER, is the size field big-endian?
-      bool messageHeaderBigEndian_;
-      /// @brief For FIXED_HEADER byte count before size; for FAST_HEADER field count before size
-      size_t messageHeaderPrefixCount_;
-      /// @brief For FIXED_HEADER byte count after size; for FAST_HEADER field count after size
-      size_t messageHeaderSuffixCount_;
-
-      /// @brief For FIXED_HEADER, how many bytes in the header size field.
-      /// @brief What type of assembler processes incoming buffers
-      AssemblerType assemblerType_;
-
-      /// @brief Should StreamingAssembler wait for a complete message
-      /// before decoding starts.
-      bool waitForCompleteMessage_;
-
-      /// @brief What type of receiver supplies incoming buffers.
-      ReceiverType receiverType_;
-
-      /// @brief For MulticastReceiver the dotted IP of the multicast group
-      std::string multicastGroupIP_;
-      /// @brief For MulticastRecevier the port number of the multicast group
-      unsigned short portNumber_;
-      /// @brief For MulticastReceiver selects the NIC on which to subscribe/listen
-      std::string listenInterfaceIP_;
-      /// @brief For TCPIPReceiver, Host name or IP
-      std::string hostName_;
-      /// @brief For TCPIPReceiver, port name or number (as text)
-      std::string portName_;
-      /// @brief Size of a communication buffer.
-      /// For MessagePerPacketAssembler, must equal or exceed maximum message size.
-      size_t bufferSize_;
-      /// @brief How many communication buffers to allocate.
-      /// For StreamingAssembler with waitForCompleteMessage_ specified,
-      /// bufferCount_ * bufferSize_ must equal or exceed maximum message size.
-      size_t bufferCount_;
-
-      /// @brief Allow nonstandard presence attribute on length instruction
-      /// If true, allow presence= attribute on sequence length instruction
-      unsigned long nonstandard_;
-
-      /// @brief Allocate a private IO Service
-      ///
-      /// This makes connections independent of each other, but may require more threads to be
-      /// allocated because connections can no longer share threads.
-      bool privateIOService_;
-
-      size_t testSkip_;
     public:
       /// @brief Iniitalize to defaults
       DecoderConfiguration()
@@ -155,6 +66,46 @@ namespace QuickFAST{
       {
       }
 
+      // copy consructor
+      DecoderConfiguration(const DecoderConfiguration & rhs)
+        : head_(rhs.head_)
+        , reset_(rhs.reset_)
+        , strict_(rhs.strict_)
+        , templateFileName_(rhs.templateFileName_)
+        , fastFileName_(rhs.fastFileName_)
+        , verboseFileName_(rhs.verboseFileName_)
+        , pcapFileName_(rhs.pcapFileName_)
+        , echoFileName_(rhs.echoFileName_)
+        , echoType_(rhs.echoType_)
+        , echoMessage_(rhs.echoMessage_)
+        , echoField_(rhs.echoField_)
+        , pcapWordSize_(rhs.pcapWordSize_)
+        , packetHeaderType_(rhs.packetHeaderType_)
+        , packetHeaderMessageSizeBytes_(rhs.packetHeaderMessageSizeBytes_)
+        , packetHeaderBigEndian_(rhs.packetHeaderBigEndian_)
+        , packetHeaderPrefixCount_(rhs.packetHeaderPrefixCount_)
+        , packetHeaderSuffixCount_(rhs.packetHeaderSuffixCount_)
+        , messageHeaderType_(rhs.messageHeaderType_)
+        , messageHeaderMessageSizeBytes_(rhs.messageHeaderMessageSizeBytes_)
+        , messageHeaderBigEndian_(rhs.messageHeaderBigEndian_)
+        , messageHeaderPrefixCount_(rhs.messageHeaderPrefixCount_)
+        , messageHeaderSuffixCount_(rhs.messageHeaderSuffixCount_)
+        , assemblerType_(rhs.assemblerType_)
+        , waitForCompleteMessage_(rhs.waitForCompleteMessage_)
+        , receiverType_(rhs.receiverType_)
+        , multicastGroupIP_(rhs.multicastGroupIP_)
+        , portNumber_(rhs.portNumber_)
+        , listenInterfaceIP_(rhs.listenInterfaceIP_)
+        , hostName_(rhs.hostName_)
+        , portName_(rhs.portName_)
+        , bufferSize_(rhs.bufferSize_)
+        , bufferCount_(rhs.bufferCount_)
+        , nonstandard_(rhs.nonstandard_)
+        , privateIOService_(rhs.privateIOService_)
+        , testSkip_(rhs.testSkip_)
+        , extras_(rhs.extras_)
+      {
+      }
 
       /// @brief Process the first "head" messages then stop.
       size_t head()const
@@ -633,6 +584,113 @@ namespace QuickFAST{
       {
         testSkip_ = testSkip;
       }
+
+      void setExtra(const std::string & name, const std::string value)
+      {
+        extras_[name] = value;
+      }
+
+      bool getExtra(const std::string & name, std::string & value)
+      {
+        if(extras_.find(name) != extras_.end())
+        {
+          value = extras_[name];
+          return true;
+        }
+        return false;
+      }
+    private:
+      /// @brief Process the first "head" messages then stop.
+      size_t head_;
+      /// @brief Reset the decoder at the start of every message and/or packet
+      bool reset_;
+      /// @brief Use strict decoding rules
+      bool strict_;
+
+      /// @brief The name of the template file
+      std::string templateFileName_;
+      /// @brief The name of a data file containing Raw FAST records
+      std::string fastFileName_;
+      /// @brief The name of a file to which verbose output will be written.
+      std::string verboseFileName_;
+      /// @brief The name of a file containing PCap captured, FAST encoded records
+      std::string pcapFileName_;
+      /// @brief The name of a file to which echo output will be written
+      std::string echoFileName_;
+      /// @brief The type of data to be echoed (hex/raw)
+      Application::DecoderConfigurationEnums::EchoType echoType_;
+      /// @brief Echo Message Boundaries?
+      bool echoMessage_;
+      /// @brief Echo Field Boundaries?
+      bool echoField_;
+
+      /// @brief What word size is used in the PCAP file.
+      size_t pcapWordSize_;
+
+      /// @brief What type of header is expected for each packet
+      HeaderType packetHeaderType_;
+
+      size_t packetHeaderMessageSizeBytes_;
+      /// @brief For FIXED_HEADER, is the size field big-endian?
+      bool packetHeaderBigEndian_;
+      /// @brief For FIXED_HEADER byte count before size; for FAST_HEADER field count before size
+      size_t packetHeaderPrefixCount_;
+      /// @brief For FIXED_HEADER byte count after size; for FAST_HEADER field count after size
+      size_t packetHeaderSuffixCount_;
+
+      /// @brief What type of header is expected for each message
+      HeaderType messageHeaderType_;
+      size_t messageHeaderMessageSizeBytes_;
+      /// @brief For FIXED_HEADER, is the size field big-endian?
+      bool messageHeaderBigEndian_;
+      /// @brief For FIXED_HEADER byte count before size; for FAST_HEADER field count before size
+      size_t messageHeaderPrefixCount_;
+      /// @brief For FIXED_HEADER byte count after size; for FAST_HEADER field count after size
+      size_t messageHeaderSuffixCount_;
+
+      /// @brief For FIXED_HEADER, how many bytes in the header size field.
+      /// @brief What type of assembler processes incoming buffers
+      AssemblerType assemblerType_;
+
+      /// @brief Should StreamingAssembler wait for a complete message
+      /// before decoding starts.
+      bool waitForCompleteMessage_;
+
+      /// @brief What type of receiver supplies incoming buffers.
+      ReceiverType receiverType_;
+
+      /// @brief For MulticastReceiver the dotted IP of the multicast group
+      std::string multicastGroupIP_;
+      /// @brief For MulticastRecevier the port number of the multicast group
+      unsigned short portNumber_;
+      /// @brief For MulticastReceiver selects the NIC on which to subscribe/listen
+      std::string listenInterfaceIP_;
+      /// @brief For TCPIPReceiver, Host name or IP
+      std::string hostName_;
+      /// @brief For TCPIPReceiver, port name or number (as text)
+      std::string portName_;
+      /// @brief Size of a communication buffer.
+      /// For MessagePerPacketAssembler, must equal or exceed maximum message size.
+      size_t bufferSize_;
+      /// @brief How many communication buffers to allocate.
+      /// For StreamingAssembler with waitForCompleteMessage_ specified,
+      /// bufferCount_ * bufferSize_ must equal or exceed maximum message size.
+      size_t bufferCount_;
+
+      /// @brief Allow nonstandard presence attribute on length instruction
+      /// If true, allow presence= attribute on sequence length instruction
+      unsigned long nonstandard_;
+
+      /// @brief Allocate a private IO Service
+      ///
+      /// This makes connections independent of each other, but may require more threads to be
+      /// allocated because connections can no longer share threads.
+      bool privateIOService_;
+
+      size_t testSkip_;
+
+      typedef std::map<std::string, std::string> NameValuePairs;
+      NameValuePairs extras_;
     };
   }
 }

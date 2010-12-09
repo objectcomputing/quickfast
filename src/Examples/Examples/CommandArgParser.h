@@ -30,15 +30,23 @@ namespace QuickFAST
     ///
     /// @param argc is a count of the args
     /// @param argv is an array c-style strings (i.e. char*'s null terminated)
+    /// @param start is the offset to the first argument to parse -- default skips the command name
     /// @return true if parsing was successful; false if an error was detected and reported.
-    bool parse(int argc,  char * argv[]);
+    bool parse(int argc,  char * argv[], int start = 1);
 
     /// @brief display a usage message
     /// @param out is the stream to which the message will be written.
     void usage(std::ostream & out) const;
 
+    /// @todo DOxygen
+    bool tokenizeAndParseLine(char * buffer, size_t bytesRead);
+    /// @todo DOxygen
+    bool parseFile(const char * filename);
+
   private:
-    bool parseArgs(int argc, char * argv[]);
+
+
+    bool parseArgs(int argc, char * argv[], int start);
     int parseSingleArg(int argc, char * argv[]);
 
   private:

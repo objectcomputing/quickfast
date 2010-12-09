@@ -5,6 +5,7 @@
 
 #include <Examples/ExamplesPch.h>
 #include "MessageInterpreter.h"
+#include <Examples/ConsoleLock.h>
 
 using namespace QuickFAST;
 using namespace Examples;
@@ -36,6 +37,7 @@ MessageInterpreter::logMessage(unsigned short level, const std::string & logMess
 {
   if(level <= logLevel_)
   {
+    boost::mutex::scoped_lock lock(ConsoleLock::consoleMutex);
     std::cerr << logMessage << std::endl;
   }
   return true;
@@ -45,6 +47,7 @@ MessageInterpreter::logMessage(unsigned short level, const std::string & logMess
 bool
 MessageInterpreter::reportDecodingError(const std::string & errorMessage)
 {
+  boost::mutex::scoped_lock lock(ConsoleLock::consoleMutex);
   std::cerr << "Decoding error: " << errorMessage << std::endl;
   return false;
 }
@@ -52,6 +55,7 @@ MessageInterpreter::reportDecodingError(const std::string & errorMessage)
 bool
 MessageInterpreter::reportCommunicationError(const std::string & errorMessage)
 {
+  boost::mutex::scoped_lock lock(ConsoleLock::consoleMutex);
   std::cerr << "Communication error: " << errorMessage << std::endl;
   return false;
 }
@@ -65,6 +69,7 @@ MessageInterpreter::decodingStarted()
 void
 MessageInterpreter::decodingStopped()
 {
+  boost::mutex::scoped_lock lock(ConsoleLock::consoleMutex);
   out_ << "End of data" << std::endl;
 }
 
@@ -73,11 +78,12 @@ bool
 MessageInterpreter::consumeMessage(Messages::Message & message)
 {
   recordCount_ += 1;
-  out_ << "Record #" << recordCount_ << ' ' << std::flush;
   if(!silent_)
   {
+    out_ << "Record #" << recordCount_ << ' ' << std::flush;
+    boost::mutex::scoped_lock lock(ConsoleLock::consoleMutex);
     formatter_.formatMessage(message);
+    out_ << std::endl;
   }
-  out_ << std::endl;
   return true;
 }
