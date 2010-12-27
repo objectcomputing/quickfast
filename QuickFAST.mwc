@@ -11,7 +11,7 @@ workspace(*) {
     src/DotNet/QuickFASTDotNet.mpc
   
     //C# Visual Studio Projects
-    specific {
+    csharp {
       cmdline += -language csharp
       src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.mpc
       src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.mpc

@@ -1,3 +1,11 @@
+Mon Dec 27 17:14:38 UTC 2010  Adam Mitz  <mitza@ociweb.com>
+
+        * QuickFAST.mwc:
+
+          The keyword "specific" is now treated as a keyword in mwc files as
+          well as mpc files.  Changed the name of the C# scope to avoid this
+          naming conflict.  The scope's name is otherwise insignificant.
+
 Thu Dec  9 20:50:00 UTC 2010  Dale Wilson  <wilsond@ociweb.com>
         * src/Common/Version.h:
           set preliminary 1.3.1
@@ -9920,3 +9928,7 @@ Mon Dec  1 16:20:14 UTC 2008  Dale Wilson  <wilsond@ociweb.com>
 
         * ChangeLog:
         Setting up new project in SVN
+
+Local Variables:
+indent-tabs-mode: nil
+End:
