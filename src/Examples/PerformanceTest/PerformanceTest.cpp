@@ -215,8 +215,6 @@ PerformanceTest::applyArgs()
 int
 PerformanceTest::run()
 {
-  // There are a lot of shortcuts in this file right now.
-  // It needs a real command line argument parser
   try
   {
     std::cout << "Parsing templates" << std::endl;

@@ -46,18 +46,14 @@ CommandArgParser::parseArgs(int argc, char * argv[], int start)
     if(consumed == 0)
     {
       std::string arg(argv[argp]);
-      std::cout << "checking for -options: " << arg << '[' << argp << '/' << argc << ']' << std::endl;
       if(arg == "-options" && argp + 1 < argc)
       {
-        std::cout << "-options found.  Parsing file: " << argv[argp + 1] << std::endl;
         if(parseFile(argv[argp + 1]))
         {
-          std::cout << "Parse file: " << argv[argp + 1] << " succeeded"<< std::endl;
           consumed = 2;
         }
         else
         {
-        std::cout << "Parse file: " << argv[argp + 1] << " failed"<< std::endl;
           // parseFile will have reported the problem
           return false;
         }
