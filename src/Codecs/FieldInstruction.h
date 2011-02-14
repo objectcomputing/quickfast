@@ -671,7 +671,7 @@ namespace QuickFAST{
       bool ignoreOverflow)
     {
       PROFILE_POINT("decodeSignedInteger");
-      uchar byte;
+      uchar byte = 0;
       if(!source.getByte(byte))
       {
         context.reportFatal("[ERR U03]", "Unexpected end of data decoding integer", name);
@@ -739,7 +739,7 @@ namespace QuickFAST{
       bool ignoreOverflow)
     {
       PROFILE_POINT("decodeUnsignedInteger");
-      uchar byte;
+      uchar byte = 0;
       if(!source.getByte(byte))
       {
         context.reportFatal("[ERR U03]", "Unexpected end of data decoding unsigned integer", name);

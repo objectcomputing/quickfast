@@ -152,7 +152,7 @@ DataSource::beginField(const std::string & name)
           unsignedInt += (byte & 0x7F);
         }
         (*echo_) << "\": " << signedInt;
-        if(signedInt != unsignedInt)
+        if(signedInt < 0)
         {
           (*echo_) << " (" << unsignedInt << ')';
         }

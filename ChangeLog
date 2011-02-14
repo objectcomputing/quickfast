@@ -1,3 +1,18 @@
+Mon Feb 14 20:31:54 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/DataSource.cpp:
+        * src/Codecs/FastEncodedHeaderAnalyzer.cpp:
+        * src/Codecs/FieldInstruction.h:
+        * src/Codecs/FieldInstruction.cpp:
+        * src/Codecs/FieldInstructionBlob.cpp:
+        * src/Codecs/FieldInstructionDecimal.cpp:
+        * src/Codecs/FieldInstructionInteger.h:
+        * src/Codecs/FixedSizeHeaderAnalyzer.cpp:
+        * src/Codecs/PresenceMap.cpp:
+        * src/Codecs/SynchronousDecoder.h:
+        * src/Messages/SingleValueBuilder.h:
+        Eliminate some build warnings on Linux.
+
+
 Fri Jan  7 19:19:32 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/DataSourceBufferedStream.h:

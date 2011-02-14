@@ -169,7 +169,7 @@ PresenceMap::decode(Codecs::DataSource & source)
 {
   reset();
 
-  uchar byte;
+  uchar byte = 0;
   if(!source.getByte(byte))
   {
     throw EncodingError("[ERR U03] EOF while decoding presence map.");

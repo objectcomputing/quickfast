@@ -52,7 +52,7 @@ FixedSizeHeaderAnalyzer::analyzeHeader(DataSource & source, size_t & blockSize, 
       {
         while(byteCount_ < prefixBytes_)
         {
-          uchar next;
+          uchar next = 0;
           if(!source.getByte(next))
           {
             return false;
@@ -68,7 +68,7 @@ FixedSizeHeaderAnalyzer::analyzeHeader(DataSource & source, size_t & blockSize, 
       {
         while(byteCount_ < sizeBytes_)
         {
-          uchar next;
+          uchar next = 0;
           if(!source.getByte(next))
           {
             return false;
@@ -93,7 +93,7 @@ FixedSizeHeaderAnalyzer::analyzeHeader(DataSource & source, size_t & blockSize, 
       {
         while(byteCount_ < suffixBytes_)
         {
-          uchar next;
+          uchar next = 0;
           if(!source.getByte(next))
           {
             return false;

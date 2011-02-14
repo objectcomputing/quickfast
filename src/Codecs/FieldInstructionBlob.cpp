@@ -17,8 +17,8 @@ FieldInstructionBlob::FieldInstructionBlob(
   ValueType::Type type,
   const std::string & name,
   const std::string & fieldNamespace)
-  : type_(type)
-  , FieldInstruction(name, fieldNamespace)
+  : FieldInstruction(name, fieldNamespace)
+  , type_(type)
 {
 }
 

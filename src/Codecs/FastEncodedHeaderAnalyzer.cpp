@@ -17,9 +17,9 @@ FastEncodedHeaderAnalyzer::FastEncodedHeaderAnalyzer(
 : prefixCount_(prefix)
 , suffixCount_(suffix)
 , state_(ParsingIdle)
+, hasBlockSize_(hasBlockSize)
 , blockSize_(0)
 , fieldCount_(0)
-, hasBlockSize_(hasBlockSize)
 {
 }
 
@@ -46,7 +46,7 @@ FastEncodedHeaderAnalyzer::analyzeHeader(DataSource & source, size_t & blockSize
       {
         while(fieldCount_ < prefixCount_)
         {
-          uchar next;
+          uchar next = 0;
           if(!source.getByte(next))
           {
             return false;
@@ -69,7 +69,7 @@ FastEncodedHeaderAnalyzer::analyzeHeader(DataSource & source, size_t & blockSize
         }
         while(state_ == ParsingBlockSize)
         {
-          uchar next;
+          uchar next = 0;
           if(!source.getByte(next))
           {
             return false;
@@ -88,7 +88,7 @@ FastEncodedHeaderAnalyzer::analyzeHeader(DataSource & source, size_t & blockSize
       {
         while(fieldCount_ < suffixCount_)
         {
-          uchar next;
+          uchar next = 0;
           if(!source.getByte(next))
           {
             return false;

@@ -244,7 +244,7 @@ FieldInstruction::decodeAscii(
   WorkingBuffer & workingBuffer)
 {
   workingBuffer.clear(false);
-  uchar byte;
+  uchar byte = 0;
   if(!source.getByte(byte))
   {
     return false;

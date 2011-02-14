@@ -267,7 +267,7 @@ FieldInstructionDecimal::decodeDelta(
   decodeSignedInteger(source, decoder, mantissaDelta, identity_->name(), true);
 
   Decimal value(typedValue_);
-  Context::DictionaryStatus previousStatus = fieldOp_->getDictionaryValue(decoder, value);
+  (void)fieldOp_->getDictionaryValue(decoder, value);
   value.setExponent(exponent_t(value.getExponent() + exponentDelta));
   value.setMantissa(mantissa_t(value.getMantissa() + mantissaDelta));
   accessor.addValue(

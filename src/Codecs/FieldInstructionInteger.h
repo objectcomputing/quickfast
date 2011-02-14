@@ -191,7 +191,7 @@ namespace QuickFAST{
         {
           int64 v = boost::lexical_cast<int64>(value);
           typedValue_ = INTEGER_TYPE(v);
-          if(v != typedValue_)
+          if(v != int64(typedValue_))
           {
             throw QuickFAST::TemplateDefinitionError("[ERR D1] Initial value overflow");
           }
@@ -201,7 +201,7 @@ namespace QuickFAST{
         {
           uint64 v = boost::lexical_cast<uint64>(value);
           typedValue_ = INTEGER_TYPE(v);
-          if(v != typedValue_)
+          if(v != uint64(typedValue_))
           {
             throw QuickFAST::TemplateDefinitionError("[ERR D1] Initial value overflow");
           }

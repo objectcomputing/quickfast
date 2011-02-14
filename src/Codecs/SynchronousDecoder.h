@@ -109,7 +109,6 @@ namespace QuickFAST{
         DataSource & source,
         Messages::ValueMessageBuilder & builder)
       {
-        bool more = true;
         while(source.messageAvailable() > 0 && messageCount_ < messageCountLimit_)
         {
           if(resetOnMessage_)

@@ -285,7 +285,7 @@ namespace QuickFAST
     inline DATATYPE
     SingleValueBuilder<DATATYPE>::value()const
     {
-      DATATYPE result;
+      DATATYPE result = DATATYPE();
       value_.getValue(result);
       return result;
     }
