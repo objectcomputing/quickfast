@@ -209,36 +209,6 @@ DecoderConnection::configure(
     }
   }
 
-  switch(configuration.messageHeaderType())
-  {
-  case Application::DecoderConfiguration::NO_HEADER:
-    {
-      Codecs::NoHeaderAnalyzer * analyzer = new Codecs::NoHeaderAnalyzer;
-      analyzer->setTestSkip(configuration.testSkip());
-      messageHeaderAnalyzer_.reset(analyzer);
-      break;
-    }
-  case Application::DecoderConfiguration::FIXED_HEADER:
-    {
-      Codecs::FixedSizeHeaderAnalyzer * fixedSizeHeaderAnalyzer = new Codecs::FixedSizeHeaderAnalyzer(
-        configuration.messageHeaderMessageSizeBytes(),
-        configuration.messageHeaderBigEndian(),
-        configuration.messageHeaderPrefixCount(),
-        configuration.messageHeaderSuffixCount());
-      fixedSizeHeaderAnalyzer->setTestSkip(configuration.testSkip());
-      messageHeaderAnalyzer_.reset(fixedSizeHeaderAnalyzer);
-      break;
-    }
-  case Application::DecoderConfiguration::FAST_HEADER:
-    {
-      messageHeaderAnalyzer_.reset(new Codecs::FastEncodedHeaderAnalyzer(
-        configuration.messageHeaderPrefixCount(),
-        configuration.messageHeaderSuffixCount(),
-        configuration.messageHeaderMessageSizeBytes() != 0)); // true if header contains message size
-      break;
-    }
-  }
-
   switch(configuration.assemblerType())
   {
   case Application::DecoderConfiguration::MESSAGE_PER_PACKET_ASSEMBLER:

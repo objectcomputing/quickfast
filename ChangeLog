@@ -1,3 +1,9 @@
+Mon Feb 14 21:40:13 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Application/DecoderConfiguration.h:
+        * src/Application/DecoderConnection.cpp:
+        Uninitialized variables and duplicated (copy/paste) code.
+        Issue #77
+
 Mon Feb 14 20:31:54 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/DataSource.cpp:
         * src/Codecs/FastEncodedHeaderAnalyzer.cpp:
