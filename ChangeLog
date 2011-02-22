@@ -1,3 +1,7 @@
+Tue Feb 22 15:16:29 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Communication/PCapReader.cpp:
+        Issue #69.   The PCapReader was including the packet checksum in the size of the payload.
+
 Mon Feb 14 21:40:13 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Application/DecoderConfiguration.h:
         * src/Application/DecoderConnection.cpp:

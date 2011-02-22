@@ -204,6 +204,9 @@ namespace
 
   static const uint32 nativeMagic = 0xa1b2c3d4;
   static const uint32 swappedMagic = 0xd4c3b2a1;
+
+  // Packet checksum
+  typedef uint32 checksum_t;
 #pragma pack(pop)
 
 }
@@ -357,7 +360,7 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
           {
             // HACK!look for the IP protocol flag to mark the end of the the link layer header
             static unsigned short IPProtocol = 0x0008;
-            while(!found && datalen > 2)
+            while(!found && datalen - sizeof(checksum_t) > 2)
             {
               unsigned short protocol = *(unsigned short *)(buffer_.get() + pos_);
               if(swap(protocol) == IPProtocol)
@@ -384,10 +387,11 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
           datalen -= ipLen;
           pos_ += sizeof(udp_header);
           datalen -= sizeof(udp_header);
-          if(datalen > 0)
+          // a 4 byte checksum appears at the end of the packet.  It is not part of the payload.
+          if(datalen > sizeof(checksum_t))
           {
             buffer = buffer_.get() + pos_;
-            size = datalen;
+            size = datalen - sizeof(checksum_t);
             if(verbose_)
             {
               std::cout << "PCapReader: " << headerPos << ": " << pos_ << ' ' << datalen
