@@ -63,7 +63,15 @@ DecoderConnection::configure(
 {
   if(!configuration.fastFileName().empty())
   {
-    fastFile_ = new std::ifstream(configuration.fastFileName().c_str(), binaryMode);
+    if(configuration.fastFileName() == "cin")
+    {
+      // Warning this only works well on *nix because cin is opened in ascii mode on Windows
+      fastFile_ = &std::cin;
+    }
+    else
+    {
+      fastFile_ = new std::ifstream(configuration.fastFileName().c_str(), binaryMode);
+    }
     if(!fastFile_->good())
     {
       std::stringstream msg;

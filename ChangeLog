@@ -1,3 +1,11 @@
+Wed Mar 30 16:05:08 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Application/DecoderConnection.cpp:
+        Accept FAST data from std::cin.  This does not work on
+        Windows because the data is binary.
+        Any application using Application::DataConnection can
+        invoke this by using a file name of "cin" for the FAST data.
+
 Tue Feb 22 15:16:29 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Communication/PCapReader.cpp:
         Issue #69.   The PCapReader was including the packet checksum in the size of the payload.
