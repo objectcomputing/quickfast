@@ -1,3 +1,11 @@
+Thu Mar 31 18:38:13 UTC 2011  Dale Wilson  <wilsond@ociweb.com>        * src/Common/Logger.h:
+        Change definition of log levels from enum to unsigned short.
+        That way the enum values are sure to match the time of the arguments.
+
+        * src/Communication/PCapReader.cpp:
+        Fix a bug encountered when reading 64 bit headers on a 32 bit system.
+        Addresses Issue #80
+
 Thu Mar 31 14:21:09 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/DataSource.h:
         add optimization to allow accessing multiple bytes

@@ -321,7 +321,7 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
       else if(usetv64_)
       {
         pcap_pkthdr64 * packetHeader = reinterpret_cast<pcap_pkthdr64 *>(buffer_.get() + pos_);
-        pos_ += sizeof(pcap_pkthdr32);
+        pos_ += sizeof(pcap_pkthdr64);
         datalen = swap(packetHeader->caplen);
         truncate = (packetHeader->caplen != packetHeader->len);
       }
