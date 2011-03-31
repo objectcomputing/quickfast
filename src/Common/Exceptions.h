@@ -94,5 +94,17 @@ namespace QuickFAST{
     {
     }
   };
+
+  /// @brief Exception to be thrown when an internal logic error is detected
+  class /* QuickFAST_Export */ InternalError : public std::logic_error{
+  public:
+    /// @brief Construct explaining what's wrong.
+    /// @param errorType the type of problem. (Coding Error, Internal Error, etc.)
+    /// @param description the actual problem.
+    InternalError(const char * errorType, const char * description)
+      : std::logic_error((std::string(errorType) + description).c_str())
+    {
+    }
+  };
 }
 #endif // EXCEPTIONS_H

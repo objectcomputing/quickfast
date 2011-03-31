@@ -61,6 +61,12 @@ namespace QuickFAST
         return filling;
       }
 
+      // Implement Receiver method
+      virtual void resetService()
+      {
+        return;
+      }
+
     private:
       std::istream & stream_;
       bool needService_;

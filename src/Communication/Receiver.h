@@ -153,6 +153,21 @@ namespace QuickFAST
       /// If stop() has not been called, this will block "forever".
       virtual void joinThreads() = 0;
 
+      /// @brief Reuse AsioService after calling stop and joinThreads
+      ///
+      /// The sequence of calls should be:
+      /// while(whatever)
+      /// {
+      ///   runThreads
+      ///   stop
+      ///   joinThreads
+      ///    resetService
+      /// }
+      /// Note that if the AsioService is being shared this will reset "everybody"
+      /// if you need to shut down/restart specific parts of the system, arrange to use
+      /// separate AsioService (see the AsyncReceiver constructor that takes an AsioService as an argument.
+      virtual void resetService() = 0;
+
       /////////////////////////////
       // Assembler support routines
 

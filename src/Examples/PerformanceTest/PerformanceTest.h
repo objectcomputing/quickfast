@@ -52,6 +52,8 @@ namespace QuickFAST{
       size_t head_;
       size_t count_;
       size_t interpret_;
+      size_t headerBytes_;
+      bool echo_;
 
       Codecs::XMLTemplateParser parser_;
       CommandArgParser commandArgParser_;

@@ -72,6 +72,11 @@ namespace QuickFAST
         return result;
       }
 
+      // Implement Receiver method
+      virtual void resetService()
+      {
+        return;
+      }
     private:
       std::string filename_;
       size_t wordSize_;

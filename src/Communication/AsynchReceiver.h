@@ -50,6 +50,11 @@ namespace QuickFAST
         ioService_.joinThreads();
       }
 
+      virtual void resetService()
+      {
+        ioService_.resetService();
+      }
+
       virtual void run()
       {
         ioService_.run();

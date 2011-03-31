@@ -29,6 +29,8 @@ PerformanceTest::PerformanceTest()
   , head_(0)
   , count_(1)
   , interpret_(false)
+  , headerBytes_(0)
+  , echo_(false)
 {
 }
 
@@ -100,6 +102,16 @@ PerformanceTest::parseSingleArg(int argc, char * argv[])
       count_ = boost::lexical_cast<size_t>(argv[1]);
       consumed = 2;
     }
+    else if(opt == "-hfix" && argc > 1)
+    {
+      headerBytes_ = boost::lexical_cast<size_t>(argv[1]);
+      consumed = 2;
+    }
+    else if(opt == "-e")
+    {
+      echo_ = true;
+      consumed = 1;
+    }
   }
   catch (std::exception & ex)
   {
@@ -122,6 +134,10 @@ PerformanceTest::usage(std::ostream & out) const
   out << "  -r          : Toggle 'reset decoder on every message' (default false)." << std::endl;
   out << "  -null       : Use null message to receive fields." << std::endl;
   out << "  -s          : Toggle 'strict decoding rules' (default true)." << std::endl;
+  out << "  -hfix n     : Skip n byte header before each message" << std::endl;
+  out << std::endl;
+  out << " THE FOLLOWING INVALIDATES THE PERFORMANCE TEST NUMBERS, OF COURSE." << std::endl;
+  out << "  -e          : Echo input to standard out in hex; include message and field boundaries (for debugging)" << std::endl;
 }
 
 bool
@@ -242,11 +258,17 @@ PerformanceTest::run()
       }
       fastFile_.seekg(0, std::ios::beg);
       Codecs::DataSourceBufferedStream source(fastFile_);
+      if(echo_)
+      {
+        source.setEcho(std::cout, Codecs::DataSource::HEX, true, true);
+      }
 
       PerformanceBuilder builder;
       Codecs::SynchronousDecoder decoder(templateRegistry);
       decoder.setResetOnMessage(resetOnMessage_);
       decoder.setStrict(strict_);
+      decoder.setLimit(head_);
+      decoder.setHeaderBytes(headerBytes_);
       StopWatch decodeTimer;
       {
         PROFILE_POINT("Main");

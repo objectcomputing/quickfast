@@ -10,6 +10,7 @@
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
 #include <Common/StringBuffer.h>
+#include <Common/Exceptions.h>
 #include <Application/DecoderConfiguration_fwd.h>
 namespace QuickFAST{
   namespace Codecs{
@@ -52,6 +53,33 @@ namespace QuickFAST{
       /// @brief return -1 if end of data (forever);
       ///        otherwise return n >= 0 for the number of bytes readily available
       virtual int bytesAvailable();
+
+      inline
+      bool hasContiguous(size_t needed, const uchar *& buffer)
+      {
+        buffer = buffer_ + position_;
+        return (position_ + needed < size_);
+      }
+      inline
+      void skipContiguous(size_t used)
+      {
+        if(echo_)
+        {
+          size_t end = position_ + used;
+          while (position_ < end)
+          {
+            doEcho(position_ < size_, buffer_[position_++]);
+          }
+        }
+        else
+        {
+          position_ += used;
+        }
+        if(position_ > size_)
+        {
+          throw InternalError("[ERR I90]", "Too many contiguous bytes read from DataSource.");
+        }
+      }
 
       /// @brief Get the next byte.
       ///

@@ -1,3 +1,36 @@
+Thu Mar 31 14:21:09 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/DataSource.h:
+        add optimization to allow accessing multiple bytes
+        with one call as long as they are contiguous in the buffer.
+
+        * src/Codecs/FieldInstruction.h:
+        Improved error messages to indicate the type of feild being decoded.
+        Work-in-progress (disabled for now): specilization of the decode*Integer methods
+        for specific integer sizes.  Not working, yet, and needs profiling after
+        it does work to be sure it actually helps.
+
+        * src/Codecs/SynchronousDecoder.h:
+        * src/Examples/PerformanceTest/PerformanceTest.h:
+        * src/Examples/PerformanceTest/PerformanceTest.cpp:
+        Add the ability to handle messages with non-FAST headers
+
+        * src/Common/Exceptions.h:
+        Add new exception to be thrown when an internal logic error is detected
+
+
+        * src/Communication/AsioService.h:
+        * src/Communication/AsioService.cpp:
+        Log messages via the logger interface rather than std::err
+
+        * src/Communication/AsynchReceiver.h:
+        * src/Communication/BufferReceiver.h:
+        * src/Communication/PCapFileReceiver.h:
+        * src/Communication/RawFileReceiver.h:
+        * src/Communication/Receiver.h:
+        Add method to reset the asio IOService
+        However, it is usually better to delete the old object an create a new one.
+        Beware shared IOServices when you use the reset method.
+
 Wed Mar 30 16:05:08 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Application/DecoderConnection.cpp:

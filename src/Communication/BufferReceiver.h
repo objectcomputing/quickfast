@@ -68,6 +68,11 @@ namespace QuickFAST
         return result;
       }
 
+      // Implement Receiver method
+      virtual void resetService()
+      {
+        return;
+      }
     private:
       const unsigned char * buffer_;
       size_t used_;

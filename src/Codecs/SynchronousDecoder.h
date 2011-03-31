@@ -24,8 +24,9 @@ namespace QuickFAST{
       : decoder_(templateRegistry)
       , resetOnMessage_(false)
       , messageCount_(0)
-      , messageCountLimit_(size_t(-1))
+      , messageCountLimit_(0)
       , maxFieldCount_(templateRegistry->maxFieldCount())
+      , headerBytes_(0)
       {
       }
 
@@ -92,6 +93,12 @@ namespace QuickFAST{
       {
         messageCountLimit_ = messageCountLimit;
       }
+      /// @brief set the number of bytes to skip at the beginning of each message
+      /// @param headerBytes is the number of bytes to skip
+      void setHeaderBytes(size_t headerBytes)
+      {
+        headerBytes_ = headerBytes;
+      }
 
       /// @brief How many messages have been decoded.
       /// @returns the number of messages that have been decoded.
@@ -109,12 +116,26 @@ namespace QuickFAST{
         DataSource & source,
         Messages::ValueMessageBuilder & builder)
       {
-        while(source.messageAvailable() > 0 && messageCount_ < messageCountLimit_)
+        while(source.messageAvailable() > 0 && (messageCountLimit_ == 0 || messageCount_ < messageCountLimit_))
         {
           if(resetOnMessage_)
           {
             decoder_.reset();
           }
+//          if(headerBytes_ > 0)
+//          {
+//            std::cout << "Skipping [";
+            for(size_t nHeadByte = 0; nHeadByte < headerBytes_; ++nHeadByte)
+            {
+              uchar byte = 0;
+              if(!source.getByte(byte))
+              {
+                return;
+              }
+//              std::cout << std::hex << std::setw(2) << (unsigned short)byte << std::dec << ' ';
+            }
+//            std::cout << ']' << std::endl;
+//          }
           decoder_.decodeMessage(source, builder);
           messageCount_ += 1;
         }
@@ -130,6 +151,7 @@ namespace QuickFAST{
       size_t messageCount_;
       size_t messageCountLimit_;
       size_t maxFieldCount_;
+      size_t headerBytes_;
     };
   }
 }

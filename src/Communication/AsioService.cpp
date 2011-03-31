@@ -3,7 +3,7 @@
 // See the file license.txt for licensing information.
 #include <Common/QuickFASTPch.h>
 #include "AsioService.h"
-
+#include <Common/Logger.h>
 
 using namespace QuickFAST;
 using namespace Communication;
@@ -15,6 +15,7 @@ AsioService::AsioService()
   , threadCount_(0)
   , threadCapacity_(0)
   , ioService_(privateIoService_)
+  , logger_(0)
 {
 }
 
@@ -23,6 +24,7 @@ AsioService::AsioService(boost::asio::io_service & ioService)
   , threadCount_(0)
   , threadCapacity_(0)
   , ioService_(ioService)
+  , logger_(0)
 {
 }
 
@@ -31,9 +33,16 @@ AsioService::~AsioService()
 }
 
 void
+AsioService::setLogger(Common::Logger & logger)
+{
+  logger_ = & logger;
+}
+
+void
 AsioService::stopService()
 {
   stopping_ = true;
+  logger_ = 0;
   ioService_.stop();
 }
 
@@ -89,8 +98,14 @@ AsioService::run()
     }
     catch (const std::exception & ex)
     {
-      // todo: logging?
-      std::cerr << ex.what() << std::endl;
+      if(logger_ != 0)
+      {
+        logger_->reportCommunicationError(ex.what());
+      }
+      else
+      {
+        std::cerr << ex.what() << std::endl;
+      }
     }
   }
 }

@@ -6,6 +6,8 @@
 #define ASIOSERVICE_H
 #include "AsioService_fwd.h"
 #include <Common/QuickFAST_Export.h>
+#include <Common/Logger_fwd.h>
+
 // In gcc including asio.hpp in precompiled headers causes problems
 #include <boost/asio.hpp>
 
@@ -28,6 +30,8 @@ namespace QuickFAST
       AsioService(boost::asio::io_service & ioService);
 
       ~AsioService();
+
+      void setLogger(Common::Logger & logger);
 
       /// @brief Run the event loop with this threads and threadCount additional threads.
       void runThreads(size_t threadCount = 0, bool useThisThread = true);
@@ -72,6 +76,15 @@ namespace QuickFAST
       /// If stopService() has not been called, this will block "forever".
       void joinThreads();
 
+      /// @brief reset the IO service
+      ///
+      /// should be called after joinThreads before calling run*, poll*, etc. again.
+      void resetService()
+      {
+        ioService_.reset();
+      }
+
+
       /// @brief stop the ioservice
       void stopService();
 
@@ -98,7 +111,7 @@ namespace QuickFAST
     protected:
       /// Protected reference to the io_service.
       boost::asio::io_service & ioService_;
-
+      Common::Logger * logger_;
     };
   }
 }
