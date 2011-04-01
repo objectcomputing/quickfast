@@ -1,4 +1,5 @@
-Thu Mar 31 18:38:13 UTC 2011  Dale Wilson  <wilsond@ociweb.com>        * src/Common/Logger.h:
+Thu Mar 31 18:38:13 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Common/Logger.h:
         Change definition of log levels from enum to unsigned short.
         That way the enum values are sure to match the time of the arguments.
 
@@ -12,7 +13,7 @@ Thu Mar 31 14:21:09 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         with one call as long as they are contiguous in the buffer.
 
         * src/Codecs/FieldInstruction.h:
-        Improved error messages to indicate the type of feild being decoded.
+        Improved error messages to indicate the type of field being decoded.
         Work-in-progress (disabled for now): specilization of the decode*Integer methods
         for specific integer sizes.  Not working, yet, and needs profiling after
         it does work to be sure it actually helps.
