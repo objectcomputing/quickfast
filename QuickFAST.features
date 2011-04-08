@@ -31,7 +31,7 @@ arcadotnet=0
 opra_support=0
 
 // Build special project to support Spryware FAST files
-spryware_support=1
+spryware_support=0
 
 //End of special projects
 ///////////////////////////////////////////////////////////////////////////////
