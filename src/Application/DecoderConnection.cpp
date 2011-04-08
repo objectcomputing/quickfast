@@ -1,4 +1,4 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// Copyright (c) 2009, 2010, 2011, Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
@@ -18,6 +18,7 @@
 #include <Communication/TCPReceiver.h>
 #include <Communication/RawFileReceiver.h>
 #include <Communication/PCapFileReceiver.h>
+#include <Communication/AsynchFileReceiver.h>
 #include <Communication/BufferReceiver.h>
 #include <Communication/AsioService.h>
 
@@ -57,11 +58,17 @@ DecoderConnection::~DecoderConnection()
 }
 
 void
+DecoderConnection::setTemplateRegistry(Codecs::TemplateRegistryPtr registry)
+{
+  registry_ = registry;
+}
+
+void
 DecoderConnection::configure(
   Messages::ValueMessageBuilder & builder,
   Application::DecoderConfiguration &configuration)
 {
-  if(!configuration.fastFileName().empty())
+  if(!configuration.asynchReads() && !configuration.fastFileName().empty())
   {
     if(configuration.fastFileName() == "cin")
     {
@@ -136,21 +143,24 @@ DecoderConnection::configure(
     }
   }
 
-  std::ifstream templates(configuration.templateFileName().c_str(),
-    std::ios::in | binaryMode
-    );
-  if(!templates.good())
+  if(!registry_)
   {
-      std::stringstream msg;
-      msg << "Can't open template file: "
-        << configuration.templateFileName();
-      throw std::invalid_argument(msg.str());
-  }
-  Codecs::XMLTemplateParser parser;
-  parser.setVerboseOutput(*verboseFile_);
-  parser.setNonstandard(configuration.nonstandard());
+    std::ifstream templates(configuration.templateFileName().c_str(),
+      std::ios::in | binaryMode
+      );
+    if(!templates.good())
+    {
+        std::stringstream msg;
+        msg << "Can't open template file: "
+          << configuration.templateFileName();
+        throw std::invalid_argument(msg.str());
+    }
+    Codecs::XMLTemplateParser parser;
+    parser.setVerboseOutput(*verboseFile_);
+    parser.setNonstandard(configuration.nonstandard());
 
-  registry_ = parser.parse(templates);
+    registry_ = parser.parse(templates);
+  }
 
   if((configuration.nonstandard() & 4) != 0)
   {
@@ -276,6 +286,7 @@ DecoderConnection::configure(
         }
       case Application::DecoderConfiguration::TCP_RECEIVER:
       case Application::DecoderConfiguration::RAWFILE_RECEIVER:
+      case Application::DecoderConfiguration::ASYNCHRONOUS_FILE_RECEIVER:
         {
           Codecs::StreamingAssembler * pAssembler = new Codecs::StreamingAssembler(
             registry_,
@@ -355,6 +366,12 @@ DecoderConnection::configure(
       receiver_.reset(new Communication::PCapFileReceiver(
         configuration.pcapFileName(),
         configuration.pcapWordSize()));
+      break;
+    }
+  case Application::DecoderConfiguration::ASYNCHRONOUS_FILE_RECEIVER:
+    {
+      receiver_.reset(new Communication::AsynchFileReceiver(
+        configuration.fastFileName()));
       break;
     }
   case Application::DecoderConfiguration::BUFFER_RECEIVER:

@@ -1,4 +1,4 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// Copyright (c) 2009, 2010, 2011, Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
@@ -23,6 +23,7 @@ namespace QuickFAST
         , buffer_(new unsigned char [capacity])
         , capacity_(capacity)
         , used_(0)
+        , extra_(0)
       {
       }
 
@@ -35,6 +36,7 @@ namespace QuickFAST
         , buffer_(0)
         , capacity_(0)
         , used_(0)
+        , extra_(0)
       {
       }
 
@@ -89,7 +91,7 @@ namespace QuickFAST
 
       /// @brief set external buffer
       ///
-      void setExternal(const unsigned char * externalBuffer, size_t used)
+      void setExternal(const unsigned char * externalBuffer, size_t used, void * extra = 0)
       {
         if(capacity_ != 0)
         {
@@ -98,6 +100,7 @@ namespace QuickFAST
         }
         buffer_ = const_cast<unsigned char *>(externalBuffer);
         used_ = used;
+        extra_ = extra;
       }
 
       /// @brief Set the number of bytes used in this buffer
@@ -128,12 +131,24 @@ namespace QuickFAST
         return link_;
       }
 
+      /// @brief capture extra info when used with external data
+      void setExtra(void *extra)
+      {
+        extra_ = extra;
+      }
+
+      /// @brief return extra info when used with external data
+      void * extra() const
+      {
+        return extra_;
+      }
+
     private:
       LinkedBuffer * link_;
       unsigned char * buffer_;
       size_t capacity_;
       size_t used_;
-      bool external_;
+      void * extra_;
     };
 
     /// @brief No frills ordered collection of buffers: FIFO
@@ -165,6 +180,19 @@ namespace QuickFAST
         buffer->link(0);
         tail_->link(buffer);
         tail_ = buffer;
+        return first;
+      }
+
+      bool push_front(LinkedBuffer * buffer)
+      {
+        bool first = isEmpty();
+        assert(buffer != 0);
+        buffer->link(&head_);
+        head_.link(buffer);
+        if(first)
+        {
+          tail_ = buffer;
+        }
         return first;
       }
 

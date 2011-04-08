@@ -1,3 +1,80 @@
+Fri Apr  8 20:00:22 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * QuickFAST.features:
+        Add features to disable builds of special projects that are
+        in the build tree at OCI, but not part of the open source package.
+
+        * src/Application/DecoderConfiguration.h:
+        * src/Application/DecoderConfiguration_fwd.h:
+        * src/Application/DecoderConnection.h:
+        * src/Application/DecoderConnection.cpp:
+        Add a new option: asynchReads to read a file asynchronously
+        This only works on windows due to the erratic support of
+        asynchronous I/O on other platforms.
+
+        Move relevant command line options from InterpretApplication
+        into decoder configuration.  This makes them easily available
+        to applications that need them.  If your application doesn't
+        want these options, don't call usage or parseSingleArg
+
+
+        * src/Common/AtomicPointer.h:
+        Compiler complained that a cast to void * should be a reinterpret_cast
+
+        * src/Common/Exceptions.h:
+        Add a colon between error type and description for some exceptions.
+
+        * src/Communication/AsioService.h:
+        Change protected members to private.
+        Add documentation.
+
+        * src/Communication/AsynchFileReceiver.h:
+        * src/Communication/AsynchFileReceiver_fwd.h:
+        * src/Communication/AsynchFileSender.h:
+        * src/Communication/AsynchFileSender.cpp:
+        * src/Communication/AsynchFileSender_fwd.h:
+        * src/Communication/AsynchSender.h:
+        * src/Communication/AsynchSender.cpp:
+        * src/Communication/AsynchSender_fwd.h:
+        * src/Communication/Sender.h:
+        * src/Communication/Sender_fwd.h:
+        New features to support reading and writing files asynchronously.
+
+        * src/Communication/AtomicQueue.h:
+        * src/Communication/AtomicQueue_fwd.h:
+        New feature.  Not yet used.
+
+        * src/Communication/BufferRecycler.h:
+        A callback method for recycling used LinkedBuffers
+
+        * src/Communication/FileSender.h:
+        * src/Communication/FileSender.cpp:
+        * src/Communication/FileSender_fwd.h:
+
+        * src/Communication/LinkedBuffer.h:
+        Add "extra"  a void* to be used for whatever purpose.
+        Remove the "external_".  capacity_ == 0 while used_ nonzero means
+        we don't own this buffer.
+
+        * src/Examples/Examples.mpc:
+        Includes definitons for special, non-open source, projects
+        These projects are disabled via the QuickFAST.features file.
+
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+        * src/Examples/InterpretApplication/main.cpp:
+        Add support for asynchronous file reads.
+        Move many command line options into the DecoderConfiguration structure
+
+        * src/Messages/MessageFormatter.cpp:
+        Display application type.
+
+        * src/Messages/ValueMessageBuilder.h:
+        Remove unnecessary semicolon.
+
+        * src/Tests/resources/fileCopyTest.dat:
+        * src/Tests/testAsynchSender.cpp:
+        Add a test for writing files asynchronously and
+        the whole infrastructure to support asynchronous writes.
+
 Thu Mar 31 18:38:13 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Common/Logger.h:
         Change definition of log levels from enum to unsigned short.

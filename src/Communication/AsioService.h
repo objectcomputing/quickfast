@@ -101,6 +101,8 @@ namespace QuickFAST
       }
 
     private:
+      // if no io_service is specified, this one
+      // will be used (shared among all users)
       static boost::asio::io_service privateIoService_;
       /// Pointer to a boost thread
       typedef boost::shared_ptr<boost::thread> ThreadPtr;
@@ -108,8 +110,7 @@ namespace QuickFAST
       boost::scoped_array<ThreadPtr> threads_;
       size_t threadCount_;
       size_t threadCapacity_;
-    protected:
-      /// Protected reference to the io_service.
+
       boost::asio::io_service & ioService_;
       Common::Logger * logger_;
     };

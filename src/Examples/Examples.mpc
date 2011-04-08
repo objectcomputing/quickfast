@@ -1,4 +1,4 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// Copyright (c) 2009, 2010, 2011, Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 
@@ -64,4 +64,28 @@ project(PCapToMulticast) : QuickFASTExample {
     PCapToMulticast
   }
 }
+
+// Special projects: Not available in open source
+project(OPRADecode) : QuickFASTExample {
+  requires += opra_support
+  exename = OPRADecode
+  Source_Files {
+    OPRA
+  }
+  Header_Files {
+    OPRA
+  }
+}
+
+project(SprywareFileDecoder) : QuickFASTExample {
+  exename = SprywareFileDecoder
+  requires += spryware_support
+  Source_Files {
+    SprywareFileDecoder
+  }
+  Header_Files {
+    SprywareFileDecoder
+  }
+}
+
 

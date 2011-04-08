@@ -1,4 +1,4 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// Copyright (c) 2009, 2010, 2011, Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
@@ -26,6 +26,15 @@ MessageFormatter::~MessageFormatter()
 void
 MessageFormatter::formatMessage(const Messages::Message & message)
 {
+  if(!message.getApplicationType().empty())
+  {
+    out_ << " Type: ";
+    if(!message.getApplicationTypeNs().empty())
+    {
+      out_ << message.getApplicationTypeNs() << '.';
+    }
+    out_ << message.getApplicationType() << ' ';
+  }
   for( Messages::Message::const_iterator it = message.begin();
     it != message.end();
     ++it)

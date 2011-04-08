@@ -1,4 +1,4 @@
-// Copyright (c) 2009, 2010 Object Computing, Inc.
+// Copyright (c) 2009, 2010, 2011, Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
@@ -29,6 +29,7 @@ namespace QuickFAST{
         TCP_RECEIVER,
         RAWFILE_RECEIVER,
         PCAPFILE_RECEIVER,
+        ASYNCHRONOUS_FILE_RECEIVER,
         BUFFER_RECEIVER,
         UNSPECIFIED_RECEIVER
       };

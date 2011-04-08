@@ -1,4 +1,4 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// Copyright (c) 2009, 2010, 2011,Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 #ifdef _MSC_VER
@@ -6,7 +6,7 @@
 #endif
 #ifndef EXCEPTIONS_H
 #define EXCEPTIONS_H
-#include <Common/QuickFAST_Export.h>
+//#include <Common/QuickFAST_Export.h>
 namespace QuickFAST{
   /// @brief Exception to be thrown when an attempt is made to convert a value to an incompatable type.
   class /* QuickFAST_Export */ UnsupportedConversion : public std::domain_error{
@@ -90,7 +90,7 @@ namespace QuickFAST{
     /// @param errorType the type of problem. (Coding Error, Internal Error, etc.)
     /// @param description the actual problem.
     UsageError(const char * errorType, const char * description)
-      : std::invalid_argument((std::string(errorType) + description).c_str())
+      : std::invalid_argument((std::string(errorType) + ": " +  description).c_str())
     {
     }
   };
@@ -102,7 +102,7 @@ namespace QuickFAST{
     /// @param errorType the type of problem. (Coding Error, Internal Error, etc.)
     /// @param description the actual problem.
     InternalError(const char * errorType, const char * description)
-      : std::logic_error((std::string(errorType) + description).c_str())
+      : std::logic_error((std::string(errorType) +  ": " + description).c_str())
     {
     }
   };

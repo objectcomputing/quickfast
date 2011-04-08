@@ -19,7 +19,7 @@ namespace QuickFAST{
     public:
 
       /// @brief Virtual destructor
-      virtual ~ValueMessageBuilder(){};
+      virtual ~ValueMessageBuilder(){}
 
       /// @brief get the application type associated with
       /// this set of fields via typeref.

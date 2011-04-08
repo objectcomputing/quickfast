@@ -1,4 +1,4 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// Copyright (c) 2009, 2010, 2011, Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
@@ -37,7 +37,7 @@ namespace QuickFAST
     bool CAS(Target * expected, Target * value)
     {
       return CASPtr(
-        static_cast<void * volatile * >(&pointer_),
+        reinterpret_cast<void * volatile * >(&pointer_),
         expected,
         value);
     }

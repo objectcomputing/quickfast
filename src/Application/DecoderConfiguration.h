@@ -1,4 +1,4 @@
-// Copyright (c) 2009, 2010 Object Computing, Inc.
+// Copyright (c) 2009, 2010, 2011, Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
@@ -33,6 +33,7 @@ namespace QuickFAST{
         TCP_RECEIVER = DecoderConfigurationEnums::TCP_RECEIVER,
         RAWFILE_RECEIVER = DecoderConfigurationEnums::RAWFILE_RECEIVER,
         PCAPFILE_RECEIVER = DecoderConfigurationEnums::PCAPFILE_RECEIVER,
+        ASYNCHRONOUS_FILE_RECEIVER = DecoderConfigurationEnums::ASYNCHRONOUS_FILE_RECEIVER,
         BUFFER_RECEIVER = DecoderConfigurationEnums::BUFFER_RECEIVER,
         UNSPECIFIED_RECEIVER = DecoderConfigurationEnums::UNSPECIFIED_RECEIVER
       };
@@ -43,6 +44,7 @@ namespace QuickFAST{
         : head_(0)
         , reset_(false)
         , strict_(true)
+        , asynchReads_(false)
         , echoType_(Application::DecoderConfigurationEnums::HEX)
         , echoMessage_(true)
         , echoField_(false)
@@ -76,6 +78,7 @@ namespace QuickFAST{
         : head_(rhs.head_)
         , reset_(rhs.reset_)
         , strict_(rhs.strict_)
+        , asynchReads_(false)
         , templateFileName_(rhs.templateFileName_)
         , fastFileName_(rhs.fastFileName_)
         , verboseFileName_(rhs.verboseFileName_)
@@ -130,6 +133,11 @@ namespace QuickFAST{
         return strict_;
       }
 
+      /// @brief Read input file asynchronously
+      bool asynchReads()const
+      {
+        return asynchReads_;
+      }
 
       /// @brief The name of the template file
       const std::string & templateFileName()const
@@ -343,6 +351,12 @@ namespace QuickFAST{
       void setStrict(bool strict)
       {
         strict_ = strict;
+      }
+
+      /// @brief Read input file asynchronously (Windows only)
+      void setAsynchReads(bool asynchReads)
+      {
+        asynchReads_ = asynchReads;
       }
 
       /// @brief The name of the template file
@@ -590,11 +604,20 @@ namespace QuickFAST{
         testSkip_ = testSkip;
       }
 
+      /// @brief support application-defined configuration information: store name/value pair
+      ///
+      /// @param name is the name to be assigned a value
+      /// @param value is the value assigned to name
       void setExtra(const std::string & name, const std::string value)
       {
         extras_[name] = value;
       }
 
+      /// @brief support application-defined configuration information: find name/value pair
+      ///
+      /// @param name is the name to be looked up
+      /// @param value will be receive the value assigned to name (if any; else unchanged)
+      /// @returns true if a value was found
       bool getExtra(const std::string & name, std::string & value)
       {
         if(extras_.find(name) != extras_.end())
@@ -604,6 +627,374 @@ namespace QuickFAST{
         }
         return false;
       }
+
+
+      void usage(std::ostream & out) const
+      {
+        out << "  -t file              : Template file (required)." << std::endl;
+        out << "  -limit n             : Process only the first 'n' messages." << std::endl;
+        out << "  -reset               : Toggle 'reset decoder on" << std::endl;
+        out << "                         every message' (default false)." << std::endl;
+        out << "  -strict              : Toggle 'strict decoding rules'" << std::endl;
+        out << "                         (default true)." << std::endl;
+        out << "  -vo filename         : Write verbose output to file" << std::endl;
+        out << "                         (cout for standard out;" << std::endl;
+        out << "                         cerr for standard error)." << std::endl;
+        out << std::endl;
+        out << "  -file file           : Input from raw FAST message file." << std::endl;
+        out << "  -afile file          : Use asynchronous reads from raw FAST message file." << std::endl;
+        out << "  -pcap file           : Input from PCap FAST message file." << std::endl;
+        out << "  -pcapsource [64|32]    : Word size of the machine where the PCap data was captured." << std::endl;
+        out << "                           Defaults to the current platform." << std::endl;
+        out << "  -multicast ip:port   : Input from Multicast." << std::endl;
+        out << "                         Subscribe to dotted \"ip\" address" << std::endl;
+        out << "                         on port number \"port\":" << std::endl;
+        out << "  -mlisten ip            : Multicast dotted IP listen address" << std::endl;
+        out << "                           (default is " << listenInterfaceIP() << ")." << std::endl;
+        out << "                           Select local network interface (NIC)" << std::endl;
+        out << "                           on which to subscribe and listen." << std::endl;
+        out << "                           0.0.0.0 means pick any NIC." << std::endl;
+        out << "  -tcp host:port       : Input from TCP/IP.  Connect to \"host\" name or" << std::endl;
+        out << "                         dotted IP on named or numbered port." << std::endl;
+        out << std::endl;
+        out << "  -threads n           : Number of threads to service incoming messages." << std::endl;
+        out << "                         Valid for multicast or tcp" << std::endl;
+        out << "                         Must be >= 1.   Default is 1." << std::endl;
+        out << "  -privateioservice    : Create a separate I/O service for the receiver." << std::endl;
+        out << "                         This doesn't do much for this program, but it helps with testing." << std::endl;
+        out << "                         The option would be used when you need multiple independent connections in the" << std::endl;
+        out << "                         same process." << std::endl;
+        out << std::endl;
+        out << "  -streaming [no]block : Message boundaries do not match packet" << std::endl;
+        out << "                         boundaries (default if TCP/IP or raw file)." << std::endl;
+        out << "                         noblock means decoding doesn't start until" << std::endl;
+        out << "                           a complete message has arrived." << std::endl;
+        out << "                           No thread will be blocked waiting" << std::endl;
+        out << "                           input if this option is used." << std::endl;
+        out << "                         block means the decoding starts immediately" << std::endl;
+        out << "                           The decoding thread may block for more data." << std::endl;
+        out << "  -datagram            : Message boundaries match packet boundaries" << std::endl;
+        out << "                         (default if Multicast or PCap file)." << std::endl;
+        out << std::endl;
+        out << "                       MESSAGE HEADER OPTIONS" << std::endl;
+        out << "  -hnone               : No header(preamble) before each FAST message (default)." << std::endl;
+        out << "  -hfix n              : Message header contains fixed size fields;" << std::endl;
+        out << "                         block size field is n bytes:" << std::endl;
+        out << "  -hbig                : fixed size header is big-endian." << std::endl;
+        out << "  -hfast               : Message header contains fast encoded fields:" << std::endl;
+        out << "  -hprefix n           : 'n' bytes (fixed) or fields (FAST) precede" << std::endl;
+        out << "                         block size." << std::endl;
+        out << "  -hsuffix n           : 'n' bytes (fixed) or fields (FAST) follow" << std::endl;
+        out << "                         block size." << std::endl;
+        out << std::endl;
+        out << "                       PACKET HEADER OPTIONS( -datagram only)" << std::endl;
+        out << "  -pnone               : No header(preamble) in packet (default)." << std::endl;
+        out << "  -pfix n              : Packet header contains fixed size fields;" << std::endl;
+        out << "                         block size field is n bytes:" << std::endl;
+        out << "  -pbig                : fixed size header is big-endian." << std::endl;
+        out << "  -pfast               : Packet header contains fast encoded fields:" << std::endl;
+        out << "  -pprefix n           : 'n' bytes (fixed) or fields (FAST) precede" << std::endl;
+        out << "                         block size." << std::endl;
+        out << "  -psuffix n           : 'n' bytes (fixed) or fields (FAST) follow" << std::endl;
+        out << "                         block size." << std::endl;
+        out << std::endl;
+        out << "  -buffersize size     : Size of communication buffers." << std::endl;
+        out << "                         For \"-datagram\" largest expected message." << std::endl;
+        out << "                         (default " << bufferSize() << ")." << std::endl;
+        out << "  -buffers count       : Number of buffers. (default " << bufferCount() << ")." << std::endl;
+        out << "                         For \"-streaming block\" buffersize * buffers must" << std::endl;
+        out << "                         exceed largest expected message." << std::endl;
+        out << std::endl;
+        out << "  -e file              : Echo input to file:" << std::endl;
+        out << "    -ehex                : Echo as hexadecimal (default)." << std::endl;
+        out << "    -eraw                : Echo as raw binary data." << std::endl;
+        out << "    -enone               : Do not echo data (boundaries only)." << std::endl;
+        out << "    -em / -em-           : Echo message boundaries on/off. (default on)" << std::endl;
+        out << "    -ef / -ef-           : Echo field boundaries on/off (default off)" << std::endl;
+        out << std::endl;
+        out << "  -nonstandard n       : enable nonstandard features (or bits together)" << std::endl;
+        out << "                         : 1 is allow presence attribute on length element (Shanghai Exchange)" << std::endl;
+      }
+
+      /// handle "standard" QuickFAST command line arguments
+      ///
+      /// Application should handle its own arguments first
+      /// but if the argument doesn't match, it may delegate
+      /// to this method.
+      /// @param argc count of arguments remaining in argv
+      /// @param argv the rest of the command line broken into "words"
+      /// @returns the number of items consumed from argv (0 means unknown argument)
+      int parseSingleArg(int argc, char * argv[])
+      {
+        int consumed = 0;
+        std::string opt(argv[0]);
+        if(opt == "-t" && argc > 1)
+        {
+          setTemplateFileName(argv[1]);
+          consumed = 2;
+        }
+        else if(opt == "-limit" && argc > 1)
+        {
+          setHead(boost::lexical_cast<size_t>(argv[1]));
+          consumed = 2;
+        }
+        else if(opt == "-reset")
+        {
+          setReset(true);
+          consumed = 1;
+        }
+        else if(opt == "-strict")
+        {
+          setStrict(false);
+          consumed = 1;
+        }
+        else if(opt == "-vo" && argc > 1)
+        {
+          setVerboseFileName(argv[1]);
+          consumed = 2;
+        }
+        else if(opt == "-e" && argc > 1)
+        {
+          setEchoFileName(argv[1]);
+          consumed = 2;
+        }
+        else if(opt == "-ehex")
+        {
+          setEchoType(Codecs::DataSource::HEX);
+          consumed = 1;
+        }
+        else if(opt == "-eraw")
+        {
+          setEchoType(Codecs::DataSource::RAW);
+          consumed = 1;
+        }
+        else if(opt == "-enone")
+        {
+          setEchoType(Codecs::DataSource::NONE);
+          consumed = 1;
+        }
+        else if(opt == "-em")
+        {
+          setEchoMessage(true);
+          consumed = 1;
+        }
+        else if(opt == "-em-")
+        {
+          setEchoMessage(false);
+          consumed = 1;
+        }
+        else if(opt == "-ef")
+        {
+          setEchoField(true);
+          consumed = 1;
+        }
+        else if(opt == "-ef-")
+        {
+          setEchoField(false);
+          consumed = 1;
+        }
+        else if(opt == "-file" && argc > 1)
+        {
+          setReceiverType(Application::DecoderConfiguration::RAWFILE_RECEIVER);
+          setFastFileName(argv[1]);
+          consumed = 2;
+        }
+        else if(opt == "-afile" && argc > 1)
+        {
+          setReceiverType(Application::DecoderConfiguration::ASYNCHRONOUS_FILE_RECEIVER);
+          setFastFileName(argv[1]);
+          setAsynchReads(true);
+          consumed = 2;
+        }
+        else if(opt == "-pcap" && argc > 1)
+        {
+          setReceiverType(Application::DecoderConfiguration::PCAPFILE_RECEIVER);
+          setPcapFileName(argv[1]);
+          consumed = 2;
+        }
+        else if(opt == "-pcapsource" && argc > 1)
+        {
+          std::string argv1(argv[1]);
+          if(argv1 == "64")
+          {
+            setPcapWordSize(64);
+            consumed = 2;
+          }
+          else if(argv1 == "32" )
+          {
+            setPcapWordSize(32);
+            consumed = 2;
+          }
+        }
+        else if(opt == "-multicast" && argc > 1)
+        {
+          setReceiverType(Application::DecoderConfiguration::MULTICAST_RECEIVER);
+          std::string address = argv[1];
+          std::string::size_type colon = address.find(':');
+          setMulticastGroupIP(address.substr(0, colon));
+          if(colon != std::string::npos)
+          {
+            setPortNumber(boost::lexical_cast<unsigned short>(
+              address.substr(colon+1)));
+          }
+          consumed = 2;
+        }
+        else if(opt == "-mlisten" && argc > 1)
+        {
+          setListenInterfaceIP(argv[1]);
+          consumed = 2;
+        }
+        else if(opt == "-tcp" && argc > 1)
+        {
+          setReceiverType(Application::DecoderConfiguration::TCP_RECEIVER);
+          std::string address = argv[1];
+          std::string::size_type colon = address.find(':');
+          setHostName(address.substr(0, colon));
+          if(colon != std::string::npos)
+          {
+            setPortName(address.substr(colon+1));
+          }
+          consumed = 2;
+        }
+        else if(opt == "-streaming" )
+        {
+          setAssemblerType(Application::DecoderConfiguration::STREAMING_ASSEMBLER);
+          consumed = 1;
+          setWaitForCompleteMessage(false);
+          if(argc > 1)
+          {
+            if(std::string(argv[1]) == "block")
+            {
+              consumed = 2;
+              setWaitForCompleteMessage(true);
+            }
+            else if(std::string(argv[1]) == "noblock")
+            {
+              consumed = 2;
+            }
+          }
+        }
+        else if(opt == "-datagram") //           : Message boundaries match packet boundaries (default if Multicast or PCap file).
+        {
+          setAssemblerType(Application::DecoderConfiguration::MESSAGE_PER_PACKET_ASSEMBLER);
+          consumed = 1;
+        }
+        else if(opt == "-hnone" ) //              : No header
+        {
+          setMessageHeaderType(Application::DecoderConfiguration::NO_HEADER);
+          consumed = 1;
+        }
+        else if(opt == "-hfix" && argc > 1) // n             : Header contains fixed size fields; block size field is n bytes" << std::endl;
+        {
+          setMessageHeaderType(Application::DecoderConfiguration::FIXED_HEADER);
+          setMessageHeaderMessageSizeBytes(boost::lexical_cast<size_t>(argv[1]));
+          consumed = 2;
+        }
+        else if(opt == "-hfast" ) //              : Header contains fast encoded fields" << std::endl;
+        {
+          setMessageHeaderType(Application::DecoderConfiguration::FAST_HEADER);
+          consumed = 1;
+        }
+        else if(opt == "-hprefix" && argc > 1) // n            : 'n' bytes (fixed) or fields (FAST) preceed block size" << std::endl;
+        {
+          setMessageHeaderPrefixCount(boost::lexical_cast<size_t>(argv[1]));
+          consumed = 2;
+        }
+        else if(opt == "-hsuffix" && argc > 1) // n            : 'n' bytes (fixed) or fields (FAST) follow block size" << std::endl;
+        {
+          setMessageHeaderSuffixCount(boost::lexical_cast<size_t>(argv[1]));
+          consumed = 2;
+        }
+        else if(opt == "-hbig" ) //                 : fixed size header is big-endian" << std::endl;
+        {
+          setMessageHeaderBigEndian(true);
+          consumed = 1;
+          if(argc > 1)
+          {
+            if(std::string(argv[1]) == "no")
+            {
+              setMessageHeaderBigEndian(false);
+              consumed = 2;
+            }
+            else if(std::string(argv[1]) == "yes")
+            {
+              setMessageHeaderBigEndian(true);
+              consumed = 2;
+            }
+          }
+        }
+        else if(opt == "-pnone" ) //              : No header
+        {
+          setPacketHeaderType(Application::DecoderConfiguration::NO_HEADER);
+          consumed = 1;
+        }
+        else if(opt == "-pfix" && argc > 1) // n             : Header contains fixed size fields; block size field is n bytes" << std::endl;
+        {
+          setPacketHeaderType(Application::DecoderConfiguration::FIXED_HEADER);
+          setPacketHeaderMessageSizeBytes(boost::lexical_cast<size_t>(argv[1]));
+          consumed = 2;
+        }
+        else if(opt == "-pfast" ) //              : Header contains fast encoded fields" << std::endl;
+        {
+          setPacketHeaderType(Application::DecoderConfiguration::FAST_HEADER);
+          consumed = 1;
+        }
+        else if(opt == "-pprefix" && argc > 1) // n            : 'n' bytes (fixed) or fields (FAST) preceed block size" << std::endl;
+        {
+          setPacketHeaderPrefixCount(boost::lexical_cast<size_t>(argv[1]));
+          consumed = 2;
+        }
+        else if(opt == "-psuffix" && argc > 1) // n            : 'n' bytes (fixed) or fields (FAST) follow block size" << std::endl;
+        {
+          setPacketHeaderSuffixCount(boost::lexical_cast<size_t>(argv[1]));
+          consumed = 2;
+        }
+        else if(opt == "-pbig" ) //                 : fixed size header is big-endian" << std::endl;
+        {
+          setPacketHeaderBigEndian(true);
+          consumed = 1;
+          if(argc > 1)
+          {
+            if(std::string(argv[1]) == "no")
+            {
+              setPacketHeaderBigEndian(false);
+              consumed = 2;
+            }
+            else if(std::string(argv[1]) == "yes")
+            {
+              setPacketHeaderBigEndian(true);
+              consumed = 2;
+            }
+          }
+        }
+        else if(opt == "-privateioservice")
+        {
+          setPrivateIOService(true);
+          consumed = 1;
+        }
+        else if(opt == "-testskip" && argc > 1)
+        {
+          setTestSkip(boost::lexical_cast<size_t>(argv[1]));
+          consumed = 2;
+        }
+        else if(opt == "-buffersize" && argc > 1) // size         : Size of communication buffers. For multicast largest expected message. (default " << bufferSize_ << ")" << std::endl;
+        {
+          setBufferSize(boost::lexical_cast<size_t>(argv[1]));
+          consumed = 2;
+        }
+        else if(opt == "-buffers" && argc > 1) // count      : Number of buffers. (default " << bufferCount_ << ")" << std::endl;
+        {
+          setBufferCount(boost::lexical_cast<size_t>(argv[1]));
+          consumed = 2;
+        }
+        else if(opt == "-nonstandard" && argc > 1)
+        {
+          setNonstandard(boost::lexical_cast<unsigned long>(argv[1]));
+          consumed = 2;
+        }
+        return consumed;
+
+      }
     private:
       /// @brief Process the first "head" messages then stop.
       size_t head_;
@@ -611,6 +1002,9 @@ namespace QuickFAST{
       bool reset_;
       /// @brief Use strict decoding rules
       bool strict_;
+
+      /// @brief Should file reads be asynchronous
+      bool asynchReads_;
 
       /// @brief The name of the template file
       std::string templateFileName_;
