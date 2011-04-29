@@ -7,6 +7,7 @@
 #ifndef DECIMAL_H
 #define DECIMAL_H
 #include <Common/QuickFAST_Export.h>
+#include <Common/Decimal_fwd.h>
 #include <Common/Types.h>
 
 namespace QuickFAST{
@@ -70,13 +71,17 @@ namespace QuickFAST{
 
     /// @brief force normalization
     ///
-    /// @param fixOverflow if true throw if normalization fails else fix it leaving the number denormalized
+    /// @param strict if true throw if normalization fails; else leave the number accurate but denormalized
     void normalize(bool strict = true);
 
     /// @brief denormalize to achieve a specific exponent
+    ///
+    /// Normalization will happen even if it means a loss of precision
+    /// @param exponent is the desired exponent
     void denormalize(exponent_t exponent);
 
     /// @brief Nothrow; no allocate; constant time swap values.
+    /// @param rhs is the Decimal with which to swap
     void swap(Decimal & rhs);
 
   private:

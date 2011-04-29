@@ -10,7 +10,6 @@
 #include <Communication/AsynchReceiver.h>
 #include <Common/Types.h>
 #include <Common/Exceptions.h>
-
 namespace QuickFAST
 {
   namespace Communication
@@ -90,13 +89,19 @@ namespace QuickFAST
       }
 
       // Implement Receiver method
-      virtual void stop()
+      virtual void close()
       {
         if(handle_.is_open())
         {
           handle_.cancel();
           handle_.close();
         }
+      }
+
+      // Implement Receiver method
+      virtual void stop()
+      {
+        close();
 
         // and then shut everything down for good.
         Receiver::stop();
@@ -112,20 +117,30 @@ namespace QuickFAST
 //        std::cout << "Read " << bytesReceived << " bytes into buffer " << (void *)(buffer->get()) << '[' << buffer->capacity() << ']' << std::endl;
         if(error == boost::asio::error::eof)
         {
+          //std::ostringstream msg;
+          //msg << fileName_ << " EOF: calling close" << std::endl;
+          //std::cout << msg.str() << std::flush;
           idleBufferPool_.push(buffer);
-          stop();
+          close();
+          // Note that by not calling handle receive we avoid starting a new I/O request
+          // thereby allowing the io_service to go idle eventually.
         }
         else
         {
+          //std::ostringstream msg;
+          //msg << fileName_ << " received " << bytesReceived << " @" << (void *) buffer << std::endl;
+          //std::cout << msg.str() << std::flush;
           offset_ += bytesReceived;
           handleReceive(error, buffer, bytesReceived);
         }
       }
 
-
       bool fillBuffer(LinkedBuffer * buffer, boost::mutex::scoped_lock& lock)
       {
-//        std::cout << "Start read into buffer " << (void *)(buffer->get()) << '[' << buffer->capacity() << ']' << std::endl;
+        //std::ostringstream msg;
+        //msg << fileName_ << " read. @" << (void *) buffer << '[' << buffer->capacity() << ']' << std::endl;
+        //std::cout << msg.str() << std::flush;
+
         handle_.async_read_some_at(
           offset_,
           boost::asio::buffer(buffer->get(), buffer->capacity()),

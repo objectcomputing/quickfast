@@ -6,7 +6,9 @@
 #endif
 #ifndef TYPES_H
 #define TYPES_H
+
 #include <Common/QuickFAST_Export.h>
+#include <Common/Decimal_fwd.h>
 
 typedef std::streamsize streamsize_t;
 
@@ -32,7 +34,6 @@ namespace QuickFAST{
   /// @brief the exponent portion of a Decimal
   typedef int8 exponent_t;
 
-  class Decimal;
   /// @brief an alias for Decimal
   typedef Decimal decimal_t;
   /// @brief the type used to store a template Id.

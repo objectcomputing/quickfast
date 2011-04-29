@@ -110,6 +110,10 @@ namespace QuickFAST{
     /// @param wrap is how many bytes to display per line.  Zero means no wrapping
     void hexDisplay(std::ostream & out, size_t wrap = 16) const;
 
+    /// @brief comparison operator
+    ///
+    /// Compares the size and contents of the buffers for equality
+    /// @param rhs the buffer to be compared with
     bool operator ==(const WorkingBuffer & rhs) const;
 
   private:

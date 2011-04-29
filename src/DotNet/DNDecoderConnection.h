@@ -50,6 +50,17 @@ namespace QuickFAST
         bool reset
         );
 
+      /// @brief Request stop after calling run with thread counts
+      ///
+      /// Returns immediately.  Call join to wait for the stop to complete.
+      void stop();
+
+      /// @brief Wait for the decoder to come to a stop.
+      ///
+      /// Unless stop() is called first (or later in another thread), this will never return.
+      /// Should only be called after calling run with useThisThread = false;
+      void joinThreads();
+
       /////////////
       // Properties
 

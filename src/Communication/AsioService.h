@@ -7,6 +7,7 @@
 #include "AsioService_fwd.h"
 #include <Common/QuickFAST_Export.h>
 #include <Common/Logger_fwd.h>
+#include <Common/AtomicCounter.h>
 
 // In gcc including asio.hpp in precompiled headers causes problems
 #include <boost/asio.hpp>
@@ -31,6 +32,8 @@ namespace QuickFAST
 
       ~AsioService();
 
+      /// @brief define the logger to receive informative messages
+      /// @param logger to which messages will be written
       void setLogger(Common::Logger & logger);
 
       /// @brief Run the event loop with this threads and threadCount additional threads.
@@ -94,16 +97,29 @@ namespace QuickFAST
         return ioService_;
       }
 
+      ///@brief Post a completion handler for later processing (usually in a different thread)
+      /// @param handler is the handler to be posted
       template<typename CompletionHandler>
       void post(CompletionHandler handler)
       {
         ioService_.post(handler);
       }
 
+      long runningThreadCount()const
+      {
+        if(usingSharedService_)
+        {
+          return sharedRunningThreadCount_;
+        }
+        return runningThreadCount_;
+      }
+
     private:
       // if no io_service is specified, this one
       // will be used (shared among all users)
-      static boost::asio::io_service privateIoService_;
+      static boost::asio::io_service sharedIoService_;
+      static AtomicCounter sharedRunningThreadCount_;
+
       /// Pointer to a boost thread
       typedef boost::shared_ptr<boost::thread> ThreadPtr;
       bool stopping_;
@@ -111,7 +127,9 @@ namespace QuickFAST
       size_t threadCount_;
       size_t threadCapacity_;
 
+      AtomicCounter runningThreadCount_;
       boost::asio::io_service & ioService_;
+      bool usingSharedService_;
       Common::Logger * logger_;
     };
   }

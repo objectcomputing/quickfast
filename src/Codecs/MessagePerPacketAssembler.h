@@ -28,7 +28,8 @@ namespace QuickFAST
     public:
       /// @brief Constuct the Assembler
       /// @param templateRegistry defines the decoding instructions for the decoder
-      /// @param headerAnalyzer analyzes the header of each packet (if any)
+      /// @param packetHeaderAnalyzer analyzes the header of each packet (if any)
+      /// @param messageHeaderAnalyzer analyzes the header of each message (if any)
       /// @param builder receives the data from the decoder.
       MessagePerPacketAssembler(
           TemplateRegistryPtr templateRegistry,

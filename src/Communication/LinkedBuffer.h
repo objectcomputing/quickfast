@@ -172,6 +172,7 @@ namespace QuickFAST
       }
 
       /// @brief Push a single buffer onto the queue
+      /// @param buffer is the buffer to be pushed
       /// @returns true if this queue was empty before the push; and not empty afterward
       bool push(LinkedBuffer * buffer)
       {
@@ -183,6 +184,10 @@ namespace QuickFAST
         return first;
       }
 
+
+      /// @brief Push a single buffer onto the front of the queue
+      /// @param buffer is the buffer to be pushed
+      /// @returns true if this queue was empty before the push; and not empty afterward
       bool push_front(LinkedBuffer * buffer)
       {
         bool first = isEmpty();
@@ -317,6 +322,10 @@ namespace QuickFAST
       /// @returns true if if the queue needs to be serviced
       bool push(LinkedBuffer * buffer, boost::mutex::scoped_lock &)
       {
+        //std::ostringstream msg;
+        //msg << "Q:{"<< (void *) this <<  "} push @" <<(void *)buffer << std::endl;
+        //std::cout << msg.str() << std::flush;
+
         incoming_.push(buffer);
         condition_.notify_one();
         return !busy_;
@@ -342,6 +351,18 @@ namespace QuickFAST
         }
         outgoing_.push(incoming_);
         busy_ = !outgoing_.isEmpty();
+        //if(busy_)
+        //{
+        //  std::ostringstream msg;
+        //  msg << "Q:{"<< (void *) this <<  "} startService " << std::endl;
+        //  std::cout << msg.str() << std::flush;
+        //}
+        //else
+        //{
+        //  std::ostringstream msg;
+        //  msg << "Q:{"<< (void *) this <<  "} idle at startService" << std::endl;
+        //  std::cout << msg.str() << std::flush;
+        //}
         return busy_;
       }
 
@@ -353,6 +374,9 @@ namespace QuickFAST
       LinkedBuffer * serviceNext()
       {
         assert(busy_);
+        //std::ostringstream msg;
+        //msg << "Q:{"<< (void *) this <<  "} pop @" <<(void *)peekOutgoing() << std::endl;
+        //std::cout << msg.str() << std::flush;
         return outgoing_.pop();
       }
 
@@ -361,6 +385,9 @@ namespace QuickFAST
       LinkedBuffer * serviceAll()
       {
         assert(busy_);
+        //std::ostringstream msg;
+        //msg << "Q:{"<< (void *) this <<  "} pop all @" <<(void *)peekOutgoing() << std::endl;
+        //std::cout << msg.str() << std::flush;
         return outgoing_.popList();
       }
 
@@ -397,13 +424,17 @@ namespace QuickFAST
       /// The (external) mutex must be locked when this method is called (even if wait is false).
       /// @param lock is used for the wait.  It also confirms that the caller has locked the mutex.
       /// @param wait is true if this call should wait for incoming buffers to be available.
-      /// Returns true if the incoming buffer queue has changed from empty to populated
+      /// @returns true if the incoming buffer queue has changed from empty to populated
       bool refresh(boost::mutex::scoped_lock & lock, bool wait)
       {
         assert(busy_);
         bool wasEmpty = incoming_.isEmpty();
         while(wait && wasEmpty)
         {
+          //std::ostringstream msg;
+          //msg << "Q:{"<< (void *) this <<  "} wait" << std::endl;
+          //std::cout << msg.str() << std::flush;
+
           condition_.wait(lock);
           wasEmpty = incoming_.isEmpty();
         }

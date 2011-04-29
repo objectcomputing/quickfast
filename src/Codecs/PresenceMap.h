@@ -37,7 +37,7 @@ namespace QuickFAST{
       /// @brief Decode directly from a buffer which must be complete in memory.
       ///
       /// @param buffer points to a fast encoded buffer;
-      /// @param[inout] pos is the position in the buffer. It will be updated to point beyond the presence map
+      /// @param[in,out] pos is the position in the buffer. It will be updated to point beyond the presence map
       void decode(const unsigned char * buffer, size_t &pos);
 
 

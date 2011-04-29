@@ -2,6 +2,11 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
+////////////////////////////
+/// UNDER CONSTRUCTION!!!
+/// NOT READY FOR USE
+////////////////////////////
+
 #ifndef ATOMICSINGLESERVERBUFFERQUEUE_H
 #define ATOMICSINGLESERVERBUFFERQUEUE_H
 // All inline, do not export.
@@ -75,6 +80,7 @@ namespace QuickFAST
         return wasIdle;
       }
 
+      /// @brief promote buffers from the incoming to the outgoing queue
       void promote()
       {
         assert(busy_);
@@ -169,7 +175,8 @@ namespace QuickFAST
       /// If wait is false, then the return value is false if nothing was changed.
       /// if wait is true, then this call waits until some incoming buffers are available.
       /// The (external) mutex must be locked when this method is called (even if wait is false).
-      /// @param lock is used for the wait.  It also confirms that the caller has locked the mutex.
+      ///
+      /// param unused scoped_lock is for legacy compatibility
       /// @param wait is true if this call should wait for incoming buffers to be available.
       /// Returns true if the incoming buffer queue has changed from empty to populated
       bool refresh(boost::mutex::scoped_lock &, bool wait)

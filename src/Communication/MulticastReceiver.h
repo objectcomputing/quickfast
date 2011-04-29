@@ -155,10 +155,10 @@ namespace QuickFAST
           boost::asio::buffer(buffer->get(), buffer->capacity()),
           senderEndpoint_,
           boost::bind(&MulticastReceiver::handleReceive,
-          this,
-          boost::asio::placeholders::error,
-          buffer,
-          boost::asio::placeholders::bytes_transferred)
+            this,
+            boost::asio::placeholders::error,
+            buffer,
+            boost::asio::placeholders::bytes_transferred)
           );
         return true;
       }

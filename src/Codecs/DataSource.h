@@ -54,12 +54,21 @@ namespace QuickFAST{
       ///        otherwise return n >= 0 for the number of bytes readily available
       virtual int bytesAvailable();
 
+      /// @brief Check for contiguous bytes in current buffer
+      /// @param needed is the nuber of contiguous bytes needed
+      /// @param[out] buffer points to beginning of contiguous area if return is true
+      /// @returns true if contiguous data is available
       inline
       bool hasContiguous(size_t needed, const uchar *& buffer)
       {
         buffer = buffer_ + position_;
         return (position_ + needed < size_);
       }
+
+      /// @brief Skip over contiguous bytes
+      ///
+      /// presumably after calling hasContiguous to find the contiguous bytes
+      /// @param used how many to skip. must be <= needed in the hasContiguous() call.
       inline
       void skipContiguous(size_t used)
       {

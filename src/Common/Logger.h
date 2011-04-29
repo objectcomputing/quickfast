@@ -14,15 +14,17 @@ namespace QuickFAST{
     {
     public:
       /// The importance of being a log message.
-      //enum LogLevel
-      //{
       typedef unsigned short LogLevel;
+      /// @brief an irrecoverable error
       static const unsigned short QF_LOG_FATAL = 0;
+      /// @brief a serious error from which we _might_ be able to recover
       static const unsigned short QF_LOG_SERIOUS = 1;
+      /// @brief a warning that will not prevent further decoding/encoding
       static const unsigned short QF_LOG_WARNING = 2;
+      /// @brief general information
       static const unsigned short QF_LOG_INFO = 3;
+      /// @brief wordy messages -- usually to support debugging
       static const unsigned short QF_LOG_VERBOSE = 4;
-//      };
 
       /// @brief a virtual destructor for form's sake.
       /// No one should ever delete a pointer to a logger, but just in case:

@@ -20,7 +20,6 @@ namespace QuickFAST
     {
     public:
       AsynchReceiver()
-        : singleThreaded_(true)
       {
       }
 
@@ -28,7 +27,6 @@ namespace QuickFAST
       /// @param ioService an ioService to be shared with other objects
       AsynchReceiver(boost::asio::io_service & ioService)
         : ioService_(ioService)
-        , singleThreaded_(true)
       {
       }
 
@@ -41,7 +39,6 @@ namespace QuickFAST
 
       virtual void runThreads(size_t threadCount = 0, bool useThisThread = true)
       {
-        singleThreaded_ = (threadCount + (useThisThread ? 1:0) <= 1);
         ioService_.runThreads(threadCount, useThisThread);
       }
 
@@ -89,35 +86,42 @@ namespace QuickFAST
           {
             return true;
           }
+          //std::ostringstream msg;
+          //msg << "AR:{"<< (void *) this <<  "} waiting for a buffer" << std::endl;
+          //std::cout << msg.str() << std::flush;
+
           bool empty = false;
           {
             boost::mutex::scoped_lock lock(bufferMutex_);
+            if(!idleBuffers_.isEmpty())
+            {
+              std::ostringstream msg;
+              msg << "AR:{"<< (void *) this <<  "} making idle buffers available" << std::endl;
+              std::cout << msg.str() << std::flush;
+            }
             idleBufferPool_.push(idleBuffers_);
             // be sure we have a read request in progress
             startReceive(lock);
             // promote any ancoming messages to outgoing
-            empty = !queue_.refresh(lock, !singleThreaded_);
+            empty = !queue_.refresh(lock, ioService_.runningThreadCount() > 1 && !stopping_);
           }
           // if there is only one thread servicing the ioService
           // and there are no buffers waiting, then let the
           // ioService borrow this thread long enough to accept
           // the next incoming packet of data.
-          // Note that in a multithreaded situation there is a race
-          // condition that would cause the system to go idle in
-          // run_one even though a buffer-full was waiting in the
-          // queue_.  This is highly unlikely and the "hang" would be
-          // broken upon the arrival of the next incoming packet, so
-          // I won't worry about it for now.  Especially since
-          // asio doesn't provide a usable way to handle the situation.
-          if(empty && singleThreaded_ && !stopping_)
+          if(empty && ioService_.runningThreadCount() < 2 && !stopping_)
           {
-            ioService_.run_one();
+            //std::ostringstream msg;
+            //msg << "AR:{"<< (void *) this <<  "} no buffers: service one io service event{"<< (void *)(&ioService_) << "}. Thread count " << ioService_.runningThreadCount() << std::endl;
+            //std::cout << msg.str() << std::flush;
+            ioService_.poll_one();
           }
         }
         return false;
       }
 
-
+      /// @brief post a completion handler for later processing
+      /// @param handler is the completion handler to be posted
       template<typename CompletionHandler>
       void post(CompletionHandler handler)
       {
@@ -207,7 +211,6 @@ namespace QuickFAST
     protected:
       /// @brief a manager for the boost::io_service object
       AsioService ioService_;
-      bool singleThreaded_;
     };
   }
 }

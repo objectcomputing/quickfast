@@ -26,7 +26,8 @@ namespace QuickFAST{
     /// Different implementations of DataDestination may use scatter/gather I/O; may
     /// send the individual buffers separately; or may assemble them into a common
     /// buffer when endMessage() is called.
-    class /*QuickFAST_Export */ DataDestination{
+    class /*QuickFAST_Export */ DataDestination
+    {
     public:
       /// @brief a type for an opaque handle to a buffer within the DataDestination
       typedef size_t BufferHandle;
@@ -145,7 +146,8 @@ namespace QuickFAST{
           (*verboseOut_) << std::endl << "**BEGIN FIELD: " << identity.name() << '[' << identity.id() << ']' << std::endl;
         }
       }
-
+      /// @brief Notification that a field has been completely encoded
+      /// @param identity identifies the field.
       void endField(const Messages::FieldIdentity & identity)
       {
         if(verboseOut_)

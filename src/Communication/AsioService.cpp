@@ -8,13 +8,15 @@
 using namespace QuickFAST;
 using namespace Communication;
 
-boost::asio::io_service AsioService::privateIoService_;
+boost::asio::io_service AsioService::sharedIoService_;
+AtomicCounter AsioService::sharedRunningThreadCount_;
 
 AsioService::AsioService()
   : stopping_(false)
   , threadCount_(0)
   , threadCapacity_(0)
-  , ioService_(privateIoService_)
+  , ioService_(sharedIoService_)
+  , usingSharedService_(true)
   , logger_(0)
 {
 }
@@ -24,6 +26,7 @@ AsioService::AsioService(boost::asio::io_service & ioService)
   , threadCount_(0)
   , threadCapacity_(0)
   , ioService_(ioService)
+  , usingSharedService_(false)
   , logger_(0)
 {
 }
@@ -85,7 +88,20 @@ AsioService::runThreads(size_t threadCount /*= 0*/, bool useThisThread /* = true
 
 void
 AsioService::run()
+{
+  long tc = 0;
+  if(usingSharedService_)
   {
+    tc = ++sharedRunningThreadCount_;
+  }
+  else
+  {
+    tc = ++runningThreadCount_;
+  }
+  //std::ostringstream msg;
+  //msg << '{' << (void *) this << "} Starting AsioService thread #" << tc << std::endl;
+  //std::cout << msg.str();
+
   while(! stopping_)
   {
     try
@@ -108,5 +124,10 @@ AsioService::run()
       }
     }
   }
+  //std::ostringstream msg2;
+  //msg2 << '{' << (void *) this << "} Stopping AsioService thread #" << tc << std::endl;
+  //std::cout << msg2.str();
+
+  --runningThreadCount_;
 }
 

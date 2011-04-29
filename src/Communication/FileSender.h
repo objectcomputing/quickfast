@@ -11,10 +11,14 @@ namespace QuickFAST
 {
   namespace Communication
   {
-    /// @brief Sender base class for sending outgoing data
+    /// @brief Simple implementaton of the Sender interface.  Writes the data to a file.
     class FileSender: public Sender
     {
     public:
+      /// @brief construct
+      /// @param recycler to take care of empty buffers
+      /// @param fileName is the name of the file to be written
+      /// @param binary controls end-of-line handling on Windows.  Ignored on other platforms.
       FileSender(
         BufferRecycler & recycler,
         const char * fileName,

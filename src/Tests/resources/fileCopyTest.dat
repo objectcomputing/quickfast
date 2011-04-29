@@ -1,3 +1,8 @@
+THIS IS A TEST FILE FOR testAsynchSender
+The test needs data to copy.  It doesn't much matter
+what data it uses so I grabbed the sorce file of another test.
+Even though this looks like C++, don't count on it working.
+
 // Copyright (c) 2009, Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.

@@ -12,15 +12,24 @@ namespace QuickFAST
 {
   namespace Communication
   {
-    /// @brief Sender base class for sending outgoing data
+    /// @brief Sender that writes data to a fil asynchronously (WINDOWS ONLY)
     class QuickFAST_Export AsynchFileSender: public AsynchSender
     {
     public:
+      /// @brief Construct
+      /// @param recycler will receive empty buffers after their contents have been written
+      /// @param fileName is the name of the file to be written
+      /// @param additionalAttributes will be used in the Windows CreateFile call.
       AsynchFileSender(
         BufferRecycler & recycler,
         const char * fileName,
         unsigned long additionalAttributes = 0);
 
+      /// @brief Construct
+      /// @param ioService is a shared io_service.
+      /// @param recycler will receive empty buffers after their contents have been written
+      /// @param fileName is the name of the file to be written
+      /// @param additionalAttributes will be used in the Windows CreateFile call.
       AsynchFileSender(
         boost::asio::io_service & ioService,
         BufferRecycler & recycler,
@@ -33,6 +42,7 @@ namespace QuickFAST
       virtual void open();
       // Override Sender method
       virtual void send(LinkedBuffer * buffer);
+
       /// @brief write a buffer to a specific location in the file
       ///
       /// relevant only to file I/O.  Does not make sense on other senders

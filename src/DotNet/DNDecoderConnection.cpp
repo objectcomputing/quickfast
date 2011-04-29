@@ -199,3 +199,12 @@ void DNDecoderConnection::BufferCount::set(unsigned int bufferCount)
   impl_->setBufferCount(bufferCount);
 }
 
+void DNDecoderConnection::stop()
+{
+  impl_->stop();
+}
+
+void DNDecoderConnection::joinThreads()
+{
+  impl_->joinThreads();
+}

@@ -18,15 +18,17 @@ namespace QuickFAST
     class QuickFAST_Export MessageAccessor
     {
     public:
+      /// @brief construct
+      /// tid = the template id to use to encode this message
       explicit MessageAccessor(template_id_t tid = template_id_t(-1));
 
       /// @brief Virtual destructor
       virtual ~MessageAccessor();
 
-      // @brief pick template to use for encoding next message
-      //
-      // @param[out] tid is the template chosen.
-      // @returns false if no more data to encode.
+      /// @brief pick template to use for encoding next message
+      ///
+      /// @param[out] tid is the template chosen.
+      /// @returns false if no more data to encode.
       virtual bool pickTemplate(template_id_t & tid);
 
 

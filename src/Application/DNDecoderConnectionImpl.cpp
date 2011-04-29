@@ -216,3 +216,14 @@ DNDecoderConnectionImpl::setBufferCount(unsigned int value)
 {
   configuration_->setBufferCount(value);
 }
+void
+DNDecoderConnectionImpl::stop()
+{
+  connection_->receiver().stop();
+}
+
+void
+DNDecoderConnectionImpl::joinThreads()
+{
+  connection_->receiver().joinThreads();
+}

@@ -31,6 +31,9 @@ namespace QuickFAST
         long bytesUsed,
         bool reset);
 
+      void stop();
+      void joinThreads();
+
       void setHead(unsigned int value);
 
       void setReset(bool value);

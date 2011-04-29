@@ -1,4 +1,4 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// Copyright (c) 2009, 2010, 2011, Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
@@ -9,6 +9,7 @@
 #include "Receiver_fwd.h"
 #include <Communication/Assembler.h>
 #include <Communication/LinkedBuffer.h>
+//#include <Communication/AtomicQueue.h>
 #include <Common/Exceptions.h>
 
 namespace QuickFAST
@@ -171,6 +172,7 @@ namespace QuickFAST
       /////////////////////////////
       // Assembler support routines
 
+      /// @brief Wait for a buffer to arrive
       virtual bool waitBuffer() = 0;
 
       /// @brief get the next buffer if possible
@@ -245,6 +247,9 @@ namespace QuickFAST
       /// @param buffer points to the buffer to be released.
       void releaseBuffer(LinkedBuffer * buffer)
       {
+        //std::ostringstream msg;
+        //msg << "{" << (void *)this << "} Release buffer " << (void *)buffer << std::endl;
+        //std::cout << msg.str();
         idleBuffers_.push(buffer);
       }
       // Assembler support routines
@@ -278,6 +283,9 @@ namespace QuickFAST
           }
           else
           {
+            //std::ostringstream msg;
+            //msg << "{" << (void *)this << "} Trying to read. No buffer available\n";
+            //std::cout << msg.str();
             ++noBufferAvailable_;
           }
         }
@@ -419,6 +427,18 @@ namespace QuickFAST
           }
           boost::mutex::scoped_lock lock(bufferMutex_);
           // add idle buffers to pool before trying to start a read.
+          //if(!idleBufferPool_.isEmpty())
+          //{
+          //  std::ostringstream msg;
+          //  msg << "{" << (void *)this << "} promote idle buffers." << std::endl;
+          //  std::cout << msg.str();
+          //}
+          //else
+          //{
+          //  std::ostringstream msg;
+          //  msg << "{" << (void *)this << "} no idle buffers available." << std::endl;
+          //  std::cout << msg.str();
+          //}
           idleBufferPool_.push(idleBuffers_);
           startReceive(lock);
           // see if this thread is still needed to service the queue

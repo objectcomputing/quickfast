@@ -17,6 +17,8 @@ namespace QuickFAST
     class Sender
     {
     public:
+      /// @brief construct
+      /// @param recycler to handle empty buffers after their contents have been sent
       Sender(BufferRecycler & recycler)
         : recycler_(recycler)
       {
@@ -44,7 +46,7 @@ namespace QuickFAST
         recycler_.recycle(buffer);
       }
 
-    protected:
+    private:
       BufferRecycler & recycler_;
     };
   }

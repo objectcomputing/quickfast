@@ -1,3 +1,58 @@
+Fri Apr 29 18:46:14 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Application/DNDecoderConnectionImpl.h:
+        * src/Application/DNDecoderConnectionImpl.cpp:
+        * src/DotNet/DNDecoderConnection.h:
+        * src/DotNet/DNDecoderConnection.cpp:
+          Add stop() and joinThreads() methods
+
+        * src/Codecs/DataDestination.h:
+        * src/Codecs/DataSource.h:
+        * src/Codecs/MessagePerPacketAssembler.h:
+        * src/Codecs/PresenceMap.h:
+        * src/Common/WorkingBuffer.h:
+        * src/Communication/AsynchFileSender.h:
+        * src/Communication/AsynchSender.h:
+        * src/Communication/FileSender.h:
+        * src/Communication/LinkedBuffer.h:
+        * src/Communication/MulticastReceiver.h:
+        * src/Communication/Receiver.h:
+        * src/Messages/MessageAccessor.h:
+        * src/Messages/MessageFormatter.h:
+        * src/Tests/resources/fileCopyTest.dat:
+        * src/Doxyfile:
+          Improve formatting and comments
+          Adapt to newer version of Doxygen
+          No functional changes
+
+        * src/Common/Decimal.h:
+        * src/Common/Decimal_fwd.h:
+        * src/Common/Types.h:
+          Forward declare Decimal in _fwd header rather than in Types.h
+
+        * src/Common/Logger.h:
+          Change log level from enum to const unsigned short.
+          This matches the types actually used as method parameters.
+
+
+        * src/Communication/AsioService.h:
+        * src/Communication/AsioService.cpp:
+          New method, runningThreadCount() reports how many threads are
+          servicing the io_service object.  This helped in solving a race condition.
+
+        * src/Communication/AsynchFileReceiver.h:
+          Separate stop() from close() for cleaner shut-down.
+
+        * src/Communication/AsynchReceiver.h:
+          Race condition in multithreaded code with a streaming assembler.
+          When no buffer was ready for decoding
+          there was a possiblity that it could wait forever.
+
+        * src/Communication/AtomicQueue.h:
+          Added a "Not ready for prime-time" warning message.  This doesn't work right yet.
+
+        * src/Communication/Sender.h:
+          Change member from protected to private.
+
 Fri Apr  8 20:00:22 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * QuickFAST.features:
         Add features to disable builds of special projects that are
