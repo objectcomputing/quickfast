@@ -95,9 +95,9 @@ namespace QuickFAST
             boost::mutex::scoped_lock lock(bufferMutex_);
             if(!idleBuffers_.isEmpty())
             {
-              std::ostringstream msg;
-              msg << "AR:{"<< (void *) this <<  "} making idle buffers available" << std::endl;
-              std::cout << msg.str() << std::flush;
+              //std::ostringstream msg;
+              //msg << "AR:{"<< (void *) this <<  "} making idle buffers available" << std::endl;
+              //std::cout << msg.str() << std::flush;
             }
             idleBufferPool_.push(idleBuffers_);
             // be sure we have a read request in progress

@@ -1,3 +1,7 @@
+Fri Apr 29 20:48:34 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Communication/AsynchReceiver.h:
+          Forgot to disable a debug message in my last check-in.
+
 Fri Apr 29 18:46:14 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Application/DNDecoderConnectionImpl.h:
         * src/Application/DNDecoderConnectionImpl.cpp:
