@@ -103,13 +103,15 @@ namespace QuickFAST
             // be sure we have a read request in progress
             startReceive(lock);
             // promote any ancoming messages to outgoing
-            empty = !queue_.refresh(lock, ioService_.runningThreadCount() > 1 && !stopping_);
+            empty = !queue_.refresh(lock, ioService_.runningThreadCount() != 1 && !stopping_);
           }
           // if there is only one thread servicing the ioService
           // and there are no buffers waiting, then let the
           // ioService borrow this thread long enough to accept
           // the next incoming packet of data.
-          if(empty && ioService_.runningThreadCount() < 2 && !stopping_)
+          // TODO: the test for one thread is not completely valid because more than one receiver can share
+          // and I/O service.
+          if(empty && ioService_.runningThreadCount() == 1 && !stopping_)
           {
             //std::ostringstream msg;
             //msg << "AR:{"<< (void *) this <<  "} no buffers: service one io service event{"<< (void *)(&ioService_) << "}. Thread count " << ioService_.runningThreadCount() << std::endl;

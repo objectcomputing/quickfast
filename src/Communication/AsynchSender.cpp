@@ -17,6 +17,7 @@ AsynchSender::AsynchSender(
     , ioService_()
     , keepAlive_(new boost::asio::io_service::work(ioService_))
 {
+  //std::cout << "Asynch Sender {" << (void *)this << "} keeping ioService " << (void*) &ioService_ << " alive." << std::endl;
 }
 
 AsynchSender::AsynchSender(
@@ -26,16 +27,20 @@ AsynchSender::AsynchSender(
     : Sender(recycler)
     , name_(name)
     , ioService_(ioService)
+    , keepAlive_(new boost::asio::io_service::work(ioService_))
 {
+//  std::cout << "Asynch Sender {" << (void *)this << "} keeping shared ioService " << (void*) &ioService_ << " alive." << std::endl;
 }
 
 AsynchSender::~AsynchSender()
 {
+//  std::cout << "Asynch Sender {" << (void *)this << "} exiting." << std::endl;
 }
 
 void
 AsynchSender::stop()
 {
+//  std::cout << "Asynch Sender {" << (void *)this << "} releasing keep-alive on  ioService " << (void*) &ioService_ << std::endl;
   keepAlive_.reset();
 }
 

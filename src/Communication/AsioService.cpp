@@ -19,6 +19,7 @@ AsioService::AsioService()
   , usingSharedService_(true)
   , logger_(0)
 {
+//  std::cout << "Create ASIO service(shared): " << (void *) this << std::endl;
 }
 
 AsioService::AsioService(boost::asio::io_service & ioService)
@@ -29,6 +30,7 @@ AsioService::AsioService(boost::asio::io_service & ioService)
   , usingSharedService_(false)
   , logger_(0)
 {
+//  std::cout << "Create ASIO service(specific): " << (void *) this << " :: " << (void *) &ioService <<  std::endl;
 }
 
 AsioService::~AsioService()
@@ -46,6 +48,7 @@ AsioService::stopService()
 {
   stopping_ = true;
   logger_ = 0;
+//  std::cout << "AsioService stop.\n" << std::flush;
   ioService_.stop();
 }
 
@@ -98,19 +101,16 @@ AsioService::run()
   {
     tc = ++runningThreadCount_;
   }
-  //std::ostringstream msg;
-  //msg << '{' << (void *) this << "} Starting AsioService thread #" << tc << std::endl;
-  //std::cout << msg.str();
+//  std::ostringstream msg;
+//  msg << '{' << (void *) this << " :: " << (void *) &ioService_ << "} Starting AsioService thread #" << tc << std::endl;
+//  std::cout << msg.str();
 
-  while(! stopping_)
+  size_t count = 1;
+  while(! stopping_ && count != 0)
   {
     try
     {
-      size_t count = ioService_.run();
-      if(count == 0)
-      {
-        return;
-      }
+      count = ioService_.run();
     }
     catch (const std::exception & ex)
     {
@@ -124,9 +124,9 @@ AsioService::run()
       }
     }
   }
-  //std::ostringstream msg2;
-  //msg2 << '{' << (void *) this << "} Stopping AsioService thread #" << tc << std::endl;
-  //std::cout << msg2.str();
+//  std::ostringstream msg2;
+//  msg2 << '{' << (void *) this << " :: " << (void *) &ioService_ << "} Stopping AsioService thread #" << tc << std::endl;
+//  std::cout << msg2.str();
 
   --runningThreadCount_;
 }

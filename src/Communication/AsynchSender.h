@@ -82,6 +82,12 @@ namespace QuickFAST
       {
         return ioService_.poll_one();
       }
+
+      AsioService & peekAtIoServiceForDebugging()
+      {
+        return ioService_;
+      };
+
     protected:
       /// @brief handle the write-complete event
       /// @param error contains the boost system error code (if any)

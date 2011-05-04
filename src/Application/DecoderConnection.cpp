@@ -370,8 +370,24 @@ DecoderConnection::configure(
     }
   case Application::DecoderConfiguration::ASYNCHRONOUS_FILE_RECEIVER:
     {
+      unsigned long attributes = 0;
+      try
+      {
+        std::string extraStr;
+        if(configuration.getExtra("INPUT_ATTRIBUTES", extraStr))
+        {
+          std::istringstream extra(extraStr);
+          extra >> std::hex >> attributes;
+        }
+      }
+      catch (...)
+      {
+        ; // for now ignore this
+      }
+
       receiver_.reset(new Communication::AsynchFileReceiver(
-        configuration.fastFileName()));
+        configuration.fastFileName(),
+        attributes));
       break;
     }
   case Application::DecoderConfiguration::BUFFER_RECEIVER:

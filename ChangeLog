@@ -1,3 +1,25 @@
+Wed May  4 14:51:56 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Application/DecoderConnection.cpp:
+          Pass extra open attributes to AsynchFileReceiver
+
+        * src/Communication/AsioService.cpp:
+          Debug messages -- commented out but convenient if needed.
+
+        * src/Communication/AsynchReceiver.h:
+          Check for exactly one thread to discriminate single-threaded
+          From multi-threaded.  Still not completely right, but better
+          than the previous.  The confusion arises when the io_service is
+          shared but all the threads are started through one of the
+          receivers.
+
+        * src/Communication/AsynchSender.h:
+        * src/Communication/AsynchSender.cpp:
+          Debugging messages -- commented out.
+          Debug method lets other parts of the system "peek" at the io_service.
+          One of the constructors was not allocating a keepAlive object so
+          when this constructor was used there was a window during which the
+          io_service could shut down prematurely.
+
 Fri Apr 29 20:48:34 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Communication/AsynchReceiver.h:
           Forgot to disable a debug message in my last check-in.
