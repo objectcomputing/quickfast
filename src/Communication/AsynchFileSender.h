@@ -12,6 +12,7 @@ namespace QuickFAST
 {
   namespace Communication
   {
+#if defined(_WIN32)
     /// @brief Sender that writes data to a fil asynchronously (WINDOWS ONLY)
     class QuickFAST_Export AsynchFileSender: public AsynchSender
     {
@@ -65,6 +66,7 @@ namespace QuickFAST
       boost::asio::windows::random_access_handle handle_;
       long volatile offset_;
     };
+#endif // _WIN32
   }
 }
 #endif // ASYNCHFILESENDER_H

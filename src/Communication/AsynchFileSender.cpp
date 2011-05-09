@@ -3,6 +3,9 @@
 // See the file license.txt for licensing information.
 //
 #include <Common/QuickFASTPch.h>
+
+#if defined(_WIN32) // Not available on non-Windows systems
+
 #include "AsynchFileSender.h"
 #include <Communication/LinkedBuffer.h>
 #include <Common/Exceptions.h>
@@ -116,3 +119,4 @@ AsynchFileSender::close()
   }
   AsynchSender::close();
 }
+#endif // _WIN32

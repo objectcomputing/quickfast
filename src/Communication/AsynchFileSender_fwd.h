@@ -8,7 +8,9 @@ namespace QuickFAST
 {
   namespace Communication
   {
+#if defined(_WIN32)
     class AsynchFileSender;
+#endif // _WIN32
   }
 }
 #endif // ASYNCHFILESENDER_FWD_H

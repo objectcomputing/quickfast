@@ -1,3 +1,13 @@
+Mon May  9 16:03:06 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Common/AtomicOps.h:
+        Rework gcc support for atomic operations
+
+        * src/Communication/AsynchFileReceiver_fwd.h:
+        * src/Communication/AsynchFileSender.h:
+        * src/Communication/AsynchFileSender.cpp:
+        * src/Communication/AsynchFileSender_fwd.h:
+        Disable asynchronous file I/O for non-windows platforms.
+
 Wed May  4 14:51:56 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Application/DecoderConnection.cpp:
           Pass extra open attributes to AsynchFileReceiver

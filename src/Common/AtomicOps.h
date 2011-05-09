@@ -14,6 +14,8 @@
 // No intrinsic compare and swap pointer so we asm it below
 # endif
 #elif defined(__GNUC__)
+// no special included needed for gcc
+#elif defined(USE_ATOMIC_OP_H)
 #include <sys/atomic_op.h>
 #else // something else.  Solaris maybe?
 #include <sys/atomic.h>
@@ -52,9 +54,7 @@ namespace QuickFAST
       (PVOID volatile *)target, value, ifeq);
 # endif
 #elif defined(__GNUC__)
-# if 0 // force ASM on gcc (assume x86 processor)
-    return __sync_bool_compare_and_swap(target, ifeq, value);
-# else // force ASM on gcc
+# if defined(FORCE_ASM_ON_GCC) // force ASM on gcc (assume x86 processor)
     bool result;
     asm(
       "lock \n\t"
@@ -66,6 +66,8 @@ namespace QuickFAST
       : "memory"
     );
     return result;
+# else // force ASM on gcc
+    return __sync_bool_compare_and_swap(target, ifeq, value);
 # endif // force asm on gcc
 #else // otherwise we hope this is defind on your favorite platform
     return ifeq == atomic_cas_ptr(target, ifeq, value);
@@ -100,9 +102,7 @@ namespace QuickFAST
     return ifeq == _InterlockedCompareExchange(target, value, ifeq);
 # endif // cpu type
 #elif defined(__GNUC__)
-# if 0 // force ASM on gcc
-    return __sync_bool_`_swap(target, ifeq, value);
-# else // force ASM on gcc
+# if defined(FORCE_ASM_ON_GCC) // force ASM on gcc (assume x86 processor)
     bool result;
     asm(
       "lock \n\t"
@@ -114,6 +114,8 @@ namespace QuickFAST
       : "memory"
     );
     return result;
+# else // force ASM on gcc
+    return __sync_bool_compare_and_swap(target, ifeq, value);
 # endif // force asm on gcc
 #else
     return ifeq == atomic_cas_ulong(target, ifeq, value);
