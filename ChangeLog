@@ -1,3 +1,7 @@
+Wed May 11 18:45:44 UTC 2011  Dale Wilson  <wilsond@ociweb.com>        * src/Codecs/MulticastDecoder.h:
+        Fix misleading documentation.
+        Yes, MulticastDecoder does support packet and message headers.
+
 Mon May  9 16:03:06 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Common/AtomicOps.h:
         Rework gcc support for atomic operations

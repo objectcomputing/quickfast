@@ -16,11 +16,14 @@ namespace QuickFAST{
   namespace Codecs {
     /// @brief Support decoding of FAST messages received via multicast.
     ///
-    /// This class assumes that incoming FAST messages are packed
-    /// one or more per packet with no additional information (no headers, etc.)
-    /// in the packet.
+    /// This class can handle one or more messages in a packet.  There can be a packet header
+    /// and each message can have it's own header. [A header is a nonFAST preamble to the encoded message)
+    /// Use the headerAnalyzer arguments to to the overloaded start() method if the incoming data contains headers.
     ///
-    /// If this is not the case, see MulticastReceiver.
+    /// This class cannot handle messages split across packet boundararies.  These should neever appear in a
+    /// multicast feed anyway because delivery of multicast packets is unreliable.
+    /// @see MulticastReceiver
+
     class QuickFAST_Export MulticastDecoder
     {
     public:
