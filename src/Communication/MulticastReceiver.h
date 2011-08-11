@@ -153,7 +153,7 @@ namespace QuickFAST
       {
         socket_.async_receive_from(
           boost::asio::buffer(buffer->get(), buffer->capacity()),
-          endpoint_,
+          senderEndpoint_,
           boost::bind(&MulticastReceiver::handleReceive,
             this,
             boost::asio::placeholders::error,
@@ -167,6 +167,7 @@ namespace QuickFAST
       boost::asio::ip::address listenInterface_;
       boost::asio::ip::address multicastGroup_;
       boost::asio::ip::udp::endpoint endpoint_;
+      boost::asio::ip::udp::endpoint senderEndpoint_;
       boost::asio::ip::udp::socket socket_;
       bool joined_;
     };
