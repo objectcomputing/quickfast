@@ -1,3 +1,7 @@
+Mon Aug 22 19:09:23 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Communication/PCapReader.cpp:
+        Fixes to support for checksum appended to packet.
+
 Wed May 11 18:45:44 UTC 2011  Dale Wilson  <wilsond@ociweb.com>        * src/Codecs/MulticastDecoder.h:
         Fix misleading documentation.
         Yes, MulticastDecoder does support packet and message headers.

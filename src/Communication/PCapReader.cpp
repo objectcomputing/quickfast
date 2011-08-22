@@ -205,8 +205,6 @@ namespace
   static const uint32 nativeMagic = 0xa1b2c3d4;
   static const uint32 swappedMagic = 0xd4c3b2a1;
 
-  // Packet checksum
-  typedef uint32 checksum_t;
 #pragma pack(pop)
 
 }
@@ -360,7 +358,7 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
           {
             // HACK!look for the IP protocol flag to mark the end of the the link layer header
             static unsigned short IPProtocol = 0x0008;
-            while(!found && datalen - sizeof(checksum_t) > 2)
+            while(!found && datalen > 2)
             {
               unsigned short protocol = *(unsigned short *)(buffer_.get() + pos_);
               if(swap(protocol) == IPProtocol)
@@ -385,20 +383,19 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
           size_t ipLen = (ipHeader->ver_ihl & 0xF) * 4;
           pos_ += ipLen;
           datalen -= ipLen;
+          udp_header * udpHeader = reinterpret_cast<udp_header*>(buffer_.get() + pos_);
           pos_ += sizeof(udp_header);
-          datalen -= sizeof(udp_header);
-          // a 4 byte checksum appears at the end of the packet.  It is not part of the payload.
-          if(datalen > sizeof(checksum_t))
+          // use the datagram length from the udp header.  Ignore any extra noise in the packet
+          //datalen -= sizeof(udp_header);
+          datalen = swap(udpHeader->len);
+          buffer = buffer_.get() + pos_;
+          size = datalen;
+          if(verbose_)
           {
-            buffer = buffer_.get() + pos_;
-            size = datalen - sizeof(checksum_t);
-            if(verbose_)
-            {
-              std::cout << "PCapReader: " << headerPos << ": " << pos_ << ' ' << datalen
-                << "=== 0x" << std::hex  << headerPos << ": 0x" << pos_ << " 0x" << datalen << std::dec << std::endl;
-            }
-            ok_ = true;
+            std::cout << "PCapReader: " << headerPos << ": " << pos_ << ' ' << datalen
+              << "=== 0x" << std::hex  << headerPos << ": 0x" << pos_ << " 0x" << datalen << std::dec << std::endl;
           }
+          ok_ = true;
           pos_ += datalen;
         }
         else
