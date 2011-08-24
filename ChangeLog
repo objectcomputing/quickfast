@@ -1,3 +1,9 @@
+Wed Aug 24 20:21:02 UTC 2011  Trevor Fields  <fields_t@ociweb.com>
+
+        * src/Communication/PCapReader.cpp:
+        Fix to corectly use udp packet length from packet.
+        Added more verbose messages.
+
 Mon Aug 22 19:09:23 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Communication/PCapReader.cpp:
         Fixes to support for checksum appended to packet.

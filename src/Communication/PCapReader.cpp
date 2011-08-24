@@ -6,7 +6,10 @@
 #include "PCapReader.h"
 #ifdef _WIN32
 #include <Winsock2.h>
+#else
+#include <netinet/in.h>
 #endif
+
 using namespace QuickFAST;
 using namespace Communication;
 
@@ -271,6 +274,10 @@ PCapReader::rewind()
     {
       swap.setSwap(fileHeader->magic == swappedMagic);
       assert(swap(fileHeader->magic) == nativeMagic);
+      if(verbose_)
+      {
+        std::cout << "PCapReader: Setting swap to : " << (fileHeader->magic == swappedMagic) << std::endl;
+      }
     }
     linktype_ = swap(fileHeader->linktype);
   }
@@ -300,12 +307,31 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
       minBytes = sizeof(pcap_pkthdr64) + sizeof(ip_header) + sizeof(udp_header);
     }
 
+    if(verbose_)
+    {
+      std::cout << "PCapReader: Starting read position: " << pos_ << " file size: " << fileSize_ 
+                << " minimum packet size: " << minBytes << std::endl;
+      if(usetv32_)
+      {
+        std::cout << "PCapReader: reading from 32 bit packet capture" << std::endl;
+      }
+      else if(usetv64_)
+      {
+        std::cout << "PCapReader: reading from 64 bit packet capture" << std::endl;
+      }
+      else
+      {
+        std::cout << "PCapReader: reading from unidentified packet capture" << std::endl;
+      }
+    }
+
     while(!ok_ && (pos_ + minBytes < fileSize_))
     {
       ////////////////////////////
       // process the packet header
       size_t headerPos = pos_;
       size_t datalen = 0;
+      size_t expectlen = 0;
       bool truncate = false;
       unsigned int dataLinkType = 0;
 
@@ -314,6 +340,7 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
         pcap_pkthdr32 * packetHeader = reinterpret_cast<pcap_pkthdr32 *>(buffer_.get() + pos_);
         pos_ += sizeof(pcap_pkthdr32);
         datalen = swap(packetHeader->caplen);
+        expectlen = swap(packetHeader->len);
         truncate = (packetHeader->caplen != packetHeader->len);
       }
       else if(usetv64_)
@@ -321,6 +348,7 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
         pcap_pkthdr64 * packetHeader = reinterpret_cast<pcap_pkthdr64 *>(buffer_.get() + pos_);
         pos_ += sizeof(pcap_pkthdr64);
         datalen = swap(packetHeader->caplen);
+        expectlen = swap(packetHeader->len);
         truncate = (packetHeader->caplen != packetHeader->len);
       }
       else
@@ -328,20 +356,38 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
         pcap_pkthdr * packetHeader = reinterpret_cast<pcap_pkthdr *>(buffer_.get() + pos_);
         pos_ += sizeof(pcap_pkthdr);
         datalen = swap(packetHeader->caplen);
+        expectlen = swap(packetHeader->len);
         truncate = (packetHeader->caplen != packetHeader->len);
+      }
+      if(verbose_)
+      {
+        std::cout << "PCapReader: after header position: " << pos_ << " data length: " << datalen;
       }
       if(truncate)
       {
         pos_ += datalen;
         skipped+= 1;
+        if(verbose_)
+        {
+          std::cout << "  Truncated. received 0x"  << std::hex << datalen
+                    << " expected 0x" << expectlen << std::dec << std::endl;
+        }
       }
       else
       {
+        if(verbose_)
+        {
+          std::cout << std::endl;
+        }
         bool found = false;
         switch(linktype_)
         {
         case DLT_EN10MB:
           {
+            if(verbose_)
+            {
+              std::cout << "PCapReader: Ethernet packet." << std::endl;
+            }
             pos_ += sizeof(ethernetIIHeader);
             datalen -= sizeof(ethernetIIHeader);
             found = true;
@@ -349,6 +395,10 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
           }
         case DLT_LINUX_SLL:
           {
+            if(verbose_)
+            {
+              std::cout << "PCapReader: Linux cooked socket packet." << std::endl;
+            }
             pos_ += sizeof(linuxCookedCaptureHeader);
             datalen -= sizeof(linuxCookedCaptureHeader);
             found = true;
@@ -356,6 +406,10 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
           }
         default:
           {
+            if(verbose_)
+            {
+              std::cout << "PCapReader: Other type of packet.  Checking for IP protocol flag." << std::endl;
+            }
             // HACK!look for the IP protocol flag to mark the end of the the link layer header
             static unsigned short IPProtocol = 0x0008;
             while(!found && datalen > 2)
@@ -385,21 +439,25 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
           datalen -= ipLen;
           udp_header * udpHeader = reinterpret_cast<udp_header*>(buffer_.get() + pos_);
           pos_ += sizeof(udp_header);
+          datalen -= sizeof(udp_header);
           // use the datagram length from the udp header.  Ignore any extra noise in the packet
-          //datalen -= sizeof(udp_header);
-          datalen = swap(udpHeader->len);
+          size_t udpLen = ntohs(swap(udpHeader->len));
           buffer = buffer_.get() + pos_;
-          size = datalen;
+          size = udpLen - sizeof(udp_header);
           if(verbose_)
           {
-            std::cout << "PCapReader: " << headerPos << ": " << pos_ << ' ' << datalen
-              << "=== 0x" << std::hex  << headerPos << ": 0x" << pos_ << " 0x" << datalen << std::dec << std::endl;
+            std::cout << "PCapReader: " << headerPos << ": " << pos_ << ' ' << size
+              << "=== 0x" << std::hex  << headerPos << ": 0x" << pos_ << " 0x" << size << std::dec << std::endl;
           }
           ok_ = true;
           pos_ += datalen;
         }
         else
         {
+          if(verbose_)
+          {
+            std::cout << "PCapReader: could not find packet. Skipping " << datalen << " bytes." << std::endl;
+          }
           pos_ += datalen;
           skipped += 1;
         }
