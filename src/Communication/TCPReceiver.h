@@ -17,7 +17,7 @@ namespace QuickFAST
       : public AsynchReceiver
     {
     public:
-      /// @brief Construct given multicast information.
+      /// @brief Construct given TCP connection information.
       /// @param hostName identifies the host to connect to
       /// @param port port service name or number
       TCPReceiver(
@@ -31,7 +31,7 @@ namespace QuickFAST
       {
       }
 
-      /// @brief construct given shared io_service and multicast information
+      /// @brief construct given shared io_service and TCP connection information
       /// @param ioService an ioService to be shared with other objects
       /// @param hostName is the name or dotted IP to connect to
       /// @param port port service name or number

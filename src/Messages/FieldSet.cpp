@@ -31,7 +31,7 @@ FieldSet::reserve(size_t capacity)
   if(capacity > capacity_)
   {
     MessageField * buffer = reinterpret_cast<MessageField *>(new unsigned char[sizeof(MessageField) * capacity]);
-    memset(buffer, 0, sizeof(MessageField) * capacity_);
+    memset(buffer, 0, sizeof(MessageField) * capacity);
     for(size_t nField = 0; nField < used_; ++nField)
     {
       new(&buffer[nField]) MessageField(fields_[nField]);

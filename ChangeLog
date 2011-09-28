@@ -1,3 +1,25 @@
+Wed Sep 28 20:32:52 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/FieldOp.cpp:
+          Issue #93.  User-defined dictionaries not honored.
+
+        * src/Codecs/DataSource.h:
+        * src/Codecs/StreamingAssembler.h:
+        * src/Codecs/StreamingAssembler.cpp:
+          Issue 92.  Streaming Assembler doesn't handle waitForCompleteMessage properly.
+
+        * src/Codecs/FieldInstruction.cpp:
+          Check for most negative integer is not working on gcc.
+
+        * src/Communication/TCPReceiver.h:
+          Documentation update.
+
+        * src/Messages/FieldSet.cpp:
+          Memory access error clearing newly allocated buffer using wrong value for capacity.
+
+        * src/Tests/testSmallestValue.cpp:
+          Rename LARGEST_INT64 to be INT64_SINGULARITY.  It's actually the most negative int64.
+
+
 Wed Aug 24 20:21:02 UTC 2011  Trevor Fields  <fields_t@ociweb.com>
 
         * src/Communication/PCapReader.cpp:

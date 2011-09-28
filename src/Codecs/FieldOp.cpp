@@ -43,7 +43,7 @@ FieldOp::indexDictionaries(
       keyNamespace = keyNamespace_;
     }
     dictionaryIndex_ = indexer.getIndex(
-      dictionaryName,
+      name,
       typeName,
       typeNamespace,
       key,

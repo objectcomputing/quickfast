@@ -82,7 +82,6 @@ namespace QuickFAST
 
       // buffer from which data is being pulled
       Communication::LinkedBuffer * currentBuffer_;
-      size_t pos_;
 
       bool headerIsComplete_;
       bool skipBlock_;

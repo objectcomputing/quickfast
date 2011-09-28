@@ -394,7 +394,7 @@ namespace
 }
 
 void
-FieldInstruction::encodeSignedInteger1(DataDestination & destination, WorkingBuffer & buffer, int64 value)
+FieldInstruction::encodeSignedInteger(DataDestination & destination, WorkingBuffer & buffer, int64 value)
 {
   encodeToWorkingBuffer(buffer, value);
   for(const uchar * it = buffer.begin();
@@ -409,7 +409,6 @@ FieldInstruction::encodeSignedInteger1(DataDestination & destination, WorkingBuf
 void
 FieldInstruction::encodeSignedInteger(DataDestination & destination, WorkingBuffer & buffer, int64 value)
 {
-//TODO Measure performance of this code
   if (value >= 0)
   {
     if (value < 0x0000000000000040LL)
@@ -502,7 +501,8 @@ FieldInstruction::encodeSignedInteger(DataDestination & destination, WorkingBuff
   {
     // using absolute value avoids tricky word length issues
     int64 absv = -value;
-    if(absv == value)
+//    if(absv == value) // Apparently this is not a valid check on all compilers
+    if((value << 1) == 0)
     {
       // encode the most negative possible number
       destination.putByte(0x7F);    // 8... .... .... ....
@@ -593,7 +593,7 @@ FieldInstruction::encodeSignedInteger(DataDestination & destination, WorkingBuff
 #endif
 #if 0
 void
-FieldInstruction::encodeUnsignedInteger1(DataDestination & destination, WorkingBuffer & buffer, uint64 value)
+FieldInstruction::encodeUnsignedInteger(DataDestination & destination, WorkingBuffer & buffer, uint64 value)
 {
   buffer.clear(true);
   uint64 until = 0ULL;

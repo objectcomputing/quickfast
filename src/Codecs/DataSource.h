@@ -50,12 +50,23 @@ namespace QuickFAST{
       /// The actual value returned is not critical.  The decoder checks
       ///  >= 0 to detect EOF.
       ///
-      /// @brief return -1 if end of data (forever);
+      /// @return -1 if end of data (forever);
       ///        otherwise return n >= 0 for the number of bytes readily available
       virtual int bytesAvailable();
 
+      /// @brief How many bytes remain in current buffer?
+      ///
+      /// Never updates the buffers.
+      ///
+      /// @return number of bytes in current buffer.
+      inline
+      size_t currentBytesAvailable()
+      {
+          return size_ - position_;
+      }
+
       /// @brief Check for contiguous bytes in current buffer
-      /// @param needed is the nuber of contiguous bytes needed
+      /// @param needed is the number of contiguous bytes needed
       /// @param[out] buffer points to beginning of contiguous area if return is true
       /// @returns true if contiguous data is available
       inline

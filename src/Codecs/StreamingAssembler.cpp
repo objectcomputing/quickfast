@@ -24,7 +24,6 @@ StreamingAssembler::StreamingAssembler(
   , waitForCompleteMessage_(waitForCompleteMessage)
   , receiver_(0)
   , currentBuffer_(0)
-  , pos_(0)
   , headerIsComplete_(false)
   , skipBlock_(false)
   , blockSize_(0)
@@ -59,11 +58,8 @@ StreamingAssembler::serviceQueue(
       if(waitForCompleteMessage_ && blockSize_ > 0)
       {
         /// check # bytes available to see if there's a complete message to decode
-        size_t available = 0;
-        if(currentBuffer_ != 0)
-        {
-          available = currentBuffer_->used() - pos_;
-        }
+        size_t available = currentBytesAvailable();
+
         // try for more bytes: false means don't wait if they aren't there
         if(available < blockSize_
           && !receiver_->needBytes(blockSize_ - available, false))
