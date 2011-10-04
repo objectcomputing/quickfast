@@ -13,8 +13,9 @@ MulticastDecoder::MulticastDecoder(
   TemplateRegistryPtr templateRegistry,
   const std::string & multicastGroupIP,
   const std::string & listenAddressIP,
+  const std::string & bindIP,
   unsigned short portNumber)
-: receiver_(multicastGroupIP, listenAddressIP, portNumber)
+: receiver_(multicastGroupIP, listenAddressIP, bindIP, portNumber)
 , templateRegistry_(templateRegistry)
 , messageLimit_(0)
 , strict_(true)
@@ -27,8 +28,9 @@ MulticastDecoder::MulticastDecoder(
   boost::asio::io_service & ioService,
   const std::string & multicastGroupIP,
   const std::string & listenAddressIP,
+  const std::string & bindIP,
   unsigned short portNumber)
-: receiver_(ioService, multicastGroupIP, listenAddressIP, portNumber)
+: receiver_(ioService, multicastGroupIP, listenAddressIP, bindIP, portNumber)
 , templateRegistry_(templateRegistry)
 , messageLimit_(0)
 , strict_(true)

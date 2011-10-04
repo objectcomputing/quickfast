@@ -23,6 +23,8 @@
 # include <windows.h>
 #endif // _WIN32
 
+#include <limits.h>
+
 // If building for .NET, must link boost threads dynamically
 #define BOOST_THREAD_USE_DLL
 // This reports at compile time which boost libraries will be used

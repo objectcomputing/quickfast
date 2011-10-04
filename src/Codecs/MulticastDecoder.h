@@ -32,11 +32,13 @@ namespace QuickFAST{
       /// @param templateRegistry the templates to use for decoding
       /// @param multicastGroupIP multicast address as a text string
       /// @param listenAddressIP listen address as a text string
+      /// @param bindIP bind address as a text string
       /// @param portNumber port number
       MulticastDecoder(
         TemplateRegistryPtr templateRegistry,
         const std::string & multicastGroupIP,
         const std::string & listenAddressIP,
+        const std::string & bindIP,
         unsigned short portNumber);
 
       /// @brief construct given templates, shared io_service, and multicast information
@@ -45,12 +47,14 @@ namespace QuickFAST{
       /// @param ioService an ioService to be shared with other objects
       /// @param multicastGroupIP multicast address as a text string
       /// @param listenAddressIP listen address as a text string
+      /// @param bindIP bind address as a text string
       /// @param portNumber port number
       MulticastDecoder(
         TemplateRegistryPtr templateRegistry,
         boost::asio::io_service & ioService,
         const std::string & multicastGroupIP,
         const std::string & listenAddressIP,
+        const std::string & bindIP,
         unsigned short portNumber);
 
       ~MulticastDecoder();

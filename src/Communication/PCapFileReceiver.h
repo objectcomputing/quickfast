@@ -50,7 +50,7 @@ namespace QuickFAST
         {
           reader_.set64bit(true);
         }
-        reader_.open(filename_.c_str());
+        reader_.open(filename_.c_str()); // for debugging, dump to->, &std::cout);
         return reader_.good();
       }
 

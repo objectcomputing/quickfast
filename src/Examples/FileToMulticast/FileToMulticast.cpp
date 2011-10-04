@@ -169,7 +169,10 @@ FileToMulticast::applyArgs()
 
     ok = ok && parseIndexFile();
 
-    sender_.reset(new Communication::MulticastSender(ioService_, sendAddress_, portNumber_));
+    sender_.reset(new Communication::MulticastSender(
+      ioService_,
+      *this,
+      sendAddress_, portNumber_));
   }
   catch (std::exception& e)
   {
@@ -362,3 +365,8 @@ FileToMulticast::fini()
 {
 }
 
+void
+FileToMulticast::recycle(Communication::LinkedBuffer * emptyBuffer)
+{
+  int todo;
+}

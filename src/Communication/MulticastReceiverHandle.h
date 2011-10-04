@@ -27,6 +27,7 @@ namespace QuickFAST{
       MulticastReceiverHandle(
         const std::string & multicastGroupIP,
         const std::string & listenInterfaceIP,
+        const std::string & bindIP,
         unsigned short portNumber);
       ~MulticastReceiverHandle();
       ///////////////////////////////////////

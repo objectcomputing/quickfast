@@ -29,8 +29,9 @@ namespace QuickFAST
       /// @brief open a PCap formatted file
       ///
       /// @param filename names the file
+      /// @param dumpFile if present, a hex dump of the input file will be written to this stream.
       /// @returns true if the open was successful
-      bool open(const char * filename);
+      bool open(const char * filename, std::ostream * dumpFile = 0);
 
       /// @brief enable noisy operation for debugging purposes
       ///
@@ -89,6 +90,10 @@ namespace QuickFAST
                       // neither usetv32_ nor usetv64_ means use native
                       // both is an (undetected) error.
       uint32 linktype_;
+
+      // Important note: swap applies to pcap hader info.  It does NOT apply to
+      // network ordered bytes within the message body.
+      // For actual captured data, use ntohl or ntohs rather than swap.
       ByteSwapper swap;
       bool verbose_;
     };

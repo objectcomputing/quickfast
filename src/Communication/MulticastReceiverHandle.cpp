@@ -14,10 +14,12 @@ namespace QuickFAST{
       MulticastReceiverHandle_i(
         const std::string & multicastGroupIP,
         const std::string & listenInterfaceIP,
+        const std::string & bindIP,
         unsigned short portNumber)
         :ptr_(new MulticastReceiver(
                   multicastGroupIP,
                   listenInterfaceIP,
+                  bindIP,
                   portNumber))
       {
       }
@@ -34,10 +36,12 @@ using namespace Communication;
 MulticastReceiverHandle::MulticastReceiverHandle(
     const std::string & multicastGroupIP,
     const std::string & listenInterfaceIP,
+    const std::string & bindIP,
     unsigned short portNumber)
   : pImpl_(new MulticastReceiverHandle_i(
             multicastGroupIP,
             listenInterfaceIP,
+            bindIP,
             portNumber))
 {
 }

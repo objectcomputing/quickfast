@@ -7,35 +7,45 @@
 // All inline, do not export.
 //#include <Common/QuickFAST_Export.h>
 #include "MulticastSender_fwd.h"
-#include <Communication/AsynchReceiver.h>
+#include <Communication/AsynchSender.h>
 
 namespace QuickFAST
 {
   namespace Communication
   {
-    /// @brief Receive Multicast Packets and pass them to a packet handler
-    class MulticastSender
+    /// @brief Send Multicast Packets
+    /// WARNING: Under construction
+    class MulticastSender : public AsynchSender
     {
     public:
       /// @brief Construct given multicast information.
+      /// @param recycler to handle empty buffers
       /// @param sendAddress multicast address as a text string
       /// @param portNumber port number
       MulticastSender(
+        BufferRecycler & recycler,
         const std::string & sendAddress,
         unsigned short portNumber
         )
-        : sendAddress_(sendAddress)
+        : AsynchSender(recycler, sendAddress.c_str())
+        , sendAddress_(sendAddress)
         , portNumber_(portNumber)
         , socket_(ioService_)
       {
       }
 
+      /// @brief Construct given multicast information.
+      /// @param ioService is a shared io service object
+      /// @param recycler to handle empty buffers
+      /// @param sendAddress multicast address as a text string
+      /// @param portNumber port number
       MulticastSender(
         boost::asio::io_service & ioService,
+        BufferRecycler & recycler,
         const std::string & sendAddress,
         unsigned short portNumber
         )
-        : ioService_(ioService)
+        : AsynchSender(ioService, recycler, sendAddress.c_str())
         , sendAddress_(sendAddress)
         , portNumber_(portNumber)
         , socket_(ioService_)
@@ -46,6 +56,7 @@ namespace QuickFAST
       {
       }
 
+      ///@brief Prepare the sender to be used
       bool initializeSender()
       {
         multicastAddress_ = boost::asio::ip::address::from_string(sendAddress_);
@@ -54,6 +65,7 @@ namespace QuickFAST
         return true;
       }
 
+      /// @brief Prepare to shut down
       void stop()
       {
         try
@@ -65,7 +77,17 @@ namespace QuickFAST
         }
       }
 
-      /// Provide direct access to the internal asio socket.
+      void open()
+      {
+        int todo;
+      }
+
+      void send(LinkedBuffer * buffer)
+      {
+        int todo;
+      }
+
+      /// @brief Provide direct access to the internal asio socket.
       boost::asio::ip::udp::socket & socket()
       {
         return socket_;
@@ -129,7 +151,7 @@ namespace QuickFAST
       }
 
     private:
-      AsioService ioService_;
+//      AsioService ioService_;
       const std::string & sendAddress_;
       unsigned short portNumber_;
       boost::asio::ip::address multicastAddress_;

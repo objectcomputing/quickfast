@@ -1,3 +1,33 @@
+Tue Oct  4 15:43:25 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Common/QuickFASTPch.h:
+        Include <limits.h> which was not getting pulled in on some platforms.
+
+        * src/Application/DecoderConfiguration.h:
+        * src/Application/DecoderConnection.cpp:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder.cpp:
+        * src/Communication/MulticastReceiver.h:
+        * src/Communication/MulticastReceiverHandle.h:
+        * src/Communication/MulticastReceiverHandle.cpp:
+        * src/Communication/MulticastSender.h:
+        * src/Examples/FileToMulticast/FileToMulticast.h:
+        * src/Examples/FileToMulticast/FileToMulticast.cpp:
+        * src/Examples/PCapToMulticast/PCapToMulticast.h:
+        * src/Examples/PCapToMulticast/PCapToMulticast.cpp:
+        Add new multicast option: -mbind ip
+        Defaults to the value specified by -mlisten ip
+
+
+        * src/Communication/PCapFileReceiver.h:
+        * src/Communication/PCapReader.h:
+        * src/Communication/PCapReader.cpp:
+        Revisit the handling of UDP headers block in pcap file.
+
+        * src/Codecs/DataSourceBlockedStream.h:
+        * src/Codecs/DataSourceBufferedBlockedStream.h:
+        Remove obsolete data sources.
+ 	Use DataSourceStream with appropriate header analyzer.
+
 Wed Sep 28 20:32:52 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/FieldOp.cpp:
           Issue #93.  User-defined dictionaries not honored.
@@ -30,7 +60,8 @@ Mon Aug 22 19:09:23 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Communication/PCapReader.cpp:
         Fixes to support for checksum appended to packet.
 
-Wed May 11 18:45:44 UTC 2011  Dale Wilson  <wilsond@ociweb.com>        * src/Codecs/MulticastDecoder.h:
+Wed May 11 18:45:44 UTC 2011  Dale Wilson  <wilsond@ociweb.com>        
+        * src/Codecs/MulticastDecoder.h:
         Fix misleading documentation.
         Yes, MulticastDecoder does support packet and message headers.
 

@@ -225,7 +225,7 @@ PCapReader::PCapReader()
 }
 
 bool
-PCapReader::open(const char * filename)
+PCapReader::open(const char * filename, std::ostream * dumpFile)
 {
   ok_ = true;
   FILE * file = fopen(filename, "rb");
@@ -236,9 +236,25 @@ PCapReader::open(const char * filename)
     fileSize_ = ftell(file);
     buffer_.reset(new unsigned char[fileSize_]);
     fseek(file, 0, SEEK_SET);
-    size_t byteCount = fread(buffer_.get(), 1, fileSize_, file);
-    ok_ = byteCount == fileSize_;
+    unsigned char * rawBuffer = buffer_.get();
+    size_t byteCount = fread(rawBuffer, 1, fileSize_, file);
     fclose(file);
+    ok_ = byteCount == fileSize_;
+    if(dumpFile != 0)
+    {
+      *dumpFile << std::hex << std::setfill('0') <<std::endl;
+      for(size_t pos = 0; pos < byteCount;)
+      {
+        *dumpFile << std::setw(4) << pos << ' ';
+        size_t end = pos + 16;
+        for(;pos < end && pos < byteCount; ++pos)
+        {
+          *dumpFile << ' ' << std::setw(2) << (short) rawBuffer[pos];
+        }
+        *dumpFile << std::endl;
+      }
+      *dumpFile << std::dec;
+    }
   }
   if(ok_)
   {
@@ -440,10 +456,15 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
           udp_header * udpHeader = reinterpret_cast<udp_header*>(buffer_.get() + pos_);
           pos_ += sizeof(udp_header);
           datalen -= sizeof(udp_header);
-          // use the datagram length from the udp header.  Ignore any extra noise in the packet
-          size_t udpLen = ntohs(swap(udpHeader->len));
+          
+          // udplen includes udp header + cargo
+          // udplen is stored in network byte order
+          size_t udplen = ntohs(udpHeader->len);
+
           buffer = buffer_.get() + pos_;
-          size = udpLen - sizeof(udp_header);
+          // trust the udp header for actual cargo size
+          // but continue to trust pos_ and datalen (originates in pcap header) for position in buffer.
+          size = udplen - sizeof(udp_header);
           if(verbose_)
           {
             std::cout << "PCapReader: " << headerPos << ": " << pos_ << ' ' << size

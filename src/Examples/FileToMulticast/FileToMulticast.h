@@ -7,6 +7,7 @@
 #include <Examples/CommandArgParser.h>
 #include <Communication/AsioService.h>
 #include <Communication/MulticastSender_fwd.h>
+#include <Communication/BufferRecycler.h>
 #include <stdio.h>
 
 namespace QuickFAST{
@@ -22,7 +23,7 @@ namespace QuickFAST{
     ///
     /// This program is not really FAST-aware. It is just part of a testing
     /// framework for other programs.
-    class FileToMulticast : public CommandArgHandler
+    class FileToMulticast : public CommandArgHandler, public Communication::BufferRecycler
     {
     public:
       FileToMulticast();
@@ -38,6 +39,9 @@ namespace QuickFAST{
       int run();
       /// @brief do final cleanup after a run.
       void fini();
+
+    private:
+      void recycle(Communication::LinkedBuffer * emptyBuffer);
 
     private:
       bool parseIndexFile();

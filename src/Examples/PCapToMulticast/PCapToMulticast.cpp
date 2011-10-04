@@ -136,19 +136,20 @@ PCapToMulticast::parseSingleArg(int argc, char * argv[])
 void
 PCapToMulticast::usage(std::ostream & out) const
 {
-  out << "  -a dotted_ip  : Multicast send address (default is 239.255.0.1)" << std::endl;
-  out << "  -p port       : Multicast port number (default 30001)" << std::endl;
-  out << "  -f datafile   : File containing PCAP format capture of a multicast feed." << std::endl;
-  out << "  -r burst/sec  : Rate at which to send bursts of messages expressed as bursts per second (default = 2000)" << std::endl;
-  out << "                : zero means send continuously." << std::endl;
-  out << "  -b msg/burst  : Messages per burst(default = 1)" << std::endl;
-  out << "  -c count      : How many times to send the file (passes)" << std::endl;
-  out << "                  (default 1; 0 means forever.)" << std::endl;
-  out << "  -pausemessage : Wait for 'Enter' before every message." << std::endl;
-  out << "  -pausepass    : Wait for 'Enter' before every pass." << std::endl;
-  out << "  -32           : Data file was captured on 32 bit system." << std::endl;
-  out << "  -64           : Data file was captured on 64 bit system." << std::endl;
-  out << "  -v            : Noise to the console while it runs" << std::endl;
+  out << "  -a dotted_ip       : Multicast send address (default is 239.255.0.1)" << std::endl;
+  out << "  -p port            : Multicast port number (default 30001)" << std::endl;
+  out << "  -f datafile        : File containing PCAP format capture of a multicast feed." << std::endl;
+  out << "  -r burst/sec       : Rate at which to send bursts of messages expressed as bursts per second (default = 2000)" << std::endl;
+  out << "                     : zero means send continuously." << std::endl;
+  out << "  -b msg/burst       : Messages per burst(default = 1)" << std::endl;
+  out << "  -c count           : How many times to send the file (passes)" << std::endl;
+  out << "                       (default 1; 0 means forever.)" << std::endl;
+  out << "  -pausemessage      : Wait for 'Enter' before every message." << std::endl;
+  out << "  -pausepass         : Wait for 'Enter' before every pass." << std::endl;
+  out << "  -32                : Data file was captured on 32 bit system." << std::endl;
+  out << "  -64                : Data file was captured on 64 bit system." << std::endl;
+  out << "  -packetchecksum n  : size of packet checksum (default is 4)" << std::endl;
+  out << "  -v                 : Noise to the console while it runs" << std::endl;
 }
 
 bool
@@ -163,7 +164,7 @@ PCapToMulticast::applyArgs()
       std::cerr << "ERROR: -f [datafile] option is required." << std::endl;
       commandArgParser_.usage(std::cerr);
     }
-    ok = ok && pcapReader_.open(dataFileName_.c_str());
+    ok = ok && pcapReader_.open(dataFileName_.c_str());// for debugging dump to->, &std::cout);
 
     multicastAddress_ = boost::asio::ip::address::from_string(sendAddress_);
     endpoint_ = boost::asio::ip::udp::endpoint(multicastAddress_, portNumber_);

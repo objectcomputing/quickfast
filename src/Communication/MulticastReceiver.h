@@ -27,11 +27,14 @@ namespace QuickFAST
       MulticastReceiver(
         const std::string & multicastGroupIP,
         const std::string & listenInterfaceIP,
+        const std::string & bindIP,
         unsigned short portNumber
         )
         : AsynchReceiver()
         , listenInterface_(boost::asio::ip::address::from_string(listenInterfaceIP))
+        , portNumber_(portNumber)
         , multicastGroup_(boost::asio::ip::address::from_string(multicastGroupIP))
+        , bindAddress_(boost::asio::ip::address::from_string(bindIP))
         , endpoint_(listenInterface_, portNumber)
         , socket_(ioService_)
         , joined_(false)
@@ -47,11 +50,14 @@ namespace QuickFAST
         boost::asio::io_service & ioService,
         const std::string & multicastGroupIP,
         const std::string & listenInterfaceIP,
+        const std::string & bindIP,
         unsigned short portNumber
         )
         : AsynchReceiver(ioService)
         , listenInterface_(boost::asio::ip::address::from_string(listenInterfaceIP))
+        , portNumber_(portNumber)
         , multicastGroup_(boost::asio::ip::address::from_string(multicastGroupIP))
+        , bindAddress_(boost::asio::ip::address::from_string(bindIP))
         , endpoint_(listenInterface_, portNumber)
         , socket_(ioService_.ioService())
         , joined_(false)
@@ -67,7 +73,8 @@ namespace QuickFAST
       {
         socket_.open(endpoint_.protocol());
         socket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
-        socket_.bind(endpoint_);
+        boost::asio::ip::udp::endpoint bindpoint(bindAddress_, portNumber_);
+        socket_.bind(bindpoint);
 
         if(assembler_->wantLog(Common::Logger::QF_LOG_INFO))
         {
@@ -165,7 +172,9 @@ namespace QuickFAST
 
     private:
       boost::asio::ip::address listenInterface_;
+      unsigned short portNumber_;
       boost::asio::ip::address multicastGroup_;
+      boost::asio::ip::address bindAddress_;
       boost::asio::ip::udp::endpoint endpoint_;
       boost::asio::ip::udp::endpoint senderEndpoint_;
       boost::asio::ip::udp::socket socket_;

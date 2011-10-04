@@ -292,6 +292,18 @@ namespace QuickFAST{
         return listenInterfaceIP_;
       }
 
+      /// @brief For MulticastReceiver selects IP to which the socket will be bound
+      const std::string & multicastBindIP()const
+      {
+        if(multicastBindIP_.empty())
+        {
+          return listenInterfaceIP_;
+        }
+        return multicastBindIP_;
+      }
+
+
+
       /// @brief For TCPIPReceiver, Host name or IP
       const std::string & hostName()const
       {
@@ -559,6 +571,13 @@ namespace QuickFAST{
         listenInterfaceIP_ = listenInterfaceIP;
       }
 
+
+      /// @brief For MulticastReceiver selects the NIC on which to subscribe/listen
+      void setMulticastBindIP(const std::string & bindIP)
+      {
+        multicastBindIP_ = bindIP;
+      }
+
       /// @brief For TCPIPReceiver, Host name or IP
       void setHostName(const std::string & hostName)
       {
@@ -649,11 +668,12 @@ namespace QuickFAST{
         out << "  -multicast ip:port   : Input from Multicast." << std::endl;
         out << "                         Subscribe to dotted \"ip\" address" << std::endl;
         out << "                         on port number \"port\":" << std::endl;
-        out << "  -mlisten ip            : Multicast dotted IP listen address" << std::endl;
+        out << "  -mlisten ip          : Multicast dotted IP listen address" << std::endl;
         out << "                           (default is " << listenInterfaceIP() << ")." << std::endl;
         out << "                           Select local network interface (NIC)" << std::endl;
         out << "                           on which to subscribe and listen." << std::endl;
         out << "                           0.0.0.0 means pick any NIC." << std::endl;
+        out << "  -mbind ip            : Multicast bind address.  Defaults to listenIP. Override if you dare." << std::endl;
         out << "  -tcp host:port       : Input from TCP/IP.  Connect to \"host\" name or" << std::endl;
         out << "                         dotted IP on named or numbered port." << std::endl;
         out << std::endl;
@@ -842,6 +862,11 @@ namespace QuickFAST{
         else if(opt == "-mlisten" && argc > 1)
         {
           setListenInterfaceIP(argv[1]);
+          consumed = 2;
+        }
+        else if(opt == "-mbind" && argc > 1)
+        {
+          setMulticastBindIP(argv[1]);
           consumed = 2;
         }
         else if(opt == "-tcp" && argc > 1)
@@ -1064,6 +1089,8 @@ namespace QuickFAST{
       unsigned short portNumber_;
       /// @brief For MulticastReceiver selects the NIC on which to subscribe/listen
       std::string listenInterfaceIP_;
+      /// @brief For MulticastReceiver the IP to which the socket will be bound
+      std::string multicastBindIP_;
       /// @brief For TCPIPReceiver, Host name or IP
       std::string hostName_;
       /// @brief For TCPIPReceiver, port name or number (as text)

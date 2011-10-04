@@ -326,6 +326,7 @@ DecoderConnection::configure(
           *ioService_,
           configuration.multicastGroupIP(),
           configuration.listenInterfaceIP(),
+          configuration.multicastBindIP(),
           configuration.portNumber()));
       }
       else
@@ -333,6 +334,7 @@ DecoderConnection::configure(
         receiver_.reset(new Communication::MulticastReceiver(
           configuration.multicastGroupIP(),
           configuration.listenInterfaceIP(),
+          configuration.multicastBindIP(),
           configuration.portNumber()));
       }
       break;
