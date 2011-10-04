@@ -1,3 +1,11 @@
+Tue Oct  4 18:16:37 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * license.txt:
+          Update copyright
+
+        * src/Codecs/DataSourceBlockedStream.cpp:
+        * src/Codecs/DataSourceBufferedBlockedStream.cpp:
+          Removed these files.
+
 Tue Oct  4 15:43:25 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Common/QuickFASTPch.h:
         Include <limits.h> which was not getting pulled in on some platforms.
@@ -60,7 +68,7 @@ Mon Aug 22 19:09:23 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Communication/PCapReader.cpp:
         Fixes to support for checksum appended to packet.
 
-Wed May 11 18:45:44 UTC 2011  Dale Wilson  <wilsond@ociweb.com>        
+Wed May 11 18:45:44 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/MulticastDecoder.h:
         Fix misleading documentation.
         Yes, MulticastDecoder does support packet and message headers.
