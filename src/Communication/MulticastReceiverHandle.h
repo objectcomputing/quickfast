@@ -23,6 +23,7 @@ namespace QuickFAST{
       /// @brief construct a multicast receiver given multicast information and a consumer
       /// @param multicastGroupIP multicast address as a text string
       /// @param listenInterfaceIP listen address as a text string
+      /// @param bindIP the IP to be used to bind the socket.
       /// @param portNumber port number
       MulticastReceiverHandle(
         const std::string & multicastGroupIP,

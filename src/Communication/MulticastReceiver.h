@@ -23,6 +23,7 @@ namespace QuickFAST
       /// @param listenInterfaceIP listen address as a text string.
       ///        This identifies the network interface to be used.
       ///        0.0.0.0 means "let the system choose"
+      /// @param bindIP the IP to be used to bind the socket.
       /// @param portNumber port number
       MulticastReceiver(
         const std::string & multicastGroupIP,
@@ -45,6 +46,7 @@ namespace QuickFAST
       /// @param ioService an ioService to be shared with other objects
       /// @param multicastGroupIP multicast address as a text string
       /// @param listenInterfaceIP listen address as a text string
+      /// @param bindIP the IP to be used to bind the socket.
       /// @param portNumber port number
       MulticastReceiver(
         boost::asio::io_service & ioService,

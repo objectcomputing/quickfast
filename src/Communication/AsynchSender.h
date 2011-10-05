@@ -83,6 +83,7 @@ namespace QuickFAST
         return ioService_.poll_one();
       }
 
+      /// @brief a hack
       AsioService & peekAtIoServiceForDebugging()
       {
         return ioService_;

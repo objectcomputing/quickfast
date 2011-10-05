@@ -105,6 +105,8 @@ namespace QuickFAST
         ioService_.post(handler);
       }
 
+      /// @brief Attempt to determine how many threads are available to ASIO
+      /// @returns the number of threads.
       long runningThreadCount()const
       {
         if(usingSharedService_)
