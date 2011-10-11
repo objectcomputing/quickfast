@@ -290,14 +290,36 @@ Decimal::operator==(const Decimal & rhs) const
     temp.denormalize(exponent_);
     return mantissa_== temp.mantissa_;
   }
-//  // at this point equality is iffy, converting to double doesn't
-//  // hurt
-//  return (double) *this == (double)rhs;
 }
 
 Decimal::operator double()const
 {
-    return double(double(mantissa_) * pow(10.0L, exponent_));
+  // faster than the pow function or repeated multiply/divides
+  static double powerTable[] =
+  {
+      1.0e-63, 1.0e-62, 1.0e-61, 1.0e-60, 1.0e-59, 1.0e-58, 1.0e-57, 1.0e-56,
+      1.0e-55, 1.0e-54, 1.0e-53, 1.0e-52, 1.0e-51, 1.0e-50, 1.0e-49, 1.0e-48,
+      1.0e-47, 1.0e-46, 1.0e-45, 1.0e-44, 1.0e-43, 1.0e-42, 1.0e-41, 1.0e-40,
+      1.0e-39, 1.0e-38, 1.0e-37, 1.0e-36, 1.0e-35, 1.0e-34, 1.0e-33, 1.0e-32,
+      1.0e-31, 1.0e-30, 1.0e-29, 1.0e-28, 1.0e-27, 1.0e-26, 1.0e-25, 1.0e-24,
+      1.0e-23, 1.0e-22, 1.0e-21, 1.0e-20, 1.0e-19, 1.0e-18, 1.0e-17, 1.0e-16,
+      1.0e-15, 1.0e-14, 1.0e-13, 1.0e-12, 1.0e-11, 1.0e-10, 1.0e-9 , 1.0e-8 ,
+      1.0e-7 , 1.0e-6 , 1.0e-5 , 1.0e-4 , 1.0e-3 , 1.0e-2 , 1.0e-1 , 1.0e0  ,
+      1.0e1  , 1.0e2  , 1.0e3  , 1.0e4  , 1.0e5  , 1.0e6  , 1.0e7  , 1.0e8  ,
+      1.0e9  , 1.0e10 , 1.0e11 , 1.0e12 , 1.0e13 , 1.0e14 , 1.0e15 , 1.0e16 ,
+      1.0e17 , 1.0e18 , 1.0e19 , 1.0e20 , 1.0e21 , 1.0e22 , 1.0e23 , 1.0e24 ,
+      1.0e25 , 1.0e26 , 1.0e27 , 1.0e28 , 1.0e29 , 1.0e30 , 1.0e31 , 1.0e32 ,
+      1.0e33 , 1.0e34 , 1.0e35 , 1.0e36 , 1.0e37 , 1.0e38 , 1.0e39 , 1.0e40 ,
+      1.0e41 , 1.0e42 , 1.0e43 , 1.0e44 , 1.0e45 , 1.0e46 , 1.0e47 , 1.0e48 ,
+      1.0e49 , 1.0e50 , 1.0e51 , 1.0e52 , 1.0e53 , 1.0e54 , 1.0e55 , 1.0e56 ,
+      1.0e57 , 1.0e58 , 1.0e59 , 1.0e60 , 1.0e61 , 1.0e62 , 1.0e63
+  };
+  if(exponent_ >= -63 && exponent_ <= 63)
+  {
+    return (double)mantissa_ * powerTable[exponent_ + 63];
+  }
+  // note it is a FAST reportable error if abs(exponent) > 63, but for now we'll just fake it here.
+  return double(double(mantissa_) * pow(10.0L, exponent_));
 }
 
 Decimal &

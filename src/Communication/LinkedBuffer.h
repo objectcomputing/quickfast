@@ -269,6 +269,7 @@ namespace QuickFAST
       }
 
       /// @brief to enable stl-like algorithms
+      /// Not really stl compatable.  Need an iterator object to do it right.
       LinkedBuffer * end() const
       {
         return 0;

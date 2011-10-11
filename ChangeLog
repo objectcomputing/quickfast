@@ -1,3 +1,11 @@
+Tue Oct 11 14:04:49 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Common/Decimal.cpp:
+          Faster conversion to decimal
+        * src/Communication/LinkedBuffer.h:
+          Clarify comment
+        * src/Doxyfile:
+          Update doxygen version number to 1.4
+
 Wed Oct  5 19:33:52 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Common/Version.h:
           Prepare for V1.4.1
