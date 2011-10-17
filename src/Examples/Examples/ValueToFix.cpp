@@ -14,6 +14,7 @@ using namespace Examples;
 ValueToFix::ValueToFix(std::ostream & out, const char * recordSeparator)
   : out_(out)
   , recordSeparator_(recordSeparator)
+  , logLevel_(Common::Logger::QF_LOG_WARNING)
 {
 }
 

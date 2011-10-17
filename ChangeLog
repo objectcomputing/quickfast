@@ -1,3 +1,9 @@
+Mon Oct 17 13:20:28 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Common/StringBuffer.h:
+          Add assignment from std::string.
+        * src/Examples/Examples/ValueToFix.cpp:
+          Unitialized verbose member caused undesired output.
+
 Tue Oct 11 14:04:49 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Common/Decimal.cpp:
           Faster conversion to decimal

@@ -65,6 +65,11 @@ namespace QuickFAST
       assign(reinterpret_cast<const unsigned char *>(rhs.data()), rhs.size());
     }
 
+    void operator =(const std::string & rhs)
+    {
+      assign(reinterpret_cast<const unsigned char *>(rhs.data()), rhs.size());
+    }
+
     /// @brief Construct from a substring
     ///
     /// @param rhs the string from which to extract a substring
