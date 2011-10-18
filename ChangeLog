@@ -1,3 +1,15 @@
+Tue Oct 18 17:38:22 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Common/StringBuffer.h:
+          Add assignment from std::string.
+
+        * src/Application/DNDecoderConnectionImpl.h:
+        * src/Application/DecoderConfiguration.h:
+        * src/Application/DecoderConfiguration_fwd.h:
+        * src/Application/DecoderConnection.h:
+        * src/Common/QuickFASTPch.h:
+        * src/Doxyfile:
+          Update Doxygen to include Application namespace.
+
 Mon Oct 17 13:20:28 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Common/StringBuffer.h:
           Add assignment from std::string.

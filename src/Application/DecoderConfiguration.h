@@ -73,7 +73,7 @@ namespace QuickFAST{
       {
       }
 
-      // copy consructor
+      /// @brief copy consructor
       DecoderConfiguration(const DecoderConfiguration & rhs)
         : head_(rhs.head_)
         , reset_(rhs.reset_)
@@ -254,21 +254,20 @@ namespace QuickFAST{
         return messageHeaderSuffixCount_;
       }
 
-
-
-      /// @brief Should StreamingAssembler wait for a complete message
+      /// @brief Should StreamingAssembler wait for a complete message?
       /// before decoding starts.
       bool waitForCompleteMessage()const
       {
         return waitForCompleteMessage_;
       }
 
+      /// @brief What type of receiver should be used?
       ReceiverType receiverType()
       {
         return receiverType_;
       }
 
-      /// @brief What type of assembler processes incoming buffers
+      /// @brief What type of assembler processes incoming buffers?
       AssemblerType assemblerType()const
       {
         return assemblerType_;
@@ -337,11 +336,13 @@ namespace QuickFAST{
         return nonstandard_;
       }
 
+      /// @brief Is a private IO Service configured?
       bool privateIOService() const
       {
         return privateIOService_;
       }
 
+      /// @brief debug/testing only.   Skip every n'th message?
       size_t testSkip()const
       {
         return testSkip_;
@@ -542,12 +543,13 @@ namespace QuickFAST{
         waitForCompleteMessage_ = waitForCompleteMessage;
       }
 
+      /// @brief Set the type of receiver to use
       void setReceiverType(ReceiverType receiverType)
       {
         receiverType_ = receiverType;
       }
 
-      /// @brief What type of assembler processes incoming buffers
+      /// @brief Set the type of assembler to processes incoming buffers
       void setAssemblerType(AssemblerType assemblerType)
       {
         assemblerType_ = assemblerType;
@@ -613,11 +615,18 @@ namespace QuickFAST{
         nonstandard_ = nonstandard;
       }
 
+      /// @brief Set private IO Service.
+      ///
+      /// By default all connections share a single ASIO IO Service object and hence
+      /// a single buffer pool.
+      /// Setting this flag causes a connection to use its own, private IO connection.
+      /// This allows connections to be started and stopped independently.
       void setPrivateIOService(bool privateIOService)
       {
         privateIOService_ = privateIOService;
       }
 
+      /// @brief For debugging, skip every 'n'th message.
       void setTestSkip(size_t testSkip)
       {
         testSkip_ = testSkip;
@@ -647,7 +656,7 @@ namespace QuickFAST{
         return false;
       }
 
-
+      /// @brief Display recognized command line options.
       void usage(std::ostream & out) const
       {
         out << "  -t file              : Template file (required)." << std::endl;

@@ -44,6 +44,7 @@ namespace QuickFAST
     }
 
     /// @brief Copy constructor
+    /// @param rhs is the data to initialize the string buffer.
     StringBufferT(const StringBufferT& rhs)
       : heapBuffer_(0)
       , size_(0)
@@ -55,17 +56,13 @@ namespace QuickFAST
     }
 
     /// @brief copy construct from a standard string
+    /// @param rhs is the data to initialize the string buffer.
     StringBufferT(const std::string & rhs)
       : heapBuffer_(0)
       , size_(0)
       , capacity_(INTERNAL_CAPACITY)
       , growCount_(0)
       , delegateString_(0)
-    {
-      assign(reinterpret_cast<const unsigned char *>(rhs.data()), rhs.size());
-    }
-
-    void operator =(const std::string & rhs)
     {
       assign(reinterpret_cast<const unsigned char *>(rhs.data()), rhs.size());
     }
@@ -190,7 +187,7 @@ namespace QuickFAST
     }
 
     /// @brief assign a QuickFAST::StringBufferT
-    StringBufferT& operator=(const StringBufferT& rhs)
+    StringBufferT<INTERNAL_CAPACITY>& operator=(const StringBufferT& rhs)
     {
       StringBufferT temp(rhs);
       swap(temp);
@@ -198,7 +195,7 @@ namespace QuickFAST
     }
 
     /// @brief assign a C style (null terminated) string.
-    StringBufferT& operator=(const unsigned char* rhs)
+    StringBufferT<INTERNAL_CAPACITY>& operator=(const unsigned char* rhs)
     {
       StringBufferT temp(rhs);
       swap(temp);
@@ -206,10 +203,18 @@ namespace QuickFAST
     }
 
     /// @brief assign a single character.
-    StringBufferT& operator=(unsigned char rhs)
+    StringBufferT<INTERNAL_CAPACITY>& operator=(unsigned char rhs)
     {
       StringBufferT temp(rhs, 1);
       swap(temp);
+      return *this;
+    }
+
+    /// @brief assign from standard string
+    /// @param rhs is the data to assign to the string buffer.
+    StringBufferT<INTERNAL_CAPACITY> & operator =(const std::string & rhs)
+    {
+      assign(reinterpret_cast<const unsigned char *>(rhs.data()), rhs.size());
       return *this;
     }
 
@@ -261,7 +266,7 @@ namespace QuickFAST
     }
 
     /// @brief append a QuickFAST::StringBufferT
-    StringBufferT& operator +=(
+    StringBufferT<INTERNAL_CAPACITY>& operator +=(
       const StringBufferT& rhs
       )
     {
@@ -269,7 +274,7 @@ namespace QuickFAST
     }
 
     /// @brief append an unsigned C-style null terminated string
-    StringBufferT& operator +=(
+    StringBufferT<INTERNAL_CAPACITY>& operator +=(
       const unsigned char * rhs
       )
     {
@@ -277,7 +282,7 @@ namespace QuickFAST
     }
 
     /// @brief append a C-style null terminated string
-    StringBufferT& operator +=(
+    StringBufferT<INTERNAL_CAPACITY>& operator +=(
       const char * rhs
       )
     {
@@ -285,13 +290,13 @@ namespace QuickFAST
     }
 
     /// @brief append a single unsigned character
-    StringBufferT& operator +=(unsigned char rhs)
+    StringBufferT<INTERNAL_CAPACITY>& operator +=(unsigned char rhs)
     {
       return append(&rhs, 1);
     }
 
     /// @brief append a single character
-    StringBufferT& operator +=(char rhs)
+    StringBufferT<INTERNAL_CAPACITY>& operator +=(char rhs)
     {
       return append(&rhs, 1);
     }

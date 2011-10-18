@@ -8,32 +8,36 @@
 namespace QuickFAST{
   namespace Application{
     struct DecoderConfiguration;
+    /// @brief Enumerated values used to specifiy configuration options
     class DecoderConfigurationEnums
     {
     public:
+      /// @brief What type of header is present on message or packet
       enum HeaderType{
-        NO_HEADER,
-        FIXED_HEADER,
-        FAST_HEADER};
+        NO_HEADER,    /// No header
+        FIXED_HEADER, /// Fixed size header
+        FAST_HEADER   /// FAST encoded header
+      };
 
       /// @brief What type of assembler processes incoming buffers
       enum AssemblerType{
-        MESSAGE_PER_PACKET_ASSEMBLER,
-        STREAMING_ASSEMBLER,
-        UNSPECIFIED_ASSEMBLER
+        MESSAGE_PER_PACKET_ASSEMBLER, /// Message boundaries on packet boundaries.
+        STREAMING_ASSEMBLER,          /// Transport layer doesn't know about message boundaries.
+        UNSPECIFIED_ASSEMBLER         /// Assembler has not yet been specified.
       };
       /// @brief What type of receiver supplies incoming buffers.
       enum ReceiverType
       {
-        MULTICAST_RECEIVER,
-        TCP_RECEIVER,
-        RAWFILE_RECEIVER,
-        PCAPFILE_RECEIVER,
-        ASYNCHRONOUS_FILE_RECEIVER,
-        BUFFER_RECEIVER,
-        UNSPECIFIED_RECEIVER
+        MULTICAST_RECEIVER,           /// Multicast: unreliable packets
+        TCP_RECEIVER,                 /// TCP/IP: streaming
+        RAWFILE_RECEIVER,             /// File containing FAST encoded records
+        PCAPFILE_RECEIVER,            /// File captured from network in PCAP format
+        ASYNCHRONOUS_FILE_RECEIVER,   /// File read using asynchronous I/O (not in core QuickFAST)
+        BUFFER_RECEIVER,              /// Decode from in-memory buffer.
+        UNSPECIFIED_RECEIVER          /// Receiver has not yet been specified.
       };
 
+      /// @brief How should incoming data be echoed.
       enum EchoType
       {
           RAW,    /// Binary data as read

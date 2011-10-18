@@ -18,6 +18,10 @@
 
 namespace QuickFAST{
   namespace Application{
+    /// @brief Support a single source of FAST encoded data.
+    ///
+    /// Each source of FAST encoded data should be supported by a separate instance of DecoderConnection.
+    /// Examples of sources include a single multicast group; a FAST encoded data file; etc.
     class QuickFAST_Export DecoderConnection
     {
     public:
@@ -113,6 +117,7 @@ namespace QuickFAST{
         return packetHeaderAnalyzer();
       }
 
+      /// @brief Access the packet header analyzer.
       Codecs::HeaderAnalyzer & packetHeaderAnalyzer() const
       {
         if(!packetHeaderAnalyzer_)
@@ -122,6 +127,7 @@ namespace QuickFAST{
         return *packetHeaderAnalyzer_;
       }
 
+      /// @brief Access the message header analyzer.
       Codecs::HeaderAnalyzer & messageHeaderAnalyzer() const
       {
         if(!messageHeaderAnalyzer_)
@@ -131,6 +137,7 @@ namespace QuickFAST{
         return *messageHeaderAnalyzer_;
       }
 
+      /// @brief Access the message assembler.
       Communication::Assembler & assembler()const
       {
         if(!assembler_)
@@ -140,6 +147,7 @@ namespace QuickFAST{
         return *assembler_;
       }
 
+      /// @brief Access the data receiver.
       Communication::Receiver & receiver()const
       {
         if(!receiver_)
@@ -149,6 +157,7 @@ namespace QuickFAST{
         return *receiver_;
       }
 
+      /// @brief Access the decoder.
       Codecs::Decoder & decoder() const;
 
     private:

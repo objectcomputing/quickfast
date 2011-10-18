@@ -196,6 +196,17 @@ namespace QuickFAST{
   /// Source files for elements in this namespace are in src/Communication directory.
   namespace Communication{}
 
+  /// @ brief Wrapper classes that provide high-level support to Applications using QuickFAST for decoding.
+  ///
+  /// This namespace contains: <dl>
+  ///
+  /// <dt>DecoderConfiguration</dt>
+  ///   <dd>Contains all the information necessary to configure a DecoderConnection. </dd>
+  /// <dt>DecoderConnection</dt>
+  ///  <dd>Supports a single source of FAST encoded input.</dd>
+  /// </dl>
+  namespace Application{}
+
 }
 
 #endif // QuickFAST_H

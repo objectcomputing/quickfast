@@ -614,6 +614,7 @@ INPUT                  = Codecs \
                          Common \
                          Communication \
                          Messages \
+                         Application \
                          Examples \
                          DotNet
 
