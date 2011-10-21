@@ -31,6 +31,7 @@ namespace QuickFAST{
         MULTICAST_RECEIVER,           /// Multicast: unreliable packets
         TCP_RECEIVER,                 /// TCP/IP: streaming
         RAWFILE_RECEIVER,             /// File containing FAST encoded records
+        BUFFERED_RAWFILE_RECEIVER,    /// File containing FAST encoded records read entirely into memory.
         PCAPFILE_RECEIVER,            /// File captured from network in PCAP format
         ASYNCHRONOUS_FILE_RECEIVER,   /// File read using asynchronous I/O (not in core QuickFAST)
         BUFFER_RECEIVER,              /// Decode from in-memory buffer.

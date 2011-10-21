@@ -301,6 +301,10 @@ namespace QuickFAST{
       }
 
     private:
+      DataDestination & operator = (const DataDestination &); // forbidden assignment
+      DataDestination(const DataDestination &); // forbidden copy constructor
+
+    private:
       /// @brief how many buffers contain data.
       size_t used_;
       /// @brief which buffer will receive pushes

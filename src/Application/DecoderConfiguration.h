@@ -32,6 +32,7 @@ namespace QuickFAST{
         MULTICAST_RECEIVER = DecoderConfigurationEnums::MULTICAST_RECEIVER,
         TCP_RECEIVER = DecoderConfigurationEnums::TCP_RECEIVER,
         RAWFILE_RECEIVER = DecoderConfigurationEnums::RAWFILE_RECEIVER,
+        BUFFERED_RAWFILE_RECEIVER = DecoderConfigurationEnums::BUFFERED_RAWFILE_RECEIVER,
         PCAPFILE_RECEIVER = DecoderConfigurationEnums::PCAPFILE_RECEIVER,
         ASYNCHRONOUS_FILE_RECEIVER = DecoderConfigurationEnums::ASYNCHRONOUS_FILE_RECEIVER,
         BUFFER_RECEIVER = DecoderConfigurationEnums::BUFFER_RECEIVER,
@@ -39,7 +40,7 @@ namespace QuickFAST{
       };
 
     public:
-      /// @brief Iniitalize to defaults
+      /// @brief Initalize to defaults
       DecoderConfiguration()
         : head_(0)
         , reset_(false)
@@ -669,8 +670,9 @@ namespace QuickFAST{
         out << "                         (cout for standard out;" << std::endl;
         out << "                         cerr for standard error)." << std::endl;
         out << std::endl;
-        out << "  -file file           : Input from raw FAST message file." << std::endl;
-        out << "  -afile file          : Use asynchronous reads from raw FAST message file." << std::endl;
+        out << "  -file file           : Input from FAST message file." << std::endl;
+        out << "  -afile file          : Use asynchronous reads from FAST message file." << std::endl;
+        out << "  -bfile file          : Buffer entire FAST message file in memory." << std::endl;
         out << "  -pcap file           : Input from PCap FAST message file." << std::endl;
         out << "  -pcapsource [64|32]    : Word size of the machine where the PCap data was captured." << std::endl;
         out << "                           Defaults to the current platform." << std::endl;
@@ -833,6 +835,12 @@ namespace QuickFAST{
           setReceiverType(Application::DecoderConfiguration::ASYNCHRONOUS_FILE_RECEIVER);
           setFastFileName(argv[1]);
           setAsynchReads(true);
+          consumed = 2;
+        }
+        else if(opt == "-bfile" && argc > 1)
+        {
+          setReceiverType(Application::DecoderConfiguration::BUFFERED_RAWFILE_RECEIVER);
+          setFastFileName(argv[1]);
           consumed = 2;
         }
         else if(opt == "-pcap" && argc > 1)

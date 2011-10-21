@@ -17,6 +17,7 @@
 #include <Communication/MulticastReceiver.h>
 #include <Communication/TCPReceiver.h>
 #include <Communication/RawFileReceiver.h>
+#include <Communication/BufferedRawFileReceiver.h>
 #include <Communication/PCapFileReceiver.h>
 #include <Communication/AsynchFileReceiver.h>
 #include <Communication/BufferReceiver.h>
@@ -70,12 +71,14 @@ DecoderConnection::configure(
 {
   if(!configuration.asynchReads() && !configuration.fastFileName().empty())
   {
+#ifndef _WIN32
+    // on Windows cin is opened in ascii mode which garbles FAST data
     if(configuration.fastFileName() == "cin")
     {
-      // Warning this only works well on *nix because cin is opened in ascii mode on Windows
       fastFile_ = &std::cin;
     }
     else
+#endif
     {
       fastFile_ = new std::ifstream(configuration.fastFileName().c_str(), binaryMode);
     }
@@ -286,6 +289,7 @@ DecoderConnection::configure(
         }
       case Application::DecoderConfiguration::TCP_RECEIVER:
       case Application::DecoderConfiguration::RAWFILE_RECEIVER:
+      case Application::DecoderConfiguration::BUFFERED_RAWFILE_RECEIVER:
       case Application::DecoderConfiguration::ASYNCHRONOUS_FILE_RECEIVER:
         {
           Codecs::StreamingAssembler * pAssembler = new Codecs::StreamingAssembler(
@@ -360,6 +364,12 @@ DecoderConnection::configure(
   case Application::DecoderConfiguration::RAWFILE_RECEIVER:
     {
       receiver_.reset(new Communication::RawFileReceiver(
+        *fastFile_));
+      break;
+    }
+  case Application::DecoderConfiguration::BUFFERED_RAWFILE_RECEIVER:
+    {
+      receiver_.reset(new Communication::BufferedRawFileReceiver(
         *fastFile_));
       break;
     }

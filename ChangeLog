@@ -1,3 +1,19 @@
+Wed Oct 19 15:35:41 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/DataDestination.h:
+          Forbid assignment and copy construction.
+
+
+        * src/Application/DecoderConfiguration.h:
+        * src/Application/DecoderConfiguration_fwd.h:
+        * src/Application/DecoderConnection.cpp:
+        * src/Communication/BufferedRawFileReceiver.h:
+        * src/Communication/BufferedRawFileReceiver_fwd.h:
+          Add new receiver type: BufferedRawFileReceiver,
+          and new command line option, -bfile name
+          Reads entire file into memory buffer before decoding.
+          For performance testing only.
+
+
 Tue Oct 18 17:38:22 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Common/StringBuffer.h:
           Add assignment from std::string.
