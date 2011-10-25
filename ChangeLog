@@ -1,3 +1,8 @@
+Tue Oct 25 18:03:30 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Examples/TutorialApplication/TutorialApplication.h:
+        * src/Examples/TutorialApplication/TutorialApplication.cpp:
+          Update the tutorial application to use Application::Decoder* classes.
+
 Tue Oct 25 16:26:45 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Examples/Examples/CommandArgHandler.h:
         * src/Examples/Examples/CommandArgParser.h:

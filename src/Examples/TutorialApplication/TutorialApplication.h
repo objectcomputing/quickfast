@@ -32,8 +32,6 @@ namespace QuickFAST{
       void fini();
 
     private:
-      std::string templateFileName_;
-      std::string fastFileName_;
       Application::DecoderConfiguration configuration_;
       Application::DecoderConnection connection_;
     };

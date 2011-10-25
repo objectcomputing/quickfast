@@ -4,27 +4,11 @@
 //
 #include <Examples/ExamplesPch.h>
 #include "TutorialApplication.h"
-#include <Communication/RawFileReceiver.h>
-#include <Codecs/XMLTemplateParser.h>
-#include <Codecs/TemplateRegistry.h>
-#include <Codecs/StreamingAssembler.h>
-#include <Codecs/NoHeaderAnalyzer.h>
 #include <Codecs/GenericMessageBuilder.h>
 #include <Examples/MessageInterpreter.h>
 
 using namespace QuickFAST;
 using namespace Examples;
-
-namespace
-{
-  // On Windows we need to open a FAST data file in binary mode to avoid translation of end of line characters.
-  // Other platforms do not have this requirement so we make openMode a "nop" for them.
-#ifdef _WIN32
-  const std::ios::openmode openMode = std::ios::binary | std::ios::in;
-#else
-  const std::ios::openmode openMode = std::ios::in;
-#endif
-}
 
 ///////////////////////
 // TutorialApplication
@@ -40,13 +24,32 @@ TutorialApplication::~TutorialApplication()
 bool
 TutorialApplication::init(int argc, char * argv[])
 {
+  // For the tutorial, we hard code two command line arguments.
   // Consider using the command argument parser: Application::CommandArgParser
-  // But for the tutorial, we hard code two command line arguments.
+  // for more flexible command line handling.
   bool ok = false;
   if(argc == 3)
   {
-    templateFileName_ = argv[1];
-    fastFileName_ = argv[2];
+    configuration_.setTemplateFileName(argv[1]);
+    configuration_.setFastFileName(argv[2]);
+    // Set configuration options.
+    //
+    // Many of these are the defaults so they do not need to be set explicitly
+    //
+    // In interpretApplication these are set by command line options.
+    // Since DecoderConfiguration includes command line parsing support, you can simply pass the args
+    // to configuration_.
+    //
+    // See InterpretApplication::parseSingleArg and DecoderConfiguration::parseSingleArg for examples.
+    //
+    // In a production application you may want to hard code configuration options the way they are set here:
+    configuration_.setReset(true);
+    configuration_.setReceiverType(Application::DecoderConfiguration::RAWFILE_RECEIVER);
+    configuration_.setAssemblerType(Application::DecoderConfiguration::STREAMING_ASSEMBLER);
+    configuration_.setWaitForCompleteMessage(false);
+    configuration_.setMessageHeaderType(Application::DecoderConfiguration::NO_HEADER);
+    configuration_.setPacketHeaderType(Application::DecoderConfiguration::NO_HEADER);
+
     ok = true;
   }
   else
@@ -62,79 +65,45 @@ TutorialApplication::run()
   int result = 0;
   try
   {
-    ////////////////////////////////////////////////
-    // Open files first to be sure they are present.
-    std::ifstream templates(templateFileName_.c_str(), openMode);
-    if(!templates.good())
-    {
-      result = -1;
-      std::cerr << "ERROR: Can't open template file: "
-        << templateFileName_
-        << std::endl;
-    }
+    //////////////////////////////////////
+    // Create an application object to use
+    // the incoming data.  In this case to
+    // accept complete messages and interpret
+    // them to standard out.
+    MessageInterpreter handler(std::cout);
+    // and use the interpreter as the consumer
+    // of generic messages.
+    Codecs::GenericMessageBuilder builder(handler);
 
-    std::ifstream fastFile(fastFileName_.c_str(), openMode);
-    if(!fastFile.good())
-    {
-      result = -1;
-      std::cerr << "ERROR: Can't open FAST data file: "
-        << fastFileName_
-        << std::endl;
-    }
+    ////////////////////
+    // IMPORTANT:
+    // GenericMessageBuilder is acceptable but
+    // much higher performance can be achieved by
+    // creating your own implementation of the
+    // ValueMessageBuilder interface.
+    //
+    // If you want output as FIX messages rather than as
+    // human readable messages, consider the ValueToFix
+    // MessageBuilder defined in src/Examples/Examples/ValueToFix.h
 
-    if(result == 0)
-    {
-      /////////////////////////////////////////////
-      // Parse the templates from the template file
-      // errors are reported by throwing exceptions
-      // which are caught below.
-      Codecs::XMLTemplateParser parser;
-      Codecs::TemplateRegistryPtr registry = parser.parse(templates);
+    /////////////////////////////////////////////
+    // Use the DecoderConfiguration to initialize the DecoderConnection:
+    // Note: this assumes that execution stays in this block.   The handler and builder
+    // object must stay in scope during the decoding process.
+    // If you plan to use the main thread for other purposes, consider
+    // making builder & handler member variables, or using smart pointers to
+    // manage their lifetime.
+    connection_.configure(builder, configuration_);
 
-      /////////////////////////////////////////////
-      // For the tutorial assume there is no header
-      // on the incoming messages.
-      Codecs::NoHeaderAnalyzer analyzer;
-
-      //////////////////////////////////////
-      // Create an application object to use
-      // the incoming data.  In this case to
-      // accept complete messages and interpret
-      // them to standard out.
-      MessageInterpreter handler(std::cout);
-      // and use the interpreter as the consumer
-      // of generic messages.
-      Codecs::GenericMessageBuilder builder(handler);
-
-      //////////////////////////////////////
-      // Now pull all the pieces together
-      // into an assembler.
-      Codecs::StreamingAssembler assembler(
-            registry,
-            analyzer,
-            builder,
-            false);
-
-      /////////////////////////////////////////////
-      // set options in the assembler if necessary.
-      // In this case configure the assembler to
-      // reset the decoder on every incoming message
-      assembler.setReset(true);
-
-      ///////////////////////////////////////////////////////////////////////////////
-      // Create an object to receive data from a raw data file (i.e to read the file)
-      Communication::RawFileReceiver receiver(fastFile);
-
-      /////////////////////////////////////////////
-      // do final initialzation of the data receiver.
-      receiver.start(assembler);
-
-      /////////////////////////////////////
-      // run the event loop in this thread.
-      // Do not return until receiver stops.
-      // The RawFileReceiver will stop at end of file.
-      receiver.run();
-    }
+    /////////////////////////////////////
+    // run the event loop in this thread.
+    // Do not return until receiver stops.
+    //
+    // Decoded messages will be passed to the MessageInterpreter for processing.
+    //
+    // See DecoderConnection::runThreads() for an approach that does not
+    // tie up the main thread.
+    connection_.run();
   }
   catch (std::exception & e)
   {
