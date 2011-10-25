@@ -1,3 +1,10 @@
+Tue Oct 25 16:26:45 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Examples/Examples/CommandArgHandler.h:
+        * src/Examples/Examples/CommandArgParser.h:
+        * src/Examples/Examples/CommandArgParser.cpp:
+          Use CommandArg* from Application namespace to QuickFAST namespace to
+          avoid problems caused by the previous check-in.
+
 Tue Oct 25 15:56:11 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Application/CommandArgHandler.h:
