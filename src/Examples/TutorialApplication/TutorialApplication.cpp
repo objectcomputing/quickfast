@@ -40,6 +40,8 @@ TutorialApplication::~TutorialApplication()
 bool
 TutorialApplication::init(int argc, char * argv[])
 {
+  // Consider using the command argument parser: Application::CommandArgParser
+  // But for the tutorial, we hard code two command line arguments.
   bool ok = false;
   if(argc == 3)
   {

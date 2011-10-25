@@ -1,3 +1,31 @@
+Tue Oct 25 15:56:11 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Application/CommandArgHandler.h:
+        * src/Application/CommandArgParser.h:
+        * src/Application/CommandArgParser.cpp:
+        * src/Examples/Examples/CommandArgHandler.h:
+        * src/Examples/Examples/CommandArgParser.h:
+        * src/Examples/Examples/CommandArgParser.cpp:
+
+          Move Command arg parser from Examples to Application directory.
+          Put the command arg parser and handler into the Application namespace.
+          WARNING: This change can potentially break existing code.
+          The next check in will contain a partial work-around.
+
+        * src/Common/QuickFASTPch.h:
+          Add includes needed by command arg parser
+
+
+        * src/Examples/FileToMulticast/FileToMulticast.h:
+        * src/Examples/FileToTCP/FileToTCP.h:
+        * src/Examples/InterpretApplication/InterpretApplication.h:
+        * src/Examples/PCapToMulticast/PCapToMulticast.h:
+        * src/Examples/PerformanceTest/PerformanceTest.h:
+        * src/Examples/TutorialApplication/TutorialApplication.h:
+        * src/Examples/TutorialApplication/TutorialApplication.cpp:
+          Use command arg parser from Application rather than Examples.
+
+
 Wed Oct 19 15:35:41 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/DataDestination.h:
           Forbid assignment and copy construction.

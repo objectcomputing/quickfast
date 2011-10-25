@@ -4,7 +4,7 @@
 //
 #ifndef FILETOTCP_H
 #define FILETOTCP_H
-#include <Examples/CommandArgParser.h>
+#include <Application/CommandArgParser.h>
 #include <boost/asio.hpp>
 #include <stdio.h>
 
@@ -22,7 +22,7 @@ namespace QuickFAST{
     /// This program is not really FAST-aware. It is just part of a testing
     /// framework for other programs.
 
-    class FileToTCP : public CommandArgHandler
+    class FileToTCP : public Application::CommandArgHandler
     {
     public:
       FileToTCP();
@@ -53,7 +53,7 @@ namespace QuickFAST{
       bool hack_;
 
       boost::asio::io_service io_service_;
-      CommandArgParser commandArgParser_;
+      Application::CommandArgParser commandArgParser_;
     };
   }
 }

@@ -5,6 +5,8 @@
 #ifndef TUTORIALAPPLICATION_H
 #define TUTORIALAPPLICATION_H
 
+#include <Application/DecoderConnection.h>
+
 namespace QuickFAST{
   namespace Examples{
     /// @brief A simple application to demonstrate how QuickFAST is intended to be used.
@@ -32,6 +34,8 @@ namespace QuickFAST{
     private:
       std::string templateFileName_;
       std::string fastFileName_;
+      Application::DecoderConfiguration configuration_;
+      Application::DecoderConnection connection_;
     };
   }
 }

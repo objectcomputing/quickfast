@@ -24,6 +24,8 @@
 #endif // _WIN32
 
 #include <limits.h>
+#include <stdio.h>
+#include <string.h>
 
 // If building for .NET, must link boost threads dynamically
 #define BOOST_THREAD_USE_DLL
@@ -43,7 +45,9 @@
 #include <cstdlib>
 
 #include <boost/date_time/gregorian/gregorian_types.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -55,6 +59,7 @@
 #include <boost/thread.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/cstdint.hpp>
+#include <boost/bind.hpp>
 
 ////////////////////////
 // Doxygen documentation

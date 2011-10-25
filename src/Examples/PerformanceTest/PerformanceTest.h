@@ -7,7 +7,7 @@
 
 #include <Codecs/XMLTemplateParser.h>
 #include <Codecs/DataSource.h>
-#include <Examples/CommandArgParser.h>
+#include <Application/CommandArgParser.h>
 
 namespace QuickFAST{
   namespace Examples{
@@ -16,7 +16,7 @@ namespace QuickFAST{
     /// This is also a good program to run when profiling.
     ///
     /// Run the program with a -? command line option for detailed usage information.
-    class PerformanceTest : public CommandArgHandler
+    class PerformanceTest : public Application::CommandArgHandler
     {
     public:
       PerformanceTest();
@@ -56,7 +56,7 @@ namespace QuickFAST{
       bool echo_;
 
       Codecs::XMLTemplateParser parser_;
-      CommandArgParser commandArgParser_;
+      Application::CommandArgParser commandArgParser_;
     };
   }
 }

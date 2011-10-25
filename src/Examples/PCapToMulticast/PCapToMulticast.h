@@ -6,7 +6,7 @@
 #define PCAPTOMULTICAST_H
 
 #define PCAP_SUPPORT_IS_HEREx
-#include <Examples/CommandArgParser.h>
+#include <Application/CommandArgParser.h>
 #include <Communication/PCapReader.h>
 #include <boost/asio.hpp>
 #include <stdio.h>
@@ -24,7 +24,7 @@ namespace QuickFAST{
     ///
     /// This program is not really FAST-aware. It is just part of a testing
     /// framework for other programs.
-    class PCapToMulticast : public CommandArgHandler
+    class PCapToMulticast : public Application::CommandArgHandler
     {
     public:
       PCapToMulticast();
@@ -69,7 +69,7 @@ namespace QuickFAST{
       boost::asio::strand strand_;
       boost::asio::deadline_timer timer_;
 
-      CommandArgParser commandArgParser_;
+      Application::CommandArgParser commandArgParser_;
 //      FILE * dataFile_;
       Communication::PCapReader pcapReader_;
       size_t nPass_;

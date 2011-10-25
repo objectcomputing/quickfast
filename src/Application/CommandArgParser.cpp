@@ -1,11 +1,12 @@
 // Copyright (c) 2009, Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
-#include <Examples/ExamplesPch.h>
+#include <Common/QuickFASTPch.h>
 #include "CommandArgParser.h"
 #include <Common/Version.h>
 
-using namespace ::QuickFAST;
+using namespace QuickFAST;
+using namespace Application;
 
 CommandArgParser::CommandArgParser()
 {

@@ -5,10 +5,9 @@
 #ifndef INTERPRETFAST_H
 #define INTERPRETFAST_H
 
-#include <Examples/CommandArgParser.h>
 #include <Codecs/DataSource.h>
 #include <Communication/Receiver_fwd.h>
-#include <Application/DecoderConfiguration.h>
+#include <Application/CommandArgParser.h>
 #include <Application/DecoderConnection.h>
 
 namespace QuickFAST{
@@ -18,7 +17,7 @@ namespace QuickFAST{
     /// May also produce an echo file to be used by other example programs in QuickFAST.
     ///
     /// Run the program with a -? command line option for detailed usage information.
-    class InterpretApplication : public CommandArgHandler
+    class InterpretApplication : public Application::CommandArgHandler
     {
     public:
       InterpretApplication();
@@ -41,7 +40,7 @@ namespace QuickFAST{
       virtual bool applyArgs();
 
     private:
-      CommandArgParser commandArgParser_;
+      Application::CommandArgParser commandArgParser_;
       typedef boost::shared_ptr<Application::DecoderConfiguration> ConfigurationPtr;
       typedef std::vector<ConfigurationPtr> Configurations;
       typedef boost::shared_ptr<Application::DecoderConnection> ConnectionPtr;

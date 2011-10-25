@@ -4,7 +4,7 @@
 //
 #ifndef FILETOMULTICAST_H
 #define FILETOMULTICAST_H
-#include <Examples/CommandArgParser.h>
+#include <Application/CommandArgParser.h>
 #include <Communication/AsioService.h>
 #include <Communication/MulticastSender_fwd.h>
 #include <Communication/BufferRecycler.h>
@@ -23,7 +23,7 @@ namespace QuickFAST{
     ///
     /// This program is not really FAST-aware. It is just part of a testing
     /// framework for other programs.
-    class FileToMulticast : public CommandArgHandler, public Communication::BufferRecycler
+    class FileToMulticast : public Application::CommandArgHandler, public Communication::BufferRecycler
     {
     public:
       FileToMulticast();
@@ -67,7 +67,7 @@ namespace QuickFAST{
       boost::asio::strand strand_;
       boost::asio::deadline_timer timer_;
 
-      CommandArgParser commandArgParser_;
+      Application::CommandArgParser commandArgParser_;
       FILE * dataFile_;
 
       typedef std::pair<size_t, size_t> MessagePosition; // position in file: start, length
