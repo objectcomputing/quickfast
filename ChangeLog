@@ -1,3 +1,14 @@
+Wed Oct 26 19:25:53 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Examples/Examples/CommandArgHandler.h:
+        * src/Examples/Examples/CommandArgParser.h:
+        * src/Examples/Examples/CommandArgParser.cpp:
+          Removed these files.
+          It was a nice try to provide forward compatibility, but it confused the linker.
+          Symptom was "inconsistent dll linkage"
+          Better to break any app that tries to include the file from the old location than
+          to produce an incomprehensible error message.
+
 Tue Oct 25 18:03:30 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Examples/TutorialApplication/TutorialApplication.h:
         * src/Examples/TutorialApplication/TutorialApplication.cpp:
