@@ -1,3 +1,8 @@
+Fri Oct 28 16:13:34 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Codecs/DataSource.h:
+          Fix off-by-one bug in checking for contiguous bytes.
+          Thanks to: Rafael Kikuchi for pointing out the problem.
+
 Wed Oct 26 19:25:53 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Examples/Examples/CommandArgHandler.h:

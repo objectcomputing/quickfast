@@ -73,7 +73,7 @@ namespace QuickFAST{
       bool hasContiguous(size_t needed, const uchar *& buffer)
       {
         buffer = buffer_ + position_;
-        return (position_ + needed < size_);
+        return (position_ + needed <= size_);
       }
 
       /// @brief Skip over contiguous bytes
