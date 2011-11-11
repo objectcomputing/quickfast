@@ -56,6 +56,8 @@ namespace QuickFAST
         /// @brief access the identity that was used to set the value
         FieldIdentityCPtr & identity()const;
 
+        void reset();
+
       private:
         /////////////////////////////////////////////////
         // Dummy implementations of other virtual methods
@@ -280,6 +282,13 @@ namespace QuickFAST
     {
       return value_.isDefined();
     }
+    template<typename DATATYPE>
+    inline void
+    SingleValueBuilder<DATATYPE>::reset()
+    {
+      value_.setUndefined();
+    }
+
 
     template<typename DATATYPE>
     inline DATATYPE

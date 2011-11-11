@@ -1,3 +1,33 @@
+Fri Nov 11 19:13:18 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * QuickFASTApplication.mpb:
+          Comment to clarify usage.
+
+        * src/Common/ByteSwapper.h:
+        * src/Common/ByteSwapper.cpp:
+          Make static member local to method.
+          This eliminates the need for a cpp file.
+
+        * src/Communication/BufferQueue.h:
+        * src/Communication/BufferQueue_fwd.h:
+        * src/Communication/LinkedBuffer.h:
+        * src/Communication/SingleServerBufferQueue.h:
+        * src/Communication/SingleServerBufferQueue_fwd.h:
+        * src/Tests/testCommon.cpp:
+          Split LinkedBuffer.h into three files to hold
+          the three separate classes which were formerly declared
+          in one file.
+          Files which include LinkedBuffer.h may need to include
+          BufferQUeue.h or SingleServerBufferQueue.h instead.
+
+          Temporarily LinkedBuffer will include SingleServerBufferQueue
+          to provide brief forward compatibility.  Don't depend on this.
+
+        * src/Messages/SequentialSingleValueBuilder.h:
+          New mock implementation of ValueMessageBilder for testing.
+
+        * src/Messages/SingleValueBuilder.h:
+          Add reset method.
+
 Fri Oct 28 16:13:34 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Codecs/DataSource.h:
           Fix off-by-one bug in checking for contiguous bytes.

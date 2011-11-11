@@ -4,6 +4,9 @@
 //////////////////////////////////////////////////////
 // Use this mpb for applications that use QuickFAST
 // be sure to specify exeout. See also QuickFASTExeOut.mpb
+//
+// Applications should include src/common/QuickFAST.h
+//
 project : boost_base, boost_filesystem, boost_system, boost_thread{
   requires += QuickFAST
   includes += $(QUICKFAST_ROOT)/src

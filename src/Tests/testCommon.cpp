@@ -7,7 +7,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
 
-#include <Communication/LinkedBuffer.h>
+#include <Communication/SingleServerBufferQueue.h>
 #include <Common/StringBuffer.h>
 #include <Common/WorkingBuffer.h>
 #include <Common/Exceptions.h>
