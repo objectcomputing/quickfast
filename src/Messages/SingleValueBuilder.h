@@ -56,6 +56,7 @@ namespace QuickFAST
         /// @brief access the identity that was used to set the value
         FieldIdentityCPtr & identity()const;
 
+        /// @brief clear flag used by isSet()
         void reset();
 
       private:

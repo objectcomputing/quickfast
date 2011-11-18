@@ -52,6 +52,10 @@ namespace QuickFAST
       {
       }
 
+      /// @brief Construct: wrap around an external buffer.
+      /// @param externalBuffer: where the data is stored
+      /// @param used How much data is present.
+      /// @param extra opaque information for the actual owner of the buffer
       LinkedBuffer(const unsigned char * externalBuffer, size_t used, void * extra = 0)
         : link_(0)
         , buffer_(const_cast<unsigned char *>(externalBuffer))

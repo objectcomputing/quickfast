@@ -125,12 +125,15 @@ namespace QuickFAST
       }
 
       /// @brief nondestructive access to the first item in the queue
+      /// @returns zero if none
       LinkedBuffer * peek() const
       {
         return head_.link();
       }
 
-      LinkedBuffer *peek_tail()
+      /// @brief nondestructive access to the last item in the queue.
+      /// @returns zero if none
+      LinkedBuffer *peek_tail() const
       {
         if(tail_ == & head_)
         {

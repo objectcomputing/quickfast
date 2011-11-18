@@ -173,26 +173,31 @@ namespace QuickFAST
           return identities_[index];
         }
 
+        /// @ brief was an error detected?
         bool hasError()const
         {
           return error_;
         }
 
+        /// @ brief was a log message written?
         bool hasLog()const
         {
           return logged_;
         }
 
+        /// @brief was a gap detected?
         bool hasGap()const
         {
           return gapDetected_;
         }
 
+        /// @brief Get the message from the last log or error.
         const std::string & message()
         {
           return message_;
         }
 
+        /// @brief reset everything and prepare to accept new data.
         void reset()
         {
           error_ = false;

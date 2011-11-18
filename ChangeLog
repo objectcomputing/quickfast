@@ -1,3 +1,13 @@
+Fri Nov 18 16:18:33 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Common/Types.h:
+          Add sequence_t for future use.
+
+        * src/Communication/BufferQueue.h:
+        * src/Communication/LinkedBuffer.h:
+        * src/Messages/SequentialSingleValueBuilder.h:
+        * src/Messages/SingleValueBuilder.h:
+          Doxygen comments improved.
+
 Fri Nov 11 19:13:18 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * QuickFASTApplication.mpb:
           Comment to clarify usage.

@@ -38,8 +38,11 @@ namespace QuickFAST{
   typedef Decimal decimal_t;
   /// @brief the type used to store a template Id.
   typedef uint32 template_id_t;
-  /// @brief type type used to store a field Id.
+  /// @brief type used to store a field Id.
   typedef std::string field_id_t;
+
+  /// @brief type used for packet sequence numbers during arbitrage
+  typedef uint32 sequence_t;
 
   /// @brief a "namespace" for value types and the method to interpret them.
   class QuickFAST_Export ValueType
