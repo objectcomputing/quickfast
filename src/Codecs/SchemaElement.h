@@ -1,4 +1,4 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// Copyright (c) 2009, 2011 Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 
@@ -8,7 +8,7 @@
 
 #ifndef SCHEMAELEMENT_H
 #define SCHEMAELEMENT_H
-
+#include "SchemaElement_fwd.h"
 #include <Common/QuickFAST_Export.h>
 #include <Codecs/Template_fwd.h>
 #include <Codecs/TemplateRegistry_fwd.h>

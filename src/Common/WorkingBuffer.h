@@ -4,10 +4,15 @@
 #ifdef _MSC_VER
 # pragma once
 #endif
-#ifndef BUFFER_H
-#define BUFFER_H
+#ifndef WORKINGBUFFER_H
+#define WORKINGBUFFER_H
+#ifndef QUICKFAST_HEADERS
+#error Please include <Application/QuickFAST.h> preferably as a precompiled header file.
+#endif //QUICKFAST_HEADERS
+
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
+
 
 namespace QuickFAST{
   /// @brief A helper buffer for QuickFAST encoding and decoding.
@@ -129,4 +134,4 @@ namespace QuickFAST{
   };
 }
 
-#endif /* BUFFER_H */
+#endif /* WORKINGBUFFER_H */

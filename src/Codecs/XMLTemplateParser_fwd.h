@@ -7,8 +7,9 @@
 
 #ifndef XMLTEMPLATEPARSER_FWD_H
 #define XMLTEMPLATEPARSER_FWD_H
-
-#include <boost/shared_ptr.hpp>
+#ifndef QUICKFAST_HEADERS
+#error Please include <Application/QuickFAST.h> preferably as a precompiled header file.
+#endif //QUICKFAST_HEADERS
 
 namespace QuickFAST
 {

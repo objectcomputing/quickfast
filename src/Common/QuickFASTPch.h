@@ -1,4 +1,4 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// Copyright (c) 2009, 2010, 2011 Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 #ifdef _MSC_VER
@@ -14,8 +14,11 @@
 #pragma warning(disable:4127)  // Conditonal expression is constant (particularly in templates)
 
 #endif
-#ifndef QuickFAST_H
-#define QuickFAST_H
+#ifndef QUICKFASTPCH_H
+#define QUICKFASTPCH_H
+// If this symbol is not defined the user included a QuickFAST header without
+// using one of the standard precompiled header files.
+#define QUICKFAST_HEADERS
 
 #ifdef _WIN32
 # define WIN32_LEAN_AND_MEAN      // Exclude rarely-used stuff from Windows headers
@@ -213,5 +216,4 @@ namespace QuickFAST{
   namespace Application{}
 
 }
-
-#endif // QuickFAST_H
+#endif // QUICKFASTPCH_H

@@ -2,6 +2,9 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
+#ifdef _MSC_VER
+# pragma once
+#endif
 #ifndef ASYNCHRECEIVER_H
 #define ASYNCHRECEIVER_H
 // All inline, do not export.
@@ -93,12 +96,12 @@ namespace QuickFAST
           bool empty = false;
           {
             boost::mutex::scoped_lock lock(bufferMutex_);
-            if(!idleBuffers_.isEmpty())
-            {
-              //std::ostringstream msg;
-              //msg << "AR:{"<< (void *) this <<  "} making idle buffers available" << std::endl;
-              //std::cout << msg.str() << std::flush;
-            }
+            //if(!idleBuffers_.isEmpty())
+            //{
+            //  std::ostringstream msg;
+            //  msg << "AR:{"<< (void *) this <<  "} making idle buffers available" << std::endl;
+            //  std::cout << msg.str() << std::flush;
+            //}
             idleBufferPool_.push(idleBuffers_);
             // be sure we have a read request in progress
             startReceive(lock);
@@ -152,7 +155,7 @@ namespace QuickFAST
         bool service = false;
         { // Scope for lock
           boost::mutex::scoped_lock lock(bufferMutex_);
-          readInProgress_ = false;
+          --readsInProgress_;
           ++packetsReceived_;
           if (!error)
           {

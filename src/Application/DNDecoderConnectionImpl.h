@@ -1,6 +1,9 @@
-// Copyright (c) 2009, 2010 Object Computing, Inc.
+// Copyright (c) 2009, 2010, 2011 Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
+#ifdef _MSC_VER
+# pragma once
+#endif
 #ifndef DNDECODERCONNECTIONIMPL_H
 #define DNDECODERCONNECTIONIMPL_H
 #include <Application/DecoderConnection_fwd.h>

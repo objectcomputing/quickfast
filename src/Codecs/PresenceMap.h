@@ -1,4 +1,4 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// Copyright (c) 2009, 2010, 2011 Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 #ifdef _MSC_VER
@@ -6,6 +6,7 @@
 #endif
 #ifndef PRESENCEMAP_H
 #define PRESENCEMAP_H
+#include "PresenceMap_fwd.h"
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
 #include <Codecs/DataSource_fwd.h>

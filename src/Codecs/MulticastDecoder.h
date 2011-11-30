@@ -2,6 +2,9 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
+#ifdef _MSC_VER
+# pragma once
+#endif
 #ifndef MULTICASTDECODER_H
 #define MULTICASTDECODER_H
 #include <Common/QuickFAST_Export.h>

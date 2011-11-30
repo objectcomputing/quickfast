@@ -6,6 +6,10 @@
 #endif
 #ifndef EXCEPTIONS_H
 #define EXCEPTIONS_H
+#ifndef QUICKFAST_HEADERS
+#error Please include <Application/QuickFAST.h> preferably as a precompiled header file.
+#endif //QUICKFAST_HEADERS
+
 //#include <Common/QuickFAST_Export.h>
 namespace QuickFAST{
   /// @brief Exception to be thrown when an attempt is made to convert a value to an incompatable type.

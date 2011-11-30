@@ -1,9 +1,15 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// Copyright (c) 2009, 2010, 2011 Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 
-#ifndef StringBuffer_H
-#define StringBuffer_H
+#ifdef _MSC_VER
+# pragma once
+#endif
+#ifndef STRINGBUFFER_H
+#define STRINGBUFFER_H
+#ifndef QUICKFAST_HEADERS
+#error Please include <Application/QuickFAST.h> preferably as a precompiled header file.
+#endif //QUICKFAST_HEADERS
 // All inline, do not export.
 //#include <Common/QuickFAST_Export.h>
 
@@ -601,4 +607,4 @@ namespace QuickFAST
     return out;
   }
 }
-#endif /* StringBuffer_H */
+#endif /* STRINGBUFFER_H */

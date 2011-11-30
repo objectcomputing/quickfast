@@ -2,6 +2,9 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
+#ifdef _MSC_VER
+# pragma once
+#endif
 #ifndef DECODERCONFIGURATION_H
 #define DECODERCONFIGURATION_H
 #include "DecoderConfiguration_fwd.h"

@@ -2,6 +2,9 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
+#ifdef _MSC_VER
+# pragma once
+#endif
 #ifndef ASYNCHFILESENDER_H
 #define ASYNCHFILESENDER_H
 #include <Common/QuickFAST_Export.h>

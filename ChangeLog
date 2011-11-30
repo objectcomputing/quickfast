@@ -1,3 +1,103 @@
+Wed Nov 30 21:36:47 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Application/DNDecoderConnectionImpl.h:
+        * src/Application/DNDecoderConnectionImpl_fwd.h:
+        * src/Application/DecoderConfiguration.h:
+        * src/Application/DecoderConfiguration_fwd.h:
+        * src/Application/DecoderConnection.h:
+        * src/Application/DecoderConnection_fwd.h:
+        * src/Codecs/Context_fwd.h:
+        * src/Codecs/DataDestination_fwd.h:
+        * src/Codecs/DataSource_fwd.h:
+        * src/Codecs/Decoder_fwd.h:
+        * src/Codecs/DictionaryIndexer_fwd.h:
+        * src/Codecs/Encoder_fwd.h:
+        * src/Codecs/FieldInstruction_fwd.h:
+        * src/Codecs/FieldOp_fwd.h:
+        * src/Codecs/HeaderAnalyzer_fwd.h:
+        * src/Codecs/MessageConsumer_fwd.h:
+        * src/Codecs/MessagePerPacketAssembler.h:
+        * src/Codecs/MessagePerPacketAssembler_fwd.h:
+        * src/Codecs/MulticastDecoder.h:
+        * src/Codecs/MulticastDecoder_fwd.h:
+        * src/Codecs/PresenceMap.h:
+        * src/Codecs/PresenceMap_fwd.h:
+        * src/Codecs/SchemaElement.h:
+        * src/Codecs/SchemaElement_fwd.h:
+        * src/Codecs/SegmentBody_fwd.h:
+        * src/Codecs/StreamingAssembler.h:
+        * src/Codecs/SynchronousDecoder.h:
+        * src/Codecs/TemplateRegistry_fwd.h:
+        * src/Codecs/Template_fwd.h:
+        * src/Codecs/XMLTemplateParser_fwd.h:
+        * src/Common/AtomicCounter.h:
+        * src/Common/AtomicOps.h:
+        * src/Common/AtomicPointer.h:
+        * src/Common/Decimal_fwd.h:
+        * src/Common/Exceptions.h:
+        * src/Common/Logger_fwd.h:
+        * src/Common/QuickFASTPch.h:
+        * src/Common/StringBuffer.h:
+        * src/Common/Value_fwd.h:
+        * src/Common/WorkingBuffer.h:
+        * src/Communication/AsioService.h:
+        * src/Communication/AsioService_fwd.h:
+        * src/Communication/Assembler_fwd.h:
+        * src/Communication/AsynchFileReceiver.h:
+        * src/Communication/AsynchFileReceiver_fwd.h:
+        * src/Communication/AsynchFileSender.h:
+        * src/Communication/AsynchFileSender_fwd.h:
+        * src/Communication/AsynchReceiver.h:
+        * src/Communication/AsynchReceiver_fwd.h:
+        * src/Communication/AsynchSender.h:
+        * src/Communication/AsynchSender_fwd.h:
+        * src/Communication/AtomicQueue.h:
+        * src/Communication/AtomicQueue_fwd.h:
+        * src/Communication/BufferQueue.h:
+        * src/Communication/BufferQueue_fwd.h:
+        * src/Communication/BufferReceiver.h:
+        * src/Communication/BufferReceiver_fwd.h:
+        * src/Communication/BufferRecycler.h:
+        * src/Communication/BufferedRawFileReceiver.h:
+        * src/Communication/BufferedRawFileReceiver_fwd.h:
+        * src/Communication/FileSender.h:
+        * src/Communication/FileSender_fwd.h:
+        * src/Communication/LinkedBuffer.h:
+        * src/Communication/LinkedBuffer_fwd.h:
+        * src/Communication/MulticastReceiver.h:
+        * src/Communication/MulticastReceiverHandle.h:
+        * src/Communication/MulticastReceiver_fwd.h:
+        * src/Communication/MulticastSender.h:
+        * src/Communication/MulticastSender_fwd.h:
+        * src/Communication/PCapFileReceiver.h:
+        * src/Communication/PCapFileReceiver_fwd.h:
+        * src/Communication/PCapReader.h:
+        * src/Communication/RawFileReceiver.h:
+        * src/Communication/RawFileReceiver_fwd.h:
+        * src/Communication/Receiver.h:
+        * src/Communication/Receiver_fwd.h:
+        * src/Communication/Sender.h:
+        * src/Communication/Sender_fwd.h:
+        * src/Communication/SingleServerBufferQueue.h:
+        * src/Communication/SingleServerBufferQueue_fwd.h:
+        * src/Communication/SynchReceiver.h:
+        * src/Communication/SynchReceiver_fwd.h:
+        * src/Communication/TCPReceiver.h:
+        * src/Communication/TCPReceiver_fwd.h:
+        * src/Examples/Examples/ExamplesPch.h:
+        * src/Messages/FieldIdentity_fwd.h:
+        * src/Messages/FieldSet_fwd.h:
+        * src/Messages/Field_fwd.h:
+        * src/Messages/MessageBuilder_fwd.h:
+        * src/Messages/MessageField_fwd.h:
+        * src/Messages/Message_fwd.h:
+        * src/Messages/Sequence_fwd.h:
+        * src/Messages/SpecialAccessors.h:
+        * src/Messages/ValueMessageBuilder_fwd.h:
+
+        Include files check to make sure necessary precompiled (or at least preincluded)
+        headers have been found.
+        #include <Application/QuickFAST.h> is intended for use by applications that use QuickFAST.
+
 Fri Nov 18 16:18:33 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Common/Types.h:
           Add sequence_t for future use.

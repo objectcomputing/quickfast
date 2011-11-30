@@ -6,7 +6,9 @@
 /// UNDER CONSTRUCTION!!!
 /// NOT READY FOR USE
 ////////////////////////////
-
+#ifdef _MSC_VER
+# pragma once
+#endif
 #ifndef ATOMICSINGLESERVERBUFFERQUEUE_H
 #define ATOMICSINGLESERVERBUFFERQUEUE_H
 // All inline, do not export.

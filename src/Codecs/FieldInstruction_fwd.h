@@ -1,4 +1,4 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// Copyright (c) 2009, 2010, 2011 Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 #ifdef _MSC_VER
@@ -6,8 +6,9 @@
 #endif
 #ifndef FIELDINSTRUCTION_FWD_H
 #define FIELDINSTRUCTION_FWD_H
-
-#include <boost/shared_ptr.hpp>
+#ifndef QUICKFAST_HEADERS
+#error Please include <Application/QuickFAST.h> preferably as a precompiled header file.
+#endif //QUICKFAST_HEADERS
 
 namespace QuickFAST{
   namespace Codecs{
