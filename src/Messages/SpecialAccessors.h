@@ -1,4 +1,4 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// Copyright (c) 2009, 2011 Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 #ifdef _MSC_VER
@@ -6,6 +6,10 @@
 #endif
 #ifndef SPECIALACCESSORS_H
 #define SPECIALACCESSORS_H
+#ifndef QUICKFAST_HEADERS
+#error Please include <Application/QuickFAST.h> preferably as a precompiled header file.
+#endif //QUICKFAST_HEADERS
+
 #include <Messages/MessageAccessor.h>
 #include <Messages/MessageField.h>
 #include <Messages/Sequence.h>

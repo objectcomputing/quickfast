@@ -12,6 +12,7 @@
 #endif
 #ifndef EXAMPLES_PCH_H
 #define EXAMPLES_PCH_H
+#define QUICKFAST_HEADERS
 
 #ifdef _WIN32
 # define WIN32_LEAN_AND_MEAN      // Exclude rarely-used stuff from Windows headers

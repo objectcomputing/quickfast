@@ -1,7 +1,10 @@
-// Copyright (c) 2009, Object Computing, Inc.
+// Copyright (c) 2009, 2010, 2011 Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
+#ifdef _MSC_VER
+# pragma once
+#endif
 #ifndef SYNCHRECEIVER_H
 #define SYNCHRECEIVER_H
 // All inline, do not export.
@@ -49,7 +52,7 @@ namespace QuickFAST
         )
       {
         bool needService = false;
-        readInProgress_ = false;
+        --readsInProgress_;
         ++packetsReceived_;
         if(bytesReceived > 0)
         {

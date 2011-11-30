@@ -2,6 +2,9 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
+#ifdef _MSC_VER
+# pragma once
+#endif
 #ifndef BUFFEREDRAWFILERECEIVER_H
 #define BUFFEREDRAWFILERECEIVER_H
 // All inline, do not export.

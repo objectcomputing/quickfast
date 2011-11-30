@@ -2,14 +2,16 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
+#ifdef _MSC_VER
+# pragma once
+#endif
 #ifndef RECEIVER_H
 #define RECEIVER_H
 // All inline, do not export.
 //#include <Common/QuickFAST_Export.h>
 #include "Receiver_fwd.h"
 #include <Communication/Assembler.h>
-#include <Communication/LinkedBuffer.h>
-//#include <Communication/AtomicQueue.h>
+#include <Communication/SingleServerBufferQueue.h>
 #include <Common/Exceptions.h>
 
 namespace QuickFAST
@@ -24,7 +26,7 @@ namespace QuickFAST
         : bufferSize_(1400)
         , paused_(false)
         , stopping_(false)
-        , readInProgress_(false)
+        , readsInProgress_(0)
         , noBufferAvailable_(0)
         , packetsReceived_(0)
         , bytesReceived_(0)
@@ -140,7 +142,8 @@ namespace QuickFAST
 
       /// @brief run the event loop until one event is handled.
       virtual void run_one() = 0;
-      /// @brief execute any ready event handlers than return.
+
+      /// @brief execute any ready event handlers then return.
       virtual size_t poll() = 0;
 
       /// @brief execute at most one ready event handler than return.
@@ -149,7 +152,7 @@ namespace QuickFAST
       /// @brief create additional threads to run the event loop
       virtual void runThreads(size_t threadCount = 0, bool useThisThread = true) = 0;
 
-      /// @brief join all additional threads after calling stopService()
+      /// @brief join all additional threads after calling stop()
       ///
       /// If stop() has not been called, this will block "forever".
       virtual void joinThreads() = 0;
@@ -264,20 +267,26 @@ namespace QuickFAST
         startReceive(lock);
       }
 
+      /// @brief Can a read be started now?
+      virtual bool canStartRead()
+      {
+        return readsInProgress_ == 0;
+      }
+
       /// @brief Receive a new buffer full if possible
       /// scoped_lock parameter means a mutex must be locked
       void startReceive(boost::mutex::scoped_lock& lock)
       {
-        if( !readInProgress_ && !stopping_)
+        if( canStartRead() && !stopping_)
         {
           LinkedBuffer *buffer = idleBufferPool_.pop();
           if(buffer != 0)
           {
-            readInProgress_ = true;
+            ++readsInProgress_;
             if(!fillBuffer(buffer, lock))
             {
               idleBufferPool_.push(buffer);
-              readInProgress_ = false;
+              --readsInProgress_;
               stop();
             }
           }
@@ -478,8 +487,8 @@ namespace QuickFAST
       /// @brief True when we're trying to shut down
       bool stopping_;
 
-      /// @brief True when a buffer is being filled.
-      bool readInProgress_;
+      /// @brief Number of reads in progress (usually zero or one)
+      unsigned int readsInProgress_;
 
       /////////////
       // Statistics

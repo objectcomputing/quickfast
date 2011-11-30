@@ -2,6 +2,9 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
+#ifdef _MSC_VER
+# pragma once
+#endif
 #ifndef SINGLESERVERBUFFERQUEUE_H
 #define SINGLESERVERBUFFERQUEUE_H
 // All inline, do not export.
