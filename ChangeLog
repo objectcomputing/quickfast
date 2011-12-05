@@ -1,3 +1,7 @@
+Mon Dec  5 16:12:16 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/DotNet/QuickFASTDotNetPch.h:
+          Include file checking works with .NET now, too.
+
 Wed Nov 30 21:36:47 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Application/DNDecoderConnectionImpl.h:
         * src/Application/DNDecoderConnectionImpl_fwd.h:

@@ -3,6 +3,7 @@
 // See the file license.txt for licensing information.
 #pragma once
 
+#define QUICKFAST_HEADERS
 # pragma warning(disable:4251) // Disable VC warning about dll linkage required (for private members?)
 # pragma warning(disable:4275) // disable warning about non dll-interface base class.
 # pragma warning(disable:4996) // Disable VC warning that std library may be unsafe
