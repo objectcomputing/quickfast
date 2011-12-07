@@ -1,3 +1,28 @@
+Wed Dec  7 16:47:06 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+
+        * src/Codecs/Context.cpp:
+        * src/Codecs/DataDestination.h:
+        * src/Codecs/TemplateRegistry.cpp:
+        * src/Codecs/XMLTemplateParser.cpp:
+        * src/Common/QuickFASTPch.h:
+        * src/Communication/FileSender.h:
+        * src/Communication/PCapReader.cpp:
+        * src/Communication/Sender.h:
+        * src/Examples/Examples/ExamplesPch.h:
+        * src/Examples/Examples/ValueToFix.h:
+        * src/Examples/FileToMulticast/FileToMulticast.cpp:
+        * src/Examples/FileToTCP/FileToTCP.cpp:
+        * src/Examples/PCapToMulticast/PCapToMulticast.cpp:
+        * src/Examples/PerformanceTest/PerformanceTest.cpp:
+        * src/Messages/MessageAccessor.h:
+        * src/Messages/MessageFormatter.h:
+          Get rid of /W4 level warnings from MSVC:
+          Disable "unused parameter" warnings.
+          Use explicitly unsigned literals to initialize unsigned values.
+          Provide unreachable assignment operators to avoid compiler generated ones.
+          Cast the result of antique c library character methods to the char data type.
+          Finally write the code to display <templates> attributes -- retiring the "todo" message.
+
 Mon Dec  5 16:12:16 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/DotNet/QuickFASTDotNetPch.h:
           Include file checking works with .NET now, too.

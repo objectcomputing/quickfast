@@ -13,7 +13,7 @@ namespace {
   void waitForEnter()
   {
     std::cout << "Hit Enter to continue:" << std::flush;
-    char c = std::cin.get();
+    char c = (char)std::cin.get();
     if(c == 'q')
     {
       exit(1);

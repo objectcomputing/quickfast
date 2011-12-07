@@ -276,9 +276,9 @@ PerformanceTest::run()
       }//PROFILE_POINT
       unsigned long decodeLapse = decodeTimer.freeze();
       size_t messageCount = builder.msgCount();//handler.getMessageCount();
-      size_t groupCount = builder.groupCount();
+//      size_t groupCount = builder.groupCount();
       size_t fieldCount = builder.fieldCount();
-      size_t sequenceCount = builder.sequenceCount();
+//      size_t sequenceCount = builder.sequenceCount();
       size_t sequenceEntryCount = builder.sequenceEntryCount();
       (*performanceFile_)
 #ifdef _DEBUG

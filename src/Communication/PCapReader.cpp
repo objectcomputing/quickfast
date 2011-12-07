@@ -325,7 +325,7 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
 
     if(verbose_)
     {
-      std::cout << "PCapReader: Starting read position: " << pos_ << " file size: " << fileSize_ 
+      std::cout << "PCapReader: Starting read position: " << pos_ << " file size: " << fileSize_
                 << " minimum packet size: " << minBytes << std::endl;
       if(usetv32_)
       {
@@ -349,7 +349,7 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
       size_t datalen = 0;
       size_t expectlen = 0;
       bool truncate = false;
-      unsigned int dataLinkType = 0;
+//      unsigned int dataLinkType = 0;
 
       if(usetv32_)
       {
@@ -456,7 +456,7 @@ PCapReader::read(const unsigned char *& buffer, size_t & size)
           udp_header * udpHeader = reinterpret_cast<udp_header*>(buffer_.get() + pos_);
           pos_ += sizeof(udp_header);
           datalen -= sizeof(udp_header);
-          
+
           // udplen includes udp header + cargo
           // udplen is stored in network byte order
           size_t udplen = ntohs(udpHeader->len);

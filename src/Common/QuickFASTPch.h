@@ -12,6 +12,7 @@
                                // cause any problems because the code never compares boost::unordered sets
 #pragma warning(disable:4820)  // 'n' bytes padding added after data member
 #pragma warning(disable:4127)  // Conditonal expression is constant (particularly in templates)
+#pragma warning(disable:4100)  // Disable: unreferenced formal parameter (/W4 warning: common case for virtual methods)
 
 #endif
 #ifndef QUICKFASTPCH_H

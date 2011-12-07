@@ -15,7 +15,7 @@ Context::Context(Codecs::TemplateRegistryCPtr registry)
 : verboseOut_(0)
 , logOut_(0)
 , templateRegistry_(registry)
-, templateId_(~0)
+, templateId_(~0U)
 , strict_(true)
 , indexedDictionarySize_(registry->dictionarySize())
 //, indexedDictionary_(new Messages::FieldCPtr[indexedDictionarySize_])
@@ -36,7 +36,7 @@ Context::reset(bool resetTemplateId /*= true*/)
   }
   if(resetTemplateId)
   {
-    templateId_ = ~0;
+    templateId_ = ~0U;
   }
 }
 

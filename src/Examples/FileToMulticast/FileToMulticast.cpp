@@ -210,7 +210,7 @@ FileToMulticast::parseIndexFile()
       std::string line(lineBuffer);
       if(line.compare(0, prefixLength, messagePrefix) == 0)
       {
-        size_t hexlength = line.length() - prefixLength - suffixLength;
+//        size_t hexlength = line.length() - prefixLength - suffixLength;
         std::stringstream hex(line.substr(prefixLength, line.length() - suffixLength));
         size_t messageEnd = 0;
         hex >> std::hex >> messageEnd;
@@ -348,6 +348,7 @@ FileToMulticast::sendBurst()
       fseek(dataFile_,  long(messageStart), SEEK_SET);
       assert(messageLength <= bufferSize_);
       size_t bytesRead = fread(buffer_.get(), 1, messageLength, dataFile_);
+      if(bytesRead == 0){} // avoid "Unused local" warning
       assert (bytesRead == messageLength);
       sender_->send(boost::asio::buffer(buffer_.get(), messageLength));
     }

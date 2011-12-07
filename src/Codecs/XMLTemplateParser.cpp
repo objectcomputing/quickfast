@@ -481,7 +481,7 @@ TemplateBuilder::getOptionalBooleanAttribute(
   if(it != attributes.end())
   {
     char yn = it->second[0];
-    yn = toupper(yn);
+    yn = (char)toupper(yn);
     if(yn != 'Y' && yn != 'N' && yn != 'T' && yn != 'F')
     {
       std::stringstream msg;

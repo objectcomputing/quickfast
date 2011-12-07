@@ -157,7 +157,20 @@ TemplateRegistry::display(std::ostream & output, size_t indent) const
 {
   std::string indentString(indent, ' ');
   output << std::endl << indentString << "<templates";
-  int todo_display_attributes;
+
+  if(!templateNamespace_.empty())
+  {
+    output << " templateNs=\"" << templateNamespace_ << "\"";
+  }
+  if(!namespace_.empty())
+  {
+    output << " ns=\"" << namespace_ << "\"";
+  }
+  if(!dictionaryName_.empty())
+  {
+    output << " dictionary=\"" << dictionaryName_ << "\"";
+  }
+
   output << ">";
   for(size_t nTemplate = 0; nTemplate < mutableTemplates_.size(); ++nTemplate)
   {

@@ -136,7 +136,7 @@ FileToTCP::run()
         while(stream.good())
         {
           char c;
-          c = stream.get();
+          c = (char)stream.get();
           std::cout << c << std::flush;
         }
         return 0;

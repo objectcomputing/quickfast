@@ -45,6 +45,8 @@ namespace QuickFAST
       /// @param field contains the field to be formatted
       void displayFieldValue(const Messages::FieldCPtr & field);
     private:
+      MessageFormatter & operator =(const MessageFormatter &); // do not autogenerate assignment operator
+    private:
       void newline();
     private:
       std::ostream & out_;

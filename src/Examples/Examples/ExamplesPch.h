@@ -9,6 +9,8 @@
 # pragma warning(disable:4396) // Disable 'boost::operator !=' : the inline specifier cannot be used when a friend declaration refers to a specialization of a function template
                                // boost::unordered_set triggers this.  I think it's a bug somewhere, but it doesn't
                                // cause any problems because the code never compares boost::unordered sets
+#pragma warning(disable:4100)  // Disable: unreferenced formal parameter
+
 #endif
 #ifndef EXAMPLES_PCH_H
 #define EXAMPLES_PCH_H
