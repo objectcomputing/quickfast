@@ -8,9 +8,12 @@
 
 #ifdef _MSC_VER
 # pragma once
+// Push the warnings that will be disabled in QuickFASTPch.h
+#pragma warning(push)
 #endif
 #ifndef QUICKFAST_H
 #define QUICKFAST_H
+
 #include <Common/QuickFASTPch.h>
 #include <Common/Version.h>
 #include <Common/Decimal.h>
@@ -19,5 +22,11 @@
 #include <Codecs/XMLTemplateParser.h>
 #include <Codecs/TemplateRegistry.h>
 #include <Messages/FieldIdentity.h>
+
+#ifdef _MSC_VER
+// Restore the warning state
+#pragma warning(pop)
+#endif
+
 #endif // QUICKFAST_H
 

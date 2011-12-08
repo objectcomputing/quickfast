@@ -1,3 +1,8 @@
+Thu Dec  8 10:01:00 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
+        * src/Application/QuickFAST.h
+        push and pop #pragma warnings
+        First hg checkin
+
 Wed Dec  7 16:47:06 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
 
         * src/Codecs/Context.cpp:
