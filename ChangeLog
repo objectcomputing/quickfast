@@ -1,3 +1,7 @@
+Mon Dec 12 19:43:54 UTC 2011 Dale Wilson <wilsond@ociweb.com>
+        * bin\hgcle.py:
+        Added command to create mercurial change log entries
+
 Thu Dec  8 10:01:00 UTC 2011  Dale Wilson  <wilsond@ociweb.com>
         * src/Application/QuickFAST.h
         push and pop #pragma warnings
