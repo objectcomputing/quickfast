@@ -202,15 +202,15 @@ namespace QuickFAST{
       {
         return false;
       }
-      if(unsignedInteger_ != unsignedInteger_ ||
-        signedInteger_ != signedInteger_ ||
-        exponent_ != exponent_)
+      if(unsignedInteger_ != rhs.unsignedInteger_ ||
+        signedInteger_ != rhs.signedInteger_ ||
+        exponent_ != rhs.exponent_)
       {
         return false;
       }
       if((class_ & STRING) == STRING)
       {
-        return string_ == string_;
+        return string_ == rhs.string_;
       }
       return true;
     }

@@ -1,3 +1,20 @@
+Wed Mar 14 19:06:17 UTC 2012 Dale Wilson <wilsond@ociweb.com>
+        * src\Codecs\FieldInstructionBlob.h:
+        * src\Codecs\FieldInstructionByteVector.cpp:
+        * src\Codecs\FieldInstructionByteVector.h:
+        * src\Codecs\FieldInstructionUtf8.cpp:
+        * src\Codecs\FieldInstructionUtf8.h:
+        Passing string by value (performance issue)
+        QuickFAST issue #103
+        * src\Common\Value.h:
+        Invalid comparison in operator == ()
+        QuickFAST issue #103
+        * src\Communication\AsynchFileReceiver.h:
+        Invalid assignment in constructor
+        QuickFAST issue #103
+        * src\Codecs\DataSource.h
+        Fix obscure bug when using -echo.  Thanks to Rafael Kikuchi on the QuickFAST users list for spotting this one.
+
 Mon Jan 16 16:18:55 UTC 2012 Dale Wilson <wilsond@ociweb.com>
         * src\Codecs\DataSource.h
         Fix obscure bug when using -echo.  Thanks to Rafael Kikuchi on the QuickFAST users list for spotting this one.

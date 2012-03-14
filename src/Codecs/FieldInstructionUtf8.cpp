@@ -32,7 +32,7 @@ FieldInstructionUtf8::createField(const uchar * buffer, size_t length)const
 }
 
 Messages::FieldCPtr
-FieldInstructionUtf8::createField(const std::string value)const
+FieldInstructionUtf8::createField(const std::string & value)const
 {
   return Messages::FieldUtf8::create(value);
 }

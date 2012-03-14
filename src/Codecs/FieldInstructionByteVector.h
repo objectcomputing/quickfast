@@ -28,7 +28,7 @@ namespace QuickFAST{
 
     private:
       virtual Messages::FieldCPtr createField(const uchar * buffer, size_t length)const;
-      virtual Messages::FieldCPtr createField(const std::string value)const;
+      virtual Messages::FieldCPtr createField(const std::string & value)const;
       virtual Messages::FieldCPtr createEmptyField()const;
     };
   }

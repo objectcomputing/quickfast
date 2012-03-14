@@ -49,7 +49,7 @@ namespace QuickFAST
         uint32 additionalAttributes = 0
         )
         : AsynchReceiver(ioService)
-        , fileName_(fileName_)
+        , fileName_(fileName)
         , additionalAttributes_(additionalAttributes)
         , handle_(ioService_)
         , offset_(0LL)

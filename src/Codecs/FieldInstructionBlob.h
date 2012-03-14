@@ -117,7 +117,7 @@ namespace QuickFAST{
       /// @brief create a populated field of the appropriate type
       /// @param value contains the data for the field
       /// @returns a pointer to the heap-allocated field
-      virtual Messages::FieldCPtr createField(const std::string value)const = 0;
+      virtual Messages::FieldCPtr createField(const std::string & value)const = 0;
       /// @brief create an empty field of the appropriate type
       /// @returns a pointer to the heap-allocated field
       virtual Messages::FieldCPtr createEmptyField()const = 0;

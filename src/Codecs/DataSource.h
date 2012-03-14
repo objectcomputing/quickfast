@@ -88,7 +88,8 @@ namespace QuickFAST{
           size_t end = position_ + used;
           while (position_ < end)
           {
-            doEcho(position_ < size_, buffer_[position_++]);
+            doEcho(position_ < size_, buffer_[position_]);
+            ++position_;
           }
         }
         else

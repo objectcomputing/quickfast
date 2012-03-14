@@ -32,7 +32,7 @@ FieldInstructionByteVector::createField(const uchar * buffer, size_t length)cons
 }
 
 Messages::FieldCPtr
-FieldInstructionByteVector::createField(const std::string value)const
+FieldInstructionByteVector::createField(const std::string & value)const
 {
   return Messages::FieldCPtr(Messages::FieldByteVector::create(value));
 }
