@@ -2,6 +2,10 @@ Mon Jan 16 16:18:55 UTC 2012 Dale Wilson <wilsond@ociweb.com>
         * src\Codecs\DataSource.h
         Fix obscure bug when using -echo.  Thanks to Rafael Kikuchi on the QuickFAST users list for spotting this one.
 
+Mon Jan 16 16:18:55 UTC 2012 Dale Wilson <wilsond@ociweb.com>
+        * src\Codecs\DataSource.h
+        Fix obscure bug when using -echo.  Thanks to Rafael Kikuchi on the QuickFAST users list for spotting this one.
+
 Mon Dec 12 19:43:54 UTC 2011 Dale Wilson <wilsond@ociweb.com>
         * bin\hgcle.py:
         Added command to create mercurial change log entries
