@@ -1,3 +1,26 @@
+Tue Mar 20 19:39:29 UTC 2012 Dale Wilson <wilsond@ociweb.com>
+        * .hgignore:
+        * src\Application\DecoderConfiguration.h:
+        * src\Application\DecoderConnection.cpp:
+        * src\Codecs\FixedSizeHeaderAnalyzer.cpp:
+        * src\Codecs\FixedSizeHeaderAnalyzer.h:
+        * src\Codecs\HeaderAnalyzer.h:
+        * src\Codecs\MessagePerPacketAssembler.cpp:
+        * src\Codecs\MessagePerPacketAssembler.h:
+        * src\Communication\MulticastReceiver.h:
+        * src\Communication\Receiver.h:
+        * src\Messages\ValueMessageBuilder.h:
+        * src\Codecs\BasePacketAssembler.cpp:
+        * src\Codecs\BasePacketAssembler.h:
+        * src\Codecs\BasePacketAssembler_fwd.h:
+        * src\Codecs\PacketSequencingAssembler.cpp:
+        * src\Codecs\PacketSequencingAssembler.h:
+        * src\Codecs\PacketSequencingAssembler_fwd.h:
+        * src\Communication\RecoveryFeed.h:
+        * src\Communication\RecoveryFeed_fwd.h:
+        * src\Tests\testErrorRecovery.cpp:
+        Rework the MessagePerPacketAssembler to add support for A/B feeds.
+
 Wed Mar 14 19:06:17 UTC 2012 Dale Wilson <wilsond@ociweb.com>
         * src\Codecs\FieldInstructionBlob.h:
         * src\Codecs\FieldInstructionByteVector.cpp:

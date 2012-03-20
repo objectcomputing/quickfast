@@ -10,6 +10,11 @@
 #include "DecoderConfiguration_fwd.h"
 #include <Codecs/DataSource.h>
 
+namespace
+{
+  const char * DEFAULT_MULTICAST_NAME = "*";
+}
+
 namespace QuickFAST{
   namespace Application{
     /// @brief structure to capture all the information needed to configure a DecoderConnection
@@ -43,6 +48,46 @@ namespace QuickFAST{
       };
 
     public:
+
+      struct MulticastFeed
+      {
+        /// @brief a name for the feed
+        std::string name_;
+        /// @brief For MulticastReceiver the dotted IP of the multicast group
+        std::string groupIP_;
+        /// @brief For MulticastRecevier the port number of the multicast group
+        unsigned short portNumber_;
+        /// @brief For MulticastReceiver selects the NIC on which to subscribe/listen
+        std::string listenInterfaceIP_;
+        /// @brief For MulticastReceiver the IP to which the socket will be bound
+        std::string bindIP_;
+
+        MulticastFeed(
+            const std::string & name,
+            const std::string & groupIP,
+            short portNumber,
+            const std::string & listenIP,
+            const std::string & bindIP)
+          : name_(name)
+          , groupIP_(groupIP)
+          , portNumber_(13014)
+          , listenInterfaceIP_(listenIP)
+          , bindIP_(bindIP)
+        {
+        }
+
+        MulticastFeed(const MulticastFeed & rhs)
+          : name_(rhs.name_)
+          , groupIP_(rhs.groupIP_)
+          , portNumber_(rhs.portNumber_)
+          , listenInterfaceIP_(rhs.listenInterfaceIP_)
+          , bindIP_(rhs.bindIP_)
+        {
+        }
+
+      };
+      typedef std::vector<MulticastFeed> MulticastFeedVector;
+
       /// @brief Initalize to defaults
       DecoderConfiguration()
         : head_(0)
@@ -66,9 +111,6 @@ namespace QuickFAST{
         , assemblerType_(UNSPECIFIED_ASSEMBLER)
         , waitForCompleteMessage_(false)
         , receiverType_(UNSPECIFIED_RECEIVER)
-        , multicastGroupIP_("224.1.2.133")
-        , portNumber_(13014)
-        , listenInterfaceIP_("0.0.0.0")
         , bufferSize_(1400)
         , bufferCount_(2)
         , nonstandard_(0)
@@ -105,9 +147,6 @@ namespace QuickFAST{
         , assemblerType_(rhs.assemblerType_)
         , waitForCompleteMessage_(rhs.waitForCompleteMessage_)
         , receiverType_(rhs.receiverType_)
-        , multicastGroupIP_(rhs.multicastGroupIP_)
-        , portNumber_(rhs.portNumber_)
-        , listenInterfaceIP_(rhs.listenInterfaceIP_)
         , hostName_(rhs.hostName_)
         , portName_(rhs.portName_)
         , bufferSize_(rhs.bufferSize_)
@@ -277,32 +316,62 @@ namespace QuickFAST{
         return assemblerType_;
       }
 
-      /// @brief For MulticastReceiver the dotted IP of the multicast group
-      const std::string & multicastGroupIP()const
+      /// @brief How many multicast feeds are configured?
+      size_t multicastCount()const
       {
-        return multicastGroupIP_;
+        size_t feeds = multicastFeeds_.size();
+        return feeds == 0? 1: feeds;
       }
 
-      /// @brief For MulticastRecevier the port number of the multicast group
-      unsigned short portNumber()const
+      void setMulticastName(const std::string & name)
       {
-        return portNumber_;
+        if(multicastFeeds_.size() == 1 && multicastFeeds_[0].name_ == DEFAULT_MULTICAST_NAME)
+        {
+          multicastFeeds_[0].name_ = name;
+        }
+        else
+        {
+          multicastFeeds_.push_back(MulticastFeed(name, "", -1, "", ""));
+        }
+      }
+
+      /// @brief For Multicast receiver the name of the indexth configured feed.
+      const std::string & multicastName(size_t index = 0) const
+      {
+        needMulticastFeed();
+        return multicastFeeds_[index].groupIP_;
+      }
+
+      /// @brief For MulticastReceiver the dotted IP of the indexth multicast group
+      const std::string & multicastGroupIP(size_t index = 0)const
+      {
+        needMulticastFeed();
+        return multicastFeeds_[index].groupIP_;
+      }
+
+      /// @brief For MulticastRecevier the port number of the indexth multicast group
+      unsigned short portNumber(size_t index = 0)const
+      {
+        needMulticastFeed();
+        return multicastFeeds_[index].portNumber_;
       }
 
       /// @brief For MulticastReceiver selects the NIC on which to subscribe/listen
-      const std::string & listenInterfaceIP()const
+      const std::string & listenInterfaceIP(size_t index = 0)const
       {
-        return listenInterfaceIP_;
+        needMulticastFeed();
+        return multicastFeeds_[index].listenInterfaceIP_;
       }
 
-      /// @brief For MulticastReceiver selects IP to which the socket will be bound
-      const std::string & multicastBindIP()const
+      /// @brief For MulticastReceiver selects IP to which the indexth multicast socket will be bound
+      const std::string & multicastBindIP(size_t index = 0)const
       {
-        if(multicastBindIP_.empty())
+        needMulticastFeed();
+        if(multicastFeeds_[index].bindIP_.empty())
         {
-          return listenInterfaceIP_;
+          return multicastFeeds_[index].listenInterfaceIP_;
         }
-        return multicastBindIP_;
+        return multicastFeeds_[index].bindIP_;
       }
 
 
@@ -562,26 +631,30 @@ namespace QuickFAST{
       /// @brief For MulticastReceiver the dotted IP of the multicast group
       void setMulticastGroupIP(const std::string & multicastGroupIP)
       {
-        multicastGroupIP_ = multicastGroupIP;
+        needMulticastFeed();
+        multicastFeeds_[0].groupIP_ = multicastGroupIP;
       }
 
       /// @brief For MulticastRecevier the port number of the multicast group
       void setPortNumber(unsigned short portNumber)
       {
-        portNumber_ = portNumber;
+        needMulticastFeed();
+        multicastFeeds_[0].portNumber_ = portNumber;
       }
 
       /// @brief For MulticastReceiver selects the NIC on which to subscribe/listen
       void setListenInterfaceIP(const std::string & listenInterfaceIP)
       {
-        listenInterfaceIP_ = listenInterfaceIP;
+        needMulticastFeed();
+        multicastFeeds_[0].listenInterfaceIP_ = listenInterfaceIP;
       }
 
 
       /// @brief For MulticastReceiver selects the NIC on which to subscribe/listen
-      void setMulticastBindIP(const std::string & bindIP)
+      void setMulticastBindIP(const std::string & multicastBindIP)
       {
-        multicastBindIP_ = bindIP;
+        needMulticastFeed();
+        multicastFeeds_[0].bindIP_ = multicastBindIP;
       }
 
       /// @brief For TCPIPReceiver, Host name or IP
@@ -679,6 +752,9 @@ namespace QuickFAST{
         out << "  -pcap file           : Input from PCap FAST message file." << std::endl;
         out << "  -pcapsource [64|32]    : Word size of the machine where the PCap data was captured." << std::endl;
         out << "                           Defaults to the current platform." << std::endl;
+        out << "  -mname name          : Declare a new multicast feed with the given name." << std::endl;
+        out << "                         May appear multiple times. The first occurrence names the default feed." << std::endl;
+        out << "                         Each subsequent occurrence starts and names a new feed." << std::endl;
         out << "  -multicast ip:port   : Input from Multicast." << std::endl;
         out << "                         Subscribe to dotted \"ip\" address" << std::endl;
         out << "                         on port number \"port\":" << std::endl;
@@ -829,26 +905,26 @@ namespace QuickFAST{
         }
         else if(opt == "-file" && argc > 1)
         {
-          setReceiverType(Application::DecoderConfiguration::RAWFILE_RECEIVER);
+          setReceiverType(RAWFILE_RECEIVER);
           setFastFileName(argv[1]);
           consumed = 2;
         }
         else if(opt == "-afile" && argc > 1)
         {
-          setReceiverType(Application::DecoderConfiguration::ASYNCHRONOUS_FILE_RECEIVER);
+          setReceiverType(ASYNCHRONOUS_FILE_RECEIVER);
           setFastFileName(argv[1]);
           setAsynchReads(true);
           consumed = 2;
         }
         else if(opt == "-bfile" && argc > 1)
         {
-          setReceiverType(Application::DecoderConfiguration::BUFFERED_RAWFILE_RECEIVER);
+          setReceiverType(BUFFERED_RAWFILE_RECEIVER);
           setFastFileName(argv[1]);
           consumed = 2;
         }
         else if(opt == "-pcap" && argc > 1)
         {
-          setReceiverType(Application::DecoderConfiguration::PCAPFILE_RECEIVER);
+          setReceiverType(PCAPFILE_RECEIVER);
           setPcapFileName(argv[1]);
           consumed = 2;
         }
@@ -866,9 +942,14 @@ namespace QuickFAST{
             consumed = 2;
           }
         }
+        else if(opt == "-mname" && argc > 1)
+        {
+          setMulticastName(argv[1]);
+          consumed = 2;
+        }
         else if(opt == "-multicast" && argc > 1)
         {
-          setReceiverType(Application::DecoderConfiguration::MULTICAST_RECEIVER);
+          setReceiverType(MULTICAST_RECEIVER);
           std::string address = argv[1];
           std::string::size_type colon = address.find(':');
           setMulticastGroupIP(address.substr(0, colon));
@@ -891,7 +972,7 @@ namespace QuickFAST{
         }
         else if(opt == "-tcp" && argc > 1)
         {
-          setReceiverType(Application::DecoderConfiguration::TCP_RECEIVER);
+          setReceiverType(TCP_RECEIVER);
           std::string address = argv[1];
           std::string::size_type colon = address.find(':');
           setHostName(address.substr(0, colon));
@@ -903,7 +984,7 @@ namespace QuickFAST{
         }
         else if(opt == "-streaming" )
         {
-          setAssemblerType(Application::DecoderConfiguration::STREAMING_ASSEMBLER);
+          setAssemblerType(STREAMING_ASSEMBLER);
           consumed = 1;
           setWaitForCompleteMessage(false);
           if(argc > 1)
@@ -921,23 +1002,23 @@ namespace QuickFAST{
         }
         else if(opt == "-datagram") //           : Message boundaries match packet boundaries (default if Multicast or PCap file).
         {
-          setAssemblerType(Application::DecoderConfiguration::MESSAGE_PER_PACKET_ASSEMBLER);
+          setAssemblerType(MESSAGE_PER_PACKET_ASSEMBLER);
           consumed = 1;
         }
         else if(opt == "-hnone" ) //              : No header
         {
-          setMessageHeaderType(Application::DecoderConfiguration::NO_HEADER);
+          setMessageHeaderType(NO_HEADER);
           consumed = 1;
         }
         else if(opt == "-hfix" && argc > 1) // n             : Header contains fixed size fields; block size field is n bytes" << std::endl;
         {
-          setMessageHeaderType(Application::DecoderConfiguration::FIXED_HEADER);
+          setMessageHeaderType(FIXED_HEADER);
           setMessageHeaderMessageSizeBytes(boost::lexical_cast<size_t>(argv[1]));
           consumed = 2;
         }
         else if(opt == "-hfast" ) //              : Header contains fast encoded fields" << std::endl;
         {
-          setMessageHeaderType(Application::DecoderConfiguration::FAST_HEADER);
+          setMessageHeaderType(FAST_HEADER);
           consumed = 1;
         }
         else if(opt == "-hprefix" && argc > 1) // n            : 'n' bytes (fixed) or fields (FAST) preceed block size" << std::endl;
@@ -970,18 +1051,18 @@ namespace QuickFAST{
         }
         else if(opt == "-pnone" ) //              : No header
         {
-          setPacketHeaderType(Application::DecoderConfiguration::NO_HEADER);
+          setPacketHeaderType(NO_HEADER);
           consumed = 1;
         }
         else if(opt == "-pfix" && argc > 1) // n             : Header contains fixed size fields; block size field is n bytes" << std::endl;
         {
-          setPacketHeaderType(Application::DecoderConfiguration::FIXED_HEADER);
+          setPacketHeaderType(FIXED_HEADER);
           setPacketHeaderMessageSizeBytes(boost::lexical_cast<size_t>(argv[1]));
           consumed = 2;
         }
         else if(opt == "-pfast" ) //              : Header contains fast encoded fields" << std::endl;
         {
-          setPacketHeaderType(Application::DecoderConfiguration::FAST_HEADER);
+          setPacketHeaderType(FAST_HEADER);
           consumed = 1;
         }
         else if(opt == "-pprefix" && argc > 1) // n            : 'n' bytes (fixed) or fields (FAST) preceed block size" << std::endl;
@@ -1040,6 +1121,21 @@ namespace QuickFAST{
         return consumed;
 
       }
+
+    private:
+      void needMulticastFeed() const
+      {
+        const_cast<DecoderConfiguration *>(this)->needMulticastFeed();
+      }
+
+      void needMulticastFeed()
+      {
+        if(multicastFeeds_.empty())
+        {
+          multicastFeeds_.push_back(MulticastFeed(DEFAULT_MULTICAST_NAME, "224.1.2.133", 13014, "0.0.0.0", "0.0.0.0"));
+        }
+      }
+
     private:
       /// @brief Process the first "head" messages then stop.
       size_t head_;
@@ -1103,14 +1199,8 @@ namespace QuickFAST{
       /// @brief What type of receiver supplies incoming buffers.
       ReceiverType receiverType_;
 
-      /// @brief For MulticastReceiver the dotted IP of the multicast group
-      std::string multicastGroupIP_;
-      /// @brief For MulticastRecevier the port number of the multicast group
-      unsigned short portNumber_;
-      /// @brief For MulticastReceiver selects the NIC on which to subscribe/listen
-      std::string listenInterfaceIP_;
-      /// @brief For MulticastReceiver the IP to which the socket will be bound
-      std::string multicastBindIP_;
+      MulticastFeedVector multicastFeeds_;
+
       /// @brief For TCPIPReceiver, Host name or IP
       std::string hostName_;
       /// @brief For TCPIPReceiver, port name or number (as text)

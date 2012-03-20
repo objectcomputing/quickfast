@@ -277,13 +277,19 @@ namespace QuickFAST
       /// scoped_lock parameter means a mutex must be locked
       void startReceive(boost::mutex::scoped_lock& lock)
       {
-        if( canStartRead() && !stopping_)
+        bool more = canStartRead();
+        while( more && !stopping_)
         {
+          more = false;
           LinkedBuffer *buffer = idleBufferPool_.pop();
           if(buffer != 0)
           {
             ++readsInProgress_;
-            if(!fillBuffer(buffer, lock))
+            if(fillBuffer(buffer, lock))
+            {
+              more = canStartRead();
+            }
+            else
             {
               idleBufferPool_.push(buffer);
               --readsInProgress_;

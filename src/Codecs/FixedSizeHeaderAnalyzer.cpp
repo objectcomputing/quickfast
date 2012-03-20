@@ -5,7 +5,6 @@
 #include "FixedSizeHeaderAnalyzer.h"
 #include <Common/Types.h>
 #include <Codecs/DataSource.h>
-#include <Common/ByteSwapper.h>
 
 using namespace ::QuickFAST;
 using namespace ::QuickFAST::Codecs;
@@ -14,11 +13,16 @@ FixedSizeHeaderAnalyzer::FixedSizeHeaderAnalyzer(
   size_t sizeBytes,
   bool bigEndian,
   size_t prefixBytes,
-  size_t suffixBytes
+  size_t suffixBytes,
+  size_t sequenceOffset,
+  size_t sequenceLength
   )
 : prefixBytes_(prefixBytes)
 , sizeBytes_(sizeBytes)
 , suffixBytes_(suffixBytes)
+, sequenceOffset_(sequenceOffset)
+, sequenceLength_(sequenceLength)
+, bigEndian_(bigEndian)
 , swapNeeded_(ByteSwapper::isBigEndian() ? !bigEndian : bigEndian)
 , state_(ParsingIdle)
 , blockSize_(0)
@@ -120,6 +124,38 @@ FixedSizeHeaderAnalyzer::analyzeHeader(DataSource & source, size_t & blockSize, 
   }
   return true;
 }
+
+bool
+FixedSizeHeaderAnalyzer::supportsSequenceNumber()const
+{
+  return true;
+}
+
+uint32
+FixedSizeHeaderAnalyzer::getSequenceNumber(const uchar * buffer) const
+{
+  uint32 value = 0;
+  if(bigEndian_)
+  {
+    size_t nByte = 0;
+    while(nByte < sequenceLength_)
+    {
+      value <<= 8;
+      value |= buffer[sequenceOffset_ + nByte++];
+    }
+  }
+  else
+  {
+    size_t nByte = sequenceLength_;
+    while(nByte != 0)
+    {
+      value <<= 8;
+      value |= buffer[sequenceOffset_ + --nByte];
+    }
+  }
+  return value;
+}
+
 
 void
 FixedSizeHeaderAnalyzer::reset()

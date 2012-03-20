@@ -8,6 +8,7 @@
 #define HEADERANALYZER_H
 #include "HeaderAnalyzer_fwd.h"
 #include <Codecs/DataSource_fwd.h>
+#include <Common/Types.h>
 namespace QuickFAST{
   namespace Codecs{
     /// An interface to be used to adapt to various styles of block or message header
@@ -46,6 +47,24 @@ namespace QuickFAST{
       /// @param[out] skip true if this message should ignored if possible.
       /// @returns true if header is complete; false if more data is needed
       virtual bool analyzeHeader(DataSource & source, size_t & blockSize, bool & skip) = 0;
+
+      /// @brief does this header analyzer support sequence numbers
+      virtual bool supportsSequenceNumber()const
+      {
+        return false;
+      }
+      /// @brief Extract a sequence number from a header
+      ///
+      /// This message assumes the entire header is available in memory.
+      /// This method does NOT consume or modify any data.  It may be called
+      /// repeatedly and will produce the same result each time.
+      /// @param buffer points to the header
+      /// @returns the sequence number;
+      virtual uint32 getSequenceNumber(const uchar * buffer) const
+      {
+        return 0;
+      }
+
       /// @brief reset the header analyzer -- called when something went wrong while analyzing previous header
       virtual void reset()
       {

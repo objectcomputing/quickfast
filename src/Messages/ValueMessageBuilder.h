@@ -183,6 +183,22 @@ namespace QuickFAST{
         FieldIdentityCPtr & identity,
         ValueMessageBuilder & groupBuilder) = 0;
 
+      /// @brief Notify builder that packets are missing
+      ///
+      /// Called when packet sequence numbers are being used for arbitrage.
+      /// No action is required.  This is for information only.
+      /// The method will be called after decoding the startGap-1th packet
+      /// and before decoding the endGap'th packet.
+      ///
+      /// New method added to the interface.  It's not pure virtual to avoid
+      /// breaking existing implementations.
+      ///
+      /// @param startGap the sequence number of the first missing packet
+      /// @param endGap the sequence number of the first packet present after the gap.
+      virtual void reportGap(sequence_t startGap, sequence_t endGap)
+      {
+      }
+
     };
   }
 }

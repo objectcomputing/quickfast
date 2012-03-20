@@ -323,23 +323,34 @@ DecoderConnection::configure(
   {
   case Application::DecoderConfiguration::MULTICAST_RECEIVER:
     {
+      Communication::MulticastReceiver * receiver;
       if(configuration.privateIOService())
       {
         ioService_.reset(new boost::asio::io_service);
-        receiver_.reset(new Communication::MulticastReceiver(
-          *ioService_,
-          configuration.multicastGroupIP(),
-          configuration.listenInterfaceIP(),
-          configuration.multicastBindIP(),
-          configuration.portNumber()));
+        receiver = new Communication::MulticastReceiver(*ioService_);
       }
       else
       {
-        receiver_.reset(new Communication::MulticastReceiver(
-          configuration.multicastGroupIP(),
-          configuration.listenInterfaceIP(),
-          configuration.multicastBindIP(),
-          configuration.portNumber()));
+        receiver = new Communication::MulticastReceiver();
+      }
+      receiver_.reset(receiver);
+      receiver->addFeed(
+        configuration.multicastName(),
+        configuration.multicastGroupIP(),
+        configuration.listenInterfaceIP(),
+        configuration.multicastBindIP(),
+        configuration.portNumber()
+        );
+
+      for(size_t nFeed = 1; nFeed < configuration.multicastCount(); ++nFeed)
+      {
+        receiver->addFeed(
+          configuration.multicastName(nFeed),
+          configuration.multicastGroupIP(nFeed),
+          configuration.listenInterfaceIP(nFeed),
+          configuration.multicastBindIP(nFeed),
+          configuration.portNumber(nFeed)
+          );
       }
       break;
     }
