@@ -1,0 +1,10 @@
+project(*): QuickFASTDotNetExample {
+  exename = InterpretFASTDotNet
+  Source_Files {
+    Properties{
+      Properties\AssemblyInfo.cs
+    }
+    *.cs
+  }
+}
+

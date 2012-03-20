@@ -1,0 +1,8 @@
+PrivateChangeLog
+testdata
+^Output
+\.ncb$
+\.sln$
+\.suo$
+/I386$
+\.vcproj
