@@ -38,6 +38,7 @@ using namespace QuickFAST;
 
 namespace
 {
+
 // template string where template 5 (nxAccountGroupDefinition) comes BEFORE template 4 (nxAccountDefinition)
   const char id4FirstTemplateString[] = "\n\
 <templates>\n\
@@ -183,6 +184,18 @@ namespace
 </templates>\n\
 ";
 
+// fields for nxAccountDefinition and nxAccountGroupDefinition
+  Messages::FieldIdentity objectTypeField("objectType");
+  Messages::FieldIdentity idFieldId("ID");
+  Messages::FieldIdentity childNodesFieldId("childNodes");
+  Messages::FieldIdentity childNodesLengthId( "childNodesLength" );
+  Messages::FieldIdentity childNodesSeqId( "childNodesSeq" );
+  Messages::FieldIdentity stateId( "state" );
+  Messages::FieldIdentity strNameId( "strName" );
+  Messages::FieldIdentity accessLevelId( "accessLevel" );
+  Messages::FieldIdentity clearingAcountId( "clearingAccount" );
+  Messages::FieldIdentity childNodes4FieldId("childNodes4");
+  Messages::FieldIdentity childNodesLength4Id( "childNodesLength4" );
 
   void validateMessage1(Messages::Message & message)
   {
@@ -212,21 +225,6 @@ BOOST_AUTO_TEST_CASE(TestSequences)
   }
 
   Messages::Message msg(templateRegistry->maxFieldCount());
-
-
-// fields for nxAccountDefinition and nxAccountGroupDefinition
-  Messages::FieldIdentityCPtr objectTypeField = new Messages::FieldIdentity("objectType");
-  Messages::FieldIdentityCPtr idFieldId = new Messages::FieldIdentity("ID");
-  Messages::FieldIdentityCPtr childNodesFieldId = new Messages::FieldIdentity("childNodes");
-  Messages::FieldIdentityCPtr childNodesLengthId = new Messages::FieldIdentity( "childNodesLength" );
-  Messages::FieldIdentityCPtr childNodesSeqId = new Messages::FieldIdentity( "childNodesSeq" );
-  Messages::FieldIdentityCPtr stateId = new Messages::FieldIdentity( "state" );
-  Messages::FieldIdentityCPtr strNameId = new Messages::FieldIdentity( "strName" );
-  Messages::FieldIdentityCPtr accessLevelId = new Messages::FieldIdentity( "accessLevel" );
-  Messages::FieldIdentityCPtr clearingAcountId = new Messages::FieldIdentity( "clearingAccount" );
-  Messages::FieldIdentityCPtr childNodes4FieldId = new Messages::FieldIdentity("childNodes4");
-  Messages::FieldIdentityCPtr childNodesLength4Id = new Messages::FieldIdentity( "childNodesLength4" );
-
 
 // create an empty childNodes sequence for the nxAccountDefinitions
   Messages::SequencePtr childNodesSequence( new Messages::Sequence( childNodesLengthId, 0 ) );

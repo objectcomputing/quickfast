@@ -25,16 +25,16 @@ namespace QuickFAST
 
         ///////////////////////////
         // Implement ValueMessageBuilder
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int64 value);
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value);
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int32 value);
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value);
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int16 value);
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value);
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int8 value);
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uchar value);
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value);
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length);
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const int64 value);
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const uint64 value);
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const int32 value);
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const uint32 value);
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const int16 value);
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const uint16 value);
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const int8 value);
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const uchar value);
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const Decimal& value);
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const unsigned char * value, size_t length);
         virtual ValueMessageBuilder & startMessage(
           const std::string & applicationType,
           const std::string & applicationTypeNamespace,
@@ -54,7 +54,7 @@ namespace QuickFAST
         DATATYPE value()const;
 
         /// @brief access the identity that was used to set the value
-        FieldIdentityCPtr & identity()const;
+        const FieldIdentity & identity()const;
 
         /// @brief clear flag used by isSet()
         void reset();
@@ -67,12 +67,6 @@ namespace QuickFAST
         virtual size_t size() const
         {
           return 1;
-        }
-
-        virtual bool getIdentity(const std::string &/*name*/, FieldIdentityCPtr & identity) const
-        {
-          identity = identity_;
-          return bool(identity);
         }
 
         virtual void setApplicationType(const std::string & /*type*/, const std::string & /*ns*/)
@@ -92,11 +86,11 @@ namespace QuickFAST
         }
 
         virtual ValueMessageBuilder & startSequence(
-          FieldIdentityCPtr & identity,
+          const FieldIdentity & identity,
           const std::string & applicationType,
           const std::string & applicationTypeNamespace,
           size_t fieldCount,
-          FieldIdentityCPtr & lengthIdentity,
+          const FieldIdentity &lengthIdentity,
           size_t length)
         {
           throw UsageError("Coding Error", "SingleValueBuilder does not support start sequence.");
@@ -114,13 +108,13 @@ namespace QuickFAST
         {
           throw UsageError("Coding Error", "SingleValueBuilder does not support end sequence entry.");
         }
-        virtual void endSequence(FieldIdentityCPtr & /*identity*/, ValueMessageBuilder & )
+        virtual void endSequence(const FieldIdentity &/*identity*/, ValueMessageBuilder & )
         {
           throw UsageError("Coding Error", "SingleValueBuilder does not support end sequence.");
         }
 
         virtual ValueMessageBuilder & startGroup(
-          FieldIdentityCPtr & /*identity*/,
+          const FieldIdentity &/*identity*/,
           const std::string & /*applicationType*/,
           const std::string & /*applicationTypeNamespace*/,
           size_t /*size*/)
@@ -129,7 +123,7 @@ namespace QuickFAST
         }
 
         virtual void endGroup(
-          FieldIdentityCPtr & /*identity*/,
+          const FieldIdentity &/*identity*/,
           ValueMessageBuilder & /*entry*/)
         {
           throw UsageError("Coding Error", "SingleValueBuilder does not support end group.");
@@ -157,12 +151,13 @@ namespace QuickFAST
 
       private:
         Value value_;
-        mutable FieldIdentityCPtr identity_;
+        const FieldIdentity * identity_;
     };
 
     template<typename DATATYPE>
     inline
     SingleValueBuilder<DATATYPE>::SingleValueBuilder()
+    : identity_(0)
     {
     }
 
@@ -174,81 +169,81 @@ namespace QuickFAST
 
     template<typename DATATYPE>
     inline void
-    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int64 value)
+    SingleValueBuilder<DATATYPE>::addValue(const FieldIdentity & identity, ValueType::Type type, const int64 value)
     {
-      identity_ = identity;
+      identity_ = &identity;
       value_.setValue(value);
     }
 
     template<typename DATATYPE>
     inline void
-    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value)
+    SingleValueBuilder<DATATYPE>::addValue(const FieldIdentity & identity, ValueType::Type type, const uint64 value)
     {
-      identity_ = identity;
+      identity_ = &identity;
       value_.setValue(value);
     }
 
     template<typename DATATYPE>
     inline void
-    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int32 value)
+    SingleValueBuilder<DATATYPE>::addValue(const FieldIdentity & identity, ValueType::Type type, const int32 value)
     {
-      identity_ = identity;
+      identity_ = &identity;
       value_.setValue(value);
     }
 
     template<typename DATATYPE>
     inline void
-    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value)
+    SingleValueBuilder<DATATYPE>::addValue(const FieldIdentity & identity, ValueType::Type type, const uint32 value)
     {
-      identity_ = identity;
+      identity_ = &identity;
       value_.setValue(value);
     }
 
     template<typename DATATYPE>
     inline void
-    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int16 value)
+    SingleValueBuilder<DATATYPE>::addValue(const FieldIdentity & identity, ValueType::Type type, const int16 value)
     {
-      identity_ = identity;
+      identity_ = &identity;
       value_.setValue(value);
     }
 
     template<typename DATATYPE>
     inline void
-    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value)
+    SingleValueBuilder<DATATYPE>::addValue(const FieldIdentity & identity, ValueType::Type type, const uint16 value)
     {
-      identity_ = identity;
+      identity_ = &identity;
       value_.setValue(value);
     }
 
     template<typename DATATYPE>
     inline void
-    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int8 value)
+    SingleValueBuilder<DATATYPE>::addValue(const FieldIdentity & identity, ValueType::Type type, const int8 value)
     {
-      identity_ = identity;
+      identity_ = &identity;
       value_.setValue(value);
     }
 
     template<typename DATATYPE>
     inline void
-    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uchar value)
+    SingleValueBuilder<DATATYPE>::addValue(const FieldIdentity & identity, ValueType::Type type, const uchar value)
     {
-      identity_ = identity;
+      identity_ = &identity;
       value_.setValue(value);
     }
 
     template<typename DATATYPE>
     inline void
-    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value)
+    SingleValueBuilder<DATATYPE>::addValue(const FieldIdentity & identity, ValueType::Type type, const Decimal& value)
     {
-      identity_ = identity;
+      identity_ = &identity;
       value_.setValue(value);
     }
 
     template<typename DATATYPE>
     inline void
-    SingleValueBuilder<DATATYPE>::addValue(FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length)
+    SingleValueBuilder<DATATYPE>::addValue(const FieldIdentity & identity, ValueType::Type type, const unsigned char * value, size_t length)
     {
-      identity_ = identity;
+      identity_ = &identity;
       value_.setValue(value, length);
     }
 
@@ -301,10 +296,10 @@ namespace QuickFAST
     }
 
     template<typename DATATYPE>
-    inline FieldIdentityCPtr &
+    inline const FieldIdentity &
     SingleValueBuilder<DATATYPE>::identity()const
     {
-      return identity_;
+      return *identity_;
     }
   }
 }

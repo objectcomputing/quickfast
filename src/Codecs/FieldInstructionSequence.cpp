@@ -68,7 +68,7 @@ FieldInstructionSequence::decodeNop(
   Messages::SingleValueBuilder<uint32> lengthSet;
   if(segment_->getLengthInstruction(lengthInstruction))
   {
-    source.beginField(lengthInstruction->getIdentity()->name());
+    source.beginField(lengthInstruction->getIdentity().name());
     lengthInstruction->decode(source, pmap, decoder, lengthSet);
   }
   else
@@ -123,7 +123,7 @@ FieldInstructionSequence::encodeNop(
   }
 
   size_t length = 0;
-  if(accessor.getSequenceLength(*identity_, length))
+  if(accessor.getSequenceLength(identity_, length))
   {
     Messages::FieldCPtr lengthField(Messages::FieldUInt32::create(QuickFAST::uint32(length)));
 
@@ -144,7 +144,7 @@ FieldInstructionSequence::encodeNop(
     for(size_t pos = 0; pos < length; ++pos)
     {
       const Messages::MessageAccessor * entry;
-      if(accessor.getSequenceEntry(*identity_, pos, entry))
+      if(accessor.getSequenceEntry(identity_, pos, entry))
       {
         encoder.encodeGroup(destination, segment_, *entry);
       }
@@ -152,11 +152,11 @@ FieldInstructionSequence::encodeNop(
       {
         std::stringstream msg;
         msg << "Sequence entry " << pos << " of " << length << " missing.";
-        encoder.reportError("Uxx", msg.str(), *identity_);
+        encoder.reportError("Uxx", msg.str(), identity_);
       }
-      accessor.endSequenceEntry(*identity_, pos, entry);
+      accessor.endSequenceEntry(identity_, pos, entry);
     }
-    accessor.endSequence(*identity_);
+    accessor.endSequence(identity_);
   }
   else
   {

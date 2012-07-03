@@ -37,14 +37,6 @@ namespace QuickFAST{
       virtual void setMantissaInstruction(FieldInstructionPtr mantissa)
       {
         mantissaInstruction_ = mantissa;
-        if(!bool(exponentInstruction_))
-        {
-          exponentInstruction_.reset(new FieldInstructionExponent(identity_->getLocalName() + "|decimal_exponent", identity_->getNamespace()));
-          if(!isMandatory())
-          {
-            exponentInstruction_->setPresence(false);
-          }
-        }
       }
 
       /// @brief Get the mantissa field instruction.
@@ -63,10 +55,6 @@ namespace QuickFAST{
         if(!isMandatory())
         {
           exponentInstruction_->setPresence(false);
-        }
-        if(!bool(mantissaInstruction_))
-        {
-          mantissaInstruction_.reset(new FieldInstructionMantissa(identity_->name() + "|decimal_mantissa", identity_->getNamespace()));
         }
       }
 

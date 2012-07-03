@@ -16,7 +16,7 @@ namespace QuickFAST
     public:
       /// @brief Construct given info about the length field
       ImplSequence(
-        Messages::FieldIdentityCPtr & lengthIdentity,
+        const Messages::FieldIdentity & lengthIdentity,
         size_t length
         );
 
@@ -43,7 +43,7 @@ namespace QuickFAST
     private:
       size_t capacity_;
       size_t used_;
-      Messages::FieldIdentityCPtr lengthIdentity_;
+      const Messages::FieldIdentity & lengthIdentity_;
       typedef ImplFieldSet * EntryPtr;
       boost::scoped_array<EntryPtr> entries_;
     };

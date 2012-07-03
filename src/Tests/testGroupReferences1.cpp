@@ -35,6 +35,17 @@
 
 using namespace QuickFAST;
 
+namespace{
+  Messages::FieldIdentity nameField("name");
+  Messages::FieldIdentity nxCurrencyIDIdentity("nxCurrencyID");
+  Messages::FieldIdentity conditionalProductID19Identity("conditionalProductID19");
+  Messages::FieldIdentity nxOptionalOrderParametersIdentity("nxOptionalOrderParameters");
+  Messages::FieldIdentity productID19Identity("productID19");
+  Messages::FieldIdentity optionalOrderParameters68Identity("optionalOrderParameters68");
+  Messages::FieldIdentity nxOrderIdentity("nxOrder");
+  Messages::FieldIdentity order71Identity("order71");
+  Messages::FieldIdentity fillVolumeIdentity("fillVolume");
+}
 
 namespace
 {
@@ -211,13 +222,11 @@ namespace
     // Create the nxCurrencyID field set
     // contains name
     Messages::FieldSetPtr nxCurrencyIDFieldSet(new Messages::FieldSet(1));
-    Messages::FieldIdentityCPtr nameField(new Messages::FieldIdentity("name"));
     nxCurrencyIDFieldSet->addField(nameField, Messages::FieldAscii::create(""));
 
     // Create productID19 Field Set
     // contains nxCurrencyID
     Messages::FieldSetPtr productID19FieldSet(new Messages::FieldSet(2));
-    Messages::FieldIdentityCPtr nxCurrencyIDIdentity(new Messages::FieldIdentity("nxCurrencyID"));
     productID19FieldSet->addField(nxCurrencyIDIdentity,
       Messages::FieldGroup::create(nxCurrencyIDFieldSet));
 
@@ -231,14 +240,12 @@ namespace
     // contains conditionalProductID19
     // omits conditionalProductIDxx where xx=22,37, 67, 97
     Messages::FieldSetPtr nxOptionalOrderParametersFieldSet(new Messages::FieldSet(1));
-    Messages::FieldIdentityCPtr conditionalProductID19Identity(new Messages::FieldIdentity("conditionalProductID19"));
     nxOptionalOrderParametersFieldSet->addField(conditionalProductID19Identity,
       Messages::FieldGroup::create(conditionalProductID19FieldSet));
 
     // Create optionalOrderParameters68 Field Set
     // contains nxOptionalOrderParameters
     Messages::FieldSetPtr optionalOrderParameters68FieldSet(new Messages::FieldSet(1));
-    Messages::FieldIdentityCPtr nxOptionalOrderParametersIdentity(new Messages::FieldIdentity("nxOptionalOrderParameters"));
     optionalOrderParameters68FieldSet->addField(nxOptionalOrderParametersIdentity,
       Messages::FieldGroup::create(nxOptionalOrderParametersFieldSet));
 
@@ -246,10 +253,8 @@ namespace
     // contains productID19
     // contains optionalOrderParameters68
     Messages::FieldSetPtr nxOrderFieldSet(new Messages::FieldSet(2));
-    Messages::FieldIdentityCPtr productID19Identity(new Messages::FieldIdentity("productID19"));
     nxOrderFieldSet->addField(productID19Identity, Messages::FieldGroup::create(productID19FieldSet));
 
-    Messages::FieldIdentityCPtr optionalOrderParameters68Identity(new Messages::FieldIdentity("optionalOrderParameters68"));
     productID19FieldSet->addField(optionalOrderParameters68Identity,
       Messages::FieldGroup::create(optionalOrderParameters68FieldSet));
 
@@ -257,16 +262,13 @@ namespace
     // Create the order71FieldSet field set
     // contains nxOrder
     Messages::FieldSetPtr order71FieldSet(new Messages::FieldSet(1));
-    Messages::FieldIdentityCPtr nxOrderIdentity(new Messages::FieldIdentity("nxOrder"));
     order71FieldSet->addField(nxOrderIdentity, Messages::FieldGroup::create(nxOrderFieldSet));
 
     // Message
     // contains order71
     // contains fillVolume
-    Messages::FieldIdentityCPtr order71Identity(new Messages::FieldIdentity("order71"));
     msg.addField( order71Identity, Messages::FieldGroup::create(order71FieldSet) );
 
-    Messages::FieldIdentityCPtr fillVolumeIdentity(new Messages::FieldIdentity("fillVolume"));
     msg.addField( fillVolumeIdentity, Messages::FieldUInt32::create(4294967295) );
     if(verbose)
     {

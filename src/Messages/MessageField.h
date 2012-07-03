@@ -26,7 +26,7 @@ namespace QuickFAST{
     {
     public:
       /// @brief Construct from an identity and a typed value.
-      MessageField(const FieldIdentityCPtr & identity, const FieldCPtr & field)
+      MessageField(const FieldIdentity & identity, const FieldCPtr & field)
         : identity_(identity)
         , field_(field)
       {
@@ -46,11 +46,11 @@ namespace QuickFAST{
       /// @returns the fully qualified field name
       const std::string name()const
       {
-        return identity_->name();
+        return identity_.name();
       }
       /// @brief get the identity of the field
       /// @returns the identifying information for this field
-      const FieldIdentityCPtr & getIdentity()const
+      const FieldIdentity & getIdentity()const
       {
         return identity_;
       }
@@ -62,7 +62,7 @@ namespace QuickFAST{
         return field_;
       }
     private:
-      FieldIdentityCPtr identity_;
+      const FieldIdentity & identity_;
       FieldCPtr field_;
     };
   }

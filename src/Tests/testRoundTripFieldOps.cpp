@@ -102,6 +102,32 @@ namespace{
     "  </template>"
     "</templates>";
 
+
+  Messages::FieldIdentity identity_1("field_1");
+  Messages::FieldIdentity identity_2("field_2");
+  Messages::FieldIdentity identity_3("field_3");
+  Messages::FieldIdentity identity_4("field_4");
+  Messages::FieldIdentity identity_5("field_5");
+  Messages::FieldIdentity identity_6("field_6");
+  Messages::FieldIdentity identity_7("field_7");
+  Messages::FieldIdentity identity_8("field_8");
+  Messages::FieldIdentity identity_9("field_9");
+  Messages::FieldIdentity identity_10("field_10");
+  Messages::FieldIdentity identity_11("field_11");
+  Messages::FieldIdentity identity_12("field_12");
+  Messages::FieldIdentity identity_13("field_13");
+  Messages::FieldIdentity identity_14("field_14");
+
+  Messages::FieldIdentity MDUpdateAdd("MDUpdateAdd");
+  Messages::FieldIdentity MDUpdateDel("MDUpdateDel");
+
+  Messages::FieldIdentity MDUpdateAction("MDUpdateAction");
+  Messages::FieldIdentity MDEntryID("MDEntryID");
+  Messages::FieldIdentity MDEntryPx("MDEntryPx");
+  Messages::FieldIdentity MDEntrySize("MDEntrySize");
+  Messages::FieldIdentity Currency("Currency");
+
+
   bool compareMessages(Messages::Message & lhs, Messages::Message & rhs)
   {
     std::stringstream reason;
@@ -123,21 +149,6 @@ BOOST_AUTO_TEST_CASE(testRoundTripFieldOperators)
 
   BOOST_CHECK(templateRegistry);
   BOOST_CHECK_EQUAL(templateRegistry->maxFieldCount(), 14);
-
-  Messages::FieldIdentityCPtr identity_1 = new Messages::FieldIdentity("field_1");
-  Messages::FieldIdentityCPtr identity_2 = new Messages::FieldIdentity("field_2");
-  Messages::FieldIdentityCPtr identity_3 = new Messages::FieldIdentity("field_3");
-  Messages::FieldIdentityCPtr identity_4 = new Messages::FieldIdentity("field_4");
-  Messages::FieldIdentityCPtr identity_5 = new Messages::FieldIdentity("field_5");
-  Messages::FieldIdentityCPtr identity_6 = new Messages::FieldIdentity("field_6");
-  Messages::FieldIdentityCPtr identity_7 = new Messages::FieldIdentity("field_7");
-  Messages::FieldIdentityCPtr identity_8 = new Messages::FieldIdentity("field_8");
-  Messages::FieldIdentityCPtr identity_9 = new Messages::FieldIdentity("field_9");
-  Messages::FieldIdentityCPtr identity_10 = new Messages::FieldIdentity("field_10");
-  Messages::FieldIdentityCPtr identity_11 = new Messages::FieldIdentity("field_11");
-  Messages::FieldIdentityCPtr identity_12 = new Messages::FieldIdentity("field_12");
-  Messages::FieldIdentityCPtr identity_13 = new Messages::FieldIdentity("field_13");
-  Messages::FieldIdentityCPtr identity_14 = new Messages::FieldIdentity("field_14");
 
   Messages::MessagePtr msg1(new Messages::Message(templateRegistry->maxFieldCount()));
   msg1->addField(identity_1, Messages::FieldUInt32::create(1));
@@ -276,15 +287,6 @@ BOOST_AUTO_TEST_CASE(testRoundTripOptionalTemplateRefs)
   std::stringstream templateStream(theTemplates);
   Codecs::TemplateRegistryPtr templateRegistry =
     parser.parse(templateStream);
-
-  Messages::FieldIdentityCPtr MDUpdateAdd = new Messages::FieldIdentity("MDUpdateAdd");
-  Messages::FieldIdentityCPtr MDUpdateDel = new Messages::FieldIdentity("MDUpdateDel");
-
-  Messages::FieldIdentityCPtr MDUpdateAction = new Messages::FieldIdentity("MDUpdateAction");
-  Messages::FieldIdentityCPtr MDEntryID = new Messages::FieldIdentity("MDEntryID");
-  Messages::FieldIdentityCPtr MDEntryPx = new Messages::FieldIdentity("MDEntryPx");
-  Messages::FieldIdentityCPtr MDEntrySize = new Messages::FieldIdentity("MDEntrySize");
-  Messages::FieldIdentityCPtr Currency = new Messages::FieldIdentity("Currency");
 
   Messages::MessagePtr addMessage(new Messages::Message(templateRegistry->maxFieldCount()));
   Messages::MessagePtr addFlatMessage(new Messages::Message(templateRegistry->maxFieldCount()));

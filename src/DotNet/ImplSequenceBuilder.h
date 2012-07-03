@@ -25,7 +25,7 @@ namespace QuickFAST
       ~ImplSequenceBuilder();
       /// @brief start or restart the builder
       void initialize(
-        Messages::FieldIdentityCPtr & lengthIdentity,
+        const Messages::FieldIdentity & lengthIdentity,
         size_t length
         );
 

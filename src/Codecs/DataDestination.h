@@ -139,7 +139,7 @@ namespace QuickFAST{
 
       /// @brief Notification that we're starting a new field.
       /// @param identity identifies the field.
-      void startField(const Messages::FieldIdentity & identity)
+      void startField(const Messages::FieldIdentity identity)
       {
         if(verboseOut_)
         {
@@ -148,7 +148,7 @@ namespace QuickFAST{
       }
       /// @brief Notification that a field has been completely encoded
       /// @param identity identifies the field.
-      void endField(const Messages::FieldIdentity & identity)
+      void endField(const Messages::FieldIdentity identity)
       {
         if(verboseOut_)
         {
@@ -222,7 +222,7 @@ namespace QuickFAST{
         }
 
         /// @brief Point iterator to next buffer (preincrement)
-        const const_iterator & operator ++()
+        const_iterator & operator ++()
         {
           if(position_ < destination_.size())
           {
@@ -258,14 +258,14 @@ namespace QuickFAST{
 
         /// @brief compare iterators.
         /// @param rhs is the iterator to which this should be compared.
-        bool operator == (const const_iterator & rhs) const
+        bool operator == (const_iterator & rhs) const
         {
           return position_ == rhs.position_;
         }
 
         /// @brief compare iterators.
         /// @param rhs is the iterator to which this should be compared.
-        bool operator != (const const_iterator & rhs) const
+        bool operator != (const_iterator & rhs) const
         {
           return position_ != rhs.position_;
         }

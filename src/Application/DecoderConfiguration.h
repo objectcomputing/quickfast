@@ -339,7 +339,7 @@ namespace QuickFAST{
       const std::string & multicastName(size_t index = 0) const
       {
         needMulticastFeed();
-        return multicastFeeds_[index].groupIP_;
+        return multicastFeeds_[index].name_;
       }
 
       /// @brief For MulticastReceiver the dotted IP of the indexth multicast group
@@ -713,7 +713,7 @@ namespace QuickFAST{
       ///
       /// @param name is the name to be assigned a value
       /// @param value is the value assigned to name
-      void setExtra(const std::string & name, const std::string value)
+      void setExtra(const std::string & name, const std::string & value)
       {
         extras_[name] = value;
       }

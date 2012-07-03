@@ -34,7 +34,14 @@
 
 using namespace QuickFAST;
 
-
+namespace{
+      //<uInt32 name="field1" id="A">
+    Messages::FieldIdentity identity_field1("field1");
+    //<uInt32 name="field2" id="B">
+    Messages::FieldIdentity identity_field2("field2");
+    //<group name="Group" presence="optional">
+    Messages::FieldIdentity identity_group("Group");
+}
 namespace
 {
   const char templateString[] = "\n\
@@ -87,13 +94,6 @@ namespace
       parser.parse(templateStream);
 
     Messages::Message msg(templateRegistry->maxFieldCount());
-
-    //<uInt32 name="field1" id="A">
-    Messages::FieldIdentityCPtr identity_field1 = new Messages::FieldIdentity("field1");
-    //<uInt32 name="field2" id="B">
-    Messages::FieldIdentityCPtr identity_field2 = new Messages::FieldIdentity("field2");
-    //<group name="Group" presence="optional">
-    Messages::FieldIdentityCPtr identity_group = new Messages::FieldIdentity("Group");
 
     // create field set to go into the group
     Messages::FieldSetPtr entry(new Messages::FieldSet(2));

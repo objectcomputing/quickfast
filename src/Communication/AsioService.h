@@ -88,8 +88,8 @@ namespace QuickFAST
       void resetService()
       {
         ioService_.reset();
+        stopping_ = false;
       }
-
 
       /// @brief stop the ioservice
       void stopService();

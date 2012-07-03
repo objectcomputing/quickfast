@@ -67,65 +67,65 @@ ValueToFix::getApplicationTypeNs()const
 }
 
 void
-ValueToFix::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int64 value)
+ValueToFix::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const int64 value)
 {
-  out_ << identity->id() << '=' << value << '\x01';
+  out_ << identity.id() << '=' << value << '\x01';
 }
 
 void
-ValueToFix::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value)
+ValueToFix::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const uint64 value)
 {
-  out_ << identity->id() << '=' << value << '\x01';
+  out_ << identity.id() << '=' << value << '\x01';
 }
 
 void
-ValueToFix::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int32 value)
+ValueToFix::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const int32 value)
 {
-  out_ << identity->id() << '=' << value << '\x01';
+  out_ << identity.id() << '=' << value << '\x01';
 }
 
 void
-ValueToFix::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value)
+ValueToFix::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const uint32 value)
 {
-  out_ << identity->id() << '=' << value << '\x01';
+  out_ << identity.id() << '=' << value << '\x01';
 }
 
 void
-ValueToFix::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int16 value)
+ValueToFix::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const int16 value)
 {
-  out_ << identity->id() << '=' << value << '\x01';
+  out_ << identity.id() << '=' << value << '\x01';
 }
 
 void
-ValueToFix::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value)
+ValueToFix::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const uint16 value)
 {
-  out_ << identity->id() << '=' << value << '\x01';
+  out_ << identity.id() << '=' << value << '\x01';
 }
 
 void
-ValueToFix::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int8 value)
+ValueToFix::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const int8 value)
 {
-  out_ << identity->id() << '=' << (short)(value) << '\x01';
+  out_ << identity.id() << '=' << (short)(value) << '\x01';
 }
 
 void
-ValueToFix::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uchar value)
+ValueToFix::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const uchar value)
 {
-  out_ << identity->id() << '=' << (unsigned short)(value) << '\x01';
+  out_ << identity.id() << '=' << (unsigned short)(value) << '\x01';
 }
 
 void
-ValueToFix::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value)
+ValueToFix::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const Decimal& value)
 {
   std::string v;
   value.toString(v);
-  out_ << identity->id() << '=' << v << '\x01';
+  out_ << identity.id() << '=' << v << '\x01';
 }
 
 void
-ValueToFix::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length)
+ValueToFix::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const unsigned char * value, size_t length)
 {
-  out_ << identity->id() << '=' << std::string(reinterpret_cast<const char *>(value), length) << '\x01';
+  out_ << identity.id() << '=' << std::string(reinterpret_cast<const char *>(value), length) << '\x01';
 }
 
 Messages::ValueMessageBuilder &
@@ -154,11 +154,11 @@ ValueToFix::ignoreMessage(Messages::ValueMessageBuilder & messageBuilder)
 
 Messages::ValueMessageBuilder &
 ValueToFix::startSequence(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t fieldCount,
-  Messages::FieldIdentityCPtr & lengthIdentity,
+  const Messages::FieldIdentity & lengthIdentity,
   size_t length)
 {
   return *this;
@@ -166,7 +166,7 @@ ValueToFix::startSequence(
 
 void
 ValueToFix::endSequence(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   Messages::ValueMessageBuilder & sequenceBuilder)
 {
 }
@@ -187,7 +187,7 @@ ValueToFix::endSequenceEntry(Messages::ValueMessageBuilder & entry)
 
 Messages::ValueMessageBuilder &
 ValueToFix::startGroup(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t size)
@@ -197,7 +197,7 @@ ValueToFix::startGroup(
 
 void
 ValueToFix::endGroup(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   Messages::ValueMessageBuilder & groupBuilder)
 {
 }

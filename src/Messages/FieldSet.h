@@ -74,7 +74,7 @@ namespace QuickFAST{
       /// The FieldCPtr is copied, not the actual Field object.
       /// @param identity identifies this field
       /// @param value is the value to be assigned.
-      void addField(const FieldIdentityCPtr & identity, const FieldCPtr & value);
+      void addField(const FieldIdentity & identity, const FieldCPtr & value);
 
 
       /// @brief Get the value of the specified field.
@@ -90,7 +90,7 @@ namespace QuickFAST{
       /// @param[in] identity Identifies the desired field
       /// @param[out] value is the value that was found.
       /// @returns true if the field was found and has a value;
-      bool getField(const Messages::FieldIdentity & identity, FieldCPtr & value) const;
+      bool getField(const Messages::FieldIdentity identity, FieldCPtr & value) const;
 
       /// @brief support iterating through Fields in this FieldSet.
       const_iterator begin() const

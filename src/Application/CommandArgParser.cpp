@@ -163,8 +163,7 @@ CommandArgParser::tokenizeAndParseLine(char * buffer, size_t bytesRead)
 bool
 CommandArgParser::parse(int argc, char * argv[], int start/* = 1*/)
 {
-  bool result = true;
-  result = parseArgs(argc, argv, start);
+  bool result = parseArgs(argc, argv, start);
 
   for(CommandArgHandlerVec::iterator it = commandHandlers_.begin();
     result && it != commandHandlers_.end();

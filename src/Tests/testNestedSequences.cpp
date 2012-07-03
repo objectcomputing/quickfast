@@ -45,6 +45,16 @@ namespace
 
 }
 
+namespace{
+  Messages::FieldIdentity noParties("NoParties");
+  Messages::FieldIdentity noEntries("NoEntries");
+
+  Messages::FieldIdentity priceIdentity("Price");
+  Messages::FieldIdentity entriesIdentity("Entries");
+  Messages::FieldIdentity partiesIdentity("Parties");
+
+}
+
 BOOST_AUTO_TEST_CASE(testNestedSequences)
 {
   BOOST_TEST_PASSPOINT();
@@ -57,28 +67,26 @@ BOOST_AUTO_TEST_CASE(testNestedSequences)
   Codecs::Decoder dec(templateRegistry);
 
   Messages::FieldSetPtr msg(new Messages::FieldSet(20));
-  Messages::FieldIdentityCPtr noParties(new Messages::FieldIdentity("NoParties"));
   Messages::SequencePtr parties(new Messages::Sequence(noParties, 20));
   Messages::FieldSetPtr p1(new Messages::FieldSet(20));
-  Messages::FieldIdentityCPtr noEntries(new Messages::FieldIdentity("NoEntries"));
   Messages::SequencePtr entries(new Messages::Sequence(noEntries, 20));
   Messages::FieldSetPtr e1(new Messages::FieldSet(20));
 
-  e1->addField( Messages::FieldIdentityCPtr(new Messages::FieldIdentity("Price")),
+  e1->addField( priceIdentity,
     Messages::FieldDecimal::create(Decimal(1, -1)) ); //(1, 0) is ok
 
   entries->addEntry(e1);
   entries->addEntry(e1);
   entries->addEntry(e1);
 
-  p1->addField( Messages::FieldIdentityCPtr(new Messages::FieldIdentity("Entries")),
+  p1->addField( entriesIdentity,
     Messages::FieldSequence::create(entries) );
 
   parties->addEntry(p1);
   parties->addEntry(p1);
   parties->addEntry(p1);
 
-  msg->addField( Messages::FieldIdentityCPtr(new Messages::FieldIdentity("Parties")),
+  msg->addField(partiesIdentity,
     Messages::FieldSequence::create(parties) );
 
   Codecs::TemplateCPtr tpl;

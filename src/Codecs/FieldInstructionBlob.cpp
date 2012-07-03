@@ -39,7 +39,7 @@ FieldInstructionBlob::decodeBlobFromSource(
 {
   PROFILE_POINT("blob::decodeBlobFromSource");
   uint32 length;
-  decodeUnsignedInteger(source, context, length, identity_->name());
+  decodeUnsignedInteger(source, context, length, identity_.name());
   if(!mandatory)
   {
     if(checkNullInteger(length))
@@ -48,7 +48,7 @@ FieldInstructionBlob::decodeBlobFromSource(
       return false;
     }
   }
-  decodeByteVector(context, source, identity_->name(), buffer, length);
+  decodeByteVector(context, source, identity_.name(), buffer, length);
   return true;
 }
 
@@ -138,7 +138,7 @@ FieldInstructionBlob::decodeDefault(
     }
     else if(isMandatory())
     {
-      decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.", *identity_);
+      decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.", identity_);
     }
 
   }
@@ -194,7 +194,7 @@ FieldInstructionBlob::decodeCopy(
     {
       if(isMandatory())
       {
-        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.", *identity_);
+        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.", identity_);
       }
     }
   }
@@ -209,7 +209,7 @@ FieldInstructionBlob::decodeDelta(
 {
   PROFILE_POINT("blob::decodeDelta");
   int32 deltaLength;
-  decodeSignedInteger(source, decoder, deltaLength, identity_->name());
+  decodeSignedInteger(source, decoder, deltaLength, identity_.name());
   if(!isMandatory())
   {
     if(checkNullInteger(deltaLength))
@@ -248,7 +248,7 @@ FieldInstructionBlob::decodeDelta(
     // don't chop more than is there
     if(static_cast<unsigned long>(deltaLength) > previousLength)
     {
-      decoder.reportError("[ERR D7]", "String tail delta front length exceeds length of previous string.", *identity_);
+      decoder.reportError("[ERR D7]", "String tail delta front length exceeds length of previous string.", identity_);
       deltaLength = QuickFAST::int32(previousLength);
     }
     std::string value = deltaValue + previousValue.substr(deltaLength);
@@ -267,7 +267,7 @@ FieldInstructionBlob::decodeDelta(
 #if 0 // handy when debugging
       std::cout << "decode blob delta length: " << deltaLength << " previous: " << previousLength << std::endl;
 #endif
-      decoder.reportError("[ERR D7]", "String tail delta back length exceeds length of previous string.", *identity_);
+      decoder.reportError("[ERR D7]", "String tail delta back length exceeds length of previous string.", identity_);
       deltaLength = QuickFAST::uint32(previousLength);
     }
 
@@ -348,7 +348,7 @@ FieldInstructionBlob::decodeTail(
     {
       if(isMandatory())
       {
-        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.", *identity_);
+        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.", identity_);
       }
     }
   }
@@ -387,7 +387,7 @@ FieldInstructionBlob::encodeNop(
 {
     // get the value from the application data
   const StringBuffer * value;
-  if(accessor.getString(*identity_, type_, value))
+  if(accessor.getString(identity_, type_, value))
   {
     if(!isMandatory())
     {
@@ -402,7 +402,7 @@ FieldInstructionBlob::encodeNop(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", identity_);
     }
     destination.putByte(nullBlob);
   }
@@ -419,12 +419,12 @@ FieldInstructionBlob::encodeConstant(
   {
     // get the value from the application data
     const StringBuffer * value;
-    if(accessor.getString(*identity_, type_, value))
+    if(accessor.getString(identity_, type_, value))
     {
       const std::string & constant = initialValue_->toString();
       if(*value != constant)
       {
-        encoder.reportFatal("[ERR U10]", "Constant value does not match application data.", *identity_);
+        encoder.reportFatal("[ERR U10]", "Constant value does not match application data.", identity_);
       }
       pmap.setNextField(true);
     }
@@ -444,7 +444,7 @@ FieldInstructionBlob::encodeDefault(
   const Messages::MessageAccessor & accessor) const
 {
   const StringBuffer * value;
-  if(accessor.getString(*identity_, type_, value))
+  if(accessor.getString(identity_, type_, value))
   {
     if(fieldOp_->hasValue() &&
       *value == initialValue_->toString())
@@ -468,7 +468,7 @@ FieldInstructionBlob::encodeDefault(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", identity_);
     }
     if(fieldOp_->hasValue())
     {
@@ -511,7 +511,7 @@ FieldInstructionBlob::encodeCopy(
   }
 
   const StringBuffer * value;
-  if(accessor.getString(*identity_, type_, value))
+  if(accessor.getString(identity_, type_, value))
   {
     if(previousStatus == Context::OK_VALUE && *value == previousValue)
     {
@@ -535,7 +535,7 @@ FieldInstructionBlob::encodeCopy(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", identity_);
       // if reportFatal returns we're being lax about the rules
       // let the copy happen.
       pmap.setNextField(false);
@@ -576,7 +576,7 @@ FieldInstructionBlob::encodeDelta(
   }
 
   const StringBuffer * value;
-  if(accessor.getString(*identity_, type_, value))
+  if(accessor.getString(identity_, type_, value))
   {
     size_t prefix = longestMatchingPrefix(previousValue, *value);
     size_t suffix = longestMatchingSuffix(previousValue, *value);
@@ -612,7 +612,7 @@ FieldInstructionBlob::encodeDelta(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", identity_);
     }
     destination.putByte(nullBlob);
   }
@@ -646,7 +646,7 @@ FieldInstructionBlob::encodeTail(
   }
 
   const StringBuffer * value;
-  if(accessor.getString(*identity_, type_, value))
+  if(accessor.getString(identity_, type_, value))
   {
     size_t prefix = longestMatchingPrefix(previousValue, *value);
     // performance: add substr method to StringBuffer
@@ -676,7 +676,7 @@ FieldInstructionBlob::encodeTail(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", identity_);
     }
     if(previousStatus != Context::NULL_VALUE)
     {

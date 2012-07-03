@@ -71,20 +71,20 @@ ImplField::setGroup(ImplFieldSet * group)
 const std::string &
 ImplField::localName()
 {
-  return identity_->getLocalName();
+  return identity_.getLocalName();
 }
 
 const std::string &
 ImplField::fieldNamespace()
 {
-  return identity_->getNamespace();
+  return identity_.getNamespace();
 }
 
 
 const std::string &
 ImplField::id()
 {
-  return identity_->id();
+  return identity_.id();
 }
 
 

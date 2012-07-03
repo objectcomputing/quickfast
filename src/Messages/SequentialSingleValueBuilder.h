@@ -7,6 +7,8 @@
 #ifndef SEQUENTIALSINGLEVALUEBUILDER_H
 #define SEQUENTIALSINGLEVALUEBUILDER_H
 #include <Messages/ValueMessageBuilder.h>
+#include <Messages/FieldIdentity.h>
+
 #include <Common/Value.h>
 
 namespace QuickFAST
@@ -34,7 +36,7 @@ namespace QuickFAST
 
         ///////////////////////////
         // Implement ValueMessageBuilder
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int64 value)
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const int64 value)
         {
           identities_.push_back(identity);
           Value v;
@@ -42,7 +44,7 @@ namespace QuickFAST
           values_.push_back(v);
         }
 
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value)
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const uint64 value)
         {
           identities_.push_back(identity);
           Value v;
@@ -50,7 +52,7 @@ namespace QuickFAST
           values_.push_back(v);
         }
 
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int32 value)
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const int32 value)
         {
           identities_.push_back(identity);
           Value v;
@@ -58,7 +60,7 @@ namespace QuickFAST
           values_.push_back(v);
         }
 
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value)
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const uint32 value)
         {
           identities_.push_back(identity);
           Value v;
@@ -66,7 +68,7 @@ namespace QuickFAST
           values_.push_back(v);
         }
 
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int16 value)
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const int16 value)
         {
           identities_.push_back(identity);
           Value v;
@@ -74,7 +76,7 @@ namespace QuickFAST
           values_.push_back(v);
         }
 
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value)
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const uint16 value)
         {
           identities_.push_back(identity);
           Value v;
@@ -82,7 +84,7 @@ namespace QuickFAST
           values_.push_back(v);
         }
 
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int8 value)
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const int8 value)
         {
           identities_.push_back(identity);
           Value v;
@@ -90,7 +92,7 @@ namespace QuickFAST
           values_.push_back(v);
         }
 
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uchar value)
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const uchar value)
         {
           identities_.push_back(identity);
           Value v;
@@ -98,7 +100,7 @@ namespace QuickFAST
           values_.push_back(v);
         }
 
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value)
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const Decimal& value)
         {
           identities_.push_back(identity);
           Value v;
@@ -106,7 +108,7 @@ namespace QuickFAST
           values_.push_back(v);
         }
 
-        virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length)
+        virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const unsigned char * value, size_t length)
         {
           identities_.push_back(identity);
           Value v;
@@ -168,7 +170,7 @@ namespace QuickFAST
         }
 
         /// @brief access the identity that was used to set the indexth value
-        FieldIdentityCPtr & identity(size_t index)const
+        const FieldIdentity & identity(size_t index)const
         {
           return identities_[index];
         }
@@ -218,15 +220,15 @@ namespace QuickFAST
           return 1;
         }
 
-        virtual bool getIdentity(const std::string &/*name*/, FieldIdentityCPtr & identity) const
-        {
-          if(identities_.empty())
-          {
-            return false;
-          }
-          identity = identities_[0];
-          return true;
-        }
+        //virtual bool getIdentity(const std::string &/*name*/, const FieldIdentity & identity) const
+        //{
+        //  if(identities_.empty())
+        //  {
+        //    return false;
+        //  }
+        //  identity = identities_[0];
+        //  return true;
+        //}
 
         virtual void setApplicationType(const std::string & /*type*/, const std::string & /*ns*/)
         {
@@ -245,11 +247,11 @@ namespace QuickFAST
         }
 
         virtual ValueMessageBuilder & startSequence(
-          FieldIdentityCPtr & identity,
+          const FieldIdentity & identity,
           const std::string & applicationType,
           const std::string & applicationTypeNamespace,
           size_t fieldCount,
-          FieldIdentityCPtr & lengthIdentity,
+          const FieldIdentity &lengthIdentity,
           size_t length)
         {
           throw UsageError("Coding Error", "SequentialSingleValueBuilder does not support start sequence.");
@@ -267,13 +269,13 @@ namespace QuickFAST
         {
           throw UsageError("Coding Error", "SequentialSingleValueBuilder does not support end sequence entry.");
         }
-        virtual void endSequence(FieldIdentityCPtr & /*identity*/, ValueMessageBuilder & )
+        virtual void endSequence(const FieldIdentity &/*identity*/, ValueMessageBuilder & )
         {
           throw UsageError("Coding Error", "SequentialSingleValueBuilder does not support end sequence.");
         }
 
         virtual ValueMessageBuilder & startGroup(
-          FieldIdentityCPtr & /*identity*/,
+          const FieldIdentity &/*identity*/,
           const std::string & /*applicationType*/,
           const std::string & /*applicationTypeNamespace*/,
           size_t /*size*/)
@@ -282,7 +284,7 @@ namespace QuickFAST
         }
 
         virtual void endGroup(
-          FieldIdentityCPtr & /*identity*/,
+          const FieldIdentity &/*identity*/,
           ValueMessageBuilder & /*entry*/)
         {
           throw UsageError("Coding Error", "SequentialSingleValueBuilder does not support end group.");
@@ -327,7 +329,7 @@ namespace QuickFAST
         typedef std::vector<Value> ValueVector;
         ValueVector values_;
 
-        typedef std::vector<FieldIdentityCPtr> IdentityVector;
+        typedef std::vector<FieldIdentity> IdentityVector;
         mutable IdentityVector identities_;
     };
   }

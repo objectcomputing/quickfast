@@ -134,9 +134,9 @@ Encoder::encodeSegmentBody(
     Codecs::FieldInstructionCPtr instruction;
     if(segment->getInstruction(nField, instruction))
     {
-      destination.startField(*(instruction->getIdentity()));
+      destination.startField(instruction->getIdentity());
       instruction->encode(destination, pmap, *this, accessor);
-      destination.endField(*(instruction->getIdentity()));
+      destination.endField(instruction->getIdentity());
     }
   }
 }

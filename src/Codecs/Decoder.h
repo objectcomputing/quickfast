@@ -63,7 +63,7 @@ namespace QuickFAST{
       void decodeNestedTemplate(
         DataSource & source,
         Messages::ValueMessageBuilder & messageBuilder,
-        Messages::FieldIdentityCPtr & identity);
+        const Messages::FieldIdentity & identity);
 
       /// @brief Decode the body of a segment into a messageBuilder.
       ///

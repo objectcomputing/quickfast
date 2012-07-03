@@ -138,7 +138,7 @@ FieldInstructionAscii::decodeDefault(
     }
     else if(isMandatory())
     {
-      decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.", *identity_);
+      decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.", identity_);
     }
   }
 }
@@ -192,7 +192,7 @@ FieldInstructionAscii::decodeCopy(
     {
       if(isMandatory())
       {
-        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.", *identity_);
+        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.", identity_);
       }
     }
   }
@@ -207,7 +207,7 @@ FieldInstructionAscii::decodeDelta(
 {
   PROFILE_POINT("ascii::decodeDelta");
   int32 deltaLength;
-  decodeSignedInteger(source, decoder, deltaLength, identity_->name());
+  decodeSignedInteger(source, decoder, deltaLength, identity_.name());
   if(!isMandatory())
   {
     if(checkNullInteger(deltaLength))
@@ -246,7 +246,7 @@ FieldInstructionAscii::decodeDelta(
     // don't chop more than is there
     if(static_cast<unsigned long>(deltaLength) > previousLength)
     {
-      decoder.reportError("[ERR D7]", "ASCII tail delta front length exceeds length of previous string.", *identity_);
+      decoder.reportError("[ERR D7]", "ASCII tail delta front length exceeds length of previous string.", identity_);
       deltaLength = QuickFAST::int32(previousLength);
     }
     std::string value = deltaValue + previousValue.substr(deltaLength);
@@ -265,7 +265,7 @@ FieldInstructionAscii::decodeDelta(
 #if 0 // handy when debugging
       std::cout << "decode ascii delta length: " << deltaLength << " previous: " << previousLength << std::endl;
 #endif
-      decoder.reportError("[ERR D7]", "ASCII tail delta back length exceeds length of previous string.", *identity_);
+      decoder.reportError("[ERR D7]", "ASCII tail delta back length exceeds length of previous string.", identity_);
       deltaLength = QuickFAST::uint32(previousLength);
     }
     std::string value = previousValue.substr(0, previousLength - deltaLength) + deltaValue;
@@ -347,7 +347,7 @@ FieldInstructionAscii::decodeTail(
     {
       if(isMandatory())
       {
-        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.", *identity_);
+        decoder.reportFatal("[ERR D6]", "No value available for mandatory copy field.", identity_);
       }
     }
   }
@@ -362,7 +362,7 @@ FieldInstructionAscii::encodeNop(
 {
   // get the value from the application data
   const StringBuffer * value;
-  if(accessor.getString(*identity_, ValueType::ASCII, value))
+  if(accessor.getString(identity_, ValueType::ASCII, value))
   {
     if(!isMandatory())
     {
@@ -377,7 +377,7 @@ FieldInstructionAscii::encodeNop(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", identity_);
     }
     destination.putByte(nullAscii);
   }
@@ -394,12 +394,12 @@ FieldInstructionAscii::encodeConstant(
   {
     // get the value from the application data
     const StringBuffer * value;
-    if(accessor.getString(*identity_, ValueType::ASCII, value))
+    if(accessor.getString(identity_, ValueType::ASCII, value))
     {
       const std::string & constant = initialValue_->toAscii();
       if(*value != constant)
       {
-        encoder.reportFatal("[ERR U10}", "Constant value does not match application data.", *identity_);
+        encoder.reportFatal("[ERR U10}", "Constant value does not match application data.", identity_);
       }
 
       pmap.setNextField(true);
@@ -421,7 +421,7 @@ FieldInstructionAscii::encodeDefault(
 {
   // get the value from the application data
   const StringBuffer * value;
-  if(accessor.getString(*identity_, ValueType::ASCII, value))
+  if(accessor.getString(identity_, ValueType::ASCII, value))
   {
 //    std::cout << "EncodeAsciiDefault: in record: \"" << value->c_str() << "\"" << std::endl;
     if(initialValue_->isDefined() &&
@@ -451,7 +451,7 @@ FieldInstructionAscii::encodeDefault(
 //    std::cout << "EncodeAsciiDefault: NOT in record:" << std::endl;
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", identity_);
     }
     if(fieldOp_->hasValue())
     {
@@ -497,7 +497,7 @@ FieldInstructionAscii::encodeCopy(
 
   // get the value from the application data
   const StringBuffer * value;
-  if(accessor.getString(*identity_, ValueType::ASCII, value))
+  if(accessor.getString(identity_, ValueType::ASCII, value))
   {
     if(previousStatus == Context::OK_VALUE && *value == previousValue)
     {
@@ -521,7 +521,7 @@ FieldInstructionAscii::encodeCopy(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory ascii field.", *identity_);
+      encoder.reportFatal("[ERR U01]", "Missing mandatory ascii field.", identity_);
       // if reportFatal returns we're being lax about the rules
       // let the copy happen.
       pmap.setNextField(false);
@@ -563,7 +563,7 @@ FieldInstructionAscii::encodeDelta(
   }
   // get the value from the application data
   const StringBuffer * valueBuffer;
-  if(accessor.getString(*identity_, ValueType::ASCII, valueBuffer))
+  if(accessor.getString(identity_, ValueType::ASCII, valueBuffer))
   {
     std::string value(*valueBuffer);
     size_t prefix = longestMatchingPrefix(previousValue, value);
@@ -598,7 +598,7 @@ FieldInstructionAscii::encodeDelta(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", identity_);
     }
     destination.putByte(nullAscii);
   }
@@ -633,7 +633,7 @@ FieldInstructionAscii::encodeTail(
 
   // get the value from the application data
   const StringBuffer * valueBuffer;
-  if(accessor.getString(*identity_, ValueType::ASCII, valueBuffer))
+  if(accessor.getString(identity_, ValueType::ASCII, valueBuffer))
   {
     std::string value(*valueBuffer);
     size_t prefix = longestMatchingPrefix(previousValue, value);
@@ -663,7 +663,7 @@ FieldInstructionAscii::encodeTail(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", identity_);
     }
     if(previousStatus != Context::NULL_VALUE)
     {

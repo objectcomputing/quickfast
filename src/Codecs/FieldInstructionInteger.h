@@ -226,11 +226,11 @@ namespace QuickFAST{
       INTEGER_TYPE value = 0;
       if(SIGNED) // expect compile-time optimization here
       {
-        decodeSignedInteger(source, decoder, value, identity_->name(), false, ignoreOverflow_);
+        decodeSignedInteger(source, decoder, value, identity_.name(), false, ignoreOverflow_);
       }
       else
       {
-        decodeUnsignedInteger(source, decoder, value, identity_->name(), ignoreOverflow_);
+        decodeUnsignedInteger(source, decoder, value, identity_.name(), ignoreOverflow_);
       }
       if(isMandatory())
       {
@@ -303,11 +303,11 @@ namespace QuickFAST{
         // present in stream
         if(SIGNED) // expect compile-time optimization here
         {
-          decodeSignedInteger(source, decoder, value, identity_->name(), false, ignoreOverflow_);
+          decodeSignedInteger(source, decoder, value, identity_.name(), false, ignoreOverflow_);
         }
         else
         {
-          decodeUnsignedInteger(source, decoder, value, identity_->name(), ignoreOverflow_);
+          decodeUnsignedInteger(source, decoder, value, identity_.name(), ignoreOverflow_);
         }
 
         if(isMandatory())
@@ -366,7 +366,7 @@ namespace QuickFAST{
               decoder.reportError(
                 "[ERR D5]",
                 "Copy operator missing mandatory integer field/no initial value",
-                *identity_);
+                identity_);
               builder.addValue(
                 identity_,
                 VALUE_TYPE,
@@ -384,7 +384,7 @@ namespace QuickFAST{
             decoder.reportError(
               "[ERR D5]",
               "Copy operator mandatory integer field, but previous value was NULL",
-              *identity_);
+              identity_);
             builder.addValue(
               identity_,
               VALUE_TYPE,
@@ -411,11 +411,11 @@ namespace QuickFAST{
         INTEGER_TYPE value = 0;
         if(SIGNED)
         {
-          decodeSignedInteger(source, decoder, value, identity_->name(), false,  ignoreOverflow_);
+          decodeSignedInteger(source, decoder, value, identity_.name(), false,  ignoreOverflow_);
         }
         else
         {
-          decodeUnsignedInteger(source, decoder, value, identity_->name(), ignoreOverflow_);
+          decodeUnsignedInteger(source, decoder, value, identity_.name(), ignoreOverflow_);
         }
         if(isMandatory())
         {
@@ -449,7 +449,7 @@ namespace QuickFAST{
         }
         else if(isMandatory())
         {
-          decoder.reportError("[ERR D5]", "Mandatory default operator with no value.", *identity_);
+          decoder.reportError("[ERR D5]", "Mandatory default operator with no value.", identity_);
         }
       }
     }
@@ -465,7 +465,7 @@ namespace QuickFAST{
     {
       PROFILE_POINT("int::decodeDelta");
       int64 delta;
-      decodeSignedInteger(source, decoder, delta, identity_->name(), true);
+      decodeSignedInteger(source, decoder, delta, identity_.name(), true);
       if(!isMandatory())
       {
         if(checkNullInteger(delta))
@@ -521,11 +521,11 @@ namespace QuickFAST{
         INTEGER_TYPE value = 0;
         if(SIGNED) // expect compile-time optimization here
         {
-          decodeSignedInteger(source, decoder, value, identity_->name(), false, ignoreOverflow_);
+          decodeSignedInteger(source, decoder, value, identity_.name(), false, ignoreOverflow_);
         }
         else
         {
-          decodeUnsignedInteger(source, decoder, value, identity_->name(), ignoreOverflow_);
+          decodeUnsignedInteger(source, decoder, value, identity_.name(), ignoreOverflow_);
         }
         if(isMandatory())
         {
@@ -572,7 +572,7 @@ namespace QuickFAST{
           {
             if(isMandatory())
             {
-              decoder.reportError("[ERR D5]", "Missing initial value for mandatory integer with increment operator", *identity_);
+              decoder.reportError("[ERR D5]", "Missing initial value for mandatory integer with increment operator", identity_);
               value = 0;
             }
             else
@@ -586,7 +586,7 @@ namespace QuickFAST{
         {
           if(isMandatory())
           {
-            decoder.reportError("[ERR D5]", "Null value for mandatory integer with increment operator", *identity_);
+            decoder.reportError("[ERR D5]", "Null value for mandatory integer with increment operator", identity_);
             value = 0;
           }
           else
@@ -618,13 +618,13 @@ namespace QuickFAST{
       if(SIGNED)
       {
         int64 value64;
-        present = accessor.getSignedInteger(*identity_, VALUE_TYPE, value64);
+        present = accessor.getSignedInteger(identity_, VALUE_TYPE, value64);
         value = static_cast<INTEGER_TYPE>(value64);
       }
       else
       {
         uint64 value64;
-        present = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, value64);
+        present = accessor.getUnsignedInteger(identity_, VALUE_TYPE, value64);
         value = static_cast<INTEGER_TYPE>(value64);
       }
 
@@ -652,7 +652,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR U01]", "Missing mandatory field.", *identity_);
+          encoder.reportError("[ERR U01]", "Missing mandatory field.", identity_);
           if(SIGNED)
           {
             encodeSignedInteger(destination, encoder.getWorkingBuffer(), 0);
@@ -689,13 +689,13 @@ namespace QuickFAST{
         if(SIGNED)
         {
           int64 value64;
-          present = accessor.getSignedInteger(*identity_, VALUE_TYPE, value64);
+          present = accessor.getSignedInteger(identity_, VALUE_TYPE, value64);
           value = static_cast<INTEGER_TYPE>(value64);
         }
         else
         {
           uint64 value64;
-          present = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, value64);
+          present = accessor.getUnsignedInteger(identity_, VALUE_TYPE, value64);
           value = static_cast<INTEGER_TYPE>(value64);
         }
 
@@ -703,7 +703,7 @@ namespace QuickFAST{
         {
           if(value != typedValue_)
           {
-            encoder.reportError("[ERR U02]", "Constant value does not match application data.", *identity_);
+            encoder.reportError("[ERR U02]", "Constant value does not match application data.", identity_);
           }
           pmap.setNextField(true);
         }
@@ -729,13 +729,13 @@ namespace QuickFAST{
       if(SIGNED)
       {
         int64 value64;
-        present = accessor.getSignedInteger(*identity_, VALUE_TYPE, value64);
+        present = accessor.getSignedInteger(identity_, VALUE_TYPE, value64);
         value = static_cast<INTEGER_TYPE>(value64);
       }
       else
       {
         uint64 value64;
-        present = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, value64);
+        present = accessor.getUnsignedInteger(identity_, VALUE_TYPE, value64);
         value = static_cast<INTEGER_TYPE>(value64);
       }
 
@@ -771,7 +771,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR U01]", "Missing mandatory field.", *identity_);
+          encoder.reportError("[ERR U01]", "Missing mandatory field.", identity_);
         }
         if(fieldOp_->hasValue())
         {
@@ -820,13 +820,13 @@ namespace QuickFAST{
       if(SIGNED)
       {
         int64 value64;
-        present = accessor.getSignedInteger(*identity_, VALUE_TYPE, value64);
+        present = accessor.getSignedInteger(identity_, VALUE_TYPE, value64);
         value = static_cast<INTEGER_TYPE>(value64);
       }
       else
       {
         uint64 value64;
-        present = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, value64);
+        present = accessor.getUnsignedInteger(identity_, VALUE_TYPE, value64);
         value = static_cast<INTEGER_TYPE>(value64);
       }
 
@@ -864,7 +864,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR U01]", "Missing mandatory integer field.", *identity_);
+          encoder.reportError("[ERR U01]", "Missing mandatory integer field.", identity_);
           // if reportEror returns we're being lax about the rules.
           // Let the copy happen
           pmap.setNextField(false);
@@ -911,13 +911,13 @@ namespace QuickFAST{
       if(SIGNED)
       {
         int64 value64;
-        present = accessor.getSignedInteger(*identity_, VALUE_TYPE, value64);
+        present = accessor.getSignedInteger(identity_, VALUE_TYPE, value64);
         value = static_cast<INTEGER_TYPE>(value64);
       }
       else
       {
         uint64 value64;
-        present = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, value64);
+        present = accessor.getUnsignedInteger(identity_, VALUE_TYPE, value64);
         value = static_cast<INTEGER_TYPE>(value64);
       }
 
@@ -942,7 +942,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR U01]", "Missing mandatory field.", *identity_);
+          encoder.reportError("[ERR U01]", "Missing mandatory field.", identity_);
           encodeSignedInteger(destination, encoder.getWorkingBuffer(), 0);
         }
         else
@@ -979,13 +979,13 @@ namespace QuickFAST{
       if(SIGNED)
       {
         int64 value64;
-        present = accessor.getSignedInteger(*identity_, VALUE_TYPE, value64);
+        present = accessor.getSignedInteger(identity_, VALUE_TYPE, value64);
         value = static_cast<INTEGER_TYPE>(value64);
       }
       else
       {
         uint64 value64;
-        present = accessor.getUnsignedInteger(*identity_, VALUE_TYPE, value64);
+        present = accessor.getUnsignedInteger(identity_, VALUE_TYPE, value64);
         value = static_cast<INTEGER_TYPE>(value64);
       }
 
@@ -1024,7 +1024,7 @@ namespace QuickFAST{
       {
         if(isMandatory())
         {
-          encoder.reportError("[ERR U01]", "Missing mandatory field.", *identity_);
+          encoder.reportError("[ERR U01]", "Missing mandatory field.", identity_);
           // if reportError returns we're being lax about the encoding rules.
           // just let it increment
           pmap.setNextField(false);

@@ -26,7 +26,7 @@ namespace QuickFAST{
     public:
       /// @brief construct an empty sequence
       Sequence(
-        Messages::FieldIdentityCPtr & lengthFieldIdentity,
+        const Messages::FieldIdentity & lengthFieldIdentity,
         size_t sequenceLength)
         : lengthIdentity_(lengthFieldIdentity)
       {
@@ -38,7 +38,7 @@ namespace QuickFAST{
       }
 
       /// @brief get the identity of the sequence's length field
-      const Messages::FieldIdentityCPtr & getLengthIdentity() const
+      const Messages::FieldIdentity & getLengthIdentity() const
       {
         return lengthIdentity_;
       }
@@ -97,7 +97,7 @@ namespace QuickFAST{
       Sequence& operator=(const Sequence&);
     private:
       std::string applicationType_;
-      Messages::FieldIdentityCPtr lengthIdentity_;
+      const Messages::FieldIdentity & lengthIdentity_;
       Entries entries_;
     };
   }

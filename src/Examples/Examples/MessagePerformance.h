@@ -48,16 +48,16 @@ namespace QuickFAST{
       // Implement ValueMessageBuilder interface
       virtual const std::string & getApplicationType()const;
       virtual const std::string & getApplicationTypeNs()const;
-      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int64 value);
-      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value);
-      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int32 value);
-      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value);
-      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int16 value);
-      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value);
-      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int8 value);
-      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uchar value);
-      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value);
-      virtual void addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length);
+      virtual void addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const int64 value);
+      virtual void addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const uint64 value);
+      virtual void addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const int32 value);
+      virtual void addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const uint32 value);
+      virtual void addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const int16 value);
+      virtual void addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const uint16 value);
+      virtual void addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const int8 value);
+      virtual void addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const uchar value);
+      virtual void addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const Decimal& value);
+      virtual void addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const unsigned char * value, size_t length);
       virtual ValueMessageBuilder & startMessage(
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
@@ -65,14 +65,14 @@ namespace QuickFAST{
       virtual bool endMessage(Messages::ValueMessageBuilder & messageBuilder);
       virtual bool ignoreMessage(Messages::ValueMessageBuilder & messageBuilder);
       virtual Messages::ValueMessageBuilder & startSequence(
-        Messages::FieldIdentityCPtr & identity,
+        const Messages::FieldIdentity & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t fieldCount,
-        Messages::FieldIdentityCPtr & lengthIdentity,
+        const Messages::FieldIdentity & lengthIdentity,
         size_t length);
       virtual void endSequence(
-        Messages::FieldIdentityCPtr & identity,
+        const Messages::FieldIdentity & identity,
         Messages::ValueMessageBuilder & sequenceBuilder);
       virtual Messages::ValueMessageBuilder & startSequenceEntry(
         const std::string & applicationType,
@@ -80,12 +80,12 @@ namespace QuickFAST{
         size_t size) ;
       virtual void endSequenceEntry(Messages::ValueMessageBuilder & entry);
       virtual Messages::ValueMessageBuilder & startGroup(
-        Messages::FieldIdentityCPtr & identity,
+        const Messages::FieldIdentity & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size) ;
       virtual void endGroup(
-        Messages::FieldIdentityCPtr & identity,
+        const Messages::FieldIdentity & identity,
         Messages::ValueMessageBuilder & groupBuilder);
 
       /////////////////////////////
@@ -132,7 +132,7 @@ namespace QuickFAST{
     private:
       void retrieveMessage(const Messages::Message & message);
       void retrieveSequence(
-        Messages::FieldIdentityCPtr & identity,
+        const Messages::FieldIdentity & identity,
         const Messages::FieldCPtr & field);
       void retrieveGroup(const Messages::FieldCPtr & field);
 

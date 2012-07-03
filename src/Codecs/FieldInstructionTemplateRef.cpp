@@ -47,7 +47,7 @@ FieldInstructionStaticTemplateRef::finalize(TemplateRegistry & templateRegistry)
   if(!templateRegistry.findNamedTemplate(templateName_, templateNamespace_, target))
   {
     std::stringstream exception;
-    exception << "[ERR D9] Unknown template name for static templateref." << identity_->name();
+    exception << "[ERR D9] Unknown template name for static templateref." << identity_.name();
     throw QuickFAST::TemplateDefinitionError(exception.str());
   }
   target->finalize(templateRegistry);
@@ -67,7 +67,7 @@ FieldInstructionStaticTemplateRef::decodeNop(
   TemplateCPtr target;
   if(!decoder.findTemplate(templateName_, templateNamespace_, target))
   {
-    decoder.reportFatal("[ERR D9]", "Unknown template name for static templateref.", *identity_);
+    decoder.reportFatal("[ERR D9]", "Unknown template name for static templateref.", identity_);
   }
 
   if(messageBuilder.getApplicationType() != target->getApplicationType())
@@ -111,13 +111,13 @@ FieldInstructionStaticTemplateRef::encodeNop(
   TemplateCPtr target;
   if(!encoder.findTemplate(templateName_, templateNamespace_, target))
   {
-    encoder.reportFatal("[ERR D9]", "Unknown template name for static templateref.", *identity_);
+    encoder.reportFatal("[ERR D9]", "Unknown template name for static templateref.", identity_);
   }
 
   // retrieve the field corresponding to this templateRef
   // which if it exists should be a FieldGroup
   const QuickFAST::Messages::MessageAccessor * group;
-  if(accessor.getGroup(*identity_, group))
+  if(accessor.getGroup(identity_, group))
   {
     encoder.encodeSegmentBody(
       destination,

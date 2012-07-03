@@ -53,6 +53,8 @@ namespace QuickFAST
       virtual void resetService()
       {
         ioService_.resetService();
+        stopping_ = false;
+        paused_ = false;
       }
 
       virtual void run()
