@@ -18,7 +18,6 @@ std::string anonName(void * address)
 
 FieldIdentity::FieldIdentity()
   : localName_(anonName(this))
-  , refcount_(0)
 {
   qualifyName();
 }
@@ -30,7 +29,6 @@ FieldIdentity::FieldIdentity(
   : localName_(name)
   , fieldNamespace_(fieldNamespace)
   , id_(id)
-  , refcount_(0)
 {
   qualifyName();
 }
@@ -38,12 +36,6 @@ FieldIdentity::FieldIdentity(
 
 FieldIdentity::~FieldIdentity()
 {
-}
-
-void
-FieldIdentity::freeFieldIdentity()const
-{
-  delete this;
 }
 
 void

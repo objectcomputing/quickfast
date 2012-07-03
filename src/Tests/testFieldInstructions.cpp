@@ -65,11 +65,11 @@ namespace
     instruction.setId("id");
     BOOST_CHECK_EQUAL(instruction.getId(), "id");
 
-    Messages::FieldIdentityCPtr identity = instruction.getIdentity();
-    BOOST_CHECK_EQUAL(identity->id(),"id");
+    Messages::FieldIdentity identity(instruction.getIdentity());
+    BOOST_CHECK_EQUAL(identity.id(),"id");
     if(hasName)
     {
-      BOOST_CHECK_EQUAL(identity->name(), "NS::Name");
+      BOOST_CHECK_EQUAL(identity.name(), "NS::Name");
     }
 
     Codecs::DictionaryIndexer indexer;

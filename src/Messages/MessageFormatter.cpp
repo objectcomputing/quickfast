@@ -39,7 +39,7 @@ MessageFormatter::formatMessage(const Messages::Message & message)
     it != message.end();
     ++it)
   {
-    const Messages::FieldIdentityCPtr & identity = it->getIdentity();
+    const Messages::FieldIdentity & identity = it->getIdentity();
     const Messages::FieldCPtr & field = it->getField();
     ValueType::Type type = field->getType();
     if(type == ValueType::SEQUENCE)
@@ -52,7 +52,7 @@ MessageFormatter::formatMessage(const Messages::Message & message)
     }
     else
     {
-      out_ << ' ' << identity->name() << '[' << identity->id() << "]=";
+      out_ << ' ' << identity.name() << '[' << identity.id() << "]=";
       displayFieldValue(field);
     }
   }
@@ -66,17 +66,17 @@ MessageFormatter::newline()
 
 void
 MessageFormatter::formatSequence(
-  const Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   const Messages::FieldCPtr & field)
 {
   Messages::SequenceCPtr sequence = field->toSequence();
   size_t count = sequence->size();
   newline();
-  out_ << ' ' << identity->name() << '[' << identity->id() << "]=";
+  out_ << ' ' << identity.name() << '[' << identity.id() << "]=";
 
-  const Messages::FieldIdentityCPtr lengthIdentity = sequence->getLengthIdentity();
+  const Messages::FieldIdentity & lengthIdentity = sequence->getLengthIdentity();
 
-  out_ << "Sequence: " << lengthIdentity->name() << '[' << lengthIdentity->id() << ']' << " = " << count << " {";
+  out_ << "Sequence: " << lengthIdentity.name() << '[' << lengthIdentity.id() << ']' << " = " << count << " {";
 
   size_t entryCount = 0;
   ++indent_;
@@ -93,7 +93,7 @@ MessageFormatter::formatSequence(
       ++fsit)
     {
       // todo: refactor with message decoding
-      const Messages::FieldIdentityCPtr & identity = fsit->getIdentity();
+      const Messages::FieldIdentity & identity = fsit->getIdentity();
       const Messages::FieldCPtr & field = fsit->getField();
       ValueType::Type type = field->getType();
       if(type == ValueType::SEQUENCE)
@@ -106,7 +106,7 @@ MessageFormatter::formatSequence(
       }
       else
       {
-        out_ << ' ' << identity->name() << '[' << identity->id() << "]=";
+        out_ << ' ' << identity.name() << '[' << identity.id() << "]=";
         displayFieldValue(field);
       }
     }
@@ -119,12 +119,12 @@ MessageFormatter::formatSequence(
 
 void
 MessageFormatter::formatGroup(
-  const Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   const Messages::FieldCPtr & field)
 {
   Messages::GroupCPtr group = field->toGroup();
   newline();
-  out_ << ' ' << identity->name() << '[' << identity->id() << "] Group {"
+  out_ << ' ' << identity.name() << '[' << identity.id() << "] Group {"
     << group->getApplicationTypeNs() << ':' << group->getApplicationType()
     << "}= {";
   ++indent_;
@@ -134,7 +134,7 @@ MessageFormatter::formatGroup(
     fsit != group->end();
     ++fsit)
   {
-    const Messages::FieldIdentityCPtr & identity = fsit->getIdentity();
+    const Messages::FieldIdentity & identity = fsit->getIdentity();
     const Messages::FieldCPtr & field = fsit->getField();
     ValueType::Type type = field->getType();
     if(type == ValueType::SEQUENCE)
@@ -147,7 +147,7 @@ MessageFormatter::formatGroup(
     }
     else
     {
-      out_ << ' ' << identity->name() << '[' << identity->id() << "]=";
+      out_ << ' ' << identity.name() << '[' << identity.id() << "]=";
       displayFieldValue(field);
     }
   }

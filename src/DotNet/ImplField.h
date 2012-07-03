@@ -6,7 +6,7 @@
 #pragma unmanaged
 #include <Common/Value.h>
 #include <Common/Decimal.h>
-#include <Messages/FieldIdentity_fwd.h>
+#include <Messages/FieldIdentity.h>
 
 namespace QuickFAST{
   namespace DotNet{
@@ -74,7 +74,7 @@ namespace QuickFAST{
 
       /// @brief Identify this field
       /// @param identity identifies this field.
-      void setIdentity(Messages::FieldIdentityCPtr & identity)
+      void setIdentity(const Messages::FieldIdentity & identity)
       {
         identity_ = identity;
       }
@@ -95,7 +95,7 @@ namespace QuickFAST{
       void setGroup(ImplFieldSet * group);
     private:
 
-      Messages::FieldIdentityCPtr identity_;
+      Messages::FieldIdentity identity_;
 //      std::string localName_;
 //      std::string fieldNamespace_;
 //      std::string id_;

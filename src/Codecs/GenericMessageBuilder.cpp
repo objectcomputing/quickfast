@@ -37,11 +37,11 @@ GenericSequenceBuilder::fieldSet()const
 
 void
 GenericSequenceBuilder::initialize(
-  Messages::FieldIdentityCPtr & /*identity*/,
+  const Messages::FieldIdentity & /*identity*/,
   const std::string & /*applicationType*/,
   const std::string & /*applicationTypeNamespace*/,
   size_t, /*size*/
-  Messages::FieldIdentityCPtr & lengthIdentity,
+  const Messages::FieldIdentity & lengthIdentity,
   size_t length
   )
 {
@@ -62,7 +62,7 @@ GenericSequenceBuilder::getApplicationTypeNs()const
 
 void
 GenericSequenceBuilder::addField(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   const Messages::FieldCPtr & value)
 {
   fieldSet()->addField(identity, value);
@@ -93,11 +93,11 @@ GenericSequenceBuilder::ignoreMessage(ValueMessageBuilder & /*messageBuilder*/)
 
 Messages::MessageBuilder &
 GenericSequenceBuilder::startSequence(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t fieldCount,
-  Messages::FieldIdentityCPtr & lengthIdentity,
+  const Messages::FieldIdentity & lengthIdentity,
   size_t length)
 {
   // This is called to start a nested sequence
@@ -118,7 +118,7 @@ GenericSequenceBuilder::startSequence(
 
 void
 GenericSequenceBuilder::endSequence(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   Messages::ValueMessageBuilder & /*sequenceBuilder*/)
 {
   // Note this will be called to end a nested sequence
@@ -161,7 +161,7 @@ GenericSequenceBuilder::endSequenceEntry(
 
 Messages::MessageBuilder &
 GenericSequenceBuilder::startGroup(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t size)
@@ -181,7 +181,7 @@ GenericSequenceBuilder::startGroup(
 
 void
 GenericSequenceBuilder::endGroup(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   Messages::ValueMessageBuilder & /*entry*/)
 {
   /// Note this will be called to end a nested group
@@ -253,7 +253,7 @@ GenericGroupBuilder::groupPtr()const
 
 void
 GenericGroupBuilder::initialize(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t size)
@@ -276,7 +276,7 @@ GenericGroupBuilder::getApplicationTypeNs()const
 
 void
 GenericGroupBuilder::addField(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   const Messages::FieldCPtr & value)
 {
   groupPtr()->addField(identity, value);
@@ -307,11 +307,11 @@ GenericGroupBuilder::ignoreMessage(Messages::ValueMessageBuilder & /*messageBuil
 
 Messages::MessageBuilder &
 GenericGroupBuilder::startSequence(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t fieldCount,
-  Messages::FieldIdentityCPtr & lengthIdentity,
+  const Messages::FieldIdentity & lengthIdentity,
   size_t length)
 {
   // This is called to start a nested sequence
@@ -331,7 +331,7 @@ GenericGroupBuilder::startSequence(
 
 void
 GenericGroupBuilder::endSequence(
-   Messages::FieldIdentityCPtr & identity,
+   const Messages::FieldIdentity & identity,
   Messages::ValueMessageBuilder & /*sequenceBuilder*/)
 {
   // Note this will be called to end a nested sequence
@@ -368,7 +368,7 @@ GenericGroupBuilder::endSequenceEntry(Messages::ValueMessageBuilder & /*entry*/)
 
 Messages::MessageBuilder &
 GenericGroupBuilder::startGroup(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t size)
@@ -388,7 +388,7 @@ GenericGroupBuilder::startGroup(
 
 void
 GenericGroupBuilder::endGroup(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   Messages::ValueMessageBuilder & /*entry*/)
 {
   /// Note this will be called to end a nested group
@@ -472,7 +472,7 @@ GenericMessageBuilder::getApplicationTypeNs()const
 
 void
 GenericMessageBuilder::addField(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   const Messages::FieldCPtr & value)
 {
   message()->addField(identity, value);
@@ -510,11 +510,11 @@ GenericMessageBuilder::ignoreMessage(Messages::ValueMessageBuilder & /*messageBu
 
 Messages::MessageBuilder &
 GenericMessageBuilder::startSequence(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t fieldCount,
-  Messages::FieldIdentityCPtr & lengthIdentity,
+  const Messages::FieldIdentity & lengthIdentity,
   size_t length)
 {
   sequenceBuilder_.initialize(
@@ -529,7 +529,7 @@ GenericMessageBuilder::startSequence(
 
 void
 GenericMessageBuilder::endSequence(
-   Messages::FieldIdentityCPtr & identity,
+   const Messages::FieldIdentity & identity,
    Messages::ValueMessageBuilder &)
 {
   message()->addField(
@@ -556,7 +556,7 @@ GenericMessageBuilder::endSequenceEntry(Messages::ValueMessageBuilder & /*entry*
 
 Messages::MessageBuilder &
 GenericMessageBuilder::startGroup(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t size)
@@ -571,7 +571,7 @@ GenericMessageBuilder::startGroup(
 
 void
 GenericMessageBuilder::endGroup(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   Messages::ValueMessageBuilder & /*groupBuilder*/)
 {
   message()->addField(

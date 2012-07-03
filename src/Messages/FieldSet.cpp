@@ -81,7 +81,7 @@ FieldSet::isPresent(const FieldIdentity & identity) const
 {
   for(size_t index = 0; index < used_; ++index)
   {
-    if(identity == *(fields_[index].getIdentity()))
+    if(identity == fields_[index].getIdentity())
     {
       return fields_[index].getField()->isDefined();
     }
@@ -90,7 +90,7 @@ FieldSet::isPresent(const FieldIdentity & identity) const
 }
 
 void
-FieldSet::addField(const FieldIdentityCPtr & identity, const FieldCPtr & value)
+FieldSet::addField(const FieldIdentity & identity, const FieldCPtr & value)
 {
   PROFILE_POINT("FieldSet::addField");
   if(used_ >= capacity_)
@@ -103,12 +103,12 @@ FieldSet::addField(const FieldIdentityCPtr & identity, const FieldCPtr & value)
 }
 
 bool
-FieldSet::getField(const Messages::FieldIdentity & identity, FieldCPtr & value) const
+FieldSet::getField(const Messages::FieldIdentity identity, FieldCPtr & value) const
 {
   PROFILE_POINT("FieldSet::getField");
   for(size_t index = 0; index < used_; ++index)
   {
-    if(identity == *(fields_[index].getIdentity()))
+    if(identity == fields_[index].getIdentity())
     {
       value = fields_[index].getField();
       return value->isDefined();

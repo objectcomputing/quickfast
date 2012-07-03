@@ -12,7 +12,7 @@ using namespace DotNet;
 
 
 ImplSequence::ImplSequence(
-    Messages::FieldIdentityCPtr & lengthIdentity,
+    const Messages::FieldIdentity &  lengthIdentity,
     size_t length
   )
   : capacity_(length)
@@ -33,21 +33,21 @@ ImplSequence::~ImplSequence()
 const std::string
 ImplSequence::lengthName()const
 {
-  return lengthIdentity_->getLocalName();
+  return lengthIdentity_.getLocalName();
 }
 
 /// @brief access the namespace of the length field
 const std::string
 ImplSequence::lengthNamespace()const
 {
-  return lengthIdentity_->getNamespace();;
+  return lengthIdentity_.getNamespace();;
 }
 
 /// @brief access the id of the length field
 const std::string
 ImplSequence::lengthId()const
 {
-  return lengthIdentity_->id();
+  return lengthIdentity_.id();
 }
 
 size_t

@@ -54,7 +54,6 @@ namespace QuickFAST{
         , fieldNamespace_(rhs.fieldNamespace_)
         , fullName_(rhs.fullName_)
         , id_(rhs.id_)
-        , refcount_(0)
       {
       }
 
@@ -134,52 +133,7 @@ namespace QuickFAST{
       std::string fieldNamespace_;
       std::string fullName_; // cached for performance
       field_id_t id_;
-    private:
-      friend void QuickFAST_Export intrusive_ptr_add_ref(const FieldIdentity * ptr);
-      friend void QuickFAST_Export intrusive_ptr_release(const FieldIdentity * ptr);
-      friend void QuickFAST_Export intrusive_ptr_add_ref(FieldIdentity * ptr);
-      friend void QuickFAST_Export intrusive_ptr_release(FieldIdentity * ptr);
-      void freeFieldIdentity()const;
-      mutable unsigned long refcount_;
     };
-
-    inline
-    void QuickFAST_Export
-    intrusive_ptr_add_ref(const Messages::FieldIdentity * ptr)
-    {
-      ++ptr->refcount_;
-//      std::cout << "Identity @" << std::hex << ptr << std::dec << "++[" << ptr->refcount_ << " ]: " << ptr->localName_ << ' ' << ptr->id_ << std::endl;
-    }
-
-    inline
-    void QuickFAST_Export
-    intrusive_ptr_release(const Messages::FieldIdentity * ptr)
-    {
-//      std::cout << "Identity @" << std::hex << ptr << std::dec << "--[" << ptr->refcount_ << " ]: " << ptr->localName_ << ' ' << ptr->id_ << std::endl;
-      if(--ptr->refcount_ == 0)
-      {
-        ptr->freeFieldIdentity();
-      }
-    }
-
-    inline
-    void QuickFAST_Export
-    intrusive_ptr_add_ref(Messages::FieldIdentity * ptr)
-    {
-      ++ptr->refcount_;
-//      std::cout << "Identity @" << std::hex << ptr << std::dec << "++[" << ptr->refcount_ << " ]: " << ptr->localName_ << ' ' << ptr->id_ << std::endl;
-    }
-
-    inline
-    void QuickFAST_Export
-    intrusive_ptr_release(Messages::FieldIdentity * ptr)
-    {
-//      std::cout << "Identity @" << std::hex << ptr << std::dec << "--[" << ptr->refcount_ << " ]: " << ptr->localName_ << ' ' << ptr->id_ << std::endl;
-      if(--ptr->refcount_ == 0)
-      {
-        ptr->freeFieldIdentity();
-      }
-    }
   }
 }
 #endif // FIELDIDENTITY_H

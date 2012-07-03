@@ -94,7 +94,7 @@ void
 Decoder::decodeNestedTemplate(
    DataSource & source,
    Messages::ValueMessageBuilder & messageBuilder,
-   Messages::FieldIdentityCPtr & identity)
+   const Messages::FieldIdentity & identity)
 {
   Codecs::PresenceMap pmap(getTemplateRegistry()->presenceMapBits());
   if(this->verboseOut_)
@@ -181,9 +181,9 @@ Decoder::decodeSegmentBody(
     const Codecs::FieldInstructionCPtr & instruction = segment->getInstruction(nField);
     if(verboseOut_)
     {
-      (*verboseOut_) <<std::endl << "Decode instruction[" <<nField << "]: " << instruction->getIdentity()->name() << std::endl;
+      (*verboseOut_) <<std::endl << "Decode instruction[" <<nField << "]: " << instruction->getIdentity().name() << std::endl;
     }
-    source.beginField(instruction->getIdentity()->name());
+    source.beginField(instruction->getIdentity().name());
     (void)instruction->decode(source, pmap, *this, messageBuilder);
   }
 }

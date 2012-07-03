@@ -14,8 +14,7 @@ using namespace ::QuickFAST::Codecs;
 
 FieldInstruction::FieldInstruction(
       const std::string & name, const std::string & fieldNamespace)
-  : mutableIdentity_(new Messages::FieldIdentity(name, fieldNamespace))
-  , identity_(mutableIdentity_)
+  : identity_(name, fieldNamespace)
   , fieldOp_(new FieldOpNop)
   , presenceMapBitsUsed_(0)
   , mandatory_(true)
@@ -24,8 +23,7 @@ FieldInstruction::FieldInstruction(
 }
 
 FieldInstruction::FieldInstruction()
-  : mutableIdentity_(new Messages::FieldIdentity)
-  , identity_(mutableIdentity_)
+  : identity_()
   , fieldOp_(new FieldOpNop)
   , presenceMapBitsUsed_(0)
   , mandatory_(true)
@@ -102,7 +100,7 @@ FieldInstruction::decodeConstant(
   Codecs::Decoder & decoder,
   Messages::ValueMessageBuilder & /*fieldSet*/) const
 {
-  decoder.reportFatal("[ERR S2]", "Const Field Operator not supported for this data type.", *identity_);
+  decoder.reportFatal("[ERR S2]", "Const Field Operator not supported for this data type.", identity_);
 }
 
 void
@@ -112,7 +110,7 @@ FieldInstruction::decodeDefault(
   Codecs::Decoder & decoder,
   Messages::ValueMessageBuilder & /*fieldSet*/) const
 {
-  decoder.reportFatal("[ERR S2]", "Default Field Operator not supported for this data type.", *identity_);
+  decoder.reportFatal("[ERR S2]", "Default Field Operator not supported for this data type.", identity_);
 }
 
 void
@@ -122,7 +120,7 @@ FieldInstruction::decodeCopy(
     Codecs::Decoder & decoder,
     Messages::ValueMessageBuilder & /*fieldSet*/) const
 {
-  decoder.reportFatal("[ERR S2]", "Copy Field Operator not supported for this data type.", *identity_);
+  decoder.reportFatal("[ERR S2]", "Copy Field Operator not supported for this data type.", identity_);
 }
 
 void
@@ -132,7 +130,7 @@ FieldInstruction::decodeCopy(
   Codecs::Decoder & decoder,
   Messages::ValueMessageBuilder & /*fieldSet*/) const
 {
-  decoder.reportFatal("[ERR U93]", "Copy with specific presence map bit not supported for this data type.", *identity_);
+  decoder.reportFatal("[ERR U93]", "Copy with specific presence map bit not supported for this data type.", identity_);
 }
 
 
@@ -143,7 +141,7 @@ FieldInstruction::decodeDelta(
   Codecs::Decoder & decoder,
   Messages::ValueMessageBuilder & /*fieldSet*/) const
 {
-  decoder.reportFatal("[ERR S2]", "Delta Field Operator not supported for this data type.", *identity_);
+  decoder.reportFatal("[ERR S2]", "Delta Field Operator not supported for this data type.", identity_);
 }
 
 void
@@ -153,7 +151,7 @@ FieldInstruction::decodeIncrement(
   Codecs::Decoder & decoder,
   Messages::ValueMessageBuilder & /*fieldSet*/) const
 {
-  decoder.reportFatal("[ERR S2]", "Increment Field Operator not supported for this data type.", *identity_);
+  decoder.reportFatal("[ERR S2]", "Increment Field Operator not supported for this data type.", identity_);
 }
 
 void
@@ -163,7 +161,7 @@ FieldInstruction::decodeIncrement(
   Codecs::Decoder & decoder,
   Messages::ValueMessageBuilder & /*fieldSet*/) const
 {
-  decoder.reportFatal("[ERR U93]", "Increment with specific presence map bit not supported for this data type.", *identity_);
+  decoder.reportFatal("[ERR U93]", "Increment with specific presence map bit not supported for this data type.", identity_);
 }
 
 void
@@ -173,7 +171,7 @@ FieldInstruction::decodeTail(
   Codecs::Decoder & decoder,
   Messages::ValueMessageBuilder & /*fieldSet*/) const
 {
-  decoder.reportFatal("[ERR S2]", "Tail Field Operator not supported for this data type.", *identity_);
+  decoder.reportFatal("[ERR S2]", "Tail Field Operator not supported for this data type.", identity_);
 }
 
 void
@@ -183,7 +181,7 @@ FieldInstruction::encodeConstant(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & /*fieldSet*/) const
 {
-  encoder.reportFatal("[ERR S2]", "Constant Field Operator not supported for this data type.", *identity_);
+  encoder.reportFatal("[ERR S2]", "Constant Field Operator not supported for this data type.", identity_);
 }
 
 
@@ -194,7 +192,7 @@ FieldInstruction::encodeDefault(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & /*fieldSet*/) const
 {
-  encoder.reportFatal("[ERR S2]", "Default Field Operator not supported for this data type.", *identity_);
+  encoder.reportFatal("[ERR S2]", "Default Field Operator not supported for this data type.", identity_);
 }
 
 
@@ -205,7 +203,7 @@ FieldInstruction::encodeCopy(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & /*fieldSet*/) const
 {
-  encoder.reportFatal("[ERR S2]", "Copy Field Operator not supported for this data type.", *identity_);
+  encoder.reportFatal("[ERR S2]", "Copy Field Operator not supported for this data type.", identity_);
 }
 
 void
@@ -215,7 +213,7 @@ FieldInstruction::encodeDelta(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & /*fieldSet*/) const
 {
-  encoder.reportFatal("[ERR S2]", "Delta Field Operator not supported for this data type.", *identity_);
+  encoder.reportFatal("[ERR S2]", "Delta Field Operator not supported for this data type.", identity_);
 }
 
 void
@@ -225,7 +223,7 @@ FieldInstruction::encodeIncrement(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & /*fieldSet*/) const
 {
-  encoder.reportFatal("[ERR S2]", "Increment Field Operator not supported for this data type.", *identity_);
+  encoder.reportFatal("[ERR S2]", "Increment Field Operator not supported for this data type.", identity_);
 }
 
 void
@@ -235,7 +233,7 @@ FieldInstruction::encodeTail(
   Codecs::Encoder & encoder,
   const Messages::MessageAccessor & /*fieldSet*/) const
 {
-  encoder.reportFatal("[ERR S2]", "Tail Field Operator not supported for this data type.", *identity_);
+  encoder.reportFatal("[ERR S2]", "Tail Field Operator not supported for this data type.", identity_);
 }
 
 bool
@@ -325,8 +323,8 @@ FieldInstruction::indexDictionaries(
     dictionaryName,
    typeName,
     typeNamespace,
-    identity_->getLocalName(),
-    identity_->getNamespace());
+    identity_.getLocalName(),
+    identity_.getNamespace());
 }
 
 void
@@ -818,7 +816,7 @@ FieldInstruction::display(std::ostream & output, size_t indent) const
   std::string elementName = ValueType::typeName(fieldInstructionType());
 
   output << std::endl << indentString << "<" << elementName;
-  identity_->display(output);
+  identity_.display(output);
   if(!isMandatory())
   {
     output << " presence=\"optional\"";
@@ -841,7 +839,7 @@ FieldInstruction::display(std::ostream & output, size_t indent) const
     output << "/>";
   }
   displayBody(output, indent + 2);
-  output << std::endl << indentString << "</" << elementName << "><!-- " << identity_->getLocalName() << "-->";
+  output << std::endl << indentString << "</" << elementName << "><!-- " << identity_.getLocalName() << "-->";
 }
 
 void

@@ -42,61 +42,61 @@ PerformanceBuilder::getApplicationTypeNs()const
 }
 
 void
-PerformanceBuilder::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int64 value)
+PerformanceBuilder::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const int64 value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value)
+PerformanceBuilder::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const uint64 value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int32 value)
+PerformanceBuilder::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const int32 value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value)
+PerformanceBuilder::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const uint32 value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int16 value)
+PerformanceBuilder::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const int16 value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value)
+PerformanceBuilder::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const uint16 value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int8 value)
+PerformanceBuilder::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const int8 value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uchar value)
+PerformanceBuilder::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const uchar value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value)
+PerformanceBuilder::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const Decimal& value)
 {
   ++fieldCount_;
 }
 
 void
-PerformanceBuilder::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length)
+PerformanceBuilder::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const unsigned char * value, size_t length)
 {
   ++fieldCount_;
 }
@@ -125,11 +125,11 @@ PerformanceBuilder::ignoreMessage(Messages::ValueMessageBuilder & messageBuilder
 
 Messages::ValueMessageBuilder &
 PerformanceBuilder::startSequence(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t fieldCount,
-  Messages::FieldIdentityCPtr & lengthIdentity,
+  const Messages::FieldIdentity & lengthIdentity,
   size_t length)
 {
   ++sequenceCount_;
@@ -138,7 +138,7 @@ PerformanceBuilder::startSequence(
 
 void
 PerformanceBuilder::endSequence(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   Messages::ValueMessageBuilder & sequenceBuilder)
 {
 }
@@ -160,7 +160,7 @@ PerformanceBuilder::endSequenceEntry(Messages::ValueMessageBuilder & entry)
 
 Messages::ValueMessageBuilder &
 PerformanceBuilder::startGroup(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t size)
@@ -171,7 +171,7 @@ PerformanceBuilder::startGroup(
 
 void
 PerformanceBuilder::endGroup(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   Messages::ValueMessageBuilder & groupBuilder)
 {
 }

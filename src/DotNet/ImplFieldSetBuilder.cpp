@@ -45,7 +45,7 @@ ImplFieldSetBuilder::reset(size_t size)
 
 void
 ImplFieldSetBuilder::addValue(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   ValueType::Type type, const int64 value)
 {
   ImplField & field = fieldSet_->append();
@@ -55,7 +55,7 @@ ImplFieldSetBuilder::addValue(
 
 void
 ImplFieldSetBuilder::addValue(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   ValueType::Type type,
   const uint64 value)
 {
@@ -66,7 +66,7 @@ ImplFieldSetBuilder::addValue(
 
 void
 ImplFieldSetBuilder::addValue(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   ValueType::Type type,
   const int32 value)
 {
@@ -77,7 +77,7 @@ ImplFieldSetBuilder::addValue(
 
 void
 ImplFieldSetBuilder::addValue(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   ValueType::Type type,
   const uint32 value)
 {
@@ -88,7 +88,7 @@ ImplFieldSetBuilder::addValue(
 
 void
 ImplFieldSetBuilder::addValue(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   ValueType::Type type,
   const int16 value)
 {
@@ -99,7 +99,7 @@ ImplFieldSetBuilder::addValue(
 
 void
 ImplFieldSetBuilder::addValue(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   ValueType::Type type,
   const uint16 value)
 {
@@ -111,7 +111,7 @@ ImplFieldSetBuilder::addValue(
 
 void
 ImplFieldSetBuilder::addValue(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   ValueType::Type type,
   const int8 value)
 {
@@ -123,7 +123,7 @@ ImplFieldSetBuilder::addValue(
 
 void
 ImplFieldSetBuilder::addValue(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   ValueType::Type type,
   const uchar value)
 {
@@ -135,7 +135,7 @@ ImplFieldSetBuilder::addValue(
 
 void
 ImplFieldSetBuilder::addValue(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   ValueType::Type type,
   const Decimal& value)
 {
@@ -147,7 +147,7 @@ ImplFieldSetBuilder::addValue(
 
 void
 ImplFieldSetBuilder::addValue(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   ValueType::Type type,
   const unsigned char * value,
   size_t length)
@@ -196,11 +196,11 @@ ImplFieldSetBuilder::ignoreMessage(Messages::ValueMessageBuilder & messageBuilde
 
 Messages::ValueMessageBuilder &
 ImplFieldSetBuilder::startSequence(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t fieldCount,
-  Messages::FieldIdentityCPtr & lengthIdentity,
+  const Messages::FieldIdentity &  lengthIdentity,
   size_t length)
 {
   if(!sequenceBuilder_)
@@ -213,7 +213,7 @@ ImplFieldSetBuilder::startSequence(
 
 void
 ImplFieldSetBuilder::endSequence(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   Messages::ValueMessageBuilder & sequenceBuilder)
 {
   ImplField & field = fieldSet_->append();
@@ -224,7 +224,7 @@ ImplFieldSetBuilder::endSequence(
 
 Messages::ValueMessageBuilder &
 ImplFieldSetBuilder::startGroup(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t size)
@@ -239,7 +239,7 @@ ImplFieldSetBuilder::startGroup(
 
 void
 ImplFieldSetBuilder::endGroup(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   Messages::ValueMessageBuilder & groupBuilder)
 {
   ImplField & field = fieldSet_->append();

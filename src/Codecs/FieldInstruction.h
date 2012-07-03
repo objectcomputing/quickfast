@@ -73,21 +73,21 @@ namespace QuickFAST{
       /// @param id is the id for this field.
       void setId(const field_id_t & id)
       {
-        mutableIdentity_->setId(id);
+        identity_.setId(id);
       }
 
       /// @brief set the name of this field instruction after construction
       /// @param name is the localname for this field
       void setName(const std::string & name)
       {
-        mutableIdentity_->setName(name);
+        identity_.setName(name);
       }
 
       /// @brief set the namespace of this field instruction after construction
       /// @param fieldNamespace qualifies localname
       void setNamespace(const std::string & fieldNamespace)
       {
-        mutableIdentity_->setNamespace(fieldNamespace);
+        identity_.setNamespace(fieldNamespace);
       }
 
       /// @brief Indicate that the field is mandatory in the application record.
@@ -132,7 +132,7 @@ namespace QuickFAST{
       /// @returns the field name.
       const std::string & getName() const
       {
-        return identity_->name();
+        return identity_.name();
       }
 
       /// @brief Retrieve the field's id
@@ -140,12 +140,12 @@ namespace QuickFAST{
       const field_id_t &
         getId()const
       {
-        return identity_->id();
+        return identity_.id();
       }
 
       /// @brief Retrieve the field's identity.
       /// @returns the field identity.
-      Messages::FieldIdentityCPtr & getIdentity()const
+      const Messages::FieldIdentity & getIdentity()const
       {
         return identity_;
       }
@@ -632,12 +632,8 @@ namespace QuickFAST{
       FieldInstruction(const FieldInstruction &);
       FieldInstruction & operator = (const FieldInstruction &);
 
-      Messages::FieldIdentityPtr mutableIdentity_;
     protected:
-      /// Identify information for the fields to be Xcoded by this instruction
-      /// Note the "mutable" applies to the pointer and permits assignement
-      /// The target identity is still immutable
-      mutable Messages::FieldIdentityCPtr identity_;
+      Messages::FieldIdentity identity_;
       /// Application type associated with this instruction
       std::string applicationType_;
       /// Namespace in which the application type is defined.

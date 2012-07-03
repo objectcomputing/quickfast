@@ -203,7 +203,7 @@ namespace QuickFAST
       virtual void reportWarning(
         const std::string & errorCode,
         const std::string & message,
-        const Messages::FieldIdentity & identity);
+        const Messages::FieldIdentity  & identity);
 
       /// @brief Report a warning
       /// @param errorCode as defined in the FIX standard (or invented for QuickFAST)

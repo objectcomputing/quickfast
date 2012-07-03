@@ -80,8 +80,8 @@ MessageInterpreter::consumeMessage(Messages::Message & message)
   recordCount_ += 1;
   if(!silent_)
   {
-    out_ << "Record #" << recordCount_ << ' ' << std::flush;
     boost::mutex::scoped_lock lock(ConsoleLock::consoleMutex);
+    out_ << "Record #" << recordCount_ << ' ' << std::flush;
     formatter_.formatMessage(message);
     out_ << std::endl;
   }

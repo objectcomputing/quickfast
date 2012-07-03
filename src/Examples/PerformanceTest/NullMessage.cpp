@@ -26,72 +26,72 @@ NullMessage::NullMessage(const NullMessage & rhs)
 }
 
 void
-NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int64 value)
+NullMessage::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const int64 value)
 {
   ++ size_;
 }
 
 void
-NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value)
+NullMessage::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const uint64 value)
 {
   ++ size_;
 }
 
 void
-NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int32 value)
+NullMessage::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const int32 value)
 {
   ++ size_;
 }
 
 void
-NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value)
+NullMessage::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const uint32 value)
 {
   ++ size_;
 }
 
 void
-NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int16 value)
+NullMessage::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const int16 value)
 {
   ++ size_;
 }
 
 void
-NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value)
+NullMessage::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const uint16 value)
 {
   ++ size_;
 }
 
 void
-NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int8 value)
+NullMessage::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const int8 value)
 {
   ++ size_;
 }
 
 void
-NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uchar value)
+NullMessage::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const uchar value)
 {
   ++ size_;
 }
 
 void
-NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value)
+NullMessage::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const Decimal& value)
 {
   ++ size_;
 }
 
 void
-NullMessage::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length)
+NullMessage::addValue(const Messages::FieldIdentity & identity, ValueType::Type type, const unsigned char * value, size_t length)
 {
   ++ size_;
 }
 
 Messages::ValueMessageBuilder &
 NullMessage::startSequence(
-  Messages::FieldIdentityCPtr & /*identity*/,
+  const Messages::FieldIdentity & /*identity*/,
   const std::string & /*applicationType*/,
   const std::string & /*applicationTypeNamespace*/,
   size_t /*fieldCount*/,
-  Messages::FieldIdentityCPtr & /*lengthIdentity*/,
+  const Messages::FieldIdentity & /*lengthIdentity*/,
   size_t /*length*/)
 {
   throw QuickFAST::TemplateDefinitionError("NullMessage does not use Sequences");
@@ -113,7 +113,7 @@ NullMessage::endSequenceEntry(Messages::ValueMessageBuilder & entry)
 }
 
 void
-NullMessage::endSequence( Messages::FieldIdentityCPtr & identity, Messages::ValueMessageBuilder & )
+NullMessage::endSequence( const Messages::FieldIdentity & identity, Messages::ValueMessageBuilder & )
 {
   throw QuickFAST::TemplateDefinitionError("NullMessage does not use Sequences");
 }
@@ -122,7 +122,7 @@ NullMessage::endSequence( Messages::FieldIdentityCPtr & identity, Messages::Valu
 
 Messages::ValueMessageBuilder &
 NullMessage::startGroup(
-    Messages::FieldIdentityCPtr & identity,
+    const Messages::FieldIdentity & identity,
     const std::string & applicationType,
     const std::string & applicationTypeNamespace,
     size_t size)
@@ -132,7 +132,7 @@ NullMessage::startGroup(
 
 void
 NullMessage::endGroup(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity & identity,
   Messages::ValueMessageBuilder & entry)
 {
   throw QuickFAST::TemplateDefinitionError("NullMessage does not use Group");

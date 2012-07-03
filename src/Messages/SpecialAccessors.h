@@ -108,7 +108,7 @@ namespace QuickFAST
     public:
       /// @brief construct with the identity and value of the field to be contained in the "record"
       SingleFieldAccessor(
-          Messages::FieldIdentityCPtr & identity,
+          const Messages::FieldIdentity & identity,
           const Messages::FieldCPtr & field);
 
       /////////////
@@ -131,7 +131,7 @@ namespace QuickFAST
 
     inline
     SingleFieldAccessor::SingleFieldAccessor(
-        Messages::FieldIdentityCPtr & identity,
+        const Messages::FieldIdentity & identity,
         const Messages::FieldCPtr & field)
       : messageField_(identity, field)
     {
@@ -140,7 +140,7 @@ namespace QuickFAST
     inline bool
     SingleFieldAccessor::isPresent(const FieldIdentity & identity)const
     {
-      return identity == * messageField_.getIdentity();
+      return identity == messageField_.getIdentity();
     }
     inline bool
     SingleFieldAccessor::getUnsignedInteger(const FieldIdentity & identity, ValueType::Type type, uint64 & value)const

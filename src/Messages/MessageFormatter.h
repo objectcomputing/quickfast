@@ -32,13 +32,13 @@ namespace QuickFAST
       /// @param identity identifies this sequence
       /// @param field is the field object containing the sequence
       void formatSequence(
-        const Messages::FieldIdentityCPtr & identity,
+        const Messages::FieldIdentity & identity,
         const Messages::FieldCPtr & field);
       /// @brief Format a group
       /// @param identity identifies this group
       /// @param field is the field object containing the group
       void formatGroup(
-        const Messages::FieldIdentityCPtr & identity,
+        const Messages::FieldIdentity & identity,
         const Messages::FieldCPtr & field);
 
       /// @brief Format a single field

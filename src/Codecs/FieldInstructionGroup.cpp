@@ -106,14 +106,14 @@ FieldInstructionGroup::encodeNop(
   // Note that applications may support merging groups
   // by returning true from getGroup but using the same accessor.
   const Messages::MessageAccessor * group;
-  if(messageAccessor.getGroup(*identity_, group))
+  if(messageAccessor.getGroup(identity_, group))
   {
     if(! isMandatory())
     {
       pmap.setNextField(true);
     }
     encoder.encodeGroup(destination, segmentBody_, *group);
-    messageAccessor.endGroup(*identity_, group);
+    messageAccessor.endGroup(identity_, group);
   }
   else
   {

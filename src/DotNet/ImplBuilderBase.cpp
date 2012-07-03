@@ -48,61 +48,61 @@ ImplBuilderBase::getApplicationTypeNs()const
 }
 
 void
-ImplBuilderBase::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int64 value)
+ImplBuilderBase::addValue(const Messages::FieldIdentity &  identity, ValueType::Type type, const int64 value)
 {
   throw std::logic_error("Unexpected call to MessageBuilder::addValue");
 }
 
 void
-ImplBuilderBase::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value)
+ImplBuilderBase::addValue(const Messages::FieldIdentity &  identity, ValueType::Type type, const uint64 value)
 {
   throw std::logic_error("Unexpected call to MessageBuilder::addValue");
 }
 
 void
-ImplBuilderBase::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int32 value)
+ImplBuilderBase::addValue(const Messages::FieldIdentity &  identity, ValueType::Type type, const int32 value)
 {
   throw std::logic_error("Unexpected call to MessageBuilder::addValue");
 }
 
 void
-ImplBuilderBase::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value)
+ImplBuilderBase::addValue(const Messages::FieldIdentity &  identity, ValueType::Type type, const uint32 value)
 {
   throw std::logic_error("Unexpected call to MessageBuilder::addValue");
 }
 
 void
-ImplBuilderBase::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int16 value)
+ImplBuilderBase::addValue(const Messages::FieldIdentity &  identity, ValueType::Type type, const int16 value)
 {
   throw std::logic_error("Unexpected call to MessageBuilder::addValue");
 }
 
 void
-ImplBuilderBase::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value)
+ImplBuilderBase::addValue(const Messages::FieldIdentity &  identity, ValueType::Type type, const uint16 value)
 {
   throw std::logic_error("Unexpected call to MessageBuilder::addValue");
 }
 
 void
-ImplBuilderBase::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const int8 value)
+ImplBuilderBase::addValue(const Messages::FieldIdentity &  identity, ValueType::Type type, const int8 value)
 {
   throw std::logic_error("Unexpected call to MessageBuilder::addValue");
 }
 
 void
-ImplBuilderBase::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const uchar value)
+ImplBuilderBase::addValue(const Messages::FieldIdentity &  identity, ValueType::Type type, const uchar value)
 {
   throw std::logic_error("Unexpected call to MessageBuilder::addValue");
 }
 
 void
-ImplBuilderBase::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value)
+ImplBuilderBase::addValue(const Messages::FieldIdentity &  identity, ValueType::Type type, const Decimal& value)
 {
   throw std::logic_error("Unexpected call to MessageBuilder::addValue");
 }
 
 void
-ImplBuilderBase::addValue(Messages::FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length)
+ImplBuilderBase::addValue(const Messages::FieldIdentity &  identity, ValueType::Type type, const unsigned char * value, size_t length)
 {
   throw std::logic_error("Unexpected call to MessageBuilder::addValue");
 }
@@ -131,11 +131,11 @@ ImplBuilderBase::ignoreMessage(Messages::ValueMessageBuilder & messageBuilder)
 
 Messages::ValueMessageBuilder &
 ImplBuilderBase::startSequence(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t fieldCount,
-  Messages::FieldIdentityCPtr & lengthIdentity,
+  const Messages::FieldIdentity &  lengthIdentity,
   size_t length)
 {
   throw std::logic_error("Unexpected call to MessageBuilder::startSequence");
@@ -143,7 +143,7 @@ ImplBuilderBase::startSequence(
 
 void
 ImplBuilderBase::endSequence(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   Messages::ValueMessageBuilder & sequenceBuilder)
 {
   throw std::logic_error("Unexpected call to MessageBuilder::startSequenceEntry");
@@ -166,7 +166,7 @@ ImplBuilderBase::endSequenceEntry(Messages::ValueMessageBuilder & entry)
 
 Messages::ValueMessageBuilder &
 ImplBuilderBase::startGroup(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   const std::string & applicationType,
   const std::string & applicationTypeNamespace,
   size_t size)
@@ -176,7 +176,7 @@ ImplBuilderBase::startGroup(
 
 void
 ImplBuilderBase::endGroup(
-  Messages::FieldIdentityCPtr & identity,
+  const Messages::FieldIdentity &  identity,
   Messages::ValueMessageBuilder & groupBuilder)
 {
   throw std::logic_error("Unexpected call to MessageBuilder::endGroup");

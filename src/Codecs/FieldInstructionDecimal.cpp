@@ -88,7 +88,7 @@ FieldInstructionDecimal::decodeNop(
   else
   {
     exponent_t exponent = 0;
-    decodeSignedInteger(source, decoder, exponent, identity_->name());
+    decodeSignedInteger(source, decoder, exponent, identity_.name());
     if(!isMandatory())
     {
       if(checkNullInteger(exponent))
@@ -97,7 +97,7 @@ FieldInstructionDecimal::decodeNop(
       }
     }
     mantissa_t mantissa;
-    decodeSignedInteger(source, decoder, mantissa, identity_->name());
+    decodeSignedInteger(source, decoder, mantissa, identity_.name());
     Decimal value(mantissa, exponent);
     accessor.addValue(
       identity_,
@@ -135,7 +135,7 @@ FieldInstructionDecimal::decodeDefault(
   if(pmap.checkNextField())
   {
     exponent_t exponent = 0;
-    decodeSignedInteger(source, decoder, exponent, identity_->name());
+    decodeSignedInteger(source, decoder, exponent, identity_.name());
     if(!isMandatory())
     {
       if(checkNullInteger(exponent))
@@ -144,7 +144,7 @@ FieldInstructionDecimal::decodeDefault(
       }
     }
     mantissa_t mantissa;
-    decodeSignedInteger(source, decoder, mantissa, identity_->name());
+    decodeSignedInteger(source, decoder, mantissa, identity_.name());
     Decimal value(mantissa, exponent);
     accessor.addValue(
       identity_,
@@ -162,7 +162,7 @@ FieldInstructionDecimal::decodeDefault(
     }
     else if(isMandatory())
     {
-      decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.", *identity_);
+      decoder.reportFatal("[ERR D5]", "Mandatory default operator with no value.", identity_);
     }
   }
 }
@@ -179,10 +179,10 @@ FieldInstructionDecimal::decodeCopy(
   mantissa_t mantissa = 0;
   if(pmap.checkNextField())
   {
-    decodeSignedInteger(source, decoder, exponent, identity_->name());
+    decodeSignedInteger(source, decoder, exponent, identity_.name());
     if(isMandatory())
     {
-      decodeSignedInteger(source, decoder, mantissa, identity_->name());
+      decodeSignedInteger(source, decoder, mantissa, identity_.name());
       Decimal value(mantissa, exponent, false);
       accessor.addValue(
         identity_,
@@ -199,7 +199,7 @@ FieldInstructionDecimal::decodeCopy(
       }
       else
       {
-        decodeSignedInteger(source, decoder, mantissa, identity_->name());
+        decodeSignedInteger(source, decoder, mantissa, identity_.name());
         Decimal value(mantissa, exponent, false);
         accessor.addValue(
           identity_,
@@ -230,7 +230,7 @@ FieldInstructionDecimal::decodeCopy(
       {
         if(isMandatory())
         {
-          decoder.reportFatal("[ERR D5]", "Copy operator missing mandatory Decimal field/no initial value", *identity_);
+          decoder.reportFatal("[ERR D5]", "Copy operator missing mandatory Decimal field/no initial value", identity_);
         }
       }
     }
@@ -254,7 +254,7 @@ FieldInstructionDecimal::decodeDelta(
 {
   PROFILE_POINT("decimal::decodeDelta");
   int64 exponentDelta;
-  decodeSignedInteger(source, decoder, exponentDelta, identity_->name(), true);
+  decodeSignedInteger(source, decoder, exponentDelta, identity_.name(), true);
   if(!isMandatory())
   {
     if(checkNullInteger(exponentDelta))
@@ -264,7 +264,7 @@ FieldInstructionDecimal::decodeDelta(
     }
   }
   int64 mantissaDelta;
-  decodeSignedInteger(source, decoder, mantissaDelta, identity_->name(), true);
+  decodeSignedInteger(source, decoder, mantissaDelta, identity_.name(), true);
 
   Decimal value(typedValue_);
   (void)fieldOp_->getDictionaryValue(decoder, value);
@@ -311,7 +311,7 @@ FieldInstructionDecimal::encodeNop(
 {
   // get the value from the application data
   Decimal value;
-  if(accessor.getDecimal(*identity_, ValueType::DECIMAL, value))
+  if(accessor.getDecimal(identity_, ValueType::DECIMAL, value))
   {
     exponent_t exponent = value.getExponent();
     mantissa_t mantissa = value.getMantissa();
@@ -361,7 +361,7 @@ FieldInstructionDecimal::encodeNop(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", identity_);
     }
     if(exponentInstruction_)
     {
@@ -390,11 +390,11 @@ FieldInstructionDecimal::encodeConstant(
   {
     // get the value from the application data
     Decimal value;
-    if(accessor.getDecimal(*identity_, ValueType::DECIMAL, value))
+    if(accessor.getDecimal(identity_, ValueType::DECIMAL, value))
     {
       if(value != typedValue_)
       {
-        encoder.reportFatal("[ERR U10]", "Constant value does not match application data.", *identity_);
+        encoder.reportFatal("[ERR U10]", "Constant value does not match application data.", identity_);
       }
 
       pmap.setNextField(true);
@@ -415,7 +415,7 @@ FieldInstructionDecimal::encodeDefault(
 {
   // get the value from the application data
   Decimal value;
-  if(accessor.getDecimal(*identity_, ValueType::DECIMAL, value))
+  if(accessor.getDecimal(identity_, ValueType::DECIMAL, value))
   {
     if(typedValueIsDefined_ &&
       value == typedValue_)
@@ -440,7 +440,7 @@ FieldInstructionDecimal::encodeDefault(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", identity_);
     }
     // if there is a default value
     // you have to cancel this by sending a null.
@@ -485,7 +485,7 @@ FieldInstructionDecimal::encodeCopy(
 
   // get the value from the application data
   Decimal value;
-  if(accessor.getDecimal(*identity_, ValueType::DECIMAL, value))
+  if(accessor.getDecimal(identity_, ValueType::DECIMAL, value))
   {
     if(previousStatus == Context::OK_VALUE && previousValue == value)
     {
@@ -509,7 +509,7 @@ FieldInstructionDecimal::encodeCopy(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory decimal field.", *identity_);
+      encoder.reportFatal("[ERR U01]", "Missing mandatory decimal field.", identity_);
       // if reportFatal returns we're being lax about encoding rules
       // let the copy happen.
       pmap.setNextField(false);
@@ -553,7 +553,7 @@ FieldInstructionDecimal::encodeDelta(
 
   // get the value from the application data
   Decimal value;
-  if(accessor.getDecimal(*identity_, ValueType::DECIMAL, value))
+  if(accessor.getDecimal(identity_, ValueType::DECIMAL, value))
   {
     int32 exponentDelta = static_cast<int32>(value.getExponent()) - int64(previousValue.getExponent());
     if(!isMandatory())
@@ -577,7 +577,7 @@ FieldInstructionDecimal::encodeDelta(
   {
     if(isMandatory())
     {
-      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", *identity_);
+      encoder.reportFatal("[ERR U01]", "Missing mandatory field.", identity_);
     }
     destination.putByte(nullInteger);
   }

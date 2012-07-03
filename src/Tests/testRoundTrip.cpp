@@ -34,51 +34,66 @@
 using namespace QuickFAST;
 
 namespace{
+  Messages::FieldIdentity identity_timestamp("timestamp");
+  Messages::FieldIdentity identity_srcId("srcId");
+  Messages::FieldIdentity identity_seqNum("seqNum");
+  Messages::FieldIdentity identity_isix("isix");
+  Messages::FieldIdentity identity_isin("isin");
+  Messages::FieldIdentity identity_exchId("exchId");
+  Messages::FieldIdentity identity_instGrp("instGrp");
+  Messages::FieldIdentity identity_instTypCod("instTypCod");
+  Messages::FieldIdentity identity_currCode("currCode");
+  Messages::FieldIdentity identity_ticSiz("ticSiz");
+  Messages::FieldIdentity identity_setId("setId");
+  Messages::FieldIdentity identity_MDFeedTypes("MDFeedTypes");
+// We don't need a fieldIdentity for the length field.
+//  Messages::FieldIdentity identity_noOfStreams("noOfStreams");
+  Messages::FieldIdentity identity_streamType("streamType");
+  Messages::FieldIdentity identity_streamService("streamService");
+  Messages::FieldIdentity identity_inetAddr("inetAddr");
+  Messages::FieldIdentity identity_port("port");
+  Messages::FieldIdentity identity_mktDepth("mktDepth");
+  Messages::FieldIdentity identity_mdBookType("mdBookType");
+  
+  Messages::FieldIdentity lengthIdentity("noOfStreams","");
+}
+
+namespace{
   void validateMessage1(Messages::Message & message)
   {
     BOOST_CHECK_EQUAL(message.getApplicationType(), "instrumentreferencedata");
     Messages::FieldCPtr value;
 
-    //msg.addField(identity_timestamp, Messages::FieldUInt32::create(1));
     BOOST_CHECK(message.getField("timestamp", value));
     BOOST_CHECK_EQUAL(value->toUInt32(), 1);
 
-    //msg.addField(identity_srcId, Messages::FieldUInt32::create(2));
     BOOST_CHECK(message.getField("srcId", value));
     BOOST_CHECK_EQUAL(value->toUInt32(), 2);
 
-    //msg.addField(identity_seqNum, Messages::FieldUInt32::create(3));
     BOOST_CHECK(message.getField("seqNum", value));
     BOOST_CHECK_EQUAL(value->toUInt32(), 3);
 
-    //msg.addField(identity_isix, Messages::FieldUInt32::create(4));
     BOOST_CHECK(message.getField("isix", value));
     BOOST_CHECK_EQUAL(value->toUInt32(), 4);
 
-    //msg.addField(identity_isin, Messages::FieldAscii::create("isin"));
     BOOST_CHECK(message.getField("isin", value));
     BOOST_CHECK_EQUAL(value->toAscii(), "isin");
 
-    //msg.addField(identity_exchId, Messages::FieldAscii::create("exchId"));
     BOOST_CHECK(message.getField("exchId", value));
     BOOST_CHECK_EQUAL(value->toAscii(), "exchId");
 
-    //msg.addField(identity_instGrp, Messages::FieldAscii::create("instGrp"));
     BOOST_CHECK(message.getField("instGrp", value));
     BOOST_CHECK_EQUAL(value->toAscii(), "instGrp");
 
-    //msg.addField(identity_instTypCod, Messages::FieldAscii::create("instTypCod"));
     BOOST_CHECK(message.getField("instTypCod", value));
     BOOST_CHECK_EQUAL(value->toAscii(), "instTypCod");
 
-    //msg.addField(identity_currCode, Messages::FieldAscii::create("currCode"));
     BOOST_CHECK(message.getField("currCode", value));
     BOOST_CHECK_EQUAL(value->toAscii(), "currCode");
 
-    //msg.addField(identity_ticSiz, Messages::FieldDecimal::create(Decimal(123, -1)));
     BOOST_CHECK(message.getField("ticSiz", value));
     BOOST_CHECK_EQUAL(value->toDecimal(), Decimal(123, -1));
-    //msg.addField(identity_setId, Messages::FieldUInt32::create(5));
+
     BOOST_CHECK(message.getField("setId", value));
     BOOST_CHECK_EQUAL(value->toUInt32(), 5);
 
@@ -112,24 +127,19 @@ namespace{
 
     seqEntry = (*mdft)[1];
 
-    //entry->addField(identity_streamType, Messages::FieldAscii::create("streamType2"));
     BOOST_CHECK( seqEntry->getField("streamType", value));
     BOOST_CHECK_EQUAL(value->toAscii(), "streamType2");
 
-    //entry->addField(identity_streamService, Messages::FieldAscii::create("streamService2"));
     BOOST_CHECK( seqEntry->getField("streamService", value));
     BOOST_CHECK_EQUAL(value->toAscii(), "streamService2");
 
-    //entry->addField(identity_inetAddr, Messages::FieldAscii::create("inetAddr.org"));
     BOOST_CHECK( seqEntry->getField("inetAddr", value));
     BOOST_CHECK_EQUAL(value->toAscii(), "inetAddr.org");
 
-    //entry->addField(identity_port, Messages::FieldUInt32::create(2224));
     BOOST_CHECK( seqEntry->getField("port", value));
     BOOST_CHECK_EQUAL(value->toUInt32(), 2224);
     // optional field omitted
     BOOST_CHECK(!seqEntry->getField("mktDepth", value));
-    //entry->addField(identity_mdBookType, Messages::FieldUInt32::create(3));
     BOOST_CHECK(seqEntry->getField("mdBookType", value));
     BOOST_CHECK_EQUAL(value->toUInt32(), 3);
   }
@@ -199,27 +209,6 @@ BOOST_AUTO_TEST_CASE(testRoundTripSequenceNoPMAP)
   BOOST_CHECK(templateRegistry);
   BOOST_CHECK_EQUAL(templateRegistry->maxFieldCount(), 12);
 
-  Messages::FieldIdentityCPtr identity_timestamp = new Messages::FieldIdentity("timestamp");
-  Messages::FieldIdentityCPtr identity_srcId = new Messages::FieldIdentity("srcId");
-  Messages::FieldIdentityCPtr identity_seqNum = new Messages::FieldIdentity("seqNum");
-  Messages::FieldIdentityCPtr identity_isix = new Messages::FieldIdentity("isix");
-  Messages::FieldIdentityCPtr identity_isin = new Messages::FieldIdentity("isin");
-  Messages::FieldIdentityCPtr identity_exchId = new Messages::FieldIdentity("exchId");
-  Messages::FieldIdentityCPtr identity_instGrp = new Messages::FieldIdentity("instGrp");
-  Messages::FieldIdentityCPtr identity_instTypCod = new Messages::FieldIdentity("instTypCod");
-  Messages::FieldIdentityCPtr identity_currCode = new Messages::FieldIdentity("currCode");
-  Messages::FieldIdentityCPtr identity_ticSiz = new Messages::FieldIdentity("ticSiz");
-  Messages::FieldIdentityCPtr identity_setId = new Messages::FieldIdentity("setId");
-  Messages::FieldIdentityCPtr identity_MDFeedTypes = new Messages::FieldIdentity("MDFeedTypes");
-// We don't need a fieldIdentity for the length field.
-//  Messages::FieldIdentityCPtr identity_noOfStreams = new Messages::FieldIdentity("noOfStreams");
-  Messages::FieldIdentityCPtr identity_streamType = new Messages::FieldIdentity("streamType");
-  Messages::FieldIdentityCPtr identity_streamService = new Messages::FieldIdentity("streamService");
-  Messages::FieldIdentityCPtr identity_inetAddr = new Messages::FieldIdentity("inetAddr");
-  Messages::FieldIdentityCPtr identity_port = new Messages::FieldIdentity("port");
-  Messages::FieldIdentityCPtr identity_mktDepth = new Messages::FieldIdentity("mktDepth");
-  Messages::FieldIdentityCPtr identity_mdBookType = new Messages::FieldIdentity("mdBookType");
-
   Messages::MessagePtr msg(new Messages::Message(templateRegistry->maxFieldCount()));
 
 //   <uInt32 name=\"timestamp\" id=\"52\"><delta/></uInt32>"
@@ -247,10 +236,8 @@ BOOST_AUTO_TEST_CASE(testRoundTripSequenceNoPMAP)
 
 //   <sequence name=\"MDFeedTypes\">"
 //     <length name=\"noOfStreams\" id=\"1141\"/>"
-  Messages::FieldIdentityPtr lengthIdentity(new Messages::FieldIdentity("noOfStreams",""));
-  Messages::FieldIdentityCPtr cLengthIdentity(lengthIdentity);
-  lengthIdentity->setId("1141");
-  Messages::SequencePtr sequence_MDFeedTypes(new Messages::Sequence(cLengthIdentity, 2));
+  lengthIdentity.setId("1141");
+  Messages::SequencePtr sequence_MDFeedTypes(new Messages::Sequence(lengthIdentity, 2));
   Messages::FieldSetPtr entry(new Messages::FieldSet(6)); // todo Hardcoded 6?
 
 //     <string name=\"streamType\" id=\"1022\"/>"

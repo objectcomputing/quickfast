@@ -27,7 +27,7 @@ ImplSequenceBuilder::~ImplSequenceBuilder()
 #pragma unmanaged
 void
 ImplSequenceBuilder::initialize(
-  Messages::FieldIdentityCPtr & lengthIdentity,
+  const Messages::FieldIdentity & lengthIdentity,
   size_t length
   )
 {

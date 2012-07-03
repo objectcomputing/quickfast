@@ -359,10 +359,10 @@ DecoderConnection::configure(
       if(configuration.privateIOService())
       {
         ioService_.reset(new boost::asio::io_service);
-          *ioService_,
           receiver_.reset(new Communication::TCPReceiver(
-          configuration.hostName(),
-          configuration.portName()));
+            *ioService_,
+            configuration.hostName(),
+            configuration.portName()));
       }
       else
       {

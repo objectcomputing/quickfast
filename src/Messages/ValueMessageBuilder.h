@@ -33,62 +33,62 @@ namespace QuickFAST{
       /// @param identity identifies this field
       /// @param type is the type of data to be added
       /// @param value is the value to be assigned.
-      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int64 value) = 0;
+      virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const int64 value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param type is the type of data to be added
       /// @param value is the value to be assigned.
-      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint64 value) = 0;
+      virtual void addValue(const FieldIdentity& identity, ValueType::Type type, const uint64 value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param type is the type of data to be added
       /// @param value is the value to be assigned.
-      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int32 value) = 0;
+      virtual void addValue(const FieldIdentity& identity, ValueType::Type type, const int32 value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param type is the type of data to be added
       /// @param value is the value to be assigned.
-      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint32 value) = 0;
+      virtual void addValue(const FieldIdentity& identity, ValueType::Type type, const uint32 value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param type is the type of data to be added
       /// @param value is the value to be assigned.
-      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int16 value) = 0;
+      virtual void addValue(const FieldIdentity& identity, ValueType::Type type, const int16 value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param type is the type of data to be added
       /// @param value is the value to be assigned.
-      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uint16 value) = 0;
+      virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const uint16 value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param type is the type of data to be added
       /// @param value is the value to be assigned.
-      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const int8 value) = 0;
+      virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const int8 value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param type is the type of data to be added
       /// @param value is the value to be assigned.
-      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const uchar value) = 0;
+      virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const uchar value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param type is the type of data to be added
       /// @param value is the value to be assigned.
-      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const Decimal& value) = 0;
+      virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const Decimal& value) = 0;
       /// @brief Add a field to the set.
       ///
       /// @param identity identifies this field
       /// @param type is the type of data to be added
       /// @param value is the value to be assigned.
       /// @param length is the length of the string pointed to by value
-      virtual void addValue(FieldIdentityCPtr & identity, ValueType::Type type, const unsigned char * value, size_t length) = 0;
+      virtual void addValue(const FieldIdentity & identity, ValueType::Type type, const unsigned char * value, size_t length) = 0;
 
       /// @brief prepare to accept an entire message
       ///
@@ -123,11 +123,11 @@ namespace QuickFAST{
       /// @param lengthIdentity is the identity of the length field
       /// @param length is a count of how many entries will be in the sequence
       virtual ValueMessageBuilder & startSequence(
-        FieldIdentityCPtr & identity,
+        const FieldIdentity & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t fieldCount,
-        FieldIdentityCPtr & lengthIdentity,
+        const FieldIdentity & lengthIdentity,
         size_t length) = 0;
 
       /// @brief Complete the entire sequence.
@@ -137,7 +137,7 @@ namespace QuickFAST{
       /// @param identity identifies the sequence
       /// @param sequenceBuilder is the builder provided by startSequence
       virtual void endSequence(
-        FieldIdentityCPtr & identity,
+        const FieldIdentity & identity,
         ValueMessageBuilder & sequenceBuilder) = 0;
 
       /// @brief prepare to accept a single decoded sequence entry
@@ -170,7 +170,7 @@ namespace QuickFAST{
       /// @param size is the maximum number of fields to expect in the group
       /// @returns a ValueMessageBuilder to accumulate fields for this group (*this is ok)
       virtual ValueMessageBuilder & startGroup(
-        FieldIdentityCPtr & identity,
+        const FieldIdentity & identity,
         const std::string & applicationType,
         const std::string & applicationTypeNamespace,
         size_t size) = 0;
@@ -180,7 +180,7 @@ namespace QuickFAST{
       /// @param identity identifies the group
       /// @param groupBuilder is the message builder returned by startGroup
       virtual void endGroup(
-        FieldIdentityCPtr & identity,
+        const FieldIdentity & identity,
         ValueMessageBuilder & groupBuilder) = 0;
 
       /// @brief Notify builder that packets are missing
