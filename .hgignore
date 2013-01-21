@@ -1,8 +1,14 @@
 PrivateChangeLog
 testdata
 ^Output
+\.pdb$
+\.bak$
 \.ncb$
 \.sln$
 \.suo$
 /I386$
 \.vcproj
+/obj/
+s\.cmd
+cle\.cmd
+commit\.cmd
