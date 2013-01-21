@@ -102,22 +102,26 @@ namespace QuickFAST
           assert(readInProgress_);
           readInProgress_ = false;
           parent_.handleReceive(error, buffer, bytesReceived);
+          if(parent_.stopping_)
+          {
+            if(joined_)
+            {
+              // leave the multicast group
+              boost::asio::ip::multicast::leave_group leaveRequest(
+                multicastGroup_.to_v4(),
+                listenInterface_.to_v4());
+              socket_.set_option(leaveRequest);
+            }
+            socket_.close();
+          }
         }
 
         void stop()
         {
           try
           {
-            // leave the multicast group
-            if(joined_)
-            {
-              boost::asio::ip::multicast::leave_group leaveRequest(
-                multicastGroup_.to_v4(),
-                listenInterface_.to_v4());
-              socket_.set_option(leaveRequest);
-            }
             // attempt to cancel any receive requests in progress.
-            socket_.close();
+            socket_.cancel();
           }
           catch(...)
           {
@@ -307,18 +311,37 @@ namespace QuickFAST
       virtual bool initializeReceiver()
       {
         bool ok = true;
-        for(size_t nFeed = 0; ok && nFeed < feeds_.size(); ++nFeed)
+        size_t nFeed = 0;
+        try
         {
-          if(assembler_->wantLog(Common::Logger::QF_LOG_INFO))
+          for(nFeed = 0; ok && nFeed < feeds_.size(); ++nFeed)
           {
-            std::stringstream msg;
-            msg << "Joining multicast group for feed " << feeds_[nFeed]->name()
-              << ": " << feeds_[nFeed]->multicastGroup().to_string()
-              << " via interface " << feeds_[nFeed]->endpoint().address().to_string()
-              << ':' << feeds_[nFeed]->endpoint().port();
-            assembler_->logMessage(Common::Logger::QF_LOG_INFO, msg.str());
+            if(assembler_->wantLog(Common::Logger::QF_LOG_INFO))
+            {
+              std::stringstream msg;
+              msg << "Joining multicast group for feed " << feeds_[nFeed]->name()
+                << ": " << feeds_[nFeed]->multicastGroup().to_string()
+                << " via interface " << feeds_[nFeed]->endpoint().address().to_string()
+                << ':' << feeds_[nFeed]->endpoint().port();
+              assembler_->logMessage(Common::Logger::QF_LOG_INFO, msg.str());
+            }
+            ok = feeds_[nFeed]->initializeReceiver();
           }
-          ok = feeds_[nFeed]->initializeReceiver();
+        }
+        catch (const std::exception & exception)
+        {
+          ok = false;
+          std::stringstream msg;
+          msg << "Error " << exception.what()
+            << " joining multicast group ";
+          if(nFeed < feeds_.size())
+          {
+            msg << " for feed " << feeds_[nFeed]->name()
+                << ": " << feeds_[nFeed]->multicastGroup().to_string()
+                << " via interface " << feeds_[nFeed]->endpoint().address().to_string()
+                << ':' << feeds_[nFeed]->endpoint().port();
+          }
+          assembler_->logMessage(Common::Logger::QF_LOG_SERIOUS, msg.str());
         }
         if(!ok)
         {

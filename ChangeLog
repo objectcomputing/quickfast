@@ -1,3 +1,26 @@
+Mon Jan 21 21:50:25 UTC 2013 Dale Wilson <wilsond@ociweb.com>
+        * src\Application\DecoderConfiguration.h:
+        * src\Codecs\FixedSizeHeaderAnalyzer.cpp:
+        * src\Codecs\MulticastDecoder.cpp:
+        * src\Codecs\MulticastDecoder.h:
+        * src\Common\StringBuffer.h:
+        * src\Communication\MulticastReceiver.h:
+        * src\Communication\MulticastReceiverHandle.h:
+        * src\Communication\Receiver.h:
+        * src\Examples\Examples\ValueToFix.h:
+        * src\Messages\FieldSet.cpp:
+        * src\Messages\FieldSet.h:
+        * src\Tests\testErrorRecovery.cpp:
+        Change the default buffer size to 1500 bytes [Issue # 111]
+        Fix blockSize in HeaderAnalyzer for bigendian headers[Issue # 109]
+        Catch report exception from bind in MulticastDecoder [Issue # 108]
+        Separate bind IP address in MulticastReceiver[Issue # 81]
+        Reinterpret cast discards constness in StringBuffer [Issue # 110]
+        32 vs 64 bit issue in testErrorRecovery [Issue 112]
+        missing includes[Issue 112]
+        Pass identity by reference not value in FieldSet
+
+
 Tue Jul 03 19:42:31 UTC 2012 Dale Wilson <wilsond@ociweb.com>
         Respond to messages on QuickFAST list.
 

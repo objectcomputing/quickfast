@@ -112,13 +112,13 @@ namespace QuickFAST{
       /// @param builder to accept the decoded output
       /// @param bufferSize should be >= the largest expected packet
       /// @param bufferCount is how many buffers to allocate (minimum 2 suggested)
-      void start(Messages::ValueMessageBuilder & builder, size_t bufferSize=1400, size_t bufferCount=2);
+      void start(Messages::ValueMessageBuilder & builder, size_t bufferSize=1500, size_t bufferCount=2);
       /// @brief Start the decoding process.  Returns immediately
       /// @param builder to accept the decoded output
       /// @param packetHeaderAnalyzer is an object to analyze the packet headers (if any)
       /// @param bufferSize should be >= the largest expected packet
       /// @param bufferCount is how many buffers to allocate (minimum 2 suggested)
-      void start(Messages::ValueMessageBuilder & builder, HeaderAnalyzer & packetHeaderAnalyzer, size_t bufferSize=1400, size_t bufferCount=2);
+      void start(Messages::ValueMessageBuilder & builder, HeaderAnalyzer & packetHeaderAnalyzer, size_t bufferSize=1500, size_t bufferCount=2);
 
       /// @brief Start the decoding process.  Returns immediately
       /// @param builder to accept the decoded output
@@ -130,7 +130,7 @@ namespace QuickFAST{
         Messages::ValueMessageBuilder & builder,
         HeaderAnalyzer & packetHeaderAnalyzer,
         HeaderAnalyzer & messageHeaderAnalyzer,
-        size_t bufferSize =1400,
+        size_t bufferSize =1500,
         size_t bufferCount =2);
 
       /// @brief Run the event loop to accept incoming messages

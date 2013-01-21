@@ -84,7 +84,7 @@ namespace QuickFAST{
       /// @param bufferCount is how many input buffers to use
       void start(
         Communication::Assembler & assembler,
-        size_t bufferSize = 1400,
+        size_t bufferSize = 1500,
         size_t bufferCount = 2
         );
 

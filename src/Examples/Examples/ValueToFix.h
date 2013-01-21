@@ -7,6 +7,7 @@
 #ifndef VALUETOFIX_H
 #define VALUETOFIX_H
 #include <Messages/ValueMessageBuilder.h>
+#include <Messages/FieldIdentity.h>
 
 namespace QuickFAST{
   namespace Examples{

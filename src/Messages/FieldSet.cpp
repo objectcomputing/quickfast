@@ -103,7 +103,7 @@ FieldSet::addField(const FieldIdentity & identity, const FieldCPtr & value)
 }
 
 bool
-FieldSet::getField(const Messages::FieldIdentity identity, FieldCPtr & value) const
+FieldSet::getField(const Messages::FieldIdentity & identity, FieldCPtr & value) const
 {
   PROFILE_POINT("FieldSet::getField");
   for(size_t index = 0; index < used_; ++index)

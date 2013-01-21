@@ -100,7 +100,7 @@ MulticastDecoder::reset()
 void
 MulticastDecoder::start(
   Messages::ValueMessageBuilder & builder,
-  size_t bufferSize /*=1400*/,
+  size_t bufferSize /*=1500*/,
   size_t bufferCount /*=2*/)
 {
   builder_ = &builder;
@@ -123,7 +123,7 @@ void
 MulticastDecoder::start(
   Messages::ValueMessageBuilder & builder,
   HeaderAnalyzer & packetHeaderAnalyzer,
-  size_t bufferSize /*=1400*/,
+  size_t bufferSize /*=1500*/,
   size_t bufferCount /*=2*/)
 {
   builder_ = &builder;
@@ -147,7 +147,7 @@ MulticastDecoder::start(
   Messages::ValueMessageBuilder & builder,
   HeaderAnalyzer & packetHeaderAnalyzer,
   HeaderAnalyzer & messageHeaderAnalyzer,
-  size_t bufferSize /*=1400*/,
+  size_t bufferSize /*=1500*/,
   size_t bufferCount /*=2*/)
 {
   builder_ = &builder;

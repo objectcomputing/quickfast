@@ -23,7 +23,7 @@ namespace QuickFAST
     {
     public:
       Receiver()
-        : bufferSize_(1400)
+        : bufferSize_(1500)
         , paused_(false)
         , stopping_(false)
         , readsInProgress_(0)
@@ -52,7 +52,7 @@ namespace QuickFAST
       /// @returns true if service started successfully
       bool start(
         Assembler & assembler,
-        size_t bufferSize = 1400,
+        size_t bufferSize = 1500,
         size_t bufferCount = 2)
       {
         bool result = false;

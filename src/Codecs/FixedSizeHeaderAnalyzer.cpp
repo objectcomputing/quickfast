@@ -79,7 +79,7 @@ FixedSizeHeaderAnalyzer::analyzeHeader(DataSource & source, size_t & blockSize, 
           }
           if(swapNeeded_)
           {
-            blockSize |= (next & 0xFF) << (byteCount_ * 8);
+            blockSize_ |= (next & 0xFF) << (byteCount_ * 8);
           }
           else
           {

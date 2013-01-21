@@ -109,7 +109,7 @@ namespace QuickFAST
       , growCount_(0)
       , delegateString_(0)
     {
-      assign(rhs, std::strlen(reinterpret_cast<char *>(rhs)));
+      assign(rhs, std::strlen(reinterpret_cast<const char *>(rhs)));
     }
 
     /// @brief Construct from a C style null terminated string
