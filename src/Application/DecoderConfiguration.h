@@ -111,7 +111,7 @@ namespace QuickFAST{
         , assemblerType_(UNSPECIFIED_ASSEMBLER)
         , waitForCompleteMessage_(false)
         , receiverType_(UNSPECIFIED_RECEIVER)
-        , bufferSize_(1400)
+        , bufferSize_(1500)
         , bufferCount_(2)
         , nonstandard_(0)
         , privateIOService_(false)
