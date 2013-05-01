@@ -1,0 +1,34 @@
+// Copyright (c) 2009, 2010 Object Computing, Inc.
+// All rights reserved.
+// See the file license.txt for licensing information.
+//////////////////////////////////////////////////////
+// Use this mpb for applications that use QuickFAST
+// be sure to specify exeout. See also QuickFASTExeOut.mpb
+//
+// Applications should include src/common/QuickFAST.h
+//
+project : boost_base, boost_filesystem, boost_system, boost_thread{
+  requires += QuickFAST
+  includes += $(QUICKFAST_ROOT)/src
+
+  specific(prop:microsoft) {
+  // To make .NET happy, build libraries into directories based on build type
+    Release::libpaths += $(QUICKFAST_ROOT)/Output/Release
+    Debug::libpaths += $(QUICKFAST_ROOT)/Output/Debug  
+  } else {
+    libpaths += $(QUICKFAST_ROOT)/lib
+  }
+
+  specific(make) {
+    // FieldInstructionInteger generates spuriouswarnings based on 
+    // signed/unsigned template arguments.
+    cppflags += -Wtype-limits
+  }
+
+  specific(vc8) { // vc9 doesn't need this
+    macros += _WIN32_WINNT=0x0501
+  }
+
+  libs += QuickFAST
+  after += QuickFAST
+}
