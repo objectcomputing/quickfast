@@ -1,3 +1,10 @@
+Wed May  1 13:31:05 UTC 2013 Brian Johnson <johnsonb@ociweb.com>
+
+        * .hgignore
+          Added make and gcc build artifacts to ignore.
+        * src/QuickFAST.mpc
+          Changed to use xerces.mpb.
+
 Wed May  1 12:24:31 UTC 2013 Brian Johnson <johnsonb@ociweb.com>
 
         * src/Codecs/Context.h
