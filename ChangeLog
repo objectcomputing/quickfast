@@ -1,3 +1,12 @@
+Wed May  1 12:24:31 UTC 2013 Brian Johnson <johnsonb@ociweb.com>
+
+        * src/Codecs/Context.h
+        * src/Messages/MessageFormatter.h
+        * src/Messages/ValueMessageBuilder.h
+          Added needed dependencies after files were moved.
+        * src/Tests/testErrorRecovery.cpp
+          Added needed dependency and fixed reinterpret_cast calls.
+
 Tue Mar 20 19:39:29 UTC 2012 Dale Wilson <wilsond@ociweb.com>
         * .hgignore:
         * src\Application\DecoderConfiguration.h:

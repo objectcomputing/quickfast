@@ -6,6 +6,7 @@
 #endif
 #ifndef CONTEXT_H
 #define CONTEXT_H
+#include <Common/QuickFASTPch.h>
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
 #include <Common/Value.h>

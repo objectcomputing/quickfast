@@ -6,6 +6,7 @@
 #endif
 #ifndef MESSAGEFORMATTER_H
 #define MESSAGEFORMATTER_H
+#include <Common/QuickFASTPch.h>
 #include <Common/QuickFAST_Export.h>
 #include <Messages/FieldIdentity_fwd.h>
 #include <Messages/Message_fwd.h>
