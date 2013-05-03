@@ -1,10 +1,7 @@
-// Copyright (c) 2009, 2010, 2011 Object Computing, Inc.
+// Copyright (c) 2009, Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
-#ifdef _MSC_VER
-# pragma once
-#endif
 #ifndef ATOMICOPS_H
 #define ATOMICOPS_H
 
@@ -12,8 +9,10 @@
 
 #if defined(_WIN32)
 # include "windows.h"
+# include <intrin.h>
 # if defined(_MSC_VER)
 #   pragma intrinsic(_InterlockedCompareExchange)
+#   pragma intrinsic(_InterlockedCompareExchange64)
 // No intrinsic compare and swap pointer so we asm it below
 # endif
 #elif defined(__GNUC__)
@@ -154,6 +153,24 @@ namespace QuickFAST
     return __sync_sub_and_fetch(target, long(1));
 #else
     return atomic_dec_long(target)
+#endif
+  }
+
+  /// @brief compare and swap long longs
+  ///
+  /// @param target the long long to be updated
+  /// @param ifeq the expected value before updating
+  /// @param value the new value to be stored in target
+  inline
+  bool CASLongLong(long long volatile * target, long long ifeq, long long value)
+  {
+#if defined(_WIN32)
+    // Intel 486 and earlier not supported
+    return ifeq == _InterlockedCompareExchange64(target, value, ifeq);
+#elif defined(__GNUC__)
+    return __sync_bool_compare_and_swap(target, ifeq, value);
+#else
+    return ifeq == atomic_cas_ulong(target, ifeq, value);
 #endif
   }
 

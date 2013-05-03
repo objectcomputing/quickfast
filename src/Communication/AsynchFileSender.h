@@ -2,9 +2,6 @@
 // All rights reserved.
 // See the file license.txt for licensing information.
 //
-#ifdef _MSC_VER
-# pragma once
-#endif
 #ifndef ASYNCHFILESENDER_H
 #define ASYNCHFILESENDER_H
 #include <Common/QuickFAST_Export.h>
@@ -58,7 +55,7 @@ namespace QuickFAST
       /// started in a multithreaded environment.  By allowing the caller to
       /// specify an offset, this method give the caller control over the order
       /// of data in the file.
-      void sendAt(LinkedBuffer * buffer, size_t offset);
+      void sendAt(LinkedBuffer * buffer, long long offset);
 
       // Override Sender method
       virtual void close();
@@ -67,7 +64,7 @@ namespace QuickFAST
     private:
       uint32 additionalAttributes_; // consider: FILE_FLAG_NO_BUFFERING
       boost::asio::windows::random_access_handle handle_;
-      long volatile offset_;
+      long long volatile offset_;
     };
 #endif // _WIN32
   }
