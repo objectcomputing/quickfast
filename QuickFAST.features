@@ -4,6 +4,10 @@
 // This file defines MPC features used to enable and disable portions of the build
 QuickFAST=1
 boost=1
+// for Xerces 3.x.x set xerces3=1 and xerces2=0
+// for Xerces 2.x.x set xerces2=1 and xerces3=0
+xerces3=1
+xerces2=0
 
 // Build .NET library
 //    To enable .NET build, change the following from '0' to '1'
