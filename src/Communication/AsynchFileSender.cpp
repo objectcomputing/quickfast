@@ -70,19 +70,19 @@ AsynchFileSender::open()
 void
 AsynchFileSender::send(LinkedBuffer * buffer)
 {
-  size_t bytesToWrite = buffer->used();
-  long pos = offset_;
-  while(!CASLong(&offset_, pos, pos + bytesToWrite))
+  const size_t bytesToWrite = buffer->used();
+  long long pos = offset_;
+  while(!CASLongLong(&offset_, pos, pos + bytesToWrite))
   {
     pos = offset_;
   }
-  sendAt(buffer, (size_t)pos);
+  sendAt(buffer, pos);
 }
 
 void
-AsynchFileSender::sendAt(LinkedBuffer * buffer, size_t offset)
+AsynchFileSender::sendAt(LinkedBuffer * buffer, long long offset)
 {
-  size_t bytesToWrite = buffer->used();
+  const size_t bytesToWrite = buffer->used();
   if(bytesToWrite > 0)
   {
 #if 0

@@ -1,3 +1,12 @@
+Fri May  3 16:52:46 UTC 2013 Brian Johnson <johnsonb@ociweb.com>
+
+        * src\Common\AtomicOps.h
+          Added CAS function for long longs.
+        * src\Communication\AsynchFileSender.cpp
+        * src\Communication\AsynchFileSender.h
+          Changed to maintain a long long offset in the file to be able to
+          write files greater than 4GB.
+
 Thu May  2  9:20:23 UTC 2013 Brian Johnson <johnsonb@ociweb.com>
 
         * src/QuickFAST.mpc
