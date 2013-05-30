@@ -1,3 +1,13 @@
+Thu May 30 22:30:25 UTC 2013 martinezm <martinezm@ociweb.com>
+        * QuickFAST.mwc:
+          Add Release and Debug configurations to makefiles.
+
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+          Build clean(er) with gcc 4.5.
+
+        * src/QuickFAST.mpc:
+          Removed redundant include settings.
+
 Fri May  3 16:52:46 UTC 2013 Brian Johnson <johnsonb@ociweb.com>
 
         * src\Common\AtomicOps.h

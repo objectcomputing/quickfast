@@ -12,6 +12,11 @@
 #include <Examples/MessageInterpreter.h>
 #include <Examples/ValueToFix.h>
 
+namespace {
+  template< typename T>
+  void ignore_returnvalue(const T&) { }
+}
+
 using namespace QuickFAST;
 using namespace Examples;
 
@@ -256,7 +261,7 @@ InterpretApplication::run()
       size_t fileSize = std::ftell(bufferFile);
       std::fseek(bufferFile, 0, SEEK_SET);
       boost::scoped_array<unsigned char> buffer(new unsigned char[fileSize]);
-      std::fread(buffer.get(), 1, fileSize, bufferFile);
+      ignore_returnvalue( std::fread(buffer.get(), 1, fileSize, bufferFile));
       pConnection->receiver().receiveBuffer(buffer.get(), fileSize);
     }
     else
