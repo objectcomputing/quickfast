@@ -1,0 +1,13 @@
+PrivateChangeLog
+testdata
+^Output
+\.ncb$
+\.sln$
+\.suo$
+/I386$
+\.vcproj
+^.+\.o$
+^.+\.so$
+\/\.depend\..+
+\/Makefile.*
+^bin

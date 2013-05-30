@@ -1,0 +1,15 @@
+// Copyright (c) 2009, 2010 Object Computing, Inc.
+// All rights reserved.
+// See the file license.txt for licensing information.
+// Define build parameters for .NET based applications that use QuickFAST
+project : QuickFASTApplication{
+  requires += dotnet
+  requires += dotnetapp
+  after += QuickFASTDotNet
+  managed = 1
+  specific {
+  // so assemblies can be added as references to .NET projects
+    add_references = 1
+  }
+}
+

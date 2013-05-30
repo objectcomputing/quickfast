@@ -1,0 +1,24 @@
+workspace(*) {
+  cmdline += -feature_file QuickFAST.features
+  src/QuickFAST.mpc
+  src/Examples/Examples.mpc
+
+  specific(make) {
+    cmdline += -value_template "configurations=Release Debug"
+  }
+
+  // .NET support only for Visual Studio compilers
+  //  exclude(!vc8,!vc9)  [was not working so instead...
+  // .Net support only on windows
+  exclude(!prop:windows) {
+    //C++/Cli Visual Studio Projects
+    src/DotNet/QuickFASTDotNet.mpc
+  
+    //C# Visual Studio Projects
+    csharp {
+      cmdline += -language csharp
+      src/DotNetExamples/InterpretFASTDotNet/InterpretFASTDotNet.mpc
+      src/DotNetExamples/PerformanceTestDotNet/PerformanceTestDotNet.mpc
+    }
+  }
+}

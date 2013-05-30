@@ -1,0 +1,47 @@
+// Copyright (c) 2009, 2010, 2011, Object Computing, Inc.
+// All rights reserved.
+// See the file license.txt for licensing information.
+// This file defines MPC features used to enable and disable portions of the build
+QuickFAST=1
+boost=1
+// for Xerces 3.x.x set xerces3=1 and xerces2=0
+// for Xerces 2.x.x set xerces2=1 and xerces3=0
+xerces3=1
+xerces2=0
+
+// Build .NET library
+//    To enable .NET build, change the following from '0' to '1'
+dotnet=0
+
+// Build .NET examples
+//    To enable .NET Example programs, change the following from '0' to '1'
+dotnetapp=0
+
+///////////////////////////////////////////////////////////////////////////////
+//NOTE: Special projects are not included in the open source QuickFAST library
+// These MPC feature flags remove them from the build
+
+// Build ARCA support library
+//    If ARCA support is present (separate project) change the following
+//    from '0' to '1'
+arca=0
+
+// Build ARCA .NET support library
+//    If ARCA .NET support is present (separate project) change the following
+//    from '0' to '1'
+arcadotnet=0
+
+// Build special project to support OPRA FAST-like data
+opra_support=0
+
+// Build special project to support Spryware FAST files
+spryware_support=0
+
+//End of special projects
+///////////////////////////////////////////////////////////////////////////////
+
+// This is a "feature" used to temporarily disable parts of the build.
+// by making the depend on the "obsolete" feature.  It should always be
+// assigned a 0.
+obsolete=0
+

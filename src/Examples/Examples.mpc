@@ -1,0 +1,91 @@
+// Copyright (c) 2009, 2010, 2011, Object Computing, Inc.
+// All rights reserved.
+// See the file license.txt for licensing information.
+
+//////////////////////////////
+// Build the QuickFAST Examples
+
+project(InterpretApplication) : QuickFASTExample {
+  exename = InterpretApplication
+  Source_Files {
+    InterpretApplication
+  }
+  Header_Files {
+    InterpretApplication
+  }
+}
+
+project(TutorialApplication) : QuickFASTExample {
+  exename = TutorialApplication
+  Source_Files {
+    TutorialApplication
+  }
+  Header_Files {
+    TutorialApplication
+  }
+}
+
+project(PerformanceTest) : QuickFASTExample {
+  exename = PerformanceTest
+  Source_Files {
+    PerformanceTest
+  }
+  Header_Files {
+    PerformanceTest
+  }
+}
+
+project(FileToTCP) : QuickFASTExample {
+  exename = FileToTCP
+  Source_Files {
+    FileToTCP
+  }
+  Header_Files {
+    FileToTCP
+  }
+}
+
+project(FileToMulticast) : QuickFASTExample {
+  exename = FileToMulticast
+  Source_Files {
+    FileToMulticast
+  }
+  Header_Files {
+    FileToMulticast
+  }
+}
+
+project(PCapToMulticast) : QuickFASTExample {
+  exename = PCapToMulticast
+  Source_Files {
+    PCapToMulticast
+  }
+  Header_Files {
+    PCapToMulticast
+  }
+}
+
+// Special projects: Not available in open source
+project(OPRADecode) : QuickFASTExample {
+  requires += opra_support
+  exename = OPRADecode
+  Source_Files {
+    OPRA
+  }
+  Header_Files {
+    OPRA
+  }
+}
+
+project(SprywareFileDecoder) : QuickFASTExample {
+  exename = SprywareFileDecoder
+  requires += spryware_support
+  Source_Files {
+    SprywareFileDecoder
+  }
+  Header_Files {
+    SprywareFileDecoder
+  }
+}
+
+
