@@ -30,8 +30,10 @@ project(*) : boost_base, boost_filesystem, boost_system, boost_thread, xerces {
     Release::libout = $(QUICKFAST_ROOT)/Output/Release
     Debug::libout = $(QUICKFAST_ROOT)/Output/Debug
     macros += BOOST_DATE_TIME_NO_LIB BOOST_REGEX_NO_LIB
+    libs += $(XERCES_LIBNAME)
   } else {
     libout = $(QUICKFAST_ROOT)/lib
+    lit_libs += $(XERCES_LIBNAME)
   }
 
   specific(make) {
@@ -57,9 +59,11 @@ project(*test) : boost_unit_test_framework, boost_base, boost_filesystem, boost_
     Release::libpaths += $(QUICKFAST_ROOT)/Output/Release
     Debug::libpaths += $(QUICKFAST_ROOT)/Output/Debug
     macros += BOOST_DATE_TIME_NO_LIB BOOST_REGEX_NO_LIB
+    libs += $(XERCES_LIBNAME)
   } else {
     libpaths += $(QUICKFAST_ROOT)/lib
     exeout = $(QUICKFAST_ROOT)/bin
+    lit_libs += $(XERCES_LIBNAME)
   }
 
   specific(vc8) { // vc9 doesn't need this

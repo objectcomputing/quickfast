@@ -76,6 +76,14 @@ namespace QuickFAST{
       /// @param value is the value to be assigned.
       void addField(const FieldIdentityCPtr & identity, const FieldCPtr & value);
 
+      /// @brief Update an existing field in the set.
+      ///
+      /// The FieldCPtr is copied, not the actual Field object.
+      /// @param identity identifies this field
+      /// @param value is the value to be assigned.
+      /// @return true if the field was found
+      bool replaceField(const FieldIdentityCPtr & identity,
+                        const FieldCPtr & value);
 
       /// @brief Get the value of the specified field.
       /// @param[in] name Identifies the desired field
