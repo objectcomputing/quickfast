@@ -10,7 +10,6 @@ project(*) : boost_base, boost_filesystem, boost_system, boost_thread {
   includes += $(QUICKFAST_ROOT)/src
   includes += $(XERCES_INCLUDE)
   libpaths += $(XERCES_LIBPATH)
-  libs += $(XERCES_LIBNAME)
   pch_header = Common/QuickFASTPch.h
   includes += $(BOOST_ROOT)/include
   pch_source = Common/QuickFASTPch.cpp
@@ -33,8 +32,10 @@ project(*) : boost_base, boost_filesystem, boost_system, boost_thread {
     Release::libout = $(QUICKFAST_ROOT)/Output/Release
     Debug::libout = $(QUICKFAST_ROOT)/Output/Debug
     macros += BOOST_DATE_TIME_NO_LIB BOOST_REGEX_NO_LIB
+    libs += $(XERCES_LIBNAME)
   } else {
     libout = $(QUICKFAST_ROOT)/lib
+    lit_libs += $(XERCES_LIBNAME)
   }
 
   specific(make) {
@@ -60,9 +61,11 @@ project(*test) : boost_unit_test_framework, boost_base, boost_filesystem, boost_
     Release::libpaths += $(QUICKFAST_ROOT)/Output/Release
     Debug::libpaths += $(QUICKFAST_ROOT)/Output/Debug
     macros += BOOST_DATE_TIME_NO_LIB BOOST_REGEX_NO_LIB
+    libs += $(XERCES_LIBNAME)
   } else {
     libpaths += $(QUICKFAST_ROOT)/lib
     exeout = $(QUICKFAST_ROOT)/bin
+    lit_libs += $(XERCES_LIBNAME)
   }
 
   specific(vc8) { // vc9 doesn't need this
@@ -71,7 +74,6 @@ project(*test) : boost_unit_test_framework, boost_base, boost_filesystem, boost_
 
   libpaths += $(XERCES_LIBPATH)
   libs += QuickFAST
-  libs += $(XERCES_LIBNAME)
   after += QuickFAST
   macros += BOOST_TEST_DYN_LINK
   pch_header = Common/QuickFASTPch.h
