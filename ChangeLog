@@ -1,3 +1,16 @@
+
+Mon Jun  3 22:30:25 UTC 2013 schmitzj <schmitzj@ociweb.com>
+        * setup.sh:
+          Don't overwrite environment variables
+
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/FieldSet.h:
+        * src/Tests/testReplaceField.cpp:
+          Allow replacement of a field.
+
+        * src/Messages/Sequence.h:
+          Make constrctor accpept const field ref.
+
 Thu May 30 22:30:25 UTC 2013 martinezm <martinezm@ociweb.com>
         * QuickFAST.mwc:
           Add Release and Debug configurations to makefiles.
