@@ -38,6 +38,7 @@ FastEncodedHeaderAnalyzer::analyzeHeader(DataSource & source, size_t & blockSize
     {
     case ParsingIdle:
       {
+        source.beginField("FAST_ENCODED_HEADER");
         state_ = ParsingPrefix;
         fieldCount_ = 0;
 //        break;
