@@ -1,0 +1,38 @@
+project(*) : boost_base {
+  requires += dotnet
+  sharedname = QuickFASTDotNet
+  managed = 1
+  libs += QuickFAST
+  after += QuickFAST
+  includes += $(QUICKFAST_ROOT)/src
+
+  pch_header = QuickFASTDotNetPch.h
+  pch_source = QuickFASTDotNetPch.cpp
+
+  specific {
+    guid = AF6401D8-96C1-4303-AAFC-C3ED969D18A4
+    Release::libout = $(QUICKFAST_ROOT)/Output/Release
+    Debug::libout = $(QUICKFAST_ROOT)/Output/Debug
+
+    Release::libpaths += $(QUICKFAST_ROOT)/Output/Release
+    Debug::libpaths += $(QUICKFAST_ROOT)/Output/Debug
+
+    AssemblyDebug  = 1
+  }
+
+
+  Source_Files {
+    *.cpp
+    ^QuickFASTDotNetPch.cpp
+  }
+
+  Header_Files {
+    *.h
+    ^QuickFASTDotNetPch.h
+  }
+
+  Resource_Files{
+    app.ico
+    app.rc
+  }
+}

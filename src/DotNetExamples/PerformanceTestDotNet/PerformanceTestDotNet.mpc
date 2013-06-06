@@ -1,0 +1,14 @@
+project(PerformanceTestDotNet): QuickFASTDotNetExample {
+  exename = PerformanceTestDotNet
+  specific {
+    guid = E8D33726-46EB-44C3-88B8-ACA7A7B366F9
+  }
+
+  Source_Files {
+    Properties{
+      Properties\AssemblyInfo.cs
+    }
+    *.cs
+  }
+}
+

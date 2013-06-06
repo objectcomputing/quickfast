@@ -1,0 +1,79 @@
+// Copyright (c) 2009, Object Computing, Inc.
+// All rights reserved.
+// See the file license.txt for licensing information.
+
+//////////////////////////////
+// Build the QuickFAST library
+project(*) : boost_base, boost_filesystem, boost_system, boost_thread, xerces {
+  sharedname = QuickFAST
+  dynamicflags += QUICKFAST_BUILD_DLL
+  includes += $(QUICKFAST_ROOT)/src
+  pch_header = Common/QuickFASTPch.h
+  pch_source = Common/QuickFASTPch.cpp
+  Source_Files {
+    Application
+    Codecs
+    Common
+    Communication
+    Messages
+  }
+  Header_Files {
+    Application
+    Codecs
+    Common
+    Communication
+    Messages
+  }
+
+  specific(prop:microsoft) {
+    Release::libout = $(QUICKFAST_ROOT)/Output/Release
+    Debug::libout = $(QUICKFAST_ROOT)/Output/Debug
+    macros += BOOST_DATE_TIME_NO_LIB BOOST_REGEX_NO_LIB
+  } else {
+    libout = $(QUICKFAST_ROOT)/lib
+  }
+
+  specific(make) {
+    // Enable full optimization on gcc/linux
+    Release::genflags += -O3
+  }
+
+  specific(vc8) { // vc9 doesn't need this
+    macros += _WIN32_WINNT=0x0501
+  }
+}
+
+////////////////////////////
+// Build the QuickFAST tests
+project(*test) : boost_unit_test_framework, boost_base, boost_filesystem, boost_system, boost_thread {
+  exename = QuickFASTTest
+  includes += $(QUICKFAST_ROOT)/src
+
+  specific(prop:microsoft) {
+    Release::exeout = $(QUICKFAST_ROOT)/Output/Release
+    Debug::exeout = $(QUICKFAST_ROOT)/Output/Debug
+    Release::libpaths += $(QUICKFAST_ROOT)/Output/Release
+    Debug::libpaths += $(QUICKFAST_ROOT)/Output/Debug
+    macros += BOOST_DATE_TIME_NO_LIB BOOST_REGEX_NO_LIB
+  } else {
+    libpaths += $(QUICKFAST_ROOT)/lib
+    exeout = $(QUICKFAST_ROOT)/bin
+  }
+
+  specific(vc8) { // vc9 doesn't need this
+    macros += _WIN32_WINNT=0x0501
+  }
+
+  libs += QuickFAST
+  after += QuickFAST
+  macros += BOOST_TEST_DYN_LINK
+  pch_header = Common/QuickFASTPch.h
+  pch_source = Common/QuickFASTPch.cpp
+  Source_Files {
+    Tests
+  }
+  Header_Files {
+    Tests
+  }
+}
+

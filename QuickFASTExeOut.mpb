@@ -1,0 +1,17 @@
+// Copyright (c) 2009,2010 Object Computing, Inc.
+// All rights reserved.
+// See the file license.txt for licensing information.
+//////////////////////////////////////////////////////
+// Add-in mpb for exe's that are part of the QuickFAST
+// package.  
+project {
+  
+  specific(prop:microsoft) {
+    Release::exeout = $(QUICKFAST_ROOT)/Output/Release
+    Debug::exeout = $(QUICKFAST_ROOT)/Output/Debug
+  } else {
+    exeout = $(QUICKFAST_ROOT)/bin
+  }
+}
+
+
