@@ -20,9 +20,59 @@ Mon Jan 21 21:50:25 UTC 2013 Dale Wilson <wilsond@ociweb.com>
         missing includes[Issue 112]
         Pass identity by reference not value in FieldSet
 
+Mon Jun  3 22:30:25 UTC 2013 schmitzj <schmitzj@ociweb.com>
+        * setup.sh:
+          Don't overwrite environment variables
 
 Tue Jul 03 19:42:31 UTC 2012 Dale Wilson <wilsond@ociweb.com>
         Respond to messages on QuickFAST list.
+        * src/Messages/FieldSet.cpp:
+        * src/Messages/FieldSet.h:
+        * src/Tests/testReplaceField.cpp:
+          Allow replacement of a field.
+
+        * src/Messages/Sequence.h:
+          Make constrctor accpept const field ref.
+
+Thu May 30 22:30:25 UTC 2013 martinezm <martinezm@ociweb.com>
+        * QuickFAST.mwc:
+          Add Release and Debug configurations to makefiles.
+
+        * src/Examples/InterpretApplication/InterpretApplication.cpp:
+          Build clean(er) with gcc 4.5.
+
+        * src/QuickFAST.mpc:
+          Removed redundant include settings.
+
+Fri May  3 16:52:46 UTC 2013 Brian Johnson <johnsonb@ociweb.com>
+
+        * src\Common\AtomicOps.h
+          Added CAS function for long longs.
+        * src\Communication\AsynchFileSender.cpp
+        * src\Communication\AsynchFileSender.h
+          Changed to maintain a long long offset in the file to be able to
+          write files greater than 4GB.
+
+Thu May  2  9:20:23 UTC 2013 Brian Johnson <johnsonb@ociweb.com>
+
+        * src/QuickFAST.mpc
+          Reverted xerces changes.
+
+Wed May  1 13:31:05 UTC 2013 Brian Johnson <johnsonb@ociweb.com>
+
+        * .hgignore
+          Added make and gcc build artifacts to ignore.
+        * src/QuickFAST.mpc
+          Changed to use xerces.mpb.
+
+Wed May  1 12:24:31 UTC 2013 Brian Johnson <johnsonb@ociweb.com>
+
+        * src/Codecs/Context.h
+        * src/Messages/MessageFormatter.h
+        * src/Messages/ValueMessageBuilder.h
+          Added needed dependencies after files were moved.
+        * src/Tests/testErrorRecovery.cpp
+          Added needed dependency and fixed reinterpret_cast calls.
 
 Tue Mar 20 19:39:29 UTC 2012 Dale Wilson <wilsond@ociweb.com>
         * .hgignore:

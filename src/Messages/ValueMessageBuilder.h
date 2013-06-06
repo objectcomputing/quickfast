@@ -6,6 +6,7 @@
 #endif
 #ifndef VALUEMESSAGEBUILDER_H
 #define VALUEMESSAGEBUILDER_H
+#include <Common/QuickFASTPch.h>
 #include "ValueMessageBuilder_fwd.h"
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>

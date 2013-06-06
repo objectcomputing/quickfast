@@ -12,3 +12,8 @@ testdata
 s\.cmd
 cle\.cmd
 commit\.cmd
+^.+\.o$
+^.+\.so$
+\/\.depend\..+
+\/Makefile.*
+^bin

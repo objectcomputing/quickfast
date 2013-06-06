@@ -33,10 +33,10 @@ namespace QuickFAST
         std::streamoff startPosition = stream.tellg();
         stream.seekg(0, std::ios_base::end);
         std::streamoff endPosition = stream.tellg();
-        size_ = endPosition - startPosition;
+        size_ = (size_t)(endPosition - startPosition);
         if(size_ > 0)
         {
-          buffer_.reset(new unsigned char[endPosition - startPosition]);
+          buffer_.reset(new unsigned char[(unsigned int)(endPosition - startPosition)]);
           stream.seekg(startPosition);
           stream.read(reinterpret_cast<char *>(buffer_.get()), size_);
           size_t read = (size_t) stream.gcount();

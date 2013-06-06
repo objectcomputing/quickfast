@@ -11,6 +11,7 @@
 #include <Codecs/FixedSizeHeaderAnalyzer.h>
 #include <Codecs/NoHeaderAnalyzer.h>
 #include <Codecs/PacketSequencingAssembler.h>
+#include <Messages/FieldIdentity.h>
 #include <Messages/SequentialSingleValueBuilder.h>
 #include <Communication/RecoveryFeed.h>
 #include <Communication/LinkedBuffer.h>
@@ -211,7 +212,7 @@ BOOST_AUTO_TEST_CASE(TestPacketSequencingAssemblerReorderAndGapDetect)
   receiver.acceptBuffer(& buffer0);
   assembler.serviceQueue(receiver);
   BOOST_REQUIRE_EQUAL(builder.valueCount(), 1);
-  BOOST_CHECK_EQUAL(builder.value(0), reinterpret_cast<intptr_t> (buffer0.extra()));
+  BOOST_CHECK_EQUAL(builder.value(0), reinterpret_cast<std::ptrdiff_t> (buffer0.extra()));
   BOOST_CHECK(!builder.hasGap());
   BOOST_CHECK(!builder.hasError());
 
@@ -221,7 +222,7 @@ BOOST_AUTO_TEST_CASE(TestPacketSequencingAssemblerReorderAndGapDetect)
   receiver.acceptBuffer(& buffer1);
   assembler.serviceQueue(receiver);
   BOOST_REQUIRE_EQUAL(builder.valueCount(), 1);
-  BOOST_CHECK_EQUAL(builder.value(0), reinterpret_cast<intptr_t> (buffer1.extra()));
+  BOOST_CHECK_EQUAL(builder.value(0), reinterpret_cast<std::ptrdiff_t> (buffer1.extra()));
   BOOST_CHECK(!builder.hasGap());
   BOOST_CHECK(!builder.hasError());
 
@@ -234,10 +235,10 @@ BOOST_AUTO_TEST_CASE(TestPacketSequencingAssemblerReorderAndGapDetect)
   receiver.acceptBuffer(&buffer2);
   assembler.serviceQueue(receiver);
   BOOST_REQUIRE_EQUAL(builder.valueCount(), 4);
-  BOOST_CHECK(builder.value(0) == reinterpret_cast<intptr_t> (buffer2.extra()));
-  BOOST_CHECK(builder.value(1) == reinterpret_cast<intptr_t> (buffer3.extra()));
-  BOOST_CHECK(builder.value(2) == reinterpret_cast<intptr_t> (buffer4.extra()));
-  BOOST_CHECK(builder.value(3) == reinterpret_cast<intptr_t> (buffer5.extra()));
+  BOOST_CHECK(builder.value(0) == reinterpret_cast<std::ptrdiff_t> (buffer2.extra()));
+  BOOST_CHECK(builder.value(1) == reinterpret_cast<std::ptrdiff_t> (buffer3.extra()));
+  BOOST_CHECK(builder.value(2) == reinterpret_cast<std::ptrdiff_t> (buffer4.extra()));
+  BOOST_CHECK(builder.value(3) == reinterpret_cast<std::ptrdiff_t> (buffer5.extra()));
   BOOST_CHECK(!builder.hasGap());
   BOOST_CHECK(!builder.hasError());
 
@@ -253,10 +254,10 @@ BOOST_AUTO_TEST_CASE(TestPacketSequencingAssemblerReorderAndGapDetect)
   receiver.acceptBuffer(&buffer6);
   assembler.serviceQueue(receiver);
   BOOST_REQUIRE_EQUAL(builder.valueCount(), 4);
-  BOOST_CHECK(builder.value(0) == reinterpret_cast<intptr_t> (buffer6.extra()));
-  BOOST_CHECK(builder.value(1) == reinterpret_cast<intptr_t> (buffer7.extra()));
-  BOOST_CHECK(builder.value(2) == reinterpret_cast<intptr_t> (buffer8.extra()));
-  BOOST_CHECK(builder.value(3) == reinterpret_cast<intptr_t> (buffer9.extra()));
+  BOOST_CHECK(builder.value(0) == reinterpret_cast<std::ptrdiff_t> (buffer6.extra()));
+  BOOST_CHECK(builder.value(1) == reinterpret_cast<std::ptrdiff_t> (buffer7.extra()));
+  BOOST_CHECK(builder.value(2) == reinterpret_cast<std::ptrdiff_t> (buffer8.extra()));
+  BOOST_CHECK(builder.value(3) == reinterpret_cast<std::ptrdiff_t> (buffer9.extra()));
   BOOST_CHECK(!builder.hasGap());
   BOOST_CHECK(!builder.hasError());
 
@@ -286,18 +287,18 @@ BOOST_AUTO_TEST_CASE(TestPacketSequencingAssemblerReorderAndGapDetect)
   receiver.acceptBuffer(&buffer10);
   assembler.serviceQueue(receiver);
   BOOST_REQUIRE_EQUAL(builder.valueCount(), 4);
-  BOOST_CHECK(builder.value(0) == reinterpret_cast<intptr_t> (buffer10.extra()));
-  BOOST_CHECK(builder.value(1) == reinterpret_cast<intptr_t> (buffer11.extra()));
-  BOOST_CHECK(builder.value(2) == reinterpret_cast<intptr_t> (buffer12.extra()));
-  BOOST_CHECK(builder.value(3) == reinterpret_cast<intptr_t> (buffer13.extra()));
+  BOOST_CHECK(builder.value(0) == reinterpret_cast<std::ptrdiff_t> (buffer10.extra()));
+  BOOST_CHECK(builder.value(1) == reinterpret_cast<std::ptrdiff_t> (buffer11.extra()));
+  BOOST_CHECK(builder.value(2) == reinterpret_cast<std::ptrdiff_t> (buffer12.extra()));
+  BOOST_CHECK(builder.value(3) == reinterpret_cast<std::ptrdiff_t> (buffer13.extra()));
   // 15, 16, 17 should be in look_ahead array
   receiver.acceptBuffer(&buffer14);
   assembler.serviceQueue(receiver);
   BOOST_REQUIRE_EQUAL(builder.valueCount(), 8);
-  BOOST_CHECK(builder.value(4) == reinterpret_cast<intptr_t> (buffer14.extra()));
-  BOOST_CHECK(builder.value(5) == reinterpret_cast<intptr_t> (buffer15.extra()));
-  BOOST_CHECK(builder.value(6) == reinterpret_cast<intptr_t> (buffer16.extra()));
-  BOOST_CHECK(builder.value(7) == reinterpret_cast<intptr_t> (buffer17.extra()));
+  BOOST_CHECK(builder.value(4) == reinterpret_cast<std::ptrdiff_t> (buffer14.extra()));
+  BOOST_CHECK(builder.value(5) == reinterpret_cast<std::ptrdiff_t> (buffer15.extra()));
+  BOOST_CHECK(builder.value(6) == reinterpret_cast<std::ptrdiff_t> (buffer16.extra()));
+  BOOST_CHECK(builder.value(7) == reinterpret_cast<std::ptrdiff_t> (buffer17.extra()));
   BOOST_CHECK(!builder.hasGap());
   BOOST_CHECK(!builder.hasError());
 
@@ -311,14 +312,14 @@ BOOST_AUTO_TEST_CASE(TestPacketSequencingAssemblerReorderAndGapDetect)
   assembler.serviceQueue(receiver);
   BOOST_REQUIRE(builder.hasGap());
   BOOST_REQUIRE_EQUAL(builder.valueCount(), 1);
-  BOOST_REQUIRE(builder.value(0) == reinterpret_cast<intptr_t> (buffer22.extra()));
+  BOOST_REQUIRE(builder.value(0) == reinterpret_cast<std::ptrdiff_t> (buffer22.extra()));
   // already skipped this message, so it should NOT be processed
   receiver.acceptBuffer(&buffer18);
   // but this one should be processed immediately
   receiver.acceptBuffer(&buffer23);
   assembler.serviceQueue(receiver);
   BOOST_REQUIRE_EQUAL(builder.valueCount(), 2);
-  BOOST_REQUIRE(builder.value(1) == reinterpret_cast<intptr_t> (buffer23.extra()));
+  BOOST_REQUIRE(builder.value(1) == reinterpret_cast<std::ptrdiff_t> (buffer23.extra()));
   BOOST_CHECK(!builder.hasError());
 }
 
@@ -438,8 +439,8 @@ BOOST_AUTO_TEST_CASE(TestPacketSequencingAssemblerGapFill)
   assembler.serviceQueue(receiver);
   BOOST_CHECK(builder.hasGap());
   BOOST_REQUIRE_EQUAL(builder.valueCount(), 2);
-  BOOST_CHECK_EQUAL(builder.value(0), reinterpret_cast<intptr_t> (buffer0.extra()));
-  BOOST_CHECK_EQUAL(builder.value(1), reinterpret_cast<intptr_t> (buffer5.extra()));
+  BOOST_CHECK_EQUAL(builder.value(0), reinterpret_cast<std::ptrdiff_t> (buffer0.extra()));
+  BOOST_CHECK_EQUAL(builder.value(1), reinterpret_cast<std::ptrdiff_t> (buffer5.extra()));
   BOOST_CHECK(!builder.hasError());
 
   ////////////////////////////
@@ -460,11 +461,11 @@ BOOST_AUTO_TEST_CASE(TestPacketSequencingAssemblerGapFill)
   BOOST_CHECK(!builder.hasError());
   BOOST_CHECK(!builder.hasGap());
   BOOST_REQUIRE_EQUAL(builder.valueCount(), 5);
-  BOOST_CHECK_EQUAL(builder.value(0), reinterpret_cast<intptr_t> (buffer6.extra()));
-  BOOST_CHECK_EQUAL(builder.value(1), reinterpret_cast<intptr_t> (buffer7.extra()));
-  BOOST_CHECK_EQUAL(builder.value(2), reinterpret_cast<intptr_t> (buffer8.extra()));
-  BOOST_CHECK_EQUAL(builder.value(3), reinterpret_cast<intptr_t> (buffer9.extra()));
-  BOOST_CHECK_EQUAL(builder.value(4), reinterpret_cast<intptr_t> (buffer10.extra()));
+  BOOST_CHECK_EQUAL(builder.value(0), reinterpret_cast<std::ptrdiff_t> (buffer6.extra()));
+  BOOST_CHECK_EQUAL(builder.value(1), reinterpret_cast<std::ptrdiff_t> (buffer7.extra()));
+  BOOST_CHECK_EQUAL(builder.value(2), reinterpret_cast<std::ptrdiff_t> (buffer8.extra()));
+  BOOST_CHECK_EQUAL(builder.value(3), reinterpret_cast<std::ptrdiff_t> (buffer9.extra()));
+  BOOST_CHECK_EQUAL(builder.value(4), reinterpret_cast<std::ptrdiff_t> (buffer10.extra()));
 
   ////////////////////////////
   // Test with fill and complete fill on
@@ -484,9 +485,9 @@ BOOST_AUTO_TEST_CASE(TestPacketSequencingAssemblerGapFill)
   BOOST_CHECK(!builder.hasError());
   BOOST_CHECK(!builder.hasGap());
   BOOST_REQUIRE_EQUAL(builder.valueCount(), 5);
-  BOOST_CHECK_EQUAL(builder.value(0), reinterpret_cast<intptr_t> (buffer11.extra()));
-  BOOST_CHECK_EQUAL(builder.value(1), reinterpret_cast<intptr_t> (buffer12.extra()));
-  BOOST_CHECK_EQUAL(builder.value(2), reinterpret_cast<intptr_t> (buffer13.extra()));
-  BOOST_CHECK_EQUAL(builder.value(3), reinterpret_cast<intptr_t> (buffer14.extra()));
-  BOOST_CHECK_EQUAL(builder.value(4), reinterpret_cast<intptr_t> (buffer15.extra()));
+  BOOST_CHECK_EQUAL(builder.value(0), reinterpret_cast<std::ptrdiff_t> (buffer11.extra()));
+  BOOST_CHECK_EQUAL(builder.value(1), reinterpret_cast<std::ptrdiff_t> (buffer12.extra()));
+  BOOST_CHECK_EQUAL(builder.value(2), reinterpret_cast<std::ptrdiff_t> (buffer13.extra()));
+  BOOST_CHECK_EQUAL(builder.value(3), reinterpret_cast<std::ptrdiff_t> (buffer14.extra()));
+  BOOST_CHECK_EQUAL(builder.value(4), reinterpret_cast<std::ptrdiff_t> (buffer15.extra()));
 }
