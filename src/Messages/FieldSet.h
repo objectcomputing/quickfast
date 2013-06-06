@@ -82,7 +82,7 @@ namespace QuickFAST{
       /// @param identity identifies this field
       /// @param value is the value to be assigned.
       /// @return true if the field was found
-      bool replaceField(const FieldIdentityCPtr & identity,
+      bool replaceField(const FieldIdentity & identity,
                         const FieldCPtr & value);
 
       /// @brief Get the value of the specified field.

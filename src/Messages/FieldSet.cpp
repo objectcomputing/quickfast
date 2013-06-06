@@ -103,7 +103,7 @@ FieldSet::addField(const FieldIdentity & identity, const FieldCPtr & value)
 }
 
 bool
-FieldSet::replaceField(const FieldIdentityCPtr & identity,
+FieldSet::replaceField(const FieldIdentity & identity,
                        const FieldCPtr & value)
 {
   for(size_t index = 0; index < used_; ++index)
