@@ -103,6 +103,24 @@ FieldSet::addField(const FieldIdentity & identity, const FieldCPtr & value)
 }
 
 bool
+FieldSet::replaceField(const FieldIdentityCPtr & identity,
+                       const FieldCPtr & value)
+{
+  for(size_t index = 0; index < used_; ++index)
+  {
+    if(identity == fields_[index].getIdentity())
+    {
+      if(fields_[index].getField()->isDefined()) {
+        (fields_ + index)->~MessageField();  // Explicit destroy
+        new (fields_ + index) MessageField(identity, value);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool
 FieldSet::getField(const Messages::FieldIdentity & identity, FieldCPtr & value) const
 {
   PROFILE_POINT("FieldSet::getField");

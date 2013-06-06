@@ -18,8 +18,7 @@ REM Setting up QuickFAST environment
 REM =====================================================================================
 REM EDIT THE FOLLOWING LINES OR SET THESE VALUES IN YOUR ENVIRONMENT BEFORE RUNNING SETUP
 if "a" == "a%MPC_ROOT%" set MPC_ROOT=c:\MPC
-if "a" == "a%XERCES_ROOT%" set XERCES_ROOT=C:\Progs\xerces-c-3.0.1-x86-windows-vc-9.0
-if "a" == "a%XERCES_LIBNAME%" set XERCES_LIBNAME=xerces-c_3
+if "a" == "a%XERCESCROOT%" set XERCESCROOT=C:\Progs\xerces-c-3.0.1-x86-windows-vc-9.0
 if "a" == "a%BOOST_VERSION%" set BOOST_VERSION=boost_1_43_0
 if "a" == "a%BOOST_ROOT%" set BOOST_ROOT=c:\boost\%BOOST_VERSION%
 REM END OF VALUES TO BE SET
@@ -33,8 +32,8 @@ REM Verify setup by checking for expected files/directories
 set SETUP_CHECKING=MPC_ROOT=%MPC_ROOT%
 if not exist "%MPC_ROOT%\mpc.pl" goto setup_is_bad
 
-set SETUP_CHECKING=XERCES_ROOT=%XERCES_ROOT%
-if not exist "%XERCES_ROOT%\lib" goto setup_is_bad
+set SETUP_CHECKING=XERCESCROOT=%XERCESCROOT%
+if not exist "%XERCESCROOT%\lib" goto setup_is_bad
 
 set SETUP_CHECKING=BOOST_ROOT=%BOOST_ROOT%
 if not exist "%BOOST_ROOT%\boost" goto setup_is_bad
@@ -66,8 +65,7 @@ goto end
 :setup_is_ok
 set SETUP_CHECKING=
 
-set XERCES_LIBPATH=%XERCES_ROOT%\lib
-set XERCES_INCLUDE=%XERCES_ROOT%\include
+set XERCESLIB=%XERCESCROOT%\lib
 set QUICKFAST_ROOT=%CD%
 
 rem must be outside the if because of the parens in the directory name [what was microsoft thinking?]
@@ -94,10 +92,10 @@ REM: This avoids growing PATH and INCLUDE every time setup is run
 if "a" == "a%BASE_PATH%" set BASE_PATH=%PATH%
 if "a" == "a%BASE_INCLUDE%" set BASE_INCLUDE=%INCLUDE%
 
-set RELEASE_PATH=%QUICKFAST_ROOT%\bin;%QUICKFAST_ROOT%\Output\Release;%MPC_ROOT%;%BOOST_ROOT%\lib;%QUICKFAST_ROOT%\lib;%XERCES_ROOT%\bin;%BASE_PATH%
-set DEBUG_PATH=%QUICKFAST_ROOT%\bin;%QUICKFAST_ROOT%\Output\Debug;%MPC_ROOT%;%BOOST_ROOT%\lib;%QUICKFAST_ROOT%\lib;%XERCES_ROOT%\bin;%BASE_PATH%
+set RELEASE_PATH=%QUICKFAST_ROOT%\bin;%QUICKFAST_ROOT%\Output\Release;%MPC_ROOT%;%BOOST_ROOT%\lib;%QUICKFAST_ROOT%\lib;%XERCESCROOT%\bin;%BASE_PATH%
+set DEBUG_PATH=%QUICKFAST_ROOT%\bin;%QUICKFAST_ROOT%\Output\Debug;%MPC_ROOT%;%BOOST_ROOT%\lib;%QUICKFAST_ROOT%\lib;%XERCESCROOT%\bin;%BASE_PATH%
 set PATH=%DEBUG_PATH%
-set INCLUDE=%BOOST_ROOT%;%XERCES_ROOT%\include;%BASE_INCLUDE%
+set INCLUDE=%BOOST_ROOT%;%XERCESCROOT%\include;%BASE_INCLUDE%
 
 title QuickFAST
 :end
