@@ -48,7 +48,7 @@ namespace QuickFAST{
       };
 
     public:
-
+      /// @brief definition of a Multicast Feed
       struct MulticastFeed
       {
         /// @brief a name for the feed
@@ -62,6 +62,7 @@ namespace QuickFAST{
         /// @brief For MulticastReceiver the IP to which the socket will be bound
         std::string bindIP_;
 
+        /// @brief Construct a Multicast feed
         MulticastFeed(
             const std::string & name,
             const std::string & groupIP,
@@ -76,6 +77,7 @@ namespace QuickFAST{
         {
         }
 
+        /// @brief copy a multicast feed
         MulticastFeed(const MulticastFeed & rhs)
           : name_(rhs.name_)
           , groupIP_(rhs.groupIP_)
@@ -86,6 +88,7 @@ namespace QuickFAST{
         }
 
       };
+      /// @brief A collection of multicast feeds.
       typedef std::vector<MulticastFeed> MulticastFeedVector;
 
       /// @brief Initalize to defaults
@@ -323,6 +326,8 @@ namespace QuickFAST{
         return feeds == 0? 1: feeds;
       }
 
+      /// @brief set a name for the multicast feed
+      /// @param name identifies the feed.
       void setMulticastName(const std::string & name)
       {
         if(multicastFeeds_.size() == 1 && multicastFeeds_[0].name_ == DEFAULT_MULTICAST_NAME)

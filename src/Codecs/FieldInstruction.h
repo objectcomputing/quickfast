@@ -633,6 +633,7 @@ namespace QuickFAST{
       FieldInstruction & operator = (const FieldInstruction &);
 
     protected:
+      /// Identifies this field
       Messages::FieldIdentity identity_;
       /// Application type associated with this instruction
       std::string applicationType_;

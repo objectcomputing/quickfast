@@ -204,13 +204,22 @@ namespace QuickFAST{
       /// position within current buffer
       size_t position_;
     protected:
+      /// Where echo output gets written
       std::ostream * echo_;
+      /// Echo message boundaries
       bool verboseMessages_;
+      /// echo field boundaries
       bool verboseFields_;
+      /// echo as raw binary
       bool raw_;
+      /// echo in hex
       bool hex_;
+      
+      /// Position in stream to be displayed by echo
       size_t byteCount_;
+      /// used to build the echo message
       StringBuffer echoString_;
+      /// Are we decoding a pmap?
       bool isPmap_;
     };
   }
