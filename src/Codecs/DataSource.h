@@ -203,7 +203,7 @@ namespace QuickFAST{
       size_t size_;
       /// position within current buffer
       size_t position_;
-
+    protected:
       std::ostream * echo_;
       bool verboseMessages_;
       bool verboseFields_;
