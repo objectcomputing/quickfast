@@ -1,0 +1,83 @@
+To generate a new release of QuickFAST:
+
+Insure there are no warnings or errors in the build.
+Insure all tests are passing both release and debug builds.
+Insure that Doxygen runs with no (or very few) errors.
+
+Edit Common/Version.h
+  -- check version number -- it should be set correctly already
+  -- comment out the [prerelease] modifier in the version number.
+  -- update copyright date if necessary
+Edit src/Doxyfile
+Run Doxygen
+check these files (src/Doxyfile and Version.h) into the repostory.
+
+Tag the repository and push to repo:
+  hg tag Vn_n
+  hg push
+
+  example: hg tag V1_5
+           hg push
+
+Repeat for each build type
+  
+  Clone the repo to a new directory:
+    hg clone https://user_id@code.google.com/p/quickfast quickfast_n_n_n   
+  Switch to the tag:
+    cd quickfast_1_5_0
+    hg checkout V1_5
+
+  Package Up:
+    Windows source:
+      Get a fresh clone from the repository into a directory named 
+        quickfast_v_v_v, like quickfast_1_5_0
+      Delete the .hg directory in the new dir
+      Delete the .hgignore and .hgtags files
+      Create a zip file named quickfast_win_src_v_v_v.zip
+      Copy the exported directory into the zip file
+      Upload the file with summary: "Windows Source Distribution VN.N" and
+        description: "A zip file containing the source of QuickFAST with windows
+        line endings." and tags of "Type-Source" and "OpSys-Windows"
+      --------------------------------------------
+    Windows Binary:
+      cd to quickfast_v_v_v
+      prepare s.cmd
+      s
+      enable dotnet and dotnetapp in features file
+      m
+      QuickFAST.sln
+       [FIX the #$%^& .NET references due to the MPC bug]
+      select release build
+      rebuild solution
+      exit from visual studio
+      del *.obj /s
+      del *vcproj* /s
+      del *.pch /s
+      del BuildLog.htm /s
+      run tests
+      cd ..
+      create a zip file named quickfast_win_bin_vcX_bXXX_xXXX_v_v_v.zip
+         where vcX is the visual studio version (i.e. vc9)
+         bXXX is the boost version number (i.e. b143 for boost 1.43.0)
+         xXXX is the xerces version number (i.e x310) for xerces 3.1.0
+         v_v_v is the QuickFAST version number
+      copy quickfast_v_v_v into the zip file.
+      
+    Linux:
+      tar cf QuickFAST_lnx_src_v_v_v.tar quickfast_v_v_v
+      gzip  QuickFAST_lnx_src_1_3.tar
+      Upload the file with summary: "Linux Source Distribution VN.N" and
+        description: "A zip file containing the source of QuickFAST with linux
+        line endings." and tags of "Type-Source" and "OpSys-Windows"
+  Compress the directory into a zip or tar.gz.
+
+end repeat
+
+Upload the compressed distribution files to the Downloads tab of the web site.
+
+In the trunk update Version.h to include the *NEXT* version number.
+Be sure [prerelease] is included in the version number.
+
+Add a news item to the Wiki News page.
+Send an announcement to the quickfast_users group.
+
