@@ -1,4 +1,12 @@
-Mon Jun  6 22:30:25 UTC 2013 wilsond <wilsond@ociweb.com>
+Fri Jun  7 22:30:25 UTC 2013 schmitzj <schmitzj@ociweb.com>
+        * setup.sh:
+        Use a more likely default MPC_ROOT
+        Don't force a default BOOST_CFG
+
+        * src/Tests/testReplaceField.cpp:
+        Replace FieldIdentityCPtr with FieldIdentity references.
+
+Thu Jun  6 22:30:25 UTC 2013 wilsond <wilsond@ociweb.com>
         * src\Application\DecoderConfiguration.h:
         * src\Codecs\DataSource.h:
         * src\Codecs\FieldInstruction.h:

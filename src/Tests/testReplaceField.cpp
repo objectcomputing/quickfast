@@ -47,30 +47,28 @@ BOOST_AUTO_TEST_CASE(TestReplaceField)
 
   Messages::Message msg(templateRegistry->maxFieldCount());
 
-  Messages::FieldIdentityCPtr identity_int32_nop = 
-      new Messages::FieldIdentity("int32_nop");
+  Messages::FieldIdentity identity_int32_nop("int32_nop");
   Messages::FieldSet fields(templateRegistry->maxFieldCount());
   // Add the field
   fields.addField(identity_int32_nop, Messages::FieldInt32::create(17));
   
   int64 value;
-  fields.getSignedInteger(*identity_int32_nop, ValueType::INT32, value);
+  fields.getSignedInteger(identity_int32_nop, ValueType::INT32, value);
   BOOST_CHECK_EQUAL(17, value);
 
   // Replace the field
   bool result;
   result = fields.replaceField(identity_int32_nop, 
                                Messages::FieldInt32::create(429));
-  fields.getSignedInteger(*identity_int32_nop, ValueType::INT32, value);
+  fields.getSignedInteger(identity_int32_nop, ValueType::INT32, value);
   BOOST_CHECK(result);
   BOOST_CHECK_EQUAL(429, value);
 
   // Replace field not present
-  Messages::FieldIdentityCPtr identity_uint64_nop = 
-      new Messages::FieldIdentity("uint64_nop");
+  Messages::FieldIdentity identity_uint64_nop("uint64_nop");
   result = fields.replaceField(identity_uint64_nop, 
                                Messages::FieldInt32::create(333));
   BOOST_CHECK(!result);
-  BOOST_CHECK(!fields.isPresent(*identity_uint64_nop));
+  BOOST_CHECK(!fields.isPresent(identity_uint64_nop));
 }
 
