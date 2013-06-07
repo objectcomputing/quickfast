@@ -9,7 +9,7 @@ export QUICKFAST_ROOT=`readlink -f $SOURCE_DIR`
 
 if test "$MPC_ROOT" = ""
 then
-  export MPC_ROOT=~/MPC
+  export MPC_ROOT=$ACE_ROOT/MPC
 fi
 
 if test "$BOOST_ROOT" = ""
@@ -20,11 +20,6 @@ fi
 if test "$BOOST_ROOT_LIB" = ""
 then
   export BOOST_ROOT_LIB=$BOOST_ROOT/lib
-fi
-
-if test "$BOOST_CFG" = ""
-then
-  export BOOST_CFG=-gcc41-mt
 fi
 
 if test "$BOOST_VERSION" = ""
