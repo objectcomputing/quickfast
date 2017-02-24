@@ -13,7 +13,7 @@ REM Setting up QuickFAST environment
 @REM Customize this file by setting variables to suit your environment
 @REM Also you should customize QuickFAST.features to enable particular features on your system.
 @REM Delete the following line when you finishing customizing this file.
-@echo See remarks in %0 for information about setting your build environment
+@echo See remarks in %~nx0 for information about setting your build environment
 @echo off
 REM =====================================================================================
 REM EDIT THE FOLLOWING LINES OR SET THESE VALUES IN YOUR ENVIRONMENT BEFORE RUNNING SETUP
@@ -50,7 +50,6 @@ if not "a" == "a%VCVER%" goto setup_is_ok
 
 set SETUP_CHECKING=Setup checking visual studio common tools
 
-echo on
 set VCVER=15
 set SETUP_CHECKING=VS150COMNTOOLS=%VS150COMNTOOLS%
 set VS_COMMON_TOOLS=%VS150COMNTOOLS%
@@ -109,6 +108,7 @@ goto end
 :setup_is_ok
 set SETUP_CHECKING=
 
+set XERCESCROOT=%XERCESROOT%
 set XERCESLIB=%XERCESROOT%\lib
 set QUICKFAST_ROOT=%CD%
 @call "%VS_COMMON_TOOLS%VSVARS32.BAT" >nul
