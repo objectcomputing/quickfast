@@ -1,11 +1,8 @@
 // Copyright (c) 2009, Object Computing, Inc.
 // All rights reserved.
 // See the file license.txt for licensing information.
-#ifdef _MSC_VER
 # pragma once
-#endif
-#ifndef BITMAP_H
-#define BITMAP_H
+
 #include <Common/QuickFAST_Export.h>
 #include <Common/Types.h>
 
@@ -40,4 +37,3 @@ namespace QuickFAST{
     std::string value_;
   };
 }
-#endif // BITMAP_H
