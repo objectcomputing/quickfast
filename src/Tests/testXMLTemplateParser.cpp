@@ -14,7 +14,7 @@
 using namespace QuickFAST;
 BOOST_AUTO_TEST_CASE(testXMLTemplateParser)
 {
-  BOOST_CHECKPOINT("Start testXMLTemplateParser");
+  BOOST_TEST_CHECKPOINT("Start testXMLTemplateParser");
   Codecs::XMLTemplateParser parser;
   std::stringstream myDocument;
 
@@ -295,7 +295,7 @@ const char GroupSequencePMAPXML[] =
 
 BOOST_AUTO_TEST_CASE(testGroupsAndSequencesVsPMAP)
 {
-  BOOST_CHECKPOINT("Start testXMLTemplateParser");
+  BOOST_TEST_CHECKPOINT("Start testXMLTemplateParser");
   Codecs::XMLTemplateParser parser;
   std::stringstream xmlin(GroupSequencePMAPXML);
 
