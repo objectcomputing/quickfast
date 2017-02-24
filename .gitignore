@@ -4,6 +4,7 @@
 *.o
 *.obj
 *.iobj
+ipch/
 
 # Compiled Dynamic libraries
 *.so
