@@ -5,8 +5,11 @@
 REM This undefines the variables set by Setup to make it easy to rerun
 REM setup after making changes.  It should not be needed unless you are
 REM editing the setup.cmd file.
+set VCVER=
 set MPC_ROOT=
 set XERCES_ROOT=
 set XERCES_LIBNAME=
+set XERCESCROOT=
+set XERCESLIB=
 set BOOST_VERSION=
 set BOOST_ROOT=
