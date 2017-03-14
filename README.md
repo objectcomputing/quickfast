@@ -24,6 +24,6 @@ For questions and discussion of QuickFAST, visit the [QuickFAST users mailing li
 
 ## See also:
 
-* For a open source Java implementation of FAST, see http://www.openfast.org/
-* For an open source C++ implementation of the FIX protocol, see http://quickfixengine.org/
-* For an open source Java implementation of the FIX protocol, see http://quickfixj.org/
+* For a open source Java implementation of FAST, see https://sourceforge.net/projects/openfast/
+* For an open source C++ implementation of the FIX protocol, see http://www.quickfixengine.org/
+* For an open source Java implementation of the FIX protocol, see http://www.quickfixj.org/
