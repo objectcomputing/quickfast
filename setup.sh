@@ -5,7 +5,34 @@
 # Customize this file by setting variables to suit your environment
 SOURCE="${BASH_SOURCE[0]}"
 SOURCE_DIR=`dirname $SOURCE`
-export QUICKFAST_ROOT=`readlink -f $SOURCE_DIR`
+$READLINK --version >/dev/null 2>/dev/null
+if (( $? != 0 )); then
+    echo "readlink does not exist or it does not support --version"
+    echo "maybe it is not GNU readlink but BSD"
+    echo "trying with greadlink..."
+    READLINK='greadlink'
+fi
+$READLINK --version >/dev/null 2>/dev/null
+if (( $? != 0 )); then
+    echo "greadlink does not exist or an error occurred"
+    UNAME=`uname`
+    if [[ $UNAME == "Darwin" ]]; then
+        echo "You are running on a Mac OSX system."
+        echo "Consider installing homebrew."
+        echo "Then install coreutils."
+        echo "# brew install coreutils"
+    fi
+else
+    echo "$READLINK found at `which $READLINK`."
+fi
+$READLINK -f $SOURCE_DIR
+if (( $? != 0 )); then
+    echo "trying exporting QUICKFAST_ROOT by pwd."
+    export QUICKFAST_ROOT=`pwd`
+    echo "QUICKFAST_ROOT = $QUICKFAST_ROOT"
+else
+    export QUICKFAST_ROOT=`$READLINK -f $SOURCE_DIR`
+fi
 
 if test "$MPC_ROOT" = ""
 then
