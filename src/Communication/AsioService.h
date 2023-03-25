@@ -7,13 +7,11 @@
 #endif
 #ifndef ASIOSERVICE_H
 #define ASIOSERVICE_H
-#include "AsioService_fwd.h"
-#include <Common/QuickFAST_Export.h>
-#include <Common/Logger_fwd.h>
-#include <Common/AtomicCounter.h>
-
 // In gcc including asio.hpp in precompiled headers causes problems
-#include <boost/asio.hpp>
+#include "boost/asio.hpp"
+#include <Common/AtomicCounter.h>
+#include <Common/Logger_fwd.h>
+#include <Common/QuickFAST_Export.h>
 
 namespace QuickFAST
 {

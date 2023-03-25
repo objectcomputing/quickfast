@@ -9,12 +9,12 @@ export QUICKFAST_ROOT=`readlink -f $SOURCE_DIR`
 
 if test "$MPC_ROOT" = ""
 then
-  export MPC_ROOT=$ACE_ROOT/MPC
+  export MPC_ROOT=/usr/lib/ace/MPC
 fi
 
 if test "$BOOST_ROOT" = ""
 then
-  export BOOST_ROOT=~/boost/boost_1_38_0
+  export BOOST_ROOT=/usr/include/boost
 fi
 
 if test "$BOOST_ROOT_LIB" = ""
@@ -24,17 +24,17 @@ fi
 
 if test "$BOOST_VERSION" = ""
 then
-  export BOOST_VERSION=boost-1_38
+  export BOOST_VERSION=boost-1_74
 fi
 
 if test "$XERCES_ROOT" = ""
 then
-  export XERCES_ROOT=~/xerces/xerces-c-3.0.1
+  export XERCES_ROOT=/usr/include/xercesc
 fi
 
 if test "$XERCES_LIBPATH" = ""
 then
-  export XERCES_LIBPATH=$XERCES_ROOT/src/.libs
+  export XERCES_LIBPATH=/usr/lib/x86_64-linux-gnu
 fi
 
 if test "$XERCES_LIBNAME" = ""
