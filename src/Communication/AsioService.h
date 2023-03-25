@@ -7,11 +7,13 @@
 #endif
 #ifndef ASIOSERVICE_H
 #define ASIOSERVICE_H
-// In gcc including asio.hpp in precompiled headers causes problems
-#include "boost/asio.hpp"
-#include <Common/AtomicCounter.h>
-#include <Common/Logger_fwd.h>
+#include "AsioService_fwd.h"
 #include <Common/QuickFAST_Export.h>
+#include <Common/Logger_fwd.h>
+#include <Common/AtomicCounter.h>
+
+// In gcc including asio.hpp in precompiled headers causes problems
+#include <boost/asio.hpp>
 
 namespace QuickFAST
 {
@@ -22,7 +24,7 @@ namespace QuickFAST
     /// Normal case is for all classes derived from AsioService to share
     /// the same boost::io_service.  The alternate constructor gives the
     /// application more control if it is needed.
-    class QuickFAST_Export AsioService
+    class QuickFAST_Export AsioService : public boost::asio::io_service
     {
     public:
       /// @brief Construct using the internal, common io service
