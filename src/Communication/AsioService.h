@@ -24,7 +24,7 @@ namespace QuickFAST
     /// Normal case is for all classes derived from AsioService to share
     /// the same boost::io_service.  The alternate constructor gives the
     /// application more control if it is needed.
-    class QuickFAST_Export AsioService
+    class QuickFAST_Export AsioService : public boost::asio::io_service
     {
     public:
       /// @brief Construct using the internal, common io service

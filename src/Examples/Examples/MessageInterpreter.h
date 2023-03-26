@@ -6,7 +6,7 @@
 #endif
 #ifndef MESSAGEINTERPRETER_H
 #define MESSAGEINTERPRETER_H
-#include <Codecs/MessageConsumer.h>
+#include "Codecs/MessageConsumer.h"
 #include <Messages/MessageFormatter.h>
 
 namespace QuickFAST{

@@ -19,6 +19,8 @@
 #include <Communication/AsioService_fwd.h>
 #include <Application/DecoderConfiguration.h>
 
+#include "boost/asio.hpp"
+
 namespace QuickFAST{
   namespace Application{
     /// @brief Support a single source of FAST encoded data.
