@@ -1,4 +1,4 @@
-add_library(QuickFAST SHARED)
+add_library(QuickFAST STATIC)
 
 find_package(Boost REQUIRED)
 
@@ -22,7 +22,7 @@ target_include_directories(QuickFAST PRIVATE .)
 
 target_sources(QuickFAST
         PRIVATE
-        #Application
+        ${Application_CPP}
         ${Codecs_CPP}
         ${Common_CPP}
         ${Communication_CPP}
@@ -33,3 +33,14 @@ target_compile_definitions(QuickFAST
         PUBLIC
         BOOST_BIND_GLOBAL_PLACEHOLDERS
         ASIOSERVICE_FWD_H)
+
+find_package(Boost COMPONENTS date_time filesystem system thread ...)
+find_package(XercesC COMPONENTS sax ...)
+
+target_link_libraries(QuickFAST
+        PUBLIC
+        ${Boost_LIBRARIES}
+        ${XercesC_LIBRARIES}
+        )
+
+add_subdirectory(Examples)
